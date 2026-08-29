@@ -1,0 +1,49 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.jrelph/ripe-atlas",
+  "slug": "jrelph__ripe-atlas",
+  "title": "RIPE Atlas",
+  "description": "RIPE Atlas network measurements — ping, traceroute, DNS, TLS, HTTP, NTP, and probes",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.jrelph/ripe-atlas",
+      "description": "RIPE Atlas network measurements — ping, traceroute, DNS, TLS, HTTP, NTP, and probes",
+      "title": "RIPE Atlas",
+      "repository": {
+        "url": "https://github.com/jrelph/ripe-atlas-mcp",
+        "source": "github"
+      },
+      "version": "1.0.1",
+      "websiteUrl": "https://atlas.ripe.net",
+      "packages": [
+        {
+          "registryType": "npm",
+          "identifier": "ripe-atlas-mcp-server",
+          "version": "1.0.1",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "RIPE Atlas API key with 'create measurement' permission. Get one at https://atlas.ripe.net/keys/",
+              "isRequired": true,
+              "format": "string",
+              "isSecret": true,
+              "name": "RIPE_ATLAS_API_KEY"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-19T06:55:28.444979Z",
+        "publishedAt": "2026-04-19T06:55:28.444979Z",
+        "updatedAt": "2026-04-19T06:55:28.444979Z",
+        "isLatest": true
+      }
+    }
+  }
+}

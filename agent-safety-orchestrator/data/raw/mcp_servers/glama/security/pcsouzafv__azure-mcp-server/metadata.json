@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "ez1jtvo60f",
+  "namespace": "pcsouzafv",
+  "slug": "azure-mcp-server",
+  "name": "Azure MCP Server",
+  "description": "Enables monitoring and management of Azure resources including Virtual Machines (VMs) and Virtual Machine Scale Sets (VMSS) through a RESTful API with secure Service Principal authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables monitoring and management of Azure resources including Virtual Machines (VMs) and Virtual Machine Scale Sets (VMSS) through a RESTful API with secure Service Principal authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "NODE_ENV": {
+          "description": "Node environment (development or production)",
+          "type": "string",
+          "default": "development"
+        },
+        "AZURE_CLIENT_ID": {
+          "description": "Your Azure Client ID (appId from Service Principal)",
+          "type": "string"
+        },
+        "AZURE_TENANT_ID": {
+          "description": "Your Azure Tenant ID",
+          "type": "string"
+        },
+        "RESOURCE_GROUPS": {
+          "description": "Comma-separated list of Resource Groups to monitor (e.g., rg-production,rg-staging)",
+          "type": "string"
+        },
+        "AZURE_CLIENT_SECRET": {
+          "description": "Your Azure Client Secret (password from Service Principal)",
+          "type": "string"
+        },
+        "AZURE_SUBSCRIPTION_ID": {
+          "description": "Your Azure Subscription ID",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AZURE_SUBSCRIPTION_ID",
+        "AZURE_TENANT_ID",
+        "AZURE_CLIENT_ID",
+        "AZURE_CLIENT_SECRET"
+      ]
+    },
+    "id": "ez1jtvo60f",
+    "name": "Azure MCP Server",
+    "namespace": "pcsouzafv",
+    "repository": {
+      "url": "https://github.com/pcsouzafv/azure-mcp-server"
+    },
+    "slug": "azure-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ez1jtvo60f"
+  }
+}

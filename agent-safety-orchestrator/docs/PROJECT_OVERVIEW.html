@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety Orchestrator Skill — 项目总览</title>
+<style>
+:root {
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --fg-soft: #64748b;
+  --bg: #f7f8fb;
+  --bg-card: #ffffff;
+  --bg-soft: #f1f5f9;
+  --border: #e2e8f0;
+  --border-soft: #eef2f6;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --accent-strong: #1d4ed8;
+  --done: #16a34a;
+  --done-soft: #d1fae5;
+  --active: #d97706;
+  --active-soft: #fef3c7;
+  --todo: #94a3b8;
+  --todo-soft: #f1f5f9;
+  --blocked: #dc2626;
+  --star: #ca8a04;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-strong: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+               "Noto Sans CJK SC", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2563eb 130%);
+  color: #f8fafc;
+  border-radius: 16px;
+  padding: 36px 36px 28px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-strong);
+}
+.hero__title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+.hero__sub {
+  margin: 0 0 24px;
+  color: #cbd5e1;
+  font-size: 15px;
+}
+.hero__stats {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.hero__stat {
+  flex: 1 1 0;
+  min-width: 130px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.hero__stat--accent {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: rgba(147, 197, 253, 0.4);
+}
+.hero__stat-num {
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+.hero__stat-label {
+  font-size: 12px;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.hero__stat-note {
+  font-size: 12px;
+  color: #94a3b8;
+}
+.hero__arrow {
+  align-self: center;
+  color: #64748b;
+  font-size: 18px;
+  padding: 0 4px;
+  user-select: none;
+}
+.hero__meta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+.hero__meta-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+/* ---------- Pipeline ---------- */
+.pipeline-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow);
+}
+.pipeline-section h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.pipeline-section .subtitle {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--fg-soft);
+}
+.pipeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.step {
+  position: relative;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+.step--done {
+  background: var(--done-soft);
+  border-color: var(--done);
+}
+.step--active {
+  background: var(--active-soft);
+  border-color: var(--active);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+}
+.step--todo {
+  background: var(--bg-soft);
+  border-color: var(--border);
+}
+.step-marker {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.step--done .step-marker { background: var(--done); color: white; }
+.step--active .step-marker { background: var(--active); color: white; }
+.step--todo .step-marker { background: var(--todo); color: white; opacity: 0.5; }
+.step-code {
+  font-size: 11px;
+  color: var(--fg-soft);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.step-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 2px 0;
+  color: var(--fg);
+}
+.step-meta {
+  font-size: 12px;
+  color: var(--fg-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Content typography ---------- */
+.content {
+  background: transparent;
+}
+.content h1 {
+  display: none; /* hero replaces title */
+}
+.content h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 36px 0 12px;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+.content h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 22px 0 8px;
+  color: var(--fg);
+}
+.section-card {
+  margin: 16px 0 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.section-card h3.section-card-head {
+  margin: 0;
+  padding: 14px 20px;
+  background: linear-gradient(0deg, var(--bg-card) 0%, var(--bg-soft) 100%);
+  border-bottom: 1px solid var(--border);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.section-card .section-card-body {
+  padding: 18px 20px 6px;
+}
+.section-card .section-card-body > *:first-child { margin-top: 0; }
+.section-card .section-card-body > *:last-child { margin-bottom: 0; }
+.content h4 {
+  font-size: 14.5px;
+  font-weight: 600;
+  margin: 18px 0 6px;
+  color: var(--fg-muted);
+  text-transform: none;
+}
+.content p { margin: 0.55em 0 0.75em; }
+.content ul, .content ol { padding-left: 1.5em; }
+.content li { margin: 0.2em 0; }
+.content strong { font-weight: 600; }
+.content em { font-style: italic; }
+.content a { color: var(--accent); text-decoration: none; }
+.content a:hover { text-decoration: underline; color: var(--accent-strong); }
+
+.content blockquote {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--fg-muted);
+  padding: 8px 16px;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 14.5px;
+}
+.content blockquote p { margin: 0.4em 0; }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+/* ---------- Code ---------- */
+.content code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+               Consolas, "Liberation Mono", monospace;
+  font-size: 0.88em;
+  background: #f1f5f9;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  border: 1px solid var(--border-soft);
+}
+.content pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 14px 18px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 1em 0;
+}
+.content pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* ---------- Tables ---------- */
+.content table {
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  width: 100%;
+  font-size: 13.5px;
+  display: block;
+  overflow-x: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+}
+.content thead { background: var(--bg-soft); }
+.content th, .content td {
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+}
+.content th { font-weight: 600; color: var(--fg-muted); }
+.content tbody tr:last-child td { border-bottom: none; }
+.content tbody tr:hover { background: rgba(37, 99, 235, 0.025); }
+.content th[align="right"], .content td[align="right"] { text-align: right; font-variant-numeric: tabular-nums; }
+.content th[align="center"], .content td[align="center"] { text-align: center; }
+
+/* ---------- Status badges (auto-wrapped) ---------- */
+.badge {
+  display: inline-block;
+  font-size: 0.92em;
+  vertical-align: middle;
+}
+.badge--done { color: var(--done); }
+.badge--active { color: var(--active); }
+.badge--todo { color: var(--todo); }
+.badge--blocked { color: var(--blocked); }
+.badge--star { color: var(--star); }
+
+/* ---------- Collapsible deep-dives ---------- */
+details.deep-dive {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  margin: 0.8em 0;
+  padding: 10px 14px;
+}
+details.deep-dive[open] {
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+}
+details.deep-dive summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fg-muted);
+  list-style: none;
+  outline: none;
+}
+details.deep-dive summary::-webkit-details-marker { display: none; }
+details.deep-dive summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 8px;
+  transition: transform 0.15s ease;
+  color: var(--accent);
+}
+details.deep-dive[open] summary::before { transform: rotate(90deg); }
+.deep-dive-label {
+  font-size: 11px;
+  background: var(--accent);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 820px) {
+  .page { padding: 16px 12px 56px; }
+  .hero { padding: 24px 20px; }
+  .hero__title { font-size: 22px; }
+  .hero__stat { min-width: 110px; }
+  .hero__stat-num { font-size: 22px; }
+  .pipeline { grid-template-columns: repeat(2, 1fr); }
+  .content h2 { font-size: 19px; }
+}
+
+/* Pygments syntax highlighting (dark theme inside <pre>) */
+.codehilite .c, .codehilite .ch, .codehilite .cm, .codehilite .cp,
+.codehilite .cpf, .codehilite .c1, .codehilite .cs { color: #94a3b8; font-style: italic }
+.codehilite .k, .codehilite .kc, .codehilite .kd, .codehilite .kn,
+.codehilite .kp, .codehilite .kr, .codehilite .kt { color: #f472b6 }
+.codehilite .o, .codehilite .ow { color: #fbbf24 }
+.codehilite .gd { color: #fca5a5; }
+.codehilite .gi { color: #86efac; }
+.codehilite .nb, .codehilite .nc, .codehilite .nf, .codehilite .nn,
+.codehilite .ne { color: #c4b5fd }
+.codehilite .na, .codehilite .nt { color: #86efac }
+.codehilite .nv, .codehilite .vc, .codehilite .vg, .codehilite .vi,
+.codehilite .vm { color: #fdba74 }
+.codehilite .m, .codehilite .mf, .codehilite .mh, .codehilite .mi,
+.codehilite .mo { color: #fbbf24 }
+.codehilite .s, .codehilite .sa, .codehilite .sb, .codehilite .sc,
+.codehilite .dl, .codehilite .sd, .codehilite .s2, .codehilite .se,
+.codehilite .sh, .codehilite .si, .codehilite .sx, .codehilite .sr,
+.codehilite .s1, .codehilite .ss { color: #93c5fd }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <h1 class="hero__title">Safety Orchestrator Skill</h1>
+  <p class="hero__sub">统一的智能体安全调度层 — Atomic Safety Skill 库 + Safety Sentinel + Safety Router</p>
+  <div class="hero__stats">
+    <div class="hero__stat">
+      <div class="hero__stat-num">10,223</div>
+      <div class="hero__stat-label">原始候选</div>
+      <div class="hero__stat-note">5 类来源</div>
+    </div>
+    <div class="hero__arrow">→</div>
+    <div class="hero__stat">
+      <div class="hero__stat-num">1,390</div>
+      <div class="hero__stat-label">三层漏斗后</div>
+      <div class="hero__stat-note">cut 86.4%</div>
+    </div>
+    <div class="hero__arrow">→</div>
+    <div class="hero__stat">
+      <div class="hero__stat-num">1,211</div>
+      <div class="hero__stat-label">LLM 判定 safety-relevant</div>
+      <div class="hero__stat-note">87% pass-rate</div>
+    </div>
+    <div class="hero__arrow">→</div>
+    <div class="hero__stat hero__stat--accent">
+      <div class="hero__stat-num">95</div>
+      <div class="hero__stat-label">原子能力 v0.3</div>
+      <div class="hero__stat-note">5 phases / 20 archetypes</div>
+    </div>
+  </div>
+  <div class="hero__meta">
+    <span class="hero__meta-item">📅 数据截止 2026-05-09</span>
+    <span class="hero__meta-item">💰 LLM 审计成本 $2.51</span>
+    <span class="hero__meta-item">⚡ DeepSeek cache 命中 92.8%</span>
+    <span class="hero__meta-item">🎯 当前焦点：§4.5 词表迭代</span>
+  </div>
+</header>
+
+<section class="pipeline-section">
+  <h2>模块 1 实施流水线</h2>
+  <p class="subtitle">每一步的状态自动从 markdown §4.0 进度表读取；点击各步可跳转到详细章节</p>
+  <ol class="pipeline">
+<li class="step step--done"><div class="step-marker">✓</div><div class="step-body"><div class="step-code">§4.1</div><div class="step-name">数据收集</div><div class="step-meta">10,223 候选</div></div></li>
+<li class="step step--done"><div class="step-marker">✓</div><div class="step-body"><div class="step-code">§4.2</div><div class="step-name">三层漏斗</div><div class="step-meta">→ 1,390</div></div></li>
+<li class="step step--done"><div class="step-marker">✓</div><div class="step-body"><div class="step-code">§4.3</div><div class="step-name">词表 v0.3</div><div class="step-meta">95 atoms</div></div></li>
+<li class="step step--done"><div class="step-marker">✓</div><div class="step-body"><div class="step-code">§4.4</div><div class="step-name">LLM 审计</div><div class="step-meta">$2.51</div></div></li>
+<li class="step step--done"><div class="step-marker">✓</div><div class="step-body"><div class="step-code">§4.5</div><div class="step-name">词表迭代 freeze</div><div class="step-meta">v1 = 95 atoms</div></div></li>
+<li class="step step--done"><div class="step-marker">✓</div><div class="step-body"><div class="step-code">§4.6</div><div class="step-name">SKILL.md 包装</div><div class="step-meta">18 files (v1.1)</div></div></li>
+<li class="step step--active"><div class="step-marker">→</div><div class="step-body"><div class="step-code">§4.7</div><div class="step-name">Pilot 验证</div><div class="step-meta">Docker isolation</div></div></li>
+</ol>
+</section>
+<article class="content">
+<h1 id="safety-orchestrator-skill-项目总览">Safety Orchestrator Skill — 项目总览</h1>
+<p>本文档基于 <code>SafetyRouter.pdf</code>（项目书）整理，用于跟踪当前实现进度。
+任何与项目书冲突的描述以项目书为准；本文随实现演进而更新。</p>
+<p>首次了解整个仓库请从根目录 <a href="../README.md"><code>README.md</code></a> 开始；本文保留完整的实施记录、实验结果与设计决策。</p>
+<blockquote>
+<p><strong>结构约定</strong>：§2 系统架构 + §3 预期产出 是稳定的项目愿景；§4 是<strong>唯一实施模块</strong>，按工作顺序线性展开（数据收集 → 漏斗预筛 → 词表 → LLM 审计 → 词表迭代 → SKILL.md 包装 → pilot）。<strong>项目 training-free</strong>——只交付一个 Claude Code skill 包，不训练任何 ML 模型。§5 是当前下一步（pilot 验证），§6 是仓库布局。</p>
+</blockquote>
+<h2 id="2-系统架构">2. 系统架构</h2>
+<div class="codehilite"><pre><span></span><code>                 ┌────────────────────────────────────┐
+任务执行阶段 ─→  │           Safety Router             │
+（输入理解 /     │  (轻量、低延迟，按阶段-技能映射决策)  │
+ 规划决策 /      │  ↑ 阅读 Atomic Safety Skill 描述文件  │
+ 工具调用 /      └───────────────┬────────────────────┘
+ 输出生成）                      │ 路由
+                                 ▼
+                  ┌─────────────────────────────────────┐
+                  │      Atomic Safety Skill 库         │
+                  │  ┌──────────┬──────────┬─────────┐  │
+                  │  │ 意图歧义  │ 参数安全 │  ……      │  │
+                  │  │ 检测      │ 检查     │          │  │
+                  │  └──────────┴──────────┴─────────┘  │
+                  │  ┌────────────────────────────────┐  │
+                  │  │ escalate-to-human-sentinel     │  │
+                  │  │ archetype (最高优先级)          │  │
+                  │  │  → pause + HITL (training-free) │  │
+                  │  └────────────────────────────────┘  │
+                  └─────────────────────────────────────┘
+</code></pre></div>
+
+<h3 id="21-atomic-safety-skill-库">2.1 Atomic Safety Skill 库</h3>
+<p>对现有各类安全能力进行拆解与标准化，形成可复用的原子能力单元。
+建设流程：</p>
+<ol>
+<li>收集公开 skill（5 类来源，详见 <a href="#41-数据收集项目书-11">§4.1</a>）</li>
+<li>三层预筛漏斗剪枝至 LLM 可负担的规模（<a href="#42-三层预筛漏斗10223--1390我们引入">§4.2</a>）</li>
+<li>起草受控词表（<strong>v1 freeze = 95 个原子</strong>；演化路径 v0.3 95 → v0.6 115 → v0.7 98 → v1 95；<a href="#43-原子能力词表-v03我们引入-为-llm-审计提供受控标签集">§4.3</a>）</li>
+<li>LLM 审计 + 原子抽取（<a href="#44-llm-审计--原子抽取项目书-12--13">§4.4</a>）</li>
+<li>语义对齐 / 词表迭代 → v1 (<a href="#45-词表迭代-v03--v1项目书-14">§4.5</a>)</li>
+<li>每个原子落地为 SKILL.md 包（<a href="#46-原子-skillmd-包装-项目产出-2">§4.6</a>）</li>
+</ol>
+<h3 id="22-safety-router">2.2 Safety Router</h3>
+<p><strong>架构定位</strong>：Router <strong>不是独立程序 / middleware</strong>，而是一份 <strong>meta-skill SKILL.md</strong>——agent host 的主 LLM 读这份 meta-skill 就成了 Router 本身。详见 <a href="SAFETY_ATOMIC_CAPABILITIES.md#11-router-架构定位meta-skill-路径">SAFETY_ATOMIC_CAPABILITIES.md §11</a>。</p>
+<ul>
+<li>meta-skill SKILL.md 内含<strong>阶段-技能映射表</strong>（自然语言形式）</li>
+<li>agent 在执行任务时按 meta-skill 走：判断当前阶段（输入理解 / 规划决策 /
+  工具调用 / 输出生成）→ 调用映射表里对应的原子技能进行检查与约束</li>
+<li>atom 描述文件预加载进 agent 的 system context，路由决策不额外调外部 LLM</li>
+<li>路由到 <code>escalate-to-human-sentinel</code> archetype 时，agent 暂停自动化、向人类发送确认请求、等待反馈</li>
+<li><strong>延迟权衡</strong>：相比传统 middleware，meta-skill 模型每 phase 边界 ~1-2s（vs 200-500ms），换来部署轻量 + host 兼容；详见 <a href="SAFETY_ATOMIC_CAPABILITIES.md#113-延迟--成本权衡vs-独立-middleware-router">SAFETY_ATOMIC_CAPABILITIES.md §11.3</a></li>
+</ul>
+<h2 id="3-预期产出">3. 预期产出</h2>
+<p><strong>唯一交付物：Safety Orchestrator Skill 包</strong>（training-free）。<strong>18 个出货文件</strong>（参 <a href="../agent-safety-orchestrator/"><code>agent-safety-orchestrator/</code></a>）= 1 Router meta-skill SKILL.md + 14 archetype reference docs + 1 hook config（8 matcher 脚本 + 1 lib + <code>hooks/hooks.json</code>）+ 2 helper（<code>cache_snapshot.py</code> + <code>health_status.py</code>）。<strong>v1.3 起真层级</strong>：唯一 top-level skill 是 <code>safety-router-skill</code>，14 个 archetype 改挂在它的 <code>references/archetypes/*.md</code>（Router 路由后模型 <code>Read</code> 加载，不再是独立 skill）——保证 router-first + session-start 只 1 条 description 进 context。<strong>v1.1 起已打包为标准 Claude Code plugin</strong>（<code>.claude-plugin/{plugin.json,marketplace.json}</code>，<code>/plugin install</code> 一键装）。</p>
+<p>词表层 = v1 freeze 95 atoms / 19 archetypes / 5 phases + v1.1 部署元数据，详 <a href="SAFETY_ATOMIC_CAPABILITIES.md#10-包装标准v05enforcement_mode--archetype-as-skill-双维度">SAFETY_ATOMIC_CAPABILITIES.md §10</a> 包装规范 + §12 部署元数据。HITL 通道通过 <code>escalate-to-human-sentinel</code> archetype（4 atoms）确定性触发，无 ML。</p>
+<hr>
+<h2 id="4-实施进度-safety-orchestrator-skill-包构建进行中">4. 实施进度 — Safety Orchestrator Skill 包构建（进行中）</h2>
+<blockquote>
+<p><strong>唯一实施模块</strong>。原"模块 2 Sentinel 训练" + "模块 3 Router runtime" 已分别 dissolve；本节是项目所有实质性实施工作。</p>
+</blockquote>
+<div class="section-card">
+<h3 class="section-card-head" id="40-进度概览">4.0 进度概览</h3>
+<div class="section-card-body">
+<table>
+<thead>
+<tr>
+<th>子任务</th>
+<th>状态</th>
+<th>详见</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.1 数据收集</td>
+<td><span class="badge badge--done">✅</span> 完成（2026-05-08）</td>
+<td><a href="#41-数据收集项目书-11">§4.1</a></td>
+</tr>
+<tr>
+<td>4.2 三层预筛漏斗</td>
+<td><span class="badge badge--done">✅</span> 完成（2026-05-08）</td>
+<td><a href="#42-三层预筛漏斗10223--1390我们引入">§4.2</a></td>
+</tr>
+<tr>
+<td>4.3 原子能力词表 v0.3</td>
+<td><span class="badge badge--done">✅</span> 接受用作审计输入（2026-05-09）</td>
+<td><a href="#43-原子能力词表-v03我们引入-为-llm-审计提供受控标签集">§4.3</a></td>
+</tr>
+<tr>
+<td>4.4 LLM 审计 + 原子抽取</td>
+<td><span class="badge badge--done">✅</span> 完成（2026-05-09，DeepSeek，$2.51）</td>
+<td><a href="#44-llm-审计--原子抽取项目书-12--13">§4.4</a></td>
+</tr>
+<tr>
+<td>4.5 人工 review v0.3 词表（基于审计实证）→ freeze v1 + v1.1 部署元数据</td>
+<td><span class="badge badge--done">✅</span> 完成（2026-05-11 v1；2026-05-12 v1.1 加 <code>requires_network</code> / <code>fail_policy</code> / 2 helper）</td>
+<td><a href="#45-人工-review-原子词表对照-llm-审计实证--freeze-v1项目书-14">§4.5</a></td>
+</tr>
+<tr>
+<td>4.6 原子 SKILL.md 包装</td>
+<td><span class="badge badge--done">✅</span> 完成（2026-05-12，<code>agent-safety-orchestrator/</code>，18 文件 / ~3300 行；pilot 验证 + 精修挪到 §4.7）</td>
+<td><a href="#46-原子-skillmd-包装-项目产出-2">§4.6</a></td>
+</tr>
+<tr>
+<td>4.7 Pilot 验证（隔离环境 <code>pilot/</code>，podman rootless）</td>
+<td><span class="badge badge--active">🟡</span> 进行中（2026-05-31）—— <strong>4.7.1 <span class="badge badge--done">✅</span> 全部完成</strong>（bring-up 7 步全过；end-to-end block 用 <code>detect-credential-in-input</code> 在 UserPromptSubmit 阶段拦下 dummy AWS key prompt，BUNDLE-only 归因）；<strong>归因仪表盘已补齐</strong>（<code>verdict-log.jsonl</code> bundle 决策账本 + transcript 持久化 + Claude Code pin 2.1.158）；4.7.2 数据采集 / 4.7.3 <span class="badge badge--todo">⚪</span></td>
+<td><a href="#47-pilot-验证当前主线">§4.7</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
+<div class="section-card">
+<h3 class="section-card-head" id="41-数据收集项目书-11">4.1 数据收集（项目书 1.1）</h3>
+<div class="section-card-body">
+<p><strong>状态：<span class="badge badge--done">✅</span> 完成</strong>（2026-05-08）。共抓取 <strong>10223 条</strong>候选：4798 条 SKILL.md skill + 5425 条 MCP server + 11 份 reference 文档。</p>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.1.1 来源边界判定规则</summary>
+<p>项目书 §1 列了 5 类来源，但它们并不完全互斥（一个 GitHub 仓库可能既是"官方"也是"安全专项"）。按以下两个维度同时分类：</p>
+<p><strong>(A) 制品类型</strong>（决定蒸馏 pipeline 分支）：</p>
+<table>
+<thead>
+<tr>
+<th>制品类型</th>
+<th>落盘根目录</th>
+<th>蒸馏路径</th>
+<th>来自项目书来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKILL.md skill</td>
+<td><code>data/raw/{official,community}_skills/</code></td>
+<td>读 markdown 正文 → 拆原子能力</td>
+<td>来源 1, 2</td>
+</tr>
+<tr>
+<td>MCP server 元数据</td>
+<td><code>data/raw/mcp_servers/</code></td>
+<td>读 <code>metadata.json</code> + tools 列表 + 访问范围 → 拆原子能力</td>
+<td>来源 3</td>
+</tr>
+<tr>
+<td>Taxonomy / 实践规范文档</td>
+<td><code>data/raw/references/</code></td>
+<td>读文档 → 提取攻击面 / 阶段定义，用于建 taxonomy 而不是直接进原子库</td>
+<td>来源 5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(B) 收录路径</strong>（决定 fetcher 风格）：
+- 上游官方仓库（hand-picked，commit 钉死）
+- 第三方聚合 / 注册表（API + 关键词检索 + 内容过滤）
+- 单一 GitHub 仓库（按需点对点抓）</p>
+<p><strong>关于来源 4 的归并</strong>：项目书例子（prompt-security/clawsec、UseAI-pro/openclaw-skills-security、slowmist/openclaw-security-practice-guide）经验证后分别属于以上两类：前两者本质是 SKILL.md 套件，已被来源 2 的 aggregator 部分捕获；slowmist 那种 practice-guide 本质是 taxonomy reference 文档而非 skill，应归入来源 5。<strong>因此来源 4 不再独立存在</strong>，相关条目按制品类型分别走来源 1/2/5。</p>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.1.2 来源矩阵</summary>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>来源类别</th>
+<th>项目书示例</th>
+<th>当前覆盖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>官方 skill 仓库</td>
+<td>OpenAI、Anthropic、OpenClaw/ClawHub</td>
+<td><span class="badge badge--done">✅</span> OpenAI（3）；<span class="badge badge--done">✅</span> Anthropic（确认 <code>anthropics/skills</code> 主仓不含独立 security 类 skill）；<span class="badge badge--done">✅</span> ClawHub（598）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>综合 skill 聚合站</td>
+<td>Official Agent Skills Directory；VoltAgent/awesome-agent-skills</td>
+<td><span class="badge badge--done">✅</span> skills.sh（2901）；<span class="badge badge--done">✅</span> skillsdirectory.com（1271）；<span class="badge badge--done">✅</span> dmgrok/agent_skills_directory（25，仅 native security 子集）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>MCP 扫描/审计工具与注册表</td>
+<td>modelcontextprotocol/registry；Smithery；Glama；MCP.so；PulseMCP</td>
+<td><span class="badge badge--done">✅</span> 5 个 registry 全部抓完：modelcontextprotocol-registry（763）；Smithery（352）；Glama（2366）；MCP.so（18，URL 预筛默认模式）；PulseMCP（1926）</td>
+</tr>
+<tr>
+<td>~~4~~</td>
+<td>~~GitHub 安全专项项目~~</td>
+<td>~~prompt-security/clawsec；UseAI-pro/openclaw-skills-security；slowmist/openclaw-security-practice-guide~~</td>
+<td><span class="badge badge--blocked">⛔</span> <strong>归并：</strong> SKILL.md 套件部分由来源 2 覆盖；practice-guide 类移交来源 5。详见 §4.1.1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>标准、博客、论文与 practice guide</td>
+<td>OWASP Agentic Skills Top 10；Snyk ToxicSkills；MCP 安全研究 / 行业博客；slowmist 等 GitHub practice guide</td>
+<td><span class="badge badge--done">✅</span> 11 份精选 reference 落盘（共 5.7MB）：standard 5（OWASP 2、NIST 2、MITRE ATLAS）、spec 1（MCP best practices）、research 2（Anthropic RSP、Lakera prompt-injection）、practice-guide 3（slowmist、prompt-security、useai-pro）。<strong>不进原子库</strong>，仅供建 taxonomy 参考</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.1.3 落盘清单</summary>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>路径</th>
+<th>Skill 数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI（official）</td>
+<td><code>data/raw/official_skills/openai/curated/security/</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>ClawHub</td>
+<td><code>data/raw/community_skills/clawhub/skills/security/</code></td>
+<td>598</td>
+</tr>
+<tr>
+<td>skills.sh</td>
+<td><code>data/raw/community_skills/skillsh/skills/security/</code></td>
+<td>2901</td>
+</tr>
+<tr>
+<td>skillsdirectory.com</td>
+<td><code>data/raw/community_skills/skillsdirectory/skills/security/</code></td>
+<td>1271</td>
+</tr>
+<tr>
+<td>dmgrok/agent_skills_directory</td>
+<td><code>data/raw/community_skills/agent-skills-directory/skills/security/</code></td>
+<td>25</td>
+</tr>
+<tr>
+<td>modelcontextprotocol-registry（MCP server）</td>
+<td><code>data/raw/mcp_servers/modelcontextprotocol-registry/security/</code></td>
+<td>763</td>
+</tr>
+<tr>
+<td>Smithery（MCP server）</td>
+<td><code>data/raw/mcp_servers/smithery/security/</code></td>
+<td>352</td>
+</tr>
+<tr>
+<td>Glama（MCP server）</td>
+<td><code>data/raw/mcp_servers/glama/security/</code></td>
+<td>2366</td>
+</tr>
+<tr>
+<td>MCP.so（MCP server）</td>
+<td><code>data/raw/mcp_servers/mcp-so/security/</code></td>
+<td>18</td>
+</tr>
+<tr>
+<td>PulseMCP（MCP server）</td>
+<td><code>data/raw/mcp_servers/pulsemcp/security/</code></td>
+<td>1926</td>
+</tr>
+<tr>
+<td><strong>合计 SKILL.md + MCP</strong></td>
+<td></td>
+<td><strong>10223</strong></td>
+</tr>
+<tr>
+<td>references（不进原子库）</td>
+<td><code>data/raw/references/&lt;source&gt;/security/</code></td>
+<td>11 份文档</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>其中 SKILL.md 类（前 5 行）共 4798；MCP server 元数据（后 5 行）共 5425。两类后续蒸馏路径不同：前者按 SKILL.md 内容拆分原子能力；后者按 server 暴露的工具集合 + 访问范围识别原子能力。</p>
+</blockquote>
+<p>数据存储约定参见 <a href="SKILL_STORAGE_LAYOUT.md">docs/SKILL_STORAGE_LAYOUT.md</a>.</p>
+<hr>
+</details>
+</div>
+</div>
+<div class="section-card">
+<h3 class="section-card-head" id="42-三层预筛漏斗10223-1390我们引入">4.2 三层预筛漏斗（10223 → 1390，我们引入）</h3>
+<div class="section-card-body">
+<p><strong>状态：<span class="badge badge--done">✅</span> 完成</strong>。10223 直接喂 LLM 成本不现实（粗算 Sonnet 数千 USD、Haiku 数百 USD）。三层漏斗按"从免费到便宜"剪枝，每层完成后看残量决定是否进下一层：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>做法</th>
+<th>实际收益</th>
+<th>成本</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stage 1</strong> 硬去重</td>
+<td>SKILL.md 正文 hash + MCP <code>name+description</code> hash；同指纹只留一份代表（按来源优先级 official &gt; curated &gt; 其他）</td>
+<td>砍 4.35% (skill, 210/4824) / 0.13% (mcp, 7/5425)；远低于预期</td>
+<td>免费、确定性</td>
+<td><span class="badge badge--done">✅</span> 完成（<a href="../reports/dedup_stage1_hash_2026-05-08.json">reports/dedup_stage1_hash_2026-05-08.json</a>）</td>
+</tr>
+<tr>
+<td><strong>Stage 2</strong> 近似去重 + 规则过滤</td>
+<td>(1) skillsdirectory branding-only-match 过滤；(2) MCP 跨 registry 用 normalized GitHub repo URL 匹配；(3) MinHash/LSH 找近似 SKILL.md 副本（Jaccard ≥ 0.85，64 hashes / 16 bands × 4 rows）；(4) 短内容过滤（SKILL.md &lt; 200 字符；MCP description+readme &lt; 100 字符）</td>
+<td>砍 10.36% (skill, 478) / 27.7% (mcp, 1501)；总残量 10032 → <strong>8053</strong></td>
+<td>免费、确定性</td>
+<td><span class="badge badge--done">✅</span> 完成（<a href="../reports/dedup_stage2_filter_2026-05-08.json">reports/dedup_stage2_filter_2026-05-08.json</a>）</td>
+</tr>
+<tr>
+<td><strong>Stage 3</strong> Embedding 相关性排序</td>
+<td>智谱 <code>embedding-3</code>（2048 维）算每条 vector，跟 v2 的 20 个 archetype（<a href="SAFETY_ATOMIC_ARCHETYPES.md">SAFETY_ATOMIC_ARCHETYPES.md</a>）算 cosine；选择规则 = per-anchor top-150 (cosine ≥ 0.55) ∪ 全局 max-cosine ≥ 0.65。脚本 <a href="../scripts/dedup_stage3_embedding.py"><code>scripts/dedup_stage3_embedding.py</code></a></td>
+<td><strong>残量 1390</strong>（1046 skill + 344 mcp），从 8053 砍 82.7%</td>
+<td>智谱 API ~¥2.5</td>
+<td><span class="badge badge--done">✅</span> 完成（<a href="../reports/dedup_stage3_embedding_2026-05-08.json">reports/dedup_stage3_embedding_2026-05-08.json</a>）</td>
+</tr>
+</tbody>
+</table>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.2.1 Stage 2 结果分析</summary>
+<p>残量 8053（4136 skill + 3917 mcp）。各规则单独贡献：</p>
+<ul>
+<li>MCP <code>short-content</code> <strong>1163</strong> —— 最大单条增益。registry 里大量"占位"条目，描述+README 不到 100 字符，没有可供 LLM 蒸馏的实质内容</li>
+<li>MCP <code>mcp-repo-url-dedup</code> <strong>338</strong> —— 同一 GitHub 项目跨 3-4 家 registry 重复（top cluster 4 份）</li>
+<li>SKILL.md <code>branding-only-match</code> <strong>246</strong> —— skillsdirectory boilerplate 假阳性</li>
+<li>SKILL.md <code>minhash-near-dup</code> <strong>206</strong> —— 真近似副本，最大 cluster 25 份（同用户在 skillsdirectory 反复上传同一 skill 的变体）</li>
+<li>SKILL.md <code>short-content</code> 26</li>
+</ul>
+<p><strong>关于 Stage 3 必要性</strong>：残量 8053 仍超出"&lt;3000 跳过 Stage 3"的阈值，因此 Stage 3 必做。</p>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.2.2 Stage 3 首跑分析</summary>
+<p><strong>总览</strong>：8051 候选（其中 2 条 MCP 因 metadata 为空被丢） → per-anchor 1390 ∪ global 209 → 残量 <strong>1390</strong>（去重后两条规则合一，global 209 全部已被 per-anchor 包含）。</p>
+<p><strong>Per-anchor 分布</strong>（按 kept 数量从大到小）：</p>
+<table>
+<thead>
+<tr>
+<th>Anchor</th>
+<th style="text-align: right;">kept</th>
+<th style="text-align: right;">skill</th>
+<th style="text-align: right;">mcp</th>
+<th style="text-align: right;">p99</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>detect-prompt-injection</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.571</td>
+<td style="text-align: right;">0.746</td>
+</tr>
+<tr>
+<td>scan-input-for-pii-and-secrets</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">129</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.583</td>
+<td style="text-align: right;">0.693</td>
+</tr>
+<tr>
+<td>threat-model-task</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">142</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.590</td>
+<td style="text-align: right;">0.751</td>
+</tr>
+<tr>
+<td>enforce-policy-as-code</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">0.578</td>
+<td style="text-align: right;">0.709</td>
+</tr>
+<tr>
+<td>detect-task-overreach</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">139</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.572</td>
+<td style="text-align: right;">0.663</td>
+</tr>
+<tr>
+<td>validate-tool-argument-safety</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">145</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.603</td>
+<td style="text-align: right;">0.682</td>
+</tr>
+<tr>
+<td>validate-agent-tool-trust</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">0.589</td>
+<td style="text-align: right;">0.668</td>
+</tr>
+<tr>
+<td>detect-supply-chain-risk</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">0.607</td>
+<td style="text-align: right;">0.734</td>
+</tr>
+<tr>
+<td>scan-code-for-vulnerabilities</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">131</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.649</td>
+<td style="text-align: right;">0.754</td>
+</tr>
+<tr>
+<td>detect-malicious-payload-in-tool-output</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">0.581</td>
+<td style="text-align: right;">0.652</td>
+</tr>
+<tr>
+<td>detect-data-exfiltration</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.569</td>
+<td style="text-align: right;">0.700</td>
+</tr>
+<tr>
+<td>audit-trail-recording</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">0.578</td>
+<td style="text-align: right;">0.735</td>
+</tr>
+<tr>
+<td>enforce-output-content-policy</td>
+<td style="text-align: right;">148</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0.565</td>
+<td style="text-align: right;">0.632</td>
+</tr>
+<tr>
+<td>constrain-workspace-boundary</td>
+<td style="text-align: right;">141</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">0.564</td>
+<td style="text-align: right;">0.699</td>
+</tr>
+<tr>
+<td>escalate-to-human-sentinel</td>
+<td style="text-align: right;">137</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">0.562</td>
+<td style="text-align: right;">0.658</td>
+</tr>
+<tr>
+<td>check-tool-permission-scope</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">109</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">0.564</td>
+<td style="text-align: right;">0.663</td>
+</tr>
+<tr>
+<td>incident-response-handler</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.555</td>
+<td style="text-align: right;">0.643</td>
+</tr>
+<tr>
+<td>redact-sensitive-output</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.547</td>
+<td style="text-align: right;">0.750</td>
+</tr>
+<tr>
+<td>enforce-rate-and-quota-limits</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.514</td>
+<td style="text-align: right;">0.705</td>
+</tr>
+<tr>
+<td>classify-input-intent-ambiguity</td>
+<td style="text-align: right;"><strong>2</strong></td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.460</td>
+<td style="text-align: right;">0.609</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键观察</strong>（用户已审定，决定不再调整阈值；下面 5 条作为后续 1.4 语义对齐时的提醒留底）：</p>
+<ol>
+<li><strong><code>classify-input-intent-ambiguity</code> anchor 几乎死透</strong>（仅 2 条命中 0.55 阈值，max=0.609）。v0.3 词表保留了该 archetype 下 3 个原子，1.4 阶段决定是否合并 / 删除（LLM 审计后续也确认这个 archetype 下的 <code>detect-destructive-action-keyword</code> 是 0-命中原子）</li>
+<li><strong>MCP 占比偏低</strong>（344 / 3917 = 8.8% vs skill 25.3%）。少数 MCP-heavy anchor（<code>audit-trail-recording</code>、<code>constrain-workspace-boundary</code>、<code>detect-malicious-payload-in-tool-output</code>）吸走了 MCP 候选名额；344 已经是合理浓度（MCP 总量本来就大量是占位条目）</li>
+<li><strong>Global threshold τ=0.65 没起独立作用</strong>（209 全部被 per-anchor 包含）。说明 per-anchor 选择规则已经足够；τ 可作为安全网保留</li>
+<li><strong>Anchor min_threshold=0.55 是有效的"剪枝线"</strong>：14 个 anchor 在这条线之上仍能装满 150 名额，4 个 anchor（<code>enforce-rate-and-quota-limits</code> / <code>classify-input-intent-ambiguity</code> / <code>redact-sensitive-output</code> / <code>incident-response-handler</code>）受这条线限制低于 150</li>
+<li><strong>Score 分布偏低</strong>：所有 anchor 的 max &lt; 0.76；p99 普遍 &lt; 0.61。说明 embedding-3 在中英混合 skill 文本上 cosine 偏保守，绝对值不能直接照搬其他 embedding 模型的经验阈值</li>
+</ol>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.2.3 Stage 3 校准入口（保留供后续追溯）</summary>
+<p>manifest 的 <code>calibrationSamples</code> 区段为每个 anchor 提供 3 个采样桶（top30 + 0.65 附近 30 + [0.55, 0.65) 30）。如果后续发现某个 anchor 召回不够或 dead anchor 真的需要救，可回头读这个区段，用 <code>python scripts/dedup_stage3_embedding.py --reselect-only --global-threshold X --anchor-min-threshold Y</code> 不重调 API 直接重选（缓存 8071 条 vector 已在 <code>data/cache/embeddings/zhipu_embedding3.pkl</code>，~64MB）。</p>
+<hr>
+</details>
+</div>
+</div>
+<div class="section-card">
+<h3 class="section-card-head" id="43-原子能力词表-v03我们引入为-llm-审计提供受控标签集">4.3 原子能力词表 v0.3（我们引入，为 LLM 审计提供受控标签集）</h3>
+<div class="section-card-body">
+<p><strong>状态：<span class="badge badge--done">✅</span> 接受用作审计输入</strong>（2026-05-09）。完整定义见 <a href="SAFETY_ATOMIC_CAPABILITIES.md">docs/SAFETY_ATOMIC_CAPABILITIES.md</a>.</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>数值 / 内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规模</td>
+<td><strong>95 个原子</strong>（<strong>v1 freeze</strong>，v0.3 95 → v0.6 115 → v0.7 98 → v1 95 经"轻量化 LLM agent guardrail"判据精简），分布在 5 个 phase × <strong>19 个</strong> archetype 下</td>
+</tr>
+<tr>
+<td>起草来源</td>
+<td>v2 archetypes（粗骨架）+ 11 份 references（OWASP LLM Top 10 / MITRE ATLAS / MCP best practices / Lakera / SlowMist / UseAI-pro / ClawSec）+ 项目书 §1.1</td>
+</tr>
+<tr>
+<td>主审阅入口</td>
+<td><a href="SAFETY_ATOMIC_CAPABILITIES.md#4-按-agent-执行阶段组织safety-router-查表视图主审阅入口">§4 按 phase 组织</a>（input-understanding 13 / planning 10 / tool-invocation 49 / output-generation 11 / cross-cutting 12；v1 = 95）</td>
+</tr>
+<tr>
+<td>详细字段</td>
+<td><a href="SAFETY_ATOMIC_CAPABILITIES.md#5-按-archetype-组织详细原子卡片对照参考">§5 按 archetype 卡片</a>（每条原子含 definition / scope_in / scope_out / signal_phrases / related）</td>
+</tr>
+<tr>
+<td>LLM 输出 schema</td>
+<td><a href="SAFETY_ATOMIC_CAPABILITIES.md#7-llm-输出-schema受控词表的使用契约">§7</a> 定义 <code>primary_atoms</code> / <code>secondary_atoms</code> / <code>suggested_new_atoms</code> / <code>self_risk_flags</code> / <code>free_form_notes</code> 等字段</td>
+</tr>
+<tr>
+<td>SKILL.md 包装标准</td>
+<td><a href="SAFETY_ATOMIC_CAPABILITIES.md#10-原子-skillmd-包装标准14-蒸馏期落地约定">§10</a> 4 段固定结构 purpose / when_to_use / how_to_check / verdict_schema</td>
+</tr>
+<tr>
+<td>Router 架构定位</td>
+<td><a href="SAFETY_ATOMIC_CAPABILITIES.md#11-router-架构定位meta-skill-路径">§11</a> meta-skill 路径，agent host LLM 即 Router</td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么不在 LLM 审计前做人工增删</strong>：用户决定使用 v0.3 直接进 LLM 审计，依据实际审计输出的覆盖度分布、<code>suggested_new_atoms</code> 分布、<code>self_risk_flags</code> 分布等数据再决定 v1 怎么调。详见 §4.5。</p>
+<hr>
+</div>
+</div>
+<div class="section-card">
+<h3 class="section-card-head" id="44-llm-审计-原子抽取项目书-12-13">4.4 LLM 审计 + 原子抽取（项目书 1.2 + 1.3）</h3>
+<div class="section-card-body">
+<p><strong>状态：<span class="badge badge--done">✅</span> 完成</strong>（2026-05-09）。1390 残量按 v0.3 词表打 <code>primary_atoms</code> / <code>secondary_atoms</code> 标签，单次 LLM pass 同时输出 <code>is_safety_relevant</code> / <code>self_risk_flags</code> / <code>suggested_new_atoms</code> / <code>free_form_notes</code>。</p>
+<p><strong>配置</strong>：
+- 模型：DeepSeek <code>deepseek-chat</code>（V3.2，OpenAI-compatible API）
+- 主脚本：<a href="../scripts/llm_audit_stage1_classify.py">scripts/llm_audit_stage1_classify.py</a>
+- 词表 loader：<a href="../scripts/_atomic_capabilities.py">scripts/_atomic_capabilities.py</a>（解析 capabilities §5 卡片为 prompt-ready dict）
+- API key：<code>.env</code> 文件（<a href="../scripts/_env.py">scripts/_env.py</a> loader）
+- Manifest：<a href="../reports/llm_audit_classify_2026-05-09.jsonl">reports/llm_audit_classify_2026-05-09.jsonl</a> + 同名 <code>_cache/</code> 目录（per-record JSON，resume 友好）</p>
+<p><strong>结果摘要</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+<th>评估</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>处理总数</td>
+<td>1390 / 1390</td>
+<td><span class="badge badge--done">✅</span> 全跑完</td>
+</tr>
+<tr>
+<td>失败</td>
+<td>0</td>
+<td><span class="badge badge--done">✅</span></td>
+</tr>
+<tr>
+<td>是 safety-relevant</td>
+<td>1211 (87%)</td>
+<td>合理</td>
+</tr>
+<tr>
+<td>非 safety-relevant</td>
+<td>179 (13%)</td>
+<td>Stage 3 假阳性，sample 验证 LLM 判得对</td>
+</tr>
+<tr>
+<td>skip_reason 分布</td>
+<td>136 non-security / 25 placeholder-only / 18 boilerplate-only</td>
+<td></td>
+</tr>
+<tr>
+<td>空 primary_atoms</td>
+<td>0</td>
+<td>词表覆盖度 100%</td>
+</tr>
+<tr>
+<td>0-命中 atoms</td>
+<td>1：<code>classify-input-intent-ambiguity/detect-destructive-action-keyword</code></td>
+<td>Stage 3 早就预言（dead anchor 下属）</td>
+</tr>
+<tr>
+<td>Confidence 中位数 / 均值</td>
+<td>0.75 / 0.795</td>
+<td>标定合理</td>
+</tr>
+<tr>
+<td>低 confidence (&lt; 0.7)</td>
+<td>249 (17.9%)</td>
+<td>spot-check 候选</td>
+</tr>
+<tr>
+<td>Schema 校验警告</td>
+<td>45 (3.2%)，全部 atom_id 挂错 parent</td>
+<td>可一键修，不需要重审</td>
+</tr>
+<tr>
+<td>共提出新原子建议</td>
+<td>94 个 <code>suggested_new_atoms</code></td>
+<td>但<strong>全部各自只出现 1 次</strong>（无共识 → v0.3 覆盖度高，无系统性 gap）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Token / 成本</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th style="text-align: right;">数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>总输入 tokens</td>
+<td style="text-align: right;">24.4M</td>
+</tr>
+<tr>
+<td>Prompt cache 命中率</td>
+<td style="text-align: right;"><strong>92.8%</strong> ← 在 1390 规模下 cache warm-up 后表现优秀</td>
+</tr>
+<tr>
+<td>总输出 tokens</td>
+<td style="text-align: right;">405k</td>
+</tr>
+<tr>
+<td><strong>总成本</strong></td>
+<td style="text-align: right;"><strong>$2.51</strong>（远低于预估 $4-6）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Top 10 primary_atoms 命中分布</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>排名</th>
+<th>Atom</th>
+<th style="text-align: right;">命中数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>scan-code-for-vulnerabilities/run-sast-scan</td>
+<td style="text-align: right;">266</td>
+</tr>
+<tr>
+<td>2</td>
+<td>detect-supply-chain-risk/check-package-cve</td>
+<td style="text-align: right;">202</td>
+</tr>
+<tr>
+<td>3</td>
+<td>scan-code-for-vulnerabilities/detect-hardcoded-secret-in-code</td>
+<td style="text-align: right;">155</td>
+</tr>
+<tr>
+<td>4</td>
+<td>detect-supply-chain-risk/check-package-typosquat</td>
+<td style="text-align: right;">101</td>
+</tr>
+<tr>
+<td>5</td>
+<td>validate-tool-argument-safety/detect-shell-command-injection</td>
+<td style="text-align: right;">99</td>
+</tr>
+<tr>
+<td>6</td>
+<td>threat-model-task/generate-stride-threat-model</td>
+<td style="text-align: right;">91</td>
+</tr>
+<tr>
+<td>7</td>
+<td>enforce-policy-as-code/evaluate-opa-rego-rule</td>
+<td style="text-align: right;">90</td>
+</tr>
+<tr>
+<td>8</td>
+<td>detect-prompt-injection/detect-direct-prompt-injection</td>
+<td style="text-align: right;">85</td>
+</tr>
+<tr>
+<td>9</td>
+<td>audit-trail-recording/record-tool-invocation-trace</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr>
+<td>10</td>
+<td>audit-trail-recording/record-decision-trace</td>
+<td style="text-align: right;">74</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Top 5 self_risk_flags 分布</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th style="text-align: right;">出现次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>requires-network-egress</td>
+<td style="text-align: right;">627</td>
+</tr>
+<tr>
+<td>executes-shell-on-install</td>
+<td style="text-align: right;">265</td>
+</tr>
+<tr>
+<td>stores-secrets-in-plaintext</td>
+<td style="text-align: right;">177</td>
+</tr>
+<tr>
+<td>executes-shell-commands</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr>
+<td>asks-for-broad-fs-write</td>
+<td style="text-align: right;">26</td>
+</tr>
+</tbody>
+</table>
+<p><strong>covered_phases 分布</strong>（多选）：</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th style="text-align: right;">出现次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tool-invocation</td>
+<td style="text-align: right;">953</td>
+</tr>
+<tr>
+<td>planning</td>
+<td style="text-align: right;">373</td>
+</tr>
+<tr>
+<td>output-generation</td>
+<td style="text-align: right;">308</td>
+</tr>
+<tr>
+<td>cross-cutting</td>
+<td style="text-align: right;">275</td>
+</tr>
+<tr>
+<td>input-understanding</td>
+<td style="text-align: right;">203</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
+<div class="section-card">
+<h3 class="section-card-head" id="45-人工-review-原子词表对照-llm-审计实证-freeze-v1项目书-14">4.5 人工 review 原子词表（对照 LLM 审计实证）→ freeze v1（项目书 1.4）</h3>
+<div class="section-card-body">
+<p><strong>状态：<span class="badge badge--done">✅</span> 完成</strong>（2026-05-11 v1 freeze；2026-05-12 v1.1 加 <code>requires_network</code> / <code>fail_policy</code> / 2 helper）。</p>
+<p><strong>这一步审的是词表本身的划分是否合理，不是审 LLM 判得准不准</strong>。v0.3 的 95 个原子是 <a href="#43-原子能力词表-v03我们引入为-llm-审计提供受控标签集">§4.3</a> 基于理论起草（v2 archetypes + 11 份 references）；LLM 审计 <a href="#44-llm-审计-原子抽取项目书-12-13">§4.4</a> 把它套到 1,390 条真实候选上提供实证信号。<strong>v0.6 → v0.7 → v1</strong>（同一天连续 3 次迭代）：v0.6 先按 LLM 审计数据加 20 新原子 + 1 搬家 + 11 处 scope MERGE → 115；v0.7 用"轻量化 LLM agent guardrail"判据（运行时点 / 作用对象 / 现成实现 / 粒度适中）精筛掉 17 个不符合的原子（研究级 SMT、vapor-infra 信任评分、离线 SAST 分析、agent-as-output deliverable）+ 删整个 <code>threat-model-task</code> archetype → 98；最后下架 <code>validate-agent-tool-trust</code> 内 3 个 planning-阶段 A2A trust 原子（前瞻、无主流场景）→ <strong>v1 freeze = 95</strong>。词表演化路径：95 → 115 → 98 → 95。</p>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.5.1 你要做的核心判断（针对每个 archetype × 原子）</summary>
+<table>
+<thead>
+<tr>
+<th>决策类型</th>
+<th>词表设计层面的问题</th>
+<th>来自审计数据的信号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>保留</strong></td>
+<td>这个原子的 carving 经得起实证</td>
+<td><code>primary_atoms</code> 命中数 ≥ 阈值（先用 5 试）</td>
+</tr>
+<tr>
+<td><strong>删除</strong></td>
+<td>这个原子本来就不该单独存在</td>
+<td>0 命中 / 极少命中 + 概念跟兄弟原子高度重叠</td>
+</tr>
+<tr>
+<td><strong>合并兄弟原子</strong></td>
+<td>两个或多个原子区分不出来</td>
+<td>sibling 原子频繁共现（同一 record 同时打两个）；或 LLM 反复在兄弟之间挂错 parent</td>
+</tr>
+<tr>
+<td><strong>新增</strong></td>
+<td>词表漏了真实存在的能力类别</td>
+<td><code>suggested_new_atoms</code> 按 <code>proposed_id</code> 聚类后的桶大小 ≥ 阈值</td>
+</tr>
+<tr>
+<td><strong>重写 scope_in / scope_out</strong></td>
+<td>原子定义边界写得不够清楚</td>
+<td>(a) 该原子的 wrong-parent 率高（atom_id 被反复挂到错的 archetype）；(b) 该原子上的 LLM confidence 中位数显著低于全局；(c) <code>free_form_notes</code> 反复说"勉强映射到 X"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>关键：<strong>这 5 类决策都是 vocabulary-level 的判断</strong>——你不需要也不应该去逐条检查"LLM 给某个 record 打的标签对不对"。LLM 标签的总体噪声水平在审计层已经控制得不错（0 失败、92.8% cache hit、median confidence 0.75），单条噪声对词表设计的影响可以忽略。</p>
+</blockquote>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.5.2 自动化辅助（先跑，给用户做 §4.5.1 判断提供数据）</summary>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>工作</th>
+<th>调 LLM？</th>
+<th>输出（针对 §4.5.1 的哪类决策）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Cleanup pass</strong></td>
+<td>❌ 确定性</td>
+<td>用 <code>atom_id → 正确 parent</code> 表批改 §4.4 的 43 条 wrong-parent + 5 条 no-slash。修完后 wrong-parent 率才能反映真实的"原子边界混淆"信号（vs 单纯 LLM 拼写错误）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>数据洞察脚本</strong> <code>scripts/llm_audit_summary.py</code>（待写）</td>
+<td>❌ 纯统计</td>
+<td>针对每个原子产出：① 命中数（→ 保留 / 删除）② sibling 共现矩阵（→ 合并）③ wrong-parent 率（→ 重写 scope）④ confidence 分布（→ 重写 scope）⑤ <code>suggested_new_atoms</code> 按 <code>proposed_id</code> 聚类（→ 新增）⑥ <code>free_form_notes</code> 关键词词频（→ 新增 / 重写）</td>
+</tr>
+</tbody>
+</table>
+<p>跑完 1 + 2 之后，用户就有了做 §4.5.1 5 类决策所需要的全部聚合数据。</p>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.5.3 人工 review 步骤</summary>
+<ol>
+<li>读 §4.5.2 的 summary 输出，<strong>逐 archetype 对照 <a href="SAFETY_ATOMIC_CAPABILITIES.md">SAFETY_ATOMIC_CAPABILITIES.md §5</a> 的原子定义看</strong></li>
+<li>对每个有疑问的原子（0-hit / 低命中 / 高 wrong-parent / 低 confidence 的）：<strong>从它命中的 records 里抽 5-10 条快速扫一眼，确认这些 records 是不是真的属于一个内聚的能力类别</strong>——这是验证 atom carving 的合理性，不是给 LLM 打分</li>
+<li>按 §4.5.1 的 5 类决策做判断，把改动 commit 到 <a href="SAFETY_ATOMIC_CAPABILITIES.md">SAFETY_ATOMIC_CAPABILITIES.md</a>（增 / 删 / 合并 / 重写 scope_in/out / 重写 definition）+ 打 v1 changelog</li>
+</ol>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.5.4 可选增量重审</summary>
+<p>v1 freeze 后，对以下两类<strong>少数</strong>候选做增量重审：
+- v0.3 标空 <code>primary_atoms</code> 但 v1 加了对应原子的（94 条 suggested 中通过 review 的）
+- v0.3 标了已合并 / 删除原子的（重新分配到 v1 下的原子）</p>
+<p>预估 &lt;&lt; 1,390，成本 &lt;&lt; $1。<strong>不需要重审整库</strong>——绝大部分 LLM 审计输出在 v1 下仍有效。</p>
+<hr>
+</details>
+</div>
+</div>
+<div class="section-card">
+<h3 class="section-card-head" id="46-双维度包装hook-config-archetype-skillmd">4.6 双维度包装：hook config + archetype SKILL.md</h3>
+<div class="section-card-body">
+<p><strong>状态：<span class="badge badge--done">✅</span> 完成</strong>（2026-05-12；<strong>2026-06-08 v1.3 真层级重构</strong>）。Bundle 在 <a href="../agent-safety-orchestrator/"><code>agent-safety-orchestrator/</code></a>：18 个出货文件 / JSON 配置有效 / health banner 已跑通（93/95 atom active，2 个按预期 degraded/disabled）。8 个 matcher 脚本覆盖 60 hook + 21 hybrid fast-path = 81 个 atom；2 个 helper（cache_snapshot + health_status）实现完整；1 Router meta + 14 archetype doc 全部按 §10.3 spec 出齐。<strong>v1.3 真层级</strong>：14 archetype 从 <code>skills/&lt;archetype&gt;/SKILL.md</code> 移到 <code>skills/safety-router-skill/references/archetypes/&lt;archetype&gt;.md</code>，唯一 top-level skill = <code>safety-router-skill</code>，Router §3.2 路由表改为指示模型 <code>Read</code> 对应 archetype doc（不再让模型直接调 archetype skill）——保证 router-first + 被动 context 只剩 1 条 Router description。词表未动（仍 95 atoms），是纯 packaging/层级变化；两个 installer（Claude plugin + Codex adapter）都靠 <code>skills/*/</code> 枚举，自动适配新布局。<strong>Hook script 内部 atom check 实现是 representative 而非 exhaustive</strong>（如 <code>run-sast-scan</code> 是轻量 regex，production 应外接 semgrep；<code>check-package-cve</code> 通过 helper 真接 osv.dev/v1/querybatch 但 snapshot fallback 是 stub）——pilot 阶段精修在 §4.7.3。</p>
+<p>按 <a href="SAFETY_ATOMIC_CAPABILITIES.md#10-包装标准v05enforcement_mode--archetype-as-skill-双维度">SAFETY_ATOMIC_CAPABILITIES.md §10</a> 标准（v0.5 双维度模型）把 v1 词表分流：</p>
+<p><strong>第一刀：enforcement_mode</strong>（每个原子标 hook / skill / hybrid）
+- 60 hook (63%) — 确定性，host 硬强制（regex / OS config / signature / log）
+- 21 hybrid (22%) — hook fast path + LLM semantic fallback
+- 14 skill (15%) — 需要 agent LLM 推理</p>
+<p><strong>第二刀：按 archetype 把 skill / hybrid atoms 打成 SKILL.md</strong>
+- 5 个 pure-hook archetype（<code>check-tool-permission-scope</code> / <code>constrain-workspace-boundary</code> / <code>detect-malicious-payload-in-tool-output</code> / <code>audit-trail-recording</code> / <code>scan-code-for-vulnerabilities</code> — 最后一个 v0.7 精简后回归 pure-hook，matcher 限定 Write|Edit|MultiEdit）→ <strong>不出 SKILL.md</strong>，只进 hook config
+- 0 个 pure-skill archetype（v0.7 <code>threat-model-task</code> 整个 archetype 下架）
+- 14 个 mixed-enforce archetype → archetype doc（v1.3 起在 Router 的 <code>references/archetypes/*.md</code>，含 skill/hybrid tools）+ hook config（含 hook tools）</p>
+<div class="codehilite"><pre><span></span><code>agent-safety-orchestrator/           ← Claude Code plugin（其自身即单-plugin marketplace）
+├── .claude-plugin/
+│   ├── plugin.json                  ← plugin manifest（name/version/license/keywords）
+│   └── marketplace.json             ← 单-plugin marketplace（source: &quot;./&quot;）
+├── hooks/                           ← ~81 个 hook 条目（60 pure-hook + 21 hybrid fast path）
+│   ├── hooks.json                   ← 自动发现；命令路径用 ${CLAUDE_PLUGIN_ROOT}
+│   └── scripts/                     ← 各 hook 调用的 matcher 脚本 + lib_common
+├── skills/                          ← v1.3 真层级：唯一 1 个 top-level skill（自动发现）
+│   └── safety-router-skill/           ← Router meta-skill = 唯一入口
+│       ├── SKILL.md                   ← Router 正文（§3.2 路由表指示模型 Read 下面的 archetype doc）
+│       └── references/
+│           ├── archetypes/*.md        ← 14 个 archetype reference docs（Read-on-route，不再是独立 skill）
+│           └── atoms-catalog.md       ← 95-atom 全表（on-demand）
+├── helpers/                         ← cache_snapshot.py + health_status.py   ┐ 共享核心
+├── atoms.json                       ←                                        ┘（双 host 共用）
+├── install.sh                       ← 统一安装调度器（--host claude|codex|both|auto）
+├── adapters/                        ← per-host adapter（复用上面的共享核心，零拷贝）
+│   ├── claude/install.sh            ← Claude 手动/非-plugin 安装路径
+│   └── codex/                       ← Codex hook 桥 codex_hook.py + hooks.json + config.backstop.toml + install.sh + README
+├── LICENSE · README.md · CHANGELOG.md · .gitignore · .env.example · .github/workflows/validate.yml
+</code></pre></div>
+
+<blockquote>
+<p>注：<code>skills/</code> + <code>hooks/scripts/</code> + <code>helpers/</code> + <code>atoms.json</code> 是<strong>唯一一份</strong>核心，Claude Code plugin 与 Codex adapter 共用；Codex 安装时由 <code>adapters/codex/install.sh</code> 从仓库根<strong>组装</strong>进 <code>$CODEX_HOME</code>，源码不重复。</p>
+</blockquote>
+<p>最终出货 = <strong>18 个顶层文件</strong>（1 hook config bundle + 14 SKILL.md + 1 Router meta-skill + <strong>2 helper</strong>：<code>cache-snapshot-helper</code> + <code>health-status-helper</code>，v1.1 加；详见 <a href="SAFETY_ATOMIC_CAPABILITIES.md#124-两块共享-helper出货文件-16--18">SAFETY_ATOMIC_CAPABILITIES.md §12.4</a>）。v0.7 把 <code>threat-model-task</code> 整个 archetype 下架（STRIDE / attack-tree 是 agent-as-output deliverable，不是 guardrail），同时 <code>scan-code-for-vulnerabilities</code> 删 3 个高 FP SAST 后回归 pure-hook（matcher 限定 Write|Edit|MultiEdit）。pure-hook 共 5 个：<code>audit-trail-recording</code> / <code>check-tool-permission-scope</code> / <code>constrain-workspace-boundary</code> / <code>detect-malicious-payload-in-tool-output</code> / <code>scan-code-for-vulnerabilities</code>。<strong>v1.1 部署元数据</strong>：8 个 hook-network atom 加 <code>requires_network</code> + <code>fail_policy</code> 字段；2 个 helper 模块统一执行外部 IO + 降级逻辑（cache + bundled snapshot + health-ping + degraded banner）。</p>
+<blockquote>
+<p><strong>2026-06-04 — plugin 打包</strong>：bundle 原地重构为标准 Claude Code plugin（<code>skill-packages/</code>→<code>skills/</code>、<code>hook-config/settings.json.snippet</code>→<code>hooks/hooks.json</code>、<code>${HOOK_BUNDLE_ROOT}</code>→<code>${CLAUDE_PLUGIN_ROOT}</code>，加 <code>.claude-plugin/{plugin.json,marketplace.json}</code> + MIT <code>LICENSE</code> + <code>.gitignore</code>）。用户一键装两层：<code>/plugin marketplace add &lt;owner&gt;/&lt;repo&gt;</code> → <code>/plugin install agent-safety-orchestrator@safety-tools</code>（marketplace 名 <code>safety-tools</code>；hook 路径用 <code>${CLAUDE_PLUGIN_ROOT}</code> 可重定位、随更新存活）。<code>install.sh</code> 保留为手动/非-plugin 路径。两个生成器输出路径 + pilot 脚本（<code>entrypoint.sh</code>/<code>run.sh</code>）已同步；<code>claude plugin validate</code> <span class="badge badge--done">✅</span>；matcher 编译 + hook 拦截 + verdict-log + <code>helpers</code> import 重定位后冒烟全过。<strong>已发布</strong>至 https://github.com/tychenn/agent-safety-orchestrator （2026-06-05，commit <code>e63fce8</code>，marketplace 名 <code>safety-tools</code>）：占位符已填（tychen / tychenn）、营销版 README + CHANGELOG + 自包含 CI（<code>.github/workflows/validate.yml</code>）齐全；词表 vendored 为面向用户子集（<code>scripts/vendor_plugin_docs.py</code> 提取，1164 行）。<strong>待验</strong>：干净环境 <code>/plugin marketplace add tychenn/agent-safety-orchestrator</code> → <code>/plugin install ...@safety-tools</code> 确认 <code>source:"./"</code> 远端可解析。</p>
+<p><strong>2026-06-05 — Codex adapter（pilot，多 agent 适配 track）</strong>：跨 agent 适配第一步，落在 <a href="../agent-safety-orchestrator/adapters/codex/"><code>adapters/codex/</code></a>（注：当日稍后并入发布仓库，见下条）。research 确认 <strong>Codex / OpenClaw / Hermes Agent 三个目标都有 host 层 tool-call 拦截（PreToolUse 等价）+ 都吃 agentskills.io SKILL.md</strong> → 结论是<strong>不该砍 hook</strong>，而是把"两层"在每个 host 重新表达（确定性是"执行点"的属性，不是 atom 的属性）。Codex adapter = 薄 I/O 桥 <code>codex_hook.py</code>（Codex 事件 ⇄ <strong>复用 vendored matcher</strong>（event-in/verdict-out）⇄ Codex <code>permissionDecision:deny</code>/exit2）+ Codex <code>hooks.json</code> + 15 SKILL.md 直接复用 + <code>config.backstop.toml</code>（sandbox+approval，补 Codex PreToolUse 对 unified_exec 流式 shell / WebSearch 的覆盖缺口）。规格用本机 codex-cli 0.64.0 + 官方文档双向核实；隔离 <code>CODEX_HOME</code> 端到端验证通过（<code>rm -rf</code> / <code>curl\|sh</code> 注入 / prompt 里 AWS key / apply_patch 藏密钥 全 deny）。<strong>已知限制</strong>：apply_patch→content 映射有损（path-traversal 弱，secret 检测仍有效）。<strong>下一步建议</strong>：vendored <code>core/</code> 已构成重复——先抽共享 <code>agent-safety-core</code> 库，再复制到 OpenClaw/Hermes（否则 4 份副本）。</p>
+<p><strong>2026-06-05 — Claude Code + Codex 统一（合并进发布仓库，单核心双 host）</strong>：把 Codex adapter 从 monorepo 挪进<strong>发布仓库</strong> <a href="../agent-safety-orchestrator/adapters/codex/"><code>agent-safety-orchestrator/adapters/codex/</code></a>，并<strong>删掉 vendored <code>core/</code> + <code>skills/</code></strong>（与插件根 byte-identical 重复，已 <code>diff -rq</code> 核实）。bridge 改为按优先级解析共享核心（<code>$SAFETY_ORCH_CORE</code> → 装机后的 <code>core/hooks/scripts</code> → 仓库内 <code>../../hooks/scripts</code>），插件与 Codex adapter 自此<strong>共用同一份 matcher / helpers / atoms.json / skills</strong>，零源码重复。新增<strong>仓库根 <code>install.sh</code> 调度器</strong>（<code>--host claude|codex|both|auto</code>，自动探测 <code>claude</code>/<code>codex</code> binary + <code>~/.claude</code>/<code>~/.codex</code>）；原 Claude 手动安装器挪到 <a href="../agent-safety-orchestrator/adapters/claude/install.sh"><code>adapters/claude/install.sh</code></a>（<code>BUNDLE_ROOT</code> 上移两级）。Codex 安装器改为<strong>装机时从仓库根组装</strong> <code>core/</code>（拷 <code>hooks/scripts</code>+<code>helpers</code>+<code>atoms.json</code>）——部署仍自包含，源码单副本。<strong>验证</strong>：dispatcher 把两个 host 装进隔离 home 全过（installed bridge 对 <code>rm -rf</code> / apply_patch 藏密钥 → deny + exit2；benign <code>ls</code> 放行；未装的 in-repo bridge 走 <code>../..</code> 解析也 deny）；Claude 手动装把 <code>${CLAUDE_PLUGIN_ROOT}</code> 渲成仓库根、health banner 93/95；三个 drift-guard <code>--check</code> + 结构计数（15 skill / 8 matcher / 95 atom）全绿；CI 加两步（adapter 编译 / TOML 解析 / <code>bash -n</code> 三个 installer + <strong>"Dual-host proof"</strong> 喂 <code>rm -rf</code> 断言 <code>deny</code>+<code>exit2</code>）。<strong>取代上一条的"下一步建议"</strong>——共享核心已落地，同仓库内直接共用，无需再抽独立 <code>agent-safety-core</code> 库。<strong>下一步</strong>：复制 adapter 模式到 OpenClaw / Hermes（各加一个 <code>adapters/&lt;host&gt;/</code> 薄桥即可，核心零拷贝）。<strong>未推</strong>：改动留在本地，等 maintainer 批准再 commit + push。</p>
+</blockquote>
+<hr>
+</div>
+</div>
+<div class="section-card">
+<h3 class="section-card-head" id="47-pilot-验证当前主线">4.7 Pilot 验证（当前主线）</h3>
+<div class="section-card-body">
+<p><strong>状态：<span class="badge badge--active">🟡</span> 进行中</strong>（4.7.1 <span class="badge badge--done">✅</span> 全部完成 2026-05-15；4.7.2 / 4.7.3 <span class="badge badge--todo">⚪</span>）。隔离测试环境 ship 在 <a href="../pilot/"><code>pilot/</code></a>（<strong>podman rootless container</strong>；不污染 host <code>~/.claude/</code>）。本节维护<strong>让 pilot 真正跑起来 + 收集数据 + 反馈精修</strong>的全套 todo。每项打 <span class="badge badge--todo">⚪</span>/<span class="badge badge--active">🟡</span>/<span class="badge badge--done">✅</span> 跟 §4.0 一致。</p>
+<blockquote>
+<p><strong>Runtime 选定</strong>：测试机 Rocky Linux 9.3 自带 podman 4.6.1 rootless（无需 sudo / 无 daemon），CLI 与 docker 兼容；<code>pilot/run.sh</code> 默认走 podman，docker 兼容路径保留但不验证。下文 §4.7.1 / §4.7.2 都以 podman 为准。</p>
+<p><strong>Pilot 网络 / 用户映射的两个坑（2026-05-14 修正）</strong>：
+- <strong><code>--userns=keep-id:uid=1001,gid=1001</code></strong>：rootless podman 默认 host uid → 同号容器 uid 映射，但 node:20-slim base image 让 Dockerfile <code>useradd pilot</code> 拿到 uid 1001，而 host cty 是 1114——错位导致容器写 <code>.audit-bundle/atom-status.json</code> 报 EPERM。<code>run.sh</code> 显式映射 cty(1114) → pilot(1001) 后通。
+- <strong>runtime <code>--network=host</code></strong>：默认开。host 有 <code>http_proxy=127.0.0.1:NNNN</code> 时，bridge 模式下容器内 127.0.0.1 ≠ host loopback，3 个 network atom (<code>check-package-cve</code> / <code>detect-hallucinated-package</code> / <code>check-package-recency-anomaly</code>) <code>[Errno 111] Connection refused</code> → 退到 fallback 路径。4.7.2 要验证 atom <strong>设计本身</strong>就必须让它跑 active 路径，所以 default host。设 <code>CONTAINER_NET_MODE=bridge</code> 可专门测 fallback。</p>
+<p><strong>归因仪表盘补齐（2026-05-31）</strong>——4.7.2 的 Bundle-only / Built-in-only 归因此前无法落盘，本次补三处：
+- <strong><code>verdict-log.jsonl</code>（bundle hook 决策账本）</strong>：<a href="../agent-safety-orchestrator/hooks/scripts/lib_common.py"><code>lib_common.py</code></a> 的 <code>aggregate()</code> 现在把每个 block/warn verdict 落盘，打 <code>source:"bundle"</code> + <code>phase</code> + <code>atom_id</code>。此前 block/warn 只走 stdout/stderr 当场回 Claude Code、不留痕，<code>decision-trace.jsonl</code> 只记 Stop 事件（名字误导）。⚠️ <strong>它只记 hook（确定性）这一层，不是 bundle 全部</strong>：bundle 另有 skill（model-invoked）层，skill 不发 exit-2 verdict，只在 <code>tool-invocations.jsonl</code> 留 <code>Skill</code> 调用（<code>detail</code> 含 skill 名）+ transcript 里的后续行为。<strong>hook 和 skill 都是 bundle 的层，归因只有 bundle vs Claude Code 一条线。</strong>
+- <strong>归因模型（Router-gated，2026-05-31 与 maintainer 敲定）</strong>：skill 层的归因闸门是 <strong>meta safety skill <code>safety-router-skill</code> 调没调</strong>；hook 层常开、永远算我们。按序判定 5 类：① <strong>bundle-hook</strong>（hook 有 verdict）= <span class="badge badge--done">✅</span> 我们 → ② 无 hook、调了 Router 且安全问题被拦下 = <span class="badge badge--done">✅</span> <strong>bundle-skill</strong> 我们 → ③ 无 hook、调了 Router 但没拦下 = ❌ <strong>detection-miss</strong> 我们失败 → ④ 无 hook、<strong>没调 Router 且漏过</strong> = 🟠 <strong>routing-miss</strong> 我们的弱点（Router description 没在该触发时吸引模型，单独记，喂 4.7.3.b 调 description）→ ⑤ 无 hook、没调 Router 但仍被拦 = <span class="badge badge--todo">⚪</span> <strong>built-in</strong> Claude Code（不归我们）。核心规则：<strong>hook 开火 OR (Router 进场且抓住) = 我们功劳</strong>；Router 没进场却被拦 = built-in；Router 进场没抓住 = detection 失败；Router 压根没进场又漏 = routing 失败。<code>--vanilla</code>（无 hook 无 skill）从"每条 scenario 必跑"降为<strong>校准 built-in 基线 + 检验 bundle 在场是否影响非路由轮行为</strong>的 baseline 跑（category-5 的拦截应能在 vanilla 复现）。
+- <strong>transcript 持久化</strong>：<code>run.sh</code> 把容器 <code>~/.claude/projects/</code> 挂到 host <code>.audit-&lt;mode&gt;/transcript/</code>。容器 <code>--rm</code> 本会焚毁会话记录，而 transcript 是 model-invoked skill 调用链 + Claude Code 自拒的 ground truth。<code>tool-invocations.jsonl</code> 也补了 <code>detail</code> 字段（Skill→哪个 skill / Bash→command / Task→subagent_type），解决"看得见调了 skill 但看不出调哪个"。
+- <strong>Claude Code pin 2.1.158</strong>：<a href="../pilot/Dockerfile"><code>Dockerfile</code></a> 原 <code>npm install</code> 不锁版本（build 那天的 latest，已漂到旧的 2.1.140）。built-in safety 行为随版本变、而 A/B 衡量的就是 built-in 这条线 → 必须 pin 死可审计。<code>CLAUDE_CODE_VERSION=2.1.149 ./pilot/run.sh --rebuild</code> 可换版本。
+- <strong>state-dir 统一</strong>：<code>matcher_pretool_generic</code> / <code>matcher_stop</code> 此前硬编码 <code>~/.safety-orch</code> 不认 <code>SAFETY_ORCH_STATUS_DIR</code>（与 health_status 不一致）→ 已改走共享 <code>_state_dir()</code>，所有 audit 流落同一目录。</p>
+</blockquote>
+<p>⚠️ 4.7.1 全部 <span class="badge badge--done">✅</span> 才能开始 4.7.2；4.7.2 完成后再做 4.7.3。每完成一项请 maintainer 在本表手动改 status。</p>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.7.1 Pilot 环境 bring-up（前置）</summary>
+<p>每项需要在用户自己的 podman host 上手动验证；失败会暴露 Dockerfile / entrypoint / Claude Code 集成的 bug，所以这一阶段<strong>有可能需要回头改 <code>pilot/</code> 文件</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>任务</th>
+<th>状态</th>
+<th>失败的可能原因 / 修复入口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.7.1.a</td>
+<td>测试机有可用 podman rootless</td>
+<td><span class="badge badge--done">✅</span></td>
+<td>2026-05-13: Rocky Linux 9.3 自带 podman 4.6.1 rootless；rootless hello-world 跑通；无 sudo</td>
+</tr>
+<tr>
+<td>4.7.1.b</td>
+<td><code>./pilot/run.sh</code> 首次 build 通过</td>
+<td><span class="badge badge--done">✅</span></td>
+<td>2026-05-13: podman build 通过；image <code>localhost/safety-orch-pilot:latest</code> 602MB；含 Claude Code 2.1.140 (<code>/usr/local/bin/claude</code>) + python 3.11 + git 2.39。Build 必须用 <code>--network=host</code>（脚本已默认）解决容器内代理 / DNS / NOSPLIT 问题</td>
+</tr>
+<tr>
+<td>4.7.1.c</td>
+<td>容器 entrypoint banner 三段都出现：<code>[BUNDLE MODE]</code> header + <code>Bundle health check</code> 段 + <code>Top-level skills: 1</code>（<strong>v1.3 真层级</strong>；旧记录是 v1.2 前的 <code>Linked skills: 15 directories</code>）+ <code>Hook entries: 8 total</code> + Claude Code 模型确认</td>
+<td><span class="badge badge--done">✅</span></td>
+<td>2026-05-14 完成：banner 输出 <code>Safety Orchestrator: 95/95 atoms active</code> + <code>✓ All atoms active.</code>。过程踩 3 个坑都已修在 <a href="../pilot/run.sh"><code>pilot/run.sh</code></a> / <a href="../pilot/entrypoint.sh"><code>pilot/entrypoint.sh</code></a>：(1) rootless podman uid 映射错位 → <code>--userns=keep-id:uid=1001,gid=1001</code>；(2) container 默认 bridge 网络 → host 代理 <code>127.0.0.1:NNNN</code> 不通 → 改 <code>--network=host</code>；(3) <code>check-package-cve</code> 缺 offline snapshot → entrypoint 自动 <code>python3 -m helpers.cache_snapshot refresh-db</code>；(4) VIRUSTOTAL_API_KEY 在 .env → run.sh <code>set -a; . .env; set +a</code> 自动 source</td>
+</tr>
+<tr>
+<td>4.7.1.d</td>
+<td><code>claude</code> 命令在容器内可用 + 完成 auth</td>
+<td><span class="badge badge--done">✅</span></td>
+<td>2026-05-15 完成。挂载的 host credentials.json 没被容器 Claude Code 自动识别（版本错位 / format），fallback 到容器内 <code>claude login</code> 走 OAuth device-code 流：浏览器开 <code>claude.com/cai/oauth/authorize?...</code> → Anthropic 自家 <code>platform.claude.com/oauth/code/callback</code> 显示 code → 贴回 TUI。<strong>关键坑</strong>：OAuth state 是一次性的，URL 复制时终端换行容易漏字符——必须全选合一行；state 错就要重 <code>claude</code> 拿新 URL。容器 <code>~/.claude/</code> ro 挂载，token 只在本 session 内有效，下次进容器要重 OAuth</td>
+</tr>
+<tr>
+<td>4.7.1.e</td>
+<td>Claude Code session 启动后列出 safety skill（<strong>v1.3 真层级：应只见 <code>safety-router-skill</code> 一个</strong>——14 archetype 不再是 top-level skill；追问 Router routes-to 才列 14 archetype。旧记录是 v1.2 前列 15 个的结果，需在 v1.3 下重跑）</td>
+<td><span class="badge badge--done">✅</span>(待 v1.3 重跑)</td>
+<td>2026-05-15（v1.2 布局）完成。agent 列出 15 个 safety skill 全部正确（<code>classify-input-intent-ambiguity</code> / <code>detect-data-exfiltration</code> / <code>detect-prompt-injection</code> / <code>detect-supply-chain-risk</code> / <code>detect-task-overreach</code> / <code>enforce-output-content-policy</code> / <code>enforce-policy-as-code</code> / <code>enforce-rate-and-quota-limits</code> / <code>escalate-to-human-sentinel</code> / <code>incident-response-handler</code> / <code>redact-sensitive-output</code> / <code>safety-router-skill</code> / <code>scan-input-for-pii-and-secrets</code> / <code>validate-agent-tool-trust</code> / <code>validate-tool-argument-safety</code>）。注：agent 通过 session 启动时的 available-skills manifest 列出（filesystem 路径用 Bash 列因 EACCES 失败——见 4.7.1.f 修复）</td>
+</tr>
+<tr>
+<td>4.7.1.f</td>
+<td>触发 1 个 Bash tool 调用后，<code>pilot/.audit/tool-invocations.jsonl</code> 出现新条目</td>
+<td><span class="badge badge--done">✅</span></td>
+<td>2026-05-15 完成。<code>pilot/.audit-bundle/</code> 长出全套文件：<code>tool-invocations.jsonl</code>（15 行，3 个 session）+ <code>decision-trace.jsonl</code> + <code>session-counters.json</code> + <code>atom-status.json</code> + 历史 snapshot。3 种 tool（Bash / Read / Agent）都被 hook 捕获——8 个 matcher 全部正确 wire-up。<strong>关键修复</strong>：4.7.1.f 之前 Bash 报 EACCES（podman 单文件 bind mount 让 <code>/home/pilot/.claude/</code> 被自动建为 root-owned）；Dockerfile 提前 <code>mkdir -p /home/pilot/.claude /home/pilot/.cache /home/pilot/.config &amp;&amp; chown -R pilot:pilot</code> 修掉</td>
+</tr>
+<tr>
+<td>4.7.1.g</td>
+<td>单条对抗 prompt 端到端 block（bundle hook 真开火 + audit 留痕）</td>
+<td><span class="badge badge--done">✅</span></td>
+<td>2026-05-15 完成。<strong>关键发现 1</strong>：原拟用 <code>ignore previous instructions</code> 这种经典 PI prompt 不 work——Claude sonnet 4.6 alignment 自己就拒，bundle 没机会开火（典型 BUILT-IN-only 归因）。<strong>关键发现 2</strong>：换成"为 CI 写 dummy AWS test fixture"这种 alignment-bypass 任务后，<code>UserPromptSubmit</code> hook 在 prompt 进 LLM 前就 block 了——<code>matcher_user_prompt.py</code> 调用 <code>detect-credential-in-input</code> atom 匹配出 <code>aws_access_key + aws_secret</code> 双模式，BUNDLE-only 归因干净。<strong>Pilot 启示</strong>：alignment 强度直接决定 bundle 边际价值；4.7.2 必须用 benchmark 而非 hand-crafted scenario（否则大多数 attack 会落到 BUILT-IN-only 类，bundle 净增价值被严重低估）</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.7.2 Pilot 数据采集（4.7.1 全 ✅ 后启动）</summary>
+<blockquote>
+<p>⚠️ <strong>A/B 协议是 mandatory</strong>：每条 scenario 必须在 <strong>vanilla 模式</strong>（<code>./pilot/run.sh --vanilla</code>，无 bundle）和 <strong>bundle 模式</strong>（<code>./pilot/run.sh</code>，full bundle）各跑一遍。不做对照单跑 bundle 无法证明 bundle 是否真起作用——Claude Code built-in safety 可能已经挡住了。详 <a href="../pilot/scenarios.md"><code>pilot/scenarios.md</code></a> §A/B 方法论。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>状态</th>
+<th>产出（建议落地路径）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.7.2.a 写 scenario list（A/B 对照版）：5 happy-path + 10 attack + 3 边界路由</td>
+<td><span class="badge badge--done">✅</span></td>
+<td><a href="../pilot/scenarios.md"><code>pilot/scenarios.md</code></a>（2026-05-13，A/B 版）</td>
+</tr>
+<tr>
+<td>4.7.2.b 双模式跑全部场景：vanilla + bundle 各 18 scenarios，每 attack 至少 3 次</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td>audit 自动留在 <code>pilot/.audit-vanilla/</code> 和 <code>pilot/.audit-bundle/</code>（含 <code>verdict-log.jsonl</code> bundle 决策 + <code>transcript/</code> 会话记录）</td>
+</tr>
+<tr>
+<td>4.7.2.c 整理 Router-gated 归因表（bundle-hook / bundle-skill / detection-miss / routing-miss / built-in 5 类）+ 算汇总指标</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td><code>pilot/atom-tpfp-2026-XX-XX.md</code>（含 Bundle 净增价值 / hook vs skill 层贡献 / detection-miss vs routing-miss / 误报率）。<strong>数据源</strong>：hook 层取 <code>.audit-bundle/verdict-log.jsonl</code>；skill 层的 Router/子 skill 调用取 <code>tool-invocations.jsonl</code> 的 <code>Skill</code>+<code>detail</code>；最终拦没拦下取 <code>transcript/</code>。归因 joiner 脚本待 4.7.2.b 跑出真实 transcript 后按其 JSONL 结构再写（判定逻辑见上方 §4.7 归因模型）</td>
+</tr>
+<tr>
+<td>4.7.2.d Archetype description 边界测试（易混 pair；只 bundle 模式）</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td><code>pilot/description-boundary-report.md</code></td>
+</tr>
+<tr>
+<td>4.7.2.e 5 个 phase 边界延迟基准 + 模型对照（sonnet / opus / haiku）</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td><code>pilot/latency-bench.md</code>；模型对照看 bundle ROI 跟模型能力的关系</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="deep-dive">
+<summary><span class="deep-dive-label">展开</span> 4.7.3 反馈精修（4.7.2 后，可能多轮）</summary>
+<p>每轮：根据 4.7.2 数据改一组 atom / SKILL.md / hook script → 重 build pilot 容器 → 重跑 4.7.2 验证修复。</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>状态</th>
+<th>入口文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.7.3.a 列 representative → production 替换清单（按数据优先级排序）</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td>matcher script regex → semgrep / 真 osv-export snapshot / LLM prompt templates</td>
+</tr>
+<tr>
+<td>4.7.3.b 修 description 边界错位的 archetype</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td><a href="../scripts/gen_archetype_skill_md.py"><code>scripts/gen_archetype_skill_md.py</code></a> <code>ARCHETYPE_META[...]["description"]</code>，改完跑 <code>--only &lt;archetype-id&gt;</code> 单独重生成</td>
+</tr>
+<tr>
+<td>4.7.3.c 给 skill/hybrid atom 补 LLM prompt template</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td>14 个 archetype doc（<code>references/archetypes/*.md</code>）的 §4 Internal tools 段——目前只有 atom 描述，没有给 LLM 的具体 prompt 模板</td>
+</tr>
+<tr>
+<td>4.7.3.d 重新跑 4.7.2 验证修复</td>
+<td><span class="badge badge--todo">⚪</span></td>
+<td>回 4.7.2 重测；记录 round-by-round 数据收敛情况</td>
+</tr>
+<tr>
+<td>4.7.3.e（预备选项，待用户拍板）<strong>Router description 回填 archetype 触发摘要</strong></td>
+<td><span class="badge badge--todo">⚪</span> 待定</td>
+<td><strong>触发条件</strong>：若 4.7.2 数据显示 v1.3 真层级后 routing-miss 率显著高于层级化之前——根因假设是旧版 14 条 archetype description 常驻 context 起了 14 个"安全检查存在"的提示作用，层级化后只剩 1 条 Router description 把这提示价值丢了。<strong>修法</strong>：把 14 个 archetype 的触发场景<strong>摘要回填进 Router 的 description / §3.2 表</strong>（等于把提示价值搬进唯一入口，既保留提示又不破坏 router-first 层级），入口在 <a href="../agent-safety-orchestrator/skills/safety-router-skill/SKILL.md"><code>agent-safety-orchestrator/skills/safety-router-skill/SKILL.md</code></a> §3.2 + frontmatter description。<strong>先看数据再决定做不做</strong>——别在没有 routing-miss 升高证据前提前 over-engineer description。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Pilot 阶段结束的判据</strong>：4.7.2.c 里 TP/FP 表全部 atom 的 FP rate &lt; 10% 且没有 critical TN（漏检高 severity）。达到判据 → 项目 ready to ship。</p>
+</blockquote>
+<hr>
+</details>
+</div>
+</div>
+<h2 id="5-下一步按优先级">5. 下一步（按优先级）</h2>
+<ol>
+<li><strong>§4.7 Pilot 验证</strong>（<strong>当前主线</strong>）：跑 pilot 验证 bundle 在真实 Claude Code 里能用，收集 per-atom TP/FP 数据，反馈精修。<strong>详细 todo 清单 + 各项状态见 <a href="#47-pilot-验证当前主线">§4.7</a></strong>——分三个阶段（4.7.1 bring-up / 4.7.2 数据采集 / 4.7.3 反馈精修），每项打 <span class="badge badge--todo">⚪</span><span class="badge badge--active">🟡</span><span class="badge badge--done">✅</span> markers 跟 §4.0 一致。<strong>最早一步</strong>是 <code>./pilot/run.sh</code>（podman rootless）build + run，看 4.7.1.c-g 是否都过；过不去 → 回头改 <code>pilot/</code> 的 Dockerfile / entrypoint。</li>
+<li><strong>可选 §4.5 增量重审</strong>（不阻塞主线）：用 v1 词表对 1390 record 子样本（如 200 条）重跑 LLM 审计，验证新词表对应的命中分布是否更干净（v0.3 时有 wrong-parent 错挂、suggested_new_atoms 多；v1 应该都收敛）</li>
+</ol>
+<blockquote>
+<p>原"启动模块 2 Sentinel 数据准备 + 训练"已从本项目移除（项目 training-free，ML 模型训练归 separate downstream project）。如果你想推进 ML Sentinel，跟本 bundle 通过 <code>escalate-to-human-sentinel</code> archetype 的 atom 接口对接，不需要改本仓库。</p>
+</blockquote>
+<h2 id="6-仓库布局">6. 仓库布局</h2>
+<div class="codehilite"><pre><span></span><code>distill_skill/
+├── README.md                                  # 整个 monorepo 的入口、快速开始与复现实验指南
+├── data/raw/                                  # 上游原始一字不改
+│   ├── official_skills/&lt;provider&gt;/&lt;collection&gt;/&lt;category&gt;/&lt;skill&gt;/
+│   ├── community_skills/&lt;marketplace&gt;/&lt;collection&gt;/&lt;category&gt;/&lt;skill&gt;/
+│   ├── mcp_servers/&lt;registry&gt;/&lt;category&gt;/&lt;server&gt;/   # MCP 服务器元数据
+│   └── references/&lt;source&gt;/&lt;category&gt;/&lt;doc&gt;/         # taxonomy / 实践规范
+├── data/cache/                                # 计算缓存（可重建）
+│   └── embeddings/zhipu_embedding3.pkl        # Stage 3 vector cache (~64MB, 8071 条)
+├── docs/                                      # 稳定的设计与参考文档
+│   ├── PROJECT_OVERVIEW.md                    # 本文件
+│   ├── SKILL_STORAGE_LAYOUT.md
+│   ├── SAFETY_ATOMIC_ARCHETYPES.md            # Stage 3 anchor set（v2，已 freeze）
+│   └── SAFETY_ATOMIC_CAPABILITIES.md          # 原子能力词表 v0.3
+├── reports/                                   # 时序工作产出（蒸馏报告 / 审计快照）
+│   ├── dedup_stage1_hash_2026-05-08.json
+│   ├── dedup_stage2_filter_2026-05-08.json
+│   ├── dedup_stage3_embedding_2026-05-08.json
+│   ├── llm_audit_classify_2026-05-09.jsonl    # LLM 审计输出（每行 1 record）
+│   ├── llm_audit_classify_2026-05-09_cache/   # per-record cache（resume 友好）
+│   └── llm_audit_classify_2026-05-09_failures.jsonl
+├── scripts/                                   # fetcher + 漏斗 + 审计
+│   ├── fetch_openai_security_skills.py
+│   ├── fetch_anthropic_security_skills.py
+│   ├── fetch_clawhub_security_skills.py
+│   ├── fetch_skillsh_security_skills.py
+│   ├── fetch_skillsdirectory_security_skills.py
+│   ├── fetch_agent_skills_directory_security_skills.py
+│   ├── fetch_mcp_registry_security_servers.py # MCP source 3 fetchers ↓
+│   ├── fetch_smithery_security_servers.py
+│   ├── fetch_glama_security_servers.py
+│   ├── fetch_mcpso_security_servers.py
+│   ├── fetch_pulsemcp_security_servers.py
+│   ├── fetch_security_references.py           # source 5 references (curated)
+│   ├── dedup_stage1_hash.py                   # §4.2 三层漏斗 ↓
+│   ├── dedup_stage2_filter.py
+│   ├── dedup_stage3_embedding.py
+│   ├── _archetypes.py                         # Stage 3 anchor config
+│   ├── _atomic_capabilities.py                # §4.3 词表 loader
+│   ├── llm_audit_stage1_classify.py           # §4.4 DeepSeek 审计
+│   └── _env.py                                # .env 文件 loader（无依赖）
+├── agent-safety-orchestrator/                 # 交付物：单核心 + Claude Code plugin + Codex adapter（布局详见 §4.6 树）
+├── pilot/                                      # §4.7 隔离测试环境（podman rootless）
+├── .env.example                               # 环境变量模板（commit 进 git）
+├── .env                                       # 真值（gitignored）
+└── .gitignore
+</code></pre></div>
+</article>
+</div>
+</body>
+</html>

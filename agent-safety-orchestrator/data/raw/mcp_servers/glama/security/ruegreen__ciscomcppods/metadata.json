@@ -1,0 +1,71 @@
+{
+  "registry": "glama",
+  "id": "de2ebikg33",
+  "namespace": "ruegreen",
+  "slug": "CiscoMCPPods",
+  "name": "Cisco MCP Pods Server",
+  "description": "Enables AI agents to interact with Cisco API Gateway pods endpoints for complete pod management including CRUD operations, credential updates, and configuration management through natural language. Supports multiple deployment modes including local Claude Desktop integration and cloud deployment for remote AI agents like Webex Connect.",
+  "discoveryQueries": [
+    "credential"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to interact with Cisco API Gateway pods endpoints for complete pod management including CRUD operations, credential updates, and configuration management through natural language. Supports multiple deployment modes including local Claude Desktop integration and cloud deployment for remote AI agents like Webex Connect.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AUTH_MODE": {
+          "description": "Authentication mode for the API Gateway",
+          "type": "string",
+          "default": "apikey"
+        },
+        "MCP_API_KEY": {
+          "description": "API key required for client connections to this MCP server",
+          "type": "string"
+        },
+        "SERVER_PATH": {
+          "description": "Path prefix for the MCP server endpoints",
+          "type": "string",
+          "default": "/CiscoMCPPods"
+        },
+        "SERVER_PORT": {
+          "description": "Port for the MCP server (for SSE/HTTP transport modes only)",
+          "type": "string",
+          "default": "1013"
+        },
+        "API_BASE_URL": {
+          "description": "The base URL for the Cisco API Gateway",
+          "type": "string",
+          "default": "http://apigateway.cxocoe.us"
+        },
+        "API_KEY_PODS": {
+          "description": "Your API key for authentication with the Cisco API Gateway",
+          "type": "string"
+        },
+        "PUBLIC_HOSTNAME": {
+          "description": "Public hostname for deployment (e.g., ciscomcppods.cxocoe.us)",
+          "type": "string"
+        },
+        "ANTHROPIC_API_KEY": {
+          "description": "Anthropic API key (optional - for test-mcp-client.js only). Required for the interactive MCP client tester with Anthropic AI integration. Get your key from: https://console.anthropic.com/",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_KEY_PODS"
+      ]
+    },
+    "id": "de2ebikg33",
+    "name": "Cisco MCP Pods Server",
+    "namespace": "ruegreen",
+    "repository": {
+      "url": "https://github.com/ruegreen/CiscoMCPPods"
+    },
+    "slug": "CiscoMCPPods",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/de2ebikg33"
+  }
+}

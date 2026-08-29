@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "pqwzba0aoz",
+  "namespace": "peacockery-studio",
+  "slug": "sharepoint-mcp",
+  "name": "SharePoint MCP Server",
+  "description": "Provides Claude with access to Microsoft SharePoint via the Microsoft Graph API, enabling folder management, document operations (upload, download, read, update, delete), and metadata management with secure OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides Claude with access to Microsoft SharePoint via the Microsoft Graph API, enabling folder management, document operations (upload, download, read, update, delete), and metadata management with secure OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SHAREPOINT_SITE_URL": {
+          "description": "The URL of your SharePoint site (e.g., https://your-tenant.sharepoint.com/sites/your-site)",
+          "type": "string"
+        },
+        "SHAREPOINT_CLIENT_ID": {
+          "description": "Your Azure AD Application (client) ID",
+          "type": "string"
+        },
+        "SHAREPOINT_TENANT_ID": {
+          "description": "Your Azure AD Directory (tenant) ID",
+          "type": "string"
+        },
+        "SHAREPOINT_DOC_LIBRARY": {
+          "description": "The name of the SharePoint document library",
+          "type": "string",
+          "default": "Shared Documents"
+        },
+        "SHAREPOINT_CLIENT_SECRET": {
+          "description": "Your Azure AD client secret value",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SHAREPOINT_CLIENT_ID",
+        "SHAREPOINT_CLIENT_SECRET",
+        "SHAREPOINT_TENANT_ID",
+        "SHAREPOINT_SITE_URL",
+        "SHAREPOINT_DOC_LIBRARY"
+      ]
+    },
+    "id": "pqwzba0aoz",
+    "name": "SharePoint MCP Server",
+    "namespace": "peacockery-studio",
+    "repository": {
+      "url": "https://github.com/peacockery-studio/sharepoint-mcp"
+    },
+    "slug": "sharepoint-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pqwzba0aoz"
+  }
+}

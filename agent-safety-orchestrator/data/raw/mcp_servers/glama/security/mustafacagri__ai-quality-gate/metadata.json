@@ -1,0 +1,86 @@
+{
+  "registry": "glama",
+  "id": "axgjlb1d5b",
+  "namespace": "mustafacagri",
+  "slug": "ai-quality-gate",
+  "name": "AI Quality Gate",
+  "description": "🚀 Kill the Junior AI Era. 🤖 Level up your AI code to Principal standards. No more sloppy lines or junior mistakes. Automated ESLint ✨ TypeScript 🔧 Prettier 🎨 SonarQube 🛡️ Security 🔒 Complexity 📊 in seconds. High-stakes quality, forced to ship only the best. ⚡🏆 Goodbye, bad code. Hello, Principal Engineer. 🚀✨",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "🚀 Kill the Junior AI Era. 🤖 Level up your AI code to Principal standards. No more sloppy lines or junior mistakes. Automated ESLint ✨ TypeScript 🔧 Prettier 🎨 SonarQube 🛡️ Security 🔒 Complexity 📊 in seconds. High-stakes quality, forced to ship only the best. ⚡🏆 Goodbye, bad code. Hello, Principal Engineer. 🚀✨",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SONAR_TOKEN": {
+          "description": "SonarQube token (required for Phase 2).",
+          "type": "string"
+        },
+        "PROJECT_ROOT": {
+          "description": "Force project root if auto-detection is wrong for your layout.",
+          "type": "string"
+        },
+        "PHASE1_TIMEOUT": {
+          "description": "Phase 1 timeout (ms).",
+          "type": "string",
+          "default": "30000"
+        },
+        "PHASE2_TIMEOUT": {
+          "description": "Phase 2 timeout (ms).",
+          "type": "string",
+          "default": "300000"
+        },
+        "SONAR_HOST_URL": {
+          "description": "SonarQube server URL (required for Phase 2).",
+          "type": "string"
+        },
+        "ENABLE_I18N_RULES": {
+          "description": "Set to true for stricter JSX literal checks for i18n projects.",
+          "type": "string",
+          "default": "false"
+        },
+        "SONAR_PROJECT_KEY": {
+          "description": "SonarQube project key (required for Phase 2).",
+          "type": "string"
+        },
+        "SONAR_SCANNER_PATH": {
+          "description": "Full path to sonar-scanner if not on PATH.",
+          "type": "string"
+        },
+        "QUALITY_GATE_CONFIG": {
+          "description": "Absolute path to a specific .quality-gate.yaml or .quality-gate.json (skips walking directories).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": []
+        },
+        {
+          "required": [
+            "SONAR_HOST_URL",
+            "SONAR_TOKEN",
+            "SONAR_PROJECT_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "axgjlb1d5b",
+    "name": "AI Quality Gate",
+    "namespace": "mustafacagri",
+    "repository": {
+      "url": "https://github.com/mustafacagri/ai-quality-gate"
+    },
+    "slug": "ai-quality-gate",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/axgjlb1d5b"
+  }
+}

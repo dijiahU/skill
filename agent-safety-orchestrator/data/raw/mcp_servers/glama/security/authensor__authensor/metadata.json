@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "x84drqn7rd",
+  "namespace": "AUTHENSOR",
+  "slug": "authensor",
+  "name": "authensor-mcp-server",
+  "description": "Policy enforcement gateway for MCP tool calls, evaluating every tool invocation against declarative YAML policies (allow/deny/escalate-to-human), generating cryptographic hash-chained audit receipts, and including built-in content safety scanning.",
+  "discoveryQueries": [
+    "audit",
+    "policy"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:hybrid"
+    ],
+    "description": "Policy enforcement gateway for MCP tool calls, evaluating every tool invocation against declarative YAML policies (allow/deny/escalate-to-human), generating cryptographic hash-chained audit receipts, and including built-in content safety scanning.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AUTHENSOR_API_KEY": {
+          "description": "The API key used for authenticating with the control plane and binding to the principal identity.",
+          "type": "string"
+        },
+        "AUTHENSOR_PRINCIPAL_ID": {
+          "description": "The unique identifier for the agent principal (e.g., 'my-agent').",
+          "type": "string"
+        },
+        "AUTHENSOR_SHADOW_POLICY_ID": {
+          "description": "Optional policy ID for shadow evaluation testing, allowing you to test new policies alongside active ones without enforcement.",
+          "type": "string"
+        },
+        "AUTHENSOR_CONTROL_PLANE_URL": {
+          "description": "The URL of the Authensor control plane. Defaults to http://localhost:3000",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "AUTHENSOR_BOOTSTRAP_ADMIN_TOKEN": {
+          "description": "The bootstrap admin token used for initial configuration and admin actions.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AUTHENSOR_PRINCIPAL_ID"
+      ]
+    },
+    "id": "x84drqn7rd",
+    "name": "authensor-mcp-server",
+    "namespace": "AUTHENSOR",
+    "repository": {
+      "url": "https://github.com/AUTHENSOR/AUTHENSOR"
+    },
+    "slug": "authensor",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/x84drqn7rd"
+  }
+}

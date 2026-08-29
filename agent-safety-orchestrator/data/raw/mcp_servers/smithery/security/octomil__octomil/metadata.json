@@ -1,0 +1,894 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "octomil/octomil",
+  "namespace": "octomil",
+  "slug": "octomil",
+  "displayName": "Octomil",
+  "description": "Manage, optimize, and deploy machine learning models to edge devices with automated hardware-aware configurations. Generate, review, and test code using local inference to reduce costs and enhance privacy. Benchmark model performance and scan codebases to identify the most efficient on-device integration points.",
+  "discoveryQueries": [
+    "encryption",
+    "ransomware",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "f5f3dbe5-d417-4de7-ae4e-320dc4084519",
+    "qualifiedName": "octomil/octomil",
+    "namespace": "octomil",
+    "slug": "octomil",
+    "displayName": "Octomil",
+    "description": "Manage, optimize, and deploy machine learning models to edge devices with automated hardware-aware configurations. Generate, review, and test code using local inference to reduce costs and enhance privacy. Benchmark model performance and scan codebases to identify the most efficient on-device integration points.",
+    "iconUrl": "https://api.smithery.ai/servers/octomil/octomil/icon",
+    "verified": false,
+    "useCount": 10155,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-10T02:36:16.290Z",
+    "homepage": "https://octomil.com",
+    "bySmithery": false,
+    "owner": "org_01KNBVMDB9A5XVEZG332HSJ07E",
+    "score": 0.0078125
+  },
+  "detail": {
+    "qualifiedName": "octomil/octomil",
+    "displayName": "Octomil",
+    "description": "Manage, optimize, and deploy machine learning models to edge devices with automated hardware-aware configurations. Generate, review, and test code using local inference to reduce costs and enhance privacy. Benchmark model performance and scan codebases to identify the most efficient on-device integration points.",
+    "iconUrl": "https://api.smithery.ai/servers/octomil/octomil/icon",
+    "remote": true,
+    "deploymentUrl": "https://octomil.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://octomil.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "title": "Model",
+              "default": "qwen-coder-7b",
+              "x-order": 1,
+              "description": "Default model for inference (e.g. phi-mini, gemma-3b, qwen-coder-7b)"
+            },
+            "octomilApiKey": {
+              "type": "string",
+              "title": "Octomil API Key",
+              "x-order": 0,
+              "description": "API key for platform features (deployment, optimization, embeddings). Get one at https://octomil.com"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "generate_code",
+        "description": "Generate code from a natural language description.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string",
+              "title": "Context",
+              "default": "",
+              "description": "Additional context (existing code, constraints, etc.)"
+            },
+            "language": {
+              "type": "string",
+              "title": "Language",
+              "default": "",
+              "description": "Target programming language (e.g. python, typescript)"
+            },
+            "description": {
+              "type": "string",
+              "title": "Description",
+              "description": "What the code should do"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "review_code",
+        "description": "Review code for bugs, security issues, and improvements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "title": "Code",
+              "description": "The code to review"
+            },
+            "focus": {
+              "type": "string",
+              "title": "Focus",
+              "default": "",
+              "description": "Specific focus area (e.g. security, performance, style)"
+            },
+            "language": {
+              "type": "string",
+              "title": "Language",
+              "default": "",
+              "description": "Programming language"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "explain_code",
+        "description": "Explain what code does in plain English.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "title": "Code",
+              "description": "The code to explain"
+            },
+            "language": {
+              "type": "string",
+              "title": "Language",
+              "default": "",
+              "description": "Programming language"
+            },
+            "detail_level": {
+              "type": "string",
+              "title": "Detail Level",
+              "default": "medium",
+              "description": "How detailed: brief, medium, or thorough"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "write_tests",
+        "description": "Generate unit tests for the given code.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "title": "Code",
+              "description": "The code to test"
+            },
+            "focus": {
+              "type": "string",
+              "title": "Focus",
+              "default": "",
+              "description": "Specific areas to test (e.g. edge cases, error handling)"
+            },
+            "language": {
+              "type": "string",
+              "title": "Language",
+              "default": "",
+              "description": "Programming language"
+            },
+            "framework": {
+              "type": "string",
+              "title": "Framework",
+              "default": "",
+              "description": "Test framework (e.g. pytest, jest, go test)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "run_prompt",
+        "description": "Run a free-form prompt through the local on-device model.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "title": "Prompt",
+              "description": "The prompt or question to send to the local model"
+            },
+            "context": {
+              "type": "string",
+              "title": "Context",
+              "default": "",
+              "description": "Additional context to include with the prompt"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "review_file",
+        "description": "Read a file from disk and review it locally using the on-device model.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "focus": {
+              "type": "string",
+              "title": "Focus",
+              "default": "",
+              "description": "Specific focus area (e.g. security, performance, bugs)"
+            },
+            "file_path": {
+              "type": "string",
+              "title": "File Path",
+              "description": "Path to the file to review"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "analyze_files",
+        "description": "Read multiple files and answer a question about them.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "title": "Question",
+              "description": "Question to answer about the files"
+            },
+            "file_paths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "File Paths",
+              "description": "List of file paths to read"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "resolve_model",
+        "description": "Resolve a model name to engine-specific artifacts including HuggingFace repo, filename, engine, and architecture.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Model specifier (e.g. 'gemma-3b', 'phi-mini:4bit', 'qwen-coder-7b')"
+            },
+            "engine": {
+              "type": "string",
+              "title": "Engine",
+              "default": "",
+              "description": "Force a specific engine (e.g. 'mlx', 'llama.cpp', 'onnx'). Empty = auto-select."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "list_models",
+        "description": "List all available models in the Octomil catalog with publisher, parameter count, engines, and variants.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filter_engine": {
+              "type": "string",
+              "title": "Filter Engine",
+              "default": "",
+              "description": "Filter models by engine compatibility (e.g. 'mlx', 'llama.cpp'). Empty = all."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "detect_engines",
+        "description": "Detect which inference engines are available on this machine.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model_name": {
+              "type": "string",
+              "title": "Model Name",
+              "default": "",
+              "description": "Filter engines by model compatibility. Empty = show all."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "run_inference",
+        "description": "Run raw inference through the local on-device model without system prompt wrapping.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "title": "Model",
+              "default": "",
+              "description": "Model override (empty = server's configured model)"
+            },
+            "prompt": {
+              "type": "string",
+              "title": "Prompt",
+              "description": "The prompt to send to the model"
+            },
+            "max_tokens": {
+              "type": "integer",
+              "title": "Max Tokens",
+              "default": 2048,
+              "description": "Maximum tokens to generate"
+            },
+            "temperature": {
+              "type": "number",
+              "title": "Temperature",
+              "default": 0.7,
+              "description": "Sampling temperature (lower = more deterministic)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_metrics",
+        "description": "Get current model, engine, hardware, and device status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_hardware": {
+              "type": "boolean",
+              "title": "Include Hardware",
+              "default": true,
+              "description": "Include hardware detection info (CPU, RAM, GPU)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "deploy_model",
+        "description": "Deploy a model to edge devices via the Octomil platform. Requires OCTOMIL_API_KEY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Model name to deploy"
+            },
+            "group": {
+              "type": "string",
+              "title": "Group",
+              "default": "",
+              "description": "Device group name"
+            },
+            "devices": {
+              "type": "string",
+              "title": "Devices",
+              "default": "",
+              "description": "Comma-separated device IDs"
+            },
+            "rollout": {
+              "type": "integer",
+              "title": "Rollout",
+              "default": 100,
+              "description": "Rollout percentage 1-100"
+            },
+            "version": {
+              "type": "string",
+              "title": "Version",
+              "default": "",
+              "description": "Model version (empty = latest)"
+            },
+            "strategy": {
+              "type": "string",
+              "title": "Strategy",
+              "default": "canary",
+              "description": "Deployment strategy: 'canary' or 'rolling'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "convert_model",
+        "description": "Convert a local PyTorch model to edge-optimized formats (ONNX, CoreML, TFLite).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "title": "Target",
+              "default": "onnx",
+              "description": "Comma-separated target formats: onnx, coreml, tflite"
+            },
+            "model_path": {
+              "type": "string",
+              "title": "Model Path",
+              "description": "Path to the PyTorch model file (.pt or .pth)"
+            },
+            "input_shape": {
+              "type": "string",
+              "title": "Input Shape",
+              "default": "1,3,224,224",
+              "description": "Comma-separated input tensor shape"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "optimize_model",
+        "description": "Optimize a model for on-device deployment via server-side pruning and quantization. Requires OCTOMIL_API_KEY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Model name (must be registered on the platform)"
+            },
+            "size_budget_mb": {
+              "type": "number",
+              "title": "Size Budget Mb",
+              "default": 0,
+              "description": "Maximum model size in MB (0 = no limit)"
+            },
+            "target_devices": {
+              "type": "string",
+              "title": "Target Devices",
+              "default": "",
+              "description": "Comma-separated target device types (e.g. 'ios,android')"
+            },
+            "accuracy_threshold": {
+              "type": "number",
+              "title": "Accuracy Threshold",
+              "default": 0.95,
+              "description": "Minimum acceptable accuracy ratio 0-1"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "detect_hardware",
+        "description": "Detect full hardware capabilities including CPU, GPU, RAM, and recommended inference backend.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "force_refresh": {
+              "type": "boolean",
+              "title": "Force Refresh",
+              "default": false,
+              "description": "Force re-detection instead of using cached hardware info"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "benchmark_model",
+        "description": "Benchmark inference engines for a specific model, measuring tokens/second and latency.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "engine": {
+              "type": "string",
+              "title": "Engine",
+              "default": "",
+              "description": "Specific engine to benchmark (empty = all available)"
+            },
+            "n_tokens": {
+              "type": "integer",
+              "title": "N Tokens",
+              "default": 32,
+              "description": "Number of tokens to generate per benchmark run"
+            },
+            "model_name": {
+              "type": "string",
+              "title": "Model Name",
+              "description": "Model to benchmark (e.g. 'gemma-3b', 'phi-mini')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "recommend_model",
+        "description": "Recommend the best model configuration for this hardware based on available RAM, GPU, and CPU.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "string",
+              "title": "Priority",
+              "default": "balanced",
+              "description": "Optimization priority: 'speed', 'quality', or 'balanced'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "scan_codebase",
+        "description": "Scan a codebase to find all ML inference points across iOS, Android, and Python code.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "title": "Path",
+              "description": "Directory path to scan"
+            },
+            "platform": {
+              "type": "string",
+              "title": "Platform",
+              "default": "",
+              "description": "Filter by platform: 'ios', 'android', 'python' (empty = all)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "compress_prompt",
+        "description": "Compress a prompt to reduce token count before inference, saving cost without losing meaning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "messages": {
+              "type": "string",
+              "title": "Messages",
+              "description": "JSON array of message objects [{\"role\": \"user\", \"content\": \"...\"}]"
+            },
+            "strategy": {
+              "type": "string",
+              "title": "Strategy",
+              "default": "token_pruning",
+              "description": "Compression strategy: 'token_pruning' or 'sliding_window'"
+            },
+            "target_ratio": {
+              "type": "number",
+              "title": "Target Ratio",
+              "default": 0.5,
+              "description": "Target compression ratio 0-1 (0.5 = reduce by half)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "plan_deployment",
+        "description": "Dry-run a deployment to see the plan without executing it. Requires OCTOMIL_API_KEY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Model name to plan deployment for"
+            },
+            "group": {
+              "type": "string",
+              "title": "Group",
+              "default": "",
+              "description": "Device group name"
+            },
+            "devices": {
+              "type": "string",
+              "title": "Devices",
+              "default": "",
+              "description": "Comma-separated device IDs"
+            },
+            "version": {
+              "type": "string",
+              "title": "Version",
+              "default": "",
+              "description": "Model version (empty = latest)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "embed_text",
+        "description": "Generate text embeddings using the Octomil platform. Requires OCTOMIL_API_KEY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "title": "Text",
+              "description": "Text to embed (single string or JSON array of strings)"
+            },
+            "model": {
+              "type": "string",
+              "title": "Model",
+              "default": "",
+              "description": "Model ID for embeddings (required)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "available_models",
+        "uri": "octomil://models",
+        "description": "List of available models in the Octomil catalog.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "server_status",
+        "uri": "octomil://status",
+        "description": "Current server status including model and engine info.",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "deploy_guide",
+        "description": "Step-by-step guide for deploying a model to edge devices.",
+        "arguments": [
+          {
+            "name": "model_name",
+            "description": "Model to deploy",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "code_review_guide",
+        "description": "Guide for reviewing code with local inference.",
+        "arguments": [
+          {
+            "name": "language",
+            "description": "Programming language",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

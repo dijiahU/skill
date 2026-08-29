@@ -1,0 +1,291 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "AIM-Intelligence/aim-mcp",
+  "namespace": "AIM-Intelligence",
+  "slug": "aim-mcp",
+  "displayName": "AIM Guard",
+  "description": "Provide AI-powered security analysis and safety instruction tools to protect AI agents during MCP interactions. Analyze text content for harmful or inappropriate material and enhance user prompts with security instructions. Ensure safer AI interactions with contextual security guidelines and real-time threat detection.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "vulnerability",
+    "credential",
+    "authentication",
+    "owasp",
+    "phishing",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "e5c7f43f-ce7b-4779-b12e-711f486894b2",
+    "qualifiedName": "AIM-Intelligence/aim-mcp",
+    "namespace": "aim-intelligence",
+    "slug": "aim-mcp",
+    "displayName": "AIM Guard",
+    "description": "Provide AI-powered security analysis and safety instruction tools to protect AI agents during MCP interactions. Analyze text content for harmful or inappropriate material and enhance user prompts with security instructions. Ensure safer AI interactions with contextual security guidelines and real-time threat detection.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/aim-intelligence.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": false,
+    "isDeployed": true,
+    "createdAt": "2025-06-19T06:39:52.631Z",
+    "homepage": "https://aim-intelligence.com",
+    "bySmithery": false,
+    "owner": "org_01KNBMYY1EAH3H65F3RJJ8YHCM",
+    "score": 0.022727272727272728
+  },
+  "detail": {
+    "qualifiedName": "AIM-Intelligence/aim-mcp",
+    "displayName": "AIM Guard",
+    "description": "Provide AI-powered security analysis and safety instruction tools to protect AI agents during MCP interactions. Analyze text content for harmful or inappropriate material and enhance user prompts with security instructions. Ensure safer AI interactions with contextual security guidelines and real-time threat detection.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/aim-intelligence.com.ico",
+    "remote": false,
+    "deploymentUrl": null,
+    "connections": [
+      {
+        "type": "stdio",
+        "bundleUrl": "https://backend.smithery.ai/storage/v1/object/public/bundles/@AIM-Intelligence/aim-mcp/server.mcpb",
+        "runtime": "node",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "ai-safety-guard",
+        "description": "AI Safety Guard - MCP Caution Instructions for AI Agents",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mcp_type": {
+              "enum": [
+                "email",
+                "slack",
+                "database",
+                "file",
+                "web",
+                "general"
+              ],
+              "type": "string",
+              "default": "general",
+              "description": "Type of MCP the AI Agent is about to call"
+            },
+            "operation_type": {
+              "enum": [
+                "read",
+                "write",
+                "execute",
+                "delete",
+                "send",
+                "query"
+              ],
+              "type": "string",
+              "default": "read",
+              "description": "Type of operation being requested"
+            },
+            "sensitivity_level": {
+              "enum": [
+                "public",
+                "internal",
+                "confidential",
+                "restricted"
+              ],
+              "type": "string",
+              "default": "internal",
+              "description": "Sensitivity level of the data/operation"
+            }
+          }
+        }
+      },
+      {
+        "name": "aim-text-guard",
+        "description": "AIM-Intelligence Text Guard Tool",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to analyze for harmful content"
+            }
+          }
+        }
+      },
+      {
+        "name": "aim-security-prompt-tool",
+        "description": "Security Prompt Enhancement Tool",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "user_prompt": {
+              "type": "string",
+              "description": "The original user prompt to enhance with security instructions"
+            },
+            "security_level": {
+              "enum": [
+                "basic",
+                "standard",
+                "strict"
+              ],
+              "type": "string",
+              "default": "standard",
+              "description": "Security enhancement level"
+            }
+          }
+        }
+      },
+      {
+        "name": "prompt-injection-detector",
+        "description": "Detect prompt injection attempts based on OWASP LLM01:2025 patterns",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to analyze for prompt injection patterns"
+            },
+            "sensitivity": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string",
+              "default": "medium",
+              "description": "Detection sensitivity level"
+            }
+          }
+        }
+      },
+      {
+        "name": "credential-scanner",
+        "description": "Scan text for exposed credentials (API keys, passwords, tokens, SSH keys)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to scan for credentials"
+            },
+            "mask_findings": {
+              "type": "boolean",
+              "default": true,
+              "description": "Mask detected credentials in output"
+            }
+          }
+        }
+      },
+      {
+        "name": "url-security-validator",
+        "description": "Validate URL safety (phishing, malware, HTTPS enforcement)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL to validate for security"
+            },
+            "strict_mode": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable strict security checks"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Database Security Checklist",
+        "uri": "security-checklist://database",
+        "description": "Security checklist for database operations",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Email Security Checklist",
+        "uri": "security-checklist://email",
+        "description": "Security checklist for email operations",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Slack/Chat Security Checklist",
+        "uri": "security-checklist://slack",
+        "description": "Security checklist for chat/messaging operations",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "File Operations Security Checklist",
+        "uri": "security-checklist://file",
+        "description": "Security checklist for file operations",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Web Request Security Checklist",
+        "uri": "security-checklist://web",
+        "description": "Security checklist for web requests",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "General MCP Security Checklist",
+        "uri": "security-checklist://general",
+        "description": "General security checklist for all MCP operations",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Data Classification Policy",
+        "uri": "security-policy://data-classification",
+        "description": "Policy for classifying and handling data by sensitivity level",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Access Control Policy",
+        "uri": "security-policy://access-control",
+        "description": "Policy for managing user access and permissions",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Incident Response Procedure",
+        "uri": "security-policy://incident-response",
+        "description": "Procedure for responding to security incidents",
+        "mimeType": "text/markdown"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "security-review",
+        "description": "Comprehensive security review workflow for code, data, or configuration",
+        "arguments": [
+          {
+            "name": "target_type",
+            "description": "Type of target to review: code, data, or configuration",
+            "required": true
+          },
+          {
+            "name": "context",
+            "description": "Additional context about what needs to be reviewed",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "threat-analysis",
+        "description": "Analyze potential security threats and risks for a given scenario",
+        "arguments": [
+          {
+            "name": "scenario",
+            "description": "The security scenario or operation to analyze",
+            "required": true
+          },
+          {
+            "name": "sensitivity_level",
+            "description": "Data sensitivity level: public, internal, confidential, or restricted",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

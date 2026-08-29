@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "dusla3os24",
+  "namespace": "nitrosend",
+  "slug": "mcp",
+  "name": "Nitrosend",
+  "description": "AI-native email marketing platform built for agents. Control campaigns, automations, contacts, templates, and analytics via MCP with OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "AI-native email marketing platform built for agents. Control campaigns, automations, contacts, templates, and analytics via MCP with OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NITROSEND_API_KEY": {
+          "description": "API key (nskey_live_...) — for stdio transport",
+          "type": "string"
+        },
+        "NITROSEND_API_URL": {
+          "description": "Override API endpoint (default: https://api.nitrosend.com/mcp)",
+          "type": "string",
+          "default": "https://api.nitrosend.com/mcp"
+        },
+        "NITROSEND_BEARER_TOKEN": {
+          "description": "OAuth bearer token — alternative to API key",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "NITROSEND_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "NITROSEND_BEARER_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "dusla3os24",
+    "name": "Nitrosend",
+    "namespace": "nitrosend",
+    "repository": {
+      "url": "https://github.com/nitrosend/mcp"
+    },
+    "slug": "mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dusla3os24"
+  }
+}

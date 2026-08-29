@@ -1,0 +1,87 @@
+{
+  "registry": "glama",
+  "id": "csrnsf0ssl",
+  "namespace": "dedalus-labs",
+  "slug": "linear-mcp",
+  "name": "linear-mcp",
+  "description": "A Model Context Protocol server that enables interaction with Linear workspaces to manage issues, projects, cycles, and teams through a GraphQL interface. It provides 21 tools for comprehensive task management, search, and workflow coordination using OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server that enables interaction with Linear workspaces to manage issues, projects, cycles, and teams through a GraphQL interface. It provides 21 tools for comprehensive task management, search, and workflow coordination using OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OAUTH_ENABLED": {
+          "description": "Whether OAuth is enabled for the provider configuration.",
+          "type": "string",
+          "default": "true"
+        },
+        "DEDALUS_AS_URL": {
+          "description": "The URL for Dedalus AS.",
+          "type": "string",
+          "default": "https://as.dedaluslabs.ai"
+        },
+        "OAUTH_BASE_URL": {
+          "description": "Base URL for Linear API.",
+          "type": "string",
+          "default": "https://api.linear.app"
+        },
+        "DEDALUS_API_KEY": {
+          "description": "Your Dedalus API key (dsk_*).",
+          "type": "string"
+        },
+        "DEDALUS_API_URL": {
+          "description": "The URL for the Dedalus API.",
+          "type": "string",
+          "default": "https://api.dedaluslabs.ai"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "Your Linear OAuth app client ID.",
+          "type": "string"
+        },
+        "OAUTH_TOKEN_URL": {
+          "description": "Linear OAuth token URL.",
+          "type": "string",
+          "default": "https://api.linear.app/oauth/token"
+        },
+        "OAUTH_AUTHORIZE_URL": {
+          "description": "Linear OAuth authorization URL.",
+          "type": "string",
+          "default": "https://linear.app/oauth/authorize"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "Your Linear OAuth app client secret.",
+          "type": "string"
+        },
+        "OAUTH_SCOPES_AVAILABLE": {
+          "description": "Available scopes for Linear OAuth.",
+          "type": "string",
+          "default": "read,write,issues:create,comments:create"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OAUTH_CLIENT_ID",
+        "OAUTH_CLIENT_SECRET",
+        "DEDALUS_API_KEY"
+      ]
+    },
+    "id": "csrnsf0ssl",
+    "name": "linear-mcp",
+    "namespace": "dedalus-labs",
+    "repository": {
+      "url": "https://github.com/dedalus-labs/linear-mcp"
+    },
+    "slug": "linear-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/csrnsf0ssl"
+  }
+}

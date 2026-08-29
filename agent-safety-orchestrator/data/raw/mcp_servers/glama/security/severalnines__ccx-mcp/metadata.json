@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "doie5psv91",
+  "namespace": "severalnines",
+  "slug": "ccx-mcp",
+  "name": "Severalnines CCX MCP Server",
+  "description": "Enables management of CCX database clusters through AI assistants, supporting operations such as datastore creation, scaling, and performance monitoring. It provides a comprehensive toolset for handling backups, database users, and firewall rules across various database engines including PostgreSQL, MySQL, and Redis.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "Enables management of CCX database clusters through AI assistants, supporting operations such as datastore creation, scaling, and performance monitoring. It provides a comprehensive toolset for handling backups, database users, and firewall rules across various database engines including PostgreSQL, MySQL, and Redis.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CCX_PROTECT": {
+          "description": "If set to 'false', destructive operations like deleting clusters or databases are allowed. These are blocked by default.",
+          "type": "string",
+          "default": "true"
+        },
+        "CCX_BASE_URL": {
+          "description": "The URL of your CCX deployment. For hosted service, use https://app.myccx.io. For self-hosted, use your instance URL.",
+          "type": "string"
+        },
+        "CCX_PASSWORD": {
+          "description": "Your CCX account password (used for password authentication).",
+          "type": "string"
+        },
+        "CCX_USERNAME": {
+          "description": "Your CCX account email address (used for password authentication).",
+          "type": "string"
+        },
+        "CCX_CLIENT_ID": {
+          "description": "Your CCX OAuth2 client ID (created under Account > Security).",
+          "type": "string"
+        },
+        "CCX_CLIENT_SECRET": {
+          "description": "Your CCX OAuth2 client secret (created under Account > Security).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "CCX_USERNAME",
+            "CCX_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "CCX_CLIENT_ID",
+            "CCX_CLIENT_SECRET"
+          ]
+        }
+      ],
+      "required": [
+        "CCX_BASE_URL"
+      ]
+    },
+    "id": "doie5psv91",
+    "name": "Severalnines CCX MCP Server",
+    "namespace": "severalnines",
+    "repository": {
+      "url": "https://github.com/severalnines/ccx-mcp"
+    },
+    "slug": "ccx-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/doie5psv91"
+  }
+}

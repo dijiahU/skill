@@ -1,0 +1,92 @@
+{
+  "registry": "glama",
+  "id": "rei60ilwxm",
+  "namespace": "mmingo-director-of-ai",
+  "slug": "huntress-sat-mcp",
+  "name": "Huntress SAT MCP Server",
+  "description": "Enables interaction with the Huntress SAT API to manage security awareness training, including learners, phishing campaigns, and training assignments. It supports OAuth2 authentication and optional role-based access control for secure organizational management.",
+  "discoveryQueries": [
+    "security",
+    "authentication",
+    "sast",
+    "phishing"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with the Huntress SAT API to manage security awareness training, including learners, phishing campaigns, and training assignments. It supports OAuth2 authentication and optional role-based access control for secure organizational management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HUNTRESS_SAT_HOST": {
+          "description": "Host for HTTP transport",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "HUNTRESS_SAT_PORT": {
+          "description": "Port for HTTP transport",
+          "type": "string",
+          "default": "8000"
+        },
+        "HUNTRESS_SAT_CLIENT_ID": {
+          "description": "OAuth2 Client ID from Huntress SAT",
+          "type": "string"
+        },
+        "HUNTRESS_SAT_TOKEN_URL": {
+          "description": "OAuth2 token endpoint",
+          "type": "string",
+          "default": "https://api.curricula.com/oauth/token"
+        },
+        "HUNTRESS_SAT_TRANSPORT": {
+          "description": "Transport mode: stdio or streamable-http",
+          "type": "string",
+          "default": "stdio"
+        },
+        "HUNTRESS_SAT_MAX_RETRIES": {
+          "description": "Max retry attempts",
+          "type": "string",
+          "default": "3"
+        },
+        "HUNTRESS_SAT_API_BASE_URL": {
+          "description": "API base URL",
+          "type": "string",
+          "default": "https://api.curricula.com/api/v1"
+        },
+        "HUNTRESS_SAT_RBAC_ENABLED": {
+          "description": "Enable role-based access control",
+          "type": "string",
+          "default": "false"
+        },
+        "HUNTRESS_SAT_CLIENT_SECRET": {
+          "description": "OAuth2 Client Secret from Huntress SAT",
+          "type": "string"
+        },
+        "HUNTRESS_SAT_REQUEST_TIMEOUT": {
+          "description": "Request timeout in seconds",
+          "type": "string",
+          "default": "30.0"
+        },
+        "HUNTRESS_SAT_RBAC_DEFAULT_ROLE": {
+          "description": "Default RBAC role",
+          "type": "string",
+          "default": "viewer"
+        }
+      },
+      "type": "object",
+      "required": [
+        "HUNTRESS_SAT_CLIENT_ID",
+        "HUNTRESS_SAT_CLIENT_SECRET"
+      ]
+    },
+    "id": "rei60ilwxm",
+    "name": "Huntress SAT MCP Server",
+    "namespace": "mmingo-director-of-ai",
+    "repository": {
+      "url": "https://github.com/mmingo-director-of-ai/huntress-sat-mcp"
+    },
+    "slug": "huntress-sat-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rei60ilwxm"
+  }
+}

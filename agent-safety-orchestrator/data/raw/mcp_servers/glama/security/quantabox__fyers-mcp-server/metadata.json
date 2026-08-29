@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "ajyb6ntl83",
+  "namespace": "quantabox",
+  "slug": "fyers-mcp-server",
+  "name": "Fyers MCP Server",
+  "description": "Enables Claude to interact with the Fyers trading platform for portfolio management, order placement, market data retrieval, and automated OAuth authentication for Indian stock markets.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to interact with the Fyers trading platform for portfolio management, order placement, market data retrieval, and automated OAuth authentication for Indian stock markets.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FYERS_CLIENT_ID": {
+          "description": "Your Fyers App ID (e.g., ABC123XYZ-100)",
+          "type": "string"
+        },
+        "FYERS_SECRET_KEY": {
+          "description": "Secret key from your Fyers app",
+          "type": "string"
+        },
+        "FYERS_REDIRECT_URI": {
+          "description": "Redirect URI for OAuth authentication",
+          "type": "string",
+          "default": "http://localhost:8080/"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FYERS_CLIENT_ID",
+        "FYERS_SECRET_KEY"
+      ]
+    },
+    "id": "ajyb6ntl83",
+    "name": "Fyers MCP Server",
+    "namespace": "quantabox",
+    "repository": {
+      "url": "https://github.com/quantabox/fyers-mcp-server"
+    },
+    "slug": "fyers-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ajyb6ntl83"
+  }
+}

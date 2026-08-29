@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "s9xyp7b49b",
+  "namespace": "Leantime",
+  "slug": "leantime-mcp",
+  "name": "Leantime MCP Bridge",
+  "description": "A robust proxy bridge that connects MCP clients to the Leantime project management system, enabling seamless interaction with projects and tasks. It supports multiple authentication methods and implements the official MCP SDK for reliable protocol handling.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "A robust proxy bridge that connects MCP clients to the Leantime project management system, enabling seamless interaction with projects and tasks. It supports multiple authentication methods and implements the official MCP SDK for reliable protocol handling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "url": {
+          "description": "The Leantime MCP endpoint URL (e.g., https://yourworkspace.leantime.io/mcp)",
+          "type": "string"
+        },
+        "token": {
+          "description": "Authentication token generated through the Leantime UI",
+          "type": "string"
+        },
+        "insecure": {
+          "description": "Skip SSL certificate verification (use for local development with self-signed certificates)",
+          "type": "string"
+        },
+        "no-cache": {
+          "description": "Disable response caching for tool/resource/prompt lists",
+          "type": "string"
+        },
+        "auth-method": {
+          "description": "Authentication method (e.g., Bearer or X-API-Key)",
+          "type": "string",
+          "default": "Bearer"
+        },
+        "max-retries": {
+          "description": "Maximum retry attempts for failed requests",
+          "type": "string",
+          "default": "3"
+        },
+        "retry-delay": {
+          "description": "Base retry delay in milliseconds",
+          "type": "string",
+          "default": "1000"
+        },
+        "protocol-version": {
+          "description": "Specific MCP protocol version to use",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "url",
+        "token"
+      ]
+    },
+    "id": "s9xyp7b49b",
+    "name": "Leantime MCP Bridge",
+    "namespace": "Leantime",
+    "repository": {
+      "url": "https://github.com/Leantime/leantime-mcp"
+    },
+    "slug": "leantime-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/s9xyp7b49b"
+  }
+}

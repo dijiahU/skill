@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "hy8p3x5rdb",
+  "namespace": "Shreyans481",
+  "slug": "remote-mcp-server-with-auth",
+  "name": "PostgreSQL MCP Server",
+  "description": "A production-ready MCP server that enables chatting with PostgreSQL databases via Cloudflare Workers with GitHub OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [],
+    "description": "A production-ready MCP server that enables chatting with PostgreSQL databases via Cloudflare Workers with GitHub OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Environment setting (development or production)",
+          "type": "string"
+        },
+        "SENTRY_DSN": {
+          "description": "Optional Sentry DSN for monitoring and error tracking",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL database connection string (e.g., postgresql://username:password@host:5432/database_name)",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "GitHub OAuth application client ID",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "GitHub OAuth application client secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Random encryption key for cookie encryption (generate with: openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY",
+        "DATABASE_URL"
+      ]
+    },
+    "id": "hy8p3x5rdb",
+    "name": "PostgreSQL MCP Server",
+    "namespace": "Shreyans481",
+    "repository": {
+      "url": "https://github.com/Shreyans481/remote-mcp-server-with-auth"
+    },
+    "slug": "remote-mcp-server-with-auth",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hy8p3x5rdb"
+  }
+}

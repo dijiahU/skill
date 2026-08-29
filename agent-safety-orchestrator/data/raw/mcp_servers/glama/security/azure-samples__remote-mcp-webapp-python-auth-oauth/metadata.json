@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "yhbmib906l",
+  "namespace": "Azure-Samples",
+  "slug": "remote-mcp-webapp-python-auth-oauth",
+  "name": "Python MCP Weather Server with OAuth 2.1 Authentication",
+  "description": "Provides weather information from the National Weather Service API with full MCP OAuth 2.1 compliance, including weather alerts and forecasts for US locations through secure Azure AD authentication.",
+  "discoveryQueries": [
+    "compliance",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides weather information from the National Weather Service API with full MCP OAuth 2.1 compliance, including weather alerts and forecasts for US locations through secure Azure AD authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "The base URL of your deployed application (e.g., https://app-web-[unique-id].azurewebsites.net)",
+          "type": "string"
+        },
+        "ENVIRONMENT": {
+          "description": "The deployment environment (e.g., production, development)",
+          "type": "string",
+          "default": "development"
+        },
+        "JWT_SECRET_KEY": {
+          "description": "Your secure JWT secret key for token signing",
+          "type": "string"
+        },
+        "AZURE_CLIENT_ID": {
+          "description": "Your Azure App Registration client ID",
+          "type": "string"
+        },
+        "AZURE_TENANT_ID": {
+          "description": "Your Azure tenant ID",
+          "type": "string"
+        },
+        "AZURE_REDIRECT_URI": {
+          "description": "The redirect URI for Azure AD OAuth callback (e.g., https://app-web-[unique-id].azurewebsites.net/auth/azure/callback)",
+          "type": "string"
+        },
+        "AZURE_CLIENT_SECRET": {
+          "description": "Your Azure App Registration client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AZURE_CLIENT_ID",
+        "AZURE_TENANT_ID",
+        "AZURE_CLIENT_SECRET",
+        "JWT_SECRET_KEY"
+      ]
+    },
+    "id": "yhbmib906l",
+    "name": "Python MCP Weather Server with OAuth 2.1 Authentication",
+    "namespace": "Azure-Samples",
+    "repository": {
+      "url": "https://github.com/Azure-Samples/remote-mcp-webapp-python-auth-oauth"
+    },
+    "slug": "remote-mcp-webapp-python-auth-oauth",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/yhbmib906l"
+  }
+}

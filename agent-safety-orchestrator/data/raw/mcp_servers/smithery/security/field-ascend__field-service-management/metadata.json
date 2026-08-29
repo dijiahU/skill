@@ -1,0 +1,311 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "field-ascend/field-service-management",
+  "namespace": "field-ascend",
+  "slug": "field-service-management",
+  "displayName": "Field Ascend",
+  "description": "Field Ascend is a multi-tenant field service management platform used by engineers and operations teams to manage jobs, equipment, customers, and compliance.\n\nWhat you can do:\n - Search and inspect jobs/work orders with full detail (work done, materials, labour times)\n - Look up equipment and assets with maintenance history across sites\n - Find customers, service locations, and their associated job history\n - Search compliance certificates (LOLER, PPM, safety inspections)\n - Query Planned Preventative Maintenance contracts\n - List field engineers assigned to jobs\n\n12 read-only tools — all data is accessed via a secure read-only database replica. Authentication via OAuth 2.1 with PKCE. No data is written or modified.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "c6972345-d681-4fbe-85bf-a3f0bf142f9a",
+    "qualifiedName": "field-ascend/field-service-management",
+    "namespace": "field-ascend",
+    "slug": "field-service-management",
+    "displayName": "Field Ascend",
+    "description": "Field Ascend is a multi-tenant field service management platform used by engineers and operations teams to manage jobs, equipment, customers, and compliance.\n\nWhat you can do:\n - Search and inspect jobs/work orders with full detail (work done, materials, labour times)\n - Look up equipment and assets with maintenance history across sites\n - Find customers, service locations, and their associated job history\n - Search compliance certificates (LOLER, PPM, safety inspections)\n - Query Planned Preventative Maintenance contracts\n - List field engineers assigned to jobs\n\n12 read-only tools — all data is accessed via a secure read-only database replica. Authentication via OAuth 2.1 with PKCE. No data is written or modified.",
+    "iconUrl": "https://api.smithery.ai/servers/field-ascend/field-service-management/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-28T06:09:33.366Z",
+    "homepage": "https://field-ascend.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBVY4MVEJQVY7TBBY8ZDEXE",
+    "score": 0.010526315789473684
+  },
+  "detail": {
+    "qualifiedName": "field-ascend/field-service-management",
+    "displayName": "Field Ascend",
+    "description": "Field Ascend is a multi-tenant field service management platform used by engineers and operations teams to manage jobs, equipment, customers, and compliance.\n\nWhat you can do:\n - Search and inspect jobs/work orders with full detail (work done, materials, labour times)\n - Look up equipment and assets with maintenance history across sites\n - Find customers, service locations, and their associated job history\n - Search compliance certificates (LOLER, PPM, safety inspections)\n - Query Planned Preventative Maintenance contracts\n - List field engineers assigned to jobs\n\n12 read-only tools — all data is accessed via a secure read-only database replica. Authentication via OAuth 2.1 with PKCE. No data is written or modified.",
+    "iconUrl": "https://api.smithery.ai/servers/field-ascend/field-service-management/icon",
+    "remote": true,
+    "deploymentUrl": "https://field-service-management--field-ascend.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://field-service-management--field-ascend.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_context",
+        "description": "Load tenant-specific domain knowledge including available job statuses, equipment types, job categories, timezone, and a glossary of field service terms. Always call this first to understand the tenant's configuration before using other tools.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_jobs",
+        "description": "Search and filter jobs (work orders) across the tenant. Supports filtering by customer_id, site_id, engineer_id, status name, category, and date ranges (date_from/date_to for scheduled dates, completed_from/completed_to for completion dates). Use the q parameter for free-text search across job number, title, and description. Returns paginated results with job number, title, status, dates, and assigned engineer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string",
+              "description": "Free-text search"
+            },
+            "page": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by status name"
+            },
+            "date_to": {
+              "type": "string",
+              "description": "To date YYYY-MM-DD"
+            },
+            "site_id": {
+              "type": "number",
+              "description": "Filter by site ID"
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by category"
+            },
+            "per_page": {
+              "type": "number"
+            },
+            "date_from": {
+              "type": "string",
+              "description": "From date YYYY-MM-DD"
+            },
+            "customer_id": {
+              "type": "number",
+              "description": "Filter by customer ID"
+            },
+            "engineer_id": {
+              "type": "number",
+              "description": "Filter by engineer ID"
+            },
+            "completed_to": {
+              "type": "string",
+              "description": "Completed to YYYY-MM-DD"
+            },
+            "completed_from": {
+              "type": "string",
+              "description": "Completed from YYYY-MM-DD"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_job_details",
+        "description": "Retrieve complete details for a specific job by its job_number (e.g. \"J00412\"). Returns work done notes, section notes (arrival, departure, etc.), materials used with quantities and costs, labour times broken down by outward travel, onsite, and return travel, plus linked equipment and certificates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_number": {
+              "type": "string",
+              "description": "Job number e.g. J00412"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_equipment",
+        "description": "Search equipment and assets across all sites. Filter by site_id, customer_id, or type_id (equipment type). Use the q parameter for free-text search across description, equipment reference, serial number, make, and model. Returns paginated results with equipment details and associated site/customer information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string",
+              "description": "Search description, ref, serial, make, model"
+            },
+            "page": {
+              "type": "number"
+            },
+            "site_id": {
+              "type": "number"
+            },
+            "type_id": {
+              "type": "number"
+            },
+            "per_page": {
+              "type": "number"
+            },
+            "customer_id": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_equipment_details",
+        "description": "Retrieve full details for a specific piece of equipment by its equipment_id. Returns description, reference, make, model, serial number, location, equipment type, and the 10 most recent jobs performed on this equipment for maintenance history tracking.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "equipment_id": {
+              "type": "number",
+              "description": "Equipment ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_customers",
+        "description": "Search customers by name, email, or phone number. Filter by status (\"active\" or \"inactive\"). Use the q parameter for free-text search. Returns paginated results with customer name, email, phone, and account status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "page": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string",
+              "description": "active or inactive"
+            },
+            "per_page": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_customer_details",
+        "description": "Retrieve full details for a specific customer by customer_id. Returns contact information, all associated sites with addresses, and the 10 most recent jobs for this customer. Useful for understanding a customer's service history and site portfolio.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "customer_id": {
+              "type": "number",
+              "description": "Customer ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_sites",
+        "description": "Search sites (service locations) by name, address, or postcode. Filter by customer_id to see all sites for a specific customer. Use the q parameter for free-text search across site name, address, postcode, and customer name. Returns paginated results with site address and associated customer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "page": {
+              "type": "number"
+            },
+            "per_page": {
+              "type": "number"
+            },
+            "postcode": {
+              "type": "string"
+            },
+            "customer_id": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_site_details",
+        "description": "Retrieve full details for a specific site by site_id. Returns the complete address, associated customer, all equipment installed at the site, and the 10 most recent jobs performed at this location. Useful for site audits and equipment inventory checks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "site_id": {
+              "type": "number",
+              "description": "Site ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_engineers",
+        "description": "List field engineers by name. Only returns engineer ID and name for privacy — no personal contact details are exposed. Use the q parameter to search by name. Useful for finding engineer IDs to filter jobs by assigned engineer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "page": {
+              "type": "number"
+            },
+            "per_page": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_certificates",
+        "description": "Search compliance and inspection certificates (e.g. LOLER, PPM, safety certificates). Filter by job_number, equipment_id, or date range (date_from/date_to). Use the q parameter to search by certificate number or template name. Returns paginated results with certificate number, template type, associated job, and issue date.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "page": {
+              "type": "number"
+            },
+            "date_to": {
+              "type": "string"
+            },
+            "per_page": {
+              "type": "number"
+            },
+            "date_from": {
+              "type": "string"
+            },
+            "job_number": {
+              "type": "string"
+            },
+            "equipment_id": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_ppm_contracts",
+        "description": "Search Planned Preventative Maintenance (PPM) contracts. Filter by customer_id or paused status (\"true\"/\"false\"). Use the q parameter for free-text search across contract name and customer. Returns paginated results with contract details, frequency, associated customer, and active/paused status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "page": {
+              "type": "number"
+            },
+            "paused": {
+              "type": "string",
+              "description": "true or false"
+            },
+            "per_page": {
+              "type": "number"
+            },
+            "customer_id": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

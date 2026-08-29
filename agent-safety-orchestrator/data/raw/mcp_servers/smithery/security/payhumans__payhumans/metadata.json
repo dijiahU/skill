@@ -1,0 +1,421 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "payhumans/payhumans",
+  "namespace": "payhumans",
+  "slug": "payhumans",
+  "displayName": "PayHumans — Hire Human Experts",
+  "description": "The human API for AI agents. When your agent hits a task it can't do — verify a fact, review a contract, analyze medical data, check code quality, evaluate a design — PayHumans matches it with a vetted domain expert who completes the task and returns the result.\nZero setup required. Call register_agent to get an API key and $50 free credits instantly. No login, no credit card, no approval process. Your agent can self-register and post its first task in a single conversation.\nExpert domains available:\n\nHealthcare & Medical: physician review, clinical data analysis, drug interaction checks, medical literature review\nLegal & Compliance: contract review, regulatory analysis, IP assessment, legal research, NDA review\nFinance & Business: financial modeling review, due diligence, market analysis, valuation checks\nTechnology: code review, architecture feedback, security audit, technical writing review, QA testing\nResearch & Academia: literature review, data verification, peer review, fact-chec",
+  "discoveryQueries": [
+    "credential",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "6f3b7d1d-1543-4bde-b274-e59dc98f3ce0",
+    "qualifiedName": "payhumans/payhumans",
+    "namespace": "payhumans",
+    "slug": "payhumans",
+    "displayName": "PayHumans — Hire Human Experts",
+    "description": "The human API for AI agents. When your agent hits a task it can't do — verify a fact, review a contract, analyze medical data, check code quality, evaluate a design — PayHumans matches it with a vetted domain expert who completes the task and returns the result.\nZero setup required. Call register_agent to get an API key and $50 free credits instantly. No login, no credit card, no approval process. Your agent can self-register and post its first task in a single conversation.\nExpert domains available:\n\nHealthcare & Medical: physician review, clinical data analysis, drug interaction checks, medical literature review\nLegal & Compliance: contract review, regulatory analysis, IP assessment, legal research, NDA review\nFinance & Business: financial modeling review, due diligence, market analysis, valuation checks\nTechnology: code review, architecture feedback, security audit, technical writing review, QA testing\nResearch & Academia: literature review, data verification, peer review, fact-chec",
+    "iconUrl": "https://api.smithery.ai/servers/payhumans/payhumans/icon",
+    "verified": false,
+    "useCount": 208,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-01T06:33:34.622Z",
+    "homepage": "https://payhumans.co/",
+    "bySmithery": false,
+    "owner": "org_01KNBW0C66DZ5D31CB92R4884D",
+    "score": 0.009900990099009901
+  },
+  "detail": {
+    "qualifiedName": "payhumans/payhumans",
+    "displayName": "PayHumans — Hire Human Experts",
+    "description": "The human API for AI agents. When your agent hits a task it can't do — verify a fact, review a contract, analyze medical data, check code quality, evaluate a design — PayHumans matches it with a vetted domain expert who completes the task and returns the result.\nZero setup required. Call register_agent to get an API key and $50 free credits instantly. No login, no credit card, no approval process. Your agent can self-register and post its first task in a single conversation.\nExpert domains available:\n\nHealthcare & Medical: physician review, clinical data analysis, drug interaction checks, medical literature review\nLegal & Compliance: contract review, regulatory analysis, IP assessment, legal research, NDA review\nFinance & Business: financial modeling review, due diligence, market analysis, valuation checks\nTechnology: code review, architecture feedback, security audit, technical writing review, QA testing\nResearch & Academia: literature review, data verification, peer review, fact-checking\nMarketing & Creative: copy review, UX evaluation, brand analysis, content strategy, design feedback\n\nHow it works:\n\nregister_agent — get API key + $50 free credits (no auth needed)\nsearch_experts — browse available experts by domain and rate\npost_job — describe the task, set budget, get matched in minutes\nget_job — retrieve the completed deliverable\ncomplete_job — approve and release payment\n\n9 tools: register_agent · search_experts · post_job · get_job · list_jobs · complete_job · confirm_payment · send_message · get_expert\nPayments: Stripe (fiat) and Solana USDC. Escrow-protected — payment released only on approval.\nIntegrations: Works with Claude Desktop, Cursor, Windsurf, LangChain, CrewAI, and AutoGen.\nPython SDK: pip install payhumans | npm: npm install @agent-network/mcp\nKeywords: human-in-the-loop, HITL, hire human, expert network, task marketplace, human API, human feedback, agent hire human, outsource to human, human review, expert review\nhttps://payhumans.co",
+    "iconUrl": "https://api.smithery.ai/servers/payhumans/payhumans/icon",
+    "remote": true,
+    "deploymentUrl": "https://payhumans--payhumans.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://payhumans--payhumans.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "PayHumans API Key",
+              "x-order": 0,
+              "x-secret": true,
+              "description": "Your PayHumans API key. Get a free key with $50 in credits at payhumans.co/register"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "agents.register",
+        "description": "Register a new AI agent with PayHumans. Call this first to get your API key — you'll receive $50 in free credits. Once registered, all subsequent tool calls in this session are automatically authenticated.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Your agent's name"
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email (optional)"
+            },
+            "website_url": {
+              "type": "string",
+              "description": "Your agent's website or repo URL (optional)"
+            },
+            "referral_code": {
+              "type": "string",
+              "description": "Referral code from a friend — gives you both $25 extra credits (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "experts.search",
+        "description": "Search vetted human experts by domain, research type, or maximum hourly rate",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to search for (e.g. legal, finance, medical, research)"
+            },
+            "max_rate": {
+              "type": "number",
+              "description": "Maximum hourly rate in USD"
+            },
+            "research_type": {
+              "type": "string",
+              "description": "Type of research needed"
+            }
+          }
+        }
+      },
+      {
+        "name": "experts.get",
+        "description": "Get a human expert's full profile, current availability, and rating",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "expert_id": {
+              "type": "string",
+              "description": "Expert UUID"
+            }
+          }
+        }
+      },
+      {
+        "name": "jobs.create",
+        "description": "Post a new research task or job for a human expert to complete",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Job title"
+            },
+            "budget": {
+              "type": "number",
+              "description": "Budget in USD"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Domain category (e.g. legal, finance, medical)"
+            },
+            "deadline": {
+              "type": "string",
+              "description": "ISO deadline date"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed job description"
+            },
+            "research_type": {
+              "type": "string",
+              "description": "Type of research"
+            }
+          }
+        }
+      },
+      {
+        "name": "jobs.get",
+        "description": "Get job details including current status and completed result",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job UUID"
+            }
+          }
+        }
+      },
+      {
+        "name": "jobs.list",
+        "description": "List all jobs posted by your agent with optional status filter",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Filter by status (open, in_progress, delivered, completed)"
+            }
+          }
+        }
+      },
+      {
+        "name": "jobs.complete",
+        "description": "Accept delivered work and initiate Solana USDC payment to the expert",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job UUID to accept and pay for"
+            }
+          }
+        }
+      },
+      {
+        "name": "payments.confirm",
+        "description": "Submit Solana transaction signature to confirm and release USDC payment to the expert",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "payment_id": {
+              "type": "string",
+              "description": "Payment UUID from jobs.complete"
+            },
+            "tx_signature": {
+              "type": "string",
+              "description": "Solana transaction signature (base58)"
+            }
+          }
+        }
+      },
+      {
+        "name": "messages.send",
+        "description": "Send a message to the human expert working on a specific job",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job UUID"
+            },
+            "content": {
+              "type": "string",
+              "description": "Message content to send to the expert"
+            }
+          }
+        }
+      },
+      {
+        "name": "messages.get",
+        "description": "Get all messages for a job, ordered chronologically. Use this to read expert replies.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job UUID"
+            }
+          }
+        }
+      },
+      {
+        "name": "agents.set_webhook",
+        "description": "Register an HTTPS callback URL to receive real-time job status change events via POST. Your server must accept POST with JSON body: { event, job_id, old_status, new_status, updated_at }.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "callback_url": {
+              "type": "string",
+              "description": "HTTPS URL that will receive job status change events"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_task_status",
+        "description": "Get the full real-time status of a posted task — who is working on it, evidence submitted, payment status, and any pending actions you need to take.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "description": "The job UUID returned from jobs.create or post_task"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_humans",
+        "description": "Search available human experts by skills, natural language query, location, or hourly rate. Use this before posting a job to preview who is available.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max results to return (default: 10)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Natural language search (e.g. 'someone who can verify medical equipment')"
+            },
+            "skills": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills to filter by (e.g. ['photography', 'legal', 'python'])"
+            },
+            "task_type": {
+              "type": "string",
+              "description": "Task category: physical, research, consultation, coding, legal, medical, financial, creative"
+            },
+            "available_now": {
+              "type": "boolean",
+              "description": "Only show currently available experts (default: true)"
+            },
+            "max_hourly_rate_usd": {
+              "type": "number",
+              "description": "Maximum hourly rate in USD"
+            }
+          }
+        }
+      },
+      {
+        "name": "approve_match",
+        "description": "Approve a specific expert to work on your task. Call this after receiving a match_proposed webhook event or after get_pending_actions returns an approve_match action.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "description": "Job UUID"
+            },
+            "expert_id": {
+              "type": "string",
+              "description": "Expert UUID to approve (from the match proposal)"
+            },
+            "message_to_expert": {
+              "type": "string",
+              "description": "Optional message to send to the expert with the approval"
+            }
+          }
+        }
+      },
+      {
+        "name": "release_payment",
+        "description": "Release escrowed payment to the expert after reviewing their submitted evidence. Supports both Stripe and Solana USDC (x402) payouts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rating": {
+              "type": "number",
+              "description": "1–5 star rating for the expert"
+            },
+            "task_id": {
+              "type": "string",
+              "description": "Job UUID"
+            },
+            "feedback": {
+              "type": "string",
+              "description": "Public feedback shown on expert's profile"
+            },
+            "tx_signature": {
+              "type": "string",
+              "description": "Solana tx signature (required for x402 payments)"
+            },
+            "payment_method": {
+              "type": "string",
+              "description": "Payment method: 'x402' (USDC, default) or 'stripe'"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_pending_actions",
+        "description": "Check all your jobs that require your attention right now — matches to approve, evidence to review, payments to release, or disputes to address.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max number of actions to return (default: 10)"
+            }
+          }
+        }
+      },
+      {
+        "name": "raise_dispute",
+        "description": "Raise a dispute if you are not satisfied with the submitted work. Payment is frozen and an admin will review within 4 hours.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "Why the work is unsatisfactory"
+            },
+            "task_id": {
+              "type": "string",
+              "description": "Job UUID"
+            },
+            "evidence_issues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Which evidence IDs are problematic"
+            },
+            "requested_resolution": {
+              "enum": [
+                "full_refund",
+                "partial_refund",
+                "redo_task",
+                "admin_review"
+              ],
+              "type": "string",
+              "description": "What resolution you want (default: admin_review)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "hire_expert",
+        "description": "Start the workflow to hire a vetted human expert for a task via PayHumans",
+        "arguments": [
+          {
+            "name": "task",
+            "description": "What do you need a human expert to do? Describe the task in detail.",
+            "required": true
+          },
+          {
+            "name": "domain",
+            "description": "Domain of expertise needed: legal, finance, medical, research, code_review, marketing",
+            "required": false
+          },
+          {
+            "name": "budget_usd",
+            "description": "Budget in USD (e.g. 25)",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

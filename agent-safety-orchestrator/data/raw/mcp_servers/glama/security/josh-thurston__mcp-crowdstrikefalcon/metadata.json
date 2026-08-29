@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "rd6pfwkx7i",
+  "namespace": "josh-thurston",
+  "slug": "MCP-CrowdStrikeFalcon",
+  "name": "CrowdStrike Falcon MCP Server",
+  "description": "An MCP server that enables interaction with the CrowdStrike Falcon API for managing hosts, detections, IOCs, and security policies. It supports both STDIO and HTTP/REST transport modes for seamless integration with AI clients like Claude and Cursor.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that enables interaction with the CrowdStrike Falcon API for managing hosts, detections, IOCs, and security policies. It supports both STDIO and HTTP/REST transport modes for seamless integration with AI clients like Claude and Cursor.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HTTP_PORT": {
+          "description": "HTTP server port (default: 80)",
+          "type": "string",
+          "default": "80"
+        },
+        "STDIO_PORT": {
+          "description": "STDIO port (default: 8080)",
+          "type": "string",
+          "default": "8080"
+        },
+        "FALCON_API_KEY": {
+          "description": "Your CrowdStrike API key. Alternative to CROWDSTRIKE_API_KEY.",
+          "type": "string"
+        },
+        "TRANSPORT_MODE": {
+          "description": "Transport mode - stdio, http, or dual (default: dual)",
+          "type": "string",
+          "default": "dual"
+        },
+        "FALCON_TENANT_ID": {
+          "description": "Optional tenant ID for multi-tenant scenarios. Alternative to CROWDSTRIKE_TENANT_ID.",
+          "type": "string"
+        },
+        "CROWDSTRIKE_API_KEY": {
+          "description": "Alternative environment variable for the CrowdStrike API key.",
+          "type": "string"
+        },
+        "FALCON_API_BASE_URL": {
+          "description": "API base URL (default: https://api.crowdstrike.com)",
+          "type": "string",
+          "default": "https://api.crowdstrike.com"
+        },
+        "CROWDSTRIKE_TENANT_ID": {
+          "description": "Alternative environment variable for the CrowdStrike tenant ID.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "rd6pfwkx7i",
+    "name": "CrowdStrike Falcon MCP Server",
+    "namespace": "josh-thurston",
+    "repository": {
+      "url": "https://github.com/josh-thurston/MCP-CrowdStrikeFalcon"
+    },
+    "slug": "MCP-CrowdStrikeFalcon",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rd6pfwkx7i"
+  }
+}

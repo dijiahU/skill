@@ -1,0 +1,119 @@
+{
+  "registry": "glama",
+  "id": "a186ld9x67",
+  "namespace": "Evilander",
+  "slug": "Audrey",
+  "name": "Audrey",
+  "description": "Local-first memory firewall and MCP server for AI agents. Audrey provides recall, memory capsules, preflight checks, reflexes, validation, tool-trace learning, contradiction handling, and SQLite/sqlite-vec storage.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Local-first memory firewall and MCP server for AI agents. Audrey provides recall, memory capsules, preflight checks, reflexes, validation, tool-trace learning, contradiction handling, and SQLite/sqlite-vec storage.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AUDREY_HOST": {
+          "description": "REST sidecar bind address. Set to 0.0.0.0 only with AUDREY_API_KEY.",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "AUDREY_PORT": {
+          "description": "REST sidecar port.",
+          "type": "string",
+          "default": "7437"
+        },
+        "AUDREY_AGENT": {
+          "description": "Logical agent identity stamped on writes.",
+          "type": "string",
+          "default": "local-agent"
+        },
+        "AUDREY_DEBUG": {
+          "description": "Set to 1 to print MCP info logs (server started, warmup completed). Errors always log.",
+          "type": "string",
+          "default": "0"
+        },
+        "AUDREY_DEVICE": {
+          "description": "Local embedding device (gpu or cpu). Falls back to CPU if GPU init fails.",
+          "type": "string",
+          "default": "gpu"
+        },
+        "AUDREY_API_KEY": {
+          "description": "Bearer token required for non-loopback REST traffic.",
+          "type": "string"
+        },
+        "AUDREY_PROFILE": {
+          "description": "Set to 1 to emit per-stage timings via MCP _meta.diagnostics.",
+          "type": "string",
+          "default": "0"
+        },
+        "AUDREY_DATA_DIR": {
+          "description": "SQLite memory store path. Use one per tenant or agent identity for isolation.",
+          "type": "string",
+          "default": "~/.audrey/data"
+        },
+        "AUDREY_LLM_PROVIDER": {
+          "description": "anthropic, openai, or mock.",
+          "type": "string",
+          "default": "auto"
+        },
+        "AUDREY_ONNX_VERBOSE": {
+          "description": "Set to 1 to restore ONNX runtime EP-assignment warnings (suppressed by default).",
+          "type": "string",
+          "default": "0"
+        },
+        "AUDREY_ALLOW_NO_AUTH": {
+          "description": "Set to 1 to allow non-loopback bind without an API key. Don't.",
+          "type": "string",
+          "default": "0"
+        },
+        "AUDREY_PROMOTE_ROOTS": {
+          "description": "Colon/semicolon-separated extra roots for audrey promote --yes writes.",
+          "type": "string"
+        },
+        "AUDREY_DISABLE_WARMUP": {
+          "description": "Set to 1 to skip background embedding warmup at MCP boot.",
+          "type": "string",
+          "default": "0"
+        },
+        "AUDREY_PRAGMA_DEFAULTS": {
+          "description": "Set to 0 to revert SQLite PRAGMA tuning to better-sqlite3 defaults.",
+          "type": "string",
+          "default": "1"
+        },
+        "AUDREY_EMBEDDING_PROVIDER": {
+          "description": "local, gemini, openai, or mock. Cloud providers require explicit opt-in.",
+          "type": "string",
+          "default": "local"
+        },
+        "AUDREY_ENABLE_ADMIN_TOOLS": {
+          "description": "Set to 1 to enable export, import, and forget routes/tools. Disabled by default.",
+          "type": "string",
+          "default": "0"
+        },
+        "AUDREY_CONTEXT_BUDGET_CHARS": {
+          "description": "Default Memory Capsule character budget.",
+          "type": "string",
+          "default": "4000"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "a186ld9x67",
+    "name": "Audrey",
+    "namespace": "Evilander",
+    "repository": {
+      "url": "https://github.com/Evilander/Audrey"
+    },
+    "slug": "Audrey",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a186ld9x67"
+  }
+}

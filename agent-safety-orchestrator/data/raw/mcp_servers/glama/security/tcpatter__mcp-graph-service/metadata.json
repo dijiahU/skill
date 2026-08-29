@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "amdyg4w0gr",
+  "namespace": "tcpatter",
+  "slug": "mcp-graph-service",
+  "name": "MCP Microsoft Graph Server",
+  "description": "Provides secure access to Microsoft Entra ID (Azure AD) resources including users, devices, and applications through Microsoft Graph API. Enables querying organizational data with comprehensive audit logging to Azure Blob Storage.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides secure access to Microsoft Entra ID (Azure AD) resources including users, devices, and applications through Microsoft Graph API. Enables querying organizational data with comprehensive audit logging to Azure Blob Storage.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AZURE_CLIENT_ID": {
+          "description": "Your Azure application (client) ID",
+          "type": "string"
+        },
+        "AZURE_TENANT_ID": {
+          "description": "Your Azure tenant ID",
+          "type": "string"
+        },
+        "AZURE_CLIENT_SECRET": {
+          "description": "Your Azure client secret",
+          "type": "string"
+        },
+        "AZURE_LOG_CONTAINER_NAME": {
+          "description": "Azure storage container name for logs",
+          "type": "string",
+          "default": "mcp-logs"
+        },
+        "AZURE_STORAGE_CONNECTION_STRING": {
+          "description": "Your Azure storage connection string for logging",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AZURE_TENANT_ID",
+        "AZURE_CLIENT_ID",
+        "AZURE_CLIENT_SECRET",
+        "AZURE_STORAGE_CONNECTION_STRING"
+      ]
+    },
+    "id": "amdyg4w0gr",
+    "name": "MCP Microsoft Graph Server",
+    "namespace": "tcpatter",
+    "repository": {
+      "url": "https://github.com/tcpatter/mcp-graph-service"
+    },
+    "slug": "mcp-graph-service",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/amdyg4w0gr"
+  }
+}

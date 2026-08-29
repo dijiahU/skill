@@ -1,0 +1,124 @@
+{
+  "registry": "glama",
+  "id": "udirfv6aia",
+  "namespace": "ryan-rbw",
+  "slug": "kepler-mcp-gitlab-server",
+  "name": "Kepler MCP GitLab Server",
+  "description": "Production-ready MCP server providing GitLab integration with OAuth authentication, enabling AI assistants to manage projects, issues, merge requests, branches, files, and commits across GitLab instances.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Production-ready MCP server providing GitLab integration with OAuth authentication, enabling AI assistants to manage projects, issues, merge requests, branches, files, and commits across GitLab instances.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "KEPLER_MCP_HOST": {
+          "description": "Server bind host",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "KEPLER_MCP_PORT": {
+          "description": "Server bind port",
+          "type": "string",
+          "default": "8000"
+        },
+        "KEPLER_MCP_APP_NAME": {
+          "description": "Application name",
+          "type": "string",
+          "default": "Kepler MCP GitLab Server"
+        },
+        "KEPLER_MCP_LOG_LEVEL": {
+          "description": "Log level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "KEPLER_MCP_GITLAB_URL": {
+          "description": "GitLab instance URL",
+          "type": "string",
+          "default": "https://gitlab.com"
+        },
+        "KEPLER_MCP_ENVIRONMENT": {
+          "description": "Environment (local/dev/stage/prod)",
+          "type": "string",
+          "default": "local"
+        },
+        "KEPLER_MCP_OAUTH_SCOPE": {
+          "description": "OAuth scopes (e.g., 'api read_user read_repository')",
+          "type": "string"
+        },
+        "KEPLER_MCP_TRANSPORT_MODE": {
+          "description": "Transport (stdio/sse)",
+          "type": "string",
+          "default": "stdio"
+        },
+        "KEPLER_MCP_OAUTH_CLIENT_ID": {
+          "description": "OAuth Client ID (Application ID from GitLab)",
+          "type": "string"
+        },
+        "KEPLER_MCP_OAUTH_TOKEN_URL": {
+          "description": "OAuth token endpoint (e.g., https://gitlab.com/oauth/token)",
+          "type": "string"
+        },
+        "KEPLER_MCP_RATE_LIMIT_BURST": {
+          "description": "Burst size",
+          "type": "string",
+          "default": "10"
+        },
+        "KEPLER_MCP_TOKEN_STORE_PATH": {
+          "description": "Path for token persistence (e.g., /var/lib/kepler-mcp/tokens.json)",
+          "type": "string"
+        },
+        "KEPLER_MCP_OAUTH_REDIRECT_URI": {
+          "description": "OAuth callback URL (must match the Redirect URI registered in GitLab)",
+          "type": "string"
+        },
+        "KEPLER_MCP_OAUTH_USERINFO_URL": {
+          "description": "User info endpoint (e.g., https://gitlab.com/api/v4/user)",
+          "type": "string"
+        },
+        "KEPLER_MCP_OAUTH_CLIENT_SECRET": {
+          "description": "OAuth Client Secret (Secret from GitLab OAuth application)",
+          "type": "string"
+        },
+        "KEPLER_MCP_TOKEN_ENCRYPTION_KEY": {
+          "description": "Fernet key for token encryption (generate with: python -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\")",
+          "type": "string"
+        },
+        "KEPLER_MCP_OAUTH_AUTHORIZATION_URL": {
+          "description": "OAuth authorize endpoint (e.g., https://gitlab.com/oauth/authorize)",
+          "type": "string"
+        },
+        "KEPLER_MCP_OAUTH_USER_AUTH_ENABLED": {
+          "description": "Enable OAuth",
+          "type": "string",
+          "default": "false"
+        },
+        "KEPLER_MCP_RATE_LIMIT_REQUESTS_PER_MINUTE": {
+          "description": "Max requests per minute",
+          "type": "string",
+          "default": "60"
+        }
+      },
+      "type": "object",
+      "required": [
+        "KEPLER_MCP_GITLAB_URL"
+      ]
+    },
+    "id": "udirfv6aia",
+    "name": "Kepler MCP GitLab Server",
+    "namespace": "ryan-rbw",
+    "repository": {
+      "url": "https://github.com/ryan-rbw/kepler-mcp-gitlab-server"
+    },
+    "slug": "kepler-mcp-gitlab-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/udirfv6aia"
+  }
+}

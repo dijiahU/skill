@@ -1,0 +1,81 @@
+{
+  "registry": "glama",
+  "id": "ulm9n57ev8",
+  "namespace": "Lekssays",
+  "slug": "joern-mcp",
+  "name": "Joern MCP Server",
+  "description": "Enables AI assistants to perform sophisticated static code analysis using Joern's Code Property Graph technology. Supports multi-language analysis, security vulnerability detection, and code quality assessment through isolated Docker environments.",
+  "discoveryQueries": [
+    "security",
+    "vulnerability"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables AI assistants to perform sophisticated static code analysis using Joern's Code Property Graph technology. Supports multi-language analysis, security vulnerability detection, and code quality assessment through isolated Docker environments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GITHUB_TOKEN": {
+          "description": "GitHub access token",
+          "type": "string"
+        },
+        "JOERN_TIMEOUT": {
+          "description": "Container timeout (seconds)",
+          "type": "string",
+          "default": "300"
+        },
+        "JOERN_CACHE_DIR": {
+          "description": "Cache directory",
+          "type": "string",
+          "default": "/tmp/joern_cache"
+        },
+        "JOERN_CPU_LIMIT": {
+          "description": "CPU limit for containers",
+          "type": "string",
+          "default": "2"
+        },
+        "JOERN_LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "JOERN_DOCKER_IMAGE": {
+          "description": "Joern Docker image",
+          "type": "string",
+          "default": "joern:latest"
+        },
+        "JOERN_MEMORY_LIMIT": {
+          "description": "Memory limit for containers",
+          "type": "string",
+          "default": "4g"
+        },
+        "JOERN_CACHE_ENABLED": {
+          "description": "Enable CPG caching",
+          "type": "string",
+          "default": "true"
+        },
+        "JOERN_CACHE_SIZE_GB": {
+          "description": "Cache size limit (GB)",
+          "type": "string",
+          "default": "10"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ulm9n57ev8",
+    "name": "Joern MCP Server",
+    "namespace": "Lekssays",
+    "repository": {
+      "url": "https://github.com/Lekssays/codebadger"
+    },
+    "slug": "joern-mcp",
+    "spdxLicense": {
+      "name": "GPL 3.0",
+      "url": "https://spdx.org/licenses/GPL-3.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ulm9n57ev8"
+  }
+}

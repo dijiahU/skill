@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "a1iyv3pvrl",
+  "namespace": "Pritrj",
+  "slug": "mcp-server",
+  "name": "FastAPI MCP Server",
+  "description": "A production-ready Model Context Protocol server built with FastAPI, featuring JWT authentication, PostgreSQL database support, Redis caching, and comprehensive health monitoring for building secure async API applications.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A production-ready Model Context Protocol server built with FastAPI, featuring JWT authentication, PostgreSQL database support, Redis caching, and comprehensive health monitoring for building secure async API applications.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Server host",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8000"
+        },
+        "DEBUG": {
+          "description": "Debug mode",
+          "type": "string",
+          "default": "false"
+        },
+        "REDIS_URL": {
+          "description": "Redis connection URL",
+          "type": "string",
+          "default": "redis://localhost:6379/0"
+        },
+        "SECRET_KEY": {
+          "description": "JWT secret key",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL connection URL",
+          "type": "string"
+        },
+        "JWT_ALGORITHM": {
+          "description": "JWT algorithm",
+          "type": "string",
+          "default": "HS256"
+        },
+        "JWT_EXPIRE_MINUTES": {
+          "description": "JWT expiration time in minutes",
+          "type": "string",
+          "default": "30"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABASE_URL",
+        "SECRET_KEY"
+      ]
+    },
+    "id": "a1iyv3pvrl",
+    "name": "FastAPI MCP Server",
+    "namespace": "Pritrj",
+    "repository": {
+      "url": "https://github.com/Pritrj/mcp-server"
+    },
+    "slug": "mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a1iyv3pvrl"
+  }
+}

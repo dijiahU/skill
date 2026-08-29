@@ -1,0 +1,469 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "mountainmystic/hederatoolbox",
+  "namespace": "mountainmystic",
+  "slug": "hederatoolbox",
+  "displayName": "HederaToolbox",
+  "description": "Production MCP server giving AI agents metered access to live Hedera blockchain data. Query token prices, screen identities, monitor governance, write tamper-evident HCS compliance records, and analyze smart contracts — all paid in HBAR micropayments per call.",
+  "discoveryQueries": [
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "bbcacc8e-01c0-4a4c-ba88-fcca9fd60add",
+    "qualifiedName": "mountainmystic/hederatoolbox",
+    "namespace": "mountainmystic",
+    "slug": "hederatoolbox",
+    "displayName": "HederaToolbox",
+    "description": "Production MCP server giving AI agents metered access to live Hedera blockchain data. Query token prices, screen identities, monitor governance, write tamper-evident HCS compliance records, and analyze smart contracts — all paid in HBAR micropayments per call.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/hederatoolbox.com.ico",
+    "verified": false,
+    "useCount": 93,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-19T03:25:57.557Z",
+    "homepage": "https://hederatoolbox.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBVS8DQW4TTA8SQ08ZQ3JF1",
+    "score": 0.008130081300813009
+  },
+  "detail": {
+    "qualifiedName": "mountainmystic/hederatoolbox",
+    "displayName": "HederaToolbox",
+    "description": "Production MCP server giving AI agents metered access to live Hedera blockchain data. Query token prices, screen identities, monitor governance, write tamper-evident HCS compliance records, and analyze smart contracts — all paid in HBAR micropayments per call.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/hederatoolbox.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://hederatoolbox--mountainmystic.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://hederatoolbox--mountainmystic.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_terms",
+        "description": "Retrieve the machine-readable Terms of Service for the HederaIntel MCP Platform. FREE to call — no API key required. All agents MUST call this tool and then call confirm_terms before using any paid tool. Returns the full legal JSON including pricing tiers, HITL thresholds, liability disclaimers, and consent instructions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "confirm_terms",
+        "description": "Confirm acceptance of the HederaIntel Terms of Service. Must be called before any paid tool will execute. Records a timestamped consent event server-side. FREE to call — no HBAR charged.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your Hedera account ID / API key (e.g. 0.0.456789)"
+            },
+            "confirmed": {
+              "type": "boolean",
+              "description": "Must be true. Passing false is a no-op."
+            },
+            "terms_version": {
+              "type": "string",
+              "description": "The terms version you are accepting — must match the current version returned by get_terms."
+            }
+          }
+        }
+      },
+      {
+        "name": "account_info",
+        "description": "Get platform wallet address, pricing for all 20 tools in HBAR and USD, and your current balance. FREE to call — no API key required. Use this tool first to discover how to fund an account and start using the platform. To create an account automatically, simply send HBAR to the platform wallet — your Hedera account ID becomes your API key automatically. 20 tools across 6 modules.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Optional. Your Hedera account ID (e.g. 0.0.456789) or API key. If provided, your current balance is returned."
+            }
+          }
+        }
+      },
+      {
+        "name": "hcs_monitor",
+        "description": "Get current status and metadata of any HCS topic - message count, creation time, memo, and recent activity. Defaults to the HederaToolbox platform topic. Costs 0.1 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "Hedera topic ID (e.g. 0.0.8026796). Defaults to the HederaIntel platform topic."
+            }
+          }
+        }
+      },
+      {
+        "name": "hcs_query",
+        "description": "Query an HCS topic with a natural language question. Returns AI-ranked relevant messages and a plain English summary. Costs 0.1 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max messages to retrieve (default 50)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Natural language question about the topic"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "Hedera topic ID (e.g. 0.0.8026796). Defaults to the HederaIntel platform topic."
+            }
+          }
+        }
+      },
+      {
+        "name": "hcs_understand",
+        "description": "Deep pattern analysis of an HCS topic - anomaly detection, trend analysis, entity extraction, or risk assessment. Costs 1.0 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "Hedera topic ID. Defaults to the HederaIntel platform topic."
+            },
+            "analysis_type": {
+              "enum": [
+                "anomaly_detection",
+                "trend_analysis",
+                "entity_extraction",
+                "risk_assessment"
+              ],
+              "type": "string",
+              "description": "Type of analysis to perform"
+            },
+            "lookback_days": {
+              "type": "number",
+              "description": "Days of history to analyze (default 7, max 30)"
+            }
+          }
+        }
+      },
+      {
+        "name": "hcs_write_record",
+        "description": "Write a tamper-evident compliance record to the Hedera blockchain. Returns a record ID and transaction proof. If no topic_id is provided, writes to the shared HederaToolbox platform topic. Sends a webhook notification on every write. Costs 5 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "The compliance data to record (any JSON object)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "HCS topic ID to write the record to. Defaults to the HederaIntel platform topic."
+            },
+            "entity_id": {
+              "type": "string",
+              "description": "ID of the entity this record relates to"
+            },
+            "record_type": {
+              "type": "string",
+              "description": "Type of compliance record (e.g. transaction, approval, audit_event)"
+            }
+          }
+        }
+      },
+      {
+        "name": "hcs_verify_record",
+        "description": "Verify a compliance record exists on the Hedera blockchain and has not been tampered with. Costs 1.0 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "HCS topic ID where the record was written. Defaults to the HederaIntel platform topic."
+            },
+            "record_id": {
+              "type": "string",
+              "description": "Record ID returned when the record was written"
+            }
+          }
+        }
+      },
+      {
+        "name": "hcs_audit_trail",
+        "description": "Retrieve the full chronological audit trail for an entity from the Hedera blockchain. Costs 2.0 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max records to retrieve (default 50)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "HCS topic ID to query. Defaults to the HederaIntel platform topic."
+            },
+            "entity_id": {
+              "type": "string",
+              "description": "Entity ID to retrieve audit trail for"
+            }
+          }
+        }
+      },
+      {
+        "name": "governance_monitor",
+        "description": "Monitor active governance proposals for a Hedera token or DAO. Returns open proposals, voting deadlines, and current vote tallies. Provide topic_id for best results — without it, only token metadata is returned. Costs 0.2 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "token_id": {
+              "type": "string",
+              "description": "Hedera token ID to monitor governance for (e.g. 0.0.123456)"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "Optional HCS topic ID used for governance messages"
+            }
+          }
+        }
+      },
+      {
+        "name": "governance_analyze",
+        "description": "Deep analysis of a governance proposal including voter sentiment, participation rate, token concentration, and outcome prediction. Costs 1.0 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "token_id": {
+              "type": "string",
+              "description": "Hedera token ID the proposal belongs to"
+            },
+            "topic_id": {
+              "type": "string",
+              "description": "HCS topic ID where proposal votes are recorded"
+            },
+            "proposal_id": {
+              "type": "string",
+              "description": "Proposal ID or HCS sequence number to analyze"
+            }
+          }
+        }
+      },
+      {
+        "name": "token_price",
+        "description": "Get the current price, market cap, and 24h trading volume for a Hedera token. Costs 0.1 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "token_id": {
+              "type": "string",
+              "description": "Hedera token ID (e.g. 0.0.123456)"
+            }
+          }
+        }
+      },
+      {
+        "name": "token_analyze",
+        "description": "Deep analysis of a Hedera token including holder distribution, transfer velocity, liquidity, and risk scoring. Costs 0.6 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "token_id": {
+              "type": "string",
+              "description": "Hedera token ID to analyze (e.g. 0.0.123456)"
+            }
+          }
+        }
+      },
+      {
+        "name": "token_monitor",
+        "description": "Monitor recent token transfer activity, whale movements, and unusual trading patterns for a Hedera token. Costs 0.2 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Number of recent transactions to return (default 25, max 100)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "token_id": {
+              "type": "string",
+              "description": "Hedera token ID to monitor (e.g. 0.0.123456)"
+            }
+          }
+        }
+      },
+      {
+        "name": "identity_resolve",
+        "description": "Resolve a Hedera account ID or EVM address to its on-chain identity profile including account age, token holdings, transaction history, and any HCS-based identity records. Accepts both Hedera native IDs (0.0.123456) and EVM addresses (0x...). Costs 0.2 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Hedera account ID (e.g. 0.0.123456) or EVM address (e.g. 0x1234...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "identity_verify_kyc",
+        "description": "Check the KYC status of a Hedera account for one or more tokens. Returns KYC grant status and verification history. Accepts both Hedera native IDs (0.0.123456) and EVM addresses (0x...). Costs 0.5 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "token_id": {
+              "type": "string",
+              "description": "Optional token ID to check KYC status for a specific token"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Hedera account ID (e.g. 0.0.123456) or EVM address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "identity_check_sanctions",
+        "description": "Screen a Hedera account against on-chain risk signals including transaction patterns, counterparty risk, and known flagged accounts. Accepts both Hedera native IDs (0.0.123456) and EVM addresses (0x...). Costs 1.0 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Hedera account ID (e.g. 0.0.123456) or EVM address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "contract_read",
+        "description": "Read state from a Hedera smart contract - get contract info, bytecode size, recent activity, and storage details without executing a transaction. Costs 0.2 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "contract_id": {
+              "type": "string",
+              "description": "Hedera contract ID (e.g. 0.0.123456) or EVM address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "contract_call",
+        "description": "Execute a read-only call to a Hedera smart contract function and return the result. Does not submit a transaction or cost gas. Costs 1.0 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "abi_hint": {
+              "type": "string",
+              "description": "Optional full function signature for precise ABI encoding e.g. 'balanceOf(address)' or 'getReserves()'"
+            },
+            "contract_id": {
+              "type": "string",
+              "description": "Hedera contract ID (e.g. 0.0.123456) or EVM address (0x...)"
+            },
+            "return_types": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional ABI return types for precise decoding e.g. ['uint112','uint112','uint32'] for getReserves, ['address'] for owner"
+            },
+            "function_name": {
+              "type": "string",
+              "description": "Contract function name to call (e.g. balanceOf, totalSupply, name)"
+            },
+            "function_params": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional array of parameter values to pass to the function"
+            }
+          }
+        }
+      },
+      {
+        "name": "contract_analyze",
+        "description": "Deep analysis of a Hedera smart contract including activity patterns, caller distribution, gas usage, risk assessment, and functional classification. Costs 1.5 HBAR.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your HederaIntel API key"
+            },
+            "contract_id": {
+              "type": "string",
+              "description": "Hedera contract ID to analyze (e.g. 0.0.123456)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

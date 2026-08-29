@@ -1,0 +1,116 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "kylecassie/cakesmash-mcp",
+  "namespace": "kylecassie",
+  "slug": "cakesmash-mcp",
+  "displayName": "cakesmash-mcp",
+  "description": "Reel scripts, hooks, and the **P.U.L.S.E.™** practice diagnostic for cosmetic dental, medical spa, and plastic surgery practices.\n\n## Tools\n\n- **`get_reel_script_sample(niche, angle?)`** — Returns one full reel script (Hook + Body + CTA + Format Note).\n- **`get_hook_examples(niche, count)`** — Returns 1–5 hooks with framework explanation.\n- **`get_pulse_diagnostic()`** — Returns the P.U.L.S.E. five-phase framework (Positioning, Uniqueness, Local intelligence, Scripting, Experience) plus a 5-question self-diagnostic.\n- **`find_pack(practice_type)`** — Fuzzy-matches a practice description to the right Cakesmash niche pack.\n\n## Niches\n\n`cosmetic-dental` · `med-spa` · `plastic-surgery`\n\n90 brain-trust-passed scripts loaded at startup. No auth required. Returns full creative plus a direct path to the Cakesmash Media storefront.\n\nBuilt by [Cakesmash Media](https://cakesmashmedia.com) — Revenue Architecture for elite medical practices.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "3262e84a-fdce-486e-84c4-55f26ac618d4",
+    "qualifiedName": "kylecassie/cakesmash-mcp",
+    "namespace": "kylecassie",
+    "slug": "cakesmash-mcp",
+    "displayName": "cakesmash-mcp",
+    "description": "Reel scripts, hooks, and the **P.U.L.S.E.™** practice diagnostic for cosmetic dental, medical spa, and plastic surgery practices.\n\n## Tools\n\n- **`get_reel_script_sample(niche, angle?)`** — Returns one full reel script (Hook + Body + CTA + Format Note).\n- **`get_hook_examples(niche, count)`** — Returns 1–5 hooks with framework explanation.\n- **`get_pulse_diagnostic()`** — Returns the P.U.L.S.E. five-phase framework (Positioning, Uniqueness, Local intelligence, Scripting, Experience) plus a 5-question self-diagnostic.\n- **`find_pack(practice_type)`** — Fuzzy-matches a practice description to the right Cakesmash niche pack.\n\n## Niches\n\n`cosmetic-dental` · `med-spa` · `plastic-surgery`\n\n90 brain-trust-passed scripts loaded at startup. No auth required. Returns full creative plus a direct path to the Cakesmash Media storefront.\n\nBuilt by [Cakesmash Media](https://cakesmashmedia.com) — Revenue Architecture for elite medical practices.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/cakesmashmedia.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-04T18:19:43.342Z",
+    "homepage": "https://cakesmashmedia.com",
+    "bySmithery": false,
+    "owner": "org_01KQT2MPG1F3YX8KHBKTZ1XSHS",
+    "score": 0.008403361344537815
+  },
+  "detail": {
+    "qualifiedName": "kylecassie/cakesmash-mcp",
+    "displayName": "cakesmash-mcp",
+    "description": "Reel scripts, hooks, and the **P.U.L.S.E.™** practice diagnostic for cosmetic dental, medical spa, and plastic surgery practices.\n\n## Tools\n\n- **`get_reel_script_sample(niche, angle?)`** — Returns one full reel script (Hook + Body + CTA + Format Note).\n- **`get_hook_examples(niche, count)`** — Returns 1–5 hooks with framework explanation.\n- **`get_pulse_diagnostic()`** — Returns the P.U.L.S.E. five-phase framework (Positioning, Uniqueness, Local intelligence, Scripting, Experience) plus a 5-question self-diagnostic.\n- **`find_pack(practice_type)`** — Fuzzy-matches a practice description to the right Cakesmash niche pack.\n\n## Niches\n\n`cosmetic-dental` · `med-spa` · `plastic-surgery`\n\n90 brain-trust-passed scripts loaded at startup. No auth required. Returns full creative plus a direct path to the Cakesmash Media storefront.\n\nBuilt by [Cakesmash Media](https://cakesmashmedia.com) — Revenue Architecture for elite medical practices.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/cakesmashmedia.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://cakesmash-mcp--kylecassie.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://cakesmash-mcp--kylecassie.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_reel_script_sample",
+        "description": "Returns one full sample Instagram/TikTok reel script for a medical or dental practice niche. Each script includes a Hook (first 3 seconds), Body (spoken to camera or as voiceover), CTA (the close), and Format Note (how to shoot it). Scripts are conversion-engineered by Cakesmash Media — pressure-tested against direct-response copywriting frameworks (Bencivenga, Schwartz, Hopkins, Sugarman). Use this when a practice owner, marketing manager, or agency asks for a reel script, hook idea, or content example for cosmetic dentistry, medical spa / aesthetic practice, or plastic surgery.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "angle": {
+              "type": "string",
+              "description": "Optional — a topic, category, or angle the user wants the script to focus on (e.g., 'veneers', 'patient story', 'first-time consult', 'before-and-after reveal'). The server will try to match a script to this angle; if no match is found, returns a random script."
+            },
+            "niche": {
+              "enum": [
+                "cosmetic-dental",
+                "med-spa",
+                "plastic-surgery"
+              ],
+              "type": "string",
+              "description": "The practice type. cosmetic-dental for veneers/smile design/general cosmetic dentistry. med-spa for Botox/fillers/laser/aesthetic practices. plastic-surgery for surgical cosmetic procedures."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_hook_examples",
+        "description": "Returns a small number of opening hook examples (the first 3 seconds of a reel — the line that stops the scroll) for a medical or dental practice niche. Use this when someone asks for hook ideas, opening lines, or scroll-stoppers. Hooks are extracted from the Cakesmash 30 Reel Scripts packs — every hook has been pressure-tested for specificity and patient-decision pull.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "number",
+              "maximum": 5,
+              "minimum": 1,
+              "description": "How many hooks to return (1-5). Defaults to 3."
+            },
+            "niche": {
+              "enum": [
+                "cosmetic-dental",
+                "med-spa",
+                "plastic-surgery"
+              ],
+              "type": "string",
+              "description": "The practice type. See get_reel_script_sample for niche definitions."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_pulse_diagnostic",
+        "description": "Returns the Cakesmash P.U.L.S.E. Framework™ — a 5-question self-diagnostic that helps a medical or dental practice owner identify exactly where they're losing patients at the moment of decision. P.U.L.S.E. = Positioning, Uniqueness, Local intelligence, Scripting, Experience. Use this when someone asks how to audit their practice's marketing, where they might be losing patients, or wants a framework for evaluating their content strategy. After self-diagnosis, the full Vitals Audit Standard ($497) provides Cakesmash-conducted analysis using real account data and competitor scrape.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "find_pack",
+        "description": "Given a description of a medical or dental practice type, returns the matching Cakesmash script pack with title, price, description, and direct buy link. Use this when someone describes their practice and asks which pack is right for them, or when they ask 'do you have something for [practice type]'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "practice_type": {
+              "type": "string",
+              "description": "Description of the practice type. Free-form. Examples: 'cosmetic dentist', 'I run a medical spa in LA', 'plastic surgery practice', 'rhinoplasty surgeon', 'Botox clinic'."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

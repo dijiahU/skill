@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "yz4z9eyw0w",
+  "namespace": "aidant64",
+  "slug": "Atlas-MCP-Gateway",
+  "name": "ATLAS Governance Gateway",
+  "description": "A secure middleware that intercepts AI agent tool calls to evaluate risks and manage human-in-the-loop approvals via durable Inngest workflows. It ensures compliance with standards like the EU AI Act by pausing high-risk actions until authorized by a human reviewer.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A secure middleware that intercepts AI agent tool calls to evaluate risks and manage human-in-the-loop approvals via durable Inngest workflows. It ensures compliance with standards like the EU AI Act by pausing high-risk actions until authorized by a human reviewer.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AI_BACKEND": {
+          "description": "The AI backend choice, such as OpenAI or Local LLM (Ollama).",
+          "type": "string"
+        },
+        "MODAL_TOKEN_ID": {
+          "description": "The Modal Token ID for authentication.",
+          "type": "string"
+        },
+        "INNGEST_EVENT_KEY": {
+          "description": "The Inngest Event Key used for triggering workflows.",
+          "type": "string"
+        },
+        "MODAL_TOKEN_SECRET": {
+          "description": "The Modal Token Secret for authentication.",
+          "type": "string"
+        },
+        "INNGEST_SIGNING_KEY": {
+          "description": "The Inngest Signing Key used for production to verify event authenticity.",
+          "type": "string"
+        },
+        "MODAL_FUNCTION_NAME": {
+          "description": "The name of the Modal function used for risk evaluation.",
+          "type": "string",
+          "default": "nislam-mics/ATLAS-NIST-Measure"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AI_BACKEND",
+        "INNGEST_EVENT_KEY",
+        "INNGEST_SIGNING_KEY",
+        "MODAL_TOKEN_ID",
+        "MODAL_TOKEN_SECRET"
+      ]
+    },
+    "id": "yz4z9eyw0w",
+    "name": "ATLAS Governance Gateway",
+    "namespace": "aidant64",
+    "repository": {
+      "url": "https://github.com/aidant64/Atlas-MCP-Gateway"
+    },
+    "slug": "Atlas-MCP-Gateway",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/yz4z9eyw0w"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "jcqiychfbm",
+  "namespace": "the-otner",
+  "slug": "aruba-mcp",
+  "name": "HPE Aruba Networking Central MCP Server",
+  "description": "Exposes 90 production-grade tools for interacting with the complete HPE Aruba Networking Central REST API surface, including network inventory, configuration, and security management. It features enterprise-ready OAuth2 handling and semantic tool filtering for optimized performance with both hosted and local LLMs.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Exposes 90 production-grade tools for interacting with the complete HPE Aruba Networking Central REST API surface, including network inventory, configuration, and security management. It features enterprise-ready OAuth2 handling and semantic tool filtering for optimized performance with both hosted and local LLMs.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OLLAMA_URL": {
+          "description": "Ollama API endpoint for local LLM usage with the LangGraph agent",
+          "type": "string",
+          "default": "http://localhost:11434"
+        },
+        "TOP_K_TOOLS": {
+          "description": "Number of tools to filter to when using the semantic filter for local LLM usage",
+          "type": "string",
+          "default": "8"
+        },
+        "OLLAMA_MODEL": {
+          "description": "Ollama model to use for local LLM usage with the LangGraph agent",
+          "type": "string",
+          "default": "llama3.1"
+        },
+        "ARUBA_CENTRAL_TOKEN": {
+          "description": "OAuth2 access token",
+          "type": "string"
+        },
+        "ARUBA_CENTRAL_TIMEOUT": {
+          "description": "HTTP request timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "ARUBA_CENTRAL_BASE_URL": {
+          "description": "Aruba Central API gateway URL",
+          "type": "string",
+          "default": "https://apigw-uswest4.central.arubanetworks.com"
+        },
+        "ARUBA_CENTRAL_CLIENT_ID": {
+          "description": "OAuth2 client ID",
+          "type": "string"
+        },
+        "ARUBA_CENTRAL_CLIENT_SECRET": {
+          "description": "OAuth2 client secret",
+          "type": "string"
+        },
+        "ARUBA_CENTRAL_REFRESH_TOKEN": {
+          "description": "OAuth2 refresh token",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ARUBA_CENTRAL_TOKEN",
+        "ARUBA_CENTRAL_CLIENT_ID",
+        "ARUBA_CENTRAL_CLIENT_SECRET",
+        "ARUBA_CENTRAL_REFRESH_TOKEN"
+      ]
+    },
+    "id": "jcqiychfbm",
+    "name": "HPE Aruba Networking Central MCP Server",
+    "namespace": "the-otner",
+    "repository": {
+      "url": "https://github.com/the-otner/aruba-mcp"
+    },
+    "slug": "aruba-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jcqiychfbm"
+  }
+}

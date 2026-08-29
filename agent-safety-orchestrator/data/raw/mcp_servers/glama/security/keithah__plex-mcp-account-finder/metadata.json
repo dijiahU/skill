@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "g189188ls4",
+  "namespace": "keithah",
+  "slug": "plex-mcp-account-finder",
+  "name": "Plex MCP Account Finder",
+  "description": "Connects to multiple Plex accounts to perform fuzzy searches for users across servers by email, username, or display name, and generates authentication tokens for new account access.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Connects to multiple Plex accounts to perform fuzzy searches for users across servers by email, username, or display name, and generates authentication tokens for new account access.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "accounts": {
+          "description": "JSON string containing list of Plex account API tokens. Example: [{\"label\":\"primary\",\"token\":\"<plex-token>\"},{\"label\":\"secondary\",\"token\":\"<plex-token>\"}]",
+          "type": "string"
+        },
+        "log_level": {
+          "description": "Log level: debug, info, warn, or error",
+          "type": "string",
+          "default": "info"
+        },
+        "cache_ttl_seconds": {
+          "description": "Cache duration for server/user lookups (30–3600 seconds)",
+          "type": "string",
+          "default": "300"
+        }
+      },
+      "type": "object",
+      "required": [
+        "accounts"
+      ]
+    },
+    "id": "g189188ls4",
+    "name": "Plex MCP Account Finder",
+    "namespace": "keithah",
+    "repository": {
+      "url": "https://github.com/keithah/plex-mcp-account-finder"
+    },
+    "slug": "plex-mcp-account-finder",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/g189188ls4"
+  }
+}

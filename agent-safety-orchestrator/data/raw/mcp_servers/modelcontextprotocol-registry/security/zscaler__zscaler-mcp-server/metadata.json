@@ -1,0 +1,130 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.zscaler/zscaler-mcp-server",
+  "slug": "zscaler__zscaler-mcp-server",
+  "title": "Zscaler Zero Trust Exchange",
+  "description": "Manage Zscaler Zero Trust Exchange via 280+ tools — ZPA, ZIA, ZDX, ZCC, EASM, and more.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.zscaler/zscaler-mcp-server",
+      "description": "Manage Zscaler Zero Trust Exchange via 280+ tools — ZPA, ZIA, ZDX, ZCC, EASM, and more.",
+      "title": "Zscaler Zero Trust Exchange",
+      "repository": {
+        "url": "https://github.com/zscaler/zscaler-mcp-server",
+        "source": "github",
+        "id": "992692668"
+      },
+      "version": "0.10.0",
+      "websiteUrl": "https://github.com/zscaler/zscaler-mcp-server",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "zscaler-mcp",
+          "version": "0.10.0",
+          "runtimeHint": "uvx",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Zscaler OneAPI Client ID from ZIdentity console.",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "ZSCALER_CLIENT_ID"
+            },
+            {
+              "description": "Zscaler OneAPI Client Secret from ZIdentity console.",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "ZSCALER_CLIENT_SECRET"
+            },
+            {
+              "description": "Zscaler Customer ID from ZIdentity console.",
+              "isRequired": true,
+              "name": "ZSCALER_CUSTOMER_ID"
+            },
+            {
+              "description": "Zscaler vanity domain (e.g. mycompany.zscloud.net).",
+              "isRequired": true,
+              "name": "ZSCALER_VANITY_DOMAIN"
+            }
+          ]
+        },
+        {
+          "registryType": "oci",
+          "identifier": "docker.io/zscaler/zscaler-mcp-server:latest",
+          "runtimeHint": "docker",
+          "transport": {
+            "type": "stdio"
+          },
+          "runtimeArguments": [
+            {
+              "description": "Zscaler OneAPI Client ID from ZIdentity console.",
+              "isRequired": true,
+              "value": "ZSCALER_CLIENT_ID={client_id}",
+              "variables": {
+                "client_id": {
+                  "isRequired": true,
+                  "format": "string",
+                  "isSecret": true
+                }
+              },
+              "type": "named",
+              "name": "-e"
+            },
+            {
+              "description": "Zscaler OneAPI Client Secret from ZIdentity console.",
+              "isRequired": true,
+              "value": "ZSCALER_CLIENT_SECRET={client_secret}",
+              "variables": {
+                "client_secret": {
+                  "isRequired": true,
+                  "format": "string",
+                  "isSecret": true
+                }
+              },
+              "type": "named",
+              "name": "-e"
+            },
+            {
+              "description": "Zscaler Customer ID from ZIdentity console.",
+              "isRequired": true,
+              "value": "ZSCALER_CUSTOMER_ID={customer_id}",
+              "variables": {
+                "customer_id": {
+                  "isRequired": true,
+                  "format": "string"
+                }
+              },
+              "type": "named",
+              "name": "-e"
+            },
+            {
+              "description": "Zscaler vanity domain (e.g. mycompany.zscloud.net).",
+              "isRequired": true,
+              "value": "ZSCALER_VANITY_DOMAIN={vanity_domain}",
+              "variables": {
+                "vanity_domain": {
+                  "isRequired": true,
+                  "format": "string"
+                }
+              },
+              "type": "named",
+              "name": "-e"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-10T20:43:51.311677Z",
+        "publishedAt": "2026-04-10T20:43:51.311677Z",
+        "updatedAt": "2026-04-10T20:43:51.311677Z",
+        "isLatest": true
+      }
+    }
+  }
+}

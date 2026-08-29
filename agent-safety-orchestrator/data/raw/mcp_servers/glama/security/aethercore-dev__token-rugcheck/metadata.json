@@ -1,0 +1,147 @@
+{
+  "registry": "glama",
+  "id": "tf7udpwbg2",
+  "namespace": "AetherCore-Dev",
+  "slug": "token-rugcheck",
+  "name": "token-rugcheck",
+  "description": "MCP server for real-time Solana token risk analysis. Cross-references RugCheck.xyz, DexScreener, and GoPlus Security to generate three-layer reports: machine verdict → LLM analysis → raw on-chain evidence. Live on Solana mainnet with USDC micropayments ($0.02/audit). Give any AI agent the ability to check if a token is safe before trading.",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "MCP server for real-time Solana token risk analysis. Cross-references RugCheck.xyz, DexScreener, and GoPlus Security to generate three-layer reports: machine verdict → LLM analysis → raw on-chain evidence. Live on Solana mainnet with USDC micropayments ($0.02/audit). Give any AI agent the ability to check if a token is safe before trading.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "X402_MODE": {
+          "description": "Operating mode: test (mock) or production (real)",
+          "type": "string",
+          "default": "test"
+        },
+        "AG402_PRICE": {
+          "description": "USDC price per request",
+          "type": "string",
+          "default": "0.02"
+        },
+        "X402_NETWORK": {
+          "description": "Solana network: mock, devnet, or mainnet",
+          "type": "string",
+          "default": "devnet"
+        },
+        "AG402_ADDRESS": {
+          "description": "Provider Solana wallet address that receives USDC payments",
+          "type": "string"
+        },
+        "RUGCHECK_HOST": {
+          "description": "Bind address for the service",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "RUGCHECK_PORT": {
+          "description": "Bind port for the service",
+          "type": "string",
+          "default": "8000"
+        },
+        "CACHE_MAX_SIZE": {
+          "description": "Maximum number of cached entries (LRU)",
+          "type": "string",
+          "default": "5000"
+        },
+        "GOPLUS_APP_KEY": {
+          "description": "Optional GoPlus API key for higher rate limits",
+          "type": "string"
+        },
+        "SOLANA_RPC_URL": {
+          "description": "Read-only Solana RPC URL for payment verification",
+          "type": "string",
+          "default": "https://api.devnet.solana.com"
+        },
+        "PAID_RATE_LIMIT": {
+          "description": "Paid requests per IP per minute",
+          "type": "string",
+          "default": "120"
+        },
+        "UVICORN_WORKERS": {
+          "description": "Number of worker processes",
+          "type": "string",
+          "default": "1"
+        },
+        "FREE_DAILY_QUOTA": {
+          "description": "Free requests per IP per day",
+          "type": "string",
+          "default": "20"
+        },
+        "CACHE_TTL_SECONDS": {
+          "description": "Cache time-to-live in seconds",
+          "type": "string",
+          "default": "3"
+        },
+        "GOPLUS_APP_SECRET": {
+          "description": "Optional GoPlus API secret",
+          "type": "string"
+        },
+        "AG402_GATEWAY_PORT": {
+          "description": "Port for the ag402 gateway",
+          "type": "string",
+          "default": "8001"
+        },
+        "RUGCHECK_LOG_LEVEL": {
+          "description": "Logging level: debug / info / warning / error",
+          "type": "string",
+          "default": "info"
+        },
+        "SOLANA_PRIVATE_KEY": {
+          "description": "Solana private key in base58 format (required for consumer setups or specific gateway configs)",
+          "type": "string"
+        },
+        "RUGCHECK_PRODUCTION": {
+          "description": "Set to true to disable docs and harden health responses",
+          "type": "string",
+          "default": "false"
+        },
+        "AG402_UNLOCK_PASSWORD": {
+          "description": "Password used to unlock the local encrypted wallet",
+          "type": "string"
+        },
+        "GOPLUS_TIMEOUT_SECONDS": {
+          "description": "Timeout for GoPlus API calls",
+          "type": "string",
+          "default": "2.5"
+        },
+        "AG402_PREPAID_SIGNING_KEY": {
+          "description": "HMAC signing key for prepaid fast-path (min 32 chars)",
+          "type": "string"
+        },
+        "DEXSCREENER_TIMEOUT_SECONDS": {
+          "description": "Timeout for DexScreener API calls",
+          "type": "string",
+          "default": "1.5"
+        },
+        "RUGCHECK_API_TIMEOUT_SECONDS": {
+          "description": "Timeout for RugCheck API calls",
+          "type": "string",
+          "default": "3.5"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "tf7udpwbg2",
+    "name": "token-rugcheck",
+    "namespace": "AetherCore-Dev",
+    "repository": {
+      "url": "https://github.com/AetherCore-Dev/token-rugcheck"
+    },
+    "slug": "token-rugcheck",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tf7udpwbg2"
+  }
+}

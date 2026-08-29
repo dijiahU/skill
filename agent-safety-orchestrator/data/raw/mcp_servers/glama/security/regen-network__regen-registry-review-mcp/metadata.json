@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "nrihzxx4zv",
+  "namespace": "regen-network",
+  "slug": "regen-registry-review-mcp",
+  "name": "Registry Review MCP Server",
+  "description": "Automates carbon credit project registration document review, transforming 6-8 hour manual reviews into 60-90 minute guided workflows with automated document discovery, evidence extraction, cross-validation, and compliance report generation.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Automates carbon credit project registration document review, transforming 6-8 hour manual reviews into 60-90 minute guided workflows with automated document discovery, evidence extraction, cross-validation, and compliance report generation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "REGISTRY_REVIEW_LLM_MODEL": {
+          "description": "Model selection for LLM extraction",
+          "type": "string",
+          "default": "claude-sonnet-4-20250514"
+        },
+        "REGISTRY_REVIEW_LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "REGISTRY_REVIEW_ANTHROPIC_API_KEY": {
+          "description": "Your Anthropic API key from https://console.anthropic.com/ (required for LLM extraction in Phase 4.2)",
+          "type": "string"
+        },
+        "REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED": {
+          "description": "Enable LLM extraction",
+          "type": "string",
+          "default": "false"
+        },
+        "REGISTRY_REVIEW_LLM_CONFIDENCE_THRESHOLD": {
+          "description": "Confidence threshold for filtering extraction results",
+          "type": "string",
+          "default": "0.7"
+        },
+        "REGISTRY_REVIEW_MAX_API_CALLS_PER_SESSION": {
+          "description": "Cost management - maximum API calls per session",
+          "type": "string",
+          "default": "50"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "nrihzxx4zv",
+    "name": "Registry Review MCP Server",
+    "namespace": "regen-network",
+    "repository": {
+      "url": "https://github.com/regen-network/registry-review-mcp"
+    },
+    "slug": "regen-registry-review-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nrihzxx4zv"
+  }
+}

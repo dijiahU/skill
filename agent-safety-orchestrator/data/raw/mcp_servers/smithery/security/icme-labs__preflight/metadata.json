@@ -1,0 +1,263 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "icme-labs/preflight",
+  "namespace": "icme-labs",
+  "slug": "preflight",
+  "displayName": "ICME Preflight",
+  "description": "Jailbreak-proof guardrails for AI agents. Policy enforcement powered by Automated Reasoning and formal verification — an SMT solver, not an LLM, decides whether an action passes or fails. Cannot be prompt-injected. Every decision produces a cryptographic ZK proof.\n\nIncludes a FREE check_logic tool that catches contradictions in agent reasoning (budget overflows, impossible timelines, conflicting constraints) using a Z3 SAT solver. No account needed.\n\n13 tools covering the full workflow:\n\ncheck_logic — FREE. Mathematically prove reasoning is consistent before acting on it.\nmake_rules — write guardrails in plain English, ICME compiles them to formal logic via Automated Reasoning.\ncheck_action / quick_check — verify any agent action against your policy. SAT = allowed, UNSAT = blocked.\nverify_proof — independently verify the ZK receipt from any prior check.\nget_scenarios / run_tests — test your policy with AWS Automated Reasoning scenarios before deploying.\nAccount & billing — create accou",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "guardrail",
+    "policy",
+    "encryption",
+    "authorization",
+    "prompt injection",
+    "jailbreak"
+  ],
+  "rawRecord": {
+    "id": "5030a140-5366-44c3-ad6e-7d02b0260131",
+    "qualifiedName": "icme-labs/preflight",
+    "namespace": "icme-labs",
+    "slug": "preflight",
+    "displayName": "ICME Preflight",
+    "description": "Jailbreak-proof guardrails for AI agents. Policy enforcement powered by Automated Reasoning and formal verification — an SMT solver, not an LLM, decides whether an action passes or fails. Cannot be prompt-injected. Every decision produces a cryptographic ZK proof.\n\nIncludes a FREE check_logic tool that catches contradictions in agent reasoning (budget overflows, impossible timelines, conflicting constraints) using a Z3 SAT solver. No account needed.\n\n13 tools covering the full workflow:\n\ncheck_logic — FREE. Mathematically prove reasoning is consistent before acting on it.\nmake_rules — write guardrails in plain English, ICME compiles them to formal logic via Automated Reasoning.\ncheck_action / quick_check — verify any agent action against your policy. SAT = allowed, UNSAT = blocked.\nverify_proof — independently verify the ZK receipt from any prior check.\nget_scenarios / run_tests — test your policy with AWS Automated Reasoning scenarios before deploying.\nAccount & billing — create accou",
+    "iconUrl": "https://api.smithery.ai/servers/icme-labs/preflight/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-20T23:01:14.950Z",
+    "homepage": "https://docs.icme.io/",
+    "bySmithery": false,
+    "owner": "org_01KNBVT9A90QSN4YRDAGTEJPNM",
+    "score": 0.007936507936507936
+  },
+  "detail": {
+    "qualifiedName": "icme-labs/preflight",
+    "displayName": "ICME Preflight",
+    "description": "Jailbreak-proof guardrails for AI agents. Policy enforcement powered by Automated Reasoning and formal verification — an SMT solver, not an LLM, decides whether an action passes or fails. Cannot be prompt-injected. Every decision produces a cryptographic ZK proof.\n\nIncludes a FREE check_logic tool that catches contradictions in agent reasoning (budget overflows, impossible timelines, conflicting constraints) using a Z3 SAT solver. No account needed.\n\n13 tools covering the full workflow:\n\ncheck_logic — FREE. Mathematically prove reasoning is consistent before acting on it.\nmake_rules — write guardrails in plain English, ICME compiles them to formal logic via Automated Reasoning.\ncheck_action / quick_check — verify any agent action against your policy. SAT = allowed, UNSAT = blocked.\nverify_proof — independently verify the ZK receipt from any prior check.\nget_scenarios / run_tests — test your policy with AWS Automated Reasoning scenarios before deploying.\nAccount & billing — create account ($5 USDC or card), top up credits, pay per call via x402.\n\nDocs: https://docs.icme.io",
+    "iconUrl": "https://api.smithery.ai/servers/icme-labs/preflight/icon",
+    "remote": true,
+    "deploymentUrl": "https://preflight--icme-labs.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://preflight--icme-labs.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_logic",
+        "description": "FREE — no account needed. Check if agent reasoning is logically consistent. Extracts quantitative and logical claims, then uses a Z3 SAT solver to mathematically prove whether they contradict. Returns CONSISTENT, CONTRADICTION, or UNKNOWN with the extracted claims. Use this before acting on any plan, calculation, or chain of thought.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "show_smt": {
+              "type": "boolean",
+              "description": "If true, include the generated SMT-LIB2 formula in the response (default: false)"
+            },
+            "reasoning": {
+              "type": "string",
+              "description": "Agent reasoning, plan, or chain of thought to check for contradictions (max 2000 chars)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_account",
+        "description": "Create an ICME Preflight account via x402 USDC payment ($5.00 on Base). Returns an API key and 325 starting credits. Save the api_key — it is shown only once.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_-]{1,32}$",
+              "description": "Unique username (1-32 chars, alphanumeric + hyphens/underscores)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_account_card",
+        "description": "Create an ICME Preflight account via credit card ($5.00). Returns a checkout_url to open in a browser. After payment, call poll_session with the session_id to get your API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "description": "Unique username (1-32 chars, alphanumeric + hyphens/underscores)"
+            }
+          }
+        }
+      },
+      {
+        "name": "make_rules",
+        "description": "Compile a natural language policy into formal logic (SMT-LIB). Costs 300 credits. Write your guardrail in plain English (up to 50 rules). Returns a policy_id and scenarios for review. Requires X-API-Key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "policy": {
+              "type": "string",
+              "description": "Natural language policy text with numbered rules (up to 50 rules)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "Your ICME API key (from create_account)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_action_paid",
+        "description": "Verify an agent action against a guardrail policy via x402 payment ($0.10 USDC on Base). No API key needed. Returns SAT (allowed) or UNSAT (blocked) with extracted values and optional ZK proof. Tip: end action with an explicit claim.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Natural language agent action to verify (max 2000 chars)"
+            },
+            "policy_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Policy ID from make_rules"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_action",
+        "description": "Verify an agent action against a guardrail policy (1 credit). Cheapest path if you have credits from signup or top_up. Requires X-API-Key. Returns SAT/UNSAT with extracted values and ZK proof.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Agent action to verify (max 2000 chars)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "Your ICME API key"
+            },
+            "policy_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_action",
+        "description": "Minimal verification: returns ALLOWED or BLOCKED (1 credit). Requires X-API-Key. Use when you only need the verdict.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string"
+            },
+            "api_key": {
+              "type": "string"
+            },
+            "policy_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_proof",
+        "description": "Verify a ZK proof from a prior check. No additional cost. Wait a few minutes after the check for the proof to be ready. Single-use per proof.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "proof_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "ZK proof ID from a check_action response"
+            }
+          }
+        }
+      },
+      {
+        "name": "top_up",
+        "description": "Add 500 credits via x402 USDC payment ($5.00 on Base). Requires X-API-Key to identify the account.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "Your ICME API key"
+            }
+          }
+        }
+      },
+      {
+        "name": "top_up_card",
+        "description": "Add credits via credit card. Returns a checkout_url. Tiers: $5=500, $10=1050, $25=2750, $50=5750, $100=12000 credits. Requires X-API-Key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string"
+            },
+            "amount_usd": {
+              "type": "integer",
+              "description": "Top-up tier in USD (5, 10, 25, 50, or 100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "poll_session",
+        "description": "Poll a Stripe Checkout session after card payment. Returns pending/complete status. For signup, returns the api_key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "description": "Stripe session ID from create_account_card or top_up_card"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_scenarios",
+        "description": "Get generated test scenarios for a policy. Requires X-API-Key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string"
+            },
+            "policy_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run saved test cases against a policy. Requires X-API-Key. All tests should pass before production use.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string"
+            },
+            "policy_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "admin-8nvf/cerebrochain",
+  "namespace": "admin-8nvf",
+  "slug": "cerebrochain",
+  "displayName": "CerebroChain",
+  "description": "Supply chain intelligence APIs for AI agents. Real-time freight rates (85+ carriers), crypto/forex/commodity prices, port congestion (NOAA), shipping\n  lanes, economic indicators (FRED), and Cerebrix AI inference. 100 free calls/day, no signup. x402 USDC micropayments, ERC-8004 trust tiers on Polygon.",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "7d4630cb-87c2-4cc6-bea0-afbc3942ef50",
+    "qualifiedName": "admin-8nvf/cerebrochain",
+    "namespace": "admin-8nvf",
+    "slug": "cerebrochain",
+    "displayName": "CerebroChain",
+    "description": "Supply chain intelligence APIs for AI agents. Real-time freight rates (85+ carriers), crypto/forex/commodity prices, port congestion (NOAA), shipping\n  lanes, economic indicators (FRED), and Cerebrix AI inference. 100 free calls/day, no signup. x402 USDC micropayments, ERC-8004 trust tiers on Polygon.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/cerebrochain.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T21:21:15.069Z",
+    "homepage": "https://cerebrochain.com/dev",
+    "bySmithery": false,
+    "owner": "org_01KP1Q5X7D7FQ1QTEK80SY6EMN",
+    "score": 0.06350806451612903
+  },
+  "detail": {
+    "qualifiedName": "admin-8nvf/cerebrochain",
+    "displayName": "CerebroChain",
+    "description": "Supply chain intelligence APIs for AI agents. Real-time freight rates (85+ carriers), crypto/forex/commodity prices, port congestion (NOAA), shipping\n  lanes, economic indicators (FRED), and Cerebrix AI inference. 100 free calls/day, no signup. x402 USDC micropayments, ERC-8004 trust tiers on Polygon.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/cerebrochain.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://cerebrochain--admin-8nvf.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://cerebrochain--admin-8nvf.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "compare_shipping_rates",
+        "description": "Compare shipping rates across multiple carriers (UPS, FedEx, USPS, DHL) for a package. Returns cheapest and fastest options. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to_zip": {
+              "type": "string",
+              "description": "Destination ZIP/postal code"
+            },
+            "from_zip": {
+              "type": "string",
+              "description": "Origin ZIP/postal code"
+            },
+            "width_in": {
+              "type": "number",
+              "description": "Package width in inches",
+              "exclusiveMinimum": 0
+            },
+            "height_in": {
+              "type": "number",
+              "description": "Package height in inches",
+              "exclusiveMinimum": 0
+            },
+            "length_in": {
+              "type": "number",
+              "description": "Package length in inches",
+              "exclusiveMinimum": 0
+            },
+            "to_country": {
+              "type": "string",
+              "default": "US",
+              "description": "Destination country code"
+            },
+            "weight_lbs": {
+              "type": "number",
+              "description": "Package weight in pounds",
+              "exclusiveMinimum": 0
+            },
+            "from_country": {
+              "type": "string",
+              "default": "US",
+              "description": "Origin country code"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_platform_status",
+        "description": "Check CerebroChain platform health and service availability. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_crypto_prices",
+        "description": "Get real-time cryptocurrency prices (BTC, ETH, SOL) from CoinGecko. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_forex_rates",
+        "description": "Get real-time forex exchange rates (EUR/USD, GBP/USD, USD/JPY) from AlphaVantage. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_commodity_prices",
+        "description": "Get commodity prices (oil, gold, agricultural) from AlphaVantage + World Bank. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_port_congestion",
+        "description": "Get real-time port congestion data from NOAA water levels for 16 major ports. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_shipping_lanes",
+        "description": "Get global shipping lane data: 10 major routes, chokepoints, and transit times. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_economic_indicators",
+        "description": "Get FRED economic indicators: diesel prices, GDP, CPI, unemployment, and more. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_freight_rates",
+        "description": "Get freight shipping rates from Shippo across 85+ carriers. Free — no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "origin": {
+              "type": "string",
+              "description": "Origin ZIP code (default: 10001)"
+            },
+            "destination": {
+              "type": "string",
+              "description": "Destination ZIP code (default: 90210)"
+            }
+          }
+        }
+      },
+      {
+        "name": "query_inventory",
+        "description": "Query warehouse inventory levels, movements, and stock alerts. Premium tool. Requires API key (set CEREBROCHAIN_API_KEY env).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search term (SKU, product name)"
+            },
+            "status": {
+              "enum": [
+                "in-stock",
+                "low-stock",
+                "out-of-stock",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Stock status filter"
+            },
+            "warehouse_id": {
+              "type": "string",
+              "description": "Filter by warehouse"
+            }
+          }
+        }
+      },
+      {
+        "name": "optimize_route",
+        "description": "AI-powered route optimization. Calculates optimal delivery route considering traffic, capacity, and time windows. Premium tool. Requires API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "stops": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "address"
+                ],
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "Stop address or coordinates"
+                  },
+                  "priority": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string",
+                    "description": "Stop priority"
+                  },
+                  "time_window_end": {
+                    "type": "string",
+                    "description": "Latest delivery time (ISO 8601)"
+                  },
+                  "time_window_start": {
+                    "type": "string",
+                    "description": "Earliest delivery time (ISO 8601)"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 2,
+              "description": "Delivery stops to optimize"
+            },
+            "vehicle_capacity_lbs": {
+              "type": "number",
+              "description": "Vehicle weight capacity in pounds"
+            }
+          }
+        }
+      },
+      {
+        "name": "forecast_demand",
+        "description": "AI-powered demand forecasting. Ask natural language questions about future inventory needs and supply chain patterns. Premium tool. Requires API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Natural language forecast question"
+            },
+            "hemisphere": {
+              "enum": [
+                "wms",
+                "logistics",
+                "executive"
+              ],
+              "type": "string",
+              "default": "wms",
+              "description": "Which hemisphere to query"
+            }
+          }
+        }
+      },
+      {
+        "name": "cerebrix_inference",
+        "description": "Run Cerebrix AI inference for supply chain intelligence. Free — uses bot API free tier.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Question about supply chain, logistics, or warehouse operations"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

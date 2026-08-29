@@ -1,0 +1,114 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "found402/multi-agent-trust-verifier",
+  "namespace": "found402",
+  "slug": "multi-agent-trust-verifier",
+  "displayName": "multi-agent-trust-verifier",
+  "description": "The #1 ranked OWASP ASI01 risk is Agent Goal Hijack — when an agent gets manipulated into doing something it was never hired to do. This service is your external policy engine. It compares every proposed action against the agent's original goal, enforces spend limits, detects goal drift, and blocks unauthorized agent-to-agent transactions before they execute. $0.004/verification via x402 on Base. MCP tool name: verify_agent_trust",
+  "discoveryQueries": [
+    "secure",
+    "policy",
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "47a71057-0ba5-4460-8a9c-1464e11ddd8e",
+    "qualifiedName": "found402/multi-agent-trust-verifier",
+    "namespace": "found402",
+    "slug": "multi-agent-trust-verifier",
+    "displayName": "multi-agent-trust-verifier",
+    "description": "The #1 ranked OWASP ASI01 risk is Agent Goal Hijack — when an agent gets manipulated into doing something it was never hired to do. This service is your external policy engine. It compares every proposed action against the agent's original goal, enforces spend limits, detects goal drift, and blocks unauthorized agent-to-agent transactions before they execute. $0.004/verification via x402 on Base. MCP tool name: verify_agent_trust",
+    "iconUrl": "https://api.smithery.ai/servers/found402/multi-agent-trust-verifier/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-16T23:34:50.815Z",
+    "homepage": "https://multi-agent-trust-verifier.fly.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVQABVMKJ0B6XQRVEMJVFJ",
+    "score": 0.008849557522123894
+  },
+  "detail": {
+    "qualifiedName": "found402/multi-agent-trust-verifier",
+    "displayName": "multi-agent-trust-verifier",
+    "description": "The #1 ranked OWASP ASI01 risk is Agent Goal Hijack — when an agent gets manipulated into doing something it was never hired to do. This service is your external policy engine. It compares every proposed action against the agent's original goal, enforces spend limits, detects goal drift, and blocks unauthorized agent-to-agent transactions before they execute. $0.004/verification via x402 on Base. MCP tool name: verify_agent_trust",
+    "iconUrl": "https://api.smithery.ai/servers/found402/multi-agent-trust-verifier/icon",
+    "remote": true,
+    "deploymentUrl": "https://multi-agent-trust-verifier--found402.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://multi-agent-trust-verifier--found402.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "verify_agent_trust",
+        "description": "Verifies trust between agents by checking goal alignment, spend limits, action scope, and detecting goal drift. Returns trust score and approve/deny/escalate recommendation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spendLimit": {
+              "type": "number",
+              "description": "Maximum allowed spend in USD"
+            },
+            "originalGoal": {
+              "type": "string",
+              "description": "The original goal or task the agent was assigned"
+            },
+            "proposedSpend": {
+              "type": "number",
+              "description": "Proposed spend for this action in USD"
+            },
+            "targetAgentId": {
+              "type": "string",
+              "description": "ID of the agent that will execute the action"
+            },
+            "proposedAction": {
+              "type": "string",
+              "description": "Description of the proposed action"
+            },
+            "requestingAgentId": {
+              "type": "string",
+              "description": "ID of the agent requesting the action"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "authorized": {
+              "type": "boolean"
+            },
+            "trustScore": {
+              "type": "number",
+              "description": "Overall trust score 0-1"
+            },
+            "violations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "recommendation": {
+              "enum": [
+                "approve",
+                "deny",
+                "escalate"
+              ],
+              "type": "string"
+            },
+            "goalAlignmentScore": {
+              "type": "number",
+              "description": "Goal alignment score 0-1"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

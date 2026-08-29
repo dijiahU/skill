@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "nf8hhwwwh0",
+  "namespace": "floradistro",
+  "slug": "wordpress_mcp",
+  "name": "WordPress MCP",
+  "description": "Enables AI models to interact with WordPress sites through standardized MCP interfaces, supporting content management, post operations, and site configuration with secure JWT authentication and dual transport protocols.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI models to interact with WordPress sites through standardized MCP interfaces, supporting content management, post operations, and site configuration with secure JWT authentication and dual transport protocols.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_FILE": {
+          "description": "Optional path to log file",
+          "type": "string"
+        },
+        "JWT_TOKEN": {
+          "description": "Your JWT token for authentication",
+          "type": "string"
+        },
+        "WP_API_URL": {
+          "description": "The WordPress site URL (e.g., https://your-site.com/)",
+          "type": "string"
+        },
+        "WP_API_PASSWORD": {
+          "description": "Your WordPress application password",
+          "type": "string"
+        },
+        "WP_API_USERNAME": {
+          "description": "Your WordPress username",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "WP_API_URL",
+            "JWT_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "WP_API_URL",
+            "WP_API_USERNAME",
+            "WP_API_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "nf8hhwwwh0",
+    "name": "WordPress MCP",
+    "namespace": "floradistro",
+    "repository": {
+      "url": "https://github.com/floradistro/wordpress_mcp"
+    },
+    "slug": "wordpress_mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nf8hhwwwh0"
+  }
+}

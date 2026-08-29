@@ -1,0 +1,102 @@
+{
+  "registry": "glama",
+  "id": "j32qgv1e4f",
+  "namespace": "gyuco",
+  "slug": "mcp-http-client",
+  "name": "MCP REST Server",
+  "description": "Enables interaction with any REST API through token or login authentication, with automatic Swagger/OpenAPI documentation integration for endpoint discovery and comprehensive HTTP request support.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with any REST API through token or login authentication, with automatic Swagger/OpenAPI documentation integration for endpoint discovery and comprehensive HTTP request support.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_REST_TOKEN": {
+          "description": "API token (required for token auth)",
+          "type": "string"
+        },
+        "MCP_REST_RETRIES": {
+          "description": "Number of retries for failed requests (default: 3)",
+          "type": "string",
+          "default": "3"
+        },
+        "MCP_REST_TIMEOUT": {
+          "description": "Request timeout in milliseconds (default: 30000)",
+          "type": "string",
+          "default": "30000"
+        },
+        "MCP_REST_BASE_URL": {
+          "description": "Base URL for the REST API (required)",
+          "type": "string"
+        },
+        "MCP_REST_PASSWORD": {
+          "description": "Password (required for login auth)",
+          "type": "string"
+        },
+        "MCP_REST_USERNAME": {
+          "description": "Username (required for login auth)",
+          "type": "string"
+        },
+        "MCP_REST_AUTH_TYPE": {
+          "description": "Authentication type: 'token' or 'login' (required)",
+          "type": "string"
+        },
+        "MCP_REST_CONFIG_FILE": {
+          "description": "Path to JSON configuration file",
+          "type": "string"
+        },
+        "MCP_REST_SWAGGER_URL": {
+          "description": "URL to Swagger/OpenAPI documentation",
+          "type": "string"
+        },
+        "MCP_REST_TOKEN_FIELD": {
+          "description": "Token field name in login response (default: access_token)",
+          "type": "string",
+          "default": "access_token"
+        },
+        "MCP_REST_LOGIN_ENDPOINT": {
+          "description": "Login endpoint path (required for login auth)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MCP_REST_BASE_URL",
+            "MCP_REST_AUTH_TYPE",
+            "MCP_REST_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "MCP_REST_BASE_URL",
+            "MCP_REST_AUTH_TYPE",
+            "MCP_REST_USERNAME",
+            "MCP_REST_PASSWORD",
+            "MCP_REST_LOGIN_ENDPOINT"
+          ]
+        },
+        {
+          "required": [
+            "MCP_REST_CONFIG_FILE"
+          ]
+        }
+      ]
+    },
+    "id": "j32qgv1e4f",
+    "name": "MCP REST Server",
+    "namespace": "gyuco",
+    "repository": {
+      "url": "https://github.com/gyuco/mcp-http-client"
+    },
+    "slug": "mcp-http-client",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j32qgv1e4f"
+  }
+}

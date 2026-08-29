@@ -1,0 +1,86 @@
+{
+  "registry": "glama",
+  "id": "b0go3v9l7o",
+  "namespace": "dacebt",
+  "slug": "prompt-cleaner-mcp",
+  "name": "Prompt Cleaner MCP Server",
+  "description": "Enables cleaning and sanitizing prompts through an LLM-powered tool that removes sensitive information, provides structured feedback with notes and risks, and normalizes prompt formatting. Supports configurable local or remote OpenAI-compatible APIs with automatic secret redaction.",
+  "discoveryQueries": [
+    "secret",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables cleaning and sanitizing prompts through an LLM-powered tool that removes sensitive information, provides structured feedback with notes and risks, and normalizes prompt formatting. Supports configurable local or remote OpenAI-compatible APIs with automatic secret redaction.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LLM_MODEL": {
+          "description": "Model identifier sent to the API",
+          "type": "string",
+          "default": "open/ai-gpt-oss-20b"
+        },
+        "LOG_LEVEL": {
+          "description": "Log verbosity (error|warn|info|debug)",
+          "type": "string",
+          "default": "info"
+        },
+        "LLM_API_KEY": {
+          "description": "Bearer token for the API (optional)",
+          "type": "string"
+        },
+        "LLM_API_BASE": {
+          "description": "OpenAI-compatible base URL",
+          "type": "string",
+          "default": "http://localhost:1234/v1"
+        },
+        "LLM_BACKOFF_MS": {
+          "description": "Initial backoff delay in milliseconds",
+          "type": "string",
+          "default": "250"
+        },
+        "LLM_TIMEOUT_MS": {
+          "description": "Request timeout in milliseconds",
+          "type": "string",
+          "default": "60000"
+        },
+        "LLM_MAX_RETRIES": {
+          "description": "Retry count for retryable HTTP/network errors",
+          "type": "string",
+          "default": "1"
+        },
+        "ENFORCE_LOCAL_API": {
+          "description": "If true, only allow localhost APIs",
+          "type": "string",
+          "default": "false"
+        },
+        "LLM_BACKOFF_JITTER": {
+          "description": "Jitter factor applied to backoff (0..1)",
+          "type": "string",
+          "default": "0.2"
+        },
+        "RETOUCH_CONTENT_MAX_RETRIES": {
+          "description": "Retries when the cleaner returns non-JSON content",
+          "type": "string",
+          "default": "1"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "b0go3v9l7o",
+    "name": "Prompt Cleaner MCP Server",
+    "namespace": "dacebt",
+    "repository": {
+      "url": "https://github.com/dacebt/prompt-cleaner-mcp"
+    },
+    "slug": "prompt-cleaner-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b0go3v9l7o"
+  }
+}

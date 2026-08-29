@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "itkuk2554f",
+  "namespace": "gensecaihq",
+  "slug": "Wazuh-MCP-Server",
+  "name": "Wazuh MCP Server",
+  "description": "Securely integrates Wazuh security data with LLMs (such as Claude Desktop) by retrieving alerts from Elasticsearch indices and transforming them into MCP-compliant format, enabling real-time security context in LLM applications.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Securely integrates Wazuh security data with LLMs (such as Claude Desktop) by retrieving alerts from Elasticsearch indices and transforming them into MCP-compliant format, enabling real-time security context in LLM applications.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "VERIFY_SSL": {
+          "description": "Set to \"true\" or \"false\"",
+          "type": "string",
+          "default": "false"
+        },
+        "WAZUH_HOST": {
+          "description": "Wazuh server hostname or IP",
+          "type": "string"
+        },
+        "WAZUH_PASS": {
+          "description": "Wazuh API password",
+          "type": "string"
+        },
+        "WAZUH_PORT": {
+          "description": "Port for the Wazuh API",
+          "type": "string",
+          "default": "55000"
+        },
+        "WAZUH_USER": {
+          "description": "Wazuh API username",
+          "type": "string"
+        },
+        "MCP_SERVER_PORT": {
+          "description": "Port on which the MCP server will run",
+          "type": "string",
+          "default": "8000"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WAZUH_HOST",
+        "WAZUH_USER",
+        "WAZUH_PASS"
+      ]
+    },
+    "id": "itkuk2554f",
+    "name": "Wazuh MCP Server",
+    "namespace": "gensecaihq",
+    "repository": {
+      "url": "https://github.com/gensecaihq/Wazuh-MCP-Server"
+    },
+    "slug": "Wazuh-MCP-Server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/itkuk2554f"
+  }
+}

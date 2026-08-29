@@ -1,0 +1,674 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "hipaaagent/hipaa-agent",
+  "namespace": "hipaaagent",
+  "slug": "hipaa-agent",
+  "displayName": "hipaa-agent",
+  "description": "AI-powered HIPAA compliance officer for healthcare practices. 73-tool scanning, SRA, BAA generation, breach monitoring, and audit trails. NPI is the universal key.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "policy",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "d854eab6-1f2c-481f-b0f7-8c566eb994cc",
+    "qualifiedName": "hipaaagent/hipaa-agent",
+    "namespace": "hipaaagent",
+    "slug": "hipaa-agent",
+    "displayName": "hipaa-agent",
+    "description": "AI-powered HIPAA compliance officer for healthcare practices. 73-tool scanning, SRA, BAA generation, breach monitoring, and audit trails. NPI is the universal key.",
+    "iconUrl": "https://api.smithery.ai/servers/hipaaagent/hipaa-agent/icon",
+    "verified": false,
+    "useCount": 66,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-04T10:37:47.386Z",
+    "homepage": "https://hipaaagent.ai/developers",
+    "bySmithery": false,
+    "owner": "org_01KNBVHHXBFSXBC3KAQ0F7D6E0",
+    "score": 0.011494252873563218
+  },
+  "detail": {
+    "qualifiedName": "hipaaagent/hipaa-agent",
+    "displayName": "hipaa-agent",
+    "description": "AI-powered HIPAA compliance officer for healthcare practices. 73-tool scanning, SRA, BAA generation, breach monitoring, and audit trails. NPI is the universal key.",
+    "iconUrl": "https://api.smithery.ai/servers/hipaaagent/hipaa-agent/icon",
+    "remote": true,
+    "deploymentUrl": "https://hipaa-agent--hipaaagent.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://hipaa-agent--hipaaagent.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_practice",
+        "description": "Trigger a fresh HIPAA compliance scan for a healthcare practice. Always dispatches a new 70+ control scan via VPS — never returns cached results. Returns a job_id for polling via get_scan_status. Optionally specify notification_email to receive the PDF report when the scan completes. Cost: 150 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit National Provider Identifier"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Practice website domain (e.g. exampleclinic.com). If omitted, looked up from existing scan data."
+            },
+            "notification_email": {
+              "type": "string",
+              "description": "Email address to send the completed PDF report to."
+            }
+          }
+        }
+      },
+      {
+        "name": "batch_scan",
+        "description": "Dispatch fresh HIPAA compliance scans for multiple practices at once. Each practice costs 150 credits. If insufficient credits for the full batch, the entire request is rejected. Max 50 practices per call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "practices": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "npi"
+                ],
+                "properties": {
+                  "npi": {
+                    "type": "string",
+                    "description": "10-digit NPI"
+                  },
+                  "domain": {
+                    "type": "string",
+                    "description": "Practice website domain"
+                  },
+                  "notification_email": {
+                    "type": "string",
+                    "description": "Email to send the completed report to"
+                  }
+                }
+              },
+              "description": "Array of practices to scan (max 50)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_scan_status",
+        "description": "Check the status of the latest scan for a practice. Returns grade, scan date, and whether data is available. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_compliance_score",
+        "description": "Get the HIPAA Agent Compliance Score breakdown for a practice. Returns overall grade, numerical score, and per-category scores across 10 compliance categories. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_report",
+        "description": "Get the full compliance report for a practice including all findings, severity breakdown, grade, and HIPAA section citations. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_audit_log",
+        "description": "Retrieve the SHA-256 hash chain audit trail for a practice. Returns timestamped, tamper-evident log entries for all compliance actions. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_evidence_package",
+        "description": "Compile a 10-component evidence package for auditors and insurers. Includes scan results, policy attestations, training records, BAA ledger, and audit trail. Async — returns job_id. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_baa",
+        "description": "Generate a Business Associate Agreement for a vendor. Requires active subscription or platform/MSP key. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI of the covered entity (practice)"
+            },
+            "risk_level": {
+              "enum": [
+                "low",
+                "standard",
+                "high"
+              ],
+              "type": "string",
+              "description": "Risk level (default: standard)"
+            },
+            "vendor_name": {
+              "type": "string",
+              "description": "Name of the business associate / vendor"
+            },
+            "vendor_email": {
+              "type": "string",
+              "description": "Vendor email — if provided, the BAA is sent for signing"
+            },
+            "agreement_type": {
+              "enum": [
+                "baa",
+                "subcontractor_baa"
+              ],
+              "type": "string",
+              "description": "Agreement type (default: baa)"
+            },
+            "effective_date": {
+              "type": "string",
+              "description": "Effective date (ISO 8601)"
+            },
+            "expiration_date": {
+              "type": "string",
+              "description": "Expiration date (ISO 8601)"
+            },
+            "vendor_contact_name": {
+              "type": "string",
+              "description": "Name of vendor contact person"
+            },
+            "services_description": {
+              "type": "string",
+              "description": "Description of services the vendor provides that involve PHI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_policies",
+        "description": "Get HIPAA policy documents generated for a practice. Requires active subscription or platform/MSP key. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_sra",
+        "description": "Initiate a HIPAA Security Risk Assessment. Returns the first batch of questions for the respondent to answer. Requires active subscription or platform/MSP key. Cost: 500 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI of the practice"
+            },
+            "practice_name": {
+              "type": "string",
+              "description": "Practice name (auto-looked up from scan data if omitted)"
+            },
+            "respondent_name": {
+              "type": "string",
+              "description": "Full name of the person completing the SRA"
+            },
+            "respondent_role": {
+              "type": "string",
+              "description": "Role/title of the respondent (e.g. Practice Manager, HIPAA Officer)"
+            },
+            "respondent_email": {
+              "type": "string",
+              "description": "Email of the person completing the SRA"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_breach",
+        "description": "Check if a practice has been involved in any known HIPAA breaches reported to HHS. Matches by practice name and state. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_breach_score",
+        "description": "Calculate a breach exposure risk score for a practice based on breach history, breached credentials, and industry benchmarks. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "trigger_internal_scan",
+        "description": "Generate a deploy token for the internal network scanner agent. Returns an API key and installation instructions for deploying the agent inside a practice network. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_internal_scan_status",
+        "description": "Check the status of the internal network scan agent deployment and whether results have been received. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_internal_findings",
+        "description": "Get the latest internal network scan results including encryption status, MFA compliance, network segmentation, patch levels, and endpoint security. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "lookup_practice",
+        "description": "Look up a healthcare practice by NPI number. Always fetches from the NPPES registry and augments with HIPAA Agent scan data if available. Returns provider name, specialty, address, and compliance grade. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_outreach_status",
+        "description": "Get the outreach and drip campaign status for a practice. Returns email send history, drip stage, and engagement data. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_practice_summary",
+        "description": "Get a comprehensive summary of a practice combining scan results, compliance score, findings count, breach history, and internal scan status. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_training_status",
+        "description": "Get staff training completion records for a practice. Returns staff members and their training course completions including scores and dates. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_vendor_baa_list",
+        "description": "Get vendor Business Associate Agreement tracking records for a practice. Returns all vendor BAAs with status, dates, and contact info. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "log_incident",
+        "description": "Log a HIPAA security or privacy incident for a practice. Creates an incident report with type, description, and severity. Returns the incident ID for tracking. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            },
+            "severity": {
+              "type": "string",
+              "description": "Severity level: low, medium, high, critical (default: medium)"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed description of the incident"
+            },
+            "incident_type": {
+              "type": "string",
+              "description": "Type of incident: breach, unauthorized_access, device_loss, phishing, policy_violation, system_failure, other"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_incidents",
+        "description": "Get incident history for a practice. Returns all logged security and privacy incidents with status, severity, and resolution dates. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_compliance_delta",
+        "description": "Get compliance controls that changed status since a given date. Shows improved and regressed controls with before/after comparison. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            },
+            "since": {
+              "type": "string",
+              "description": "ISO date to compare from (e.g. 2026-01-01)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_vendor",
+        "description": "Check vendor risk profile including breach history, BAA coverage, and security score. Input vendor_name or domain. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Vendor website domain"
+            },
+            "vendor_name": {
+              "type": "string",
+              "description": "Vendor/business associate name"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_compliance_state",
+        "description": "Get the HIPAA compliance readiness state for a practice. Tracks 13 requirements against the May 2026 deadline. Returns state (compliant/near_compliant/in_progress/early_stage/not_started), completed count, next action, and per-requirement status. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "subscribe_webhook",
+        "description": "Register a webhook URL to receive HIPAA compliance event notifications. Events: breach_detected, score_dropped, baa_expiring, scan_completed, control_failed, sra_expired. Payloads signed with HMAC-SHA256. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI to monitor"
+            },
+            "url": {
+              "type": "string",
+              "description": "HTTPS URL to receive webhook POST payloads"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Event types to subscribe to"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_webhooks",
+        "description": "List active webhook subscriptions for a practice. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_breach_probability",
+        "description": "Calculate breach probability for a practice. Model: HHS base rate by specialty, adjusted by security grade penalty, gap penalties (no MFA +8%, no encryption +12%, flat network +15%, no backups +10%), and prior breach history 3x multiplier. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_workflow",
+        "description": "Validate whether a data workflow is HIPAA-compliant. Synchronous guardrail — returns allowed/denied with risk score, missing controls, and HIPAA citations. No prior scan required. Zero PHI. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "Optional 10-digit NPI for practice context"
+            },
+            "data_type": {
+              "type": "string",
+              "description": "Data classification: phi, de_identified, limited_data_set, non_phi"
+            },
+            "destination": {
+              "type": "string",
+              "description": "Target: cloud_us, cloud_intl, on_prem, vendor, email, fax, portal"
+            },
+            "workflow_type": {
+              "type": "string",
+              "description": "Type: data_transfer, cloud_migration, vendor_share, backup, messaging"
+            },
+            "controls_applied": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Controls already in place (e.g. encryption_in_transit, baa, mfa)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_controls",
+        "description": "Get HIPAA/NIST control-level assessment for a practice. Maps scan findings to 13 standardized controls with pass/fail/partial status, risk scores, and required actions. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "npi": {
+              "type": "string",
+              "description": "10-digit NPI"
+            }
+          }
+        }
+      },
+      {
+        "name": "execute_agent_baa",
+        "description": "Execute a digital Business Associate Agreement between two healthcare practices. Verifies both parties have passing compliance grades (C or above), creates a signed BAA with SHA-256 digital signature, and logs to the audit trail. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "initiator_npi": {
+              "type": "string",
+              "description": "10-digit NPI of the initiating party"
+            },
+            "effective_date": {
+              "type": "string",
+              "description": "BAA effective date (ISO 8601, default: today)"
+            },
+            "expiration_date": {
+              "type": "string",
+              "description": "BAA expiration date (ISO 8601, default: 1 year from today)"
+            },
+            "counterparty_npi": {
+              "type": "string",
+              "description": "10-digit NPI of the counterparty"
+            },
+            "services_description": {
+              "type": "string",
+              "description": "Description of services involving PHI (default: Healthcare data processing services)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_model_insights",
+        "description": "Get HIPAA Agent data intelligence model stats — vulnerability patterns discovered, remediation effectiveness tracking, breach calibration coefficients, specialty benchmarks, and state coverage. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_state_coverage",
+        "description": "Get scanning coverage by US state — total NPIs in registry, scanned count, average grade per state. Shows which states have been expanded and their scan progress. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string",
+              "description": "Filter to a specific 2-letter state code (e.g., CA, TX). Omit for all states."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_threat_intel",
+        "description": "Get recent healthcare threat intelligence alerts from FBI Watchdog, HHS HC3, CISA KEV, and MS-ISAC. Returns alerts with severity, healthcare relevance scores, and source attribution. Cost: 25 credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "number",
+              "description": "Lookback period in days (default 30, max 90)"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Max results (default 50, max 100)"
+            },
+            "source": {
+              "type": "string",
+              "description": "Filter by source: FBI_Watchdog, HHS_HC3, CISA_KEV, MS_ISAC"
+            },
+            "severity": {
+              "type": "string",
+              "description": "Filter by severity: critical, high, medium, low"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_reputation",
+        "description": "Get HIPAA Agent verified reputation stats — total scans, unique practices, documents generated, breaches tracked, uptime, and SHA-256 data integrity hash. Free, no authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_blockchain_anchor",
+        "description": "Get the blockchain anchor proof for a specific date. Returns the SHA-256 root hash of all audit events from that date, the Base L2 transaction hash, and a Basescan verification link. Proves compliance records have not been tampered with. Free, no authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "Date in YYYY-MM-DD format"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

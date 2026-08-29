@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "qs2pevxvr0",
+  "namespace": "xyzbuilds",
+  "slug": "workspace-one-uem-mcp",
+  "name": "Workspace ONE UEM MCP Server",
+  "description": "Enables AI assistants to interact with VMware Workspace ONE UEM environments for device management, user administration, and system operations. Provides access to 25+ commonly used UEM APIs with support for OAuth2 authentication and bulk operations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with VMware Workspace ONE UEM environments for device management, user administration, and system operations. Provides access to 25+ commonly used UEM APIs with support for OAuth2 authentication and bulk operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WS1_UEM_API_KEY": {
+          "description": "Your API key (also called Tenant Code) from Workspace ONE UEM",
+          "type": "string"
+        },
+        "WS1_UEM_BASE_URL": {
+          "description": "The base URL of your Workspace ONE UEM instance (e.g., https://your-instance.awmdm.com)",
+          "type": "string"
+        },
+        "WS1_UEM_PASSWORD": {
+          "description": "Password for basic authentication",
+          "type": "string"
+        },
+        "WS1_UEM_USERNAME": {
+          "description": "Username for basic authentication",
+          "type": "string"
+        },
+        "WS1_UEM_CLIENT_ID": {
+          "description": "OAuth client ID for OAuth authentication",
+          "type": "string"
+        },
+        "WS1_UEM_TOKEN_URL": {
+          "description": "OAuth token URL based on your region (e.g., https://na.uemauth.vmwservices.com/connect/token)",
+          "type": "string"
+        },
+        "WS1_UEM_CLIENT_SECRET": {
+          "description": "OAuth client secret for OAuth authentication",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "WS1_UEM_BASE_URL",
+            "WS1_UEM_API_KEY",
+            "WS1_UEM_CLIENT_ID",
+            "WS1_UEM_CLIENT_SECRET",
+            "WS1_UEM_TOKEN_URL"
+          ]
+        },
+        {
+          "required": [
+            "WS1_UEM_BASE_URL",
+            "WS1_UEM_API_KEY",
+            "WS1_UEM_USERNAME",
+            "WS1_UEM_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "qs2pevxvr0",
+    "name": "Workspace ONE UEM MCP Server",
+    "namespace": "xyzbuilds",
+    "repository": {
+      "url": "https://github.com/xyzbuilds/workspace-one-uem-mcp"
+    },
+    "slug": "workspace-one-uem-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/qs2pevxvr0"
+  }
+}

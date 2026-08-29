@@ -1,0 +1,1672 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "socialapi/socialapi",
+  "namespace": "socialapi",
+  "slug": "socialapi",
+  "displayName": "Social-API.ai",
+  "description": "SocialAPI is a unifed API to read and reply to comments, DMs, and reviews. Create and schedule posts. Upload media. Get engagement metrics. Integrate once, ship everywhere. \n\nIt replaces your Facebook, Instagram, Threads, TikTok, LinkedIn, Google Business, and YouTube integrations with one REST API. \n\nYou don’t need to set up developer apps with Instagram, Facebook, Threads, TikTok, Google, LinkedIn, or YouTube - SocialAPI’s apps are already approved and we handle the OAuth.",
+  "discoveryQueries": [
+    "credential",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "3e897e33-bf24-4352-9c83-85ab390c20a9",
+    "qualifiedName": "socialapi/socialapi",
+    "namespace": "socialapi",
+    "slug": "socialapi",
+    "displayName": "Social-API.ai",
+    "description": "SocialAPI is a unifed API to read and reply to comments, DMs, and reviews. Create and schedule posts. Upload media. Get engagement metrics. Integrate once, ship everywhere. \n\nIt replaces your Facebook, Instagram, Threads, TikTok, LinkedIn, Google Business, and YouTube integrations with one REST API. \n\nYou don’t need to set up developer apps with Instagram, Facebook, Threads, TikTok, Google, LinkedIn, or YouTube - SocialAPI’s apps are already approved and we handle the OAuth.",
+    "iconUrl": "https://api.smithery.ai/servers/socialapi/socialapi/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-08T10:48:41.603Z",
+    "homepage": "https://social-api.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBVKNT0CFG9XJMN1K6400FM",
+    "score": 0.011627906976744186
+  },
+  "detail": {
+    "qualifiedName": "socialapi/socialapi",
+    "displayName": "Social-API.ai",
+    "description": "SocialAPI is a unifed API to read and reply to comments, DMs, and reviews. Create and schedule posts. Upload media. Get engagement metrics. Integrate once, ship everywhere. \n\nIt replaces your Facebook, Instagram, Threads, TikTok, LinkedIn, Google Business, and YouTube integrations with one REST API. \n\nYou don’t need to set up developer apps with Instagram, Facebook, Threads, TikTok, Google, LinkedIn, or YouTube - SocialAPI’s apps are already approved and we handle the OAuth.",
+    "iconUrl": "https://api.smithery.ai/servers/socialapi/socialapi/icon",
+    "remote": true,
+    "deploymentUrl": "https://socialapi--socialapi.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://socialapi--socialapi.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "social_api_connect_account",
+        "description": "Initiate connecting a new social media account. For OAuth2 platforms (instagram, facebook) returns an auth_url the user must visit to authorize access. After authorization, the account is connected automatically — no follow-up call needed. Present the auth_url link to the user and ask them to let you know once they've completed the authorization. For direct-auth platforms, stores credentials immediately and returns the new account_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand_id": {
+              "type": "string",
+              "description": "Optional brand ID to attach the account to. If omitted, a new brand is auto-created."
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Platform-specific metadata (e.g. redirect_uri)",
+              "additionalProperties": true
+            },
+            "platform": {
+              "type": "string",
+              "description": "Platform name (e.g. instagram, facebook)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_create_brand",
+        "description": "Create a new brand to group social accounts for a business, client, or project. Each brand can connect one account per platform. The number of brands is limited by your plan tier.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name for the brand (e.g. company or client name)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_create_export",
+        "description": "Create an analytics export for a connected account. Enqueues an async job that collects post data, engagement metrics, and optionally video transcripts and AI vision analysis into a downloadable Excel report and shareable report page. Subject to plan limits: exports per month, cooldown hours between exports for the same account, and max one concurrent export. Use social_api_get_export to poll for completion. Free plan: 2 exports/mo, 7-day cooldown, 30 videos max. Paid plans have higher limits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID to export analytics for"
+            },
+            "include_vision": {
+              "type": "boolean",
+              "description": "Include AI vision analysis in the export (plan-gated)"
+            },
+            "include_transcript": {
+              "type": "boolean",
+              "description": "Include video transcripts in the export (plan-gated)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_create_invite",
+        "description": "Create a platform invite link for a brand. The invite allows someone to connect a social media account to the brand via a one-time URL. expires_in_days must be one of: 1, 3, 7, 14, 30 (defaults to 7). Returns the invite token and shareable URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand_id": {
+              "type": "string",
+              "description": "Brand ID to create the invite for"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Platform name (e.g. instagram, facebook, tiktok)"
+            },
+            "expires_in_days": {
+              "type": "integer",
+              "description": "Number of days until the invite expires (1, 3, 7, 14, or 30; default 7)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_create_key",
+        "description": "Generate a new API key (prefixed sapi_key_) for programmatic API access. The raw key is returned exactly once in the response and cannot be retrieved later -- store it securely immediately. All keys for a user share the same monthly quota pool. Provide a descriptive name to identify the key's purpose later.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Display name for the API key"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_create_post",
+        "description": "Create or schedule a post to one or more connected social media accounts. Omit targets and scheduled_at to create a draft. Provide targets to publish; omit scheduled_at for immediate publish, or provide an RFC3339 timestamp to schedule. Attach media by first uploading via social_api_get_media_upload_url, verifying with social_api_verify_media_upload, then passing the media_ids here. Consumes 1 post credit.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Post text content"
+            },
+            "title": {
+              "type": "string",
+              "description": "Post title (YouTube, Pinterest)"
+            },
+            "targets": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "object",
+                "required": [
+                  "account_id"
+                ],
+                "properties": {
+                  "text": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override text for this target"
+                  },
+                  "title": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override title"
+                  },
+                  "page_id": {
+                    "type": "string",
+                    "description": "Optional page ID for multi-page accounts (e.g. Facebook Pages). If omitted, uses the default page."
+                  },
+                  "media_ids": {
+                    "type": [
+                      "null",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Override media IDs"
+                  },
+                  "account_id": {
+                    "type": "string",
+                    "description": "Connected account ID"
+                  },
+                  "visibility": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override visibility"
+                  },
+                  "scheduled_at": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override schedule time (RFC3339)"
+                  },
+                  "first_comment": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "First comment for this target"
+                  },
+                  "platform_data": {
+                    "type": "object",
+                    "description": "Platform-specific settings",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Per-account targets with overrides"
+            },
+            "media_ids": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "Media IDs from upload"
+            },
+            "visibility": {
+              "type": "string",
+              "description": "public, private, or unlisted (default public)"
+            },
+            "publish_now": {
+              "type": "boolean",
+              "description": "Publish immediately when no scheduled_at"
+            },
+            "scheduled_at": {
+              "type": "string",
+              "description": "RFC3339 timestamp; omit for immediate publish"
+            },
+            "first_comment": {
+              "type": "string",
+              "description": "First comment posted after publish"
+            },
+            "skip_duplicate_check": {
+              "type": "boolean",
+              "description": "Skip 24h duplicate content check"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_create_webhook",
+        "description": "Register a new webhook endpoint to receive real-time event notifications. The URL must be HTTPS. Specify which event types to subscribe to (comment.received, dm.received, review.received, mention.received, post.published, post.failed, post.scheduled). The signing secret is returned once -- store it securely to verify payload signatures (HMAC-SHA256).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "HTTPS webhook endpoint URL"
+            },
+            "events": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "Event types to subscribe to (comment.received, dm.received, review.received, mention.received)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_delete_brand",
+        "description": "Delete a brand and disconnect all its connected social accounts. This is irreversible.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand_id": {
+              "type": "string",
+              "description": "ID of the brand to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_delete_comment",
+        "description": "Permanently delete a comment from the platform and remove it from the inbox database. This action is irreversible. Supported on Instagram, Facebook, and YouTube.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Platform post ID"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "comment_id": {
+              "type": "string",
+              "description": "Platform comment ID to delete (irreversible)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_delete_me",
+        "description": "Permanently delete the authenticated user account and ALL associated data including API keys, connected social accounts, usage logs, webhook endpoints, and OAuth consents. This action is completely irreversible -- all API keys for this user stop working immediately. Confirm the user's intent explicitly before calling this tool.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_delete_media",
+        "description": "Permanently delete a media file from the media library and object storage. This is irreversible. If the media is referenced by any post, the post will lose that attachment. Use social_api_list_media to find the media_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "media_id": {
+              "type": "string",
+              "description": "Media ID to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_delete_post",
+        "description": "Delete a published post from the social media platform, or cancel a scheduled/failed post before it is published. For published posts, this removes the post from the platform (irreversible). Provide the post_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Post ID to delete or cancel"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_delete_review_reply",
+        "description": "Delete a business reply to a review. Requires account_id and the platform review_id. Supported on Google Business. Returns 501 for platforms that do not support deleting review replies. This action is irreversible.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "review_id": {
+              "type": "string",
+              "description": "Platform review ID whose reply should be deleted"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_delete_webhook",
+        "description": "Permanently delete a webhook endpoint. Future events will no longer be delivered to this URL. Any in-flight deliveries may still complete. This is irreversible. Use social_api_list_webhooks to find the webhook_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "webhook_id": {
+              "type": "string",
+              "description": "Webhook endpoint ID to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_disconnect_account",
+        "description": "Disconnect a connected social media account. Removes the stored OAuth tokens and disassociates the account from the user. Any scheduled posts targeting this account will fail on publish. This is irreversible — to reconnect, use social_api_connect_account again. Use social_api_list_accounts to find the account_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID to disconnect"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_events_summary",
+        "description": "Get aggregated event counts for a time window. Returns total events, failure count broken down by error category, counts by event category (post, inbox, account, api, webhook), inbox breakdown (comment vs DM vs mention), and the plan's retention window in days. Use to check system health, recent failures, or inbox activity volume.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "string",
+              "description": "RFC3339 end time. Defaults to now."
+            },
+            "from": {
+              "type": "string",
+              "description": "RFC3339 start time for the summary window (e.g. 2026-04-10T00:00:00Z). Defaults to 24 hours ago."
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_exchange_oauth",
+        "description": "Complete an OAuth2 account connection by exchanging the authorization code received after the user authorized access. Requires platform, the authorization code, and metadata including redirect_uri and state (from social_api_connect_account). For Facebook, a single user token may yield multiple Page accounts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "OAuth authorization code"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Metadata including redirect_uri and state",
+              "additionalProperties": true
+            },
+            "platform": {
+              "type": "string",
+              "description": "Platform name"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_account_limits",
+        "description": "Get platform-specific API usage limits and quotas for a connected account, as reported by the platform itself (e.g., Instagram daily posting limits). Returns a map of quota keys to remaining counts. Not all platforms expose usage limits -- returns 501 for Facebook and platforms that do not provide this data. These are the platform's own rate limits, separate from SocialAPI billing quotas.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_comment_replies",
+        "description": "List replies to a specific comment. The interaction_id must be a comment ID starting with sapi_cmt_ (from social_api_get_comments). Returns reply interaction objects in the same format. Supports pagination via cursor and since filter. Max 100 results (default 20). Supported on Instagram and Facebook.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Max results (1-100, default 20)"
+            },
+            "since": {
+              "type": "string",
+              "description": "RFC3339 timestamp to filter after"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "interaction_id": {
+              "type": "string",
+              "description": "Comment interaction ID (must start with sapi_cmt_)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_constraints",
+        "description": "Get platform-specific content constraints for post creation. Returns per-platform limits including max text length, max media count, supported media types, max file sizes, aspect ratio requirements, and video duration limits. Use before creating a post to validate content will be accepted.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_get_conversation",
+        "description": "Get details for a single DM conversation including participant info, unread count, status (active/archived), and last message preview. The conversation_id comes from social_api_list_conversations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "conversation_id": {
+              "type": "string",
+              "description": "Conversation ID (from social_api_list_conversations)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_creator_info",
+        "description": "Fetch creator-facing profile details for a connected account: display name, username, profile picture, bio, follower/following counts, and platform-specific publishing capabilities (e.g. TikTok privacy levels, duet/stitch permissions). Use this before building a post UI so defaults and options match what the platform allows for this account. Use social_api_list_accounts to find the account_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_export",
+        "description": "Get the status and result of an analytics export. Returns status (pending, processing, completed, failed), progress (total_videos, processed_videos), and for completed exports: a presigned Excel download URL (valid 15 minutes) and a shareable report page URL. Poll this after social_api_create_export to check completion.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "export_id": {
+              "type": "string",
+              "description": "Export ID (from social_api_create_export or social_api_list_exports)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_export_videos",
+        "description": "Get the cached video data from a completed analytics export. Returns the full video array with per-video analytics (views, likes, comments, shares, duration, transcripts, vision analysis). The export must be in 'completed' status. Use social_api_get_export to check status first.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "export_id": {
+              "type": "string",
+              "description": "Export ID of a completed export"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_me",
+        "description": "Get the authenticated user's profile. Returns id (UUID), email, plan tier (free, starter, pro, business, or enterprise), onboarding status (true if onboarding is incomplete), and avatar_url. Use this to check the current plan tier before performing plan-gated operations.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_get_media_upload_url",
+        "description": "Get a presigned S3-compatible URL for uploading a media file to attach to a post. Provide the MIME type (e.g., image/jpeg, image/png, video/mp4) and the original filename. Upload workflow: (1) call this tool to get upload_url and media_id, (2) upload the file to the upload_url using a PUT request with the file bytes as body and Content-Type header matching the media_type (e.g. via curl: curl -X PUT -H 'Content-Type: image/jpeg' --data-binary @photo.jpg '<upload_url>'), (3) call social_api_verify_media_upload with the media_id, (4) pass the media_id to social_api_create_post in media_ids. The upload URL expires in 15 minutes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "description": "Original filename e.g. photo.jpg"
+            },
+            "media_type": {
+              "type": "string",
+              "description": "MIME type e.g. image/jpeg or video/mp4"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_mentions",
+        "description": "List brand mentions and tags for a connected account -- posts by other users that mention or tag your account. Returns interaction objects with id (prefixed sapi_mnt_), author, text, media_url, and timestamp. Supported on Instagram (@mentions and tags) and Facebook (page mentions). Returns 501 for platforms without mention tracking. Supports pagination.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Max results (1-100, default 20)"
+            },
+            "since": {
+              "type": "string",
+              "description": "RFC3339 timestamp to filter after"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_post",
+        "description": "Get full details for a single post including text, status, scheduled/published timestamps, per-platform delivery details with engagement metrics (likes, comments, shares, saves), and media IDs. Use the post_id from social_api_list_posts or social_api_create_post.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Post ID (from social_api_list_posts or social_api_create_post)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_post_metrics",
+        "description": "Fetch live engagement metrics for a published post from each target platform. Returns per-platform metrics including like_count, comments_count, shares_count, saves_count, impressions, reach, and platform-specific extra_metrics. Triggers a real-time refresh from platform APIs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Post ID to fetch live metrics for"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_reviews",
+        "description": "List reviews across connected accounts (applicable to Google Business, Trustpilot, and similar review platforms). Fan-out queries all matching accounts in parallel. Returns review interaction objects with id, reviewer name, rating, text, and timestamp. Use social_api_reply_to_review to respond. Returns 501 for Instagram, Facebook, and platforms without review support. Supports account_id or platform filter and pagination.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Max results per account (1-100, default 20)"
+            },
+            "since": {
+              "type": "string",
+              "description": "RFC3339 timestamp to filter after"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Filter by platform (google, trustpilot, …)"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID (optional, omit to fan-out across all accounts)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_storage_usage",
+        "description": "Get storage usage and quota for the authenticated user's media library. Returns used_bytes, limit_bytes (-1 if unlimited), and file_count. Storage limits vary by plan: Free (100 MB), all paid plans (unlimited).",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_get_usage",
+        "description": "Get resource usage for the current billing period. Returns counts and limits for brands (brand slots), posts (create_post and retry_post operations), and interactions (reply and send_dm operations), plus period_start and period_end timestamps. Use before billed operations to check remaining quota. Free plan: 2 brands, 10 posts/mo, 50 interactions/mo. All paid plans (Starter, Pro, Business, Enterprise): unlimited posts and interactions. Brand limits vary by plan. -1 means unlimited.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_get_webhook",
+        "description": "Get details for a single webhook endpoint including URL, subscribed events, is_active status, a secret hint (last 4 chars only -- the full secret is returned once at creation), and delivery stats for the last 24 hours and last 7 days (delivered vs failed counts). Use social_api_list_webhooks to find the webhook_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "webhook_id": {
+              "type": "string",
+              "description": "Webhook endpoint ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_get_webhook_delivery",
+        "description": "Get full details of a single webhook delivery attempt: request payload, response body, response headers, HTTP status code, attempt count, and any error message. Use social_api_list_webhook_deliveries to find the delivery_id. Essential for diagnosing why a delivery failed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "webhook_id": {
+              "type": "string",
+              "description": "Webhook endpoint ID"
+            },
+            "delivery_id": {
+              "type": "string",
+              "description": "Delivery attempt ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_hide_comment",
+        "description": "Hide a comment from public view on the platform. The comment remains in the database but is marked hidden. Reversible — use social_api_unhide_comment to restore. Supported on Instagram, Facebook, and Threads.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Platform post ID"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "comment_id": {
+              "type": "string",
+              "description": "Platform comment ID to hide"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_like_comment",
+        "description": "Like a comment on behalf of the connected account. Supported on Facebook and Twitter. Returns 501 for platforms without like support.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Platform post ID"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "comment_id": {
+              "type": "string",
+              "description": "Platform comment ID to like"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_account_pages",
+        "description": "List pages (e.g. Facebook Pages) for a connected account. Returns page IDs, names, default/active status. Use the returned page IDs as the page_id parameter in publishing and inbox tools.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID to list pages for"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_accounts",
+        "description": "List all connected social media accounts for the authenticated user. Returns account details including platform name, username, connection status, and platform-specific metadata (follower_count, video_count, avatar_url, etc.). Use the returned account IDs as the account_id parameter in all other tools.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand_id": {
+              "type": "string",
+              "description": "Optional brand ID to filter accounts by"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_brands",
+        "description": "List all brands for the authenticated user. Each brand groups social accounts for one business, client, or project. Returns brand id, name, connected accounts count, and timestamps.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_list_conversations",
+        "description": "List inbox DM conversations for the authenticated user, sorted by most recently active. Optionally filter by connected account, platform, or status (active/archived). Returns conversation objects with id, participant name/picture, last message preview, and unread count. Supports pagination via cursor. Max 100 results (default 25). Supported on Instagram and Facebook (Messenger).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Max results (1-100, default 25)"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            },
+            "status": {
+              "type": "string",
+              "description": "Conversation status: active (default) or archived"
+            },
+            "page_id": {
+              "type": "string",
+              "description": "Optional page ID to filter by (for multi-page accounts like Facebook)"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Filter by platform (instagram, facebook, …)"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID (optional, omit to list across all accounts)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_events",
+        "description": "List developer events (unified activity log). Filter by category (post, webhook, inbox, api, account), status, platform, action, account, or resource. Shows publishing attempts, webhook deliveries, inbound platform events, API calls, and account lifecycle events. Sorted newest first.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Max results (default 50, max 100)"
+            },
+            "action": {
+              "type": "string",
+              "description": "Filter by action (publish, delivery.failed, etc.)"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by status (success, failed, pending, skipped)"
+            },
+            "category": {
+              "type": "string",
+              "description": "Comma-separated event categories: post, webhook, inbox, api, account"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Filter by platform (instagram, facebook, etc.)"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Filter by connected account ID"
+            },
+            "resource_id": {
+              "type": "string",
+              "description": "Filter by resource (post ID, endpoint ID, etc.)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_exports",
+        "description": "List the 50 most recent analytics exports for the authenticated user, newest first. Optionally filter by status (pending, processing, completed, failed). Returns export ID, account, platform, status, progress, and timestamps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Filter by status: pending, processing, completed, or failed"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_inbox_posts",
+        "description": "List inbox posts (posts that have received comments) for the authenticated user. Optionally filter by account, platform, minimum comment count, or updated-since timestamp. Sorted newest first by default (sort_by=date). Use social_api_list_post_comments to fetch comments for a specific post. Supports pagination via cursor. Max 100 results (default 25).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Max results (1-100, default 25)"
+            },
+            "since": {
+              "type": "string",
+              "description": "RFC3339 timestamp — only return posts updated after this time"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            },
+            "page_id": {
+              "type": "string",
+              "description": "Optional page ID to filter by (for multi-page accounts like Facebook)"
+            },
+            "sort_by": {
+              "type": "string",
+              "description": "Sort key: date (default) or comments"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Filter by platform (instagram, facebook, …)"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID (optional, omit for all accounts)"
+            },
+            "sort_order": {
+              "type": "string",
+              "description": "asc or desc (default desc)"
+            },
+            "min_comments": {
+              "type": "string",
+              "description": "Only return posts with at least this many comments"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_invites",
+        "description": "List all platform invites for a brand, ordered by creation date (newest first). Returns both active and expired/used invites. Use is_active to filter in the response.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand_id": {
+              "type": "string",
+              "description": "Brand ID to list invites for"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_keys",
+        "description": "List all API keys for the authenticated user. Returns key metadata including id, name, preview (first characters of the key), is_active status, last_used_at timestamp, and created_at. The full key value is never shown after creation. Use this to audit active keys or find a key_id for revocation.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_list_media",
+        "description": "List uploaded media files in the user's media library. Returns media objects with id, filename, content_type, size_bytes, status (pending/ready), and created_at. Use media IDs from here or from social_api_get_media_upload_url when creating posts. Supports pagination via cursor.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Max results (default 25, max 100)"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_messages",
+        "description": "List messages in a DM conversation, sorted newest first. The conversation_id comes from social_api_list_conversations. Returns message objects with id, direction (incoming/outgoing), text, sender info, and timestamp. Supports pagination via cursor. Max 200 results (default 50).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Max results (1-200, default 50)"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            },
+            "conversation_id": {
+              "type": "string",
+              "description": "Conversation ID (from social_api_list_conversations)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_post_comments",
+        "description": "List comments for a specific inbox post, sorted oldest-first. The inbox_post_id comes from social_api_list_inbox_posts. Requires the account_id that owns the post. Returns comment objects with text, author info, like_count, reply_count, is_hidden, and is_liked flags. Supports pagination via cursor. Max 100 results (default 25).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Max results (1-100, default 25)"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID that owns the post"
+            },
+            "inbox_post_id": {
+              "type": "string",
+              "description": "Inbox post ID (from social_api_list_inbox_posts)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_posts",
+        "description": "List all posts (drafts, scheduled, published, failed) with rich filtering. Supports filtering by status, platform, account_ids, date range, text search. Returns posts with per-platform delivery details and engagement metrics. Use cursor for pagination.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "string",
+              "description": "End date (RFC3339); filters against the sort column"
+            },
+            "from": {
+              "type": "string",
+              "description": "Start date (RFC3339); filters against the sort column"
+            },
+            "sort": {
+              "type": "string",
+              "description": "Sort order: scheduled_asc (default), scheduled_desc, created_asc, created_desc"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max results (default 25, max 100)"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            },
+            "hidden": {
+              "type": "boolean",
+              "description": "Include hidden posts (default false)"
+            },
+            "search": {
+              "type": "string",
+              "description": "Search posts by text content (case-insensitive)"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by status: draft, scheduled, publishing, published, partial, failed, cancelled"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Filter by platform name (e.g., instagram, facebook)"
+            },
+            "account_ids": {
+              "type": "string",
+              "description": "Comma-separated connected account IDs to filter by"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_webhook_deliveries",
+        "description": "List recent delivery attempts for a webhook endpoint. Each delivery includes id, event_type, status (pending, delivered, failed), HTTP response code, attempt count, and timestamps. Filter by status or event_type. Keyset cursor pagination via the cursor field. Use this to debug failing webhook endpoints.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Page size (1-100, default 50)"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor from previous response"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by status: pending, delivered, failed"
+            },
+            "event_type": {
+              "type": "string",
+              "description": "Filter by event type (e.g. comment.received)"
+            },
+            "webhook_id": {
+              "type": "string",
+              "description": "Webhook endpoint ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_list_webhooks",
+        "description": "List all registered webhook endpoints for the authenticated user. Returns endpoint details including id, url, subscribed event types, is_active status, and created_at. Available event types: comment.received, dm.received, review.received, mention.received, post.published, post.failed, post.scheduled.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "social_api_mark_conversation_read",
+        "description": "Mark all messages in a conversation as read, resetting the unread count to zero. Idempotent -- calling on an already-read conversation has no effect. Use social_api_list_conversations to find the conversation_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "conversation_id": {
+              "type": "string",
+              "description": "Conversation ID (from social_api_list_conversations)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_moderate_comment",
+        "description": "Moderate a comment by hiding, unhiding, or deleting it. The interaction_id must be a comment ID starting with sapi_cmt_. Actions: 'hide' removes from public view (reversible), 'unhide' restores a hidden comment, 'delete' permanently removes it (irreversible). Returns 501 for platforms without moderation support.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Moderation action: hide, unhide, or delete"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "interaction_id": {
+              "type": "string",
+              "description": "Comment ID (must start with sapi_cmt_)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_patch_me",
+        "description": "Update the authenticated user's profile. Currently only supports marking onboarding complete by setting onboarding=false. Setting onboarding=true returns an error. Returns the updated user profile. Idempotent -- calling with onboarding=false when already false has no effect.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "onboarding": {
+              "type": "boolean",
+              "description": "Set to false to mark onboarding complete (only false is allowed)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_private_reply_to_comment",
+        "description": "Send a private reply (DM) in response to a comment, visible only to the commenter. Max 1000 characters. Consumes 1 interaction credit. Supported on Instagram and Facebook. Returns 501 for platforms that do not support private replies.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Message text (max 1000 characters)"
+            },
+            "post_id": {
+              "type": "string",
+              "description": "Platform post ID containing the comment"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "comment_id": {
+              "type": "string",
+              "description": "Platform comment ID to privately reply to"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_reply_to_comment",
+        "description": "Reply publicly to a post or a specific comment. Provide account_id and post_id; optionally also comment_id to target a specific comment thread. The reply appears publicly on the post. Max 2200 characters. Consumes 1 interaction credit. Returns the created reply ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Reply text (max 2200 characters)"
+            },
+            "post_id": {
+              "type": "string",
+              "description": "Platform post ID to reply to (or omit to use comment_id only)"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "comment_id": {
+              "type": "string",
+              "description": "Platform comment ID to reply to (optional — replies to a specific comment)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_reply_to_review",
+        "description": "Reply to a review as the business. The reply appears publicly as the business response. Requires account_id and the platform review_id. Max 2200 characters. Consumes 1 interaction credit. Returns the created reply ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Reply text (max 2200 characters)"
+            },
+            "review_id": {
+              "type": "string",
+              "description": "Platform review ID to reply to"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_retry_post",
+        "description": "Retry publishing a post that previously failed. Only posts in 'failed' or 'partial' status can be retried -- re-enqueues only the failed platform deliveries. Consumes 1 post credit.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Failed post ID to retry"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_retry_webhook_delivery",
+        "description": "Manually retry a failed webhook delivery. Re-sends the original payload to the endpoint URL with a fresh attempt count. Use this after fixing an endpoint that was returning errors. Use social_api_list_webhook_deliveries (filtered by status=failed) to find the delivery_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "webhook_id": {
+              "type": "string",
+              "description": "Webhook endpoint ID"
+            },
+            "delivery_id": {
+              "type": "string",
+              "description": "Delivery attempt ID to retry"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_revoke_invite",
+        "description": "Revoke an active platform invite, making the invite URL immediately invalid. This is irreversible. Use social_api_list_invites to find the invite_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "invite_id": {
+              "type": "string",
+              "description": "Invite ID to revoke"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_revoke_key",
+        "description": "Permanently deactivate an API key. This is irreversible -- the key immediately stops working for all API requests. Use social_api_list_keys to find the key_id. Revoking an already-revoked key is a no-op (idempotent). Does not affect other active keys for the same user.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key_id": {
+              "type": "string",
+              "description": "ID of the API key to revoke"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_send_dm",
+        "description": "Send a direct message in an existing inbox conversation. The conversation_id comes from social_api_list_conversations. Specify the account_id to send from. Max 1000 characters. Consumes 1 interaction credit. On Facebook Messenger, messages can only be sent within 24 hours of the user's last message to you (platform policy). Supported on Instagram and Facebook.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Message text (max 1000 characters)"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID to send from"
+            },
+            "conversation_id": {
+              "type": "string",
+              "description": "Conversation ID (from social_api_list_conversations)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_send_feedback",
+        "description": "Send feedback to the SocialAPI team. Use when a user wants to report a bug, request a feature, or share general feedback. Type must be one of: 'bug', 'feature_request', or 'general'. The feedback is stored in the database and the team is notified. This is the preferred way to reach the team from within an MCP conversation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Feedback type: bug, feature_request, or general"
+            },
+            "message": {
+              "type": "string",
+              "description": "The feedback message"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_test_webhook",
+        "description": "Send a test event to a webhook endpoint to verify it is reachable and correctly configured. Takes an event_type (e.g. comment.received) and a raw JSON payload. Returns the delivery result including HTTP response code and any error. Does not charge the user's event quota. Use this during setup to confirm your endpoint validates the signature correctly.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "payload": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "integer",
+                "maximum": 255,
+                "minimum": 0
+              },
+              "description": "JSON payload to send as the event body"
+            },
+            "event_type": {
+              "type": "string",
+              "description": "Event type to simulate (e.g. comment.received)"
+            },
+            "webhook_id": {
+              "type": "string",
+              "description": "Webhook endpoint ID to send test payload to"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_unhide_comment",
+        "description": "Restore a previously hidden comment to public view. Supported on Instagram, Facebook, and Threads.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Platform post ID"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "comment_id": {
+              "type": "string",
+              "description": "Platform comment ID to unhide"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_unlike_comment",
+        "description": "Remove a like from a comment previously liked by the connected account. Supported on Facebook and Twitter. Returns 501 for platforms without like support.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Platform post ID"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "comment_id": {
+              "type": "string",
+              "description": "Platform comment ID to unlike"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_unpublish_post",
+        "description": "Unpublish a post from one or all platforms. Removes the post from the social media platform but keeps the post record in SocialAPI. Optionally specify account_id to unpublish from a single platform only; omit to unpublish from all. This is irreversible on the platform side.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "post_id": {
+              "type": "string",
+              "description": "Post ID to unpublish"
+            },
+            "account_id": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Account ID to unpublish from (omit for all)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_update_account_page",
+        "description": "Update a page's default or active status for a connected account. Set is_default=true to make this the default page for publishing and inbox operations. Set is_active=false to deactivate a page (it will no longer receive events or appear in default listings). Idempotent -- setting the current value has no effect. Use social_api_list_account_pages to find the page_id first.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page_id": {
+              "type": "string",
+              "description": "Page ID to update"
+            },
+            "is_active": {
+              "type": [
+                "null",
+                "boolean"
+              ],
+              "description": "Activate or deactivate page"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            },
+            "is_default": {
+              "type": [
+                "null",
+                "boolean"
+              ],
+              "description": "Set as default page"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_update_brand",
+        "description": "Rename a brand. Only the name can be changed; connected accounts are not affected. Idempotent -- setting the same name has no effect. Use social_api_list_brands to find the brand_id first.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "New name for the brand"
+            },
+            "brand_id": {
+              "type": "string",
+              "description": "ID of the brand to rename"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_update_conversation",
+        "description": "Update a conversation's status. Set status to 'archived' to move it out of the active inbox, or 'active' to restore it. Idempotent -- setting the current status has no effect. Use social_api_list_conversations to find the conversation_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "New status: active or archived"
+            },
+            "conversation_id": {
+              "type": "string",
+              "description": "Conversation ID (from social_api_list_conversations)"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_update_post",
+        "description": "Update the content of a draft, scheduled, or failed post. Only posts in 'draft', 'scheduled', or 'failed' status can be updated. Provide the post_id. Does not consume additional credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Updated post text"
+            },
+            "title": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Updated title"
+            },
+            "hidden": {
+              "type": [
+                "null",
+                "boolean"
+              ],
+              "description": "Hide or unhide the post"
+            },
+            "post_id": {
+              "type": "string",
+              "description": "Post ID to update"
+            },
+            "targets": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "object",
+                "required": [
+                  "account_id"
+                ],
+                "properties": {
+                  "text": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override text for this target"
+                  },
+                  "title": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override title"
+                  },
+                  "page_id": {
+                    "type": "string",
+                    "description": "Optional page ID for multi-page accounts (e.g. Facebook Pages). If omitted, uses the default page."
+                  },
+                  "media_ids": {
+                    "type": [
+                      "null",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Override media IDs"
+                  },
+                  "account_id": {
+                    "type": "string",
+                    "description": "Connected account ID"
+                  },
+                  "visibility": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override visibility"
+                  },
+                  "scheduled_at": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "Override schedule time (RFC3339)"
+                  },
+                  "first_comment": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "First comment for this target"
+                  },
+                  "platform_data": {
+                    "type": "object",
+                    "description": "Platform-specific settings",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Replace targets (full list)"
+            },
+            "media_ids": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "Updated media IDs"
+            },
+            "visibility": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Updated visibility"
+            },
+            "scheduled_at": {
+              "type": "string",
+              "description": "Updated schedule time (RFC3339)"
+            },
+            "first_comment": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "description": "Updated first comment"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_update_review_reply",
+        "description": "Update an existing business reply to a review. Requires account_id and the platform review_id. Max 2200 characters. Supported on Google Business. Returns 501 for platforms that do not support updating review replies.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Updated reply text (max 2200 characters)"
+            },
+            "review_id": {
+              "type": "string",
+              "description": "Platform review ID whose reply should be updated"
+            },
+            "account_id": {
+              "type": "string",
+              "description": "Connected account ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_update_webhook",
+        "description": "Update an existing webhook endpoint. Change the URL, subscribed event types, or enable/disable it (is_active). At least one field must be provided. Idempotent -- setting the same values has no effect. Use social_api_list_webhooks to find the webhook_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "New HTTPS URL"
+            },
+            "events": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "New event types"
+            },
+            "is_active": {
+              "type": [
+                "null",
+                "boolean"
+              ],
+              "description": "Enable or disable the webhook"
+            },
+            "webhook_id": {
+              "type": "string",
+              "description": "Webhook endpoint ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_validate_post",
+        "description": "Validate post content against platform-specific constraints before creating a post. Checks text length, media counts, file types, aspect ratios, and other platform rules. Returns valid (bool), errors (blocking issues), and warnings (non-blocking). Provide either platforms (by name) or account_ids (resolved to platforms). Use this before social_api_create_post to catch issues early.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Post text content to validate"
+            },
+            "media_ids": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "Media IDs to validate (from social_api_get_media_upload_url)"
+            },
+            "platforms": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "Platform names to validate against (e.g. instagram, facebook). Provide either platforms or account_ids."
+            },
+            "account_ids": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "Connected account IDs — platforms are resolved from these. Provide either platforms or account_ids."
+            }
+          }
+        }
+      },
+      {
+        "name": "social_api_verify_media_upload",
+        "description": "Confirm that a media file was successfully uploaded to the presigned URL. Call this after uploading the file via HTTP PUT to the URL from social_api_get_media_upload_url. Once verified, the media_id can be included in social_api_create_post's media_ids array.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "media_id": {
+              "type": "string",
+              "description": "Media ID returned by social_api_get_media_upload_url"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

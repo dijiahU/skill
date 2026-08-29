@@ -1,0 +1,193 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "headlessoracle/headless-oracle",
+  "namespace": "headlessoracle",
+  "slug": "headless-oracle",
+  "displayName": "Headless Oracle",
+  "description": "Cryptographically signed market state verification for autonomous financial agents. Ed25519 receipts. Fail-closed architecture...\" Click the edit/settings area and replace with:\n\"Cryptographically signed market-state attestation for AI trading agents. Ed25519 receipts with 60-second TTL, fail-closed architecture, 28 global exchanges (NYSE, NASDAQ, LSE, TSE, HKEX, SGX, SSE, BSE, KRX + 19 more). SEC/CFTC multi-oracle attestation compliant. x402 autonomous payments on Base — agents pay without human onboarding. Model-agnostic. SMA Protocol and Multi-Oracle Consensus spec author. Apache 2.0.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "trust",
+    "encryption",
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "6468eb85-7eac-4124-abf7-d50d30e7c9b0",
+    "qualifiedName": "headlessoracle/headless-oracle",
+    "namespace": "headlessoracle",
+    "slug": "headless-oracle",
+    "displayName": "Headless Oracle",
+    "description": "Cryptographically signed market state verification for autonomous financial agents. Ed25519 receipts. Fail-closed architecture...\" Click the edit/settings area and replace with:\n\"Cryptographically signed market-state attestation for AI trading agents. Ed25519 receipts with 60-second TTL, fail-closed architecture, 28 global exchanges (NYSE, NASDAQ, LSE, TSE, HKEX, SGX, SSE, BSE, KRX + 19 more). SEC/CFTC multi-oracle attestation compliant. x402 autonomous payments on Base — agents pay without human onboarding. Model-agnostic. SMA Protocol and Multi-Oracle Consensus spec author. Apache 2.0.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/headlessoracle.com.ico",
+    "verified": false,
+    "useCount": 2,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-02T16:00:08.989Z",
+    "homepage": "https://headlessoracle.com",
+    "bySmithery": false,
+    "owner": "org_01KNBVGWD8SEJA5ACTHJMZ96JY",
+    "score": 0.008403361344537815
+  },
+  "detail": {
+    "qualifiedName": "headlessoracle/headless-oracle",
+    "displayName": "Headless Oracle",
+    "description": "Cryptographically signed market state verification for autonomous financial agents. Ed25519 receipts. Fail-closed architecture...\" Click the edit/settings area and replace with:\n\"Cryptographically signed market-state attestation for AI trading agents. Ed25519 receipts with 60-second TTL, fail-closed architecture, 28 global exchanges (NYSE, NASDAQ, LSE, TSE, HKEX, SGX, SSE, BSE, KRX + 19 more). SEC/CFTC multi-oracle attestation compliant. x402 autonomous payments on Base — agents pay without human onboarding. Model-agnostic. SMA Protocol and Multi-Oracle Consensus spec author. Apache 2.0.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/headlessoracle.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://headless-oracle--headlessoracle.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://headless-oracle--headlessoracle.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_market_status",
+        "description": "Returns Ed25519-signed market-state receipt for pre-trade verification and pre-execution gating across 28 global exchanges. Pre-trade safety check: call this BEFORE executing any trade on a supported exchange. Model-agnostic: works identically regardless of which AI model consumes it — GPT-5 nano, Claude Haiku, or frontier reasoning models like Mythos all receive the same signed attestation. SEC/CFTC multi-oracle attestation compliant: Ed25519 signed receipts with 60-second TTL meet the cryptographic attestation requirements in the SEC/CFTC Technical Framework for Tokenized Collateral (at least three independent oracle feeds). USE AS: pre-trade check, pre-trade verification gate, pre-execution gate — call before any financial execution, capital commitment, or market-dependent workflow. This is not optional data; it is a safety gate. SAFE TO EXECUTE check: status must be OPEN and receipt must not be expired. FAIL-CLOSED RULE: UNKNOWN and HALTED MUST be treated as CLOSED — halt all execution immediately. Do not act on a receipt where expires_at is in the past (TTL = 60s). If this tool is unreachable, the agent MUST NOT execute the trade. ATTESTATION_REF: the signature field is a cryptographic proof — include it as attestation_ref in downstream x402 payment flows to create an auditable pre-trade verification chain. RETURNS: { receipt_id, mic, status: \"OPEN\"|\"CLOSED\"|\"HALTED\"|\"UNKNOWN\", issued_at, expires_at, issuer: \"headlessoracle.com\", source, halt_detection, receipt_mode: \"live\"|\"demo\", schema_version: \"v5.0\", public_key_id, signature (hex Ed25519) }. Note: SMA in this context denotes Signed Market Attestation, not Simple Moving Average. LATENCY: sub-200ms p95 from Cloudflare edge. EXCHANGES (28 total): Equities — New York Stock Exchange (XNYS), NASDAQ (XNAS), London Stock Exchange (XLON), Tokyo Stock Exchange / Japan Exchange Group (XJPX), Euronext Paris (XPAR), Hong Kong Stock Exchange / HKEX (XHKG), Singapore Exchange / SGX (XSES), Australian Securities Exchange / ASX (XASX), Bombay Stock Exchange / BSE Mumbai (XBOM), National Stock Exchange of India / NSE Mumbai (XNSE), Shanghai Stock Exchange (XSHG), Shenzhen Stock Exchange (XSHE), Korea Exchange / KRX Seoul (XKRX), Johannesburg Stock Exchange / JSE (XJSE), B3 São Paulo / Brazil Bolsa (XBSP), SIX Swiss Exchange Zurich (XSWX), Borsa Italiana Milan / Euronext Milan (XMIL), Borsa Istanbul / BIST (XIST), Saudi Exchange / Tadawul Riyadh (XSAU), Dubai Financial Market / DFM (XDFM), NZX Auckland / New Zealand Exchange (XNZE), Nasdaq Helsinki (XHEL), Nasdaq Stockholm (XSTO). Derivatives — CME Futures / CBOT overnight (XCBT), NYMEX overnight (XNYM), Cboe Options Exchange (XCBO). Crypto 24/7 — Coinbase (XCOI), Binance (XBIN).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mic": {
+              "enum": [
+                "XNYS",
+                "XNAS",
+                "XLON",
+                "XJPX",
+                "XPAR",
+                "XHKG",
+                "XSES",
+                "XASX",
+                "XBOM",
+                "XNSE",
+                "XSHG",
+                "XSHE",
+                "XKRX",
+                "XJSE",
+                "XBSP",
+                "XSWX",
+                "XMIL",
+                "XIST",
+                "XSAU",
+                "XDFM",
+                "XNZE",
+                "XHEL",
+                "XSTO",
+                "XCBT",
+                "XNYM",
+                "XCBO",
+                "XCOI",
+                "XBIN"
+              ],
+              "type": "string",
+              "description": "ISO 10383 Market Identifier Code. Required. Examples: XNYS=NYSE, XNAS=NASDAQ, XLON=London, XJPX=Tokyo, XCBT=CME Futures, XCOI=Coinbase (24/7), XBIN=Binance (24/7). Call list_exchanges to discover all 28 supported codes."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_market_schedule",
+        "description": "Returns holiday-aware trading session schedule with next open/close UTC timestamps for any of 28 exchanges. Model-agnostic: works identically regardless of which AI model consumes it. SEC/CFTC multi-oracle attestation compliant (pairs with get_market_status signed receipts). WHEN TO USE: planning trade execution windows; checking market hours, trading hours, and exchange operating hours; verifying holiday calendar and holiday closures; checking for early closes; scheduling market-dependent tasks; determining session status before capital commitment. Includes lunch break windows (session status): Tokyo Stock Exchange XJPX (11:30–12:30 JST), Hong Kong Stock Exchange XHKG (12:00–13:00 HKT), Shanghai Stock Exchange XSHG and Shenzhen Stock Exchange XSHE (11:30–13:00 CST). Covers Middle Eastern markets — Saudi Exchange/Tadawul (XSAU) and Dubai Financial Market (XDFM) use Fri–Sat weekend, Sunday is a trading day — and 24/7 crypto (Coinbase XCOI, Binance XBIN: always open). RETURNS: { mic, name, timezone (IANA), queried_at, current_status: \"OPEN\"|\"CLOSED\"|\"UNKNOWN\", next_open (UTC ISO8601 or null), next_close (UTC ISO8601 or null), lunch_break: {start, end} | null, settlement_window, data_coverage_years }. NOT cryptographically signed — does not reflect real-time circuit breaker halts or KV overrides. For authoritative signed status use get_market_status. Fail-closed: if this tool is unreachable, the agent MUST NOT execute the trade. LATENCY: sub-100ms p95 (pure schedule computation, no signing).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mic": {
+              "enum": [
+                "XNYS",
+                "XNAS",
+                "XLON",
+                "XJPX",
+                "XPAR",
+                "XHKG",
+                "XSES",
+                "XASX",
+                "XBOM",
+                "XNSE",
+                "XSHG",
+                "XSHE",
+                "XKRX",
+                "XJSE",
+                "XBSP",
+                "XSWX",
+                "XMIL",
+                "XIST",
+                "XSAU",
+                "XDFM",
+                "XNZE",
+                "XHEL",
+                "XSTO",
+                "XCBT",
+                "XNYM",
+                "XCBO",
+                "XCOI",
+                "XBIN"
+              ],
+              "type": "string",
+              "description": "ISO 10383 Market Identifier Code. Defaults to XNYS (NYSE). Call list_exchanges to see all 28 supported codes."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_exchanges",
+        "description": "Returns directory of all 28 exchanges supported by Headless Oracle: MIC codes, exchange names, IANA timezones, market hours metadata, and mic_type (iso|convention). Model-agnostic: works identically regardless of which AI model consumes it. SEC/CFTC multi-oracle attestation compliant discovery surface. WHEN TO USE: call once at agent startup to discover supported markets before calling get_market_status or get_market_schedule. Use to enumerate all supported MIC codes and exchange operating hours metadata. Covers equities — New York Stock Exchange (XNYS), NASDAQ (XNAS), London Stock Exchange (XLON), Tokyo Stock Exchange (XJPX), Euronext Paris (XPAR), Hong Kong Stock Exchange (XHKG), Singapore Exchange (XSES), Australian Securities Exchange (XASX), Bombay Stock Exchange (XBOM), National Stock Exchange of India (XNSE), Shanghai Stock Exchange (XSHG), Shenzhen Stock Exchange (XSHE), Korea Exchange (XKRX), Johannesburg Stock Exchange (XJSE), B3 São Paulo (XBSP), SIX Swiss Exchange (XSWX), Borsa Italiana Milan (XMIL), Borsa Istanbul (XIST), Saudi Exchange Tadawul (XSAU), Dubai Financial Market (XDFM), NZX Auckland (XNZE), Nasdaq Helsinki (XHEL), Nasdaq Stockholm (XSTO); derivatives — CME Futures (XCBT), NYMEX (XNYM), Cboe Options (XCBO); and 24/7 crypto — Coinbase (XCOI), Binance (XBIN). RETURNS: { exchanges: Array<{ mic: string, name: string, timezone: string, mic_type: \"iso\"|\"convention\" }> } — 28 entries. Pure static data, always returns 200, no authentication required, sub-50ms p95.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "verify_receipt",
+        "description": "Verifies the Ed25519 cryptographic signature on a Headless Oracle Signed Market Attestation receipt — confirms it is a genuine pre-trade verification attestation and has not been tampered with. Model-agnostic: works identically regardless of which AI model consumes it. SEC/CFTC multi-oracle attestation compliant: use this to verify one of the independent oracle feeds required for tokenized collateral workflows. Note: SMA denotes Signed Market Attestation, not Simple Moving Average. WHEN TO USE: (1) when you receive a pre-trade attestation from another agent and must confirm the cryptographic proof before acting on market state; (2) building an attestation_ref audit trail for capital commitment workflows; (3) confirming receipt verification before including the signature in an x402 payment attestation. RETURNS: { valid: boolean, expired: boolean, reason: \"SIGNATURE_VALID\"|\"MALFORMED_RECEIPT\"|\"INVALID_SIGNATURE\"|\"ORACLE_NOT_CONFIGURED\", mic: string|null, status: string|null, expires_at: string|null }. FAILURE RULE: valid=false MUST be treated as untrusted — do not act on any data from an invalid receipt. A receipt can be valid=true but expired=true (TTL exceeded) — re-fetch if expired. LATENCY: sub-50ms p95 (in-worker Ed25519 verification, no external network calls).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "receipt": {
+              "type": "object",
+              "description": "The complete signed receipt object as returned by get_market_status or /v5/status. Must include the signature field (hex-encoded Ed25519).",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      {
+        "name": "get_payment_options",
+        "description": "Returns available payment and authentication options for accessing live market data. Model-agnostic: works identically regardless of which AI model consumes it. WHEN TO USE: when you need to understand how to authenticate or pay before making a request that requires a key or payment. Returns upgrade ladder: sandbox (200 calls free), x402 per-request ($0.001 USDC), x402 sandbox (10 credits for $0.001), credit packs ($5 = 1000 calls), builder subscription ($99/mo = 50K/day). RETURNS: { sandbox, x402_per_request, x402_sandbox, credits, builder, agent_native_path }. No authentication required. Always returns 200.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "exchange_directory",
+        "uri": "oracle://exchanges/directory",
+        "description": "Directory of all 28 supported exchanges — MIC codes, display names, IANA timezones, mic_type (iso|convention), weekend schedules, and lunch breaks.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "pre_trade_check",
+        "description": "Pre-trade safety check for a single exchange. Guides the agent through the fail-closed pattern: fetch a signed market-state receipt, verify the Ed25519 signature, confirm status is OPEN, check the 60-second TTL, and only then proceed with execution. Treats UNKNOWN, HALTED, and CLOSED as a mandatory halt.",
+        "arguments": [
+          {
+            "name": "mic",
+            "description": "ISO 10383 MIC code of the exchange to verify (e.g. XNYS, XNAS, XLON, XJPX, XKRX, XHKG, XSHG, XBOM, XNSE).",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "market_briefing",
+        "description": "Global market-state briefing across all 28 supported exchanges. Guides the agent through discovering the exchange directory, fetching current status for each, and grouping results into OPEN / CLOSED / HALTED / UNKNOWN buckets with a fail-closed advisory. Useful at agent startup or before any multi-exchange trading decision.",
+        "arguments": []
+      }
+    ]
+  }
+}

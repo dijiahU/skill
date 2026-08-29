@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "aupztzlnmh",
+  "namespace": "iceener",
+  "slug": "streamable-mcp-server-template",
+  "name": "MCP Streamable HTTP Server Template",
+  "description": "A dual-runtime template for building Model Context Protocol servers compatible with Node.js and Cloudflare Workers. It features integrated OAuth, encrypted token storage, and multi-tenant session management to simplify the creation of secure tool, resource, and prompt interfaces.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A dual-runtime template for building Model Context Protocol servers compatible with Node.js and Cloudflare Workers. It features integrated OAuth, encrypted token storage, and multi-tenant session management to simplify the creation of secure tool, resource, and prompt interfaces.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_KEY": {
+          "description": "Static key used when AUTH_STRATEGY is set to 'api_key'.",
+          "type": "string"
+        },
+        "BEARER_TOKEN": {
+          "description": "Static token used when AUTH_STRATEGY is set to 'bearer'.",
+          "type": "string"
+        },
+        "AUTH_STRATEGY": {
+          "description": "Authentication strategy to use. Options: 'oauth', 'bearer', 'api_key', 'custom', 'none'.",
+          "type": "string"
+        },
+        "CUSTOM_HEADERS": {
+          "description": "Custom headers configuration used when AUTH_STRATEGY is set to 'custom'.",
+          "type": "string"
+        },
+        "PROVIDER_API_URL": {
+          "description": "Optional provider API base URL.",
+          "type": "string"
+        },
+        "RS_TOKENS_ENC_KEY": {
+          "description": "Encryption key for tokens, generated via 'openssl rand -base64 32 | tr -d '=' | tr '+/' '-_''",
+          "type": "string"
+        },
+        "PROVIDER_CLIENT_ID": {
+          "description": "OAuth client ID for the provider.",
+          "type": "string"
+        },
+        "PROVIDER_ACCOUNTS_URL": {
+          "description": "The provider's accounts/auth base URL (e.g., https://accounts.spotify.com).",
+          "type": "string"
+        },
+        "PROVIDER_CLIENT_SECRET": {
+          "description": "OAuth client secret for the provider.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "RS_TOKENS_ENC_KEY"
+      ]
+    },
+    "id": "aupztzlnmh",
+    "name": "MCP Streamable HTTP Server Template",
+    "namespace": "iceener",
+    "repository": {
+      "url": "https://github.com/iceener/streamable-mcp-server-template"
+    },
+    "slug": "streamable-mcp-server-template",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/aupztzlnmh"
+  }
+}

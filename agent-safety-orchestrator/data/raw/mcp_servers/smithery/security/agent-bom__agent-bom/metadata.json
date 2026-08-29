@@ -1,0 +1,1488 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "agent-bom/agent-bom",
+  "namespace": "agent-bom",
+  "slug": "agent-bom",
+  "displayName": "Agent Bom",
+  "description": "AI supply chain security scanner — 7 tools for CVE scanning, blast radius mapping, SBOM generation, compliance posture (OWASP/ATLAS/NIST), policy enforcement, and remediation planning for AI agents and MCP servers. Read-only, no credentials accessed.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "policy",
+    "trust",
+    "vulnerability",
+    "credential",
+    "compliance",
+    "owasp",
+    "sbom",
+    "phishing",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "9e355182-10ec-4753-a17a-fb9601aa7115",
+    "qualifiedName": "agent-bom/agent-bom",
+    "namespace": "agent-bom",
+    "slug": "agent-bom",
+    "displayName": "Agent Bom",
+    "description": "AI supply chain security scanner — 7 tools for CVE scanning, blast radius mapping, SBOM generation, compliance posture (OWASP/ATLAS/NIST), policy enforcement, and remediation planning for AI agents and MCP servers. Read-only, no credentials accessed.",
+    "iconUrl": "https://api.smithery.ai/servers/agent-bom/agent-bom/icon",
+    "verified": false,
+    "useCount": 14,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-23T03:45:53.226Z",
+    "homepage": "https://github.com/msaad00/agent-bom",
+    "bySmithery": false,
+    "owner": "org_01KNBVC3Y1MHVR9MP3YZG5MAR8",
+    "score": 0.026356857985087564
+  },
+  "detail": {
+    "qualifiedName": "agent-bom/agent-bom",
+    "displayName": "Agent Bom",
+    "description": "AI supply chain security scanner — 7 tools for CVE scanning, blast radius mapping, SBOM generation, compliance posture (OWASP/ATLAS/NIST), policy enforcement, and remediation planning for AI agents and MCP servers. Read-only, no credentials accessed.",
+    "iconUrl": "https://api.smithery.ai/servers/agent-bom/agent-bom/icon",
+    "remote": true,
+    "deploymentUrl": "https://agent-bom--agent-bom.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agent-bom--agent-bom.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "NVD_API_KEY": {
+              "type": "string",
+              "x-order": 0,
+              "description": "NVD API key for higher rate limits on CVSS enrichment (optional)"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan",
+        "description": "Run a full AI supply chain security scan.\n\n        Discovers local MCP configurations (Claude Desktop, Cursor, Windsurf,\n        VS Code Copilot, OpenClaw, etc.), extracts package dependencies, queries\n        OSV.dev for CVEs, assesses config security (credential exposure, tool access),\n        computes blast radius, and returns structured results.\n\n        Returns:\n            JSON with the complete AI-BOM report including agents, packages,\n            vulnerabilities, blast radius, and remediation guidance.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Image",
+              "default": null,
+              "description": "Docker image to scan (e.g. 'nginx:1.25', 'ghcr.io/org/app:v1')."
+            },
+            "enrich": {
+              "type": "boolean",
+              "title": "Enrich",
+              "default": false,
+              "description": "Enable NVD CVSS, EPSS probability, and CISA KEV enrichment."
+            },
+            "policy": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Policy",
+              "default": null,
+              "description": "Policy object to evaluate alongside scan results, e.g. {\"rules\": [{\"id\": \"no-critical\", \"severity_gte\": \"critical\", \"action\": \"fail\"}]}."
+            },
+            "sbom_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sbom Path",
+              "default": null,
+              "description": "Path to existing CycloneDX or SPDX JSON SBOM file to ingest."
+            },
+            "scorecard": {
+              "type": "boolean",
+              "title": "Scorecard",
+              "default": false,
+              "description": "Enrich packages with OpenSSF Scorecard scores (requires resolvable GitHub repos)."
+            },
+            "db_sources": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Db Sources",
+              "default": null,
+              "description": "Comma-separated DB sources to sync before scanning (e.g. 'nvd,ghsa,osv,epss,kev')."
+            },
+            "transitive": {
+              "type": "boolean",
+              "title": "Transitive",
+              "default": false,
+              "description": "Resolve transitive dependencies for npx/uvx packages."
+            },
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP client config directory. Auto-discovers all if omitted."
+            },
+            "fail_severity": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fail Severity",
+              "default": null,
+              "description": "Return failure status if vulns at this severity or higher: critical, high, medium, low."
+            },
+            "output_format": {
+              "type": "string",
+              "title": "Output Format",
+              "default": "json",
+              "description": "Output format: 'json' (default), 'sarif', 'cyclonedx', 'spdx', 'junit', 'csv', or 'markdown'."
+            },
+            "warn_severity": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Warn Severity",
+              "default": null,
+              "description": "Return warning status (gate_status=warn, exit 0) when vulns at this severity or higher exist. Use with fail_severity for two-tier CI gates, e.g. warn_severity='medium', fail_severity='critical'."
+            },
+            "auto_update_db": {
+              "type": "boolean",
+              "title": "Auto Update Db",
+              "default": true,
+              "description": "Auto-refresh local vuln DB if stale (>7 days) before scanning."
+            },
+            "verify_integrity": {
+              "type": "boolean",
+              "title": "Verify Integrity",
+              "default": false,
+              "description": "Verify package SHA-256/SRI hashes and SLSA provenance against registries."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check",
+        "description": "Check a specific package for known CVEs before installing.\n\n        Queries OSV.dev for vulnerabilities in the given package. Use this\n        before installing an MCP server or dependency to verify it is safe.\n\n        Args:\n            package: Package name with optional version, e.g. \"express@4.18.2\",\n                     \"@modelcontextprotocol/server-filesystem@2025.1.14\",\n                     or just \"requests\" (resolves @latest).\n            ecosystem: Package ecosystem — \"npm\", \"pypi\", \"go\", \"cargo\",\n                       \"maven\", \"nuget\", \"rubygems\", \"composer\", \"swift\",\n                       \"pub\", \"hex\", \"conda\", \"deb\", \"apk\", or \"rpm\".\n                       Defaults to \"npm\".\n\n        Returns:\n            JSON with package, version, ecosystem, vulnerability count,\n            and vulnerability details (id, severity, cvss, fix version, summary).\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "package": {
+              "type": "string",
+              "title": "Package",
+              "description": "Package name with optional version, e.g. 'express@4.18.2', '@modelcontextprotocol/server-filesystem@2025.1.14', or 'requests' (resolves @latest)."
+            },
+            "ecosystem": {
+              "type": "string",
+              "title": "Ecosystem",
+              "default": "npm",
+              "description": "Package ecosystem: 'npm', 'pypi', 'go', 'cargo', 'maven', 'nuget', 'rubygems', 'composer', 'swift', 'pub', 'hex', 'conda', 'deb', 'apk', or 'rpm'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "blast_radius",
+        "description": "Look up the blast radius of a specific CVE across your AI agent setup.\n\n        Scans local MCP configurations, finds the specified CVE, and returns\n        the full attack chain: which packages are affected, which MCP servers\n        use those packages, which agents connect to those servers, and what\n        credentials and tools are exposed.\n\n        Args:\n            cve_id: The CVE identifier (e.g. \"CVE-2024-1234\" or \"GHSA-xxxx\").\n\n        Returns:\n            JSON with blast radius details including risk_score,\n            affected_servers, affected_agents, exposed_credentials, and\n            exposed_tools. Returns found=false if CVE not found.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cve_id": {
+              "type": "string",
+              "title": "Cve Id",
+              "description": "CVE identifier to look up, e.g. 'CVE-2024-1234' or 'GHSA-xxxx'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "policy_check",
+        "description": "Evaluate a security policy against current scan results.\n\n        Runs a scan, then evaluates the provided policy rules against the\n        findings. Policies can gate on severity thresholds, CISA KEV status,\n        AI risk flags, credential exposure, and denied packages.\n\n        Args:\n            policy_json: JSON string containing policy rules. Example:\n                {\"rules\": [{\"id\": \"no-critical\", \"severity_gte\": \"critical\",\n                \"action\": \"fail\"}, {\"id\": \"no-kev\", \"kev\": true, \"action\": \"fail\"}]}\n\n        Returns:\n            JSON with passed (bool), violations list, failure_count, and\n            warning_count.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "policy_json": {
+              "type": "string",
+              "title": "Policy Json",
+              "description": "JSON string containing policy rules, e.g. {\"rules\": [{\"id\": \"no-critical\", \"severity_gte\": \"critical\", \"action\": \"fail\"}]}."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "registry_lookup",
+        "description": "Query the agent-bom MCP server threat intelligence registry.\n\n        Look up risk level, known tools, credential requirements, and\n        verification status for known MCP servers. The registry contains\n        109+ servers with security metadata.\n\n        Args:\n            server_name: MCP server name to look up (e.g. \"filesystem\",\n                         \"@modelcontextprotocol/server-github\").\n            package_name: Package name to search for (e.g. \"mcp-server-sqlite\").\n                          At least one of server_name or package_name is required.\n\n        Returns:\n            JSON with registry entry: risk_level, verified, tools,\n            credential_env_vars, risk_justification. Returns found=false\n            if not found.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "server_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Server Name",
+              "default": null,
+              "description": "MCP server name to look up, e.g. 'filesystem', '@modelcontextprotocol/server-github'."
+            },
+            "package_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Package Name",
+              "default": null,
+              "description": "Package name to search for, e.g. 'mcp-server-sqlite'. At least one of server_name or package_name is required."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "generate_sbom",
+        "description": "Generate a Software Bill of Materials (SBOM) for your AI agent setup.\n\n        Discovers AI agents and MCP servers, extracts all package dependencies,\n        and generates a standards-compliant SBOM.\n\n        Args:\n            format: SBOM format — \"cyclonedx\" (CycloneDX 1.6) or \"spdx\" (SPDX 3.0).\n            config_path: Path to a specific MCP config directory.\n                         If not provided, auto-discovers all local agent configs.\n\n        Returns:\n            JSON string containing the SBOM in the requested format.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string",
+              "title": "Format",
+              "default": "cyclonedx",
+              "description": "SBOM format: 'cyclonedx' (CycloneDX 1.6) or 'spdx' (SPDX 3.0)."
+            },
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP client config directory. Auto-discovers all if omitted."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "compliance",
+        "description": "Get OWASP LLM Top 10 / OWASP MCP Top 10 / MITRE ATLAS / NIST AI RMF compliance posture.\n\n        Scans local MCP configurations, maps findings to 47 security controls\n        across four AI security frameworks, and returns per-control\n        pass/warning/fail status with an overall compliance score.\n\n        Args:\n            config_path: Path to a specific MCP config directory.\n                         If not provided, auto-discovers all local agent configs.\n            image: Docker image reference to scan (e.g. \"nginx:1.25\").\n\n        Returns:\n            JSON with overall_score (0-100), overall_status (pass/warning/fail),\n            and per-control details for OWASP LLM Top 10 (10 controls),\n            OWASP MCP Top 10 (10 controls), MITRE ATLAS (13 techniques),\n            and NIST AI RMF (14 subcategories).\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Image",
+              "default": null,
+              "description": "Docker image to scan, e.g. 'nginx:1.25'."
+            },
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP client config directory. Auto-discovers all if omitted."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "remediate",
+        "description": "Generate a remediation plan for vulnerabilities in your AI agent setup.\n\n        Scans for vulnerabilities, then generates actionable fix commands for\n        each affected package (npm install, pip install), credential scope\n        reduction guidance, and reports on unfixable vulnerabilities.\n\n        Args:\n            config_path: Path to a specific MCP config directory.\n                         If not provided, auto-discovers all local agent configs.\n            image: Docker image reference to scan (e.g. \"nginx:1.25\").\n\n        Returns:\n            JSON with package_fixes (upgrade commands by ecosystem),\n            credential_fixes (scope reduction steps), and unfixable items.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Image",
+              "default": null,
+              "description": "Docker image to scan, e.g. 'nginx:1.25'."
+            },
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP client config directory. Auto-discovers all if omitted."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "skill_scan",
+        "description": "Scan skill and instruction files for trust, findings, and provenance.\n\n        Discovers supported files such as `CLAUDE.md`, `AGENTS.md`,\n        `.cursorrules`, and `skills/*.md`, then parses referenced packages,\n        MCP servers, credential env vars, audit findings, and trust verdicts.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "title": "Path",
+              "default": ".",
+              "description": "Path to a skill/instruction file or directory to scan."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "skill_verify",
+        "description": "Verify Sigstore provenance for skill and instruction files.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "title": "Path",
+              "default": ".",
+              "description": "Path to a skill/instruction file or directory to verify."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "skill_trust",
+        "description": "Assess the trust level of a SKILL.md file using ClawHub-style categories.\n\n        Parses a SKILL.md file, runs security audit checks, then evaluates\n        trust across 5 categories: Purpose & Capability, Instruction Scope,\n        Install Mechanism, Credentials, and Persistence & Privilege.\n\n        Returns an overall verdict (benign/suspicious/malicious) with\n        confidence level and actionable recommendations.\n\n        Args:\n            skill_path: Path to a SKILL.md file (or any skill/instruction file).\n\n        Returns:\n            JSON with verdict, confidence, per-category assessments, and\n            recommendations.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "skill_path": {
+              "type": "string",
+              "title": "Skill Path",
+              "description": "Path to a SKILL.md file (or any skill/instruction file) to assess."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "verify",
+        "description": "Verify package integrity and SLSA provenance against registries.\n\n        Checks SHA-256/SRI hashes against npm/PyPI registries and looks up\n        SLSA build provenance attestations to confirm the package was built\n        from its claimed source repository.\n\n        Returns:\n            JSON with integrity verification (hash match, expected vs actual)\n            and provenance status (SLSA level, source repo, build trigger).\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "package": {
+              "type": "string",
+              "title": "Package",
+              "description": "Package name with optional version, e.g. 'express@4.18.2' or 'requests==2.31.0'."
+            },
+            "ecosystem": {
+              "type": "string",
+              "title": "Ecosystem",
+              "default": "npm",
+              "description": "Package ecosystem: 'npm' or 'pypi'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "where",
+        "description": "Show all MCP discovery paths and which config files exist.\n\n        Lists every known MCP client config path per platform, indicating\n        which files are present on the current system. Useful for debugging\n        discovery issues or understanding where MCP configs live.\n\n        Returns:\n            JSON with per-client config paths, existence status, and platform.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "inventory",
+        "description": "List all discovered MCP configurations and servers without CVE scanning.\n\n        Performs fast discovery and package extraction only — no vulnerability\n        scanning. Use this for a quick inventory of configs, servers, and packages.\n\n        Returns:\n            JSON with discovered agents, their MCP servers, packages, and\n            transport types.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP client config directory. Auto-discovers all if omitted."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "tool_risk_assessment",
+        "description": "Score live-introspected MCP tool capabilities and server risk.\n\n        Uses runtime `tools/list` data to classify tool capabilities\n        (READ/WRITE/EXECUTE/NETWORK/etc.) and compute a per-server risk profile.\n\n        Returns:\n            JSON with per-server tool profiles, capability counts, dangerous\n            combinations, and risk justification.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "timeout": {
+              "type": "number",
+              "title": "Timeout",
+              "default": 10,
+              "description": "Per-server introspection timeout in seconds."
+            },
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP client config directory. Auto-discovers all if omitted."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "diff",
+        "description": "Compare a fresh scan against a baseline to find new and resolved vulns.\n\n        Runs a new scan, then diffs it against the provided baseline (or the\n        latest saved report). Shows new vulnerabilities, resolved ones, and\n        changes in the package inventory.\n\n        Returns:\n            JSON with new findings, resolved findings, new/removed packages,\n            and a human-readable summary.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "baseline": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Baseline",
+              "default": null,
+              "description": "Baseline report JSON object. If omitted, uses the latest saved report from history."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "marketplace_check",
+        "description": "Pre-install trust check for an MCP server package.\n\n        Queries the package registry (npm or PyPI) for metadata and\n        cross-references against the agent-bom MCP threat intelligence registry.\n        Returns trust signals including download count, CVE status, and\n        registry verification.\n\n        Args:\n            package: Package name to check.\n            ecosystem: 'npm' or 'pypi'. Defaults to 'npm'.\n\n        Returns:\n            JSON with name, version, ecosystem, cve_count, download_count,\n            registry_verified, and trust_signals.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "package": {
+              "type": "string",
+              "title": "Package",
+              "description": "Package name, e.g. 'express', 'langchain'."
+            },
+            "ecosystem": {
+              "type": "string",
+              "title": "Ecosystem",
+              "default": "npm",
+              "description": "Package ecosystem: 'npm' or 'pypi'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "code_scan",
+        "description": "Run SAST (Static Application Security Testing) on source code via Semgrep.\n\n        Scans for security flaws: SQL injection, XSS, command injection,\n        hardcoded credentials, insecure deserialization, path traversal, etc.\n        Returns findings with CWE classifications and severity levels.\n\n        Requires ``semgrep`` on PATH (``pip install semgrep``).\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "title": "Path",
+              "description": "Path to source code directory to scan."
+            },
+            "config": {
+              "type": "string",
+              "title": "Config",
+              "default": "auto",
+              "description": "Semgrep config. 'auto' = Semgrep Registry rules. Can be a path or registry string."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "context_graph",
+        "description": "Build an agent context graph with lateral movement analysis.\n\n        Models reachability between agents, servers, credentials, tools,\n        and vulnerabilities.  Answers: \"If agent X is compromised, what\n        else becomes reachable?\"\n\n        Returns:\n            JSON with nodes, edges, lateral_paths, interaction_risks, and stats.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "max_depth": {
+              "type": "integer",
+              "title": "Max Depth",
+              "default": 4,
+              "description": "Max BFS depth for lateral path discovery (1-6, default 4)."
+            },
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP config directory. Omit to auto-discover."
+            },
+            "source_agent": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source Agent",
+              "default": null,
+              "description": "Agent name to compute lateral paths from. Omit for all agents."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "graph_export",
+        "description": "Export the agent dependency graph in graph-native formats.\n\n        Formats:\n        - **graphml** — yEd, Gephi, NetworkX compatible with AIBOM-typed attributes\n        - **cypher** — Neo4j import script with AIBOM node labels (AIAgent, MCPServer, Package, Vulnerability)\n        - **dot** — Graphviz (pipe through ``dot -Tsvg``)\n        - **mermaid** — embed in markdown, GitHub, Notion\n        - **json** — machine-readable nodes/edges list\n\n        Returns:\n            Graph in the requested format as a string.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string",
+              "title": "Format",
+              "default": "json",
+              "description": "Export format: graphml, cypher, dot, mermaid, or json (default)."
+            },
+            "config_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Config Path",
+              "default": null,
+              "description": "Path to MCP config directory. Omit to auto-discover."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "analytics_query",
+        "description": "Query vulnerability trends, posture history, and runtime event summaries from ClickHouse.\n\n        Requires AGENT_BOM_CLICKHOUSE_URL to be set. Returns empty results if\n        ClickHouse is not configured.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "integer",
+              "title": "Days",
+              "default": 30,
+              "description": "Lookback window in days (default 30). Used by vuln_trends and posture_history."
+            },
+            "agent": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Agent",
+              "default": null,
+              "description": "Filter by agent name. Used by vuln_trends and posture_history."
+            },
+            "hours": {
+              "type": "integer",
+              "title": "Hours",
+              "default": 24,
+              "description": "Lookback window in hours (default 24). Used by event_summary."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "description": "Max results for top_cves (default 20)."
+            },
+            "query_type": {
+              "type": "string",
+              "title": "Query Type",
+              "description": "Query type: vuln_trends, top_cves, posture_history, or event_summary"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "cis_benchmark",
+        "description": "Run CIS benchmark checks against a cloud account.\n\n        Evaluates security posture against CIS Foundations Benchmarks:\n        - AWS Foundations v3.0: 18 checks (IAM, Storage, Logging, Networking)\n        - Snowflake v1.0: 12 checks (Auth, Network, Data Protection, Monitoring, Access Control)\n        - Azure Security Benchmark v3.0: 10 checks (IAM, Storage, Logging, Networking, Key Vault)\n        - GCP Foundation v3.0: 8 checks (IAM, Logging, Networking, Storage)\n\n        All checks are read-only. Failed checks include MITRE ATT&CK Enterprise technique mappings.\n        Requires appropriate credentials for the chosen provider.\n\n        Returns:\n            JSON with per-check pass/fail results, evidence, severity, ATT&CK techniques, and pass rate.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "checks": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Checks",
+              "default": null,
+              "description": "Comma-separated check IDs to run (e.g. '1.1,2.1'). Omit to run all."
+            },
+            "region": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region",
+              "default": null,
+              "description": "AWS region (only for provider=aws). Defaults to us-east-1."
+            },
+            "profile": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Profile",
+              "default": null,
+              "description": "AWS CLI profile (only for provider=aws)."
+            },
+            "provider": {
+              "type": "string",
+              "title": "Provider",
+              "description": "Cloud provider: 'aws', 'snowflake', 'azure', or 'gcp'."
+            },
+            "project_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Project Id",
+              "default": null,
+              "description": "GCP project ID (only for provider=gcp). Falls back to GOOGLE_CLOUD_PROJECT env var."
+            },
+            "subscription_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subscription Id",
+              "default": null,
+              "description": "Azure subscription ID (only for provider=azure). Falls back to AZURE_SUBSCRIPTION_ID env var."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "fleet_scan",
+        "description": "Batch-scan a list of MCP server names against the security metadata registry.\n\n        Designed for fleet inventory data (CrowdStrike, SIEM, CSV exports) where\n        you have server names but not versions. Returns per-server risk assessment\n        with registry match status, risk category, tools, credentials, known CVEs,\n        and a verdict (known-high-risk, known-medium, known-low, unknown-unvetted).\n\n        Risk levels are category-derived (filesystem=high, database=medium,\n        search=low), not made-up threat scores. Every field is traceable to a source.\n\n        Returns:\n            JSON with summary (total, matched, unmatched, risk breakdown)\n            and per-server details.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "servers": {
+              "type": "string",
+              "title": "Servers",
+              "description": "Comma-separated or newline-separated list of MCP server names to scan. E.g. '@modelcontextprotocol/server-filesystem, brave-search, glean, 50 sleep'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "runtime_correlate",
+        "description": "Cross-reference vulnerability scan results with proxy runtime audit logs.\n\n        Identifies which vulnerable tools were ACTUALLY CALLED in production,\n        distinguishing confirmed attack surface from theoretical risk. Produces\n        risk-amplified findings: a vulnerable tool that was called 100 times is\n        higher priority than one never invoked.\n\n        Also accepts an OTel trace file (``otel_trace``) to extract ML API call\n        provenance: which models were called, token usage, and deprecation advisories.\n\n        Requires a proxy audit log (generated by running agent-bom proxy with\n        the --log flag). Without an audit log, returns scan results only.\n\n        Returns:\n            JSON with correlated findings (CVE + tool call data + amplified risk),\n            summary stats, uncalled vulnerable tools, and ml_api_calls provenance.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "audit_log": {
+              "type": "string",
+              "title": "Audit Log",
+              "default": "",
+              "description": "Path to proxy audit JSONL log file (generated by 'agent-bom proxy --log audit.jsonl')."
+            },
+            "otel_trace": {
+              "type": "string",
+              "title": "Otel Trace",
+              "default": "",
+              "description": "Path to OTel OTLP JSON trace file for ML API provenance (detects deprecated/vulnerable model versions)."
+            },
+            "config_path": {
+              "type": "string",
+              "title": "Config Path",
+              "default": "auto",
+              "description": "Path to MCP config directory (e.g. ~/.config/claude) or 'auto' for default discovery."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "vector_db_scan",
+        "description": "Scan for running vector databases and assess their security posture.\n\n        Probes well-known ports for Qdrant (6333), Weaviate (8080), Chroma (8000),\n        and Milvus (9091). For each discovered instance checks:\n        - Authentication required (no_auth flag if collections accessible without credentials)\n        - Network exposure (network_exposed if accessible beyond localhost)\n        - Number of collections/indexes exposed without auth\n        - MAESTRO layer: KC4: Memory & Context\n\n        Returns:\n            JSON with per-database risk assessment including risk_level, risk_flags, and metadata.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hosts": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hosts",
+              "default": null,
+              "description": "Comma-separated hosts to probe (default: 127.0.0.1). Example: '127.0.0.1,10.0.0.5'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "aisvs_benchmark",
+        "description": "Run AISVS v1.0 (AI Security Verification Standard) compliance checks.\n\n        Evaluates the local AI system stack against OWASP AISVS v1.0 controls:\n        - AI-4.1 Model files use safe serialization (not pickle/pt/bin)\n        - AI-4.2 Model files have cryptographic integrity digest\n        - AI-4.3 Ollama inference API not network-exposed without auth\n        - AI-5.2 No ML development tools (Jupyter, MLflow, Ray) network-exposed\n        - AI-6.1 Vector stores require authentication\n        - AI-6.2 Vector stores bound to localhost only\n        - AI-7.1 No known malicious or typosquatted ML packages installed\n        - AI-7.2 Locally cached models have verifiable provenance\n        - AI-8.1 MCP server tool definitions include input schemas\n\n        Each check is tagged with its MAESTRO layer (KC1-KC6).\n\n        Returns:\n            JSON with per-check pass/fail results, evidence, severity, MAESTRO layer, and pass rate.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "checks": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Checks",
+              "default": null,
+              "description": "Comma-separated AISVS check IDs to run (e.g. 'AI-4.1,AI-6.1'). Omit to run all 9 checks."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "gpu_infra_scan",
+        "description": "Discover GPU/AI compute infrastructure: containers, K8s nodes, and DCGM endpoints.\n\n        Scans for GPU-enabled workloads from the local Docker daemon and Kubernetes\n        clusters. Identifies NVIDIA base images, CUDA/cuDNN versions, explicit GPU\n        device assignments, and unauthenticated DCGM exporter endpoints.\n\n        Discovery targets (MAESTRO KC6):\n        - NVIDIA base images (nvcr.io/nvidia/, nvidia/cuda, etc.)\n        - CUDA/cuDNN versions from container labels and env vars\n        - GPU-assigned containers (Docker --gpus, K8s nvidia.com/gpu requests)\n        - Unauthenticated DCGM exporter endpoints (port 9400 — GPU metrics leak)\n        - Kubernetes GPU node inventory with capacity and allocatable counts\n\n        Requires docker and/or kubectl on PATH. All discovery is best-effort\n        (returns empty results rather than failing if tools are unavailable).\n\n        Returns:\n            JSON with GPU containers, K8s nodes, DCGM endpoints, CUDA version\n            inventory, and a risk summary with unauthenticated DCGM count.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "probe_dcgm": {
+              "type": "boolean",
+              "title": "Probe Dcgm",
+              "default": true,
+              "description": "Whether to probe DCGM exporter endpoints on port 9400 (unauthenticated metrics leak detection)."
+            },
+            "k8s_context": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "K8S Context",
+              "default": null,
+              "description": "kubectl context to use for K8s GPU node discovery. Omit for current context."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "dataset_card_scan",
+        "description": "Scan a directory for ML dataset card metadata and provenance.\n\n        Discovers and parses:\n        - HuggingFace dataset_info.json (auto-generated metadata)\n        - HuggingFace README.md YAML frontmatter (dataset cards)\n        - DVC .dvc tracking files (data versioning provenance)\n\n        Flags: UNLICENSED_DATASET, NO_DATASET_CARD, UNVERSIONED_DATA, REMOTE_DATA_SOURCE.\n        Tags findings with compliance frameworks: OWASP LLM (LLM03), MITRE ATLAS,\n        NIST AI RMF (MAP-3.5), EU AI Act (ART-10).\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "title": "Directory",
+              "description": "Directory path to scan for dataset cards (dataset_info.json, README.md frontmatter, .dvc files)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "training_pipeline_scan",
+        "description": "Scan a directory for ML training pipeline lineage and provenance.\n\n        Discovers and parses:\n        - MLflow: meta.yaml, MLmodel, requirements.txt, conda.yaml\n        - Kubeflow: Argo workflow YAML, KFP v2 pipelineSpec YAML\n        - W&B: wandb-metadata.json, config.yaml, wandb-summary.json\n\n        Flags: UNSAFE_SERIALIZATION, MISSING_PROVENANCE, MISSING_REQUIREMENTS, EXPOSED_CREDENTIALS.\n        Tags findings with compliance frameworks: OWASP LLM (LLM03), MITRE ATLAS (AML.T0020),\n        NIST AI RMF (MAP-3.5, GOVERN-1.7).\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "title": "Directory",
+              "description": "Directory path to scan for training pipeline artifacts (MLflow, Kubeflow, W&B)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "browser_extension_scan",
+        "description": "Scan installed browser extensions for dangerous permissions.\n\n        Scans Chrome, Chromium, Brave, Edge, and Firefox for extensions with:\n        - nativeMessaging (can execute arbitrary commands)\n        - debugger (can intercept all browser traffic)\n        - cookies/clipboardRead on AI domains\n        - Broad host access patterns (*://*/*)\n        - AI assistant domain access (claude.ai, chatgpt.com, cursor.sh)\n\n        Deduplicates across profiles. Returns risk-ranked results.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_low_risk": {
+              "type": "boolean",
+              "title": "Include Low Risk",
+              "default": false,
+              "description": "Include low-risk extensions in results (default: only medium+ risk)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "model_provenance_scan",
+        "description": "Check ML model provenance and supply chain metadata.\n\n        Queries HuggingFace Hub or Ollama for:\n        - Serialization format (safetensors=safe, pickle/pt=unsafe)\n        - SHA256 digest verification\n        - Gated/private status\n        - Model card presence\n        - Risk assessment (critical/high/medium/safe)\n\n        Returns structured provenance data for supply chain risk assessment.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "title": "Source",
+              "default": "huggingface",
+              "description": "Model source: 'huggingface' or 'ollama' (default: huggingface)."
+            },
+            "model_id": {
+              "type": "string",
+              "title": "Model Id",
+              "description": "HuggingFace model ID (e.g. 'meta-llama/Llama-3-8B') or Ollama model name (e.g. 'llama3')."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "prompt_scan",
+        "description": "Scan prompt template files for injection risks and security issues.\n\n        Discovers and analyzes:\n        - .prompt files\n        - system_prompt.* files\n        - Files in prompts/ directories\n\n        Checks for injection patterns, unsafe variable interpolation, and\n        missing guardrails in prompt templates.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "title": "Directory",
+              "description": "Directory path to scan for prompt template files (.prompt, system_prompt.*, prompts/ directories)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "model_file_scan",
+        "description": "Scan a directory for ML model files and assess serialization risks.\n\n        Discovers model files and checks:\n        - Serialization format (safetensors=safe, pickle/joblib=unsafe)\n        - File size and format metadata\n        - GGUF/GGML quantization details\n        - Known unsafe patterns in pickle-based formats\n\n        Returns structured results with risk assessment per model file.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "title": "Directory",
+              "description": "Directory path to scan for ML model files (.gguf, .safetensors, .onnx, .pt, .pkl, .h5, etc.)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "ai_inventory_scan",
+        "description": "Scan source code for AI component usage patterns.\n\n        Detects:\n        - AI SDK imports (openai, anthropic, langchain, etc.) across 7 languages\n        - Model string references (gpt-4o, claude-3-5-sonnet, llama-3, etc.)\n        - Hardcoded API keys (sk-proj-*, sk-ant-*, hf_*, etc.)\n        - Deprecated model usage with recommended replacements\n        - Shadow AI: SDKs imported in code but not declared in package manifests\n\n        Returns structured inventory with severity classification.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "title": "Directory",
+              "description": "Directory to scan for AI SDK imports, model refs, API keys, shadow AI (Python/JS/TS/Java/Go/Rust/Ruby)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "license_compliance_scan",
+        "description": "Evaluate package licenses against compliance policy.\n\n        Categorizes each package license using the full SPDX catalog (2,500+ licenses)\n        with proper expression parsing (OR/AND/WITH), deprecated ID normalization,\n        and network-copyleft detection (AGPL, EUPL, OSL).\n\n        Risk tiers: permissive (low), weak-copyleft (medium), strong-copyleft (high),\n        network-copyleft (critical), commercial-risk (critical), source-available (high).\n\n        Returns structured report with compliance status, findings, and risk summary.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scan_json": {
+              "type": "string",
+              "title": "Scan Json",
+              "description": "JSON string of a previous scan result (from the 'scan' tool) containing agents with packages. Or a JSON array of {\"name\": \"pkg\", \"version\": \"1.0\", \"ecosystem\": \"npm\", \"license\": \"MIT\"} objects."
+            },
+            "policy_json": {
+              "type": "string",
+              "title": "Policy Json",
+              "default": "",
+              "description": "Optional JSON policy: {\"license_block\": [\"GPL-*\"], \"license_warn\": [\"LGPL-*\"]}. Uses default policy (block GPL/AGPL/SSPL/BUSL/EUPL/OSL, warn LGPL/MPL/EPL/CDDL) if empty."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "ingest_external_scan",
+        "description": "Ingest Trivy, Grype, or Syft JSON scan output and return packages with blast radius analysis.\n\n        Auto-detects the scanner format from the JSON structure:\n        - Trivy (``trivy fs --format json``): Results + Vulnerabilities\n        - Grype (``grype --output json``): matches array\n        - Syft (``syft --output syft-json``): artifacts + schema\n\n        Returns a summary of ingested packages and their vulnerability counts.\n        Pass the full JSON string from the scanner's ``--format json`` / ``--output json``\n        output as the ``scan_json`` argument.\n        ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scan_json": {
+              "type": "string",
+              "title": "Scan Json",
+              "description": "JSON string from Trivy, Grype, or Syft scan output"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "registry_servers_resource",
+        "uri": "registry://servers",
+        "description": "Browse the MCP server security metadata registry (427+ servers).\n\n        Returns the full registry with risk levels (category-derived), tools,\n        credential env vars (heuristic-inferred), and verification status\n        for every known MCP server.\n        ",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "policy_template_resource",
+        "uri": "policy://template",
+        "description": "Get a default security policy template for agent-bom.\n\n        Returns a ready-to-use policy with common rules: block critical CVEs,\n        flag CISA KEV entries, warn on unverified servers, and limit credential\n        exposure.\n        ",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "quick-audit",
+        "description": "Run a complete security audit of your AI agent setup",
+        "arguments": []
+      },
+      {
+        "name": "pre-install-check",
+        "description": "Check an MCP server package for vulnerabilities before installing",
+        "arguments": [
+          {
+            "name": "package",
+            "required": true
+          },
+          {
+            "name": "ecosystem",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "compliance-report",
+        "description": "Generate OWASP/ATLAS/NIST compliance posture for your AI stack",
+        "arguments": []
+      }
+    ]
+  }
+}

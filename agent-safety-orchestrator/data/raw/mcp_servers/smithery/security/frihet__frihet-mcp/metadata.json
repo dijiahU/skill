@@ -1,0 +1,2306 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "frihet/frihet-mcp",
+  "namespace": "frihet",
+  "slug": "frihet-mcp",
+  "displayName": "Frihet",
+  "description": "AI-native business management MCP server. 31 tools for invoicing, expenses, clients, products, quotes, tax compliance (VeriFactu), and webhooks. Multi-currency (40 currencies), OCR scanning, Stripe Connect. OAuth 2.0 + PKCE.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "92727513-f924-4b7c-94cd-f40efc9f2267",
+    "qualifiedName": "frihet/frihet-mcp",
+    "namespace": "frihet",
+    "slug": "frihet-mcp",
+    "displayName": "Frihet",
+    "description": "AI-native business management MCP server. 31 tools for invoicing, expenses, clients, products, quotes, tax compliance (VeriFactu), and webhooks. Multi-currency (40 currencies), OCR scanning, Stripe Connect. OAuth 2.0 + PKCE.",
+    "iconUrl": "https://api.smithery.ai/servers/frihet/frihet-mcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-14T01:48:59.589Z",
+    "homepage": "https://www.frihet.io",
+    "bySmithery": false,
+    "owner": "org_01KNBVKYX7CNPSK7D7RECV0HZZ",
+    "score": 0.010416666666666666
+  },
+  "detail": {
+    "qualifiedName": "frihet/frihet-mcp",
+    "displayName": "Frihet",
+    "description": "AI-native business management MCP server. 31 tools for invoicing, expenses, clients, products, quotes, tax compliance (VeriFactu), and webhooks. Multi-currency (40 currencies), OCR scanning, Stripe Connect. OAuth 2.0 + PKCE.",
+    "iconUrl": "https://api.smithery.ai/servers/frihet/frihet-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://frihet.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://frihet.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_invoices",
+        "description": "List all invoices with optional pagination. Returns a paginated list of invoices sorted by creation date. / Lista todas las facturas con paginacion opcional. Devuelve una lista paginada de facturas ordenadas por fecha de creacion.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "clientName",
+                  "items"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "description",
+                        "quantity",
+                        "unitPrice"
+                      ],
+                      "properties": {
+                        "quantity": {
+                          "type": "number"
+                        },
+                        "unitPrice": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "notes": {
+                    "type": "string"
+                  },
+                  "total": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "type": "string"
+                  },
+                  "taxRate": {
+                    "type": "number"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "clientName": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "data",
+            "total",
+            "limit",
+            "offset"
+          ]
+        }
+      },
+      {
+        "name": "get_invoice",
+        "description": "Get a single invoice by its ID. Returns the full invoice including line items, totals, and status. / Obtiene una factura por su ID. Devuelve la factura completa con conceptos, totales y estado.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "dueDate": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "clientName",
+            "items"
+          ]
+        }
+      },
+      {
+        "name": "create_invoice",
+        "description": "Create a new invoice. Requires client name and at least one line item. The invoice number is auto-generated. / Crea una nueva factura. Requiere nombre del cliente y al menos un concepto. El numero de factura se genera automaticamente.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "minItems": 1
+            },
+            "notes": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "sent",
+                "paid",
+                "overdue",
+                "cancelled"
+              ],
+              "type": "string"
+            },
+            "dueDate": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "clientName": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "dueDate": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "clientName",
+            "items"
+          ]
+        }
+      },
+      {
+        "name": "update_invoice",
+        "description": "Update an existing invoice. Only the provided fields will be changed. / Actualiza una factura existente. Solo se modifican los campos proporcionados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "minItems": 1
+            },
+            "notes": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "sent",
+                "paid",
+                "overdue",
+                "cancelled"
+              ],
+              "type": "string"
+            },
+            "dueDate": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "clientName": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "dueDate": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "clientName",
+            "items"
+          ]
+        }
+      },
+      {
+        "name": "delete_invoice",
+        "description": "Permanently delete an invoice by its ID. This action cannot be undone. / Elimina permanentemente una factura por su ID. Esta accion no se puede deshacer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success",
+            "id"
+          ]
+        }
+      },
+      {
+        "name": "search_invoices",
+        "description": "Search invoices by client name. Useful for finding all invoices for a specific client. / Busca facturas por nombre de cliente. Util para encontrar todas las facturas de un cliente concreto.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 0
+            },
+            "clientName": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "clientName",
+                  "items"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "description",
+                        "quantity",
+                        "unitPrice"
+                      ],
+                      "properties": {
+                        "quantity": {
+                          "type": "number"
+                        },
+                        "unitPrice": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "notes": {
+                    "type": "string"
+                  },
+                  "total": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "type": "string"
+                  },
+                  "taxRate": {
+                    "type": "number"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "clientName": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "data",
+            "total",
+            "limit",
+            "offset"
+          ]
+        }
+      },
+      {
+        "name": "list_expenses",
+        "description": "List all expenses with optional pagination. / Lista todos los gastos con paginacion opcional.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "description",
+                  "amount"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "vendor": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "taxDeductible": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "data",
+            "total",
+            "limit",
+            "offset"
+          ]
+        }
+      },
+      {
+        "name": "get_expense",
+        "description": "Get a single expense by its ID. / Obtiene un gasto por su ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "vendor": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "taxDeductible": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "description",
+            "amount"
+          ]
+        }
+      },
+      {
+        "name": "create_expense",
+        "description": "Record a new expense. Requires a description and amount. Useful for tracking business costs, deductible expenses, and vendor payments. / Registra un nuevo gasto. Requiere descripcion e importe. Util para seguimiento de costes, gastos deducibles y pagos a proveedores.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "vendor": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "taxDeductible": {
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "vendor": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "taxDeductible": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "description",
+            "amount"
+          ]
+        }
+      },
+      {
+        "name": "update_expense",
+        "description": "Update an existing expense. Only the provided fields will be changed. / Actualiza un gasto existente. Solo se modifican los campos proporcionados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "vendor": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "taxDeductible": {
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "vendor": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "taxDeductible": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "description",
+            "amount"
+          ]
+        }
+      },
+      {
+        "name": "delete_expense",
+        "description": "Permanently delete an expense by its ID. This action cannot be undone. / Elimina permanentemente un gasto por su ID. Esta accion no se puede deshacer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success",
+            "id"
+          ]
+        }
+      },
+      {
+        "name": "list_clients",
+        "description": "List all clients/customers with optional pagination. Returns contact info, tax IDs, and addresses. / Lista todos los clientes con paginacion opcional. Devuelve informacion de contacto, NIF/CIF y direcciones.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "taxId": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "object",
+                    "properties": {
+                      "city": {
+                        "type": "string"
+                      },
+                      "street": {
+                        "type": "string"
+                      },
+                      "country": {
+                        "type": "string"
+                      },
+                      "postalCode": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "data",
+            "total",
+            "limit",
+            "offset"
+          ]
+        }
+      },
+      {
+        "name": "get_client",
+        "description": "Get a single client by their ID. Returns full contact details. / Obtiene un cliente por su ID. Devuelve todos los datos de contacto.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "taxId": {
+              "type": "string"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "postalCode": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_client",
+        "description": "Create a new client/customer. Requires at minimum a name. Clients are used when creating invoices and quotes. / Crea un nuevo cliente. Requiere como minimo un nombre. Los clientes se usan al crear facturas y presupuestos.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "taxId": {
+              "type": "string"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "postalCode": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "taxId": {
+              "type": "string"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "postalCode": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "update_client",
+        "description": "Update an existing client. Only the provided fields will be changed. / Actualiza un cliente existente. Solo se modifican los campos proporcionados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "taxId": {
+              "type": "string"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "postalCode": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "taxId": {
+              "type": "string"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "postalCode": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "delete_client",
+        "description": "Permanently delete a client by their ID. This action cannot be undone. Warning: this may affect existing invoices and quotes referencing this client. / Elimina permanentemente un cliente por su ID. Esta accion no se puede deshacer. Advertencia: puede afectar a facturas y presupuestos existentes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success",
+            "id"
+          ]
+        }
+      },
+      {
+        "name": "list_products",
+        "description": "List all products/services with optional pagination. Products are reusable items that can be added to invoices and quotes. / Lista todos los productos/servicios con paginacion opcional. Los productos son conceptos reutilizables para facturas y presupuestos.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "sku": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "taxRate": {
+                    "type": "number"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "data",
+            "total",
+            "limit",
+            "offset"
+          ]
+        }
+      },
+      {
+        "name": "get_product",
+        "description": "Get a single product/service by its ID. / Obtiene un producto/servicio por su ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sku": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "unitPrice": {
+              "type": "number"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "unitPrice"
+          ]
+        }
+      },
+      {
+        "name": "create_product",
+        "description": "Create a new product or service. Requires a name and unit price. Products can be referenced when creating invoices and quotes for faster data entry. / Crea un nuevo producto o servicio. Requiere nombre y precio unitario. Los productos se pueden usar al crear facturas y presupuestos.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sku": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "unitPrice": {
+              "type": "number"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sku": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "unitPrice": {
+              "type": "number"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "unitPrice"
+          ]
+        }
+      },
+      {
+        "name": "update_product",
+        "description": "Update an existing product. Only the provided fields will be changed. / Actualiza un producto existente. Solo se modifican los campos proporcionados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sku": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "unitPrice": {
+              "type": "number"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "sku": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "taxRate": {
+              "type": "number"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "unitPrice": {
+              "type": "number"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "unitPrice"
+          ]
+        }
+      },
+      {
+        "name": "delete_product",
+        "description": "Permanently delete a product by its ID. This action cannot be undone. / Elimina permanentemente un producto por su ID. Esta accion no se puede deshacer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success",
+            "id"
+          ]
+        }
+      },
+      {
+        "name": "list_quotes",
+        "description": "List all quotes/estimates with optional pagination. Quotes are proposals sent to clients before they become invoices. / Lista todos los presupuestos con paginacion opcional. Los presupuestos son propuestas enviadas a clientes antes de facturar.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "clientName",
+                  "items"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "description",
+                        "quantity",
+                        "unitPrice"
+                      ],
+                      "properties": {
+                        "quantity": {
+                          "type": "number"
+                        },
+                        "unitPrice": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "notes": {
+                    "type": "string"
+                  },
+                  "total": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "clientName": {
+                    "type": "string"
+                  },
+                  "validUntil": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "data",
+            "total",
+            "limit",
+            "offset"
+          ]
+        }
+      },
+      {
+        "name": "get_quote",
+        "description": "Get a single quote/estimate by its ID. Returns the full quote with line items and totals. / Obtiene un presupuesto por su ID. Devuelve el presupuesto completo con conceptos y totales.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            },
+            "validUntil": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "clientName",
+            "items"
+          ]
+        }
+      },
+      {
+        "name": "create_quote",
+        "description": "Create a new quote/estimate for a client. Requires client name and at least one line item. Quotes can later be converted to invoices. / Crea un nuevo presupuesto para un cliente. Requiere nombre del cliente y al menos un concepto. Los presupuestos se pueden convertir en facturas despues.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "minItems": 1
+            },
+            "notes": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "sent",
+                "accepted",
+                "rejected",
+                "expired"
+              ],
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            },
+            "validUntil": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            },
+            "validUntil": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "clientName",
+            "items"
+          ]
+        }
+      },
+      {
+        "name": "update_quote",
+        "description": "Update an existing quote. Only the provided fields will be changed. / Actualiza un presupuesto existente. Solo se modifican los campos proporcionados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "minItems": 1
+            },
+            "notes": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "sent",
+                "accepted",
+                "rejected",
+                "expired"
+              ],
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            },
+            "validUntil": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unitPrice"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "unitPrice": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "clientName": {
+              "type": "string"
+            },
+            "validUntil": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "clientName",
+            "items"
+          ]
+        }
+      },
+      {
+        "name": "delete_quote",
+        "description": "Permanently delete a quote by its ID. This action cannot be undone. / Elimina permanentemente un presupuesto por su ID. Esta accion no se puede deshacer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success",
+            "id"
+          ]
+        }
+      },
+      {
+        "name": "list_webhooks",
+        "description": "List all configured webhooks. Webhooks send HTTP POST notifications when events occur in Frihet. / Lista todos los webhooks configurados. Los webhooks envian notificaciones HTTP POST cuando ocurren eventos en Frihet.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "url",
+                  "events"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "active": {
+                    "type": "boolean"
+                  },
+                  "events": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "secret": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "data",
+            "total",
+            "limit",
+            "offset"
+          ]
+        }
+      },
+      {
+        "name": "get_webhook",
+        "description": "Get a single webhook configuration by its ID. / Obtiene la configuracion de un webhook por su ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "secret": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "url",
+            "events"
+          ]
+        }
+      },
+      {
+        "name": "create_webhook",
+        "description": "Register a new webhook endpoint. You must specify the URL to receive notifications and which events to subscribe to (e.g. 'invoice.created', 'invoice.paid', 'expense.created'). / Registra un nuevo endpoint de webhook. Debes especificar la URL y los eventos a los que suscribirte (ej. 'invoice.created', 'invoice.paid', 'expense.created').",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "secret": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "secret": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "url",
+            "events"
+          ]
+        }
+      },
+      {
+        "name": "update_webhook",
+        "description": "Update an existing webhook configuration. Only the provided fields will be changed. / Actualiza la configuracion de un webhook. Solo se modifican los campos proporcionados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "secret": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "secret": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "url",
+            "events"
+          ]
+        }
+      },
+      {
+        "name": "delete_webhook",
+        "description": "Permanently delete a webhook by its ID. Notifications will stop immediately. / Elimina permanentemente un webhook por su ID. Las notificaciones se detendran inmediatamente.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success",
+            "id"
+          ]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "api-schema",
+        "uri": "frihet://api/schema",
+        "description": "OpenAPI schema summary: all endpoints, authentication method, rate limits, pagination, and error codes. / Resumen del esquema OpenAPI: endpoints, autenticación, límites, paginación y errores.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "tax-rates",
+        "uri": "frihet://tax/rates",
+        "description": "Current tax rates by Spanish fiscal zone: Peninsula IVA (21/10/4%), Canary Islands IGIC (7/3/0%), Ceuta IPSI, EU reverse charge, international exports, IRPF withholding, and special regimes. / Tipos impositivos por zona fiscal: IVA, IGIC, IPSI, intracomunitario, exportaciones, IRPF, regímenes especiales.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "tax-calendar",
+        "uri": "frihet://tax/calendar",
+        "description": "Spanish quarterly tax calendar with filing deadlines for Modelo 303, 130, 390, 420 (IGIC), and annual returns. Includes VeriFactu e-invoicing timeline. / Calendario fiscal trimestral español con plazos de presentación de modelos y VeriFactu.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "expense-categories",
+        "uri": "frihet://config/expense-categories",
+        "description": "The 8 expense categories in Frihet with deductibility rules, IVA treatment, and amortization periods. Essential for correctly categorizing business expenses. / Las 8 categorías de gastos con reglas de deducibilidad, IVA y amortización.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "invoice-statuses",
+        "uri": "frihet://config/invoice-statuses",
+        "description": "Invoice status flow in Frihet: draft → sent → paid/overdue → cancelled. Includes transition rules, automation triggers, webhook events, and fiscal compliance notes. / Flujo de estados de factura: borrador → enviada → pagada/vencida → cancelada.",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "monthly-close",
+        "description": "Guide through closing the month: review unpaid invoices, categorize uncategorized expenses, check tax obligations, and generate a financial summary. / Guía para el cierre mensual: revisar facturas impagadas, categorizar gastos, verificar obligaciones fiscales y generar resumen.",
+        "arguments": [
+          {
+            "name": "month",
+            "description": "Month to close in YYYY-MM format (defaults to previous month) / Mes a cerrar",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "onboard-client",
+        "description": "Set up a new client: create the client record, determine correct tax rates based on their location, and optionally create a welcome quote. / Dar de alta un nuevo cliente: crear ficha, determinar impuestos según ubicación y crear presupuesto de bienvenida.",
+        "arguments": [
+          {
+            "name": "clientName",
+            "description": "Client or company name / Nombre del cliente o empresa",
+            "required": true
+          },
+          {
+            "name": "country",
+            "description": "Client country ISO code (e.g. ES, DE, US) / Código de país",
+            "required": false
+          },
+          {
+            "name": "region",
+            "description": "Spanish region if applicable (peninsula, canarias, ceuta, melilla) / Región española",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "quarterly-tax-prep",
+        "description": "Prepare for quarterly tax filing: list all invoices and expenses for the quarter, calculate IVA/IGIC totals, identify deductible expenses, and generate a Modelo 303/130/420 preview. / Preparar la declaración trimestral: facturas, gastos, cálculo de IVA/IGIC, gastos deducibles y vista previa del modelo.",
+        "arguments": [
+          {
+            "name": "quarter",
+            "description": "Quarter in format Q1-Q4 and year, e.g. 'Q1 2026' (defaults to current quarter) / Trimestre",
+            "required": false
+          },
+          {
+            "name": "fiscalZone",
+            "description": "Fiscal zone for tax calculation / Zona fiscal",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "overdue-followup",
+        "description": "Find all overdue invoices, draft follow-up messages for each client, and suggest payment reminders. / Buscar facturas vencidas, redactar mensajes de seguimiento y sugerir recordatorios de pago."
+      },
+      {
+        "name": "expense-batch",
+        "description": "Process a batch of expenses: help categorize each one, apply correct tax rates, flag items needing receipts. / Procesar lote de gastos: categorizar, aplicar impuestos correctos, marcar los que necesitan justificante.",
+        "arguments": [
+          {
+            "name": "fiscalZone",
+            "description": "Fiscal zone for tax deduction rules / Zona fiscal",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

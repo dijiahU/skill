@@ -1,0 +1,73 @@
+{
+  "registry": "glama",
+  "id": "bcvfaba32s",
+  "namespace": "Chawengwit",
+  "slug": "MCP",
+  "name": "MCP Data Gateway",
+  "description": "A unified data gateway MCP server that enables Claude to interact with multiple external REST and GraphQL APIs through OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A unified data gateway MCP server that enables Claude to interact with multiple external REST and GraphQL APIs through OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_DEBUG": {
+          "description": "Enable verbose request tracing, default false",
+          "type": "string",
+          "default": "false"
+        },
+        "MCP_LOG_FILE": {
+          "description": "Optional path to log file, default stderr only",
+          "type": "string"
+        },
+        "MCP_LOG_LEVEL": {
+          "description": "Log level: DEBUG, INFO, WARN, ERROR, default INFO",
+          "type": "string",
+          "default": "INFO"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "OAuth client ID for the provider",
+          "type": "string"
+        },
+        "OAUTH_REDIRECT_URI": {
+          "description": "OAuth redirect URI, default http://localhost:8765/callback",
+          "type": "string",
+          "default": "http://localhost:8765/callback"
+        },
+        "OAUTH_CALLBACK_PORT": {
+          "description": "Port for local OAuth callback server, default 8765",
+          "type": "string",
+          "default": "8765"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "OAuth client secret",
+          "type": "string"
+        },
+        "MCP_MAX_RESPONSE_BYTES": {
+          "description": "Response size cap in bytes, default 1048576",
+          "type": "string",
+          "default": "1048576"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OAUTH_CLIENT_ID",
+        "OAUTH_CLIENT_SECRET"
+      ]
+    },
+    "id": "bcvfaba32s",
+    "name": "MCP Data Gateway",
+    "namespace": "Chawengwit",
+    "repository": {
+      "url": "https://github.com/Chawengwit/MCP"
+    },
+    "slug": "MCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bcvfaba32s"
+  }
+}

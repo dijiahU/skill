@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "sodbde7qa3",
+  "namespace": "bradzw0917",
+  "slug": "mcpgateway",
+  "name": "MCP Gateway",
+  "description": "A proxy service that connects Claude Code to Alibaba Cloud International OpenAPI MCP Server, supporting services like ECS and OSS. It provides secure multi-user authentication via OAuth 2.1 and allows for dynamic configuration of MCP services.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A proxy service that connects Claude Code to Alibaba Cloud International OpenAPI MCP Server, supporting services like ECS and OSS. It provides secure multi-user authentication via OAuth 2.1 and allows for dynamic configuration of MCP services.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "日志级别",
+          "type": "string",
+          "default": "info"
+        },
+        "OAUTH_SCOPE": {
+          "description": "OAuth 权限范围",
+          "type": "string",
+          "default": "/acs/mcp-server"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "OAuth Client ID",
+          "type": "string"
+        },
+        "MCP_GATEWAY_PORT": {
+          "description": "Gateway 监听端口",
+          "type": "string",
+          "default": "3000"
+        },
+        "MCP_SERVER_BASE_URL": {
+          "description": "MCP Server 基础 URL",
+          "type": "string",
+          "default": "https://openapi-mcp-intl.vpc-proxy.aliyuncs.com"
+        },
+        "OAUTH_TOKEN_ENDPOINT": {
+          "description": "OAuth Token 端点",
+          "type": "string",
+          "default": "https://oauth-intl.vpc-proxy.aliyuncs.com/oauth2/token"
+        },
+        "OAUTH_AUTHORIZATION_ENDPOINT": {
+          "description": "OAuth 授权端点",
+          "type": "string",
+          "default": "https://oauth-intl.vpc-proxy.aliyuncs.com/oauth2/authorize"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OAUTH_CLIENT_ID"
+      ]
+    },
+    "id": "sodbde7qa3",
+    "name": "MCP Gateway",
+    "namespace": "bradzw0917",
+    "repository": {
+      "url": "https://github.com/bradzw0917/mcpgateway"
+    },
+    "slug": "mcpgateway",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sodbde7qa3"
+  }
+}

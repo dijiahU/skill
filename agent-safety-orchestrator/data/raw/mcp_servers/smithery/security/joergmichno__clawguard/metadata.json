@@ -1,0 +1,87 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "joergmichno/clawguard",
+  "namespace": "joergmichno",
+  "slug": "clawguard",
+  "displayName": "ClawGuard Shield",
+  "description": "AI Agent Security Scanner — detect prompt injection, jailbreaks, and tool poisoning in real-time. 204+ attack patterns, 15 languages, EU AI Act compliance-ready. Scan text or MCP server configs for threats.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "vulnerability",
+    "authentication",
+    "phishing",
+    "ransomware",
+    "prompt injection",
+    "jailbreak"
+  ],
+  "rawRecord": {
+    "id": "aa6457ab-d58e-48ff-94f3-cf8f09faeec2",
+    "qualifiedName": "joergmichno/clawguard",
+    "namespace": "joergmichno",
+    "slug": "clawguard",
+    "displayName": "ClawGuard Shield",
+    "description": "AI Agent Security Scanner — detect prompt injection, jailbreaks, and tool poisoning in real-time. 204+ attack patterns, 15 languages, EU AI Act compliance-ready. Scan text or MCP server configs for threats.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/prompttools.co.ico",
+    "verified": false,
+    "useCount": 1076,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-22T16:09:01.873Z",
+    "homepage": "https://prompttools.co/shield",
+    "bySmithery": false,
+    "owner": "org_01KNBVJABZKTDGPWKH471DTG1V",
+    "score": 0.029726775956284153
+  },
+  "detail": {
+    "qualifiedName": "joergmichno/clawguard",
+    "displayName": "ClawGuard Shield",
+    "description": "AI Agent Security Scanner — detect prompt injection, jailbreaks, and tool poisoning in real-time. 204+ attack patterns, 15 languages, EU AI Act compliance-ready. Scan text or MCP server configs for threats.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/prompttools.co.ico",
+    "remote": true,
+    "deploymentUrl": "https://clawguard--joergmichno.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://clawguard--joergmichno.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_text",
+        "description": "Scan text for prompt injection attacks, jailbreak attempts, and other AI security threats. Detects 204+ attack patterns across 15 languages. Returns findings with severity, confidence, and remediation advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "The text to scan for security threats"
+            },
+            "source": {
+              "type": "string",
+              "description": "Optional label for the source (e.g. 'user-input', 'email', 'tool-description')"
+            }
+          }
+        }
+      },
+      {
+        "name": "scan_mcp_config",
+        "description": "Scan an MCP server configuration for security vulnerabilities: tool poisoning, permission escalation, data exfiltration vectors, hidden instructions, and prompt injection in tool descriptions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "config": {
+              "type": "object",
+              "description": "MCP config JSON with a 'tools' array, or Claude Desktop format with 'mcpServers'"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

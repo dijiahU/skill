@@ -1,0 +1,85 @@
+{
+  "registry": "glama",
+  "id": "py7ai2jjg4",
+  "namespace": "pensados",
+  "slug": "sentinelx-core-mcp",
+  "name": "SentinelX Core MCP",
+  "description": "An MCP server that proxies tool calls to a running SentinelX Core instance with OIDC/OAuth authentication. It enables secure integration of SentinelX Core's HTTP agent capabilities through the MCP protocol.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "An MCP server that proxies tool calls to a running SentinelX Core instance with OIDC/OAuth authentication. It enables secure integration of SentinelX Core's HTTP agent capabilities through the MCP protocol.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_DIR": {
+          "description": "Directory for log files (e.g., /var/log/sentinelx-mcp).",
+          "type": "string"
+        },
+        "LOG_FILE": {
+          "description": "Path to the log file (e.g., /var/log/sentinelx-mcp/sentinelx-core-mcp.log).",
+          "type": "string"
+        },
+        "MCP_PORT": {
+          "description": "The port for the MCP server to listen on (e.g., 8098 or 8099).",
+          "type": "string"
+        },
+        "MCP_TOKEN": {
+          "description": "Optional token for MCP server authentication.",
+          "type": "string"
+        },
+        "AUTH_DEBUG": {
+          "description": "Enable debug logging for authentication (e.g., false).",
+          "type": "string"
+        },
+        "OIDC_ISSUER": {
+          "description": "The OIDC issuer URL for validating external MCP bearer tokens (e.g., https://auth.example.com/realms/sentinelx).",
+          "type": "string"
+        },
+        "RESOURCE_URL": {
+          "description": "The resource URL for the MCP server (e.g., https://sentinelx.example.com).",
+          "type": "string"
+        },
+        "OIDC_JWKS_URI": {
+          "description": "The JWKS URI for OIDC token validation (e.g., https://auth.example.com/realms/sentinelx/protocol/openid-connect/certs).",
+          "type": "string"
+        },
+        "SENTINELX_URL": {
+          "description": "The URL of the upstream SentinelX Core instance (e.g., http://127.0.0.1:8091).",
+          "type": "string"
+        },
+        "SENTINELX_TOKEN": {
+          "description": "The bearer token for authenticating with the upstream SentinelX Core API.",
+          "type": "string"
+        },
+        "OIDC_EXPECTED_AUDIENCE": {
+          "description": "Optional expected audience for OIDC token validation.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SENTINELX_URL",
+        "SENTINELX_TOKEN",
+        "OIDC_ISSUER",
+        "OIDC_JWKS_URI"
+      ]
+    },
+    "id": "py7ai2jjg4",
+    "name": "SentinelX Core MCP",
+    "namespace": "pensados",
+    "repository": {
+      "url": "https://github.com/pensados/sentinelx-core-mcp"
+    },
+    "slug": "sentinelx-core-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/py7ai2jjg4"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "registry": "glama",
+  "id": "tfkkmnezf0",
+  "namespace": "saoqixiaomm",
+  "slug": "yuque-mcp",
+  "name": "Yuque MCP Server",
+  "description": "Enables access to Yuque (语雀) documentation through cookie-based authentication, supporting document retrieval, search, TOC navigation, and content management from knowledge bases via URL or namespace.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables access to Yuque (语雀) documentation through cookie-based authentication, supporting document retrieval, search, TOC navigation, and content management from knowledge bases via URL or namespace.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "YUQUE_COOKIE": {
+          "description": "语雀 Cookie（单个 _yuque_session 的值或完整的 Cookie 字符串）。可以是仅 _yuque_session 的值，也可以是完整的 Cookie 字符串（如：lang=zh-cn; _yuque_session=xxx; yuque_ctoken=xxx; current_theme=default）",
+          "type": "string"
+        },
+        "YUQUE_BASE_URL": {
+          "description": "语雀基础 URL。企业私有部署时需要设置，公有云用户可以不设置。",
+          "type": "string",
+          "default": "https://www.yuque.com"
+        },
+        "YUQUE_NAMESPACE": {
+          "description": "默认知识库命名空间。格式为 username/repo，支持中文（如：username/repo 或 用户名/知识库名）。设置后可以直接通过 slug 获取文档，无需每次指定命名空间。",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "YUQUE_COOKIE"
+      ]
+    },
+    "id": "tfkkmnezf0",
+    "name": "Yuque MCP Server",
+    "namespace": "saoqixiaomm",
+    "repository": {
+      "url": "https://github.com/saoqixiaomm/yuque-mcp"
+    },
+    "slug": "yuque-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tfkkmnezf0"
+  }
+}

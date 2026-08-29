@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "sr69kneenh",
+  "namespace": "nathan-bw",
+  "slug": "unifi-mcp-server",
+  "name": "UniFi MCP Server",
+  "description": "Enables managing UniFi networks through natural language, allowing users to monitor clients, check network health, and perform device actions like blocking or restarting access points. It securely connects UniFi Controllers to MCP clients with features like Google OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables managing UniFi networks through natural language, allowing users to monitor clients, check network health, and perform device actions like blocking or restarting access points. It securely connects UniFi Controllers to MCP clients with features like Google OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "UNIFI_HOST": {
+          "description": "UniFi controller IP address",
+          "type": "string"
+        },
+        "ALLOWED_EMAILS": {
+          "description": "Comma-separated allowed emails",
+          "type": "string"
+        },
+        "SESSION_SECRET": {
+          "description": "Random secret for sessions",
+          "type": "string"
+        },
+        "UNIFI_PASSWORD": {
+          "description": "UniFi admin password",
+          "type": "string"
+        },
+        "UNIFI_USERNAME": {
+          "description": "UniFi admin username",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Google OAuth client ID",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Google OAuth client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SESSION_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "ALLOWED_EMAILS",
+        "UNIFI_HOST",
+        "UNIFI_USERNAME",
+        "UNIFI_PASSWORD"
+      ]
+    },
+    "id": "sr69kneenh",
+    "name": "UniFi MCP Server",
+    "namespace": "nathan-bw",
+    "repository": {
+      "url": "https://github.com/nathan-bw/unifi-mcp-server"
+    },
+    "slug": "unifi-mcp-server",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sr69kneenh"
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "registry": "glama",
+  "id": "sp5hw83ehk",
+  "namespace": "100xPercent",
+  "slug": "pop-pay-python",
+  "name": "pop-pay",
+  "description": "Project Point One Percent - Agent Pay \\[pop-pay] is a payment guardrail and one-time flow protocol specifically designed for Agentic AI (e.g., Claude Code, OpenClaw). It enables agents to handle financial transactions safely without risking unlimited exposure of human-controlled credit cards.",
+  "discoveryQueries": [
+    "guardrail"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Project Point One Percent - Agent Pay \\[pop-pay] is a payment guardrail and one-time flow protocol specifically designed for Agentic AI (e.g., Claude Code, OpenClaw). It enables agents to handle financial transactions safely without risking unlimited exposure of human-controlled credit cards.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "POP_CDP_URL": {
+          "description": "Chrome DevTools Protocol URL for card injection.",
+          "type": "string",
+          "default": "http://localhost:9222"
+        },
+        "POP_BYOC_CVV": {
+          "description": "Card CVV for BYOC mode.",
+          "type": "string"
+        },
+        "POP_MAX_DAILY": {
+          "description": "Maximum total amount allowed per day.",
+          "type": "string",
+          "default": "500.0"
+        },
+        "POP_MAX_PER_TX": {
+          "description": "Maximum amount allowed per transaction.",
+          "type": "string",
+          "default": "100.0"
+        },
+        "POP_STRIPE_KEY": {
+          "description": "Stripe secret key (sk_live_... or sk_test_...) for real virtual card issuing via Stripe Issuing.",
+          "type": "string"
+        },
+        "POP_AUTO_INJECT": {
+          "description": "Enable CDP card injection into browser forms via Chrome DevTools Protocol (true/false).",
+          "type": "string",
+          "default": "false"
+        },
+        "POP_BILLING_ZIP": {
+          "description": "Billing ZIP code for auto-filling payment forms.",
+          "type": "string"
+        },
+        "POP_BLOCK_LOOPS": {
+          "description": "Whether to block detected hallucination or retry loops (true/false).",
+          "type": "string",
+          "default": "true"
+        },
+        "POP_BYOC_NUMBER": {
+          "description": "Physical credit card number for Bring Your Own Card (BYOC) mode.",
+          "type": "string"
+        },
+        "POP_BILLING_EMAIL": {
+          "description": "Billing email address for auto-filling payment forms.",
+          "type": "string"
+        },
+        "POP_BYOC_EXP_YEAR": {
+          "description": "Card expiry year (e.g., 27) for BYOC mode.",
+          "type": "string"
+        },
+        "POP_BILLING_STREET": {
+          "description": "Billing street address for auto-filling payment forms.",
+          "type": "string"
+        },
+        "POP_BYOC_EXP_MONTH": {
+          "description": "Card expiry month (e.g., 12) for BYOC mode.",
+          "type": "string"
+        },
+        "POP_GUARDRAIL_ENGINE": {
+          "description": "Guardrail engine type: 'keyword' for simple phrase blocking or 'llm' for semantic analysis.",
+          "type": "string",
+          "default": "keyword"
+        },
+        "POP_BILLING_LAST_NAME": {
+          "description": "Billing last name for auto-filling payment forms.",
+          "type": "string"
+        },
+        "POP_ALLOWED_CATEGORIES": {
+          "description": "Vendors the agent is allowed to pay. Specified as a JSON array string.",
+          "type": "string",
+          "default": "[\"aws\",\"cloudflare\"]"
+        },
+        "POP_BILLING_FIRST_NAME": {
+          "description": "Billing first name for auto-filling payment forms.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": []
+        },
+        {
+          "required": [
+            "POP_STRIPE_KEY"
+          ]
+        },
+        {
+          "required": [
+            "POP_BYOC_NUMBER",
+            "POP_BYOC_CVV",
+            "POP_BYOC_EXP_MONTH",
+            "POP_BYOC_EXP_YEAR"
+          ]
+        }
+      ]
+    },
+    "id": "sp5hw83ehk",
+    "name": "pop-pay",
+    "namespace": "100xPercent",
+    "repository": {
+      "url": "https://github.com/100xPercent/pop-pay-python"
+    },
+    "slug": "pop-pay-python",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sp5hw83ehk"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "middlebrick/api-security",
+  "namespace": "middlebrick",
+  "slug": "api-security",
+  "displayName": "middleBrick | API-Security",
+  "description": "Scan any API for OWASP Top 10 vulnerabilities and get a security risk score. Covers authentication, authorization (BOLA/BFLA), injection, data exposure, rate limiting, GraphQL, and LLM security.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "vulnerability",
+    "authentication",
+    "authorization",
+    "owasp",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "a91f2012-0f8d-4ca3-a71a-d04e5b99b697",
+    "qualifiedName": "middlebrick/api-security",
+    "namespace": "middlebrick",
+    "slug": "api-security",
+    "displayName": "middleBrick | API-Security",
+    "description": "Scan any API for OWASP Top 10 vulnerabilities and get a security risk score. Covers authentication, authorization (BOLA/BFLA), injection, data exposure, rate limiting, GraphQL, and LLM security.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/middlebrick.com.ico",
+    "verified": false,
+    "useCount": 6,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-27T06:36:08.156Z",
+    "homepage": "https://middlebrick.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBVXRGMV0T9Z12GX3NZJ4FT",
+    "score": 0.029411764705882353
+  },
+  "detail": {
+    "qualifiedName": "middlebrick/api-security",
+    "displayName": "middleBrick | API-Security",
+    "description": "Scan any API for OWASP Top 10 vulnerabilities and get a security risk score. Covers authentication, authorization (BOLA/BFLA), injection, data exposure, rate limiting, GraphQL, and LLM security.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/middlebrick.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://api-security--middlebrick.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://api-security--middlebrick.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_api",
+        "description": "Scan an API endpoint for security vulnerabilities and get a risk score",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The API endpoint URL to scan"
+            },
+            "method": {
+              "type": "string",
+              "description": "HTTP method (default: GET)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_scan",
+        "description": "Get results of a previous middleBrick scan by its ID",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scanId": {
+              "type": "string",
+              "description": "The scan ID to retrieve"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_scans",
+        "description": "List previous middleBrick API security scans",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of scans to return"
+            },
+            "offset": {
+              "type": "number",
+              "description": "Number of scans to skip"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by status (queued, processing, completed, failed)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

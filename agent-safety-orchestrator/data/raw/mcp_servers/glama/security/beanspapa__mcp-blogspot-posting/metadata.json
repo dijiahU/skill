@@ -1,0 +1,57 @@
+{
+  "registry": "glama",
+  "id": "scf050n27k",
+  "namespace": "beanspapa",
+  "slug": "mcp-blogspot-posting",
+  "name": "MCP Blogger Posting Server",
+  "description": "Enables LLMs to automate Google Blogger content management by providing tools for single and batch post creation via the Blogger API. It supports secure OAuth2 authentication and allows for seamless blog integration through the Model Context Protocol.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables LLMs to automate Google Blogger content management by providing tools for single and batch post creation via the Blogger API. It supports secure OAuth2 authentication and allows for seamless blog integration through the Model Context Protocol.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "The port number on which the server runs.",
+          "type": "string",
+          "default": "3000"
+        },
+        "BLOG_ID": {
+          "description": "The Blogger Blog ID. If not provided, it will be automatically fetched and cached using the BLOG_URL.",
+          "type": "string"
+        },
+        "BLOG_URL": {
+          "description": "The URL of the Google Blogger blog. Explicitly required for the server to fetch the blog ID if not already cached.",
+          "type": "string"
+        },
+        "SESSION_SECRET": {
+          "description": "Secret used for session management. Mentioned as not required in the current version.",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET_PATH": {
+          "description": "Path to the Google OAuth2 client_secret JSON file.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_SECRET_PATH",
+        "BLOG_URL"
+      ]
+    },
+    "id": "scf050n27k",
+    "name": "MCP Blogger Posting Server",
+    "namespace": "beanspapa",
+    "repository": {
+      "url": "https://github.com/beanspapa/mcp-blogspot-posting"
+    },
+    "slug": "mcp-blogspot-posting",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/scf050n27k"
+  }
+}

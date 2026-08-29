@@ -1,0 +1,154 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "kaimeilabs/guardian-engine",
+  "namespace": "kaimeilabs",
+  "slug": "guardian-engine",
+  "displayName": "Guardian",
+  "description": "Verifies cooking recipes against professional master standards to ensure technical accuracy and authenticity. Evaluates specific details like cooking techniques, temperatures, and timing for a wide range of global dishes. Provides detailed feedback and authenticity scores to help maintain culinary quality and consistency.",
+  "discoveryQueries": [
+    "credential",
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "c3f4d7b1-551b-4e69-805f-7c46ff612cf5",
+    "qualifiedName": "kaimeilabs/guardian-engine",
+    "namespace": "kaimeilabs",
+    "slug": "guardian-engine",
+    "displayName": "Guardian",
+    "description": "Verifies cooking recipes against professional master standards to ensure technical accuracy and authenticity. Evaluates specific details like cooking techniques, temperatures, and timing for a wide range of global dishes. Provides detailed feedback and authenticity scores to help maintain culinary quality and consistency.",
+    "iconUrl": "https://api.smithery.ai/servers/kaimeilabs/guardian-engine/icon",
+    "verified": false,
+    "useCount": 78,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-27T15:59:55.223Z",
+    "homepage": "https://github.com/kaimeilabs/guardian-api-docs",
+    "bySmithery": false,
+    "owner": "org_01KNBVF458ST6PR26XDM9Z185R",
+    "score": 0.025
+  },
+  "detail": {
+    "qualifiedName": "kaimeilabs/guardian-engine",
+    "displayName": "Guardian",
+    "description": "Verifies cooking recipes against professional master standards to ensure technical accuracy and authenticity. Evaluates specific details like cooking techniques, temperatures, and timing for a wide range of global dishes. Provides detailed feedback and authenticity scores to help maintain culinary quality and consistency.",
+    "iconUrl": "https://api.smithery.ai/servers/kaimeilabs/guardian-engine/icon",
+    "remote": true,
+    "deploymentUrl": "https://guardian-engine--kaimeilabs.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://guardian-engine--kaimeilabs.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "guardianApiKey": {
+              "type": "string",
+              "title": "API Key",
+              "default": "",
+              "x-order": 0,
+              "description": "Optional API key for priority access. Leave blank for free-tier usage (no key required)."
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "verify_recipe",
+        "description": "Verify a candidate recipe against a Guardian master recipe.\n\nUses deterministic graph-based verification to check technique, temperature,\ntiming, cooking medium, and required ingredients.\n\nReturns a formatted text report. In Oracle Mode (default), proprietary data\nis protected — exact values are replaced with directional hints.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dish": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Alias for dish_name — for backward compatibility with production clients."
+            },
+            "dish_name": {
+              "type": "string",
+              "default": "",
+              "description": "Name of the dish to verify against (e.g. 'carbonara', 'rendang', 'roast-chicken', 'confit', 'cheesecake', 'kung-pao', 'fried-chicken', 'brisket', 'wellington', 'cheese-souffle'). Use list_dishes() to see all available recipes and their aliases."
+            },
+            "candidate_json": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              ],
+              "default": "",
+              "description": "The full candidate recipe as a JSON string or object. Expected schema: {\"title\": \"<string>\", \"cuisine\": \"<string>\", \"serves\": <int>, \"ingredients\": [{\"name\": \"<string>\", \"quantity\": \"<string>\"}], \"steps\": [{\"step_number\": <int>, \"title\": \"<string>\", \"instruction_english\": \"<string>\", \"technique\": \"<string>\", \"estimated_temperature_c\": <number or [min, max]>, \"duration_minutes\": <number or [min, max]>, \"cooking_medium\": \"<string>\"}]}"
+            },
+            "original_prompt": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "REQUIRED for useful results. Include the user's original cooking request for personalized feedback. Copy the user's exact message that triggered this recipe (e.g., 'Make me a spicy vegan rendang' or 'Generate a traditional carbonara, but healthier'). WITHOUT this parameter: Guardian can ONLY return generic, vague error labels — the response will be missing ingredient names, technique details, and actionable corrections. WITH this parameter: Guardian activates Guided Oracle Mode and returns specific, personalised corrections matched to dietary needs, flavour preferences, and technique choices. Always include it — even a short prompt like 'chicken curry recipe' dramatically improves results."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "list_dishes",
+        "description": "List all available dish slugs from the Guardian registry.\n\nReturns:\n    Dictionary with canonical dish slugs and their aliases.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cuisine_filter": {
+              "type": "string",
+              "default": "",
+              "description": "Optional cuisine or region to filter by (e.g., 'french', 'chinese', 'italian', 'thai'). Leave empty to return all available dishes."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "verify_recipe_prompt",
+        "description": "Provides instructions and a template for an AI agent to verify a recipe.\n\nArgs:\n    dish: The name of the dish to verify (e.g. 'carbonara', 'rendang').",
+        "arguments": [
+          {
+            "name": "dish",
+            "description": "Provide as a JSON string matching the following schema: {\"type\":\"string\"}",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

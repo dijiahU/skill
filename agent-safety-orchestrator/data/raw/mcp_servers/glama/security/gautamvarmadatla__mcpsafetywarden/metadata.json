@@ -1,0 +1,96 @@
+{
+  "registry": "glama",
+  "id": "krmitrnd3y",
+  "namespace": "gautamvarmadatla",
+  "slug": "mcpsafetywarden",
+  "name": "MCP Safety Warden",
+  "description": "A proxy server that wraps any MCP server, adding behavioral profiling, security scanning, risk gating, and safe execution to its tools.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A proxy server that wraps any MCP server, adding behavioral profiling, security scanning, risk gating, and safe execution to its tools.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Bind address for HTTP transports",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "MCP_PORT": {
+          "description": "Bind port for HTTP transports",
+          "type": "string",
+          "default": "8000"
+        },
+        "SNYK_TOKEN": {
+          "description": "Enables Snyk E001 prompt-injection detection",
+          "type": "string"
+        },
+        "OLLAMA_MODEL": {
+          "description": "Model name for Ollama provider (e.g. llama3.1, mistral)",
+          "type": "string"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport mode: stdio, sse, or streamable_http",
+          "type": "string",
+          "default": "stdio"
+        },
+        "GEMINI_API_KEY": {
+          "description": "Enables Gemini as LLM provider",
+          "type": "string"
+        },
+        "GOOGLE_API_KEY": {
+          "description": "Legacy alias for GEMINI_API_KEY",
+          "type": "string"
+        },
+        "MCP_AUTH_TOKEN": {
+          "description": "Bearer token for HTTP transport auth",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "Enables OpenAI as LLM provider",
+          "type": "string"
+        },
+        "OLLAMA_BASE_URL": {
+          "description": "Ollama API base URL (OpenAI-compatible)",
+          "type": "string",
+          "default": "http://localhost:11434/v1"
+        },
+        "ANTHROPIC_API_KEY": {
+          "description": "Enables Anthropic as LLM provider for classification and scanning",
+          "type": "string"
+        },
+        "MCP_SCANNER_API_KEY": {
+          "description": "Cisco AI Defense API key for cloud ML engine",
+          "type": "string"
+        },
+        "MCP_DB_ENCRYPTION_KEY": {
+          "description": "Fernet key to encrypt stored credentials at rest",
+          "type": "string"
+        },
+        "MCP_SCANNER_LLM_API_KEY": {
+          "description": "LLM key for Cisco internal AST analysis (falls back to OPENAI_API_KEY)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "krmitrnd3y",
+    "name": "MCP Safety Warden",
+    "namespace": "gautamvarmadatla",
+    "repository": {
+      "url": "https://github.com/gautamvarmadatla/mcpsafetywarden"
+    },
+    "slug": "mcpsafetywarden",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/krmitrnd3y"
+  }
+}

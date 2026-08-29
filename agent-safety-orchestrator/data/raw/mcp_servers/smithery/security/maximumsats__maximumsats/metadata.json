@@ -1,0 +1,114 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "maximumsats/maximumsats",
+  "namespace": "maximumsats",
+  "slug": "maximumsats",
+  "displayName": "Maximum Sats",
+  "description": "Access deep insights and statistics for Bitcoin, the Lightning Network, and the Nostr ecosystem. Evaluate the reputation of Nostr accounts using Web of Trust scores based on social graph analysis. Query real-time network data and receive expert answers on decentralized technologies.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "ce8e2d68-42b1-4f8e-8ace-7f012364baa5",
+    "qualifiedName": "maximumsats/maximumsats",
+    "namespace": "maximumsats",
+    "slug": "maximumsats",
+    "displayName": "Maximum Sats",
+    "description": "Access deep insights and statistics for Bitcoin, the Lightning Network, and the Nostr ecosystem. Evaluate the reputation of Nostr accounts using Web of Trust scores based on social graph analysis. Query real-time network data and receive expert answers on decentralized technologies.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": true,
+    "useCount": 7311,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-08T05:19:02.072Z",
+    "homepage": "https://github.com/joelklabo/maximumsats-mcp",
+    "bySmithery": false,
+    "owner": "org_01KNBV5V6RVN3EQGNBQC3CJTDB",
+    "score": 0.021739130434782608
+  },
+  "detail": {
+    "qualifiedName": "maximumsats/maximumsats",
+    "displayName": "Maximum Sats",
+    "description": "Access deep insights and statistics for Bitcoin, the Lightning Network, and the Nostr ecosystem. Evaluate the reputation of Nostr accounts using Web of Trust scores based on social graph analysis. Query real-time network data and receive expert answers on decentralized technologies.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://maximumsats--maximumsats.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://maximumsats--maximumsats.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "ask_bitcoin",
+        "description": "Ask a question about Bitcoin, Lightning Network, Nostr, or related topics. Powered by Maximum Sats AI (Llama 3.3 70B). First query per IP per day is free. Accepts L402 (Lightning) or x402 (USDC) payment.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "Your question about Bitcoin, Lightning, Nostr, or crypto"
+            }
+          }
+        }
+      },
+      {
+        "name": "retry_with_payment",
+        "description": "Retry a paid query after paying the Lightning invoice. Provide the payment_hash from the original response.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "Your original question"
+            },
+            "payment_hash": {
+              "type": "string",
+              "description": "The payment_hash from the payment_required response"
+            }
+          }
+        }
+      },
+      {
+        "name": "wot_score",
+        "description": "Look up the Web of Trust score for a Nostr pubkey. Based on PageRank over the Nostr follow graph (51K+ nodes, 618K+ edges).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pubkey": {
+              "type": "string",
+              "description": "Nostr hex pubkey to look up"
+            }
+          }
+        }
+      },
+      {
+        "name": "wot_top",
+        "description": "Get the top Web of Trust scores on Nostr. Shows the most trusted pubkeys based on PageRank analysis of the follow graph.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 10,
+              "description": "Number of top scores to return (max 100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "bitcoin_stats",
+        "description": "Get current Bitcoin and Lightning Network statistics from Maximum Sats.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

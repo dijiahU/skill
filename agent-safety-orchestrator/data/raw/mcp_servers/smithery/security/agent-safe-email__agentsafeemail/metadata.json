@@ -1,0 +1,672 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "agent-safe-email/agentsafeemail",
+  "namespace": "agent-safe-email",
+  "slug": "agentsafeemail",
+  "displayName": "Agent Safe Message MCP",
+  "description": "A suite of MCP tools that scan every message, image, and video your AI agent handles.\n\nYour AI agent processes messages across every platform — but should it trust them? Agent Safe is a 10-tool MCP security suite that protects against phishing, BEC, malware, and manipulation on any messaging platform your agent operates on. Start with the free triage tool to instantly know which checks to run, and use the free feedback tool to help improve detection.",
+  "discoveryQueries": [
+    "phishing",
+    "ransomware",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "48ae00d5-7180-4617-b542-d07168bfa27e",
+    "qualifiedName": "agent-safe-email/agentsafeemail",
+    "namespace": "agent-safe-email",
+    "slug": "agentsafeemail",
+    "displayName": "Agent Safe Message MCP",
+    "description": "A suite of MCP tools that scan every message, image, and video your AI agent handles.\n\nYour AI agent processes messages across every platform — but should it trust them? Agent Safe is a 10-tool MCP security suite that protects against phishing, BEC, malware, and manipulation on any messaging platform your agent operates on. Start with the free triage tool to instantly know which checks to run, and use the free feedback tool to help improve detection.",
+    "iconUrl": "https://api.smithery.ai/servers/agent-safe-email/agentsafeemail/icon",
+    "verified": true,
+    "useCount": 46,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-10T21:23:59.876Z",
+    "homepage": "https://agentsafe.locationledger.com",
+    "bySmithery": false,
+    "owner": "org_01KNBV72E1QCQ9C1WFYNKR8PK4",
+    "score": 0.0521680216802168
+  },
+  "detail": {
+    "qualifiedName": "agent-safe-email/agentsafeemail",
+    "displayName": "Agent Safe Message MCP",
+    "description": "A suite of MCP tools that scan every message, image, and video your AI agent handles.\n\nYour AI agent processes messages across every platform — but should it trust them? Agent Safe is a 10-tool MCP security suite that protects against phishing, BEC, malware, and manipulation on any messaging platform your agent operates on. Start with the free triage tool to instantly know which checks to run, and use the free feedback tool to help improve detection.",
+    "iconUrl": "https://api.smithery.ai/servers/agent-safe-email/agentsafeemail/icon",
+    "remote": true,
+    "deploymentUrl": "https://agentsafeemail--agent-safe-email.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agentsafeemail--agent-safe-email.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_email_safety",
+        "description": "Analyze an email for phishing, social engineering, prompt injection, and other threats targeting AI agents. Returns verdict, risk score, threats, and recommended actions. $0.01/call via skyfire-api-key header (Skyfire Buyer API Key). By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Email body content"
+            },
+            "from": {
+              "type": "string",
+              "description": "Sender email address"
+            },
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "URLs found in the email"
+            },
+            "subject": {
+              "type": "string",
+              "description": "Email subject line"
+            },
+            "attachments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "size"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "size": {
+                    "type": "number"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Attachment metadata"
+            },
+            "knownSender": {
+              "type": "boolean",
+              "description": "Whether the sender is known/trusted"
+            },
+            "previousCorrespondence": {
+              "type": "boolean",
+              "description": "Whether there has been previous email exchange"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_url_safety",
+        "description": "Analyze one or more URLs for phishing, malware, redirects, and spoofing. Returns per-URL and overall verdicts. $0.01/call via skyfire-api-key header (Skyfire Buyer API Key). By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 20,
+              "minItems": 1,
+              "description": "List of URLs to analyze (max 20)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_response_safety",
+        "description": "Check a draft email reply BEFORE sending for data leakage, social engineering compliance, and unauthorized disclosure. $0.01/call via skyfire-api-key header (Skyfire Buyer API Key). By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "draftTo": {
+              "type": "string",
+              "description": "Recipient email address"
+            },
+            "draftBody": {
+              "type": "string",
+              "description": "Draft reply body"
+            },
+            "draftSubject": {
+              "type": "string",
+              "description": "Draft reply subject"
+            },
+            "originalBody": {
+              "type": "string",
+              "description": "Original email body for context"
+            },
+            "originalFrom": {
+              "type": "string",
+              "description": "Original sender address"
+            },
+            "originalSubject": {
+              "type": "string",
+              "description": "Original email subject"
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_email_thread",
+        "description": "Analyze a full email conversation thread for escalating social engineering, scope creep, and manipulation patterns. $0.01/call for <=5 units (4000 tokens each); quote-first for larger threads. Via skyfire-api-key header (Skyfire Buyer API Key). By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "from",
+                  "subject",
+                  "body"
+                ],
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "description": "Message body"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Date of the message"
+                  },
+                  "from": {
+                    "type": "string",
+                    "description": "Sender of this message"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Subject line"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 50,
+              "minItems": 2,
+              "description": "Thread messages in chronological order (min 2)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_attachment_safety",
+        "description": "Assess email attachments for malware risk based on filename, MIME type, and size BEFORE opening/downloading. $0.01/call via skyfire-api-key header (Skyfire Buyer API Key). By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "attachments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "size",
+                  "mimeType"
+                ],
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "description": "Sender of the email containing this attachment"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Filename including extension"
+                  },
+                  "size": {
+                    "type": "number",
+                    "description": "File size in bytes"
+                  },
+                  "mimeType": {
+                    "type": "string",
+                    "description": "MIME type of the attachment"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 20,
+              "minItems": 1,
+              "description": "Attachment metadata to analyze (max 20)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_sender_reputation",
+        "description": "Verify sender identity and detect Business Email Compromise (BEC), spoofing, and impersonation. Includes live DNS DMARC and RDAP domain age checks at no extra cost. $0.01/call via skyfire-api-key header (Skyfire Buyer API Key). By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Sender email address"
+            },
+            "replyTo": {
+              "type": "string",
+              "description": "Reply-To address if different from sender"
+            },
+            "displayName": {
+              "type": "string",
+              "description": "Sender display name"
+            },
+            "emailSnippet": {
+              "type": "string",
+              "description": "First ~500 chars of email body for context"
+            },
+            "emailSubject": {
+              "type": "string",
+              "description": "Subject of the email for context"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_message_safety",
+        "description": "Analyze non-email messages (SMS, WhatsApp, Instagram DMs, Discord, Slack, Telegram, LinkedIn, Facebook Messenger, iMessage, Signal) for platform-specific threats including smishing, wrong-number scams, OTP interception, impersonation, and crypto fraud. $0.01/call via skyfire-api-key header (Skyfire Buyer API Key). By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "media": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "URL if available"
+                  },
+                  "type": {
+                    "enum": [
+                      "image",
+                      "video",
+                      "audio",
+                      "document",
+                      "link"
+                    ],
+                    "type": "string",
+                    "description": "Media type"
+                  },
+                  "caption": {
+                    "type": "string",
+                    "description": "Caption or description"
+                  },
+                  "filename": {
+                    "type": "string",
+                    "description": "Filename if available"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Media attachments"
+            },
+            "sender": {
+              "type": "string",
+              "description": "Sender identifier — phone number, username, handle, or display name"
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "body",
+                  "direction"
+                ],
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "description": "Message text content"
+                  },
+                  "direction": {
+                    "enum": [
+                      "inbound",
+                      "outbound"
+                    ],
+                    "type": "string",
+                    "description": "Whether the message was received or sent"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "Message timestamp"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 50,
+              "minItems": 1,
+              "description": "Array of messages in chronological order (min 1, max 50)"
+            },
+            "platform": {
+              "enum": [
+                "sms",
+                "imessage",
+                "whatsapp",
+                "facebook_messenger",
+                "instagram_dm",
+                "telegram",
+                "slack",
+                "discord",
+                "linkedin",
+                "signal",
+                "other"
+              ],
+              "type": "string",
+              "description": "Message platform"
+            },
+            "contactKnown": {
+              "type": "boolean",
+              "description": "Whether the sender is in the agent's/user's contacts"
+            },
+            "senderVerified": {
+              "type": "boolean",
+              "description": "Whether the platform has verified the sender (blue checkmark, business account)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_media_authenticity",
+        "description": "Analyze an image or short video to assess whether it is AI-generated, deepfaked, or authentic. Uses multi-layer analysis including metadata forensics, error level analysis, ML-based AI detection, and noise pattern analysis. Returns a confidence-scored verdict with per-layer breakdown. $0.04/image (4 units x $0.01), $0.10/video (10 units x $0.01) via skyfire-api-key header. Results are best-guess estimates, not definitive. By using this service you accept the Terms of Service. Advisory service only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mediaUrl": {
+              "type": "string",
+              "description": "URL of the image or video to analyze"
+            },
+            "mediaType": {
+              "enum": [
+                "image",
+                "video"
+              ],
+              "type": "string",
+              "description": "Type of media (auto-detected if omitted)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_prompt_injection_db",
+        "description": "FREE — Query a database of known prompt injection attacks observed in the wild on agent social networks. Returns recent injection patterns, payloads, and threat classifications to help agents recognize and avoid manipulation. No charge, no authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "ignore_instructions",
+                "system_override",
+                "encoded_payload",
+                "social_engineering",
+                "data_exfiltration"
+              ],
+              "type": "string",
+              "description": "Filter by injection type"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search term or pattern to look for in injection payloads"
+            },
+            "timeframe": {
+              "enum": [
+                "24h",
+                "7d",
+                "30d"
+              ],
+              "type": "string",
+              "description": "How far back to search (default: 30d)"
+            }
+          }
+        }
+      },
+      {
+        "name": "assess_message",
+        "description": "FREE triage tool — send whatever context you have (message content, sender info, URLs, attachments, draft replies, thread messages, image/video URLs) and get back a prioritized list of which security tools to run. No AI call, no charge, instant response. Always call this first to get the best security coverage.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Message body content"
+            },
+            "from": {
+              "type": "string",
+              "description": "Sender email address or identifier"
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "URLs to check (alternative to links)"
+            },
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "URLs found in the message"
+            },
+            "media": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "URL"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Media type"
+                  },
+                  "caption": {
+                    "type": "string",
+                    "description": "Caption"
+                  },
+                  "filename": {
+                    "type": "string",
+                    "description": "Filename"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Media attachments for non-email platforms"
+            },
+            "sender": {
+              "type": "string",
+              "description": "Sender identifier for non-email platforms"
+            },
+            "draftTo": {
+              "type": "string",
+              "description": "Draft reply recipient"
+            },
+            "replyTo": {
+              "type": "string",
+              "description": "Reply-To address if different from sender"
+            },
+            "subject": {
+              "type": "string",
+              "description": "Message subject line"
+            },
+            "imageUrl": {
+              "type": "string",
+              "description": "Direct image URL to check for AI generation"
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "description": "Message body"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Date of the message"
+                  },
+                  "from": {
+                    "type": "string",
+                    "description": "Sender of this message"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Subject line"
+                  },
+                  "direction": {
+                    "type": "string",
+                    "description": "inbound or outbound"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "Message timestamp"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Array of thread messages (2+ for thread analysis)"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Message platform (sms, whatsapp, slack, discord, telegram, etc.) — omit for email"
+            },
+            "videoUrl": {
+              "type": "string",
+              "description": "Direct video URL to check for AI generation"
+            },
+            "draftBody": {
+              "type": "string",
+              "description": "Draft reply body — include to check for data leakage"
+            },
+            "imageUrls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Multiple image URLs to check"
+            },
+            "attachments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "size"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "size": {
+                    "type": "number"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Attachment metadata"
+            },
+            "knownSender": {
+              "type": "boolean",
+              "description": "Whether the email sender is known/trusted"
+            },
+            "contactKnown": {
+              "type": "boolean",
+              "description": "Whether sender is a known contact"
+            },
+            "draftSubject": {
+              "type": "string",
+              "description": "Draft reply subject"
+            },
+            "senderVerified": {
+              "type": "boolean",
+              "description": "Whether platform has verified the sender"
+            },
+            "senderDisplayName": {
+              "type": "string",
+              "description": "Sender display name for reputation check"
+            },
+            "previousCorrespondence": {
+              "type": "boolean",
+              "description": "Whether there has been prior correspondence"
+            }
+          }
+        }
+      },
+      {
+        "name": "submit_feedback",
+        "description": "FREE — Submit feedback about any Agent Safe tool you used. Helps us improve detection accuracy and tool quality. No charge, no authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rating": {
+              "enum": [
+                "helpful",
+                "not_helpful",
+                "inaccurate",
+                "missed_threat",
+                "false_positive"
+              ],
+              "type": "string",
+              "description": "Your rating of the tool's output"
+            },
+            "checkId": {
+              "type": "string",
+              "description": "The checkId returned by the tool you're rating (helps us link feedback to specific analyses)"
+            },
+            "comment": {
+              "type": "string",
+              "description": "Optional details about your experience — what worked well, what could improve, or what was missed"
+            },
+            "toolName": {
+              "type": "string",
+              "description": "Which tool you're giving feedback on (e.g. check_email_safety, check_url_safety)"
+            },
+            "agentPlatform": {
+              "type": "string",
+              "description": "Your agent platform (e.g. claude, cursor, openai, custom) — helps us optimize for your environment"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "tool-catalog",
+        "uri": "agentsafe://catalog",
+        "description": "Agent Safe tool catalog with descriptions, parameters, and pricing for all 8 security tools + 2 free tools",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "security-scan-guide",
+        "description": "Guides an AI agent to choose the right Agent Safe security tool for a given message, URL, attachment, or sender. Returns a recommended tool name and example parameters.",
+        "arguments": [
+          {
+            "name": "messageType",
+            "description": "The type of content to scan",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

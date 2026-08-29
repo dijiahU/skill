@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "glxtsj0kpm",
+  "namespace": "marianfoo",
+  "slug": "mcp-sap-notes",
+  "name": "SAP Note Search MCP Server",
+  "description": "This MCP server allows Cursor AI users to search and retrieve SAP Notes and Knowledge Base articles using SAP Passport authentication and Playwright automation.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "This MCP server allows Cursor AI users to search and retrieve SAP Notes and Knowledge Base articles using SAP Passport authentication and Playwright automation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HEADFUL": {
+          "description": "Browser visibility (for debugging)",
+          "type": "string",
+          "default": "false"
+        },
+        "PFX_PATH": {
+          "description": "Path to SAP Passport certificate (.pfx)",
+          "type": "string",
+          "default": "./certs/sap.pfx"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (debug, info, warn, error)",
+          "type": "string",
+          "default": "info"
+        },
+        "MAX_JWT_AGE_H": {
+          "description": "Token cache lifetime (hours)",
+          "type": "string",
+          "default": "12"
+        },
+        "PFX_PASSPHRASE": {
+          "description": "Certificate passphrase",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "PFX_PATH",
+        "PFX_PASSPHRASE"
+      ]
+    },
+    "id": "glxtsj0kpm",
+    "name": "SAP Note Search MCP Server",
+    "namespace": "marianfoo",
+    "repository": {
+      "url": "https://github.com/marianfoo/mcp-sap-notes"
+    },
+    "slug": "mcp-sap-notes",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/glxtsj0kpm"
+  }
+}

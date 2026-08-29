@@ -1,0 +1,71 @@
+{
+  "registry": "glama",
+  "id": "id0mrjw8vq",
+  "namespace": "r3-yamauchi",
+  "slug": "kintone-mcp-server-python3",
+  "name": "kintone MCP Server (Python3)",
+  "description": "Enables AI assistants to interact with kintone data by providing comprehensive tools for record CRUD operations, file management, and workflow status updates. It supports secure authentication and automatic pagination to handle large datasets efficiently through the Model Context Protocol.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with kintone data by providing comprehensive tools for record CRUD operations, file management, and workflow status updates. It supports secure authentication and automatic pagination to handle large datasets efficiently through the Model Context Protocol.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Optional log level for debugging (e.g., DEBUG, INFO, WARNING, ERROR).",
+          "type": "string"
+        },
+        "KINTONE_DOMAIN": {
+          "description": "The kintone domain URL (e.g., your-subdomain.cybozu.com).",
+          "type": "string"
+        },
+        "KINTONE_PASSWORD": {
+          "description": "Password for password-based authentication.",
+          "type": "string"
+        },
+        "KINTONE_USERNAME": {
+          "description": "Username for password-based authentication.",
+          "type": "string"
+        },
+        "KINTONE_API_TOKEN": {
+          "description": "API token for token-based authentication.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "KINTONE_USERNAME",
+            "KINTONE_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "KINTONE_API_TOKEN"
+          ]
+        }
+      ],
+      "required": [
+        "KINTONE_DOMAIN"
+      ]
+    },
+    "id": "id0mrjw8vq",
+    "name": "kintone MCP Server (Python3)",
+    "namespace": "r3-yamauchi",
+    "repository": {
+      "url": "https://github.com/r3-yamauchi/kintone-mcp-server-python3"
+    },
+    "slug": "kintone-mcp-server-python3",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/id0mrjw8vq"
+  }
+}

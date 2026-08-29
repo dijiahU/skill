@@ -1,0 +1,93 @@
+{
+  "registry": "glama",
+  "id": "v5x5mw1ybv",
+  "namespace": "Prekzursil",
+  "slug": "omniaudit-mcp",
+  "name": "OmniAudit MCP",
+  "description": "A production-grade MCP server offering modules for GitHub issue/PR triage, live website auditing, and automated release note generation. It provides robust security features like write-operation confirmation gates, rate limiting, and dual-read storage backends.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A production-grade MCP server offering modules for GitHub issue/PR triage, live website auditing, and automated release note generation. It provides robust security features like write-operation confirmation gates, rate limiting, and dual-read storage backends.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_FORMAT": {
+          "description": "The format for structured logs (json or plain).",
+          "type": "string",
+          "default": "plain"
+        },
+        "OTEL_ENABLED": {
+          "description": "Set to true to enable optional OTLP traces.",
+          "type": "string"
+        },
+        "MCP_AUTH_MODE": {
+          "description": "Authentication mode for the MCP endpoint (e.g., none, api_key).",
+          "type": "string",
+          "default": "none"
+        },
+        "S3_ENDPOINT_URL": {
+          "description": "The endpoint URL for S3 or MinIO.",
+          "type": "string"
+        },
+        "S3_ACCESS_KEY_ID": {
+          "description": "The access key ID for S3/MinIO.",
+          "type": "string"
+        },
+        "PROMETHEUS_ENABLED": {
+          "description": "Set to true to enable the Prometheus metrics endpoint.",
+          "type": "string"
+        },
+        "OBJECT_STORE_BUCKET": {
+          "description": "The S3 bucket name to use when OBJECT_STORE_BACKEND is set to s3.",
+          "type": "string"
+        },
+        "OBJECT_STORE_PREFIX": {
+          "description": "The prefix (path) within the S3 bucket.",
+          "type": "string"
+        },
+        "S3_FORCE_PATH_STYLE": {
+          "description": "Whether to force path-style URLs for S3/MinIO.",
+          "type": "string",
+          "default": "true"
+        },
+        "SITELINT_ASYNC_MODE": {
+          "description": "Set to true and run worker service to process scan jobs via Celery.",
+          "type": "string",
+          "default": "false"
+        },
+        "OBJECT_STORE_BACKEND": {
+          "description": "Storage backend mode (local or s3). Default is local.",
+          "type": "string",
+          "default": "local"
+        },
+        "S3_SECRET_ACCESS_KEY": {
+          "description": "The secret access key for S3/MinIO.",
+          "type": "string"
+        },
+        "OTEL_EXPORTER_OTLP_ENDPOINT": {
+          "description": "The endpoint for the OTLP collector (e.g., http://otel-collector:4318/v1/traces).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "v5x5mw1ybv",
+    "name": "OmniAudit MCP",
+    "namespace": "Prekzursil",
+    "repository": {
+      "url": "https://github.com/Prekzursil/omniaudit-mcp"
+    },
+    "slug": "omniaudit-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/v5x5mw1ybv"
+  }
+}

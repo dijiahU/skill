@@ -1,0 +1,101 @@
+{
+  "registry": "glama",
+  "id": "zwuoh4n89n",
+  "namespace": "JihunBlue",
+  "slug": "mcp-kit",
+  "name": "MCP-Kit Developer Task Assignment System",
+  "description": "Enables intelligent task assignment to developers using hybrid AI algorithms that match tasks based on past experience, skill sets, workload balance, and project alignment. Features enterprise-grade security with AES-256 encryption and 75% performance optimization through smart caching.",
+  "discoveryQueries": [
+    "security",
+    "encryption"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables intelligent task assignment to developers using hybrid AI algorithms that match tasks based on past experience, skill sets, workload balance, and project alignment. Features enterprise-grade security with AES-256 encryption and 75% performance optimization through smart caching.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PGHOST": {
+          "description": "PostgreSQL host",
+          "type": "string"
+        },
+        "PGPORT": {
+          "description": "PostgreSQL port",
+          "type": "string"
+        },
+        "PGUSER": {
+          "description": "PostgreSQL user",
+          "type": "string"
+        },
+        "PGDATABASE": {
+          "description": "PostgreSQL database name",
+          "type": "string"
+        },
+        "PGPASSWORD": {
+          "description": "PostgreSQL password",
+          "type": "string"
+        },
+        "OPENAI_MODEL": {
+          "description": "OpenAI model name (fallback option)",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "OpenAI API key (fallback option)",
+          "type": "string"
+        },
+        "OPENAI_EMBED_MODEL": {
+          "description": "OpenAI embedding model name",
+          "type": "string"
+        },
+        "AZURE_OPENAI_API_KEY": {
+          "description": "Azure OpenAI API key",
+          "type": "string"
+        },
+        "AZURE_OPENAI_ENDPOINT": {
+          "description": "Azure OpenAI endpoint URL",
+          "type": "string"
+        },
+        "AZURE_OPENAI_DEPLOYMENT_NAME": {
+          "description": "Azure OpenAI deployment name",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "PGHOST",
+            "PGPORT",
+            "PGDATABASE",
+            "PGUSER",
+            "PGPASSWORD",
+            "AZURE_OPENAI_ENDPOINT",
+            "AZURE_OPENAI_API_KEY",
+            "AZURE_OPENAI_DEPLOYMENT_NAME"
+          ]
+        },
+        {
+          "required": [
+            "PGHOST",
+            "PGPORT",
+            "PGDATABASE",
+            "PGUSER",
+            "PGPASSWORD",
+            "OPENAI_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "zwuoh4n89n",
+    "name": "MCP-Kit Developer Task Assignment System",
+    "namespace": "JihunBlue",
+    "repository": {
+      "url": "https://github.com/JihunBlue/mcp-kit"
+    },
+    "slug": "mcp-kit",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/zwuoh4n89n"
+  }
+}

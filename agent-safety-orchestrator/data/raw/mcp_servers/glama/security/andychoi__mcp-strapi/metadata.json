@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "n2eaw5g839",
+  "namespace": "andychoi",
+  "slug": "mcp-strapi",
+  "name": "Strapi MCP Server",
+  "description": "Provides AI agents with full access to Strapi 5.x CMS for managing content types, entries, media, and schemas. It supports full CRUD operations, relation management, and secure authentication for comprehensive content administration.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides AI agents with full access to Strapi 5.x CMS for managing content types, entries, media, and schemas. It supports full CRUD operations, relation management, and secure authentication for comprehensive content administration.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Log verbosity: error | warn | info | debug",
+          "type": "string",
+          "default": "info"
+        },
+        "STRAPI_URL": {
+          "description": "Strapi instance URL",
+          "type": "string",
+          "default": "http://localhost:1337"
+        },
+        "STRAPI_DEV_MODE": {
+          "description": "Enable schema management tools",
+          "type": "string",
+          "default": "false"
+        },
+        "STRAPI_API_TOKEN": {
+          "description": "API token fallback (limited permissions)",
+          "type": "string"
+        },
+        "STRAPI_CACHE_TTL": {
+          "description": "Content type cache TTL in milliseconds (5 min)",
+          "type": "string",
+          "default": "300000"
+        },
+        "STRAPI_ADMIN_EMAIL": {
+          "description": "Admin email for full functionality",
+          "type": "string"
+        },
+        "STRAPI_ADMIN_PASSWORD": {
+          "description": "Admin password",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "STRAPI_ADMIN_EMAIL",
+            "STRAPI_ADMIN_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "STRAPI_API_TOKEN"
+          ]
+        },
+        {
+          "required": []
+        }
+      ]
+    },
+    "id": "n2eaw5g839",
+    "name": "Strapi MCP Server",
+    "namespace": "andychoi",
+    "repository": {
+      "url": "https://github.com/andychoi/mcp-strapi"
+    },
+    "slug": "mcp-strapi",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n2eaw5g839"
+  }
+}

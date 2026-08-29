@@ -1,0 +1,44 @@
+{
+  "skill_name": "gpc-security",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I think our service account key may have been accidentally committed to a public repo branch before we noticed and removed it. The key is for our main Play Console app. What should I do right now?",
+      "expected_output": "Provides immediate incident response steps for a compromised key",
+      "files": [],
+      "expectations": [
+        "First step: immediately delete the compromised key in Google Cloud Console",
+        "Create a new key and re-authenticate with gpc auth login",
+        "Update all CI secrets with the new key",
+        "Review audit logs for unauthorized actions during the exposure window",
+        "Mentions clearing token cache and checking git history for other leaks"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our security team wants to know where GPC stores credentials on developer machines and whether there's an audit trail of all Play Store operations. Can you give me a complete picture?",
+      "expected_output": "Explains credential storage locations, security model, and audit logging",
+      "files": [],
+      "expectations": [
+        "Lists all storage locations: OS keychain, ~/.cache/gpc/tokens/, ~/.config/gpc/",
+        "Explains that .gpcrc.json never contains secrets",
+        "Describes the audit log at ~/.config/gpc/audit.log with JSON Lines format",
+        "Mentions automatic secrets redaction in all output",
+        "Notes file permissions (0600) on sensitive files"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We need to rotate our service account key. We use the same key in GitHub Actions, our staging server, and local dev. How do we rotate without breaking anything?",
+      "expected_output": "Provides a zero-downtime rotation procedure with overlap period",
+      "files": [],
+      "expectations": [
+        "Creates new key while old key is still active (overlap period)",
+        "Tests new key locally with gpc doctor before updating CI",
+        "Updates CI secrets (GitHub Actions, staging) with the new key",
+        "Verifies CI pipelines pass before deleting the old key",
+        "Clears token cache after rotation"
+      ]
+    }
+  ]
+}

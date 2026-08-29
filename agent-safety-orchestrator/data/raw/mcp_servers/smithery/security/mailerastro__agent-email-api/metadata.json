@@ -1,0 +1,306 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "mailerastro/agent-email-api",
+  "namespace": "mailerastro",
+  "slug": "agent-email-api",
+  "displayName": "MailerAstro",
+  "description": "Send transactional emails and manage bulk distributions using your wallet address as a secure identity. Pay automatically with USDC for a streamlined experience without the need for traditional API keys or accounts. Monitor delivery performance and reputation scores to ensure high-quality communication and deliverability.",
+  "discoveryQueries": [
+    "encryption",
+    "authentication",
+    "ransomware",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "843f21fa-8511-4d86-a84e-791afb75000a",
+    "qualifiedName": "mailerastro/agent-email-api",
+    "namespace": "mailerastro",
+    "slug": "agent-email-api",
+    "displayName": "MailerAstro",
+    "description": "Send transactional emails and manage bulk distributions using your wallet address as a secure identity. Pay automatically with USDC for a streamlined experience without the need for traditional API keys or accounts. Monitor delivery performance and reputation scores to ensure high-quality communication and deliverability.",
+    "iconUrl": "https://api.smithery.ai/servers/mailerastro/agent-email-api/icon",
+    "verified": false,
+    "useCount": 34,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-25T01:32:01.378Z",
+    "homepage": "https://mcp.mailerastro.com/mcp",
+    "bySmithery": false,
+    "owner": "org_01KNBVDFD0J4PCJ44E82Z8EMEV",
+    "score": 0.008695652173913044
+  },
+  "detail": {
+    "qualifiedName": "mailerastro/agent-email-api",
+    "displayName": "MailerAstro",
+    "description": "Send transactional emails and manage bulk distributions using your wallet address as a secure identity. Pay automatically with USDC for a streamlined experience without the need for traditional API keys or accounts. Monitor delivery performance and reputation scores to ensure high-quality communication and deliverability.",
+    "iconUrl": "https://api.smithery.ai/servers/mailerastro/agent-email-api/icon",
+    "remote": true,
+    "deploymentUrl": "https://agent-email-api--mailerastro.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agent-email-api--mailerastro.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "wallet_address": {
+              "type": "string",
+              "x-from": {
+                "query": "wallet_address"
+              },
+              "x-order": 0,
+              "description": "Your 0x... Ethereum/Base wallet address (optional - can also pass per tool call)"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "mailerastro_send_email",
+        "description": "Send a single transactional email through MailerAstro. Payment is automatic via your wallet's USDC balance on Base (x402 protocol).\n\nPricing:\n  - Plain text: $0.001 per email\n  - HTML: $0.005 per email\n\nYour wallet address IS your identity — no API keys or accounts needed. First-time senders are automatically registered.\n\nArgs:\n  - wallet_address (string): Your 0x... Ethereum/Base wallet address\n  - to (string): Recipient email address\n  - from (string): Sender email address\n  - from_name (string, optional): Display name for sender\n  - subject (string): Email subject line\n  - body (string): Email body (plain text or HTML)\n  - content_type ('text' | 'html'): Content format (default: 'text')\n  - reply_to (string, optional): Reply-to email address\n\nReturns:\n  JSON with: success (boolean), messageId (string), cost (number), remainingBalance (number)\n\nExamples:\n  - Send a welcome email: wallet_address=\"0x...\", to=\"user@example.com\", from=\"hello@myapp.com\", subject=\"Welcome!\", body=\"Thanks for signing up.\"\n  - Send HTML email: same as above but content_type=\"html\", body=\"<h1>Welcome!</h1>\"\n\nError Handling:\n  - 402: Insufficient USDC balance. Fund your wallet on Base.\n  - 429: Rate limited. Max 60 emails/minute.\n  - Use mailerastro_check_balance to verify funds before sending.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 254,
+              "description": "Recipient email address"
+            },
+            "body": {
+              "type": "string",
+              "maxLength": 100000,
+              "minLength": 1,
+              "description": "Email body content (plain text or HTML depending on content_type)"
+            },
+            "from": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 254,
+              "description": "Sender email address"
+            },
+            "subject": {
+              "type": "string",
+              "maxLength": 998,
+              "minLength": 1,
+              "description": "Email subject line"
+            },
+            "reply_to": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 254,
+              "description": "Optional reply-to email address"
+            },
+            "from_name": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Display name for the sender (e.g., 'Agent Astro')"
+            },
+            "content_type": {
+              "enum": [
+                "text",
+                "html"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Content type: 'text' for plain text ($0.001/email) or 'html' for HTML ($0.005/email)"
+            },
+            "wallet_address": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$",
+              "description": "Agent's wallet address (0x... format). This is your identity on MailerAstro — no API keys needed."
+            }
+          }
+        }
+      },
+      {
+        "name": "mailerastro_send_batch",
+        "description": "Send up to 50 transactional emails in a single call. More efficient than individual sends — includes a 10% batch discount.\n\nPricing (with batch discount):\n  - Plain text: $0.0009 per email\n  - HTML: $0.005 per email\n\nArgs:\n  - wallet_address (string): Your 0x... wallet address\n  - recipients (array): Up to 50 objects with { email, name? }\n  - from (string): Sender email address\n  - from_name (string, optional): Sender display name\n  - subject (string): Email subject line\n  - body (string): Email body content\n  - content_type ('text' | 'html'): Content format (default: 'text')\n  - reply_to (string, optional): Reply-to address\n\nReturns:\n  JSON with: success, totalSent, totalFailed, results (per-recipient), totalCost, remainingBalance\n\nExamples:\n  - Notify 20 users: wallet_address=\"0x...\", recipients=[{email: \"a@b.com\"}, ...], from=\"alerts@myapp.com\", subject=\"Update\", body=\"New feature launched\"\n\nError Handling:\n  - 402: Insufficient balance for entire batch. Partial sends are not performed.\n  - Maximum 50 recipients per batch call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "maxLength": 100000,
+              "minLength": 1,
+              "description": "Email body content"
+            },
+            "from": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 254,
+              "description": "Sender email address"
+            },
+            "subject": {
+              "type": "string",
+              "maxLength": 998,
+              "minLength": 1,
+              "description": "Email subject line"
+            },
+            "reply_to": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 254,
+              "description": "Optional reply-to email address"
+            },
+            "from_name": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Display name for the sender"
+            },
+            "recipients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "description": "Recipient display name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 254,
+                    "description": "Recipient email address"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 50,
+              "minItems": 1,
+              "description": "Array of recipient objects (max 50)"
+            },
+            "content_type": {
+              "enum": [
+                "text",
+                "html"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Content type: 'text' for plain text or 'html' for HTML"
+            },
+            "wallet_address": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$",
+              "description": "Agent's wallet address (0x... format). This is your identity on MailerAstro — no API keys needed."
+            }
+          }
+        }
+      },
+      {
+        "name": "mailerastro_check_balance",
+        "description": "Check your USDC balance on MailerAstro. This is FREE — no payment required.\n\nUse this before sending emails to verify you have sufficient funds. Your wallet address is your identity on MailerAstro.\n\nArgs:\n  - wallet_address (string): Your 0x... Ethereum/Base wallet address\n  - response_format ('json' | 'markdown'): Output format (default: 'json')\n\nReturns:\n  JSON with: walletAddress, balance (in USD), currency, lastUpdated\n\nExamples:\n  - Check balance: wallet_address=\"0x1234...abcd\"\n  - A balance of $1.00 can send ~1,000 plain text emails or ~200 HTML emails\n\nError Handling:\n  - 404: Wallet not found. Send your first email to auto-register, or fund your wallet with USDC on Base.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "wallet_address": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$",
+              "description": "Agent's wallet address (0x... format). This is your identity on MailerAstro — no API keys needed."
+            },
+            "response_format": {
+              "enum": [
+                "markdown",
+                "json"
+              ],
+              "type": "string",
+              "default": "json",
+              "description": "Output format: 'json' for structured data or 'markdown' for human-readable"
+            }
+          }
+        }
+      },
+      {
+        "name": "mailerastro_get_reputation",
+        "description": "Query the reputation score and tier for any wallet address. This is FREE — no payment required.\n\nMailerAstro tracks agent reputation based on email behavior. Higher reputation unlocks premium services and higher rate limits.\n\nTiers: Bronze (0-25) → Silver (26-50) → Gold (51-75) → Platinum (76-100)\n\nArgs:\n  - wallet_address (string): Wallet address to query (can be any agent's address)\n  - response_format ('json' | 'markdown'): Output format (default: 'json')\n\nReturns:\n  JSON with: walletAddress, score (0-100), tier, totalEmailsSent, deliveryRate, bounceRate, spamRate, lastUpdated\n\nExamples:\n  - Check your own reputation: wallet_address=\"0x1234...abcd\"\n  - Check another agent's reputation before interacting: wallet_address=\"0xabcd...1234\"\n  - Platinum tier agents get priority delivery and higher rate limits\n\nError Handling:\n  - 404: Wallet has no reputation history. Score starts at 50 (Silver) after first email.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "wallet_address": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$",
+              "description": "Agent's wallet address (0x... format). This is your identity on MailerAstro — no API keys needed."
+            },
+            "response_format": {
+              "enum": [
+                "markdown",
+                "json"
+              ],
+              "type": "string",
+              "default": "json",
+              "description": "Output format: 'json' for structured data or 'markdown' for human-readable"
+            }
+          }
+        }
+      },
+      {
+        "name": "mailerastro_get_send_history",
+        "description": "View recent email send history for your wallet, including delivery status. This is FREE — no payment required.\n\nUse this to monitor deliverability, track bounces, and debug issues. Supports pagination and status filtering.\n\nArgs:\n  - wallet_address (string): Your 0x... wallet address\n  - limit (number): Max results per page (1-100, default: 20)\n  - offset (number): Skip N results for pagination (default: 0)\n  - status ('delivered' | 'bounced' | 'pending' | 'failed', optional): Filter by status\n  - response_format ('json' | 'markdown'): Output format (default: 'json')\n\nReturns:\n  JSON with: total, count, offset, entries[], has_more, next_offset\n\nExamples:\n  - Get last 10 sends: wallet_address=\"0x...\", limit=10\n  - Check for bounces: wallet_address=\"0x...\", status=\"bounced\"\n  - Page through history: offset=20, limit=20 (page 2)\n\nError Handling:\n  - 404: No history found for this wallet.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of results to return (1-100, default: 20)"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "description": "Number of results to skip for pagination (default: 0)"
+            },
+            "status": {
+              "enum": [
+                "delivered",
+                "bounced",
+                "pending",
+                "failed"
+              ],
+              "type": "string",
+              "description": "Filter by delivery status"
+            },
+            "wallet_address": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$",
+              "description": "Agent's wallet address (0x... format). This is your identity on MailerAstro — no API keys needed."
+            },
+            "response_format": {
+              "enum": [
+                "markdown",
+                "json"
+              ],
+              "type": "string",
+              "default": "json",
+              "description": "Output format: 'json' for structured data or 'markdown' for human-readable"
+            }
+          }
+        }
+      },
+      {
+        "name": "mailerastro_get_started",
+        "description": "Get setup instructions and introduction to MailerAstro — the email API for AI agents.\n\nCall this first to understand how MailerAstro works. Optionally provide your wallet address to check if you already have a balance.\n\nThis tool is FREE — no payment required.\n\nArgs:\n  - wallet_address (string, optional): Your 0x... wallet to check existing balance\n\nReturns:\n  Setup guide with pricing, capabilities, and next steps. If wallet_address provided, includes current balance.\n\nExamples:\n  - First time: mailerastro_get_started with no args\n  - Returning agent: mailerastro_get_started with wallet_address=\"0x...\"",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "wallet_address": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$",
+              "description": "Optional: provide your wallet address to check if you already have a balance"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

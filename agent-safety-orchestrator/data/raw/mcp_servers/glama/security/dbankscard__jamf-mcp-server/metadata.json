@@ -1,0 +1,98 @@
+{
+  "registry": "glama",
+  "id": "bthntgh2bp",
+  "namespace": "dbankscard",
+  "slug": "jamf-mcp-server",
+  "name": "Jamf Pro MCP Server",
+  "description": "Enables AI assistants to interact with Jamf Pro for comprehensive Apple device management, including device inventory, policy deployment, configuration profiles, script execution, and compliance reporting.",
+  "discoveryQueries": [
+    "policy",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Jamf Pro for comprehensive Apple device management, including device inventory, policy deployment, configuration profiles, script execution, and compliance reporting.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JAMF_URL": {
+          "description": "Your Jamf Pro instance URL (e.g., https://your-instance.jamfcloud.com)",
+          "type": "string"
+        },
+        "JAMF_CLIENT_ID": {
+          "description": "Your Jamf Pro API client ID",
+          "type": "string"
+        },
+        "JAMF_READ_ONLY": {
+          "description": "Set to 'true' to prevent any modifications to Jamf Pro",
+          "type": "string",
+          "default": "false"
+        },
+        "JAMF_DEBUG_MODE": {
+          "description": "Enable debug logging for troubleshooting",
+          "type": "string",
+          "default": "false"
+        },
+        "JAMF_MAX_RETRIES": {
+          "description": "Maximum number of retry attempts for failed requests",
+          "type": "string",
+          "default": "3"
+        },
+        "JAMF_RETRY_DELAY": {
+          "description": "Initial retry delay in milliseconds",
+          "type": "string",
+          "default": "1000"
+        },
+        "JAMF_ENABLE_RETRY": {
+          "description": "Enable automatic retries for failed requests",
+          "type": "string",
+          "default": "true"
+        },
+        "JAMF_CLIENT_SECRET": {
+          "description": "Your Jamf Pro API client secret",
+          "type": "string"
+        },
+        "JAMF_RETRY_MAX_DELAY": {
+          "description": "Maximum retry delay in milliseconds",
+          "type": "string",
+          "default": "10000"
+        },
+        "JAMF_USE_ENHANCED_MODE": {
+          "description": "Enable enhanced error handling and retry logic features",
+          "type": "string",
+          "default": "false"
+        },
+        "JAMF_ENABLE_RATE_LIMITING": {
+          "description": "Enable rate limiting to prevent API throttling",
+          "type": "string",
+          "default": "false"
+        },
+        "JAMF_ENABLE_CIRCUIT_BREAKER": {
+          "description": "Enable circuit breaker to prevent cascading failures",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "JAMF_URL",
+        "JAMF_CLIENT_ID",
+        "JAMF_CLIENT_SECRET"
+      ]
+    },
+    "id": "bthntgh2bp",
+    "name": "Jamf Pro MCP Server",
+    "namespace": "dbankscard",
+    "repository": {
+      "url": "https://github.com/dbankscard/jamf-mcp-server"
+    },
+    "slug": "jamf-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bthntgh2bp"
+  }
+}

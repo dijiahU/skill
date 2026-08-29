@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "x724h66f1r",
+  "namespace": "hackIDLE",
+  "slug": "fedramp-docs-mcp",
+  "name": "FedRAMP Docs MCP Server",
+  "description": "Enables querying and analysis of FedRAMP documentation, compliance requirements, and security controls through structured tools that search markdown guidance, analyze FRMR datasets, and track regulatory changes.",
+  "discoveryQueries": [
+    "security",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables querying and analysis of FedRAMP documentation, compliance requirements, and security controls through structured tools that search markdown guidance, analyze FRMR datasets, and track regulatory changes.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FEDRAMP_DOCS_PATH": {
+          "description": "Path to an existing FedRAMP/docs checkout.",
+          "type": "string",
+          "default": "~/.cache/fedramp-docs"
+        },
+        "FEDRAMP_DOCS_BRANCH": {
+          "description": "Branch to checkout when cloning.",
+          "type": "string",
+          "default": "main"
+        },
+        "FEDRAMP_DOCS_REMOTE": {
+          "description": "Remote used when cloning.",
+          "type": "string",
+          "default": "https://github.com/FedRAMP/docs"
+        },
+        "FEDRAMP_DOCS_AUTO_UPDATE": {
+          "description": "Automatically check for and fetch repository updates.",
+          "type": "string",
+          "default": "true"
+        },
+        "FEDRAMP_DOCS_INDEX_PERSIST": {
+          "description": "Persist the in-memory index under `~/.cache/fedramp-docs/index-v1.json`.",
+          "type": "string",
+          "default": "true"
+        },
+        "FEDRAMP_DOCS_ALLOW_AUTO_CLONE": {
+          "description": "Clone automatically when the path is missing.",
+          "type": "string",
+          "default": "true"
+        },
+        "FEDRAMP_DOCS_UPDATE_CHECK_HOURS": {
+          "description": "Hours between automatic update checks (when auto-update is enabled).",
+          "type": "string",
+          "default": "24"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "x724h66f1r",
+    "name": "FedRAMP Docs MCP Server",
+    "namespace": "hackIDLE",
+    "repository": {
+      "url": "https://github.com/hackIDLE/fedramp-docs-mcp"
+    },
+    "slug": "fedramp-docs-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/x724h66f1r"
+  }
+}

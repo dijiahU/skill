@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "lhr7ixiklt",
+  "namespace": "NgoQuocViet2001",
+  "slug": "google-workspace-mcp",
+  "name": "Google Workspace MCP",
+  "description": "Enables reading and extracting structured data from Google Docs and Sheets, including text, tables, formulas, and images. It supports advanced image handling and multiple authentication methods for interacting with private and public workspace files.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables reading and extracting structured data from Google Docs and Sheets, including text, tables, formulas, and images. It supports advanced image handling and multiple authentication methods for interacting with private and public workspace files.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GOOGLE_API_KEY": {
+          "description": "Google API key for public Google Sheets access.",
+          "type": "string"
+        },
+        "GOOGLE_OAUTH_TOKEN_FILE": {
+          "description": "Path to the stored Google OAuth refreshable token JSON file.",
+          "type": "string"
+        },
+        "GOOGLE_OAUTH_ACCESS_TOKEN": {
+          "description": "An existing Google OAuth bearer access token.",
+          "type": "string"
+        },
+        "GOOGLE_SERVICE_ACCOUNT_FILE": {
+          "description": "Path to the Google Cloud service account key JSON file.",
+          "type": "string"
+        },
+        "GOOGLE_OAUTH_CLIENT_SECRETS_FILE": {
+          "description": "Path to the Google OAuth client secret JSON file for desktop application authentication.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_OAUTH_CLIENT_SECRETS_FILE"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_SERVICE_ACCOUNT_FILE"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_OAUTH_ACCESS_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "lhr7ixiklt",
+    "name": "Google Workspace MCP",
+    "namespace": "NgoQuocViet2001",
+    "repository": {
+      "url": "https://github.com/NgoQuocViet2001/google-workspace-mcp"
+    },
+    "slug": "google-workspace-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lhr7ixiklt"
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cronozen/proof",
+  "namespace": "cronozen",
+  "slug": "proof",
+  "displayName": "Cronozen Proof",
+  "description": "Cronozen Proof — Operational Decision Evidence Platform.\n\n  Record, verify, and export AI-assisted decisions as cryptographically chained Decision Proof Units (DPUs).\n\n  - proof_record: Create a DPU with SHA-256 hash chain linking\n  - proof_verify: Verify individual proof integrity\n  - proof_chain_verify: Validate entire hash chain for a domain\n  - proof_get: Retrieve a DPU with full details\n  - proof_export_jsonld: Export as JSON-LD v2.0 document\n  - proof_public_verify: Public verification without auth\n\n  Built for compliance, audit trails, and AI governance.",
+  "discoveryQueries": [
+    "secure",
+    "audit",
+    "policy",
+    "compliance",
+    "encryption",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "dfe2f6aa-c89b-4ebb-add6-c4349831e817",
+    "qualifiedName": "cronozen/proof",
+    "namespace": "cronozen",
+    "slug": "proof",
+    "displayName": "Cronozen Proof",
+    "description": "Cronozen Proof — Operational Decision Evidence Platform.\n\n  Record, verify, and export AI-assisted decisions as cryptographically chained Decision Proof Units (DPUs).\n\n  - proof_record: Create a DPU with SHA-256 hash chain linking\n  - proof_verify: Verify individual proof integrity\n  - proof_chain_verify: Validate entire hash chain for a domain\n  - proof_get: Retrieve a DPU with full details\n  - proof_export_jsonld: Export as JSON-LD v2.0 document\n  - proof_public_verify: Public verification without auth\n\n  Built for compliance, audit trails, and AI governance.",
+    "iconUrl": "https://api.smithery.ai/servers/cronozen/proof/icon",
+    "verified": false,
+    "useCount": 39,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-20T14:56:53.171Z",
+    "homepage": "https://cronozen.com/proof",
+    "bySmithery": false,
+    "owner": "org_01KNBVT4BDZ3R7JYGWFAMD7YJN",
+    "score": 0.008771929824561403
+  },
+  "detail": {
+    "qualifiedName": "cronozen/proof",
+    "displayName": "Cronozen Proof",
+    "description": "Cronozen Proof — Operational Decision Evidence Platform.\n\n  Record, verify, and export AI-assisted decisions as cryptographically chained Decision Proof Units (DPUs).\n\n  - proof_record: Create a DPU with SHA-256 hash chain linking\n  - proof_verify: Verify individual proof integrity\n  - proof_chain_verify: Validate entire hash chain for a domain\n  - proof_get: Retrieve a DPU with full details\n  - proof_export_jsonld: Export as JSON-LD v2.0 document\n  - proof_public_verify: Public verification without auth\n\n  Built for compliance, audit trails, and AI governance.",
+    "iconUrl": "https://api.smithery.ai/servers/cronozen/proof/icon",
+    "remote": true,
+    "deploymentUrl": "https://proof--cronozen.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://proof--cronozen.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "proof_record",
+        "description": "Records an AI execution as a Decision Proof Unit (DPU). Creates a cryptographically chained proof record with SHA-256 hash chain. Returns the created DPU with decision_id and chain hash.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Tags for categorization"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Business domain (e.g. rehab_care, market, edu, mentor, welfare)"
+            },
+            "purpose": {
+              "type": "string",
+              "description": "Purpose/reason for the decision"
+            },
+            "approved": {
+              "type": "boolean",
+              "description": "Whether the decision was approved"
+            },
+            "reviewed_by": {
+              "type": "string",
+              "description": "Human reviewer identifier"
+            },
+            "final_action": {
+              "type": "string",
+              "description": "The action that was taken (e.g. CREATE, UPDATE, APPROVE)"
+            },
+            "reference_id": {
+              "type": "string",
+              "description": "ID of referenced entity"
+            },
+            "reviewer_role": {
+              "type": "string",
+              "description": "Role of the reviewer (e.g. operator, admin)"
+            },
+            "evidence_level": {
+              "enum": [
+                "DRAFT",
+                "PARTIAL",
+                "AUDIT_READY"
+              ],
+              "type": "string",
+              "description": "Evidence level. Default: AUDIT_READY"
+            },
+            "reference_type": {
+              "type": "string",
+              "description": "Type of referenced entity"
+            }
+          }
+        }
+      },
+      {
+        "name": "proof_verify",
+        "description": "Verifies a specific proof record's cryptographic integrity. Checks hash consistency and returns verification status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Optional original data for re-verification of hash",
+              "additionalProperties": {}
+            },
+            "proofId": {
+              "type": "string",
+              "description": "The proof ID to verify"
+            }
+          }
+        }
+      },
+      {
+        "name": "proof_chain_verify",
+        "description": "Verifies the entire SHA-256 hash chain integrity for a domain. Performs O(n) sequential verification of all Decision Proof Units and reports the first broken index if tampering is detected.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "The domain to verify (e.g. rehab_care, market, edu)"
+            },
+            "toIndex": {
+              "type": "number",
+              "description": "End verification at this chain index"
+            },
+            "batchSize": {
+              "type": "number",
+              "description": "Number of DPUs to process per batch"
+            },
+            "fromIndex": {
+              "type": "number",
+              "description": "Start verification from this chain index"
+            }
+          }
+        }
+      },
+      {
+        "name": "proof_get",
+        "description": "Retrieves a Decision Proof Unit by ID with full details including hash chain position, AI involvement, human control, evidence level, and compliance information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The DPU ID to retrieve"
+            }
+          }
+        }
+      },
+      {
+        "name": "proof_export_jsonld",
+        "description": "Exports a Decision Proof Unit as a JSON-LD v2.0 proof document conforming to Cronozen Evidence Ontology. Includes compliance status, 6W extraction (Who/What/Where/When/How/Why), hash chain info, and policy snapshot.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The DPU ID to export as JSON-LD"
+            }
+          }
+        }
+      },
+      {
+        "name": "proof_public_verify",
+        "description": "Publicly verifies a DPU's cryptographic integrity without authentication. Checks SHA-256 hash validity, previous/next chain link integrity, and returns verification status. Anyone can verify — no credentials required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The DPU ID to publicly verify"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

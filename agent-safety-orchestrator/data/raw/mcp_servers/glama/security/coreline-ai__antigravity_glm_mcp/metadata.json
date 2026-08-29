@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "cw300cjduw",
+  "namespace": "coreline-ai",
+  "slug": "antigravity_glm_mcp",
+  "name": "Antigravity GLM MCP",
+  "description": "A bridge between Gemini and GLM-4.5 models that provides 25 tools for automating complex coding tasks, file management, and system operations. It features a security-hardened architecture with sandboxing, persistent memory, and automatic file backups.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A bridge between Gemini and GLM-4.5 models that provides 25 tools for automating complex coding tasks, file management, and system operations. It features a security-hardened architecture with sandboxing, persistent memory, and automatic file backups.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GLM_MODEL": {
+          "description": "사용할 모델 (Model to use)",
+          "type": "string",
+          "default": "glm-4-plus"
+        },
+        "PYTHONPATH": {
+          "description": "Path to the antigravity_glm_mcp directory",
+          "type": "string"
+        },
+        "GLM_TIMEOUT": {
+          "description": "요청 타임아웃 (초) (Request timeout in seconds)",
+          "type": "string",
+          "default": "120"
+        },
+        "GLM_BASE_URL": {
+          "description": "API 엔드포인트 (API endpoint)",
+          "type": "string",
+          "default": "https://open.bigmodel.cn/api/paas/v4"
+        },
+        "PROJECT_ROOT": {
+          "description": "작업 대상 디렉토리 (Target directory for work)",
+          "type": "string",
+          "default": "현재 디렉토리 (Current directory)"
+        },
+        "ZHIPU_API_KEY": {
+          "description": "GLM API 인증 키 (GLM API authentication key)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ZHIPU_API_KEY",
+        "PROJECT_ROOT"
+      ]
+    },
+    "id": "cw300cjduw",
+    "name": "Antigravity GLM MCP",
+    "namespace": "coreline-ai",
+    "repository": {
+      "url": "https://github.com/coreline-ai/antigravity_glm_mcp"
+    },
+    "slug": "antigravity_glm_mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/cw300cjduw"
+  }
+}

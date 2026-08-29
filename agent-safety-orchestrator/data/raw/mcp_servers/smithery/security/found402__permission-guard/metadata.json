@@ -1,0 +1,137 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "found402/permission-guard",
+  "namespace": "found402",
+  "slug": "permission-guard",
+  "displayName": "permission-guard",
+  "description": "Permission Guard — validates an agent's requested action against its defined scope before execution. Detects out-of-scope access, privilege escalation, and flags dangerous operations like delete, execute, admin, and deploy even when technically permitted. Stops agents from doing more than they're supposed to. $0.002/req via x402 on Base.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "credential",
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "81f183bc-1b75-4cad-9efe-514e1489341c",
+    "qualifiedName": "found402/permission-guard",
+    "namespace": "found402",
+    "slug": "permission-guard",
+    "displayName": "permission-guard",
+    "description": "Permission Guard — validates an agent's requested action against its defined scope before execution. Detects out-of-scope access, privilege escalation, and flags dangerous operations like delete, execute, admin, and deploy even when technically permitted. Stops agents from doing more than they're supposed to. $0.002/req via x402 on Base.",
+    "iconUrl": "https://api.smithery.ai/servers/found402/permission-guard/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-16T17:17:13.955Z",
+    "homepage": "https://permission-guard.fly.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVQABVMKJ0B6XQRVEMJVFJ",
+    "score": 0.015873015873015872
+  },
+  "detail": {
+    "qualifiedName": "found402/permission-guard",
+    "displayName": "permission-guard",
+    "description": "Permission Guard — validates an agent's requested action against its defined scope before execution. Detects out-of-scope access, privilege escalation, and flags dangerous operations like delete, execute, admin, and deploy even when technically permitted. Stops agents from doing more than they're supposed to. $0.002/req via x402 on Base.",
+    "iconUrl": "https://api.smithery.ai/servers/found402/permission-guard/icon",
+    "remote": true,
+    "deploymentUrl": "https://permission-guard--found402.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://permission-guard--found402.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_permission",
+        "description": "Checks if an agent's requested action exceeds its defined scope. Pass the action, resource, and the agent's permission scope. Returns allowed/denied with violation details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "resource",
+                  "actions"
+                ],
+                "properties": {
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Allowed actions"
+                  },
+                  "resource": {
+                    "type": "string",
+                    "description": "Resource pattern (supports * and /* wildcards)"
+                  }
+                }
+              },
+              "description": "The agent's defined permission scope"
+            },
+            "action": {
+              "type": "string",
+              "description": "The action the agent wants to perform (e.g. read, write, delete, execute)"
+            },
+            "resource": {
+              "type": "string",
+              "description": "The resource path being accessed (e.g. db/users, files/config/*)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "allowed": {
+              "type": "boolean",
+              "description": "Whether the action is permitted"
+            },
+            "scope_size": {
+              "type": "integer"
+            },
+            "violations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "resource": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "warning",
+                      "denied"
+                    ],
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "List of violations found"
+            },
+            "checked_action": {
+              "type": "string"
+            },
+            "checked_resource": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

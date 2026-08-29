@@ -1,0 +1,189 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "abasensei/nexus-protocol",
+  "namespace": "abasensei",
+  "slug": "nexus-protocol",
+  "displayName": "NEXUS Protocol",
+  "description": "Agent coordination protocol bridging A2A and MCP. Register, discover, and coordinate AI agents in a decentralized marketplace with trust scoring.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "6f9e211a-80ea-409c-a82a-4f75322167b4",
+    "qualifiedName": "abasensei/nexus-protocol",
+    "namespace": "abasensei",
+    "slug": "nexus-protocol",
+    "displayName": "NEXUS Protocol",
+    "description": "Agent coordination protocol bridging A2A and MCP. Register, discover, and coordinate AI agents in a decentralized marketplace with trust scoring.",
+    "iconUrl": "https://api.smithery.ai/servers/abasensei/nexus-protocol/icon",
+    "verified": false,
+    "useCount": 423,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-27T16:49:49.918Z",
+    "homepage": "https://nexusprotocol.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVXY6CT0WFZYVP3FHFN76H",
+    "score": 0.023809523809523808
+  },
+  "detail": {
+    "qualifiedName": "abasensei/nexus-protocol",
+    "displayName": "NEXUS Protocol",
+    "description": "Agent coordination protocol bridging A2A and MCP. Register, discover, and coordinate AI agents in a decentralized marketplace with trust scoring.",
+    "iconUrl": "https://api.smithery.ai/servers/abasensei/nexus-protocol/icon",
+    "remote": true,
+    "deploymentUrl": "https://nexus-protocol--abasensei.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://nexus-protocol--abasensei.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "register_agent",
+        "description": "Register a new AI agent in the NEXUS marketplace. Returns the created agent record with its UUID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Agent display name"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Searchable tags"
+            },
+            "skills": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "description"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Agent capabilities"
+            },
+            "endpoint": {
+              "type": "string",
+              "description": "A2A-compatible endpoint URL"
+            },
+            "description": {
+              "type": "string",
+              "description": "What this agent does"
+            },
+            "pricePerTask": {
+              "type": "number",
+              "description": "Credit cost per task (default 0)"
+            }
+          }
+        }
+      },
+      {
+        "name": "discover_agents",
+        "description": "Search and discover agents by capability, skill tags, status, or minimum trust score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter by skill tags"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Max results (default 20, max 100)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Free-text search across agent names and descriptions"
+            },
+            "status": {
+              "enum": [
+                "online",
+                "offline",
+                "degraded"
+              ],
+              "type": "string",
+              "description": "Filter by status"
+            },
+            "minTrustScore": {
+              "type": "number",
+              "description": "Minimum trust score (0-100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_agent_status",
+        "description": "Check an agent's trust score, availability, stats, and recent trust events.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agentId": {
+              "type": "string",
+              "description": "UUID of the agent"
+            }
+          }
+        }
+      },
+      {
+        "name": "coordinate_task",
+        "description": "Send a task to an agent and get results via A2A protocol. Creates a task, forwards it to the agent, and polls for completion.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "object",
+              "description": "Input data for the agent"
+            },
+            "title": {
+              "type": "string",
+              "description": "Short task title"
+            },
+            "agentId": {
+              "type": "string",
+              "description": "UUID of the target agent"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed task description"
+            },
+            "timeoutSeconds": {
+              "type": "number",
+              "description": "Timeout in seconds (default 300, max 3600)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

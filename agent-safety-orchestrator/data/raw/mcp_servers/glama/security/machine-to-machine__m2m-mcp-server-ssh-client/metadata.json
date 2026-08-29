@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "n9j5lavce3",
+  "namespace": "Machine-To-Machine",
+  "slug": "m2m-mcp-server-ssh-client",
+  "name": "Remote MCP SSH Gateway",
+  "description": "The m2m-mcp-server-ssh-client provides a unified MCP server interface, securely connecting via SSH to the m2m-mcp-server-ssh-server back-end which aggregates MCP servers. This setup offers secure, single-point access to diverse remote tools using robust SSH key-based authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "The m2m-mcp-server-ssh-client provides a unified MCP server interface, securely connecting via SSH to the m2m-mcp-server-ssh-server back-end which aggregates MCP servers. This setup offers secure, single-point access to diverse remote tools using robust SSH key-based authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "host": {
+          "description": "Remote SSH server host",
+          "type": "string",
+          "default": "localhost"
+        },
+        "port": {
+          "description": "Remote SSH server port",
+          "type": "string",
+          "default": "8022"
+        },
+        "username": {
+          "description": "SSH username",
+          "type": "string",
+          "default": "mcp"
+        },
+        "log_level": {
+          "description": "Set logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "client_key": {
+          "description": "Client private key file",
+          "type": "string",
+          "default": "~/.ssh/m2m_mcp_server_ssh_client"
+        },
+        "passphrase": {
+          "description": "Passphrase for the private key",
+          "type": "string"
+        },
+        "known_hosts": {
+          "description": "Path to known hosts file",
+          "type": "string",
+          "default": "~/.ssh/known_hosts"
+        },
+        "use_key_server": {
+          "description": "Use the key server for automatic key management",
+          "type": "string"
+        },
+        "disable_host_key_checking": {
+          "description": "Skip server signature verification",
+          "type": "string",
+          "default": "False"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "n9j5lavce3",
+    "name": "Remote MCP SSH Gateway",
+    "namespace": "Machine-To-Machine",
+    "repository": {
+      "url": "https://github.com/Machine-To-Machine/m2m-mcp-server-ssh-client"
+    },
+    "slug": "m2m-mcp-server-ssh-client",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n9j5lavce3"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "strawbird/globalcheck",
+  "namespace": "strawbird",
+  "slug": "globalcheck",
+  "displayName": "globalcheck",
+  "description": "# GlobalCheck: Deterministic Trade Compliance for AI Agents\n\nGlobalCheck is a commercial-grade, deterministic trade compliance engine built natively for the Model Context Protocol. It prevents AI agents from executing illegal international e-commerce purchases, logistics routing, or trade treaty violations.\n\n## Why GlobalCheck?\n\nUnlike standard LLMs that \"guess\" legal answers based on training data, GlobalCheck uses a **4-DB Hybrid Architecture** to guarantee deterministic compliance:\n- **Qdrant**: Semantic Search for accurate HS Code translation.\n- **Neo4j**: Knowledge Graph for complex, multi-lateral trade treaty restrictions.\n- **PostgreSQL**: Relational storage for strict carrier policies and \"golden records.\"\n- **Redis**: High-speed caching for real-time inference.\n\n## How Agents Use It\n\nAgents use the `check_compliance` tool before initiating any cross-border transaction. The tool returns a deterministic verdict (Approved, Blocked, or Manual Review) alongside the generated HS Cod",
+  "discoveryQueries": [
+    "guardrail",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "baee0b16-41ff-475b-bc07-524794810b9f",
+    "qualifiedName": "strawbird/globalcheck",
+    "namespace": "strawbird",
+    "slug": "globalcheck",
+    "displayName": "globalcheck",
+    "description": "# GlobalCheck: Deterministic Trade Compliance for AI Agents\n\nGlobalCheck is a commercial-grade, deterministic trade compliance engine built natively for the Model Context Protocol. It prevents AI agents from executing illegal international e-commerce purchases, logistics routing, or trade treaty violations.\n\n## Why GlobalCheck?\n\nUnlike standard LLMs that \"guess\" legal answers based on training data, GlobalCheck uses a **4-DB Hybrid Architecture** to guarantee deterministic compliance:\n- **Qdrant**: Semantic Search for accurate HS Code translation.\n- **Neo4j**: Knowledge Graph for complex, multi-lateral trade treaty restrictions.\n- **PostgreSQL**: Relational storage for strict carrier policies and \"golden records.\"\n- **Redis**: High-speed caching for real-time inference.\n\n## How Agents Use It\n\nAgents use the `check_compliance` tool before initiating any cross-border transaction. The tool returns a deterministic verdict (Approved, Blocked, or Manual Review) alongside the generated HS Cod",
+    "iconUrl": "https://api.smithery.ai/servers/strawbird/globalcheck/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-26T00:23:46.407Z",
+    "homepage": "https://globalcheck.ai",
+    "bySmithery": false,
+    "owner": "org_01KQ3J8NTVYW0Z66PCNPYJ0TCE",
+    "score": 0.02702702702702703
+  },
+  "detail": {
+    "qualifiedName": "strawbird/globalcheck",
+    "displayName": "globalcheck",
+    "description": "# GlobalCheck: Deterministic Trade Compliance for AI Agents\n\nGlobalCheck is a commercial-grade, deterministic trade compliance engine built natively for the Model Context Protocol. It prevents AI agents from executing illegal international e-commerce purchases, logistics routing, or trade treaty violations.\n\n## Why GlobalCheck?\n\nUnlike standard LLMs that \"guess\" legal answers based on training data, GlobalCheck uses a **4-DB Hybrid Architecture** to guarantee deterministic compliance:\n- **Qdrant**: Semantic Search for accurate HS Code translation.\n- **Neo4j**: Knowledge Graph for complex, multi-lateral trade treaty restrictions.\n- **PostgreSQL**: Relational storage for strict carrier policies and \"golden records.\"\n- **Redis**: High-speed caching for real-time inference.\n\n## How Agents Use It\n\nAgents use the `check_compliance` tool before initiating any cross-border transaction. The tool returns a deterministic verdict (Approved, Blocked, or Manual Review) alongside the generated HS Code and the legal reasoning.\n\n## For Developers\n\nThis MCP server is offered as a free, frictionless endpoint for IDE integration and agent testing. For production scale, high-volume automation, and enterprise SLAs (including legally auditable Compliance Receipts), subscribe to the core REST API via RapidAPI.\n",
+    "iconUrl": "https://api.smithery.ai/servers/strawbird/globalcheck/icon",
+    "remote": true,
+    "deploymentUrl": "https://globalcheck--strawbird.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://globalcheck--strawbird.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_compliance",
+        "description": "CRITICAL GUARDRAIL: Automatically verify international trade compliance for e-commerce or logistics shipments. Use this BEFORE performing any purchase integrations to guarantee legal constraints and treaties.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "origin_country": {
+              "type": "string",
+              "description": "ISO 2-letter country code of origin"
+            },
+            "destination_country": {
+              "type": "string",
+              "description": "ISO 2-letter country code of destination"
+            },
+            "product_description": {
+              "type": "string",
+              "description": "Natural language product description"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

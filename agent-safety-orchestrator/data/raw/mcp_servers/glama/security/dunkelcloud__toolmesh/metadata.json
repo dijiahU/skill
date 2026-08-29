@@ -1,0 +1,94 @@
+{
+  "registry": "glama",
+  "id": "gipltneh2d",
+  "namespace": "DunkelCloud",
+  "slug": "ToolMesh",
+  "name": "ToolMesh",
+  "description": "ToolMesh is an Apache-2.0, self-hosted MCP gateway written in Go that sits between AI agents and backend systems. It enforces a fail-closed pipeline on every tool call, including per-tool and per-user authorization, server-side credential injection, structured audit logging, and output policies. APIs are declared in YAML with DADL, turning REST endpoints into MCP tools without writing a custom MCP",
+  "discoveryQueries": [
+    "audit",
+    "credential",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "ToolMesh is an Apache-2.0, self-hosted MCP gateway written in Go that sits between AI agents and backend systems. It enforces a fail-closed pipeline on every tool call, including per-tool and per-user authorization, server-side credential injection, structured audit logging, and output policies. APIs are declared in YAML with DADL, turning REST endpoints into MCP tools without writing a custom MCP",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Structured logging level (debug, info, warn, error). Set to 'info' or higher for production.",
+          "type": "string",
+          "default": "debug"
+        },
+        "OPENFGA_MODE": {
+          "description": "Authorization mode: 'bypass' (default, no authz checks) or 'restrict' (OpenFGA enforcement).",
+          "type": "string",
+          "default": "bypass"
+        },
+        "GATE_EVALUATORS": {
+          "description": "Comma-separated list of gate evaluators (e.g., 'goja').",
+          "type": "string"
+        },
+        "CREDENTIAL_STORE": {
+          "description": "Credential store implementation name (e.g., 'embedded').",
+          "type": "string"
+        },
+        "OPENFGA_STORE_ID": {
+          "description": "OpenFGA store ID (required when OPENFGA_MODE=restrict).",
+          "type": "string"
+        },
+        "TOOLMESH_API_KEY": {
+          "description": "API key for programmatic access. Alternative to TOOLMESH_AUTH_PASSWORD for single-key setups.",
+          "type": "string"
+        },
+        "TOOLMESH_AUTH_PLAN": {
+          "description": "Identity plan when using TOOLMESH_AUTH_PASSWORD or TOOLMESH_API_KEY fallback.",
+          "type": "string",
+          "default": "pro"
+        },
+        "TOOLMESH_AUTH_USER": {
+          "description": "Identity username when using TOOLMESH_AUTH_PASSWORD or TOOLMESH_API_KEY fallback.",
+          "type": "string",
+          "default": "owner"
+        },
+        "TOOLMESH_AUTH_ROLES": {
+          "description": "Identity roles when using TOOLMESH_AUTH_PASSWORD or TOOLMESH_API_KEY fallback.",
+          "type": "string",
+          "default": "admin"
+        },
+        "TOOLMESH_MCP_TIMEOUT": {
+          "description": "HTTP client timeout in seconds for calls to downstream MCP servers.",
+          "type": "string",
+          "default": "120"
+        },
+        "TOOLMESH_EXEC_TIMEOUT": {
+          "description": "Tool execution timeout in seconds (context deadline for backend calls).",
+          "type": "string",
+          "default": "120"
+        },
+        "TOOLMESH_AUTH_PASSWORD": {
+          "description": "Password for single-user authentication. Without it, all requests are rejected unless TOOLMESH_API_KEY is set or users/API keys are configured via YAML files.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "gipltneh2d",
+    "name": "ToolMesh",
+    "namespace": "DunkelCloud",
+    "repository": {
+      "url": "https://github.com/DunkelCloud/ToolMesh"
+    },
+    "slug": "ToolMesh",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gipltneh2d"
+  }
+}

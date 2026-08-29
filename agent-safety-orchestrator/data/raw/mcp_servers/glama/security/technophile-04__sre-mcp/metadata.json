@@ -1,0 +1,66 @@
+{
+  "registry": "glama",
+  "id": "efi7lpsvsd",
+  "namespace": "technophile-04",
+  "slug": "sre-mcp",
+  "name": "Cloudflare Remote PostgreSQL Database MCP Server",
+  "description": "Enables chatting with PostgreSQL databases through secure GitHub OAuth authentication, supporting read operations for all users and write operations for privileged users. Deployable as a production-ready remote MCP server on Cloudflare Workers with automatic schema discovery and SQL injection protection.",
+  "discoveryQueries": [
+    "authentication",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables chatting with PostgreSQL databases through secure GitHub OAuth authentication, supporting read operations for all users and write operations for privileged users. Deployable as a production-ready remote MCP server on Cloudflare Workers with automatic schema discovery and SQL injection protection.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Environment mode (development/production)",
+          "type": "string"
+        },
+        "SENTRY_DSN": {
+          "description": "Optional Sentry DSN for error tracking and monitoring",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL database connection string (e.g., postgresql://username:password@host:5432/database_name)",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "Your GitHub OAuth client ID",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Your GitHub OAuth client secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random encryption key for cookie encryption (generate with: openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY",
+        "DATABASE_URL"
+      ]
+    },
+    "id": "efi7lpsvsd",
+    "name": "Cloudflare Remote PostgreSQL Database MCP Server",
+    "namespace": "technophile-04",
+    "repository": {
+      "url": "https://github.com/technophile-04/sre-mcp"
+    },
+    "slug": "sre-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/efi7lpsvsd"
+  }
+}

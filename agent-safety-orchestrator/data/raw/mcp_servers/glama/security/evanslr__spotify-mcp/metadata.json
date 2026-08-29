@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "usvpcobcmh",
+  "namespace": "EvansLR",
+  "slug": "spotify-mcp",
+  "name": "Spotify MCP Server",
+  "description": "Enables control of Spotify playback through OAuth authentication, including play/pause, track navigation, volume control, device management, and searching/playing songs by artist or track name.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables control of Spotify playback through OAuth authentication, including play/pause, track navigation, volume control, device management, and searching/playing songs by artist or track name.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SPOTIFY_CLIENT_ID": {
+          "description": "Your Spotify Client ID from the Spotify Developer Dashboard",
+          "type": "string"
+        },
+        "SPOTIFY_REDIRECT_URI": {
+          "description": "The redirect URI for Spotify OAuth (optional, defaults to http://127.0.0.1:8000/callback)",
+          "type": "string",
+          "default": "http://127.0.0.1:8000/callback"
+        },
+        "SPOTIFY_CLIENT_SECRET": {
+          "description": "Your Spotify Client Secret from the Spotify Developer Dashboard",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SPOTIFY_CLIENT_ID",
+        "SPOTIFY_CLIENT_SECRET"
+      ]
+    },
+    "id": "usvpcobcmh",
+    "name": "Spotify MCP Server",
+    "namespace": "EvansLR",
+    "repository": {
+      "url": "https://github.com/EvansLR/spotify-mcp"
+    },
+    "slug": "spotify-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/usvpcobcmh"
+  }
+}

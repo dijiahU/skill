@@ -1,0 +1,93 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Manifests & atoms.json are valid JSON
+        run: |
+          for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json hooks/hooks.json atoms.json; do
+            python3 -c "import json,sys; json.load(open('$f')); print('ok:', '$f')"
+          done
+
+      - name: Hook scripts and helpers compile
+        run: python3 -m py_compile hooks/scripts/*.py helpers/*.py
+
+      - name: Structural invariants (1 router · 14 references · 95 atoms · 8 matchers)
+        run: |
+          test "$(find skills -name SKILL.md | wc -l)" -eq 1
+          test "$(find skills/safety-router-skill/references/archetypes -maxdepth 1 -name '*.md' | wc -l)" -eq 14
+          test "$(ls hooks/scripts/matcher_*.py | wc -l)" -eq 8
+          test "$(python3 -c 'import json;print(len(json.load(open("atoms.json"))))')" -eq 95
+          echo "structural invariants ok"
+
+      - name: Every hooks.json command references a real matcher script
+        run: |
+          python3 - <<'PY'
+          import json, re, os, sys
+          h = json.load(open("hooks/hooks.json"))["hooks"]
+          cmds = [hk["command"] for ev in h.values() for grp in ev for hk in grp["hooks"]]
+          missing = []
+          for c in cmds:
+              m = re.search(r"hooks/scripts/\S+\.py", c)
+              p = m.group(0) if m else None
+              if not p or not os.path.exists(p):
+                  missing.append(c)
+          if missing:
+              print("missing matcher scripts for:", *missing, sep="\n  ")
+              sys.exit(1)
+          print(f"all {len(cmds)} hook commands resolve to existing scripts")
+          PY
+
+      - name: Adapters compile, configs parse, installers are valid bash
+        run: |
+          python3 -c "import json; p=json.load(open('adapters/codex/hooks.json')); extra=set(p)-{'description','hooks'}; assert not extra, f'unsupported Codex hooks.json keys: {sorted(extra)}'; print('ok: codex hooks.json schema')"
+          python3 -c "import tomllib; c=tomllib.load(open('adapters/codex/config.backstop.toml','rb')); assert c.get('sandbox_mode') == 'workspace-write' and c.get('approval_policy') == 'on-request'; assert c.get('features',{}).get('hooks') is True and c.get('sandbox_workspace_write',{}).get('network_access') is False; print('ok: codex backstop toml layout')"
+          python3 -m py_compile adapters/codex/codex_hook.py && echo "ok: codex_hook.py compiles"
+          for s in install.sh adapters/claude/install.sh adapters/codex/install.sh; do
+            bash -n "$s" && echo "ok: bash -n $s"
+          done
+
+      - name: Codex installer uses current user-skill location
+        run: |
+          trial="$RUNNER_TEMP/codex-install"
+          mkdir -p "$trial/home" "$trial/codex-home"
+          HOME="$trial/home" CODEX_HOME="$trial/codex-home" ./install.sh --host codex
+          test -f "$trial/home/.agents/skills/safety-router-skill/SKILL.md"
+          test -f "$trial/home/.agents/skills/safety-router-skill/helpers/health_status.py"
+          test ! -e "$trial/codex-home/skills/safety-router-skill"
+          test -f "$trial/codex-home/hooks.json"
+          echo "codex skill discovery layout ok"
+
+      - name: Dual-host proof — Codex bridge denies a destructive call
+        run: |
+          export SAFETY_ORCH_STATUS_DIR="$RUNNER_TEMP/codex-hook-state"
+          mkdir -p "$SAFETY_ORCH_STATUS_DIR"
+          out=$(echo '{"hook_event_name":"PreToolUse","session_id":"ci-session","turn_id":"ci-turn","tool_name":"Bash","tool_input":{"command":"rm --recursive -- /home"}}' \
+                | python3 adapters/codex/codex_hook.py; echo "EXIT=$?")
+          echo "$out"
+          echo "$out" | grep -q '"permissionDecision": "deny"' || { echo "FAIL: not denied"; exit 1; }
+          echo "$out" | grep -q 'EXIT=2' || { echo "FAIL: exit code not 2"; exit 1; }
+
+          retry=$(echo '{"hook_event_name":"PreToolUse","session_id":"ci-session","turn_id":"ci-turn","tool_name":"Bash","tool_input":{"command":"printf safe"}}' \
+                  | python3 adapters/codex/codex_hook.py; echo "EXIT=$?")
+          echo "$retry"
+          echo "$retry" | grep -q 'verdict is terminal' || { echo "FAIL: same-turn retry was not latched"; exit 1; }
+          echo "$retry" | grep -q 'EXIT=2' || { echo "FAIL: retry exit code not 2"; exit 1; }
+
+          echo '{"hook_event_name":"Stop","session_id":"ci-session","turn_id":"ci-turn"}' \
+            | python3 adapters/codex/codex_hook.py
+          after_stop=$(echo '{"hook_event_name":"PreToolUse","session_id":"ci-session","turn_id":"ci-turn","tool_name":"Bash","tool_input":{"command":"printf safe"}}' \
+                       | python3 adapters/codex/codex_hook.py; echo "EXIT=$?")
+          echo "$after_stop" | grep -q 'EXIT=0' || { echo "FAIL: Stop did not release latch"; exit 1; }
+          echo "codex bridge blocks deterministically and prevents same-turn retries"

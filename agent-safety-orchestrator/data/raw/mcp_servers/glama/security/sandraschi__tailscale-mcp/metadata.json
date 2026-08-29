@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "k9b8py8z16",
+  "namespace": "sandraschi",
+  "slug": "tailscale-mcp",
+  "name": "TailscaleMCP",
+  "description": "Enables comprehensive management of Tailscale networks including device management, DNS configuration, file sharing via Taildrop, security monitoring, and network automation with built-in Grafana/Prometheus observability stack.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive management of Tailscale networks including device management, DNS configuration, file sharing via Taildrop, security monitoring, and network automation with built-in Grafana/Prometheus observability stack.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_FILE": {
+          "description": "Log file path",
+          "type": "string",
+          "default": "logs/tailscale-mcp.log"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (DEBUG, INFO, WARNING, ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "PROMETHEUS_PORT": {
+          "description": "Prometheus metrics port",
+          "type": "string",
+          "default": "9091"
+        },
+        "TAILSCALE_API_KEY": {
+          "description": "Your Tailscale API key",
+          "type": "string"
+        },
+        "TAILSCALE_TAILNET": {
+          "description": "Your Tailnet name",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "TAILSCALE_API_KEY",
+        "TAILSCALE_TAILNET"
+      ]
+    },
+    "id": "k9b8py8z16",
+    "name": "TailscaleMCP",
+    "namespace": "sandraschi",
+    "repository": {
+      "url": "https://github.com/sandraschi/tailscale-mcp"
+    },
+    "slug": "tailscale-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/k9b8py8z16"
+  }
+}

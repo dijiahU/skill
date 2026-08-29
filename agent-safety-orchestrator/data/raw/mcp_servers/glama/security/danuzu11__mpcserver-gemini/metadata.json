@@ -1,0 +1,57 @@
+{
+  "registry": "glama",
+  "id": "xbndhanb0g",
+  "namespace": "Danuzu11",
+  "slug": "MPCserver-gemini",
+  "name": "Empresa Gemini MCP",
+  "description": "An MCP server that integrates Google Gemini with corporate management APIs to handle employees, clients, and suppliers through natural language. It enables dynamic data retrieval, record creation, and secure document listing without including sensitive data in the initial prompt.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "An MCP server that integrates Google Gemini with corporate management APIs to handle employees, clients, and suppliers through natural language. It enables dynamic data retrieval, record creation, and secure document listing without including sensitive data in the initial prompt.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_BASE_URL": {
+          "description": "Base URL of the business backend (e.g., for employees, clients, etc.)",
+          "type": "string",
+          "default": "http://localhost:3000/api"
+        },
+        "GEMINI_API_KEY": {
+          "description": "Alternative environment variable for the Google AI API key",
+          "type": "string"
+        },
+        "GOOGLE_GENERATIVE_AI_API_KEY": {
+          "description": "Google AI API key for Gemini integration",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_GENERATIVE_AI_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "GEMINI_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "xbndhanb0g",
+    "name": "Empresa Gemini MCP",
+    "namespace": "Danuzu11",
+    "repository": {
+      "url": "https://github.com/Danuzu11/MPCserver-gemini"
+    },
+    "slug": "MPCserver-gemini",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xbndhanb0g"
+  }
+}

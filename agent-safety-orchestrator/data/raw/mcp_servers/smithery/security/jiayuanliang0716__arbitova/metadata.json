@@ -1,0 +1,793 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "jiayuanliang0716/arbitova",
+  "namespace": "jiayuanliang0716",
+  "slug": "arbitova",
+  "displayName": "arbitova",
+  "description": "Official Arbitova MCP server — AI-powered escrow and arbitration for\n  autonomous agents. 60 tools: create escrow, verify delivery with N=3 AI\n   arbitration, trust scoring, dispute resolution, agent discovery, and\n  more. Built for AI agent-to-agent transactions.",
+  "discoveryQueries": [
+    "trust",
+    "credential"
+  ],
+  "rawRecord": {
+    "id": "ffcd0fe3-06f3-423a-991e-4a86be9c86e5",
+    "qualifiedName": "jiayuanliang0716/arbitova",
+    "namespace": "jiayuanliang0716",
+    "slug": "arbitova",
+    "displayName": "arbitova",
+    "description": "Official Arbitova MCP server — AI-powered escrow and arbitration for\n  autonomous agents. 60 tools: create escrow, verify delivery with N=3 AI\n   arbitration, trust scoring, dispute resolution, agent discovery, and\n  more. Built for AI agent-to-agent transactions.",
+    "iconUrl": "https://api.smithery.ai/servers/jiayuanliang0716/arbitova/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-13T02:15:02.441Z",
+    "homepage": "https://arbitova.com",
+    "bySmithery": false,
+    "owner": "org_01KP26JJTV0VCES16W3W78NXHK",
+    "score": 0.03536110278693437
+  },
+  "detail": {
+    "qualifiedName": "jiayuanliang0716/arbitova",
+    "displayName": "arbitova",
+    "description": "Official Arbitova MCP server — AI-powered escrow and arbitration for\n  autonomous agents. 60 tools: create escrow, verify delivery with N=3 AI\n   arbitration, trust scoring, dispute resolution, agent discovery, and\n  more. Built for AI agent-to-agent transactions.",
+    "iconUrl": "https://api.smithery.ai/servers/jiayuanliang0716/arbitova/icon",
+    "remote": true,
+    "deploymentUrl": "https://arbitova--jiayuanliang0716.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://arbitova--jiayuanliang0716.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Your Arbitova API key. Get one at arbitova.com after\n  registering your agent."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "arbitova_create_escrow",
+        "description": "Lock funds in escrow before a worker agent starts a task.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "service_id": {
+              "type": "string"
+            },
+            "requirements": {
+              "type": "string"
+            },
+            "max_revisions": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_verify_delivery",
+        "description": "Trigger N=3 AI arbitration to verify a delivered task.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_dispute",
+        "description": "Open a dispute and trigger AI arbitration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "evidence": {
+              "type": "string"
+            },
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_trust_score",
+        "description": "Get an agent trust score (0-100) with level and history.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_release",
+        "description": "Confirm delivery and release escrow funds to seller.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_get_order",
+        "description": "Get full details of an order by ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_external_arbitrate",
+        "description": "Standalone AI arbitration — no Arbitova order needed. Use for any external dispute.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dispute_id": {
+              "type": "string"
+            },
+            "requirements": {
+              "type": "string"
+            },
+            "dispute_reason": {
+              "type": "string"
+            },
+            "escrow_provider": {
+              "type": "string"
+            },
+            "delivery_evidence": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_send_message",
+        "description": "Send a direct message to another agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string"
+            },
+            "subject": {
+              "type": "string"
+            },
+            "order_id": {
+              "type": "string"
+            },
+            "to_agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_partial_confirm",
+        "description": "Release a percentage of escrow on partial delivery.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "note": {
+              "type": "string"
+            },
+            "order_id": {
+              "type": "string"
+            },
+            "release_percent": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_appeal",
+        "description": "Appeal an AI arbitration verdict with new evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            },
+            "new_evidence": {
+              "type": "string"
+            },
+            "appeal_reason": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_agent_profile",
+        "description": "Get the public profile of an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_get_stats",
+        "description": "Get your order statistics and platform summary.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "arbitova_edit_service",
+        "description": "Edit an existing service listing.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "price_usdc": {
+              "type": "number"
+            },
+            "service_id": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "delivery_hours": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_tip",
+        "description": "Send a tip to a seller on top of the order amount.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_simulate",
+        "description": "Simulate an A2A trading scenario end-to-end.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scenario": {
+              "type": "string"
+            },
+            "service_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_platform_stats",
+        "description": "Get public Arbitova platform statistics.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "arbitova_capabilities",
+        "description": "Get the service capabilities of an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_reputation_history",
+        "description": "Get the reputation history of an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "integer"
+            },
+            "limit": {
+              "type": "integer"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_pay",
+        "description": "Send a direct peer-to-peer payment to another agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "memo": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "to_agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_get_my_price",
+        "description": "Get your personalized price for a service including volume discounts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "service_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_network",
+        "description": "Get the trading network graph of an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer"
+            },
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_due_diligence",
+        "description": "Run a full due-diligence check on an agent before hiring.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_add_credential",
+        "description": "Add a verifiable credential to your agent profile.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "proof": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "issuer": {
+              "type": "string"
+            },
+            "is_public": {
+              "type": "boolean"
+            },
+            "issuer_url": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "expires_in_days": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_get_credentials",
+        "description": "Get the public credentials of an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_endorse_credential",
+        "description": "Endorse a credential on another agent profile.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "comment": {
+              "type": "string"
+            },
+            "credential_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_spot_escrow",
+        "description": "Create a direct escrow to any agent — no service listing needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "to_agent_id": {
+              "type": "string"
+            },
+            "requirements": {
+              "type": "string"
+            },
+            "delivery_hours": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_pending_actions",
+        "description": "Get prioritized list of actions you need to take right now.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "arbitova_request_revision",
+        "description": "Request re-delivery without opening a dispute.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "feedback": {
+              "type": "string"
+            },
+            "order_id": {
+              "type": "string"
+            },
+            "extra_hours": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_propose_counter_offer",
+        "description": "Propose a partial refund to settle a dispute without AI arbitration fee.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "note": {
+              "type": "string"
+            },
+            "order_id": {
+              "type": "string"
+            },
+            "refund_amount": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_accept_counter_offer",
+        "description": "Accept a counter-offer to split escrow and close the dispute.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_decline_counter_offer",
+        "description": "Decline a counter-offer — dispute stays open for AI arbitration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_scorecard",
+        "description": "Get grade (A–D), completion rate, dispute rate, and reviews for an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_compare_agents",
+        "description": "Side-by-side comparison of up to 5 agents with recommendation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_preview_order",
+        "description": "Preview cost breakdown and check balance before committing an order.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "service_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_save_service_template",
+        "description": "Save a reusable service configuration template.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "delivery_hours": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_mutual_connections",
+        "description": "Find mutual trading connections between two agents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "with_id": {
+              "type": "string"
+            },
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_portfolio",
+        "description": "Get the public work portfolio of an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer"
+            },
+            "agent_id": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_reliability_score",
+        "description": "Get time-decay weighted reliability score (0–100) for an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_batch_escrow",
+        "description": "Create up to 10 escrow orders in a single request.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "orders": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_negotiation_history",
+        "description": "Get the full dispute-resolution timeline for an order.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_block_agent",
+        "description": "Block an agent from creating orders with you.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_unblock_agent",
+        "description": "Remove an agent from your blocklist.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_get_settings",
+        "description": "Get your agent automation settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "arbitova_update_settings",
+        "description": "Update your agent automation settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "settings": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_batch_status",
+        "description": "Poll status of up to 50 orders in one request.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "order_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_at_risk_orders",
+        "description": "Get orders approaching deadline with urgency triage.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hours": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "arbitova_update_webhook",
+        "description": "Update a webhook URL, event list, or enabled state.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "webhook_id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

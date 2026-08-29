@@ -1,0 +1,98 @@
+{
+  "registry": "glama",
+  "id": "v2vhw6fm9w",
+  "namespace": "steevenmentech",
+  "slug": "MCP-SQl-SERVER",
+  "name": "MCP SQL Server",
+  "description": "Enables interaction with Microsoft SQL Server databases using both SQL Server and Windows Authentication. It supports flexible connection configurations, including read-only modes and encrypted communication for secure data management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables interaction with Microsoft SQL Server databases using both SQL Server and Windows Authentication. It supports flexible connection configurations, including read-only modes and encrypted communication for secure data management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DOMAIN": {
+          "description": "The Windows domain (optional, used when USE_WINDOWS_AUTH is true).",
+          "type": "string"
+        },
+        "ENCRYPT": {
+          "description": "Whether to use encryption ('true' or 'false').",
+          "type": "string",
+          "default": "false"
+        },
+        "PASSWORD": {
+          "description": "The password for SQL Server authentication or specific Windows user.",
+          "type": "string"
+        },
+        "READONLY": {
+          "description": "Whether to connect in read-only mode ('true' or 'false').",
+          "type": "string",
+          "default": "false"
+        },
+        "USERNAME": {
+          "description": "The username for SQL Server authentication or specific Windows user.",
+          "type": "string"
+        },
+        "SERVER_NAME": {
+          "description": "The SQL Server instance name or IP address (e.g., localhost, localhost\\SQLEXPRESS, or 192.168.1.100,1433).",
+          "type": "string"
+        },
+        "DATABASE_NAME": {
+          "description": "The name of the database to connect to.",
+          "type": "string"
+        },
+        "USE_WINDOWS_AUTH": {
+          "description": "Whether to use Windows Authentication ('true') or SQL Server Authentication ('false'). Defaults to 'false'.",
+          "type": "string",
+          "default": "false"
+        },
+        "CONNECTION_TIMEOUT": {
+          "description": "Connection timeout in seconds.",
+          "type": "string",
+          "default": "30"
+        },
+        "TRUST_SERVER_CERTIFICATE": {
+          "description": "Whether to trust the server certificate ('true' or 'false').",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SERVER_NAME",
+            "DATABASE_NAME",
+            "USE_WINDOWS_AUTH",
+            "USERNAME",
+            "PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SERVER_NAME",
+            "DATABASE_NAME",
+            "USE_WINDOWS_AUTH"
+          ]
+        }
+      ]
+    },
+    "id": "v2vhw6fm9w",
+    "name": "MCP SQL Server",
+    "namespace": "steevenmentech",
+    "repository": {
+      "url": "https://github.com/steevenmentech/MCP-SQl-SERVER"
+    },
+    "slug": "MCP-SQl-SERVER",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/v2vhw6fm9w"
+  }
+}

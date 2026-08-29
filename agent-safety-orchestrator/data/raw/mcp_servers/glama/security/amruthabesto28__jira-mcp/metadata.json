@@ -1,0 +1,159 @@
+{
+  "registry": "glama",
+  "id": "j3b428tdbu",
+  "namespace": "amruthabesto28",
+  "slug": "JIRA-MCP",
+  "name": "MCP Jira",
+  "description": "Enables AI assistants to interact with Jira Cloud and Server/Data Center deployments for issue management, project tracking, and workflow automation. Supports multiple authentication methods including API tokens, OAuth 2.0, and personal access tokens.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Jira Cloud and Server/Data Center deployments for issue management, project tracking, and workflow automation. Supports multiple authentication methods including API tokens, OAuth 2.0, and personal access tokens.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JIRA_URL": {
+          "description": "The URL of your Jira instance",
+          "type": "string"
+        },
+        "NO_PROXY": {
+          "description": "Comma-separated list of hosts to bypass proxy (e.g., localhost,.your-company.com)",
+          "type": "string"
+        },
+        "HTTP_PROXY": {
+          "description": "HTTP proxy URL (e.g., http://proxy.internal:8080)",
+          "type": "string"
+        },
+        "HTTPS_PROXY": {
+          "description": "HTTPS proxy URL (e.g., http://proxy.internal:8080)",
+          "type": "string"
+        },
+        "MCP_VERBOSE": {
+          "description": "Set to 'true' for more detailed logging",
+          "type": "string"
+        },
+        "SOCKS_PROXY": {
+          "description": "SOCKS proxy URL",
+          "type": "string"
+        },
+        "ENABLED_TOOLS": {
+          "description": "Comma-separated list of tool names to enable (e.g., 'jira_search,jira_get_issue')",
+          "type": "string"
+        },
+        "JIRA_USERNAME": {
+          "description": "Your email address for Jira Cloud authentication",
+          "type": "string"
+        },
+        "JIRA_API_TOKEN": {
+          "description": "Your Jira API token for Cloud authentication",
+          "type": "string"
+        },
+        "READ_ONLY_MODE": {
+          "description": "Set to 'true' to disable write operations",
+          "type": "string"
+        },
+        "JIRA_SSL_VERIFY": {
+          "description": "Set to 'false' to disable SSL verification for self-signed certificates",
+          "type": "string"
+        },
+        "MCP_VERY_VERBOSE": {
+          "description": "Set to 'true' for very detailed debug logging",
+          "type": "string"
+        },
+        "MCP_LOGGING_STDOUT": {
+          "description": "Set to 'true' to log to stdout instead of stderr",
+          "type": "string"
+        },
+        "JIRA_CUSTOM_HEADERS": {
+          "description": "Comma-separated key=value pairs of custom HTTP headers (e.g., X-Forwarded-User=service-account,X-Company-Service=mcp-atlassian)",
+          "type": "string"
+        },
+        "JIRA_PERSONAL_TOKEN": {
+          "description": "Your Personal Access Token for Server/Data Center authentication",
+          "type": "string"
+        },
+        "JIRA_PROJECTS_FILTER": {
+          "description": "Filter by project keys (e.g., 'PROJ,DEV,SUPPORT')",
+          "type": "string"
+        },
+        "ATLASSIAN_OAUTH_SCOPE": {
+          "description": "OAuth 2.0 scopes for Jira access (e.g., read:jira-work write:jira-work offline_access)",
+          "type": "string"
+        },
+        "ATLASSIAN_OAUTH_ENABLE": {
+          "description": "Set to 'true' to enable minimal OAuth mode for multi-cloud scenarios",
+          "type": "string"
+        },
+        "ATLASSIAN_OAUTH_CLOUD_ID": {
+          "description": "Atlassian Cloud ID for OAuth authentication",
+          "type": "string"
+        },
+        "ATLASSIAN_OAUTH_CLIENT_ID": {
+          "description": "OAuth 2.0 client ID from Atlassian Developer Console",
+          "type": "string"
+        },
+        "ATLASSIAN_OAUTH_ACCESS_TOKEN": {
+          "description": "Pre-existing OAuth 2.0 access token for BYOT method",
+          "type": "string"
+        },
+        "ATLASSIAN_OAUTH_REDIRECT_URI": {
+          "description": "OAuth 2.0 redirect URI (e.g., http://localhost:8080/callback)",
+          "type": "string"
+        },
+        "ATLASSIAN_OAUTH_CLIENT_SECRET": {
+          "description": "OAuth 2.0 client secret from Atlassian Developer Console",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "JIRA_URL",
+            "JIRA_USERNAME",
+            "JIRA_API_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "JIRA_URL",
+            "JIRA_PERSONAL_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "JIRA_URL",
+            "ATLASSIAN_OAUTH_CLIENT_ID",
+            "ATLASSIAN_OAUTH_CLIENT_SECRET",
+            "ATLASSIAN_OAUTH_REDIRECT_URI",
+            "ATLASSIAN_OAUTH_SCOPE",
+            "ATLASSIAN_OAUTH_CLOUD_ID"
+          ]
+        },
+        {
+          "required": [
+            "JIRA_URL",
+            "ATLASSIAN_OAUTH_CLOUD_ID",
+            "ATLASSIAN_OAUTH_ACCESS_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "j3b428tdbu",
+    "name": "MCP Jira",
+    "namespace": "amruthabesto28",
+    "repository": {
+      "url": "https://github.com/amruthabesto28/JIRA-MCP"
+    },
+    "slug": "JIRA-MCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j3b428tdbu"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "registry": "glama",
+  "id": "iwpnyk93vc",
+  "namespace": "Thinh-nguyen-03",
+  "slug": "virtual-assistant-mcp",
+  "name": "Google MCP Router",
+  "description": "Enables scheduling meetings and sending email confirmations through Google Calendar and Gmail APIs. Provides secure OAuth authentication, policy enforcement for working hours, and prevents scheduling conflicts.",
+  "discoveryQueries": [
+    "policy",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables scheduling meetings and sending email confirmations through Google Calendar and Gmail APIs. Provides secure OAuth authentication, policy enforcement for working hours, and prevents scheduling conflicts.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "APP_PORT": {
+          "description": "The port number for the application",
+          "type": "string",
+          "default": "8080"
+        },
+        "NODE_ENV": {
+          "description": "The Node.js environment mode",
+          "type": "string",
+          "default": "staging"
+        },
+        "LOG_LEVEL": {
+          "description": "The logging level",
+          "type": "string",
+          "default": "info"
+        },
+        "REDIS_URL": {
+          "description": "Redis connection URL (optional, falls back to in-memory store)",
+          "type": "string",
+          "default": "redis://localhost:6379"
+        },
+        "WORK_DAYS": {
+          "description": "Comma-separated list of work days",
+          "type": "string",
+          "default": "Mon,Tue,Wed,Thu,Fri"
+        },
+        "DEFAULT_TZ": {
+          "description": "The default timezone",
+          "type": "string",
+          "default": "America/Chicago"
+        },
+        "TOKEN_ENC_KEY": {
+          "description": "Base64 encryption key for token storage",
+          "type": "string"
+        },
+        "WORK_HOURS_END": {
+          "description": "The end time for work hours",
+          "type": "string",
+          "default": "18:00"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth client ID",
+          "type": "string"
+        },
+        "WORK_HOURS_START": {
+          "description": "The start time for work hours",
+          "type": "string",
+          "default": "08:00"
+        },
+        "GMAIL_SENDER_NAME": {
+          "description": "The sender name for Gmail",
+          "type": "string"
+        },
+        "GMAIL_SENDER_EMAIL": {
+          "description": "The sender email address for Gmail",
+          "type": "string"
+        },
+        "DEFAULT_MEETING_MIN": {
+          "description": "The default meeting duration in minutes",
+          "type": "string",
+          "default": "30"
+        },
+        "GOOGLE_REDIRECT_URI": {
+          "description": "The Google OAuth redirect URI",
+          "type": "string",
+          "default": "http://localhost:8080/oauth/google/callback"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth client secret",
+          "type": "string"
+        },
+        "ALLOWLIST_CALENDAR_IDS": {
+          "description": "Comma-separated list of allowed calendar IDs",
+          "type": "string",
+          "default": "primary"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "TOKEN_ENC_KEY",
+        "GMAIL_SENDER_EMAIL"
+      ]
+    },
+    "id": "iwpnyk93vc",
+    "name": "Google MCP Router",
+    "namespace": "Thinh-nguyen-03",
+    "repository": {
+      "url": "https://github.com/Thinh-nguyen-03/virtual-assistant-mcp"
+    },
+    "slug": "virtual-assistant-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/iwpnyk93vc"
+  }
+}

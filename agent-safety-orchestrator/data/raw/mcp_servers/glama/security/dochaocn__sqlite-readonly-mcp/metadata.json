@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "rezd3e9zej",
+  "namespace": "dochaocn",
+  "slug": "sqlite-readonly-mcp",
+  "name": "sqlite-readonly-mcp",
+  "description": "A read-only SQLite MCP server for remote Linux deployment that provides secure database querying via SELECT statements and table listing. It uses Bearer Token authentication and returns JSON results through Streamable HTTP, designed to run behind Nginx with HTTPS.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A read-only SQLite MCP server for remote Linux deployment that provides secure database querying via SELECT statements and table listing. It uses Bearer Token authentication and returns JSON results through Streamable HTTP, designed to run behind Nginx with HTTPS.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Host to bind the server to",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "PORT": {
+          "description": "Port to bind the server to",
+          "type": "string",
+          "default": "3333"
+        },
+        "SQLITE_PATH": {
+          "description": "Database file absolute path",
+          "type": "string"
+        },
+        "BEARER_TOKEN": {
+          "description": "Static Bearer token (can also use READONLY_TOKEN)",
+          "type": "string"
+        },
+        "ALLOWED_HOSTS": {
+          "description": "Comma-separated list of allowed Host headers; should include Nginx external domain",
+          "type": "string",
+          "default": "127.0.0.1,localhost,[::1]"
+        },
+        "SQLITE_MAX_ROWS": {
+          "description": "Maximum number of rows per query",
+          "type": "string",
+          "default": "5000"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SQLITE_PATH",
+        "BEARER_TOKEN"
+      ]
+    },
+    "id": "rezd3e9zej",
+    "name": "sqlite-readonly-mcp",
+    "namespace": "dochaocn",
+    "repository": {
+      "url": "https://github.com/dochaocn/sqlite-readonly-mcp"
+    },
+    "slug": "sqlite-readonly-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rezd3e9zej"
+  }
+}

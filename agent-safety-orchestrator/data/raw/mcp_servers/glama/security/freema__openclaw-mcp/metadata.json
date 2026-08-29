@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "vpymwjz5mr",
+  "namespace": "freema",
+  "slug": "openclaw-mcp",
+  "name": "openclaw-mcp",
+  "description": "🦞 MCP server for OpenClaw - secure bridge between Claude.ai and your self-hosted OpenClaw assistant with OAuth2 authentication",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [],
+    "description": "🦞 MCP server for OpenClaw - secure bridge between Claude.ai and your self-hosted OpenClaw assistant with OAuth2 authentication",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AUTH_ENABLED": {
+          "description": "Whether to enable authentication (required for production or remote use).",
+          "type": "string"
+        },
+        "CORS_ORIGINS": {
+          "description": "Comma-separated list of allowed CORS origins, e.g., https://claude.ai.",
+          "type": "string"
+        },
+        "OPENCLAW_URL": {
+          "description": "The URL of the OpenClaw gateway server.",
+          "type": "string",
+          "default": "http://127.0.0.1:18789"
+        },
+        "MCP_CLIENT_ID": {
+          "description": "The client ID used for MCP authentication.",
+          "type": "string"
+        },
+        "MCP_ISSUER_URL": {
+          "description": "The public HTTPS URL of the MCP server, required for OAuth metadata when running behind a reverse proxy.",
+          "type": "string"
+        },
+        "MCP_CLIENT_SECRET": {
+          "description": "The client secret used for MCP authentication.",
+          "type": "string"
+        },
+        "OPENCLAW_GATEWAY_TOKEN": {
+          "description": "The gateway token used for authentication with OpenClaw.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OPENCLAW_URL",
+        "OPENCLAW_GATEWAY_TOKEN"
+      ]
+    },
+    "id": "vpymwjz5mr",
+    "name": "openclaw-mcp",
+    "namespace": "freema",
+    "repository": {
+      "url": "https://github.com/freema/openclaw-mcp"
+    },
+    "slug": "openclaw-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vpymwjz5mr"
+  }
+}

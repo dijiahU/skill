@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "kcjbcjvs93",
+  "namespace": "Traia-IO",
+  "slug": "icon-mcp-v101-mcp-server",
+  "name": "ICON MCP v101 MCP Server",
+  "description": "Provides Model Context Protocol access to the ICON MCP v101 API with support for both Bearer token authentication and pay-per-use blockchain payments via the HTTP 402 protocol. It enables AI agents to interact with ICON API endpoints through standardized, asynchronous tools.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides Model Context Protocol access to the ICON MCP v101 API with support for both Bearer token authentication and pay-per-use blockchain payments via the HTTP 402 protocol. It enables AI agents to interact with ICON API endpoints through standardized, asynchronous tools.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port.",
+          "type": "string",
+          "default": "8000"
+        },
+        "STAGE": {
+          "description": "Environment stage (e.g., MAINNET, TESTNET).",
+          "type": "string",
+          "default": "MAINNET"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (e.g., DEBUG, INFO, WARNING, ERROR).",
+          "type": "string",
+          "default": "INFO"
+        },
+        "SERVER_ADDRESS": {
+          "description": "Server's payment address (for HTTP 402 protocol).",
+          "type": "string"
+        },
+        "D402_TESTING_MODE": {
+          "description": "Set to 'true' for local testing without settlement.",
+          "type": "string",
+          "default": "false"
+        },
+        "D402_FACILITATOR_URL": {
+          "description": "Facilitator service URL for the D402 protocol.",
+          "type": "string"
+        },
+        "MCP_OPERATOR_ADDRESS": {
+          "description": "Operator's public address for verification (Required for Settlement in Production).",
+          "type": "string"
+        },
+        "ICON_MCP_V101_API_KEY": {
+          "description": "Your ICON MCP v101 API key (required). Used for either direct authentication or as the server's internal key in payment mode.",
+          "type": "string"
+        },
+        "D402_FACILITATOR_API_KEY": {
+          "description": "API key for a private facilitator service.",
+          "type": "string"
+        },
+        "MCP_OPERATOR_PRIVATE_KEY": {
+          "description": "Private key for signing settlement attestations (Required for Settlement in Production).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ICON_MCP_V101_API_KEY"
+      ]
+    },
+    "id": "kcjbcjvs93",
+    "name": "ICON MCP v101 MCP Server",
+    "namespace": "Traia-IO",
+    "repository": {
+      "url": "https://github.com/Traia-IO/icon-mcp-v101-mcp-server"
+    },
+    "slug": "icon-mcp-v101-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kcjbcjvs93"
+  }
+}

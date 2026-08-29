@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "q6f9be5nmd",
+  "namespace": "ross-jill-ws",
+  "slug": "cloudflare-mcp-lab",
+  "name": "Cloudflare MCP Lab",
+  "description": "A remote MCP server deployed on Cloudflare Workers with Google OAuth authentication that enables users to interact with a SQL database containing employee data. Demonstrates how to build authenticated MCP servers with OAuth integration on Cloudflare infrastructure.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A remote MCP server deployed on Cloudflare Workers with Google OAuth authentication that enables users to interact with a SQL database containing employee data. Demonstrates how to build authenticated MCP servers with OAuth integration on Cloudflare infrastructure.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth client secret from Google Cloud Console",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A 32-byte random value for cookie encryption (can be generated with 'openssl rand -hex 32')",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "q6f9be5nmd",
+    "name": "Cloudflare MCP Lab",
+    "namespace": "ross-jill-ws",
+    "repository": {
+      "url": "https://github.com/ross-jill-ws/cloudflare-mcp-lab"
+    },
+    "slug": "cloudflare-mcp-lab",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/q6f9be5nmd"
+  }
+}

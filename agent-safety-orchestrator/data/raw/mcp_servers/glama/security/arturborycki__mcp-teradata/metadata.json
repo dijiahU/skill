@@ -1,0 +1,109 @@
+{
+  "registry": "glama",
+  "id": "uh1h4jv0xc",
+  "namespace": "arturborycki",
+  "slug": "mcp-teradata",
+  "name": "Teradata MCP Server",
+  "description": "Enables secure interaction with Teradata databases through SQL queries, schema exploration, and business intelligence analysis with enterprise-grade OAuth 2.1 authentication and workload management capabilities.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure interaction with Teradata databases through SQL queries, schema exploration, and business intelligence analysis with enterprise-grade OAuth 2.1 authentication and workload management capabilities.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Host address for MCP server (e.g., 0.0.0.0)",
+          "type": "string"
+        },
+        "MCP_PATH": {
+          "description": "Path for MCP server when using streamable-http transport (e.g., /mcp/)",
+          "type": "string"
+        },
+        "MCP_PORT": {
+          "description": "Port number for MCP server (e.g., 8000)",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (e.g., DEBUG, INFO, WARNING, ERROR)",
+          "type": "string"
+        },
+        "DATABASE_URI": {
+          "description": "Database connection URI in format: teradatasql://username:password@hostname/database",
+          "type": "string"
+        },
+        "KEYCLOAK_URL": {
+          "description": "Keycloak server URL (e.g., https://keycloak.example.com)",
+          "type": "string"
+        },
+        "MCP_TRANSPORT": {
+          "description": "MCP transport method (sse, streamable-http, or stdio)",
+          "type": "string"
+        },
+        "OAUTH_ENABLED": {
+          "description": "Enable OAuth authentication (true/false)",
+          "type": "string"
+        },
+        "KEYCLOAK_REALM": {
+          "description": "Keycloak realm name (e.g., teradata-realm)",
+          "type": "string"
+        },
+        "KEYCLOAK_CLIENT_ID": {
+          "description": "Keycloak client ID (e.g., teradata-mcp)",
+          "type": "string"
+        },
+        "OAUTH_REQUIRE_HTTPS": {
+          "description": "Require HTTPS for OAuth endpoints (true/false)",
+          "type": "string"
+        },
+        "OAUTH_REQUIRED_SCOPES": {
+          "description": "Optional: Required scopes (comma-separated, e.g., teradata:read,teradata:query)",
+          "type": "string"
+        },
+        "OAUTH_VALIDATE_SCOPES": {
+          "description": "Whether to validate token scopes (true/false)",
+          "type": "string"
+        },
+        "KEYCLOAK_CLIENT_SECRET": {
+          "description": "Keycloak client secret",
+          "type": "string"
+        },
+        "OAUTH_VALIDATE_AUDIENCE": {
+          "description": "Whether to validate token audience (true/false)",
+          "type": "string"
+        },
+        "TOOL_RETRY_MAX_ATTEMPTS": {
+          "description": "Number of retry attempts for database connections (default: 1)",
+          "type": "string",
+          "default": "1"
+        },
+        "TOOL_RETRY_DELAY_SECONDS": {
+          "description": "Delay between retry attempts in seconds (default: 1.0)",
+          "type": "string",
+          "default": "1.0"
+        },
+        "OAUTH_RESOURCE_SERVER_URL": {
+          "description": "Resource server identification URL (e.g., https://your-mcp-server.com)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABASE_URI"
+      ]
+    },
+    "id": "uh1h4jv0xc",
+    "name": "Teradata MCP Server",
+    "namespace": "arturborycki",
+    "repository": {
+      "url": "https://github.com/arturborycki/mcp-teradata"
+    },
+    "slug": "mcp-teradata",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/uh1h4jv0xc"
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cybrlab-ai/PreClick",
+  "namespace": "cybrlab-ai",
+  "slug": "PreClick",
+  "displayName": "PreClick",
+  "description": "PreClick: An intent + security layer for agent browsing that verifies each destination before an agent proceeds, applying analyst-like reasoning, adaptive behavior, and continuous improvement. It enables AI agents and any MCP-compatible client to analyze URLs for malicious content and security threats before navigation.\n\nBASIC USAGE\n\nAgent: Hey, PreClick - I want to open this link to book a room.\nPreClick: ALLOW (low risk + destination matches intent).\n\nAgent: Hey, PreClick - I want to open this link to invest in crypto.\nPreClick: DENY (high risk and/or intent mismatch).\n\nTelco Agent: Hey, PreClick - validate this URL for the SMS campaign (intent: Device trade-in promo).\nPreClick: ALLOW (low risk + intent match).",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "phishing",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "b03e1aa6-a2e2-4845-a3d6-d0199a0d7502",
+    "qualifiedName": "cybrlab-ai/PreClick",
+    "namespace": "cybrlab-ai",
+    "slug": "PreClick",
+    "displayName": "PreClick",
+    "description": "PreClick: An intent + security layer for agent browsing that verifies each destination before an agent proceeds, applying analyst-like reasoning, adaptive behavior, and continuous improvement. It enables AI agents and any MCP-compatible client to analyze URLs for malicious content and security threats before navigation.\n\nBASIC USAGE\n\nAgent: Hey, PreClick - I want to open this link to book a room.\nPreClick: ALLOW (low risk + destination matches intent).\n\nAgent: Hey, PreClick - I want to open this link to invest in crypto.\nPreClick: DENY (high risk and/or intent mismatch).\n\nTelco Agent: Hey, PreClick - validate this URL for the SMS campaign (intent: Device trade-in promo).\nPreClick: ALLOW (low risk + intent match).",
+    "iconUrl": "https://api.smithery.ai/servers/cybrlab-ai/PreClick/icon",
+    "verified": false,
+    "useCount": 1182,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-16T14:47:35.337Z",
+    "homepage": "https://preclick.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBV6SJJB8T0M31BG5QXMEDE",
+    "score": 0.024386724386724387
+  },
+  "detail": {
+    "qualifiedName": "cybrlab-ai/PreClick",
+    "displayName": "PreClick",
+    "description": "PreClick: An intent + security layer for agent browsing that verifies each destination before an agent proceeds, applying analyst-like reasoning, adaptive behavior, and continuous improvement. It enables AI agents and any MCP-compatible client to analyze URLs for malicious content and security threats before navigation.\n\nBASIC USAGE\n\nAgent: Hey, PreClick - I want to open this link to book a room.\nPreClick: ALLOW (low risk + destination matches intent).\n\nAgent: Hey, PreClick - I want to open this link to invest in crypto.\nPreClick: DENY (high risk and/or intent mismatch).\n\nTelco Agent: Hey, PreClick - validate this URL for the SMS campaign (intent: Device trade-in promo).\nPreClick: ALLOW (low risk + intent match).",
+    "iconUrl": "https://api.smithery.ai/servers/cybrlab-ai/PreClick/icon",
+    "remote": true,
+    "deploymentUrl": "https://preclick--cybrlab-ai.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://preclick--cybrlab-ai.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "url_scanner_async_scan",
+        "description": "Submit a URL for asynchronous security analysis. Returns immediately with a task_id. Poll with url_scanner_async_task_status to check progress, then url_scanner_async_task_result to get the scan result. Async counterpart of url_scanner_scan for clients without native MCP Tasks support.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_async_scan_with_intent",
+        "description": "Submit a URL with optional user intent for asynchronous security analysis. Returns immediately with a task_id. Poll with url_scanner_async_task_status to check progress, then url_scanner_async_task_result to get the scan result. Async counterpart of url_scanner_scan_with_intent for clients without native MCP Tasks support.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            },
+            "intent": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional user intent for visiting the URL. Recommended for additional context."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_async_task_result",
+        "description": "Retrieve the result of an asynchronous scan task. If completed, returns the full scan result (risk_score, confidence, agent_access_directive, etc.). If still running, returns status with retry_after_ms — call again after that interval. Non-blocking.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "description": "The task ID to retrieve the result for."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_async_task_status",
+        "description": "Check the status of an asynchronous scan task. Returns the current task status using native MCP task semantics (working, completed, failed, cancelled) without blocking. Use url_scanner_async_task_result to retrieve the result once completed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "description": "The task ID to check status for."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_scan",
+        "description": "Analyze a URL for security threats (synchronous, blocks until complete or timeout). Returns risk score, confidence, agent access guidance, and intent_alignment (always not_provided for this tool; use url_scanner_scan_with_intent for intent context). For long-running scans, prefer url_scanner_async_scan which returns immediately with a task_id for polling via url_scanner_async_task_result.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_scan_with_intent",
+        "description": "Analyze a URL for security threats with optional user intent context (synchronous, blocks until complete or timeout). Returns risk score, confidence, agent access guidance, and intent_alignment. For long-running scans, prefer url_scanner_async_scan_with_intent which returns immediately with a task_id for polling via url_scanner_async_task_result.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            },
+            "intent": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional user intent for visiting the URL. Recommended for additional context."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

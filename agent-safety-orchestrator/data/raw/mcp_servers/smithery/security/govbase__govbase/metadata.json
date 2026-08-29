@@ -1,0 +1,239 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "govbase/govbase",
+  "namespace": "govbase",
+  "slug": "govbase",
+  "displayName": "Govbase",
+  "description": "Govbase provides U.S. federal policy data — search bills, executive orders, look up Congress members and voting records, browse narrative story bundles, and get civic info like representatives and polling locations by address.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "id": "501417d0-53eb-4a3e-a1be-bbd96c64df4b",
+    "qualifiedName": "govbase/govbase",
+    "namespace": "govbase",
+    "slug": "govbase",
+    "displayName": "Govbase",
+    "description": "Govbase provides U.S. federal policy data — search bills, executive orders, look up Congress members and voting records, browse narrative story bundles, and get civic info like representatives and polling locations by address.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/govbase.com.ico",
+    "verified": false,
+    "useCount": 812,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-27T22:54:26.346Z",
+    "homepage": "https://govbase.com",
+    "bySmithery": false,
+    "owner": "org_01KNBVY1AQ8PKMF0SXWR0V6HW0",
+    "score": 0.06256109481915934
+  },
+  "detail": {
+    "qualifiedName": "govbase/govbase",
+    "displayName": "Govbase",
+    "description": "Govbase provides U.S. federal policy data — search bills, executive orders, look up Congress members and voting records, browse narrative story bundles, and get civic info like representatives and polling locations by address.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/govbase.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://govbase--govbase.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://govbase--govbase.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_policies",
+        "description": "Search U.S. federal policies and legislation by keyword, topic, or bill name. Returns a list of matching policies with summaries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "enum": [
+                "date",
+                "importance"
+              ],
+              "type": "string",
+              "default": "importance",
+              "description": "Sort order"
+            },
+            "limit": {
+              "type": "number",
+              "default": 10,
+              "maximum": 25,
+              "minimum": 1,
+              "description": "Number of results (max 25)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search query (bill name, topic, keyword)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_policy",
+        "description": "Retrieve detailed information about a specific U.S. federal policy by its ID (e.g., \"bill-119-hr-22\" or \"eo-2025-1234\").",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "policy_id": {
+              "type": "string",
+              "description": "Policy ID (e.g., \"bill-119-hr-22\" or \"eo-2025-1234\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_policy_text",
+        "description": "Retrieve the full text of a U.S. federal policy document. Returns the raw legislative or regulatory text.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "markdown",
+                "plain"
+              ],
+              "type": "string",
+              "default": "markdown",
+              "description": "Text format"
+            },
+            "policy_id": {
+              "type": "string",
+              "description": "Policy ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_members",
+        "description": "Search current U.S. members of Congress by name, state, party, or chamber. Returns a list of matching members with key details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 20,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Number of results"
+            },
+            "party": {
+              "enum": [
+                "Democratic",
+                "Republican",
+                "Independent"
+              ],
+              "type": "string",
+              "description": "Political party"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search by name"
+            },
+            "state": {
+              "type": "string",
+              "description": "Two-letter state code (e.g., \"CA\")"
+            },
+            "chamber": {
+              "enum": [
+                "house",
+                "senate"
+              ],
+              "type": "string",
+              "description": "Congressional chamber"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_member",
+        "description": "Retrieve detailed information about a specific U.S. member of Congress by their Bioguide ID (e.g., \"P000197\" for Nancy Pelosi).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "bioguide_id": {
+              "type": "string",
+              "description": "Bioguide ID (e.g., \"P000197\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_member_vote",
+        "description": "Check how a specific U.S. member of Congress voted on a policy by providing their Bioguide ID and the policy ID. Returns all roll call votes for that member on the given policy.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "policy_id": {
+              "type": "string",
+              "description": "Policy ID to check vote on"
+            },
+            "bioguide_id": {
+              "type": "string",
+              "description": "Bioguide ID of the member"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_stories",
+        "description": "List current story bundles tracking ongoing policy issues. Returns a feed of active stories grouping related policies and developments.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 10,
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Number of stories"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_story",
+        "description": "Retrieve detailed information about a specific story bundle by its ID, including the full timeline of related events.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "bundle_id": {
+              "type": "string",
+              "description": "Story bundle ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_representatives",
+        "description": "Look up elected representatives for a given U.S. address, including federal, state, and local officials.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "Street address (e.g., \"1600 Pennsylvania Ave, Washington DC\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_voter_info",
+        "description": "Get election and polling location information for a registered U.S. voter address, including upcoming elections and early vote sites.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "Registered voter address"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

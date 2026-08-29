@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "gpj4j80c7p",
+  "namespace": "Unson-LLC",
+  "slug": "freee-mcp",
+  "name": "freee MCP Server",
+  "description": "Enables Claude to interact with freee accounting software through OAuth 2.0 authentication, supporting operations like transaction creation, account management, receipt uploads, and financial statement retrieval.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to interact with freee accounting software through OAuth 2.0 authentication, supporting operations like transaction creation, account management, receipt uploads, and financial statement retrieval.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FREEE_CLIENT_ID": {
+          "description": "Your freee application client ID obtained from freee Developers",
+          "type": "string"
+        },
+        "FREEE_COMPANY_ID": {
+          "description": "Your freee company ID",
+          "type": "string"
+        },
+        "FREEE_REDIRECT_URI": {
+          "description": "OAuth redirect URI (must match the one configured in freee Developers)",
+          "type": "string",
+          "default": "http://localhost:8080/callback"
+        },
+        "FREEE_CLIENT_SECRET": {
+          "description": "Your freee application client secret obtained from freee Developers",
+          "type": "string"
+        },
+        "TOKEN_ENCRYPTION_KEY": {
+          "description": "32-byte encryption key for storing tokens securely (generate using: python -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\")",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FREEE_CLIENT_ID",
+        "FREEE_CLIENT_SECRET",
+        "FREEE_COMPANY_ID",
+        "TOKEN_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "gpj4j80c7p",
+    "name": "freee MCP Server",
+    "namespace": "Unson-LLC",
+    "repository": {
+      "url": "https://github.com/Unson-LLC/freee-mcp"
+    },
+    "slug": "freee-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gpj4j80c7p"
+  }
+}

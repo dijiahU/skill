@@ -1,0 +1,149 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "nexgendata-apify/seo-web-analysis-mcp-server",
+  "namespace": "nexgendata-apify",
+  "slug": "seo-web-analysis-mcp-server",
+  "displayName": "SEO Web Analysis MCP — Site Audit & Tech Stack",
+  "description": "SEO audit toolkit: feed it a URL, get back rendered content, the technology stack (CMS, CDN, frameworks), DNS records, SSL cert status, and WHOIS. Useful for competitive analysis ('what's our competitor running?'), security checks, or due-diligence on a target acquisition.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "d9a3592f-dd1d-4ee8-b94c-69f67235d996",
+    "qualifiedName": "nexgendata-apify/seo-web-analysis-mcp-server",
+    "namespace": "nexgendata-apify",
+    "slug": "seo-web-analysis-mcp-server",
+    "displayName": "SEO Web Analysis MCP — Site Audit & Tech Stack",
+    "description": "SEO audit toolkit: feed it a URL, get back rendered content, the technology stack (CMS, CDN, frameworks), DNS records, SSL cert status, and WHOIS. Useful for competitive analysis ('what's our competitor running?'), security checks, or due-diligence on a target acquisition.",
+    "iconUrl": "https://api.smithery.ai/servers/nexgendata-apify/seo-web-analysis-mcp-server/icon",
+    "verified": false,
+    "useCount": 4784,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-03T08:36:45.443Z",
+    "homepage": "https://thenextgennexus.com",
+    "bySmithery": false,
+    "owner": "org_01KNBW09ZWF5YSC6BWS1SEWWWA",
+    "score": 0.0402046783625731
+  },
+  "detail": {
+    "qualifiedName": "nexgendata-apify/seo-web-analysis-mcp-server",
+    "displayName": "SEO Web Analysis MCP — Site Audit & Tech Stack",
+    "description": "SEO audit toolkit: feed it a URL, get back rendered content, the technology stack (CMS, CDN, frameworks), DNS records, SSL cert status, and WHOIS. Useful for competitive analysis ('what's our competitor running?'), security checks, or due-diligence on a target acquisition.",
+    "iconUrl": "https://api.smithery.ai/servers/nexgendata-apify/seo-web-analysis-mcp-server/icon",
+    "remote": true,
+    "deploymentUrl": "https://seo-web-analysis-mcp-server--nexgendata-apify.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://seo-web-analysis-mcp-server--nexgendata-apify.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "Apify API Token",
+              "x-order": 0,
+              "description": "Your Apify API token for authenticated access. Get it from https://console.apify.com/settings/integrations. Required for data retrieval; optional for server discovery and capability listing."
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "crawl_website",
+        "description": "Crawl a website and extract structured content from all accessible pages. Returns page titles, meta descriptions, headings, body text, internal/external links, and page structure. Use for SEO audits, content inventory, site mapping, or data extraction for analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Website URL to crawl (e.g. 'https://www.example.com', 'example.com')"
+            },
+            "max_pages": {
+              "type": "integer",
+              "default": 10,
+              "description": "Maximum number of pages to crawl (default 10, higher for full site scans)"
+            }
+          }
+        }
+      },
+      {
+        "name": "detect_tech_stack",
+        "description": "Identify the technology stack and services used by a website. Returns framework names, CMS platform, JavaScript libraries, analytics services, CDN provider, hosting provider, and security tools detected. Use for competitive analysis, vendor intelligence, or understanding site architecture.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Website URL to analyze (e.g. 'https://www.example.com')"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_dns",
+        "description": "Perform DNS lookup to retrieve DNS record details for a domain. Returns A records (IP addresses), MX records (mail servers), CNAME records, NS records (nameservers), and TXT records. Use for email setup verification, DNS troubleshooting, or server infrastructure research.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name to look up (e.g. 'google.com', 'example.org', 'subdomain.example.com')"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_ssl",
+        "description": "Inspect SSL/TLS certificate details for a domain. Returns certificate issuer, expiration date, subject alternative names (SANs), key strength, and certificate chain validation status. Use for security audits, certificate renewal tracking, or compliance verification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to check SSL certificate (e.g. 'example.com', 'api.example.com')"
+            }
+          }
+        }
+      },
+      {
+        "name": "lookup_whois",
+        "description": "Query WHOIS database for domain registration details. Returns registrant name, registrar, registration and expiration dates, registrant contact info, and nameserver list. Use for domain research, owner identification, or tracking registration status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name to look up in WHOIS (e.g. 'example.com', 'company.org')"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Available Analyses",
+        "uri": "seo://analysis-types",
+        "description": "Website crawling, tech stack detection, DNS lookup, SSL inspection, and WHOIS queries.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "site_audit",
+        "description": "Perform a comprehensive SEO and technical audit of a website including content, tech stack, DNS, SSL, and WHOIS.",
+        "arguments": [
+          {
+            "name": "url",
+            "description": "Website URL to audit",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

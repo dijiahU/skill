@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "h89j8xgpvc",
+  "namespace": "nusagates",
+  "slug": "mcp_pbi",
+  "name": "Power BI Modeling MCP SSE Bridge",
+  "description": "This MCP server provides a web-ready SSE bridge for Microsoft's Power BI Modeling MCP Server, enabling URL-based interaction with Power BI semantic models from any programming language without local stdio piping. It features automatic Azure authentication and dynamic binary resolution for seamless Power BI data analysis.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "This MCP server provides a web-ready SSE bridge for Microsoft's Power BI Modeling MCP Server, enabling URL-based interaction with Power BI semantic models from any programming language without local stdio piping. It features automatic Azure authentication and dynamic binary resolution for seamless Power BI data analysis.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MS_PBI_PASSWORD": {
+          "description": "Power BI Admin password for password-based login.",
+          "type": "string"
+        },
+        "MS_PBI_USERNAME": {
+          "description": "Power BI Admin username for password-based login.",
+          "type": "string"
+        },
+        "MS_PBI_CLIENT_ID": {
+          "description": "Azure client ID for authentication.",
+          "type": "string"
+        },
+        "MS_PBI_TENANT_ID": {
+          "description": "Azure tenant ID for authentication.",
+          "type": "string"
+        },
+        "MS_PBI_CLIENT_SECRET": {
+          "description": "Azure client secret for authentication (used with Service Principal).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MS_PBI_TENANT_ID",
+            "MS_PBI_CLIENT_ID",
+            "MS_PBI_CLIENT_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "MS_PBI_TENANT_ID",
+            "MS_PBI_CLIENT_ID",
+            "MS_PBI_USERNAME",
+            "MS_PBI_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "h89j8xgpvc",
+    "name": "Power BI Modeling MCP SSE Bridge",
+    "namespace": "nusagates",
+    "repository": {
+      "url": "https://github.com/nusagates/mcp_pbi"
+    },
+    "slug": "mcp_pbi",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/h89j8xgpvc"
+  }
+}

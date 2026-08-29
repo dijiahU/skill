@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "l1q99k5037",
+  "namespace": "bolnet",
+  "slug": "attestor",
+  "name": "attestor",
+  "description": "Audit-grade memory backbone for agent teams. Bi-temporal facts (event time + transaction time, with recall(as_of=...) replay), 6-step deterministic retrieval (no LLM in the critical path), conversation ingest with speaker-locked dual-pass extraction, per-tenant Postgres row-level security, and Ed25519-signed provenance. Postgres + pgvector + Neo4j defaults.",
+  "discoveryQueries": [
+    "security",
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Audit-grade memory backbone for agent teams. Bi-temporal facts (event time + transaction time, with recall(as_of=...) replay), 6-step deterministic retrieval (no LLM in the critical path), conversation ingest with speaker-locked dual-pass extraction, per-tenant Postgres row-level security, and Ed25519-signed provenance. Postgres + pgvector + Neo4j defaults.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ATTESTOR_TRACE": {
+          "description": "Set to '0' to disable JSONL traces.",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "OpenAI API key for embeddings or benchmarks.",
+          "type": "string"
+        },
+        "ATTESTOR_EMBEDDING_MODEL": {
+          "description": "Override embedding model (e.g., 'text-embedding-3-large'). Default: 'bge-m3'.",
+          "type": "string"
+        },
+        "ATTESTOR_EMBEDDING_PROVIDER": {
+          "description": "Override embedding provider (e.g., 'openai'). Default: auto-detected from local Ollama.",
+          "type": "string"
+        },
+        "OPENAI_EMBEDDING_DIMENSIONS": {
+          "description": "Override embedding dimensions (e.g., '1024').",
+          "type": "string"
+        },
+        "ATTESTOR_DISABLE_LOCAL_EMBED": {
+          "description": "Set to '1' to skip local Ollama probe.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "l1q99k5037",
+    "name": "attestor",
+    "namespace": "bolnet",
+    "repository": {
+      "url": "https://github.com/bolnet/attestor"
+    },
+    "slug": "attestor",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/l1q99k5037"
+  }
+}

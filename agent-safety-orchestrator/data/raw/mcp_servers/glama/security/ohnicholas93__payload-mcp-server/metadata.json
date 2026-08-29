@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "lx0y7kv7rz",
+  "namespace": "ohnicholas93",
+  "slug": "payload-mcp-server",
+  "name": "Payload CMS MCP Server",
+  "description": "Enables AI assistants to interact with Payload CMS instances through authenticated REST API operations. Supports creating, searching, and updating documents in collections with automatic JWT authentication and localization support.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to interact with Payload CMS instances through authenticated REST API operations. Supports creating, searching, and updating documents in collections with automatic JWT authentication and localization support.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PAYLOAD_MCP_LOG_LEVEL": {
+          "description": "Logging verbosity (options: DEBUG, WARNING, ERROR, CRITICAL)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "PAYLOAD_MCP_PAYLOAD__TIMEOUT": {
+          "description": "Request timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "PAYLOAD_MCP_PAYLOAD__BASE_URL": {
+          "description": "Base API URL for Payload CMS instance",
+          "type": "string",
+          "default": "http://localhost:3000/api"
+        },
+        "PAYLOAD_MCP_PAYLOAD__AUTH_TOKEN": {
+          "description": "Optional JWT token for pre-authenticated access. If omitted, browser login will be used on first need",
+          "type": "string"
+        },
+        "PAYLOAD_MCP_PAYLOAD__VERIFY_SSL": {
+          "description": "Enable SSL verification (default: false for local dev; set to true for HTTPS production)",
+          "type": "string",
+          "default": "false"
+        },
+        "PAYLOAD_MCP_PAYLOAD__BYPASS_PROXY": {
+          "description": "Bypass proxies for localhost",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "lx0y7kv7rz",
+    "name": "Payload CMS MCP Server",
+    "namespace": "ohnicholas93",
+    "repository": {
+      "url": "https://github.com/ohnicholas93/payload-mcp-server"
+    },
+    "slug": "payload-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lx0y7kv7rz"
+  }
+}

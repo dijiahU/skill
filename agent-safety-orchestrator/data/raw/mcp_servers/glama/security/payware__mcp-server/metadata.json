@@ -1,0 +1,57 @@
+{
+  "registry": "glama",
+  "id": "mht7pi9jmf",
+  "namespace": "payware",
+  "slug": "mcp-server",
+  "name": "Payware MCP Server",
+  "description": "Enables merchant integration with payware payment APIs for creating transactions, managing authentication, and generating code examples across multiple programming languages. Provides comprehensive tools for payment processing, JWT authentication, and sandbox testing.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "Enables merchant integration with payware payment APIs for creating transactions, managing authentication, and generating code examples across multiple programming languages. Provides comprehensive tools for payment processing, JWT authentication, and sandbox testing.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PAYWARE_PARTNER_ID": {
+          "description": "Partner ID from payware dashboard",
+          "type": "string"
+        },
+        "PAYWARE_SANDBOX_URL": {
+          "description": "Sandbox base URL",
+          "type": "string",
+          "default": "https://sandbox.payware.eu/api"
+        },
+        "PAYWARE_SANDBOX_PRIVATE_KEY_PATH": {
+          "description": "Path to private key file (relative to project root)",
+          "type": "string"
+        },
+        "PAYWARE_PRODUCTION_PRIVATE_KEY_PATH": {
+          "description": "Path to production private key file (relative to project root)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "PAYWARE_PARTNER_ID",
+        "PAYWARE_SANDBOX_PRIVATE_KEY_PATH"
+      ]
+    },
+    "id": "mht7pi9jmf",
+    "name": "Payware MCP Server",
+    "namespace": "payware",
+    "repository": {
+      "url": "https://github.com/payware/mcp-server"
+    },
+    "slug": "mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mht7pi9jmf"
+  }
+}

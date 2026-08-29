@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "lzsa97l4h2",
+  "namespace": "Valiant-Cat",
+  "slug": "zentao-mcp-server",
+  "name": "ZenTao MCP Server",
+  "description": "Enables interaction with ZenTao project management system through RESTful API v1. Supports bug tracking, project/product management, and automated token authentication for seamless integration.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with ZenTao project management system through RESTful API v1. Supports bug tracking, project/product management, and automated token authentication for seamless integration.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ZENTAO_TOKEN": {
+          "description": "可选，已有 token；如果未提供会自动通过 /tokens 获取",
+          "type": "string"
+        },
+        "ZENTAO_ACCOUNT": {
+          "description": "登录账号",
+          "type": "string"
+        },
+        "ZENTAO_BASE_URL": {
+          "description": "禅道服务地址，形如 https://xxx.com",
+          "type": "string"
+        },
+        "ZENTAO_PASSWORD": {
+          "description": "登录密码",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ZENTAO_BASE_URL",
+            "ZENTAO_ACCOUNT",
+            "ZENTAO_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "ZENTAO_BASE_URL",
+            "ZENTAO_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "lzsa97l4h2",
+    "name": "ZenTao MCP Server",
+    "namespace": "Valiant-Cat",
+    "repository": {
+      "url": "https://github.com/Valiant-Cat/zentao-mcp-server"
+    },
+    "slug": "zentao-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lzsa97l4h2"
+  }
+}

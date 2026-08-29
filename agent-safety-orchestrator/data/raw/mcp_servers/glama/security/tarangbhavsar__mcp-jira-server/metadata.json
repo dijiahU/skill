@@ -1,0 +1,100 @@
+{
+  "registry": "glama",
+  "id": "b14f42q0tm",
+  "namespace": "tarangbhavsar",
+  "slug": "mcp-jira-server",
+  "name": "MCP JIRA Server",
+  "description": "Enables comprehensive interaction with JIRA through the Model Context Protocol, supporting issue management, search, comments, attachments, workflow transitions, and custom fields with enterprise Kerberos authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive interaction with JIRA through the Model Context Protocol, supporting issue management, search, comments, attachments, workflow transitions, and custom fields with enterprise Kerberos authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JIRA_URL": {
+          "description": "The URL of your JIRA instance (e.g., https://jira.yourcompany.com)",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (e.g., INFO, DEBUG, WARNING, ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "JIRA_EMAIL": {
+          "description": "Your JIRA email address. Required when AUTH_METHOD=api_token",
+          "type": "string"
+        },
+        "AUTH_METHOD": {
+          "description": "Authentication method to use: 'kerberos', 'api_token', or 'basic'",
+          "type": "string",
+          "default": "kerberos"
+        },
+        "JIRA_API_TOKEN": {
+          "description": "Your JIRA API token. Required when AUTH_METHOD=api_token",
+          "type": "string"
+        },
+        "REQUEST_TIMEOUT": {
+          "description": "Request timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "KERBEROS_PRINCIPAL": {
+          "description": "Kerberos principal for authentication (e.g., HTTP/jira.yourcompany.com@REALM). Required when AUTH_METHOD=kerberos",
+          "type": "string"
+        },
+        "KERBEROS_KEYTAB_PATH": {
+          "description": "Path to Kerberos keytab file. Required when AUTH_METHOD=kerberos",
+          "type": "string"
+        },
+        "KERBEROS_MUTUAL_AUTH": {
+          "description": "Enable mutual authentication for Kerberos",
+          "type": "string",
+          "default": "true"
+        },
+        "CUSTOM_FIELDS_CACHE_TTL": {
+          "description": "Time-to-live for custom fields cache in seconds",
+          "type": "string",
+          "default": "3600"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "JIRA_URL",
+            "AUTH_METHOD",
+            "KERBEROS_PRINCIPAL",
+            "KERBEROS_KEYTAB_PATH"
+          ]
+        },
+        {
+          "required": [
+            "JIRA_URL",
+            "AUTH_METHOD",
+            "JIRA_EMAIL",
+            "JIRA_API_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "JIRA_URL"
+          ]
+        }
+      ]
+    },
+    "id": "b14f42q0tm",
+    "name": "MCP JIRA Server",
+    "namespace": "tarangbhavsar",
+    "repository": {
+      "url": "https://github.com/tarangbhavsar/mcp-jira-server"
+    },
+    "slug": "mcp-jira-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b14f42q0tm"
+  }
+}

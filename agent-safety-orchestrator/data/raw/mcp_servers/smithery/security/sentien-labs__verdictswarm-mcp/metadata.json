@@ -1,0 +1,267 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "sentien-labs/verdictswarm-mcp",
+  "namespace": "sentien-labs",
+  "slug": "verdictswarm-mcp",
+  "displayName": "VerdictSwarm",
+  "description": "Fight AI with AI. The security layer for AI agents that touch money. 6 adversarial AI agents independently analyze, debate, and reach consensus on any token — catching what single-algorithm scanners miss. Supports Solana, Ethereum, Base, BSC. Free tier, no API key needed.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "guardrail",
+    "vulnerability"
+  ],
+  "rawRecord": {
+    "id": "436c6e53-e5da-4db6-8d6a-601087dbe981",
+    "qualifiedName": "sentien-labs/verdictswarm-mcp",
+    "namespace": "sentien-labs",
+    "slug": "verdictswarm-mcp",
+    "displayName": "VerdictSwarm",
+    "description": "Fight AI with AI. The security layer for AI agents that touch money. 6 adversarial AI agents independently analyze, debate, and reach consensus on any token — catching what single-algorithm scanners miss. Supports Solana, Ethereum, Base, BSC. Free tier, no API key needed.",
+    "iconUrl": "https://api.smithery.ai/servers/sentien-labs/verdictswarm-mcp/icon",
+    "verified": false,
+    "useCount": 234,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-02T20:05:38.238Z",
+    "homepage": "https://vswarm.io",
+    "bySmithery": false,
+    "owner": "org_01KNBW12TQ91A6C3YTZA95PMJ1",
+    "score": 0.02389418290428104
+  },
+  "detail": {
+    "qualifiedName": "sentien-labs/verdictswarm-mcp",
+    "displayName": "VerdictSwarm",
+    "description": "Fight AI with AI. The security layer for AI agents that touch money. 6 adversarial AI agents independently analyze, debate, and reach consensus on any token — catching what single-algorithm scanners miss. Supports Solana, Ethereum, Base, BSC. Free tier, no API key needed.",
+    "iconUrl": "https://api.smithery.ai/servers/sentien-labs/verdictswarm-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://verdictswarm-mcp--sentien-labs.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://verdictswarm-mcp--sentien-labs.run.tools",
+        "configSchema": {
+          "type": "object",
+          "title": "VerdictSwarm Configuration",
+          "required": [],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "default": "",
+              "x-order": 0,
+              "description": "Optional API key for higher rate limits. Leave empty for free tier (10 scans included)."
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_token",
+        "description": "\n    Run a full 6-agent VerdictSwarm risk scan.\n    Returns consensus score, risk level, and agent-level findings for safe trading decisions.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "title": "Chain",
+              "default": "solana"
+            },
+            "depth": {
+              "type": "string",
+              "title": "Depth",
+              "default": "full"
+            },
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "default": ""
+            },
+            "tx_signature": {
+              "type": "string",
+              "title": "Tx Signature",
+              "default": ""
+            },
+            "token_address": {
+              "type": "string",
+              "title": "Token Address"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_quick_score",
+        "description": "\n    Fast cached token risk check.\n    Returns score (0-100), risk band, and key token metadata for quick pre-trade screening.\n    Free: 10 calls/day; paid calls: 0.02 USDC.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "title": "Chain",
+              "default": "solana"
+            },
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "default": ""
+            },
+            "client_id": {
+              "type": "string",
+              "title": "Client Id",
+              "default": "anonymous"
+            },
+            "tx_signature": {
+              "type": "string",
+              "title": "Tx Signature",
+              "default": ""
+            },
+            "token_address": {
+              "type": "string",
+              "title": "Token Address"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_rug_risk",
+        "description": "\n    Rug-pull-focused security scan.\n    Checks mint/freeze controls, LP lock status, honeypot behavior, holder concentration, and returns SAFE/CAUTION/DANGER.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "title": "Chain",
+              "default": "solana"
+            },
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "default": ""
+            },
+            "tx_signature": {
+              "type": "string",
+              "title": "Tx Signature",
+              "default": ""
+            },
+            "token_address": {
+              "type": "string",
+              "title": "Token Address"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_token_report",
+        "description": "\n    Generate a shareable markdown report for a token.\n    Includes score, risk level, security findings, and recommendations.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "title": "Chain",
+              "default": "solana"
+            },
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "default": ""
+            },
+            "tx_signature": {
+              "type": "string",
+              "title": "Tx Signature",
+              "default": ""
+            },
+            "token_address": {
+              "type": "string",
+              "title": "Token Address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_pricing",
+        "description": "\n    Return current tool pricing and Solana payment details.\n    Includes USDC rates, wallet/mint, free-tier limits, and transaction instructions.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "verify_payment",
+        "description": "\n    Verify a Solana USDC payment for a tool call.\n    Returns verification status, sender, and required vs received amount.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tool_name": {
+              "type": "string",
+              "title": "Tool Name"
+            },
+            "tx_signature": {
+              "type": "string",
+              "title": "Tx Signature"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "help_resource",
+        "uri": "verdictswarm://help",
+        "description": "",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "scoring_resource",
+        "uri": "verdictswarm://scoring",
+        "description": "",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "should_i_buy",
+        "description": "",
+        "arguments": [
+          {
+            "name": "token_address",
+            "required": true
+          },
+          {
+            "name": "chain",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "portfolio_check",
+        "description": "",
+        "arguments": [
+          {
+            "name": "tokens",
+            "required": true
+          },
+          {
+            "name": "chain",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "r5j7g9yitd",
+  "namespace": "PleasePrompto",
+  "slug": "notebooklm-mcp",
+  "name": "NotebookLM MCP Server",
+  "description": "Enables direct integration with Google NotebookLM from MCP clients, allowing agents to query notebooks, manage libraries, and get grounded research answers without manual copy-pasting. Uses browser automation to maintain persistent authentication and provides RAG-style research capabilities within code editors.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables direct integration with Google NotebookLM from MCP clients, allowing agents to query notebooks, manage libraries, and get grounded research answers without manual copy-pasting. Uses browser automation to maintain persistent authentication and provides RAG-style research capabilities within code editors.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HEADLESS": {
+          "description": "Run Chrome headless (agents can override with show_browser).",
+          "type": "string",
+          "default": "true"
+        },
+        "LOGIN_EMAIL": {
+          "description": "Email for scripted login (required when AUTO_LOGIN_ENABLED is true).",
+          "type": "string"
+        },
+        "MAX_SESSIONS": {
+          "description": "Maximum concurrent NotebookLM sessions.",
+          "type": "string",
+          "default": "10"
+        },
+        "NOTEBOOK_URL": {
+          "description": "Legacy default notebook (library usage is recommended instead).",
+          "type": "string",
+          "default": ""
+        },
+        "LOGIN_PASSWORD": {
+          "description": "Password for scripted login (required when AUTO_LOGIN_ENABLED is true).",
+          "type": "string"
+        },
+        "SESSION_TIMEOUT": {
+          "description": "Inactive seconds before a session auto-closes.",
+          "type": "string",
+          "default": "900"
+        },
+        "STEALTH_ENABLED": {
+          "description": "Human-like typing/mouse behaviour.",
+          "type": "string",
+          "default": "true"
+        },
+        "AUTO_LOGIN_ENABLED": {
+          "description": "Enable scripted login (requires LOGIN_EMAIL + LOGIN_PASSWORD).",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "r5j7g9yitd",
+    "name": "NotebookLM MCP Server",
+    "namespace": "PleasePrompto",
+    "repository": {
+      "url": "https://github.com/PleasePrompto/notebooklm-mcp"
+    },
+    "slug": "notebooklm-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/r5j7g9yitd"
+  }
+}

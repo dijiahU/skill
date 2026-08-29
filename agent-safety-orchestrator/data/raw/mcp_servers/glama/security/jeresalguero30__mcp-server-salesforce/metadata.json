@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "n6zgek0m6n",
+  "namespace": "JereSalguero30",
+  "slug": "mcp-server-salesforce",
+  "name": "Salesforce MCP Server",
+  "description": "Enables natural language interactions with Salesforce data and metadata, allowing users to query records, manage custom objects, and manipulate Apex code. It provides comprehensive tools for schema exploration, aggregate queries, and field-level security management.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables natural language interactions with Salesforce data and metadata, allowing users to query records, manage custom objects, and manipulate Apex code. It provides comprehensive tools for schema exploration, aggregate queries, and field-level security management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SALESFORCE_TOKEN": {
+          "description": "Your Salesforce security token (required for User_Password authentication).",
+          "type": "string"
+        },
+        "SALESFORCE_PASSWORD": {
+          "description": "Your Salesforce password (required for User_Password authentication).",
+          "type": "string"
+        },
+        "SALESFORCE_USERNAME": {
+          "description": "Your Salesforce username (required for User_Password authentication).",
+          "type": "string"
+        },
+        "SALESFORCE_CLIENT_ID": {
+          "description": "The Client ID from your Salesforce Connected App (required for OAuth_2.0_Client_Credentials).",
+          "type": "string"
+        },
+        "SALESFORCE_INSTANCE_URL": {
+          "description": "Your exact Salesforce instance URL (e.g., https://your-domain.my.salesforce.com). Optional for User_Password (defaults to https://login.salesforce.com), but required for OAuth_2.0_Client_Credentials.",
+          "type": "string",
+          "default": "https://login.salesforce.com"
+        },
+        "SALESFORCE_CLIENT_SECRET": {
+          "description": "The Client Secret from your Salesforce Connected App (required for OAuth_2.0_Client_Credentials).",
+          "type": "string"
+        },
+        "SALESFORCE_CONNECTION_TYPE": {
+          "description": "The method used to connect to Salesforce. Use 'User_Password' for traditional login or 'OAuth_2.0_Client_Credentials' for OAuth flow.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SALESFORCE_CONNECTION_TYPE",
+            "SALESFORCE_USERNAME",
+            "SALESFORCE_PASSWORD",
+            "SALESFORCE_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "SALESFORCE_CONNECTION_TYPE",
+            "SALESFORCE_CLIENT_ID",
+            "SALESFORCE_CLIENT_SECRET",
+            "SALESFORCE_INSTANCE_URL"
+          ]
+        }
+      ]
+    },
+    "id": "n6zgek0m6n",
+    "name": "Salesforce MCP Server",
+    "namespace": "JereSalguero30",
+    "repository": {
+      "url": "https://github.com/JereSalguero30/mcp-server-salesforce"
+    },
+    "slug": "mcp-server-salesforce",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n6zgek0m6n"
+  }
+}

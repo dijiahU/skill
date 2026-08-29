@@ -1,0 +1,100 @@
+# Kubernetes Skill Test Deployment
+#
+# Battle-tested manifest following security-first patterns from SKILL.md
+# Tests: security context, health probes, resource limits, labels
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-skill-test
+  labels:
+    app.kubernetes.io/name: k8s-skill-test
+    app.kubernetes.io/instance: k8s-skill-test-dev
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: test
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: k8s-skill-test
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: k8s-skill-test
+    spec:
+      # Security: Never run as root
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: nginx
+        # Using unprivileged nginx (port 8080, not 80)
+        image: nginxinc/nginx-unprivileged:alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        # Port >=1024 for runAsNonRoot compatibility
+        - containerPort: 8080
+          protocol: TCP
+        # Container-level security
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        # Resource limits
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        # Health probes
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        # Temp dirs for read-only filesystem
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: cache
+          mountPath: /var/cache/nginx
+        - name: pid
+          mountPath: /var/run
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: cache
+        emptyDir: {}
+      - name: pid
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-skill-test
+  labels:
+    app.kubernetes.io/name: k8s-skill-test
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app.kubernetes.io/name: k8s-skill-test

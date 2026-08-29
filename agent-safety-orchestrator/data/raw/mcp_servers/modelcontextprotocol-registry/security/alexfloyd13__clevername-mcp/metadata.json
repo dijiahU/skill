@@ -1,0 +1,57 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.AlexFloyd13/clevername-mcp",
+  "slug": "AlexFloyd13__clevername-mcp",
+  "title": "Clevername",
+  "description": "AI agent governance — security scanning, BYOK routing, audit logging, and Council approvals.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.AlexFloyd13/clevername-mcp",
+      "description": "AI agent governance — security scanning, BYOK routing, audit logging, and Council approvals.",
+      "title": "Clevername",
+      "repository": {
+        "url": "https://github.com/AlexFloyd13/clevername",
+        "source": "github",
+        "subfolder": "integrations/clevername-mcp"
+      },
+      "version": "1.1.2",
+      "packages": [
+        {
+          "registryType": "npm",
+          "identifier": "@clevername/clevername-mcp",
+          "version": "1.1.2",
+          "transport": {
+            "type": "streamable-http",
+            "url": "https://clevername.net/api/hub/mcp/gateway"
+          }
+        },
+        {
+          "registryType": "npm",
+          "identifier": "@clevername/clevername-mcp",
+          "version": "1.1.2",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Gateway token (cnk_*) from clevername.net/dashboard/settings/developer. Optional — omit to use the clevername_login device flow instead.",
+              "format": "string",
+              "isSecret": true,
+              "name": "CLEVERNAME_API_KEY"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-03-29T15:49:59.263566Z",
+        "publishedAt": "2026-03-29T15:49:59.263566Z",
+        "updatedAt": "2026-03-29T15:49:59.263566Z",
+        "isLatest": true
+      }
+    }
+  }
+}

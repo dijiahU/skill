@@ -1,0 +1,71 @@
+{
+  "registry": "glama",
+  "id": "irzugdvfek",
+  "namespace": "HainanZhao",
+  "slug": "mcp-swagger",
+  "name": "MCP Swagger Server",
+  "description": "Automatically converts REST APIs with Swagger/OpenAPI documentation into MCP tools, making any documented API accessible to MCP-compatible clients. Supports authentication, SSL handling, and flexible configuration for seamless API integration.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Automatically converts REST APIs with Swagger/OpenAPI documentation into MCP tools, making any documented API accessible to MCP-compatible clients. Supports authentication, SSL handling, and flexible configuration for seamless API integration.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "Override base URL for API calls",
+          "type": "string"
+        },
+        "IGNORE_SSL": {
+          "description": "Ignore SSL certificate errors",
+          "type": "string"
+        },
+        "AUTH_HEADER": {
+          "description": "Authentication header",
+          "type": "string"
+        },
+        "SWAGGER_URL": {
+          "description": "URL to swagger documentation",
+          "type": "string"
+        },
+        "TOOL_PREFIX": {
+          "description": "Custom prefix for generated tools",
+          "type": "string"
+        },
+        "SWAGGER_FILE": {
+          "description": "Path to local swagger file",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SWAGGER_URL"
+          ]
+        },
+        {
+          "required": [
+            "SWAGGER_FILE"
+          ]
+        }
+      ]
+    },
+    "id": "irzugdvfek",
+    "name": "MCP Swagger Server",
+    "namespace": "HainanZhao",
+    "repository": {
+      "url": "https://github.com/HainanZhao/mcp-swagger"
+    },
+    "slug": "mcp-swagger",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/irzugdvfek"
+  }
+}

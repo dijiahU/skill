@@ -1,0 +1,166 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "b0d02xk/nutriscan-ai",
+  "namespace": "b0d02xk",
+  "slug": "nutriscan-ai",
+  "displayName": "nutriscan-ai",
+  "description": "Title: NutriScan AI — Food Intelligence & Allergen Guard\n\nShort Description: A multi-modal food intelligence API for AI agents. Instantly analyze products via barcode, label photo, or ingredient text to get health scores, allergen warnings, and diet compatibility.\n\nLong Description: NutriScan AI is a powerful Model Context Protocol (MCP) server that gives AI agents \"eyes\" and \"expertise\" in the grocery aisle. It bridges the gap between raw product data (Open Food Facts/USDA) and actionable nutritional intelligence.\n\nKey Capabilities:\nMulti-Modal Input: Seamlessly switch between barcode lookup (UPC/EAN), OCR-powered label image analysis, and raw ingredient list text.\nHealth Scoring: Instant Nutri-Score (A-F) grading and NOVA processing level classification (1-4).\nAdvanced Allergen Guard: Multi-stage detection for 10+ major allergen groups, using a proprietary blend of database tags, heuristics, and LLM reasoning to catch hidden derivatives.\nDiet Compatibility: Automated verification for",
+  "discoveryQueries": [
+    "scanner"
+  ],
+  "rawRecord": {
+    "id": "6eb81eb3-f9af-4744-abe4-54c0d35a5fa5",
+    "qualifiedName": "b0d02xk/nutriscan-ai",
+    "namespace": "b0d02xk",
+    "slug": "nutriscan-ai",
+    "displayName": "nutriscan-ai",
+    "description": "Title: NutriScan AI — Food Intelligence & Allergen Guard\n\nShort Description: A multi-modal food intelligence API for AI agents. Instantly analyze products via barcode, label photo, or ingredient text to get health scores, allergen warnings, and diet compatibility.\n\nLong Description: NutriScan AI is a powerful Model Context Protocol (MCP) server that gives AI agents \"eyes\" and \"expertise\" in the grocery aisle. It bridges the gap between raw product data (Open Food Facts/USDA) and actionable nutritional intelligence.\n\nKey Capabilities:\nMulti-Modal Input: Seamlessly switch between barcode lookup (UPC/EAN), OCR-powered label image analysis, and raw ingredient list text.\nHealth Scoring: Instant Nutri-Score (A-F) grading and NOVA processing level classification (1-4).\nAdvanced Allergen Guard: Multi-stage detection for 10+ major allergen groups, using a proprietary blend of database tags, heuristics, and LLM reasoning to catch hidden derivatives.\nDiet Compatibility: Automated verification for",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-18T04:18:28.908Z",
+    "homepage": "https://smithery.ai/servers/b0d02xk/nutriscan-ai",
+    "bySmithery": false,
+    "owner": "org_01KNBVR0T9F08T719WXPN1NJXE",
+    "score": 0.008771929824561403
+  },
+  "detail": {
+    "qualifiedName": "b0d02xk/nutriscan-ai",
+    "displayName": "nutriscan-ai",
+    "description": "Title: NutriScan AI — Food Intelligence & Allergen Guard\n\nShort Description: A multi-modal food intelligence API for AI agents. Instantly analyze products via barcode, label photo, or ingredient text to get health scores, allergen warnings, and diet compatibility.\n\nLong Description: NutriScan AI is a powerful Model Context Protocol (MCP) server that gives AI agents \"eyes\" and \"expertise\" in the grocery aisle. It bridges the gap between raw product data (Open Food Facts/USDA) and actionable nutritional intelligence.\n\nKey Capabilities:\nMulti-Modal Input: Seamlessly switch between barcode lookup (UPC/EAN), OCR-powered label image analysis, and raw ingredient list text.\nHealth Scoring: Instant Nutri-Score (A-F) grading and NOVA processing level classification (1-4).\nAdvanced Allergen Guard: Multi-stage detection for 10+ major allergen groups, using a proprietary blend of database tags, heuristics, and LLM reasoning to catch hidden derivatives.\nDiet Compatibility: Automated verification for Vegan, Vegetarian, Keto, Paleo, Gluten-Free, Diabetic-friendly, Halal, and Kosher diets.\nSmart Alternatives: Context-aware suggestions for healthier swaps when a product scores poorly.\nAgent-Optimized: Designed specifically for AI agents (Claude, GPT, Cursor) with structured JSON outputs and descriptive tool schemas.\n\nUse Cases:\n\"Scan this box of cereal and tell me if it's safe for a child with a peanut allergy.\"\n\"Analyze these ingredients and estimate the Nutri-Score.\"\n\"Is this snack compatible with a Paleo diet? If not, suggest a healthier swap.\"",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://nutriscan-ai--b0d02xk.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://nutriscan-ai--b0d02xk.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "nutriscan_scan_barcode",
+        "description": "Look up a food or consumer product by its barcode (UPC/EAN) and get a complete nutritional intelligence report. Returns: health grade (A-F), ingredient analysis in plain English, allergen detection (CONTAINS/MAY_CONTAIN/UNLIKELY for gluten, dairy, peanuts, tree nuts, soy, eggs, fish, shellfish, sesame), diet compatibility (vegan, vegetarian, keto, paleo, gluten-free, diabetic-friendly, etc.), processing level (NOVA 1-4), and healthier alternative suggestions. Use this when a user wants to know if a product is safe for their diet or allergies.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "barcode": {
+              "type": "string",
+              "description": "Product barcode — UPC-A (12 digits), EAN-13 (13 digits), or EAN-8 (8 digits). Example: '016000275690' for Cheerios."
+            },
+            "check_diets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "description": "List of diets to check compatibility. Options: vegan, vegetarian, keto, paleo, gluten_free, diabetic_friendly, low_fodmap, halal, kosher."
+            },
+            "check_allergens": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "gluten",
+                "dairy",
+                "peanuts",
+                "tree_nuts",
+                "soy",
+                "eggs",
+                "fish",
+                "shellfish",
+                "sesame"
+              ],
+              "description": "List of allergens to check. Options: gluten, dairy, peanuts, tree_nuts, soy, eggs, fish, shellfish, sesame. Defaults to all."
+            },
+            "include_alternatives": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to suggest healthier alternatives if the product scores C, D, or E."
+            }
+          }
+        }
+      },
+      {
+        "name": "nutriscan_analyze_text",
+        "description": "Analyze a raw ingredient list (as text) and get a nutritional intelligence report. Use this when you have the ingredient text but no barcode — e.g. from a photo of a label, a user typing ingredients, or an extracted ingredient list. Returns the same report as nutriscan_scan_barcode: health grade, ingredient explanations in plain English, allergen detection, and diet compatibility.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "check_diets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "description": "List of diets to check compatibility."
+            },
+            "check_allergens": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "gluten",
+                "dairy",
+                "peanuts",
+                "tree_nuts",
+                "soy",
+                "eggs",
+                "fish",
+                "shellfish",
+                "sesame"
+              ],
+              "description": "List of allergens to check. Options: gluten, dairy, peanuts, tree_nuts, soy, eggs, fish, shellfish, sesame."
+            },
+            "ingredients_text": {
+              "type": "string",
+              "description": "The ingredients list as a comma-separated string. Example: 'whole wheat flour, sugar, palm oil, salt, mixed tocopherols'"
+            }
+          }
+        }
+      },
+      {
+        "name": "nutriscan_check_allergens",
+        "description": "Fast allergen-only check for a product barcode or ingredient list. Returns only allergen status — faster and cheaper than a full scan. Use this when you only need to know if a product is safe for a specific allergy and don't need the full nutritional breakdown.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "barcode": {
+              "type": "string",
+              "description": "Product barcode (optional if ingredients_text provided)."
+            },
+            "allergens": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "gluten",
+                "dairy",
+                "peanuts",
+                "tree_nuts",
+                "soy",
+                "eggs",
+                "fish",
+                "shellfish",
+                "sesame"
+              ],
+              "description": "Allergens to check. Options: gluten, dairy, peanuts, tree_nuts, soy, eggs, fish, shellfish, sesame."
+            },
+            "ingredients_text": {
+              "type": "string",
+              "description": "Raw ingredient list (optional if barcode provided)."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

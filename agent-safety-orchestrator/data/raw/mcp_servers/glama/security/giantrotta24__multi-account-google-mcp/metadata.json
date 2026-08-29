@@ -1,0 +1,56 @@
+{
+  "registry": "glama",
+  "id": "ti0y34ag3o",
+  "namespace": "giantrotta24",
+  "slug": "multi-account-google-mcp",
+  "name": "google-mcp",
+  "description": "Multi-account Google MCP server providing read access to Gmail and Calendar via stdio. Supports secure authentication for personal and work accounts with OAuth and keychain token storage.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Multi-account Google MCP server providing read access to Gmail and Calendar via stdio. Supports secure authentication for personal and work accounts with OAuth and keychain token storage.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "RUN_LIVE_TESTS": {
+          "description": "Set to '1' to enable basic live integration tests that hit real Google APIs.",
+          "type": "string"
+        },
+        "GOOGLE_MCP_WORK_EMAIL": {
+          "description": "Expected work account email for auth safety checks (optional but recommended).",
+          "type": "string"
+        },
+        "RUN_DESTRUCTIVE_TESTS": {
+          "description": "Set to '1' to include destructive keychain mutation tests in integration tests (requires RUN_LIVE_TESTS=1).",
+          "type": "string"
+        },
+        "GOOGLE_MCP_WORK_CALENDAR": {
+          "description": "Optional specific work calendar filter (calendar ID or summary).",
+          "type": "string"
+        },
+        "GOOGLE_MCP_PERSONAL_EMAIL": {
+          "description": "Expected personal account email for auth safety checks (optional but recommended).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ti0y34ag3o",
+    "name": "google-mcp",
+    "namespace": "giantrotta24",
+    "repository": {
+      "url": "https://github.com/giantrotta24/multi-account-google-mcp"
+    },
+    "slug": "multi-account-google-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ti0y34ag3o"
+  }
+}

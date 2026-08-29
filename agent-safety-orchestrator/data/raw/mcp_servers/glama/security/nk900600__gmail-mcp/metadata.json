@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "dxe7huekgw",
+  "namespace": "nk900600",
+  "slug": "gmail-mcp",
+  "name": "Gmail MCP Server",
+  "description": "Provides complete Gmail API integration for email management, including sending/receiving messages, managing labels and threads, creating drafts, and configuring settings through OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides complete Gmail API integration for email management, including sending/receiving messages, managing labels and threads, creating drafts, and configuring settings through OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Port for Streamable HTTP transport method",
+          "type": "string",
+          "default": "3000"
+        },
+        "CLIENT_ID": {
+          "description": "Google API client ID (found in GMAIL_OAUTH_PATH)",
+          "type": "string"
+        },
+        "CLIENT_SECRET": {
+          "description": "Google API client secret (found in GMAIL_OAUTH_PATH)",
+          "type": "string"
+        },
+        "REFRESH_TOKEN": {
+          "description": "OAuth refresh token (found in GMAIL_CREDENTIALS_PATH)",
+          "type": "string"
+        },
+        "MCP_CONFIG_DIR": {
+          "description": "Directory for storing configuration files",
+          "type": "string",
+          "default": "~/.gmail-mcp"
+        },
+        "AUTH_SERVER_PORT": {
+          "description": "Port for the temporary OAuth authentication server",
+          "type": "string",
+          "default": "3000"
+        },
+        "GMAIL_OAUTH_PATH": {
+          "description": "Path to the Google API Client file",
+          "type": "string",
+          "default": "MCP_CONFIG_DIR/gcp-oauth.keys.json"
+        },
+        "TELEMETRY_ENABLED": {
+          "description": "Enable telemetry",
+          "type": "string",
+          "default": "true"
+        },
+        "GMAIL_CREDENTIALS_PATH": {
+          "description": "Path to the user credentials file",
+          "type": "string",
+          "default": "MCP_CONFIG_DIR/credentials.json"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "dxe7huekgw",
+    "name": "Gmail MCP Server",
+    "namespace": "nk900600",
+    "repository": {
+      "url": "https://github.com/nk900600/gmail-mcp"
+    },
+    "slug": "gmail-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dxe7huekgw"
+  }
+}

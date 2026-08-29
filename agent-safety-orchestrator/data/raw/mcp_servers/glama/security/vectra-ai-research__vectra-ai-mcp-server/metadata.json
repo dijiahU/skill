@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "gzcdolqpbn",
+  "namespace": "vectra-ai-research",
+  "slug": "vectra-ai-mcp-server",
+  "name": "Vectra AI MCP Server",
+  "description": "Connects AI assistants to the Vectra AI security platform to enable intelligent analysis of threat detection data and automated incident response workflows. It allows users to investigate threats, take response actions, and generate security reports using natural language.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Connects AI assistants to the Vectra AI security platform to enable intelligent analysis of threat detection data and automated incident response workflows. It allows users to investigate threats, take response actions, and generate security reports using natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "VECTRA_BASE_URL": {
+          "description": "Your Vectra portal URL",
+          "type": "string"
+        },
+        "VECTRA_MCP_HOST": {
+          "description": "Host to bind to for HTTP transports",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "VECTRA_MCP_PORT": {
+          "description": "Port for HTTP transports",
+          "type": "string",
+          "default": "8000"
+        },
+        "VECTRA_CLIENT_ID": {
+          "description": "Your client ID from Vectra",
+          "type": "string"
+        },
+        "VECTRA_MCP_DEBUG": {
+          "description": "Enable debug logging",
+          "type": "string",
+          "default": "false"
+        },
+        "VECTRA_CLIENT_SECRET": {
+          "description": "Your client secret from Vectra",
+          "type": "string"
+        },
+        "VECTRA_MCP_TRANSPORT": {
+          "description": "Transport protocol (stdio, sse, or streamable-http)",
+          "type": "string",
+          "default": "stdio"
+        }
+      },
+      "type": "object",
+      "required": [
+        "VECTRA_BASE_URL",
+        "VECTRA_CLIENT_ID",
+        "VECTRA_CLIENT_SECRET"
+      ]
+    },
+    "id": "gzcdolqpbn",
+    "name": "Vectra AI MCP Server",
+    "namespace": "vectra-ai-research",
+    "repository": {
+      "url": "https://github.com/vectra-ai-research/vectra-ai-mcp-server"
+    },
+    "slug": "vectra-ai-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gzcdolqpbn"
+  }
+}

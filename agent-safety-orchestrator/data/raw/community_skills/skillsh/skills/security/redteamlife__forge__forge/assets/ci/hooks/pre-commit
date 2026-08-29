@@ -1,0 +1,22 @@
+#!/bin/bash
+# FORGE pre-commit hook
+# Validates governance state/evidence coupling for local commits.
+#
+# Install: cp ci/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+CHANGED_FILES=$(git diff --cached --name-only)
+
+if echo "$CHANGED_FILES" | grep -q "^docs/forge/TASKS.yaml$"; then
+  if ! echo "$CHANGED_FILES" | grep -q "^docs/forge/EVALUATION.md$"; then
+    echo ""
+    echo "FORGE: Commit rejected - TASKS.yaml changed without EVALUATION.md."
+    echo ""
+    echo "  Update docs/forge/EVALUATION.md in the same commit as task-state changes."
+    echo ""
+    exit 1
+  fi
+fi
+
+exit 0

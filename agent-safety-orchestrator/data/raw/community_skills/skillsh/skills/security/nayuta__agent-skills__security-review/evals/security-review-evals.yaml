@@ -1,0 +1,83 @@
+skill: security-review
+surface: claude-code
+models:
+  - claude-haiku
+  - claude-sonnet
+  - claude-opus
+
+cases:
+  - id: trigger-01
+    bucket: should-trigger
+    prompt: "Review my code changes for security vulnerabilities before I merge this PR."
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "security"
+        - "vulnerability"
+        - "review"
+
+  - id: trigger-02
+    bucket: should-trigger
+    prompt: "Can you check if my authentication code has any security issues?"
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "authentication"
+        - "security"
+
+  - id: trigger-03
+    bucket: should-trigger
+    prompt: "Audit this feature branch for SQL injection and other security flaws."
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "injection"
+        - "security"
+
+  - id: trigger-04
+    bucket: should-trigger
+    prompt: "Do a full security audit of the entire codebase."
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "security"
+        - "audit"
+
+  - id: no-trigger-01
+    bucket: should-not-trigger
+    prompt: "Fix the linting errors in this file."
+    expect:
+      skill_selected: false
+
+  - id: no-trigger-02
+    bucket: should-not-trigger
+    prompt: "Refactor this code to improve performance."
+    expect:
+      skill_selected: false
+
+  - id: no-trigger-03
+    bucket: should-not-trigger
+    prompt: "Add unit tests for the new feature."
+    expect:
+      skill_selected: false
+
+  - id: edge-01
+    bucket: ambiguous
+    prompt: "Review my code for any issues before merging."
+    expect:
+      notes: "Could trigger security-review or general code review. Track consistency based on context."
+
+  - id: edge-02
+    bucket: ambiguous
+    prompt: "Check if this code is safe to deploy."
+    expect:
+      notes: "May trigger security-review or general review depending on interpretation of 'safe'."
+
+metrics:
+  trigger_accuracy: true
+  non_trigger_accuracy: true
+  output_quality_llm_grade: true
+  latency_ms: true
+  input_tokens: true
+  output_tokens: true
+  tool_calls: true

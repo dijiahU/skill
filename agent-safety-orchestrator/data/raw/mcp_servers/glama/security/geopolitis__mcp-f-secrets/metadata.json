@@ -1,0 +1,174 @@
+{
+  "registry": "glama",
+  "id": "ib198rvz14",
+  "namespace": "geopolitis",
+  "slug": "MCP-f-Secrets",
+  "name": "Vault MCP Bridge",
+  "description": "Enables secure management of agent-scoped secrets in HashiCorp Vault through MCP protocol. Provides per-agent namespacing, multiple authentication methods (API key, JWT, mTLS), and optional encryption/decryption capabilities with built-in rate limiting.",
+  "discoveryQueries": [
+    "secret",
+    "encryption",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure management of agent-scoped secrets in HashiCorp Vault through MCP protocol. Provides per-agent namespacing, multiple authentication methods (API key, JWT, mTLS), and optional encryption/decryption capabilities with built-in rate limiting.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Host to bind the server to",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "PORT": {
+          "description": "Port to bind the server to",
+          "type": "string",
+          "default": "8000"
+        },
+        "RELOAD": {
+          "description": "Enable auto-reload for development",
+          "type": "string",
+          "default": "false"
+        },
+        "KV_MOUNT": {
+          "description": "KV mount point in Vault",
+          "type": "string",
+          "default": "secret"
+        },
+        "LOG_LEVEL": {
+          "description": "Log level for the server",
+          "type": "string",
+          "default": "info"
+        },
+        "JWT_ISSUER": {
+          "description": "JWT issuer claim",
+          "type": "string"
+        },
+        "VAULT_ADDR": {
+          "description": "Vault server address",
+          "type": "string",
+          "default": "http://localhost:8200"
+        },
+        "VAULT_TOKEN": {
+          "description": "Vault authentication token",
+          "type": "string"
+        },
+        "JWT_AUDIENCE": {
+          "description": "JWT audience claim",
+          "type": "string"
+        },
+        "API_KEYS_JSON": {
+          "description": "JSON map of API keys to agent IDs: { \"<api-key>\": \"<agent-id>\" }",
+          "type": "string"
+        },
+        "VAULT_ROLE_ID": {
+          "description": "Vault AppRole role ID for authentication",
+          "type": "string"
+        },
+        "DEFAULT_PREFIX": {
+          "description": "Default prefix for agent namespacing",
+          "type": "string",
+          "default": "mcp"
+        },
+        "CHILD_TOKEN_TTL": {
+          "description": "TTL for child tokens",
+          "type": "string",
+          "default": "90s"
+        },
+        "VAULT_NAMESPACE": {
+          "description": "Vault namespace (Enterprise only)",
+          "type": "string"
+        },
+        "VAULT_SECRET_ID": {
+          "description": "Vault AppRole secret ID for authentication",
+          "type": "string"
+        },
+        "AUTH_JWT_ENABLED": {
+          "description": "Enable JWT authentication",
+          "type": "string",
+          "default": "true"
+        },
+        "JWT_HS256_SECRET": {
+          "description": "Secret for HS256 JWT signing",
+          "type": "string"
+        },
+        "AUTH_MTLS_ENABLED": {
+          "description": "Enable mTLS authentication via proxy headers",
+          "type": "string",
+          "default": "false"
+        },
+        "MTLS_VERIFY_HEADER": {
+          "description": "Header name for mTLS verification status",
+          "type": "string",
+          "default": "x-ssl-client-verify"
+        },
+        "RATE_LIMIT_ENABLED": {
+          "description": "Enable rate limiting",
+          "type": "string",
+          "default": "true"
+        },
+        "CHILD_TOKEN_ENABLED": {
+          "description": "Enable per-request child token issuance",
+          "type": "string",
+          "default": "false"
+        },
+        "RATE_LIMIT_REQUESTS": {
+          "description": "Number of requests allowed per window",
+          "type": "string",
+          "default": "60"
+        },
+        "AUTH_API_KEY_ENABLED": {
+          "description": "Enable API key authentication",
+          "type": "string",
+          "default": "true"
+        },
+        "MTLS_IDENTITY_HEADER": {
+          "description": "Header name for mTLS client identity",
+          "type": "string",
+          "default": "x-ssl-client-s-dn"
+        },
+        "MTLS_SUBJECT_CN_PREFIX": {
+          "description": "Prefix for extracting CN from mTLS subject",
+          "type": "string",
+          "default": "CN="
+        },
+        "CHILD_TOKEN_POLICY_PREFIX": {
+          "description": "Prefix for child token policy names",
+          "type": "string",
+          "default": "mcp-agent-"
+        },
+        "RATE_LIMIT_WINDOW_SECONDS": {
+          "description": "Rate limiting window in seconds",
+          "type": "string",
+          "default": "60"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "VAULT_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "VAULT_ROLE_ID",
+            "VAULT_SECRET_ID"
+          ]
+        }
+      ]
+    },
+    "id": "ib198rvz14",
+    "name": "Vault MCP Bridge",
+    "namespace": "geopolitis",
+    "repository": {
+      "url": "https://github.com/geopolitis/MCP-f-Secrets"
+    },
+    "slug": "MCP-f-Secrets",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ib198rvz14"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "ontre2l948",
+  "namespace": "anotherik",
+  "slug": "ThreatByte-MCP",
+  "name": "ThreatByte-MCP",
+  "description": "An intentionally vulnerable case management system designed for security training that provides MCP tools for SOC analyst workflows like case handling and indicator search. It enables users to explore and demonstrate common security weaknesses such as prompt injection, SQL injection, and broken authorization in an MCP-integrated environment.",
+  "discoveryQueries": [
+    "security",
+    "authorization",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An intentionally vulnerable case management system designed for security training that provides MCP tools for SOC analyst workflows like case handling and indicator search. It enables users to explore and demonstrate common security weaknesses such as prompt injection, SQL injection, and broken authorization in an MCP-integrated environment.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OPENAI_API_KEY": {
+          "description": "Fallback OpenAI API key if TBMCP_OPENAI_API_KEY is not set.",
+          "type": "string"
+        },
+        "TBMCP_SECRET_KEY": {
+          "description": "Flask secret key for session signing.",
+          "type": "string",
+          "default": "dev-secret-key-change-me"
+        },
+        "TBMCP_OPENAI_MODEL": {
+          "description": "OpenAI model for agent tasks.",
+          "type": "string",
+          "default": "gpt-4o-mini"
+        },
+        "TBMCP_MCP_SERVER_URL": {
+          "description": "MCP server JSON-RPC endpoint used by the web app proxy.",
+          "type": "string",
+          "default": "http://localhost:5002/mcp"
+        },
+        "TBMCP_OPENAI_API_KEY": {
+          "description": "Primary OpenAI API key used by agent endpoints.",
+          "type": "string"
+        },
+        "TBMCP_MCP_SERVER_TOKEN": {
+          "description": "Shared secret token between web app and MCP server.",
+          "type": "string",
+          "default": "tbmcp-mcp-token"
+        }
+      },
+      "type": "object"
+    },
+    "id": "ontre2l948",
+    "name": "ThreatByte-MCP",
+    "namespace": "anotherik",
+    "repository": {
+      "url": "https://github.com/anotherik/ThreatByte-MCP"
+    },
+    "slug": "ThreatByte-MCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ontre2l948"
+  }
+}

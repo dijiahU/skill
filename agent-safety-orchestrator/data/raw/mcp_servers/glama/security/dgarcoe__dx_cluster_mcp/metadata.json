@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "mvbj45nts2",
+  "namespace": "dgarcoe",
+  "slug": "dx_cluster_mcp",
+  "name": "DX Cluster MCP Server",
+  "description": "Enables interaction with Ham Radio DX Cluster networks to read and create spots, analyze band activity, and track propagation trends through Claude Desktop. It features secure Auth0 authentication and supports various cluster types including DXSpider and AR-Cluster.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Ham Radio DX Cluster networks to read and create spots, analyze band activity, and track propagation trends through Claude Desktop. It features secure Auth0 authentication and supports various cluster types including DXSpider and AR-Cluster.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SERVER_PORT": {
+          "description": "The port the server will run on.",
+          "type": "string",
+          "default": "8000"
+        },
+        "AUTH0_DOMAIN": {
+          "description": "Auth0 domain (e.g., your-domain.auth0.com).",
+          "type": "string"
+        },
+        "AUTH0_CLIENT_ID": {
+          "description": "Auth0 client ID.",
+          "type": "string"
+        },
+        "DX_CLUSTER_HOST": {
+          "description": "Your preferred DX Cluster host (e.g., dxspider.net).",
+          "type": "string",
+          "default": "dxspider.net"
+        },
+        "DX_CLUSTER_PORT": {
+          "description": "The cluster port.",
+          "type": "string",
+          "default": "7300"
+        },
+        "SERVER_BASE_URL": {
+          "description": "The base URL where the server is hosted.",
+          "type": "string",
+          "default": "http://localhost:8000"
+        },
+        "AUTH0_CALLBACK_URL": {
+          "description": "Auth0 callback URL for authentication.",
+          "type": "string",
+          "default": "http://localhost:8000/auth/callback"
+        },
+        "AUTH0_CLIENT_SECRET": {
+          "description": "Auth0 client secret.",
+          "type": "string"
+        },
+        "DX_CLUSTER_CALLSIGN": {
+          "description": "Your amateur radio callsign.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DX_CLUSTER_CALLSIGN"
+      ]
+    },
+    "id": "mvbj45nts2",
+    "name": "DX Cluster MCP Server",
+    "namespace": "dgarcoe",
+    "repository": {
+      "url": "https://github.com/dgarcoe/dx_cluster_mcp"
+    },
+    "slug": "dx_cluster_mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mvbj45nts2"
+  }
+}

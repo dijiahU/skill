@@ -1,0 +1,91 @@
+{
+  "registry": "glama",
+  "id": "mynys71ywu",
+  "namespace": "solomonneas",
+  "slug": "wazuh-mcp",
+  "name": "wazuh-mcp",
+  "description": "An MCP server for the Wazuh SIEM/XDR platform that enables users to query agents, security alerts, detection rules, and decoders through Claude or other MCP clients. It provides specialized tools and prompts for investigating security alerts, performing agent health checks, and generating environmental security overviews.",
+  "discoveryQueries": [
+    "security",
+    "siem"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server for the Wazuh SIEM/XDR platform that enables users to query agents, security alerts, detection rules, and decoders through Claude or other MCP clients. It provides specialized tools and prompts for investigating security alerts, performing agent health checks, and generating environmental security overviews.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WAZUH_URL": {
+          "description": "Wazuh API URL (e.g., https://10.0.0.2:55000)",
+          "type": "string"
+        },
+        "WAZUH_USER": {
+          "description": "Alternative API username",
+          "type": "string"
+        },
+        "WAZUH_BASE_URL": {
+          "description": "Alternative Wazuh API URL (e.g., https://10.0.0.2:55000)",
+          "type": "string"
+        },
+        "WAZUH_PASSWORD": {
+          "description": "API password",
+          "type": "string"
+        },
+        "WAZUH_USERNAME": {
+          "description": "API username",
+          "type": "string"
+        },
+        "WAZUH_VERIFY_SSL": {
+          "description": "Set to true to verify SSL certificates",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "WAZUH_URL",
+            "WAZUH_USERNAME",
+            "WAZUH_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "WAZUH_BASE_URL",
+            "WAZUH_USERNAME",
+            "WAZUH_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "WAZUH_URL",
+            "WAZUH_USER",
+            "WAZUH_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "WAZUH_BASE_URL",
+            "WAZUH_USER",
+            "WAZUH_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "mynys71ywu",
+    "name": "wazuh-mcp",
+    "namespace": "solomonneas",
+    "repository": {
+      "url": "https://github.com/solomonneas/wazuh-mcp"
+    },
+    "slug": "wazuh-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mynys71ywu"
+  }
+}

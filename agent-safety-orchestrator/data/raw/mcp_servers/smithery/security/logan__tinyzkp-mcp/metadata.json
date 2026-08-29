@@ -1,0 +1,202 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "logan/tinyzkp-mcp",
+  "namespace": "logan",
+  "slug": "tinyzkp-mcp",
+  "displayName": "tinyzkp-mcp",
+  "description": "# TinyZKP — Verifiable Receipts for AI Agents\n\n**[tinyzkp.com](https://tinyzkp.com)** &middot; **[Try it in browser](https://tinyzkp.com/try)** &middot; **[API docs](https://tinyzkp.com/docs)** &middot; **[Free signup](https://tinyzkp.com/signup)**\n\nMint a tamper-evident proof that your agent ran the code it claims, on the inputs it claims. **One MCP install. One API call. Verify in milliseconds.** No cryptography degree required.",
+  "discoveryQueries": [
+    "secure",
+    "credential",
+    "secret",
+    "encryption",
+    "authentication",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "cf89af6f-4bba-4af1-8766-2acb94c24624",
+    "qualifiedName": "logan/tinyzkp-mcp",
+    "namespace": "logan",
+    "slug": "tinyzkp-mcp",
+    "displayName": "tinyzkp-mcp",
+    "description": "# TinyZKP — Verifiable Receipts for AI Agents\n\n**[tinyzkp.com](https://tinyzkp.com)** &middot; **[Try it in browser](https://tinyzkp.com/try)** &middot; **[API docs](https://tinyzkp.com/docs)** &middot; **[Free signup](https://tinyzkp.com/signup)**\n\nMint a tamper-evident proof that your agent ran the code it claims, on the inputs it claims. **One MCP install. One API call. Verify in milliseconds.** No cryptography degree required.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.tinyzkp.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-28T16:17:58.671Z",
+    "homepage": "https://www.tinyzkp.com",
+    "bySmithery": false,
+    "owner": "org_01KQ7XPQWB9F5YFEPB2AHYNQE2",
+    "score": 0.014084507042253521
+  },
+  "detail": {
+    "qualifiedName": "logan/tinyzkp-mcp",
+    "displayName": "tinyzkp-mcp",
+    "description": "# TinyZKP — Verifiable Receipts for AI Agents\n\n**[tinyzkp.com](https://tinyzkp.com)** &middot; **[Try it in browser](https://tinyzkp.com/try)** &middot; **[API docs](https://tinyzkp.com/docs)** &middot; **[Free signup](https://tinyzkp.com/signup)**\n\nMint a tamper-evident proof that your agent ran the code it claims, on the inputs it claims. **One MCP install. One API call. Verify in milliseconds.** No cryptography degree required.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.tinyzkp.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://tinyzkp-mcp--logan.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://tinyzkp-mcp--logan.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "describe_template",
+        "description": "Get full parameter schema and example JSON for a specific proof template. Call this before prove_template to understand what parameters are needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "template_id": {
+              "type": "string",
+              "description": "Template ID to describe. Call list_templates to see available IDs."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_capabilities",
+        "description": "Get server capabilities, version, and recommended workflow. Start here if you're unsure what this server can do.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_proof",
+        "description": "Retrieve the base64-encoded proof bytes for a completed job. Pass the result to verify_proof for independent verification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job ID of a completed proof job."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_proof_summary",
+        "description": "Get a human-readable summary of what a proof job attests to, including template, public inputs, and status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job ID of a completed proof job."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_templates",
+        "description": "List all available proof templates with IDs, summaries, and tags. Use this to discover what kinds of proofs you can generate.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_workloads",
+        "description": "List all registered workload IDs. Workloads are predefined proof programs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "poll_job",
+        "description": "Check the status of a proof job. Returns: pending, running, succeeded, or failed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job ID returned by prove_template or prove_workload."
+            }
+          }
+        }
+      },
+      {
+        "name": "prove_template",
+        "description": "Generate a zero-knowledge proof from a template ID and parameters. Returns a job_id — call poll_job to check progress. Consumes one proof from your monthly quota.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "zk": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Enable zero-knowledge mode. Default: use template recommendation."
+            },
+            "parameters": {
+              "type": "object",
+              "description": "Template parameters as JSON object. Call describe_template for the parameter schema.",
+              "additionalProperties": true
+            },
+            "template_id": {
+              "type": "string",
+              "description": "Template ID. Call list_templates to see available options."
+            }
+          }
+        }
+      },
+      {
+        "name": "prove_workload",
+        "description": "Generate a proof from a registered workload ID. Returns a job_id — call poll_job to check progress. Consumes one proof from your monthly quota.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "final_acc": {
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0,
+              "description": "Expected final accumulator value."
+            },
+            "block_size": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "uint",
+              "minimum": 0,
+              "description": "Block size for the prover (power of 2). Default: 2."
+            },
+            "initial_acc": {
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0,
+              "description": "Initial accumulator value."
+            },
+            "workload_id": {
+              "type": "string",
+              "description": "Registered workload ID. Call list_workloads to see available options."
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_proof",
+        "description": "Verify a proof independently. Pass the base64-encoded proof from get_proof. Returns {valid: true/false}. This is a pure cryptographic check — no quota consumed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "proof_b64": {
+              "type": "string",
+              "description": "Base64-encoded proof bytes (from get_proof)."
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

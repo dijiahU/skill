@@ -1,0 +1,115 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "ybolduc/ipayx-fx-audit",
+  "namespace": "ybolduc",
+  "slug": "ipayx-fx-audit",
+  "displayName": "iPayX FX Audit — Hidden Bank Fee Detector",
+  "description": "Detect hidden FX fees on international bank transfers in 30 seconds. \nScore 1-10 forensic audit. Proves exactly what your bank is hiding. \nFINTRAC MSB certified (C10001283). \n\"10 free audits / 7-day trial. No signup required.\"\n",
+  "discoveryQueries": [
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "9c8819ab-91a9-48f4-bc35-84a6270547d1",
+    "qualifiedName": "ybolduc/ipayx-fx-audit",
+    "namespace": "ybolduc",
+    "slug": "ipayx-fx-audit",
+    "displayName": "iPayX FX Audit — Hidden Bank Fee Detector",
+    "description": "Detect hidden FX fees on international bank transfers in 30 seconds. \nScore 1-10 forensic audit. Proves exactly what your bank is hiding. \nFINTRAC MSB certified (C10001283). \n\"10 free audits / 7-day trial. No signup required.\"\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.ipayx.ai.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-27T01:35:00.489Z",
+    "homepage": "https://www.ipayx.ai",
+    "bySmithery": false,
+    "owner": "org_01KQ68XE67DMV4PKYKG851913V",
+    "score": 0.053534660260809885
+  },
+  "detail": {
+    "qualifiedName": "ybolduc/ipayx-fx-audit",
+    "displayName": "iPayX FX Audit — Hidden Bank Fee Detector",
+    "description": "Detect hidden FX fees on international bank transfers in 30 seconds. \nScore 1-10 forensic audit. Proves exactly what your bank is hiding. \nFINTRAC MSB certified (C10001283). \n\"10 free audits / 7-day trial. No signup required.\"\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.ipayx.ai.ico",
+    "remote": true,
+    "deploymentUrl": "https://ipayx-fx-audit--ybolduc.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://ipayx-fx-audit--ybolduc.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_fx_rate",
+        "description": "Get the current mid-market FX rate for a currency pair. Always free, no authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "currency_to": {
+              "type": "string",
+              "description": "ISO 4217 quote currency (e.g. CAD)"
+            },
+            "currency_from": {
+              "type": "string",
+              "description": "ISO 4217 base currency (e.g. USD)"
+            }
+          }
+        }
+      },
+      {
+        "name": "audit_transaction",
+        "description": "Audit a single FX transaction against the mid-market rate. Returns score (1-10), spread %, hidden fee, and rating. Free for first 3 calls per month per IP — after that returns 402 Payment Required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "description": "Transaction amount in currency_from"
+            },
+            "bank_rate": {
+              "type": "number",
+              "description": "The rate the bank/broker actually charged"
+            },
+            "currency_to": {
+              "type": "string"
+            },
+            "currency_from": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "full_forensic_report",
+        "description": "Generate a full forensic FX audit report with detailed breakdown, partner routing, and recommendations. Requires a valid Bearer API token from the iPayX dashboard.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "bank_rate": {
+              "type": "number"
+            },
+            "currency_to": {
+              "type": "string"
+            },
+            "company_name": {
+              "type": "string",
+              "description": "Optional company name for the report"
+            },
+            "currency_from": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

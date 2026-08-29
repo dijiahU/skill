@@ -1,0 +1,57 @@
+{
+  "registry": "glama",
+  "id": "vddthurkw2",
+  "namespace": "Feyfa",
+  "slug": "exactmatch-mcp-apps",
+  "name": "Exact Match Site ID MCP Connector",
+  "description": "Exposes Exact Match Site ID data to MCP-compatible AI clients. Supports OAuth authentication and local development with a Laravel backend.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Exposes Exact Match Site ID data to MCP-compatible AI clients. Supports OAuth authentication and local development with a Laravel backend.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OAUTH_TOKEN_SECRET": {
+          "description": "At least 32 random characters.",
+          "type": "string"
+        },
+        "LARAVEL_API_BASE_URL": {
+          "description": "The Laravel API base URL.",
+          "type": "string"
+        },
+        "MCP_DEV_AUTH_ENABLED": {
+          "description": "Enable dev auth (optional, default false).",
+          "type": "string"
+        },
+        "LARAVEL_MCP_PROXY_TOKEN": {
+          "description": "The token configured in Laravel for services.mcp_proxy.internal_token.",
+          "type": "string"
+        },
+        "OAUTH_ALLOWED_REDIRECT_URIS": {
+          "description": "Comma-separated list of allowed redirect URIs for OAuth (optional, for dev).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "LARAVEL_API_BASE_URL",
+        "LARAVEL_MCP_PROXY_TOKEN",
+        "OAUTH_TOKEN_SECRET"
+      ]
+    },
+    "id": "vddthurkw2",
+    "name": "Exact Match Site ID MCP Connector",
+    "namespace": "Feyfa",
+    "repository": {
+      "url": "https://github.com/Feyfa/exactmatch-mcp-apps"
+    },
+    "slug": "exactmatch-mcp-apps",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vddthurkw2"
+  }
+}

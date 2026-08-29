@@ -1,0 +1,103 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "found402/agent-audit-trail",
+  "namespace": "found402",
+  "slug": "agent-audit-trail",
+  "displayName": "agent-audit-trail",
+  "description": "Creates a tamper-evident, HMAC-signed log entry for every agent action. No database, no infrastructure — just a cryptographically verifiable receipt you store yourself. Built for HIPAA, SOC2, and any compliance requirement that asks \"what did your agent do and when?\" $0.001/log via x402 on Base. MCP tool name: log_agent_action",
+  "discoveryQueries": [
+    "audit",
+    "compliance",
+    "encryption"
+  ],
+  "rawRecord": {
+    "id": "6ced5af4-04f4-4f0d-9f56-183b936cd5a2",
+    "qualifiedName": "found402/agent-audit-trail",
+    "namespace": "found402",
+    "slug": "agent-audit-trail",
+    "displayName": "agent-audit-trail",
+    "description": "Creates a tamper-evident, HMAC-signed log entry for every agent action. No database, no infrastructure — just a cryptographically verifiable receipt you store yourself. Built for HIPAA, SOC2, and any compliance requirement that asks \"what did your agent do and when?\" $0.001/log via x402 on Base. MCP tool name: log_agent_action",
+    "iconUrl": "https://api.smithery.ai/servers/found402/agent-audit-trail/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-16T23:33:16.889Z",
+    "homepage": "https://agent-audit-trail.fly.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVQABVMKJ0B6XQRVEMJVFJ",
+    "score": 0.053558844256518676
+  },
+  "detail": {
+    "qualifiedName": "found402/agent-audit-trail",
+    "displayName": "agent-audit-trail",
+    "description": "Creates a tamper-evident, HMAC-signed log entry for every agent action. No database, no infrastructure — just a cryptographically verifiable receipt you store yourself. Built for HIPAA, SOC2, and any compliance requirement that asks \"what did your agent do and when?\" $0.001/log via x402 on Base. MCP tool name: log_agent_action",
+    "iconUrl": "https://api.smithery.ai/servers/found402/agent-audit-trail/icon",
+    "remote": true,
+    "deploymentUrl": "https://agent-audit-trail--found402.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agent-audit-trail--found402.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "log_agent_action",
+        "description": "Creates a tamper-evident, HMAC-signed audit log entry for an agent action. Returns a signed receipt the caller stores.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Description of the action performed"
+            },
+            "agentId": {
+              "type": "string",
+              "description": "Unique identifier for the agent"
+            },
+            "outcome": {
+              "type": "string",
+              "description": "Optional outcome/result of the action"
+            },
+            "payload": {
+              "type": "object",
+              "description": "Optional structured payload data"
+            },
+            "timestamp": {
+              "type": "string",
+              "description": "ISO 8601 timestamp of the action"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string"
+            },
+            "agentId": {
+              "type": "string"
+            },
+            "verified": {
+              "type": "boolean"
+            },
+            "receiptId": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string"
+            },
+            "hmacSignature": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

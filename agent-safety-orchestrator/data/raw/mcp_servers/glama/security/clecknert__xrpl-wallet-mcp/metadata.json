@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "yfqi0o20uo",
+  "namespace": "ClecknerT",
+  "slug": "xrpl-wallet-mcp",
+  "name": "XRPL Agent Wallet MCP",
+  "description": "Provides secure, policy-controlled wallet infrastructure for AI agents to autonomously manage XRP Ledger wallets and sign transactions. It features a tiered security model with encrypted key storage, a declarative policy engine, and full audit trails for compliance.",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "policy",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides secure, policy-controlled wallet infrastructure for AI agents to autonomously manage XRP Ledger wallets and sign transactions. It features a tiered security model with encrypted key storage, a declarative policy engine, and full audit trails for compliance.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level (debug, info, warn, error).",
+          "type": "string",
+          "default": "info"
+        },
+        "XRPL_NETWORK": {
+          "description": "The XRP Ledger network to connect to (mainnet, testnet, or devnet).",
+          "type": "string"
+        },
+        "XRPL_WALLET_POLICY": {
+          "description": "Path to the policy configuration JSON file.",
+          "type": "string",
+          "default": "Built-in"
+        },
+        "XRPL_WALLET_PASSWORD": {
+          "description": "Master encryption password used for the keystore.",
+          "type": "string"
+        },
+        "XRPL_WALLET_KEYSTORE_PATH": {
+          "description": "Path to the keystore location.",
+          "type": "string",
+          "default": "~/.xrpl-wallet-mcp"
+        }
+      },
+      "type": "object",
+      "required": [
+        "XRPL_NETWORK",
+        "XRPL_WALLET_PASSWORD"
+      ]
+    },
+    "id": "yfqi0o20uo",
+    "name": "XRPL Agent Wallet MCP",
+    "namespace": "ClecknerT",
+    "repository": {
+      "url": "https://github.com/ClecknerT/xrpl-wallet-mcp"
+    },
+    "slug": "xrpl-wallet-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/yfqi0o20uo"
+  }
+}

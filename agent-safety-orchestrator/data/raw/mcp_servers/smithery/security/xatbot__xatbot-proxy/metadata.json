@@ -1,0 +1,925 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "xatbot/xatbot-proxy",
+  "namespace": "xatbot",
+  "slug": "xatbot-proxy",
+  "displayName": "Orbitax",
+  "description": "Access comprehensive global tax data, compliance tracking, and regulatory updates across multiple jurisdictions. Streamline research by calculating withholding, corporate, and VAT rates while verifying international treaty statuses. Generate professional tax documentation and monitor legislative changes to ensure accurate cross-border reporting.",
+  "discoveryQueries": [
+    "vetter",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "1ef64a6d-e8fe-4c54-905d-05fba5016001",
+    "qualifiedName": "xatbot/xatbot-proxy",
+    "namespace": "xatbot",
+    "slug": "xatbot-proxy",
+    "displayName": "Orbitax",
+    "description": "Access comprehensive global tax data, compliance tracking, and regulatory updates across multiple jurisdictions. Streamline research by calculating withholding, corporate, and VAT rates while verifying international treaty statuses. Generate professional tax documentation and monitor legislative changes to ensure accurate cross-border reporting.",
+    "iconUrl": "https://api.smithery.ai/servers/xatbot/xatbot-proxy/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-04T08:30:31.568Z",
+    "homepage": "https://orbitax.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBVHEW5NV3GYKV6VXVKKQJF",
+    "score": 0.008928571428571428
+  },
+  "detail": {
+    "qualifiedName": "xatbot/xatbot-proxy",
+    "displayName": "Orbitax",
+    "description": "Access comprehensive global tax data, compliance tracking, and regulatory updates across multiple jurisdictions. Streamline research by calculating withholding, corporate, and VAT rates while verifying international treaty statuses. Generate professional tax documentation and monitor legislative changes to ensure accurate cross-border reporting.",
+    "iconUrl": "https://api.smithery.ai/servers/xatbot/xatbot-proxy/icon",
+    "remote": true,
+    "deploymentUrl": "https://orbitax-xatbot-mcp.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://orbitax-xatbot-mcp.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "X-API-Key"
+          ],
+          "properties": {
+            "X-API-Key": {
+              "type": "string",
+              "x-from": {
+                "header": "X-API-Key"
+              },
+              "x-order": 0,
+              "description": "Authorization token"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "obitax_proxy_chat",
+        "description": "Send a message to the Orbitax AI system (XatBot) via XatBotProxyController and get a response.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "default": "default"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "obitax_proxy_chat_with_history",
+        "description": "Send a conversation (JSON array of {role, content}) to the Orbitax AI system (XatBot) via XatBotProxyController.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "default": "default"
+            },
+            "messages": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "xatbot_proxy_ping",
+        "description": "Ping the internal proxy query handler.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "xatbot_proxy_mcp_tools",
+        "description": "Get MCP tools metadata from internal query handler. tool_ids must be JSON array.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tool_ids": {
+              "type": "string",
+              "default": "[]"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "platform_query",
+        "description": "Execute a PlatformQuery against the internal XatBot API. field_values is JSON.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "field_values": {
+              "type": "string",
+              "default": "{}"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "platform_command",
+        "description": "Execute a PlatformCommand against the internal XatBot API. field_values is JSON.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "field_values": {
+              "type": "string",
+              "default": "{}"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "ComplianceTracker",
+        "description": "Tool to retrieve, analyze, and contextualize Pillar two OECD GloBE administration rule data by jurisdiction.\n\n**Purpose:**\n• Centralize structured access to country-level Pillar 2 OECD GloBE administration rules, including legislation, status, effective dates and different groups and sub groups.\n• Provide both high-level contextual insight (via the context_data action) and detailed, filterable datasets (via detail_data) to support analytics, comparisons, and downstream automation.\n• Enable Xatbot and related systems to interpret, validate, filter, and paginate GloBE administration-rule information efficiently.\n\n**Core Capabilities:**\n• Surface compact contextual mappings across Country, Group, SubGroup, Legislation, Notes, and EffectiveDate using the lightweight context_data action.\n• Retrieve detailed administration-rule records using detail_data, with optional complex filtering and pagination.\n• Expose structured attributes covering legislation status, registration requirements, filing obligations (information returns, tax returns, domestic minimum tax), agent requirements, payment rules, transitional elections, and top-up tax form requirements.\n• Provide machine-consumable outputs suitable for comparison, rule tracking, reasoning, and analytics.\n\n**Data Domains Covered:**\n• **Registration Requirements** – including registration obligations for GIR, Domestic Minimum Tax (DMT), exemptions, designated local entity permissions.\n• **Information-Return Filing (GIR/DMT)** – obligations, exclusions, double-filing relief notifications, amended return considerations, deadlines, and extension provisions.\n• **Tax-Return Filing (IIR/UTPR/DMT)** – filing rules, exclusions, timelines, and extension options.\n• **Other Returns** – miscellaneous filings and jurisdiction-specific requirements.\n• **Payment Dates** – payment timing, deadlines, and administrative notes.\n• **Agent Requirements** – whether an agent is required for filing or submission.\n• **Additional Compliance Elements:**\n   – Exclusion for Transitional CbCR Safe Harbor\n   – GIR Information Exchange Agreements\n   – Filing Frequency\n   – Consolidated Return Forms\n• **Transitional Reporting Election** – eligibility, requirements, and filing details.\n• **Top-Up Tax Forms** – form types, submission methods, and related administrative notes.\n\n**Input Parameters:**\n• **action (required):**\n   – \"context_data\": returns compact contextual mappings for Country, Group, SubGroup, EffectiveDate, Legislation, Notes.\n   – \"detail_data\": returns detailed administration-rule rows, with optional filters and pagination.\n• **currentActionDescription (required):** a short, human-friendly text shown in the UI while the tool is executing; it must not contain instructions or influence tool behavior.\r\n• **fields (required):** list of one or more of the supported field names\n• **filters (optional for detail_data):** field-level constraints; each properties corresponds to a field and contains an array of allowed values.\n• **top / skip (optional for detail_data):** pagination controls.\n\n**Ideal Use Cases:**\n• Obtain a quick relational understanding of countries, administrative groups, subgroups, and effective dates using context_data.\n• Retrieve detailed rule records filtered by jurisdiction, group, subgroup, status.\n• Compare administrative attributes across countries.\n• Build analytics, monitoring triggers, or rule-change tracking workflows using paginated detail_data output.\n\n**Output:**\n• For **context_data**: lightweight, structured lists of unique field values supporting fast contextual reasoning.\n• For **detail_data**: full administration-rule rows, filtered and paginated according to input parameters.\n\n**Recommendation:**\n• Use context_data to gather unique permissible values before constructing filters or detailed queries.\n• Use detail_data for record-level retrieval and apply targeted filters to reduce response size.\n• For large result sets, use pagination via 'top' and 'skip' fields.\n• Pagination strategy:\n   – First call: top=100, skip=0\n   – Next call: top=100, skip=100\n   – Continue incrementing skip by top until fewer than 'top' rows are returned.\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "integer",
+              "default": 100,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max rows to return (applies only to detail_data)."
+            },
+            "skip": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "description": "Rows to skip for pagination (applies only to detail_data)."
+            },
+            "action": {
+              "enum": [
+                "context_data",
+                "detail_data"
+              ],
+              "type": "string",
+              "description": "Type of operation to perform. Supported values: • context_data – return compact contextual dataset. • detail_data – return detailed rows based on 'fields', 'filters', 'top', 'skip'."
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of fields to return when action = detail_data.",
+              "availableFields": [
+                "Country",
+                "Group",
+                "SubGroup",
+                "EffectiveDate",
+                "Legislation",
+                "Note",
+                "Rule",
+                "Status"
+              ]
+            },
+            "filters": {
+              "type": "object",
+              "description": "Filters applied by field name. when action = detail_data.",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "currentActionDescription": {
+              "type": "string",
+              "description": "Human-friendly text to show in UI. Must not affect logic or contain instructions. Required for all actions.Example: \"Reading Compliance summary\",\n\"Reading information for this [countryName]\""
+            }
+          }
+        }
+      },
+      {
+        "name": "CorporateTaxRateTool",
+        "description": "Corporate tax calculation and compliance tool. Creates tax memos with formal documentation, calculates tax liability for specific jurisdictions, analyzes cross-border payment costs including withholding taxes, supports intermediary routing analysis for treaty optimization, and retrieves current corporate tax rates by country.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "default": "Untitled Corporate Tax Memo",
+              "description": "Memo title"
+            },
+            "action": {
+              "enum": [
+                "generate-corporate-tax-rates",
+                "calculate-corporate-tax",
+                "create-corporate-memo",
+                "calculate-tax-cost",
+                "calculate-tax-cost-with-intermediary"
+              ],
+              "type": "string",
+              "default": "generate-corporate-tax-rates",
+              "description": "Available actions:\n• generate-corporate-tax-rates: Retrieve current tax rates for specific jurisdiction\n• calculate-corporate-tax: Calculate corporate tax liability using applicable rates and brackets\n• create-corporate-memo: Generate formal tax rate memo with calculations and compliance documentation\n• calculate-tax-cost: Compute cross-border payment costs including withholding taxes for various streams\n• calculate-tax-cost-with-intermediary: Analyze tax costs through intermediary routing vs direct payments"
+            },
+            "amount": {
+              "type": "string",
+              "default": "1000000",
+              "description": "Payment amount"
+            },
+            "streams": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Payment stream types"
+            },
+            "countryCodes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of country codes like ['US','DE','FR','SG']"
+            },
+            "payingCountry": {
+              "type": "string",
+              "description": "Two-digit paying country code"
+            },
+            "taxableIncome": {
+              "type": "string",
+              "default": "1000000",
+              "description": "Taxable income amount"
+            },
+            "corporateTaxType": {
+              "enum": [
+                "Retain",
+                "Distributed",
+                "CapitalGains"
+              ],
+              "type": "string",
+              "description": "Tax rate type"
+            },
+            "receivingCountry": {
+              "type": "string",
+              "description": "Two-digit receiving country code"
+            },
+            "intermediaryCountry": {
+              "type": "string",
+              "description": "Two-digit intermediary country code"
+            }
+          }
+        }
+      },
+      {
+        "name": "elite-form-field-analyzer",
+        "description": "Analyzes field-level data within user's My Forms instances. Returns all form fields with their filled values, titles, descriptions, data types, formulas, and metadata. Works with form instances that users have created from the library for data entry. Supports queries about entity information, group structure, financial data, calculations, elections, and administrative details.\n\n**Actions:**\n• **get-field-structure**: Returns field structure (titles and descriptions only)\n• **get-specific-field-data**: Returns complete data for a specific field by title\n• **get-all-fields-data**: Returns complete data for all fields with values\n\n**Parameters:**\n• **action** (required): One of the actions listed above\n• **formId** (required): Form ID from My Forms (e.g., 'Form-0001', 'Form-0002')\n• **currentActionDescription** (required): UI display text\n• **specificFieldName** (conditional): Required when action is 'get-specific-field-data'\n\n**Use Cases:**\n• Review field values entered in My Forms instances\n• Extract specific field data from completed forms\n• Analyze form responses and calculations\n• Verify entity and financial data entries",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "get-field-structure",
+                "get-specific-field-data",
+                "get-all-fields-data"
+              ],
+              "type": "string",
+              "description": "Action to perform: • get-field-structure — field structure  (titles and descriptions only). • get-specific-field-data — complete data for one field. • get-all-fields-data — complete data for all fields with their values."
+            },
+            "formId": {
+              "type": "string",
+              "description": "Form ID (AutoId) from My Forms - the user's form instance (e.g., 'Form-0001', 'Form-0002')."
+            },
+            "specificFieldName": {
+              "type": "string",
+              "description": "Required when action is 'get-specific-field-data'. The exact title of the field to retrieve."
+            },
+            "currentActionDescription": {
+              "type": "string",
+              "description": "UI display text. Example: \"Analyzing entity fields\", \"Retrieving tax calculation data\", \"Getting form field values\""
+            }
+          }
+        }
+      },
+      {
+        "name": "FileCreator",
+        "description": "Creates professional documents with AI-generated content from conversation context.\n\n**Required Parameters:**\n• file_name (mandatory) - Name for the file without extension\n• file_type (mandatory) - Accepts: excel/xlsx/xls, pdf, word/docx/doc, text/txt\n• outline (mandatory) - Concise outline of file content\n\n**File Types (flexible naming):**\n• excel, xlsx, xls - Data tables and spreadsheets\n• pdf - Formatted reports (read-only)\n• word, docx, doc - Editable business documents\n• text, txt - Plain text notes\n\n**Examples:**\n• file_type='excel' or 'xlsx' - Tax rate comparison table\n• file_type='pdf' - BEPS Pillar 2 compliance report\n• file_type='word' or 'docx' - Transfer pricing documentation\n• file_type='text' or 'txt' - Meeting notes summary",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "outline": {
+              "type": "string",
+              "examples": [
+                "Table: Country, Tax Rates 2020-2024. Countries: US, UK, Germany, France, Japan",
+                "Sections: Overview, Country-by-Country Status, Implementation Dates, Compliance Requirements",
+                "Executive summary, benefits, costs, implementation timeline",
+                "Registration, Filing Deadlines, Documentation, Compliance Steps",
+                "Transfer pricing requirements, deadlines, action items"
+              ],
+              "description": "Concise outline of file content (max 50 words). Brief structure only:\n• Excel/XLSX: Key columns and data points\n• PDF: Main sections\n• Word/DOCX: Main sections and structure\n• Text/TXT: Key topics"
+            },
+            "file_name": {
+              "type": "string",
+              "examples": [
+                "Tax_Rate_Comparison",
+                "BEPS_Report",
+                "Compliance_Checklist",
+                "Meeting_Notes"
+              ],
+              "description": "Name of the file to create (without extension). Example: 'Tax_Rate_Comparison' or 'BEPS_Report'"
+            },
+            "file_type": {
+              "enum": [
+                "excel",
+                "xlsx",
+                "xls",
+                "pdf",
+                "word",
+                "docx",
+                "doc",
+                "text",
+                "txt"
+              ],
+              "type": "string",
+              "description": "Type of file to generate. Accepts multiple formats: excel/xlsx/xls, pdf, word/docx/doc, text/txt"
+            }
+          }
+        }
+      },
+      {
+        "name": "FilingManagerMCPTool",
+        "description": "Retrieve, filter, and search Filing Manager forms (Library + My Forms). This tool can answer direct questions about any form's metadata, including tax year end, filing deadline, form status, created date, entity information, jurisdiction, version, publication date, and more.\n\n**What This Tool Returns:**\n• Form metadata (FormId, Title, Country, Version, Status, Dates, Tax Year End, Filing Deadline)\n• Library forms (published templates)\n• My Forms (user-created instances which are user using)\n• Supports searching and filtering forms by any metadata\n\n**Supported Questions Examples:**\n• \"What is the tax year end for form 0077?\"\n• \"When is the filing deadline for my form 0021?\"\n• \"Show form 0044 details\"\n• \"List Japan forms in the library\"\n• \"Give me form 0002 metadata\"\n\n**Parameters:**\n• action: library or my-forms\n• startIndex/endIndex: pagination\n• sortField/isAscending: sorting\n• filters: filter forms by any metadata field\n\n**CRITICAL - Data Analysis and Counting Instructions:**\n• COUNT CAREFULLY: Parse the entire JSON array and count each item systematically\n• VERIFY ALL MATH: Every breakdown, subtotal, percentage, and total must be mathematically correct\n• CHECK COMPLETENESS: Ensure all forms are accounted for - no forms should be missing from your analysis\n• VALIDATE TOTALS: When grouping by country, form type, or status, verify subtotals sum to the total count\n• AVOID ASSUMPTIONS: Don't estimate or approximate - count actual data from the JSON response\n• GROUP SYSTEMATICALLY: Use proper data grouping (Country → Form Type → Individual Forms)\n• CALCULATE PERCENTAGES: Show distribution percentages and verify they add up to 100%\n• PRESENT CLEARLY: Use structured tables or hierarchical lists for multi-dimensional breakdowns\n• DOUBLE-CHECK: Before presenting any summary, verify your counts match the total and make logical sense\n\n**Note:**\nThis tool returns form-level metadata only, not the values inside form fields.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "library",
+                "my-forms"
+              ],
+              "type": "string",
+              "description": "Type of operation: • library – browse form templates. • my-forms – browse user's form instances created for fillup form."
+            },
+            "filters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "SelectAll",
+                  "SelectedItems",
+                  "FieldKey"
+                ],
+                "properties": {
+                  "fieldKey": {
+                    "enum": [
+                      "AutoId",
+                      "CountryCode",
+                      "ToolName",
+                      "FormType",
+                      "Title",
+                      "Version",
+                      "Author",
+                      "PublicationStatus"
+                    ],
+                    "type": "string",
+                    "description": "The field key to apply this filter to"
+                  },
+                  "selectAll": {
+                    "type": "boolean",
+                    "description": "Set to false for specific filtering, true to include all values for this field"
+                  },
+                  "selectedItems": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of values to filter by"
+                  }
+                }
+              },
+              "description": "Array of filters to apply"
+            },
+            "endIndex": {
+              "type": "integer",
+              "default": 200,
+              "description": "Ending index for pagination (exclusive)"
+            },
+            "sortField": {
+              "enum": [
+                "AutoId",
+                "CountryCode",
+                "ToolName",
+                "FormType",
+                "Title",
+                "Version",
+                "EffectiveDate",
+                "PublicationDate"
+              ],
+              "type": "string",
+              "default": "CountryCode",
+              "description": "Field to sort results by"
+            },
+            "startIndex": {
+              "type": "integer",
+              "default": 0,
+              "description": "Starting index for pagination (0-based)"
+            },
+            "isAscending": {
+              "type": "boolean",
+              "default": true,
+              "description": "Sort direction: true for ascending, false for descending"
+            },
+            "currentActionDescription": {
+              "type": "string",
+              "description": "UI display text. Example: \"Browsing library\", \"Browsing my forms\""
+            }
+          }
+        }
+      },
+      {
+        "name": "FXRateTool",
+        "description": "A versatile financial tool for retrieving and analyzing foreign exchange (FX) rates. It supports real-time and historical data for spot, periodic, and tax-year rates across global currencies and countries. The tool facilitates currency conversions, multi-currency comparisons, and formal FX reporting for treasury, tax compliance, and financial analysis. It offers configurable views including simple/weighted averages and daily/monthly frequencies. Crucial: When presenting results, always specify whether the 'MultiplyBy' or 'DivideBy' calculation format is applied and what multiply by and divided by means in here.• MultiplyBy: Conversion is calculated as [Result = Source Amount * FX Rate]. Example: With FX Rate 1.5, 100 Source = 100 * 1.5 = 150 Target.\n• DivideBy: Conversion is calculated as [Result = Source Amount * (1 / FX Rate) ]. Example: With FX Rate 0.5, 100 Source = 100 * (1/0.5) = 200 Target.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "Single date for FX rate retrieval (YYYY-MM-DD). Used for SpotRate or TaxYearRate if startDate/endDate are not provided. Optional, defaults to today."
+            },
+            "action": {
+              "enum": [
+                "fx-rate-lookup"
+              ],
+              "type": "string",
+              "default": "fx-rate-lookup",
+              "description": "Available actions:\n• fx-rate-lookup: Retrieve FX rates by currency or country\n"
+            },
+            "endDate": {
+              "type": "string",
+              "description": "End date for FX rate retrieval (YYYY-MM-DD).\n- Required for PeriodRate to specify the end of the period (optional, defaults to today if not provided).\n- Optional for SpotRate or TaxYearRate (defaults to today)."
+            },
+            "rateType": {
+              "enum": [
+                "SpotRate",
+                "PeriodRate",
+                "TaxYearRate"
+              ],
+              "type": "string",
+              "default": "SpotRate",
+              "description": "Type of FX rate to retrieve:\n• SpotRate – FX rate for a single day (use 'date').\n• PeriodRate – FX rate over a date range (use 'startDate' and 'endDate').\n• TaxYearRate – one single year, or last year, tax-year FX rate (year is taken from 'date')."
+            },
+            "fxFormats": {
+              "enum": [
+                "MultiplyBy",
+                "DivideBy"
+              ],
+              "type": "string",
+              "default": "MultiplyBy",
+              "description": "The mathematical convention used to apply the exchange rate to the source currency:\n• MultiplyBy: Conversion is calculated as [Result = Source Amount * FX Rate]. (The rate is the multiplier for the source currency).\n• DivideBy: Conversion is calculated as [Result = Source Amount * (1 / FX Rate) ]. (The rate is the multiplier for the target currency).\nTechnical Note: For 'SpotRate' requests, only 'MultiplyBy' is supported."
+            },
+            "memoTitle": {
+              "type": "string",
+              "default": "FX Analysis Memo",
+              "description": "Title of FX memo"
+            },
+            "startDate": {
+              "type": "string",
+              "description": "Start date for FX rate retrieval (YYYY-MM-DD).\n- Required for PeriodRate to specify the start of the period (optional, defaults to today if not provided).\n- Optional for SpotRate or TaxYearRate (defaults to today)."
+            },
+            "detailRateView": {
+              "enum": [
+                "Daily",
+                "Month-End"
+              ],
+              "type": "string",
+              "description": "Detailed FX rate view frequency"
+            },
+            "summeryRateView": {
+              "enum": [
+                "Simple Average",
+                "Weighted Average",
+                "12 Month Average",
+                "13 Month Average"
+              ],
+              "type": "string",
+              "default": "Simple Average",
+              "description": "Summary rate calculation method for aggregated FX rates"
+            },
+            "reportingCountries": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Country codes to determine reporting currencies (e.g., 'US', 'FR'). Overrides 'ReportingCurrencyCodes' if provided."
+            },
+            "transactionCountries": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Country codes to determine transaction currencies (e.g., 'US', 'FR'). Overrides 'TranslationCurrencyCodes' if provided."
+            },
+            "reportingCurrencyCodes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Currency codes to get the FX rate for (e.g., 'USD', 'EUR'). Optional if 'ReportingCountries' is provided."
+            },
+            "translationCurrencyCodes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Currency codes to get the FX rate from (e.g., 'USD', 'EUR'). Optional if 'TransactionCountries' is provided."
+            }
+          }
+        }
+      },
+      {
+        "name": "OrbitaxLawChanges",
+        "description": "Tool to search for tax law changes and legislative updates from the Orbitax database.\n\n**Purpose:**\n• Provides information on enacted and proposed tax law changes, their business impact, and effective dates.\n• Focuses specifically on Law Changes documents only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "integer",
+              "default": 365,
+              "minimum": 90,
+              "description": "Only return content published within this many days"
+            },
+            "count": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 5,
+              "minimum": 1,
+              "description": "Maximum number of results to return"
+            },
+            "query": {
+              "type": "string",
+              "description": "The search query to execute for tax law changes"
+            }
+          }
+        }
+      },
+      {
+        "name": "OrbitaxNewsSearch",
+        "description": "Tool to search for recent tax news and updates from the Orbitax database.\n\n**Purpose:**\n• Provides up-to-date information on tax developments and breaking news from tax authorities worldwide.\n• Focuses specifically on news documents only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "integer",
+              "default": 365,
+              "minimum": 30,
+              "description": "Only return content published within this many days"
+            },
+            "count": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 5,
+              "minimum": 1,
+              "description": "Maximum number of results to return"
+            },
+            "query": {
+              "type": "string",
+              "description": "The search query to execute for tax news"
+            }
+          }
+        }
+      },
+      {
+        "name": "OrbitaxSearch",
+        "description": "Tool to search for stable, authoritative tax-related information from the Orbitax internal research database.\n\n**Purpose:**\n• Provides authoritative answers to tax-related questions using structured data and content maintained within the Orbitax platform.\n• Focuses on stable, comprehensive tax guidance rather than recent news or law changes.\n\n**Core Capabilities:**\n• Execute keyword-based searches across the Orbitax tax knowledge base\n• Return relevant results from tax documents, treaties, and compliance frameworks\n• Filter results based on topic relevance, jurisdiction, document type",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Maximum number of results to return"
+            },
+            "query": {
+              "type": "string",
+              "description": "The search query to execute"
+            },
+            "searchType": {
+              "type": "string",
+              "default": "Semantic",
+              "description": "Search methodology to use: 'Hybrid' combines keyword and semantic search, 'Semantic' uses AI-based understanding"
+            },
+            "countryCodes": {
+              "type": "string",
+              "default": "",
+              "description": "Comma-separated list of ISO country codes to filter results (e.g., US,UK,FR)"
+            },
+            "documentTypes": {
+              "type": "string",
+              "default": "",
+              "examples": [
+                "countrychapter,whtchapter,duedatechapter"
+              ],
+              "description": "Comma-separated list of document types to include in search results."
+            }
+          }
+        }
+      },
+      {
+        "name": "SourceVerification",
+        "description": "Tool to verify and cross-reference information across retrieved source documents.\n\n**When to use:**\n• Call this tool after retrieving sources to verify that they adequately cover the user's question.\n• You can call it again after searching for more sources — it will update and refine the previous verification with the new sources.\n\n**How to call:**\n• First, decompose the user's question into a list of specific information items that need verification.\n• Example: If user asks 'Is Japan, Australia implemented Pillar 2? What is the status? What is the next filing date?'\n  Pass itemsToVerify as:\n  'Japan Pillar 2 status\\nJapan implementation details\\nJapan next filing date\\nAustralia Pillar 2 status\\nAustralia implementation details\\nAustralia next filing date'\n\n**What it does:**\n• Checks which sources cover each information item\n• Detects contradictions, outdated information, and coverage gaps\n• Returns a structured verification report with confidence assessments and an overall verdict\n• If called again, merges new findings with the previous verification result",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "itemsToVerify": {
+              "type": "string",
+              "description": "A newline-separated list of specific information items to verify from the sources. Break down the user's question into discrete facts/topics. Example: 'Japan Pillar 2 status\\nJapan implementation details\\nJapan next filing date\\nAustralia Pillar 2 status'"
+            }
+          }
+        }
+      },
+      {
+        "name": "TaxSites",
+        "description": "Search within tax and professional service websites including government tax authorities.\n\nCovers government tax sites, Big 4 firms, tax publications, and international tax organizations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 5,
+              "minimum": 1,
+              "description": "Number of results to return"
+            },
+            "query": {
+              "type": "string",
+              "description": "The search query to execute within tax sites"
+            },
+            "freshness": {
+              "type": "integer",
+              "default": 180,
+              "maximum": 365,
+              "minimum": 60,
+              "description": "Limit results to last N days"
+            }
+          }
+        }
+      },
+      {
+        "name": "TreatyStatusTool",
+        "description": "Comprehensive treaty information tool. Check tax treaty status between countries including effective dates and signing information, list all available treaties between two countries with metadata, and retrieve full treaty document content by ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "treaty-status",
+                "available-treaties",
+                "treaty-content"
+              ],
+              "type": "string",
+              "default": "treaty-status",
+              "description": "Available actions:\n• treaty-status: Check if treaty exists between two countries with status and dates\n• available-treaties: List all available treaties between two countries with metadata (title, status, dates)\n• treaty-content: Retrieve full content of a specific treaty document by ID"
+            },
+            "countryCodeOne": {
+              "type": "string",
+              "description": "Two-letter ISO country code for the first country (e.g., 'US', 'DE')"
+            },
+            "countryCodeTwo": {
+              "type": "string",
+              "description": "Two-letter ISO country code for the second country (e.g., 'UK', 'FR')"
+            },
+            "treatyDocumentId": {
+              "type": "string",
+              "description": "The specific treaty document ID to retrieve (required for treaty-content action, obtained from available-treaties)"
+            }
+          }
+        }
+      },
+      {
+        "name": "VatRateTool",
+        "description": "Tool to retrieve VAT rates and news for specific countries from the Orbitax database.\n\n**Purpose:**\n• Provides current VAT rates (Standard, Reduced, Increased) for specified jurisdictions.\n• Includes footnotes and additional rate information for comprehensive VAT analysis.\n• Returns related VAT news updates for each country.\n\n**Input Parameters:**\n• action (required): 'rates', 'news', or 'rates-with-news'\n• countryCodes (required): comma-separated list of two-digit ISO country codes (e.g., 'US,DE,FR')\n• count (optional): number of news items to return (default: 3, for news action)\n\n**Output:**\n• VAT rates breakdown by country with footnotes and/or news information",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "default": 3,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of news items to return (used with 'news' action)"
+            },
+            "action": {
+              "enum": [
+                "rates",
+                "news",
+                "rates-with-news"
+              ],
+              "type": "string",
+              "default": "rates",
+              "description": "Type of information to retrieve"
+            },
+            "countryCodes": {
+              "type": "string",
+              "description": "Comma-separated list of two-digit ISO country codes (e.g., 'US,DE,FR,GB')"
+            }
+          }
+        }
+      },
+      {
+        "name": "WebSearch",
+        "description": "Real-time web search tool for retrieving current information from the internet when content is not available within Orbitax.\n\n**Core Capabilities:**\n• Search for up-to-date web information and current news\n• Access articles and publications from across the internet\n• Target specific websites or domains for focused searches\n• Scrape content directly from a specific URL\n• Automatic content extraction with relevance scoring\n\n**Search Types:**\n• **General**: Broad internet search across all sources (default)\n• **Domains**: Search within specific websites you specify\n• **Direct Link**: Scrape and extract content from a specific URL\n\n**Use Cases:**\n• \"Latest tax law changes in Germany\" → General web search\n• \"Search irs.gov for new regulations\" → Domain-specific search\n• \"Scrape content from https://example.com/article\" → Direct link scraping\n• \"Current VAT rates news\" → Recent information retrieval",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "examples": [
+                "https://example.com/article.pdf",
+                "https://news.com/story"
+              ],
+              "description": "Direct URL to scrape (for direct_link search type)"
+            },
+            "count": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of results to return"
+            },
+            "query": {
+              "type": "string",
+              "description": "The search query to execute"
+            },
+            "domains": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "examples": [
+                "example.com",
+                "news.com",
+                "blog.org"
+              ],
+              "description": "List of domains to search within (for domains search type)"
+            },
+            "search_type": {
+              "enum": [
+                "general",
+                "domains",
+                "direct_link"
+              ],
+              "type": "string",
+              "default": "general",
+              "description": "Type of search to perform"
+            }
+          }
+        }
+      },
+      {
+        "name": "WHTRateTool",
+        "description": "Comprehensive withholding tax tool for cross-border payments and compliance. Calculates withholding tax rates between countries using treaty and domestic rates, creates formal tax memos for documentation, analyzes tax minimization strategies, and generates step-by-step compliance procedures with required forms and certificates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "default": "Untitled Memo",
+              "description": "Memo title"
+            },
+            "action": {
+              "enum": [
+                "generate-wht-rate",
+                "create-tax-memo",
+                "minimize-withholding-tax",
+                "create-wht-procedure",
+                "generate-wht-procedure"
+              ],
+              "type": "string",
+              "default": "generate-wht-rate",
+              "description": "Available actions:\n• generate-wht-rate: Calculate withholding tax rates between countries (treaty, domestic, EU rates)\n• create-tax-memo: Generate formal withholding tax documentation with custom titles\n• minimize-withholding-tax: Analyze and suggest strategies to reduce withholding tax exposure\n• create-wht-procedure: Generate step-by-step compliance procedure with required forms\n• generate-wht-procedure: Provide detailed procedure information including deadlines and filing instructions"
+            },
+            "amount": {
+              "type": "string",
+              "default": "1000000",
+              "description": "Transaction amount"
+            },
+            "streams": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Payment stream types"
+            },
+            "currency": {
+              "type": "string",
+              "default": "USD",
+              "description": "Currency code"
+            },
+            "memoType": {
+              "type": "string",
+              "default": "wt",
+              "description": "Memo type"
+            },
+            "rateType": {
+              "enum": [
+                "Treaty",
+                "Domestic",
+                "EU"
+              ],
+              "type": "string",
+              "description": "WHT rate type: 'Treaty', 'Domestic', or 'EU'"
+            },
+            "payingCountries": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of paying country codes (e.g., ['US','DE'])"
+            },
+            "receivingCountries": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of receiving country codes (e.g., ['US', 'DE'])"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

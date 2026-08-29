@@ -1,0 +1,120 @@
+{
+  "registry": "glama",
+  "id": "rhokbtsqe9",
+  "namespace": "forgesworn",
+  "slug": "bray",
+  "name": "nostr-bray",
+  "description": "Trust-aware Nostr MCP server. 236 tools for identity, social, DMs, trust scoring, AI-to-AI dispatch, Lightning payments, privacy proofs, and encrypted vaults. NIP-46 bunker auth; keys never leave the signing device.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Trust-aware Nostr MCP server. 236 tools for identity, social, DMs, trust scoring, AI-to-AI dispatch, Lightning payments, privacy proofs, and encrypted vaults. NIP-46 bunker auth; keys never leave the signing device.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "HTTP port (default 3000)",
+          "type": "string"
+        },
+        "TOR_PROXY": {
+          "description": "SOCKS5h proxy for Tor",
+          "type": "string"
+        },
+        "TRANSPORT": {
+          "description": "stdio (default) or http",
+          "type": "string"
+        },
+        "BUNKER_URI": {
+          "description": "NIP-46 bunker URL (safest)",
+          "type": "string"
+        },
+        "BRAY_CONFIG": {
+          "description": "Path to config file",
+          "type": "string"
+        },
+        "NOSTR_RELAYS": {
+          "description": "Comma-separated relay URLs",
+          "type": "string"
+        },
+        "NIP04_ENABLED": {
+          "description": "Set '1' to enable legacy NIP-04 DMs",
+          "type": "string"
+        },
+        "BUNKER_URI_FILE": {
+          "description": "Path to bunker URI file",
+          "type": "string"
+        },
+        "NOSTR_NCRYPTSEC": {
+          "description": "NIP-49 encrypted key",
+          "type": "string"
+        },
+        "NOSTR_SECRET_KEY": {
+          "description": "nsec, hex, or BIP-39 mnemonic",
+          "type": "string"
+        },
+        "NOSTR_SECRET_KEY_FILE": {
+          "description": "Path to secret key file",
+          "type": "string"
+        },
+        "NOSTR_NCRYPTSEC_PASSWORD": {
+          "description": "Password for ncryptsec",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "BRAY_CONFIG"
+          ]
+        },
+        {
+          "required": [
+            "BUNKER_URI",
+            "NOSTR_RELAYS"
+          ]
+        },
+        {
+          "required": [
+            "BUNKER_URI_FILE",
+            "NOSTR_RELAYS"
+          ]
+        },
+        {
+          "required": [
+            "NOSTR_SECRET_KEY",
+            "NOSTR_RELAYS"
+          ]
+        },
+        {
+          "required": [
+            "NOSTR_SECRET_KEY_FILE",
+            "NOSTR_RELAYS"
+          ]
+        },
+        {
+          "required": [
+            "NOSTR_NCRYPTSEC",
+            "NOSTR_RELAYS"
+          ]
+        }
+      ]
+    },
+    "id": "rhokbtsqe9",
+    "name": "nostr-bray",
+    "namespace": "forgesworn",
+    "repository": {
+      "url": "https://github.com/forgesworn/bray"
+    },
+    "slug": "bray",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rhokbtsqe9"
+  }
+}

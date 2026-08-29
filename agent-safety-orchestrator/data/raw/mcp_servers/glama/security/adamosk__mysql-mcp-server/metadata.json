@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "xfu52mab5w",
+  "namespace": "adamosk",
+  "slug": "mysql-mcp-server",
+  "name": "MySQL MCP Server",
+  "description": "A Model Context Protocol server that provides secure, multi-database MySQL access with configurable security levels, enabling SQL queries across multiple databases directly from VS Code.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server that provides secure, multi-database MySQL access with configurable security levels, enabling SQL queries across multiple databases directly from VS Code.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_SERVER_NAME": {
+          "description": "Server metadata - name of the MCP server",
+          "type": "string",
+          "default": "mysql-mcp-server"
+        },
+        "MYSQL_DATABASES": {
+          "description": "JSON array of database configurations containing name, host, user, password, and database",
+          "type": "string"
+        },
+        "MCP_SERVER_VERSION": {
+          "description": "Server metadata - version of the MCP server",
+          "type": "string",
+          "default": "1.0.0"
+        },
+        "MYSQL_ALLOWED_COMMANDS": {
+          "description": "Security level - options: default (not set), extended, all, or custom comma-separated list",
+          "type": "string",
+          "default": "default"
+        },
+        "MYSQL_CONNECTION_LIMIT": {
+          "description": "Maximum connections per pool",
+          "type": "string",
+          "default": "4"
+        },
+        "MYSQL_WAIT_FOR_CONNECTIONS": {
+          "description": "Wait for available connections",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MYSQL_DATABASES"
+      ]
+    },
+    "id": "xfu52mab5w",
+    "name": "MySQL MCP Server",
+    "namespace": "adamosk",
+    "repository": {
+      "url": "https://github.com/adamosk/mysql-mcp-server"
+    },
+    "slug": "mysql-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xfu52mab5w"
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "registry": "glama",
+  "id": "wjdxzq4hpg",
+  "namespace": "itcons-app",
+  "slug": "mcp",
+  "name": "Itcons.app MCP Server",
+  "description": "Connects AI assistants to the Itcons.app business operations platform for managing work reports, work orders, projects, clients, and users. It supports both local stdio and remote HTTP modes, enabling querying, searching, and creating operational data with secure authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Connects AI assistants to the Itcons.app business operations platform for managing work reports, work orders, projects, clients, and users. It supports both local stdio and remote HTTP modes, enabling querying, searching, and creating operational data with secure authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "HTTP server bind host. Defaults to 127.0.0.1.",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "PORT": {
+          "description": "HTTP server port. Defaults to 3000.",
+          "type": "string",
+          "default": "3000"
+        },
+        "ITCONS_TOKEN": {
+          "description": "Existing Bearer token. If set, login is skipped.",
+          "type": "string"
+        },
+        "ITCONS_DOMAIN": {
+          "description": "Installation subdomain. For https://demo.itcons.app, use demo.",
+          "type": "string"
+        },
+        "ITCONS_MCP_PATH": {
+          "description": "Remote MCP endpoint path. Defaults to /mcp.",
+          "type": "string",
+          "default": "/mcp"
+        },
+        "ITCONS_PASSWORD": {
+          "description": "Itcons.app password.",
+          "type": "string"
+        },
+        "ITCONS_TIMEZONE": {
+          "description": "Time zone used by itcons_list_today_work_reports. Defaults to Europe/Madrid.",
+          "type": "string",
+          "default": "Europe/Madrid"
+        },
+        "ITCONS_USERNAME": {
+          "description": "Itcons.app username or email.",
+          "type": "string"
+        },
+        "ITCONS_API_BASE_URL": {
+          "description": "Alternative API base URL.",
+          "type": "string"
+        },
+        "ITCONS_MCP_SSE_PATH": {
+          "description": "SSE-compatible endpoint path. Defaults to /sse.",
+          "type": "string",
+          "default": "/sse"
+        },
+        "ITCONS_MCP_PUBLIC_URL": {
+          "description": "Public HTTPS origin, for example https://mcp.example.com.",
+          "type": "string"
+        },
+        "ITCONS_OAUTH_CLIENT_ID": {
+          "description": "OAuth client ID expected by the remote server. Defaults to itcons-app-chatgpt.",
+          "type": "string",
+          "default": "itcons-app-chatgpt"
+        },
+        "ITCONS_DOMAIN_LOOKUP_URL": {
+          "description": "Endpoint used to detect the Itcons.app domain from an email. Defaults to https://auto.itcons.app/webhook/my-domain.",
+          "type": "string",
+          "default": "https://auto.itcons.app/webhook/my-domain"
+        },
+        "ITCONS_MCP_ALLOWED_HOSTS": {
+          "description": "Comma-separated allowed Host headers, for example mcp.example.com.",
+          "type": "string"
+        },
+        "ITCONS_HTTP_AUTH_DISABLED": {
+          "description": "Set to 1 only for local HTTP smoke tests. Disables remote MCP bearer auth.",
+          "type": "string"
+        },
+        "ITCONS_OAUTH_CLIENTS_FILE": {
+          "description": "JSON file used to persist dynamically registered OAuth clients.",
+          "type": "string"
+        },
+        "ITCONS_OAUTH_CLIENT_SECRET": {
+          "description": "OAuth client secret expected by the remote server.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ITCONS_DOMAIN",
+            "ITCONS_USERNAME",
+            "ITCONS_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "ITCONS_DOMAIN",
+            "ITCONS_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "wjdxzq4hpg",
+    "name": "Itcons.app MCP Server",
+    "namespace": "itcons-app",
+    "repository": {
+      "url": "https://github.com/itcons-app/mcp"
+    },
+    "slug": "mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/wjdxzq4hpg"
+  }
+}

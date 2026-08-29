@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgenticPlan",
+  "description": "Schema for agent-executable plans with verification, dependencies, and checkpoints",
+  "type": "object",
+  "required": ["id", "objective", "created", "tasks", "verification"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^plan-[0-9]{8}-[0-9]{6}$",
+      "description": "Unique plan identifier (plan-YYYYMMDD-HHMMSS)",
+      "examples": ["plan-20241124-153000"]
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Primary objective this plan addresses"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of plan creation"
+    },
+    "status": {
+      "enum": ["planning", "approved", "executing", "complete", "failed", "paused"],
+      "default": "planning",
+      "description": "Current plan execution status"
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "included": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "What is included in scope"
+        },
+        "excluded": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "What is explicitly out of scope"
+        }
+      }
+    },
+    "approach": {
+      "type": "string",
+      "description": "High-level approach and strategy"
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "verification", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)*$",
+            "description": "Task identifier (e.g., 1, 1.1, 1.1.1 for hierarchy)",
+            "examples": ["1", "1.2", "1.2.3"]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Clear description of what needs to be done"
+          },
+          "level": {
+            "enum": ["huge", "large", "medium", "small", "atomic"],
+            "description": "Task granularity level"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Task IDs this task depends on"
+          },
+          "agent_suggestion": {
+            "type": "string",
+            "description": "Suggested agent type (research, code, test, review, etc.)",
+            "examples": ["code-writer", "test-generator", "security-reviewer"]
+          },
+          "estimated_hours": {
+            "type": "number",
+            "minimum": 0.1,
+            "description": "Estimated effort in hours"
+          },
+          "verification": {
+            "type": "object",
+            "required": ["success_criteria", "method"],
+            "properties": {
+              "success_criteria": {
+                "type": "array",
+                "items": {"type": "string"},
+                "minItems": 1,
+                "description": "Specific, measurable success conditions"
+              },
+              "method": {
+                "enum": ["automated_test", "manual_check", "visual_inspection", "integration_test", "code_review"],
+                "description": "How to verify task completion"
+              },
+              "commands": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Commands to run for automated verification"
+              },
+              "timeout_seconds": {
+                "type": "number",
+                "minimum": 1,
+                "description": "Maximum time for verification to complete"
+              }
+            }
+          },
+          "status": {
+            "enum": ["pending", "in_progress", "complete", "failed", "skipped", "blocked"],
+            "default": "pending",
+            "description": "Current task status"
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Expected output files or deliverables",
+            "examples": ["src/auth/login.ts", "tests/auth.test.ts", "docs/api.md"]
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When task started (ISO 8601)"
+          },
+          "completed": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When task completed (ISO 8601)"
+          },
+          "actual_hours": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Actual time spent (for learning)"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+(\\.[0-9]+)*$": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "description": "Dependency graph (task_id: [dependency_ids])"
+    },
+    "parallel_groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["group_id", "tasks"],
+        "properties": {
+          "group_id": {"type": "string"},
+          "tasks": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Task IDs that can run in parallel"
+          },
+          "description": {"type": "string"}
+        }
+      },
+      "description": "Groups of tasks that can execute in parallel"
+    },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "after_tasks"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^cp-[0-9]+$",
+            "examples": ["cp-001", "cp-002"]
+          },
+          "after_tasks": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Create checkpoint after these tasks complete"
+          },
+          "description": {"type": "string"},
+          "git_tag": {"type": "string"},
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "description": "Checkpoint definitions for safe resumption"
+    },
+    "verification": {
+      "type": "object",
+      "required": ["quality_gates"],
+      "properties": {
+        "quality_gates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["gate_id", "description", "criteria"],
+            "properties": {
+              "gate_id": {"type": "string"},
+              "description": {"type": "string"},
+              "criteria": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "threshold": {"type": "string"},
+              "status": {
+                "enum": ["pending", "passed", "failed"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "quality_score": {
+      "type": "object",
+      "properties": {
+        "comprehensiveness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "feasibility": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "clarity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "executability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "integration": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "total": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "description": "Quality assessment scores (0-100 scale)"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "estimated_total_hours": {"type": "number"},
+        "actual_total_hours": {"type": "number"},
+        "risk_level": {
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "requires_approval": {"type": "boolean"},
+        "created_by": {"type": "string"},
+        "ai_systems_used": {
+          "type": "array",
+          "items": {
+            "enum": ["claude", "gemini", "codex"]
+          }
+        },
+        "plan_version": {"type": "string"},
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes, context, or special considerations"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "registry": "glama",
+  "id": "iz6uge7s3f",
+  "namespace": "classfang",
+  "slug": "ssh-mcp-server",
+  "name": "ssh-mcp-server",
+  "description": "Enables secure remote command execution and bidirectional file transfers on SSH servers through the Model Context Protocol. It features robust security controls including command whitelisting, credential isolation, and support for multiple SSH connection profiles.",
+  "discoveryQueries": [
+    "security",
+    "credential"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables secure remote command execution and bidirectional file transfers on SSH servers through the Model Context Protocol. It features robust security controls including command whitelisting, credential isolation, and support for multiple SSH connection profiles.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ssh": {
+          "description": "Multi-SSH connection configuration string (e.g., name=dev,host=1.2.3.4,port=22,user=alice,password=xxx)",
+          "type": "string"
+        },
+        "host": {
+          "description": "SSH server host address",
+          "type": "string"
+        },
+        "port": {
+          "description": "SSH server port",
+          "type": "string"
+        },
+        "password": {
+          "description": "SSH password",
+          "type": "string"
+        },
+        "username": {
+          "description": "SSH username",
+          "type": "string"
+        },
+        "blacklist": {
+          "description": "Command blacklist, comma-separated regular expressions",
+          "type": "string"
+        },
+        "whitelist": {
+          "description": "Command whitelist, comma-separated regular expressions",
+          "type": "string"
+        },
+        "passphrase": {
+          "description": "Private key passphrase (if any)",
+          "type": "string"
+        },
+        "privateKey": {
+          "description": "SSH private key file path",
+          "type": "string"
+        },
+        "socksProxy": {
+          "description": "SOCKS proxy server address (e.g., socks://user:password@host:port)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "host",
+            "username",
+            "password"
+          ]
+        },
+        {
+          "required": [
+            "host",
+            "username",
+            "privateKey"
+          ]
+        },
+        {
+          "required": [
+            "ssh"
+          ]
+        }
+      ]
+    },
+    "id": "iz6uge7s3f",
+    "name": "ssh-mcp-server",
+    "namespace": "classfang",
+    "repository": {
+      "url": "https://github.com/classfang/ssh-mcp-server"
+    },
+    "slug": "ssh-mcp-server",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/iz6uge7s3f"
+  }
+}

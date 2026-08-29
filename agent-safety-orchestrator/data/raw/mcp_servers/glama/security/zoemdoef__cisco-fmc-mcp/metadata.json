@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "db0li3nvp4",
+  "namespace": "ZoemDoef",
+  "slug": "cisco-fmc-mcp",
+  "name": "Cisco FMC MCP Server",
+  "description": "A read-only Model Context Protocol server that enables LLMs to query Cisco Firepower Management Center (FMC) for firewall configurations, network objects, and deployment status. It features automatic token management and built-in rate limiting to safely interact with FMC 7.4.x instances through natural language.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A read-only Model Context Protocol server that enables LLMs to query Cisco Firepower Management Center (FMC) for firewall configurations, network objects, and deployment status. It features automatic token management and built-in rate limiting to safely interact with FMC 7.4.x instances through natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FMC_HOST": {
+          "description": "FMC hostname or IP",
+          "type": "string"
+        },
+        "FMC_TIMEOUT": {
+          "description": "Request timeout in seconds",
+          "type": "string",
+          "default": "60"
+        },
+        "FMC_PASSWORD": {
+          "description": "API password",
+          "type": "string"
+        },
+        "FMC_USERNAME": {
+          "description": "API username",
+          "type": "string"
+        },
+        "FMC_VERIFY_SSL": {
+          "description": "SSL certificate verification",
+          "type": "string",
+          "default": "false"
+        },
+        "FMC_DOMAIN_UUID": {
+          "description": "Domain UUID (auto-discovered)",
+          "type": "string",
+          "default": "auto"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FMC_HOST",
+        "FMC_USERNAME",
+        "FMC_PASSWORD"
+      ]
+    },
+    "id": "db0li3nvp4",
+    "name": "Cisco FMC MCP Server",
+    "namespace": "ZoemDoef",
+    "repository": {
+      "url": "https://github.com/ZoemDoef/cisco-fmc-mcp"
+    },
+    "slug": "cisco-fmc-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/db0li3nvp4"
+  }
+}

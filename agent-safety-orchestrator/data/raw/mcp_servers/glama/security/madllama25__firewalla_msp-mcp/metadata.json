@@ -1,0 +1,70 @@
+{
+  "registry": "glama",
+  "id": "jmxa4bphpx",
+  "namespace": "MadLlama25",
+  "slug": "firewalla_msp-mcp",
+  "name": "Firewalla MCP Server",
+  "description": "A production-ready server that connects Claude Desktop to Firewalla network management capabilities, allowing users to monitor devices, analyze network traffic, manage security alerts, and configure firewall rules through natural language.",
+  "discoveryQueries": [
+    "security",
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A production-ready server that connects Claude Desktop to Firewalla network management capabilities, allowing users to monitor devices, analyze network traffic, manage security alerts, and configure firewall rules through natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (debug/info/warn/error)",
+          "type": "string",
+          "default": "info"
+        },
+        "CACHE_ENABLED": {
+          "description": "Enable response caching",
+          "type": "string",
+          "default": "true"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport method (stdio/sse/http)",
+          "type": "string",
+          "default": "sse"
+        },
+        "RATE_LIMIT_MAX": {
+          "description": "Max requests per window",
+          "type": "string",
+          "default": "100"
+        },
+        "FIREWALLA_API_TOKEN": {
+          "description": "Your Firewalla MSP API token",
+          "type": "string"
+        },
+        "FIREWALLA_MSP_DOMAIN": {
+          "description": "Your MSP domain URL",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FIREWALLA_API_TOKEN",
+        "FIREWALLA_MSP_DOMAIN"
+      ]
+    },
+    "id": "jmxa4bphpx",
+    "name": "Firewalla MCP Server",
+    "namespace": "MadLlama25",
+    "repository": {
+      "url": "https://github.com/MadLlama25/firewalla_msp-mcp"
+    },
+    "slug": "firewalla_msp-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jmxa4bphpx"
+  }
+}

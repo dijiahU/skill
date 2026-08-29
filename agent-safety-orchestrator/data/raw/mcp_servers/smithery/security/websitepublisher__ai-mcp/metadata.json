@@ -1,0 +1,691 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "websitepublisher/ai-mcp",
+  "namespace": "websitepublisher",
+  "slug": "ai-mcp",
+  "displayName": "WebsitePublisher.ai",
+  "description": "WebsitePublisher.ai — Build and publish websites through AI conversation\nWebsitePublisher.ai is a remote MCP server that gives AI assistants the power to create, manage and publish complete websites. No local installation required — connect via OAuth 2.1 and start building.\n27 tools across 5 API domains:\n\nPages — Create, edit and publish HTML pages with full asset management\nAssets — Upload images, CSS, JavaScript and other files\nEntities & Records — Structured data storage for dynamic content\nIntegrations — Connect external services like Stripe, Mailgun, SendGrid\nProject Management — Create projects, manage settings, custom domains\n\nKey features:\n\nRemote server — nothing to install\nOAuth 2.1 with auto-discovery (RFC 9728)\nStreamable HTTP transport\nWorks with Claude, ChatGPT, Mistral/Le Chat, Cursor and more\nFree tier available, paid plans from €9/month\n\nGet started: Connect your AI assistant to https://mcp.websitepublisher.ai/ — OAuth handles the rest automatically.\n📖 Docs: https://w",
+  "discoveryQueries": [
+    "secret"
+  ],
+  "rawRecord": {
+    "id": "9b4fc96b-d74f-416a-8169-89cf92996962",
+    "qualifiedName": "websitepublisher/ai-mcp",
+    "namespace": "websitepublisher",
+    "slug": "ai-mcp",
+    "displayName": "WebsitePublisher.ai",
+    "description": "WebsitePublisher.ai — Build and publish websites through AI conversation\nWebsitePublisher.ai is a remote MCP server that gives AI assistants the power to create, manage and publish complete websites. No local installation required — connect via OAuth 2.1 and start building.\n27 tools across 5 API domains:\n\nPages — Create, edit and publish HTML pages with full asset management\nAssets — Upload images, CSS, JavaScript and other files\nEntities & Records — Structured data storage for dynamic content\nIntegrations — Connect external services like Stripe, Mailgun, SendGrid\nProject Management — Create projects, manage settings, custom domains\n\nKey features:\n\nRemote server — nothing to install\nOAuth 2.1 with auto-discovery (RFC 9728)\nStreamable HTTP transport\nWorks with Claude, ChatGPT, Mistral/Le Chat, Cursor and more\nFree tier available, paid plans from €9/month\n\nGet started: Connect your AI assistant to https://mcp.websitepublisher.ai/ — OAuth handles the rest automatically.\n📖 Docs: https://w",
+    "iconUrl": "https://api.smithery.ai/servers/websitepublisher/ai-mcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-18T14:36:16.693Z",
+    "homepage": "https://www.websitepublisher.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBVAJAV626NFJ1M9E38YENQ",
+    "score": 0.014925373134328358
+  },
+  "detail": {
+    "qualifiedName": "websitepublisher/ai-mcp",
+    "displayName": "WebsitePublisher.ai",
+    "description": "WebsitePublisher.ai — Build and publish websites through AI conversation\nWebsitePublisher.ai is a remote MCP server that gives AI assistants the power to create, manage and publish complete websites. No local installation required — connect via OAuth 2.1 and start building.\n27 tools across 5 API domains:\n\nPages — Create, edit and publish HTML pages with full asset management\nAssets — Upload images, CSS, JavaScript and other files\nEntities & Records — Structured data storage for dynamic content\nIntegrations — Connect external services like Stripe, Mailgun, SendGrid\nProject Management — Create projects, manage settings, custom domains\n\nKey features:\n\nRemote server — nothing to install\nOAuth 2.1 with auto-discovery (RFC 9728)\nStreamable HTTP transport\nWorks with Claude, ChatGPT, Mistral/Le Chat, Cursor and more\nFree tier available, paid plans from €9/month\n\nGet started: Connect your AI assistant to https://mcp.websitepublisher.ai/ — OAuth handles the rest automatically.\n📖 Docs: https://websitepublisher.ai/docs\n💻 GitHub: https://github.com/megberts/mcp-websitepublisher-ai",
+    "iconUrl": "https://api.smithery.ai/servers/websitepublisher/ai-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcp-websitepublisher-ai.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-websitepublisher-ai.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_projects",
+        "description": "List all projects the authenticated user has access to",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_project_status",
+        "description": "Get detailed status of a specific project including page, asset, and entity counts",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_pages",
+        "description": "List all pages in a project",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_page",
+        "description": "Get a specific page with its content. Returns version and version_hash for use with patch_page.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The page slug (e.g., \"index.html\", \"about.html\")"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_page",
+        "description": "Create a new page with HTML content",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The page slug (e.g., \"index.html\", \"blog/post1.html\")"
+            },
+            "title": {
+              "type": "string",
+              "description": "Page title (optional)"
+            },
+            "content": {
+              "type": "string",
+              "description": "Full HTML content with DOCTYPE"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "description": {
+              "type": "string",
+              "description": "SEO description (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_page",
+        "description": "Replace an existing page with full new content. For small changes, use patch_page instead — it saves tokens and preserves version history.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The page slug to update"
+            },
+            "title": {
+              "type": "string",
+              "description": "New page title (optional)"
+            },
+            "content": {
+              "type": "string",
+              "description": "New HTML content (optional)"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "description": {
+              "type": "string",
+              "description": "New SEO description (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_page",
+        "description": "Delete a page",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The page slug to delete"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "patch_page",
+        "description": "Apply targeted changes to an existing page without sending the full content. Requires base_version_hash from get_page to prevent conflicts. Supports replace and delete operations. Much more efficient than update_page for small edits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The page slug to patch"
+            },
+            "patches": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "operation",
+                  "find"
+                ],
+                "properties": {
+                  "find": {
+                    "type": "string",
+                    "description": "Exact string to find in the page content (must match exactly once)"
+                  },
+                  "replace": {
+                    "type": "string",
+                    "description": "Replacement string (required for replace operation)"
+                  },
+                  "operation": {
+                    "type": "string",
+                    "description": "Operation type: \"replace\" or \"delete\""
+                  }
+                }
+              },
+              "description": "Array of patch operations. Each patch needs: operation (\"replace\" or \"delete\"), find (exact string to locate). For replace: also include replace (new string). The find string must match exactly once in the page content."
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "patch_summary": {
+              "type": "string",
+              "description": "Brief description of what was changed (optional, stored in version history)"
+            },
+            "base_version_hash": {
+              "type": "string",
+              "description": "The version_hash from get_page response. Ensures no conflicting changes."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_page_versions",
+        "description": "Get the version history of a page. Returns metadata (version numbers, hashes, timestamps, change summaries) — no content. Useful to check what changed or find a version to rollback to.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The page slug"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "rollback_page",
+        "description": "Rollback a page to a previous version. Creates a new version with the old content (audit trail preserved). Specify either target_version (number) or target_version_hash. Use get_page_versions to find available versions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The page slug to rollback"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "target_version": {
+              "type": "integer",
+              "description": "Version number to rollback to (use this OR target_version_hash)"
+            },
+            "target_version_hash": {
+              "type": "string",
+              "description": "Version hash to rollback to (use this OR target_version)"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_assets",
+        "description": "List all assets (images, CSS, JS, etc.) in a project",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "upload_asset",
+        "description": "Upload an asset (image, CSS, JS, etc.)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alt": {
+              "type": "string",
+              "description": "Alt text for images (optional)"
+            },
+            "slug": {
+              "type": "string",
+              "description": "The asset path (e.g., \"images/logo.png\", \"css/style.css\")"
+            },
+            "content": {
+              "type": "string",
+              "description": "Base64 encoded content (no data: prefix)"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_asset",
+        "description": "Delete an asset",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The asset path to delete"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_entities",
+        "description": "List all entities (data models) in a project. Entities are like database tables that store structured data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_entity",
+        "description": "Create a new entity (data model). Example: create a \"blogpost\" entity with title, content, author fields.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Entity name in lowercase (e.g., \"blogpost\", \"product\", \"testimonial\")"
+            },
+            "plural": {
+              "type": "string",
+              "description": "Plural form of entity name (optional, defaults to name + \"s\")"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "properties": {
+              "type": "array",
+              "description": "Array of property definitions. Each property needs: name (string), type (varchar|text|int|datetime|tinyint), length (optional), required (optional boolean)"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the entity (optional)"
+            },
+            "public_read": {
+              "type": "boolean",
+              "description": "Enable public read-only access without authentication (optional, default: false). When true, records are accessible via /mapi/public/{projectId}/{entity}."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_entity_schema",
+        "description": "Get the schema definition of an entity, including all its properties and their types",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name (e.g., \"blogpost\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_entity",
+        "description": "Delete an entity and ALL its data. This action cannot be undone!",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_entity",
+        "description": "Update entity metadata such as plural name, description, or public_read access. Set public_read to true to make entity data accessible without authentication via /mapi/public/{projectId}/{entity}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "plural": {
+              "type": "string",
+              "description": "New plural form (optional)"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "description": {
+              "type": "string",
+              "description": "New description (optional)"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name to update"
+            },
+            "public_read": {
+              "type": "boolean",
+              "description": "Enable/disable public read-only access without authentication (optional, default: false)"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_records",
+        "description": "List all records of an entity type with optional pagination",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "integer",
+              "description": "Page number for pagination (optional, default: 1)"
+            },
+            "sort_by": {
+              "type": "string",
+              "description": "Field to sort by (optional, default: \"id\")"
+            },
+            "per_page": {
+              "type": "integer",
+              "description": "Records per page (optional, default: 50, max: 100)"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "sort_order": {
+              "type": "string",
+              "description": "Sort order: \"ASC\" or \"DESC\" (optional, default: \"DESC\")"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name (e.g., \"blogpost\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_record",
+        "description": "Get a single record by ID",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "record_id": {
+              "type": "integer",
+              "description": "The record ID"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name (e.g., \"blogpost\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_record",
+        "description": "Create a new record in an entity. Fields depend on the entity schema.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Record data as key-value pairs matching the entity schema"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name (e.g., \"blogpost\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_record",
+        "description": "Update an existing record. Only provided fields will be updated.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Fields to update as key-value pairs"
+            },
+            "record_id": {
+              "type": "integer",
+              "description": "The record ID to update"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name (e.g., \"blogpost\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_record",
+        "description": "Delete a record by ID",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "record_id": {
+              "type": "integer",
+              "description": "The record ID to delete"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "The entity name (e.g., \"blogpost\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "vault_list_secrets",
+        "description": "List all secrets stored in a project's vault. Returns metadata only (key names, prefixes, service types, status) — never the actual secret values. Use this to check what credentials are stored before setting up integrations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "service_type": {
+              "type": "string",
+              "description": "Optional filter by service type (e.g., \"resend\", \"mollie\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "vault_store_secret",
+        "description": "Store or update a secret in the project vault. The value is encrypted with AES-256-GCM and can never be read back. Use this to save API keys for integrations. If the key_name already exists, the value is replaced. For integration setup, prefer setup_integration which handles validation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "The secret value to encrypt and store (e.g., the actual API key)"
+            },
+            "key_name": {
+              "type": "string",
+              "description": "Unique identifier for the secret (lowercase, underscores, e.g., \"resend_api_key\", \"mollie_api_key\")"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            },
+            "description": {
+              "type": "string",
+              "description": "Human-readable description (e.g., \"Resend API key for transactional email\") — optional"
+            },
+            "service_type": {
+              "type": "string",
+              "description": "Service type label (e.g., \"resend\", \"mollie\") — optional"
+            }
+          }
+        }
+      },
+      {
+        "name": "vault_delete_secret",
+        "description": "Permanently delete a secret from the project vault. This cannot be undone. The encrypted value is destroyed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key_name": {
+              "type": "string",
+              "description": "The secret key name to delete (e.g., \"resend_api_key\")"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_integrations",
+        "description": "List all available integrations and their configuration status for a project. Shows which integrations are fully configured (vault secrets present and ready to use) and which are available but need setup. Each integration includes its available endpoints.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "setup_integration",
+        "description": "Configure an integration by storing its required API keys in the vault. Validates key format against the integration manifest. After setup, the integration endpoints become available for execute_integration calls. Use list_integrations first to see what secrets are required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "secrets": {
+              "type": "object",
+              "description": "Key-value pairs of secret names and their values. Example for Resend: {\"resend_api_key\": \"re_abc123...\"}"
+            },
+            "service": {
+              "type": "string",
+              "description": "Integration id (e.g., \"resend\", \"mollie\")"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "execute_integration",
+        "description": "Execute an integration action — e.g., send an email via Resend, create a payment via Mollie. The system resolves vault credentials server-side so you never handle API keys directly. The integration must be configured first via setup_integration. Input fields depend on the specific endpoint (use list_integrations to see available endpoints and their schemas).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "object",
+              "description": "Input data for the endpoint. Fields depend on the specific endpoint schema. Example for Resend send-email: {\"from\": \"noreply@site.com\", \"to\": \"user@example.com\", \"subject\": \"Hello\", \"html\": \"<p>Content</p>\"}"
+            },
+            "service": {
+              "type": "string",
+              "description": "Integration id (e.g., \"resend\", \"mollie\")"
+            },
+            "endpoint": {
+              "type": "string",
+              "description": "Endpoint name (e.g., \"send-email\", \"create-payment\", \"get-payment\")"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "remove_integration",
+        "description": "Remove an integration by permanently deleting all its vault secrets. After removal, the integration endpoints will no longer work until reconfigured via setup_integration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Integration id to remove (e.g., \"resend\", \"mollie\")"
+            },
+            "project_id": {
+              "type": "integer",
+              "description": "The project ID"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

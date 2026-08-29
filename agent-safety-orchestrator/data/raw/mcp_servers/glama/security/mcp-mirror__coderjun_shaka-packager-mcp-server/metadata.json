@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "fcbzffhfkw",
+  "namespace": "MCP-Mirror",
+  "slug": "coderjun_shaka-packager-mcp-server",
+  "name": "Shaka Packager MCP Server",
+  "description": "Integrates Shaka Packager with Claude to enable video analysis, transcoding, and packaging for HLS and DASH streaming. It supports advanced features like DRM encryption and content conversion while working alongside the Filesystem MCP server to process local media files.",
+  "discoveryQueries": [
+    "encryption"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Integrates Shaka Packager with Claude to enable video analysis, transcoding, and packaging for HLS and DASH streaming. It supports advanced features like DRM encryption and content conversion while working alongside the Filesystem MCP server to process local media files.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TEMP_DIR": {
+          "description": "Custom temporary directory for file uploads",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
+          "type": "string"
+        },
+        "VIDEO_PATH": {
+          "description": "Path to your local video directory (used for translating paths between Docker and host)",
+          "type": "string"
+        },
+        "DOCKER_PATH": {
+          "description": "Docker container mount path",
+          "type": "string",
+          "default": "/projects/video-drop"
+        },
+        "COMMAND_TIMEOUT": {
+          "description": "Timeout in seconds for Shaka Packager commands",
+          "type": "string",
+          "default": "300"
+        },
+        "SHAKA_PACKAGER_PATH": {
+          "description": "Path to the Shaka Packager executable (highly recommended for Claude Desktop)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SHAKA_PACKAGER_PATH",
+        "VIDEO_PATH"
+      ]
+    },
+    "id": "fcbzffhfkw",
+    "name": "Shaka Packager MCP Server",
+    "namespace": "MCP-Mirror",
+    "repository": {
+      "url": "https://github.com/MCP-Mirror/coderjun_shaka-packager-mcp-server"
+    },
+    "slug": "coderjun_shaka-packager-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fcbzffhfkw"
+  }
+}

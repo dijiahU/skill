@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "m7fyb1ygay",
+  "namespace": "klodr",
+  "slug": "faxdrop-mcp",
+  "name": "faxdrop-mcp",
+  "description": "Enables AI assistants to send real faxes through the FaxDrop API. Provides safeguards including rate limiting, dry-run mode, and audit logging for secure fax operations.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to send real faxes through the FaxDrop API. Provides safeguards including rate limiting, dry-run mode, and audit logging for secure fax operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FAXDROP_API_KEY": {
+          "description": "Your FaxDrop API key, obtained from faxdrop.com/account (Developer API → Generate Key). Keys look like 'fd_live_<32 hex>'.",
+          "type": "string"
+        },
+        "FAXDROP_MCP_DRY_RUN": {
+          "description": "Enable dry run mode to simulate sending without calling FaxDrop. Set to 'true' to enable. Default is off.",
+          "type": "string"
+        },
+        "FAXDROP_MCP_AUDIT_LOG": {
+          "description": "Path to an audit log file for append-only JSON Lines logging. Sensitive args are redacted. Default is off.",
+          "type": "string"
+        },
+        "FAXDROP_MCP_RATE_LIMIT_send": {
+          "description": "Daily rate limit for sending faxes, e.g., '100/day'. Use 'N/minute', 'N/hour', 'N/day', or 'N/week'. Default is '100/day'.",
+          "type": "string"
+        },
+        "FAXDROP_MCP_RATE_LIMIT_DISABLE": {
+          "description": "Disable rate limit for testing. Set to 'true' to turn off. Default is off.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FAXDROP_API_KEY"
+      ]
+    },
+    "id": "m7fyb1ygay",
+    "name": "faxdrop-mcp",
+    "namespace": "klodr",
+    "repository": {
+      "url": "https://github.com/klodr/faxdrop-mcp"
+    },
+    "slug": "faxdrop-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/m7fyb1ygay"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "registry": "glama",
+  "id": "w1rpo3mr5s",
+  "namespace": "trailofbits",
+  "slug": "mcp-context-protector",
+  "name": "mcp-context-protector",
+  "description": "A security wrapper for MCP servers that provides trust-on-first-use pinning, guardrail scanning, and protection against prompt injection attacks. It acts as an intermediary layer to ensure universal compatibility and secure enforcement of server configurations across various MCP host applications.",
+  "discoveryQueries": [
+    "security",
+    "guardrail",
+    "trust",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A security wrapper for MCP servers that provides trust-on-first-use pinning, guardrail scanning, and protection against prompt injection attacks. It acts as an intermediary layer to ensure universal compatibility and secure enforcement of server configurations across various MCP host applications.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "url": {
+          "description": "Connect to a remote MCP server over streamable HTTP at the specified URL",
+          "type": "string"
+        },
+        "command": {
+          "description": "Start a wrapped server over the stdio transport using the specified command",
+          "type": "string"
+        },
+        "sse_url": {
+          "description": "Connect to a remote MCP server over SSE at the specified URL",
+          "type": "string"
+        },
+        "environment": {
+          "description": "Select specific environment/profile for multi-environment config",
+          "type": "string"
+        },
+        "command_args": {
+          "description": "Start a wrapped server over the stdio transport using the specified command arguments (space-separated). Supports arguments with dashes.",
+          "type": "string"
+        },
+        "quarantine_path": {
+          "description": "The path to the quarantine database file (default: ~/.mcp-context-protector/quarantine.json)",
+          "type": "string"
+        },
+        "guardrail_provider": {
+          "description": "The guardrail provider to use for checking server configurations (e.g., LlamaFirewall)",
+          "type": "string"
+        },
+        "server_config_file": {
+          "description": "The path to the server config database file (default: ~/.mcp-context-protector/servers.json)",
+          "type": "string"
+        },
+        "visualize_ansi_codes": {
+          "description": "Make ANSI escape codes visible by replacing escape characters with 'ESC'",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "command"
+          ]
+        },
+        {
+          "required": [
+            "command_args"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        },
+        {
+          "required": [
+            "sse_url"
+          ]
+        }
+      ]
+    },
+    "id": "w1rpo3mr5s",
+    "name": "mcp-context-protector",
+    "namespace": "trailofbits",
+    "repository": {
+      "url": "https://github.com/trailofbits/mcp-context-protector"
+    },
+    "slug": "mcp-context-protector",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/w1rpo3mr5s"
+  }
+}

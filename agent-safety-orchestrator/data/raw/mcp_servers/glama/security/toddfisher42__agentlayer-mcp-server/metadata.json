@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "m5hfozl4yq",
+  "namespace": "ToddFisher42",
+  "slug": "agentlayer-mcp-server",
+  "name": "AgentLayer MCP Server",
+  "description": "Provides real-time AI infrastructure data including LLM costs, model benchmarks, API deprecations, quality scores, and agent spend tracking. Supports authentication, rate limiting, x402 micropayments, and Stripe billing.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides real-time AI infrastructure data including LLM costs, model benchmarks, API deprecations, quality scores, and agent spend tracking. Supports authentication, rate limiting, x402 micropayments, and Stripe billing.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FIRECRAWL_API_KEY": {
+          "description": "Firecrawl API key",
+          "type": "string"
+        },
+        "NEON_DATABASE_URL": {
+          "description": "Neon Postgres connection string",
+          "type": "string"
+        },
+        "STRIPE_SECRET_KEY": {
+          "description": "Stripe secret key",
+          "type": "string"
+        },
+        "STRIPE_STARTER_PRICE_ID": {
+          "description": "Stripe price ID for Starter tier",
+          "type": "string"
+        },
+        "STRIPE_PRO_MONTHLY_PRICE_ID": {
+          "description": "Stripe price ID for Pro tier",
+          "type": "string"
+        },
+        "STRIPE_SCALE_MONTHLY_PRICE_ID": {
+          "description": "Stripe price ID for Scale tier",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NEON_DATABASE_URL",
+        "FIRECRAWL_API_KEY",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_STARTER_PRICE_ID",
+        "STRIPE_PRO_MONTHLY_PRICE_ID",
+        "STRIPE_SCALE_MONTHLY_PRICE_ID"
+      ]
+    },
+    "id": "m5hfozl4yq",
+    "name": "AgentLayer MCP Server",
+    "namespace": "ToddFisher42",
+    "repository": {
+      "url": "https://github.com/ToddFisher42/agentlayer-mcp-server"
+    },
+    "slug": "agentlayer-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/m5hfozl4yq"
+  }
+}

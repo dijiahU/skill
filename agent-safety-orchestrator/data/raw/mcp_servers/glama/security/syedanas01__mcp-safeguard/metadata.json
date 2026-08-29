@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "gxppvacejf",
+  "namespace": "SyedAnas01",
+  "slug": "mcp-safeguard",
+  "name": "mcp-safeguard",
+  "description": "An MCP server that provides safeguard capabilities to protect against prompt injection and unsafe tool calls.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "An MCP server that provides safeguard capabilities to protect against prompt injection and unsafe tool calls.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_SHIELD_API_KEY": {
+          "description": "API key for authenticating requests to the mcp-safeguard server",
+          "type": "string"
+        },
+        "MCP_SHIELD_OTLP_ENDPOINT": {
+          "description": "OpenTelemetry endpoint for traces, e.g., 'http://jaeger:4317'",
+          "type": "string"
+        },
+        "MCP_SHIELD_SSRF_ALLOWLIST": {
+          "description": "JSON array of allowed hosts for SSRF protection, e.g., '[\"localhost\",\"127.0.0.1\"]'",
+          "type": "string"
+        },
+        "MCP_SHIELD_RATE_LIMIT_WINDOW": {
+          "description": "Rate limit window duration in seconds (default 60)",
+          "type": "string"
+        },
+        "MCP_SHIELD_PROMETHEUS_ENABLED": {
+          "description": "Set to 'true' to expose Prometheus metrics at /metrics",
+          "type": "string"
+        },
+        "MCP_SHIELD_RATE_LIMIT_REQUESTS": {
+          "description": "Maximum number of requests per window (default 100)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "gxppvacejf",
+    "name": "mcp-safeguard",
+    "namespace": "SyedAnas01",
+    "repository": {
+      "url": "https://github.com/SyedAnas01/mcp-safeguard"
+    },
+    "slug": "mcp-safeguard",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gxppvacejf"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.getstack-run/stack",
+  "slug": "getstack-run__stack",
+  "title": "STACK",
+  "description": "Secure credential vault and authenticated handoffs for multi-agent systems with verified identity.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.getstack-run/stack",
+      "description": "Secure credential vault and authenticated handoffs for multi-agent systems with verified identity.",
+      "title": "STACK",
+      "repository": {
+        "url": "https://github.com/getstack-run/stack",
+        "source": "github"
+      },
+      "version": "0.1.0",
+      "websiteUrl": "https://getstack.run",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://mcp.getstack.run",
+          "headers": [
+            {
+              "description": "Bearer token with operator API key",
+              "isRequired": true,
+              "value": "Bearer {api_key}",
+              "isSecret": true,
+              "variables": {
+                "api_key": {
+                  "description": "Operator API key from stack-cli register",
+                  "isRequired": true,
+                  "isSecret": true
+                }
+              },
+              "name": "Authorization"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-03-28T17:37:27.880511Z",
+        "publishedAt": "2026-03-28T17:37:27.880511Z",
+        "updatedAt": "2026-03-28T17:37:27.880511Z",
+        "isLatest": false
+      }
+    }
+  }
+}

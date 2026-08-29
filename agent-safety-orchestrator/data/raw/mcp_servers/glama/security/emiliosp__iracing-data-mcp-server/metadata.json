@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "mj2zx6ehu5",
+  "namespace": "emilioSp",
+  "slug": "iracing-data-mcp-server",
+  "name": "iRacing Data MCP Server",
+  "description": "Provides seamless access to iRacing's racing simulation data, enabling AI assistants to retrieve driver profiles, career statistics, and team information. It features automatic authentication and tools for real-time driver lookups and season performance analysis.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides seamless access to iRacing's racing simulation data, enabling AI assistants to retrieve driver profiles, career statistics, and team information. It features automatic authentication and tools for real-time driver lookups and season performance analysis.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "EMAIL": {
+          "description": "Required: Your iRacing account email address",
+          "type": "string"
+        },
+        "API_KEY": {
+          "description": "Your pre-generated iRacing API key (recommended for security)",
+          "type": "string"
+        },
+        "PASSWORD": {
+          "description": "Your iRacing account password",
+          "type": "string"
+        },
+        "COOKIE_JAR": {
+          "description": "Required: Path to store authentication cookies (e.g., ./cookies.txt)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "API_KEY"
+          ]
+        }
+      ],
+      "required": [
+        "COOKIE_JAR",
+        "EMAIL"
+      ]
+    },
+    "id": "mj2zx6ehu5",
+    "name": "iRacing Data MCP Server",
+    "namespace": "emilioSp",
+    "repository": {
+      "url": "https://github.com/emilioSp/iracing-data-mcp-server"
+    },
+    "slug": "iracing-data-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mj2zx6ehu5"
+  }
+}

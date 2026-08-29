@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "jigvzmh0fn",
+  "namespace": "Abysswalkr",
+  "slug": "porthunter-mcp",
+  "name": "PortHunter MCP",
+  "description": "Analyzes PCAP/PCAPNG network capture files to detect port scanning techniques (SYN, FIN, Xmas), classify scan patterns, and enrich suspicious IP addresses with threat intelligence data. Provides comprehensive network security analysis through natural language interactions.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Analyzes PCAP/PCAPNG network capture files to detect port scanning techniques (SYN, FIN, Xmas), classify scan patterns, and enrich suspicious IP addresses with threat intelligence data. Provides comprehensive network security analysis through natural language interactions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT_HUNTER_TOKEN": {
+          "description": "Token requerido si PORT_HUNTER_REQUIRE_TOKEN=true",
+          "type": "string",
+          "default": "TEST_TOKEN"
+        },
+        "PORT_HUNTER_ALLOWED_DIR": {
+          "description": "Directorio raíz permitido para leer PCAP/PCAPNG",
+          "type": "string",
+          "default": "."
+        },
+        "PORT_HUNTER_MAX_PCAP_MB": {
+          "description": "Tamaño máximo del archivo a procesar",
+          "type": "string",
+          "default": "50"
+        },
+        "PORT_HUNTER_ALLOW_PRIVATE": {
+          "description": "Si true, permite enriquecer IPs privadas (por defecto se omite)",
+          "type": "string",
+          "default": "false"
+        },
+        "PORT_HUNTER_REQUIRE_TOKEN": {
+          "description": "Exige auth_token en cada llamada de tool",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "jigvzmh0fn",
+    "name": "PortHunter MCP",
+    "namespace": "Abysswalkr",
+    "repository": {
+      "url": "https://github.com/Abysswalkr/porthunter-mcp"
+    },
+    "slug": "porthunter-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jigvzmh0fn"
+  }
+}

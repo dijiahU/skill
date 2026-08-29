@@ -1,0 +1,45 @@
+{
+  "skill_name": "security-best-practices",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review our public API before launch. I want to know which security layers are missing around headers, cookies, CSRF, validation, and abuse limits.",
+      "expected_output": "A prioritized hardening brief that identifies trust boundaries, groups recommendations by control family, and states what should be verified before release.",
+      "assertions": [
+        "Response identifies the trust boundary or attack surface before listing controls",
+        "Response groups advice into security control lanes such as headers, sessions, validation, CSRF, abuse controls, secrets, or monitoring",
+        "Response includes verification or release evidence rather than only implementation tips"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Secure this app according to OWASP.",
+      "expected_output": "A bounded response that turns a vague security request into a concrete hardening plan instead of dumping a generic top-ten list or framework boilerplate.",
+      "assertions": [
+        "Response avoids treating all OWASP items as equally urgent without context",
+        "Response asks for or infers app surface, trust boundaries, or likely failure cost",
+        "Response produces a prioritized hardening brief rather than a giant code dump"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Should we use OAuth, passkeys, or JWT sessions for this multi-tenant product login flow?",
+      "expected_output": "A routing-aware response that recognizes authentication architecture belongs in a sibling skill.",
+      "assertions": [
+        "Response routes the user to `authentication-setup` for login and auth architecture design",
+        "Response does not pretend this skill should decide the full auth product architecture",
+        "Response preserves this skill's role as hardening guidance around the chosen auth surface"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Run a deep exploit-focused security audit on this repository and find concrete vulnerabilities.",
+      "expected_output": "A routing-aware response that recognizes a code-level exploit hunt belongs in a deeper security review surface.",
+      "assertions": [
+        "Response routes the task to `security-review` or an equivalent concrete audit lane",
+        "Response does not substitute a generic checklist for a repository audit",
+        "Response distinguishes hardening guidance from exploit-focused code review"
+      ]
+    }
+  ]
+}

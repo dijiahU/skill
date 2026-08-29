@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "j2lc4fshap",
+  "namespace": "lucamilletti99",
+  "slug": "dataverse_mcp_server",
+  "name": "API Registry MCP Server",
+  "description": "Enables discovery, registration, and management of external API endpoints through natural language, supporting multiple authentication methods (public, API key, bearer token) with automatic endpoint testing and documentation parsing.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables discovery, registration, and management of external API endpoints through natural language, supporting multiple authentication methods (public, API key, bearer token) with automatic endpoint testing and documentation parsing.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DATABRICKS_HOST": {
+          "description": "Your Databricks workspace URL (e.g., https://your-workspace.cloud.databricks.com)",
+          "type": "string"
+        },
+        "DATABRICKS_TOKEN": {
+          "description": "Your personal access token for local development",
+          "type": "string"
+        },
+        "MCP_API_KEY_SCOPE": {
+          "description": "Optional: Override default secret scope name for API keys",
+          "type": "string",
+          "default": "mcp_api_keys"
+        },
+        "MCP_BEARER_TOKEN_SCOPE": {
+          "description": "Optional: Override default secret scope name for bearer tokens",
+          "type": "string",
+          "default": "mcp_bearer_tokens"
+        },
+        "DATABRICKS_SQL_WAREHOUSE_ID": {
+          "description": "Your SQL warehouse ID (optional)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABRICKS_HOST",
+        "DATABRICKS_TOKEN"
+      ]
+    },
+    "id": "j2lc4fshap",
+    "name": "API Registry MCP Server",
+    "namespace": "lucamilletti99",
+    "repository": {
+      "url": "https://github.com/lucamilletti99/dataverse_mcp_server"
+    },
+    "slug": "dataverse_mcp_server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j2lc4fshap"
+  }
+}

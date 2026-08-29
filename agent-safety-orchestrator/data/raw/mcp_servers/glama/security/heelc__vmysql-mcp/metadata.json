@@ -1,0 +1,51 @@
+{
+  "registry": "glama",
+  "id": "a3mhhlgse7",
+  "namespace": "Heelc",
+  "slug": "vmysql-mcp",
+  "name": "vmysql-mcp",
+  "description": "A lightweight, multi-environment MySQL MCP server that provides secure, policy-gated database access through simplified query and execution tools. It enables AI agents to interact with multiple database environments safely using environment-based routing and strict security constraints.",
+  "discoveryQueries": [
+    "security",
+    "policy"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A lightweight, multi-environment MySQL MCP server that provides secure, policy-gated database access through simplified query and execution tools. It enables AI agents to interact with multiple database environments safely using environment-based routing and strict security constraints.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MYSQL_DEV_DSN": {
+          "description": "MySQL connection string for the development environment. (e.g., mysql://user:password@127.0.0.1:3306/app_dev)",
+          "type": "string"
+        },
+        "MYSQL_PROD_RO_DSN": {
+          "description": "MySQL connection string for the production read-only environment. (e.g., mysql://readonly:password@127.0.0.1:3306/app)",
+          "type": "string"
+        },
+        "VMYSQL_CONFIG_PATH": {
+          "description": "Path to the vmysql.config.json configuration file. By default, it uses vmysql.config.json in the current working directory. Absolute paths are recommended.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "VMYSQL_CONFIG_PATH"
+      ]
+    },
+    "id": "a3mhhlgse7",
+    "name": "vmysql-mcp",
+    "namespace": "Heelc",
+    "repository": {
+      "url": "https://github.com/Heelc/vmysql-mcp"
+    },
+    "slug": "vmysql-mcp",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a3mhhlgse7"
+  }
+}

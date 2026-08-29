@@ -1,0 +1,145 @@
+{
+  "registry": "glama",
+  "id": "kmvahywkwy",
+  "namespace": "alnosarus",
+  "slug": "copymaple",
+  "name": "Maple",
+  "description": "A unified MCP server providing observability, safety control, and behavior evolution for high-agency AI agents through tracing, replaying, and auditing. It features real-time firewall guardrails and ML-driven anomaly detection to monitor, block, or fork agent actions based on risk.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A unified MCP server providing observability, safety control, and behavior evolution for high-agency AI agents through tracing, replaying, and auditing. It features real-time firewall guardrails and ML-driven anomaly detection to monitor, block, or fork agent actions based on risk.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_URL": {
+          "description": "The URL where the MCP server is hosted (e.g., http://localhost:3000).",
+          "type": "string"
+        },
+        "MAPLE_API_KEY": {
+          "description": "API key for authenticating with the Maple server. Auth is fail-closed by default.",
+          "type": "string"
+        },
+        "MAPLE_API_KEYS": {
+          "description": "Alternative to MAPLE_API_KEY, allows providing multiple keys.",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "API key for OpenAI to enable AI-powered firewall chat mode.",
+          "type": "string"
+        },
+        "SLACK_BOT_TOKEN": {
+          "description": "Bot token for the slack_post_message tool (alternative to webhook mode).",
+          "type": "string"
+        },
+        "ANTHROPIC_API_KEY": {
+          "description": "API key for Anthropic to enable AI-powered firewall chat mode.",
+          "type": "string"
+        },
+        "DEMO_OPEN_BROWSER": {
+          "description": "Set to '0' to disable auto-opening browser pages during demo:up.",
+          "type": "string",
+          "default": "1"
+        },
+        "SLACK_WEBHOOK_URL": {
+          "description": "Incoming webhook URL for the slack_post_message tool.",
+          "type": "string"
+        },
+        "MAPLE_ALLOW_NO_AUTH": {
+          "description": "If set to 'true', allows local-only bypass of API key authentication (not recommended).",
+          "type": "string"
+        },
+        "OPENCLAW_BRIDGE_URL": {
+          "description": "The URL of the OpenClaw bridge adapter. Required in production.",
+          "type": "string"
+        },
+        "OPENCLAW_BRIDGE_TOKEN": {
+          "description": "The token used to authenticate with the OpenClaw bridge. Required in production.",
+          "type": "string"
+        },
+        "SLACK_DEFAULT_CHANNEL": {
+          "description": "Optional default channel for Slack bot mode.",
+          "type": "string"
+        },
+        "MAPLE_FIREWALL_ENABLED": {
+          "description": "Whether to enable deterministic firewall policy checks (true | false).",
+          "type": "string",
+          "default": "true"
+        },
+        "MAPLE_FIREWALL_LOG_DIR": {
+          "description": "Directory for firewall audit logs.",
+          "type": "string",
+          "default": "~/.maple/firewall-logs"
+        },
+        "MAPLE_LOCK_BRIDGE_TARGET": {
+          "description": "Set to 'true' to deny per-request bridgeUrl/token overrides. Enabled automatically in production.",
+          "type": "string",
+          "default": "true"
+        },
+        "MAPLE_ALLOW_BRIDGE_OVERRIDE": {
+          "description": "If set to 'true', allows local-only override of the bridge configuration.",
+          "type": "string"
+        },
+        "MAPLE_FIREWALL_CHAT_PRIMARY": {
+          "description": "Primary model provider for firewall chat (openai | anthropic).",
+          "type": "string"
+        },
+        "MAPLE_FIREWALL_DEFAULT_ACTION": {
+          "description": "Default firewall behavior (allow | deny | log_only).",
+          "type": "string",
+          "default": "allow"
+        },
+        "MAPLE_FIREWALL_CHAT_TIMEOUT_MS": {
+          "description": "Timeout in milliseconds for firewall chat AI responses.",
+          "type": "string",
+          "default": "15000"
+        },
+        "MAPLE_FIREWALL_CHAT_OPENAI_MODEL": {
+          "description": "Specific OpenAI model for firewall chat (e.g., gpt-4o-mini).",
+          "type": "string"
+        },
+        "MAPLE_FIREWALL_CHAT_ANTHROPIC_MODEL": {
+          "description": "Specific Anthropic model for firewall chat (e.g., claude-sonnet-4-6).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MAPLE_API_KEY",
+            "OPENCLAW_BRIDGE_URL",
+            "OPENCLAW_BRIDGE_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "MAPLE_API_KEYS",
+            "OPENCLAW_BRIDGE_URL",
+            "OPENCLAW_BRIDGE_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "MAPLE_ALLOW_NO_AUTH",
+            "OPENCLAW_BRIDGE_URL",
+            "OPENCLAW_BRIDGE_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "kmvahywkwy",
+    "name": "Maple",
+    "namespace": "alnosarus",
+    "repository": {
+      "url": "https://github.com/alnosarus/copymaple"
+    },
+    "slug": "copymaple",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kmvahywkwy"
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "osamah96/qqqqw",
+  "namespace": "osamah96",
+  "slug": "qqqqw",
+  "displayName": "Brand Me Please",
+  "description": "Ensure your content aligns with your brand’s voice, values, and visuals. Retrieve complete guidelines and assets, then run quick checks or deep analyses for any draft. Get clear scores, examples, and before/after recommendations to boost consistency and compliance.",
+  "discoveryQueries": [
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "5a3cefa6-ce83-408a-80c3-f972a0dc21bc",
+    "qualifiedName": "osamah96/qqqqw",
+    "namespace": "osamah96",
+    "slug": "qqqqw",
+    "displayName": "Brand Me Please",
+    "description": "Ensure your content aligns with your brand’s voice, values, and visuals. Retrieve complete guidelines and assets, then run quick checks or deep analyses for any draft. Get clear scores, examples, and before/after recommendations to boost consistency and compliance.",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2025-10-04T11:36:57.298Z",
+    "homepage": "https://smithery.ai/servers/osamah96/qqqqw",
+    "bySmithery": false,
+    "owner": "org_01KNBRA343H7BY81YJDKZYSKDV",
+    "score": 0.009615384615384616
+  },
+  "detail": {
+    "qualifiedName": "osamah96/qqqqw",
+    "displayName": "Brand Me Please",
+    "description": "Ensure your content aligns with your brand’s voice, values, and visuals. Retrieve complete guidelines and assets, then run quick checks or deep analyses for any draft. Get clear scores, examples, and before/after recommendations to boost consistency and compliance.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://qqqqw--osamah96.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://qqqqw--osamah96.run.tools",
+        "configSchema": {
+          "name": "brand-guidelines-mcp",
+          "transport": [
+            "streamable-http",
+            "sse",
+            "http"
+          ],
+          "description": "Brand Guidelines MCP Server",
+          "mcp_version": "2025-06-18",
+          "capabilities": {
+            "tools": {
+              "listChanged": true
+            },
+            "prompts": {
+              "listChanged": true
+            },
+            "resources": {
+              "subscribe": false,
+              "listChanged": false
+            },
+            "notifications": true
+          },
+          "authentication_required": false
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "brand_me_please",
+        "description": "Complete brand analysis workflow - literally \"Brand Me Please!\" Analyzes your content, retrieves brand guidelines, and fetches visual assets all in one go. Use this for comprehensive brand analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to analyze (text, extracted from images/PDFs, etc.)"
+            },
+            "strictness": {
+              "enum": [
+                "flexible",
+                "moderate",
+                "strict"
+              ],
+              "type": "string",
+              "default": "moderate",
+              "description": "Analysis strictness level"
+            },
+            "content_type": {
+              "enum": [
+                "text",
+                "social_post",
+                "email",
+                "website_copy"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Type of content"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_brand_context",
+        "description": "Retrieve comprehensive brand guidelines and rules from BrandMePlease",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "detail_level": {
+              "enum": [
+                "summary",
+                "detailed",
+                "complete"
+              ],
+              "type": "string",
+              "default": "detailed",
+              "description": "Level of detail to return"
+            },
+            "include_examples": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include usage examples"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_brand_visuals",
+        "description": "Fetch PDFs and visual assets from your brand via BrandMePlease",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 10,
+              "description": "Maximum number of assets to return"
+            },
+            "format": {
+              "enum": [
+                "urls",
+                "metadata",
+                "preview"
+              ],
+              "type": "string",
+              "default": "urls",
+              "description": "Format of returned assets"
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_content",
+        "description": "Analyze content against your brand guidelines using BrandMePlease",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to analyze"
+            },
+            "strictness": {
+              "enum": [
+                "flexible",
+                "moderate",
+                "strict"
+              ],
+              "type": "string",
+              "default": "moderate",
+              "description": "Analysis strictness level"
+            },
+            "content_type": {
+              "enum": [
+                "text",
+                "social_post",
+                "email",
+                "website_copy"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Type of content"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": [
+      {
+        "name": "analyze_brand_content",
+        "description": "Comprehensive analysis of your content against brand guidelines with detailed scoring, specific examples, and actionable recommendations. Provides 5 detailed aspects (tone, terminology, consistency, formatting, values) with before/after improvement suggestions.",
+        "arguments": [
+          {
+            "name": "content",
+            "description": "The content to analyze (text, social post, email, website copy, etc.). REQUIRED. Must be non-empty string, maximum 50,000 characters.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "review_brand_guidelines",
+        "description": "View your complete brand guidelines including personality, voice characteristics, core values, messaging rules, and visual elements. Returns formatted reference guide for content creators. No arguments required.",
+        "arguments": []
+      },
+      {
+        "name": "quick_brand_check",
+        "description": "Fast brand compliance check with key insights and top 3 recommendations. Ideal for quick feedback on short content pieces.",
+        "arguments": [
+          {
+            "name": "content",
+            "description": "Content to check for brand compliance. REQUIRED. Must be non-empty string, maximum 50,000 characters.",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

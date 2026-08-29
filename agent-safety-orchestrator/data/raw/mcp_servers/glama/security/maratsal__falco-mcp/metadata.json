@@ -1,0 +1,73 @@
+{
+  "registry": "glama",
+  "id": "ljrbcz0e3t",
+  "namespace": "maratsal",
+  "slug": "falco-mcp",
+  "name": "Falcosidekick UI MCP Server",
+  "description": "Enables querying and analyzing Falco security events from Falcosidekick UI through MCP tools. Supports filtering events by time windows and retrieving full event details for security monitoring and incident investigation.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables querying and analyzing Falco security events from Falcosidekick UI through MCP tools. Supports filtering events by time windows and retrieving full event details for security monitoring and incident investigation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "MCP HTTP listener port",
+          "type": "string",
+          "default": "8080"
+        },
+        "MCP_HTTP_PATH": {
+          "description": "Streamable HTTP mount path",
+          "type": "string",
+          "default": "/mcp"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Set to 'stdio' if your MCP client expects stdio transport",
+          "type": "string",
+          "default": "streamable-http"
+        },
+        "FALCO_BASE_URL": {
+          "description": "Falcosidekick UI base URL",
+          "type": "string",
+          "default": "http://localhost:8080"
+        },
+        "FALCO_PASSWORD": {
+          "description": "Basic Auth password",
+          "type": "string",
+          "default": "admin"
+        },
+        "FALCO_USERNAME": {
+          "description": "Basic Auth username",
+          "type": "string",
+          "default": "admin"
+        },
+        "FALCO_EVENTS_PATH": {
+          "description": "Override the events endpoint path if needed",
+          "type": "string",
+          "default": "/api/v1/events/search"
+        },
+        "FALCO_HTTP_TIMEOUT": {
+          "description": "HTTP timeout in seconds",
+          "type": "string",
+          "default": "15"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ljrbcz0e3t",
+    "name": "Falcosidekick UI MCP Server",
+    "namespace": "maratsal",
+    "repository": {
+      "url": "https://github.com/maratsal/falco-mcp"
+    },
+    "slug": "falco-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ljrbcz0e3t"
+  }
+}

@@ -1,0 +1,388 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "moltrust/moltrust-mcp-server",
+  "namespace": "moltrust",
+  "slug": "moltrust-mcp-server",
+  "displayName": "MolTrust",
+  "description": "Register and verify decentralized identities to establish secure, trusted interactions. Manage reputation scores and verifiable credentials to validate reliability within a decentralized network. Track credit balances and query on-chain registries to streamline peer-to-peer transactions.",
+  "discoveryQueries": [
+    "secure",
+    "trust",
+    "credential",
+    "authentication",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "f5e6be92-478a-40bd-a2de-eb80f3b6c4f5",
+    "qualifiedName": "moltrust/moltrust-mcp-server",
+    "namespace": "moltrust",
+    "slug": "moltrust-mcp-server",
+    "displayName": "MolTrust",
+    "description": "Register and verify decentralized identities to establish secure, trusted interactions. Manage reputation scores and verifiable credentials to validate reliability within a decentralized network. Track credit balances and query on-chain registries to streamline peer-to-peer transactions.",
+    "verified": false,
+    "useCount": 705,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-01T14:19:42.276Z",
+    "homepage": "https://smithery.ai/servers/moltrust/moltrust-mcp-server",
+    "bySmithery": false,
+    "owner": "org_01KNBVDD64D6E1T87RGPZSDESW",
+    "score": 0.015151515151515152
+  },
+  "detail": {
+    "qualifiedName": "moltrust/moltrust-mcp-server",
+    "displayName": "MolTrust",
+    "description": "Register and verify decentralized identities to establish secure, trusted interactions. Manage reputation scores and verifiable credentials to validate reliability within a decentralized network. Track credit balances and query on-chain registries to streamline peer-to-peer transactions.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://moltrust-mcp-server--moltrust.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://moltrust-mcp-server--moltrust.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "moltrust_register",
+        "description": "Register a new AI agent on MolTrust.\n\n    Creates a decentralised identity (DID), issues a W3C Verifiable Credential,\n    and anchors the agent on the Base blockchain.\n\n    Args:\n        display_name: Agent name (1-64 chars, alphanumeric/dash/underscore/dot/space)\n        platform: Platform identifier (e.g. \"openai\", \"langchain\", \"custom\")\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "platform": {
+              "type": "string",
+              "title": "Platform"
+            },
+            "display_name": {
+              "type": "string",
+              "title": "Display Name"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_verify",
+        "description": "Verify an AI agent by its DID.\n\n    Checks whether the DID is registered and returns verification status\n    along with the agent's trust card (reputation, credentials, blockchain anchor).\n\n    Args:\n        did: Decentralised identifier (e.g. \"did:moltrust:a1b2c3d4e5f60718\")\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "title": "Did"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_reputation",
+        "description": "Get the reputation score for an AI agent.\n\n    Returns the aggregate trust score (1-5) and total number of ratings.\n\n    Args:\n        did: Decentralised identifier (e.g. \"did:moltrust:a1b2c3d4e5f60718\")\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "title": "Did"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_rate",
+        "description": "Rate another AI agent (1-5 stars).\n\n    Submit a trust rating from one agent to another.\n\n    Args:\n        from_did: Your agent's DID (the rater)\n        to_did: Target agent's DID (the agent being rated)\n        score: Rating from 1 (untrusted) to 5 (highly trusted)\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "integer",
+              "title": "Score"
+            },
+            "to_did": {
+              "type": "string",
+              "title": "To Did"
+            },
+            "from_did": {
+              "type": "string",
+              "title": "From Did"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_credential",
+        "description": "Issue or verify a W3C Verifiable Credential.\n\n    Args:\n        action: Either \"issue\" or \"verify\"\n        subject_did: DID of the credential subject (required for \"issue\")\n        credential_type: Type of credential (default: \"AgentTrustCredential\", only for \"issue\")\n        credential: JSON string of the credential to verify (required for \"verify\")\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "title": "Action"
+            },
+            "credential": {
+              "type": "string",
+              "title": "Credential",
+              "default": ""
+            },
+            "subject_did": {
+              "type": "string",
+              "title": "Subject Did",
+              "default": ""
+            },
+            "credential_type": {
+              "type": "string",
+              "title": "Credential Type",
+              "default": "AgentTrustCredential"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_credits",
+        "description": "Manage MolTrust credits: check balance, view pricing, transfer credits, or view transaction history.\n\n    Args:\n        action: One of \"balance\", \"pricing\", \"transfer\", or \"transactions\"\n        did: Agent DID (required for \"balance\" and \"transactions\")\n        to_did: Recipient DID (required for \"transfer\")\n        amount: Number of credits to transfer (required for \"transfer\", must be >= 1)\n        reference: Optional reference string for transfers\n        limit: Max transactions to return (default 20, for \"transactions\")\n        offset: Pagination offset (default 0, for \"transactions\")\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "title": "Did",
+              "default": ""
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20
+            },
+            "action": {
+              "type": "string",
+              "title": "Action"
+            },
+            "amount": {
+              "type": "integer",
+              "title": "Amount",
+              "default": 0
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0
+            },
+            "to_did": {
+              "type": "string",
+              "title": "To Did",
+              "default": ""
+            },
+            "reference": {
+              "type": "string",
+              "title": "Reference",
+              "default": ""
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_deposit_info",
+        "description": "Get USDC deposit instructions to buy MolTrust credits.\n\n    Returns the MolTrust wallet address on Base (Ethereum L2),\n    USDC token contract, conversion rate (1 USDC = 100 credits),\n    and step-by-step instructions.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_claim_deposit",
+        "description": "Claim MolTrust credits from a USDC deposit on Base.\n\n    After sending USDC to the MolTrust wallet on Base (L2),\n    submit the transaction hash to receive credits.\n    1 USDC = 100 credits, verified on-chain.\n\n    Args:\n        tx_hash: Base blockchain transaction hash (0x...)\n        did: Your agent's DID to credit\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "title": "Did"
+            },
+            "tx_hash": {
+              "type": "string",
+              "title": "Tx Hash"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_stats",
+        "description": "Get MolTrust network statistics.\n\n    Returns total registered agents, credentials issued,\n    ratings given, and other network health metrics.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_deposit_history",
+        "description": "Get USDC deposit history for an agent.\n\n    Args:\n        did: The agent's DID\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "title": "Did"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "moltrust_erc8004",
+        "description": "Query the ERC-8004 on-chain agent registry on Base.\n\n    Resolve MolTrust agents to their on-chain ERC-8004 identity, fetch Agent Cards,\n    or look up on-chain agents by their agentId.\n\n    Args:\n        action: One of \"card\", \"resolve\", or \"well-known\"\n        did: Agent DID (required for \"card\", e.g. \"did:moltrust:a1b2c3d4e5f60718\")\n        agent_id: On-chain ERC-8004 agent ID (required for \"resolve\", e.g. 21023)\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "title": "Did",
+              "default": ""
+            },
+            "action": {
+              "type": "string",
+              "title": "Action"
+            },
+            "agent_id": {
+              "type": "integer",
+              "title": "Agent Id",
+              "default": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

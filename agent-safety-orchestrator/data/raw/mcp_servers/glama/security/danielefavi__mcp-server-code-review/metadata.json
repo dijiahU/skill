@@ -1,0 +1,56 @@
+{
+  "registry": "glama",
+  "id": "o381c36533",
+  "namespace": "danielefavi",
+  "slug": "mcp-server-code-review",
+  "name": "Code Review MCP Server",
+  "description": "Connects LLMs to GitHub and GitLab to analyze pull and merge requests for logic, security, and architectural alignment. It provides tools for fetching diffs, file contents, and project metadata, alongside guided prompts for professional code reviews.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Connects LLMs to GitHub and GitLab to analyze pull and merge requests for logic, security, and architectural alignment. It provides tools for fetching diffs, file contents, and project metadata, alongside guided prompts for professional code reviews.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GITLAB_URL": {
+          "description": "GitLab instance URL (default: https://gitlab.com). Required for GitLab (Self-Managed).",
+          "type": "string",
+          "default": "https://gitlab.com"
+        },
+        "GITHUB_TOKEN": {
+          "description": "Your GitHub Personal Access Token. Required for GitHub functionality.",
+          "type": "string"
+        },
+        "GITLAB_TOKEN": {
+          "description": "Your GitLab Personal Access Token. Required for GitLab functionality.",
+          "type": "string"
+        },
+        "CODE_REVIEW_GUIDELINES": {
+          "description": "Inline custom code review guidelines text. Optional (Custom Rules).",
+          "type": "string"
+        },
+        "CODE_REVIEW_GUIDELINES_FILE": {
+          "description": "Path to a file containing custom code review guidelines. Optional (Custom Rules). If set, it takes precedence over CODE_REVIEW_GUIDELINES.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "id": "o381c36533",
+    "name": "Code Review MCP Server",
+    "namespace": "danielefavi",
+    "repository": {
+      "url": "https://github.com/danielefavi/mcp-server-code-review"
+    },
+    "slug": "mcp-server-code-review",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/o381c36533"
+  }
+}

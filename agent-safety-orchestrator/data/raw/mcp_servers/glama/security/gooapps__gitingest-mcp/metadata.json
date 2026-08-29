@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "u9915raufg",
+  "namespace": "gooapps",
+  "slug": "gitingest-mcp",
+  "name": "GitIngest MCP Server",
+  "description": "Integrates GitIngest to generate context files from public and private GitHub repositories, optimized for LLM consumption. Supports flexible file filtering, Docker deployment, and secure token-based authentication for private repository access.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Integrates GitIngest to generate context files from public and private GitHub repositories, optimized for LLM consumption. Supports flexible file filtering, Docker deployment, and secure token-based authentication for private repository access.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Nivel de logging (DEBUG, INFO, WARNING, ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "GITHUB_TOKEN": {
+          "description": "Token de acceso personal de GitHub (requerido para repositorios privados)",
+          "type": "string"
+        },
+        "GITINGEST_TIMEOUT": {
+          "description": "Tiempo de espera en segundos (por defecto 5 minutos)",
+          "type": "string",
+          "default": "300"
+        },
+        "GITINGEST_MAX_FILE_SIZE": {
+          "description": "Tamaño máximo de archivo en bytes (por defecto 1MB)",
+          "type": "string",
+          "default": "1048576"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "u9915raufg",
+    "name": "GitIngest MCP Server",
+    "namespace": "gooapps",
+    "repository": {
+      "url": "https://github.com/gooapps/gitingest-mcp"
+    },
+    "slug": "gitingest-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/u9915raufg"
+  }
+}

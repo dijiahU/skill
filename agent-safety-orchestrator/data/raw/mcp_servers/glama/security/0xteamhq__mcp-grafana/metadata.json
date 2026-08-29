@@ -1,0 +1,88 @@
+{
+  "registry": "glama",
+  "id": "fflnng4c44",
+  "namespace": "0xteamhq",
+  "slug": "mcp-grafana",
+  "name": "Grafana MCP Server",
+  "description": "Enables AI assistants to interact with Grafana dashboards, datasources, alerts, incidents, and monitoring data through 43 comprehensive tools. Supports querying Prometheus metrics, Loki logs, managing incidents, and dashboard operations with full authentication support.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Grafana dashboards, datasources, alerts, incidents, and monitoring data through 43 comprehensive tools. Supports querying Prometheus metrics, Loki logs, managing incidents, and dashboard operations with full authentication support.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Enable debug logging",
+          "type": "string",
+          "default": "false"
+        },
+        "GRAFANA_URL": {
+          "description": "The URL of your Grafana instance",
+          "type": "string"
+        },
+        "TLS_CA_FILE": {
+          "description": "Path to custom CA certificate file",
+          "type": "string"
+        },
+        "TLS_KEY_FILE": {
+          "description": "Path to mTLS key file",
+          "type": "string"
+        },
+        "TLS_CERT_FILE": {
+          "description": "Path to mTLS certificate file",
+          "type": "string"
+        },
+        "TLS_SKIP_VERIFY": {
+          "description": "Skip TLS verification",
+          "type": "string",
+          "default": "false"
+        },
+        "GRAFANA_PASSWORD": {
+          "description": "Grafana password for basic authentication",
+          "type": "string"
+        },
+        "GRAFANA_USERNAME": {
+          "description": "Grafana username for basic authentication",
+          "type": "string"
+        },
+        "GRAFANA_SERVICE_ACCOUNT_TOKEN": {
+          "description": "Grafana service account token (recommended authentication method)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GRAFANA_URL",
+            "GRAFANA_SERVICE_ACCOUNT_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "GRAFANA_URL",
+            "GRAFANA_USERNAME",
+            "GRAFANA_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "fflnng4c44",
+    "name": "Grafana MCP Server",
+    "namespace": "0xteamhq",
+    "repository": {
+      "url": "https://github.com/0xteamhq/mcp-grafana"
+    },
+    "slug": "mcp-grafana",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fflnng4c44"
+  }
+}

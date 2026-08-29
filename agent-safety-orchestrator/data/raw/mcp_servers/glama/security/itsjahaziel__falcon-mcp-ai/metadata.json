@@ -1,0 +1,77 @@
+{
+  "registry": "glama",
+  "id": "pkx16ctgl8",
+  "namespace": "itsjahaziel",
+  "slug": "falcon-mcp-ai",
+  "name": "falcon-mcp",
+  "description": "An MCP server that connects AI agents to the CrowdStrike Falcon platform for intelligent security analysis and automation across various security modules. It provides programmatic access to detections, incidents, host management, and threat intelligence to enhance security operations within agentic workflows.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that connects AI agents to the CrowdStrike Falcon platform for intelligent security analysis and automation across various security modules. It provides programmatic access to detections, incidents, host management, and threat intelligence to enhance security operations within agentic workflows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FALCON_BASE_URL": {
+          "description": "CrowdStrike Falcon API Region URL (e.g., https://api.crowdstrike.com).",
+          "type": "string",
+          "default": "https://api.crowdstrike.com"
+        },
+        "FALCON_MCP_HOST": {
+          "description": "Host for HTTP transports.",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "FALCON_MCP_PORT": {
+          "description": "Port for HTTP transports.",
+          "type": "string",
+          "default": "8000"
+        },
+        "FALCON_CLIENT_ID": {
+          "description": "Your CrowdStrike Falcon API Client ID.",
+          "type": "string"
+        },
+        "FALCON_MCP_DEBUG": {
+          "description": "Enable debug logging: true or false.",
+          "type": "string",
+          "default": "false"
+        },
+        "FALCON_MCP_MODULES": {
+          "description": "Comma-separated list of modules to enable (e.g., detections,incidents,intel). If none specified, all available modules are enabled.",
+          "type": "string"
+        },
+        "FALCON_CLIENT_SECRET": {
+          "description": "Your CrowdStrike Falcon API Client Secret.",
+          "type": "string"
+        },
+        "FALCON_MCP_TRANSPORT": {
+          "description": "Transport method: stdio, sse, or streamable-http.",
+          "type": "string",
+          "default": "stdio"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FALCON_CLIENT_ID",
+        "FALCON_CLIENT_SECRET",
+        "FALCON_BASE_URL"
+      ]
+    },
+    "id": "pkx16ctgl8",
+    "name": "falcon-mcp",
+    "namespace": "itsjahaziel",
+    "repository": {
+      "url": "https://github.com/itsjahaziel/falcon-mcp-ai"
+    },
+    "slug": "falcon-mcp-ai",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pkx16ctgl8"
+  }
+}

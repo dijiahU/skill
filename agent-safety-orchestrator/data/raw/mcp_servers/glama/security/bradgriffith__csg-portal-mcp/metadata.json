@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "ooidlbhgtf",
+  "namespace": "BradGriffith",
+  "slug": "csg-portal-mcp",
+  "name": "CSG Portal MCP Server",
+  "description": "Enables access to Columbus School for Girls Veracross portal features including directory search for students/parents/staff, calendar events, and Lower School lunch volunteer scheduling through secure browser authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables access to Columbus School for Girls Veracross portal features including directory search for students/parents/staff, calendar events, and Lower School lunch volunteer scheduling through secure browser authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MONGODB_URI": {
+          "description": "MongoDB connection URI (required for production use)",
+          "type": "string",
+          "default": "mongodb://localhost:27017"
+        },
+        "MONGODB_DATABASE": {
+          "description": "MongoDB database name",
+          "type": "string",
+          "default": "csg_portal"
+        },
+        "VERACROSS_BASE_URL": {
+          "description": "Veracross portal URL (optional, defaults to CSG)",
+          "type": "string",
+          "default": "https://portals.veracross.com/csg"
+        },
+        "LS_LUNCH_SIGNUP_URL": {
+          "description": "SignUpGenius URL for Lower School lunch volunteers (optional, defaults to current CSG URL)",
+          "type": "string",
+          "default": "https://www.signupgenius.com/go/10C084BADAA2BA2FFC43-57722061-lslunch#/"
+        },
+        "ENCRYPTION_MASTER_KEY": {
+          "description": "Encryption key for secure credential storage",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ooidlbhgtf",
+    "name": "CSG Portal MCP Server",
+    "namespace": "BradGriffith",
+    "repository": {
+      "url": "https://github.com/BradGriffith/csg-portal-mcp"
+    },
+    "slug": "csg-portal-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ooidlbhgtf"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "kc4eau2urw",
+  "namespace": "pam-supastellar",
+  "slug": "cashchat-mcp",
+  "name": "CashChat MCP Server",
+  "description": "Connects CashChat financial data to AI assistants, enabling users to manage transactions, view spending summaries, and track category breakdowns through natural language. It supports both local stdio and remote URL-based connections with secure OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Connects CashChat financial data to AI assistants, enabling users to manage transactions, view spending summaries, and track category breakdowns through natural language. It supports both local stdio and remote URL-based connections with secure OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "The port the HTTP server will listen on.",
+          "type": "string",
+          "default": "3000"
+        },
+        "SERVER_URL": {
+          "description": "The publicly accessible URL of the server (e.g., http://localhost:3000).",
+          "type": "string"
+        },
+        "CASHCHAT_API_KEY": {
+          "description": "Your CashChat API key obtained from the settings page.",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "Optional client secret for additional OAuth security in production.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CASHCHAT_API_KEY"
+      ]
+    },
+    "id": "kc4eau2urw",
+    "name": "CashChat MCP Server",
+    "namespace": "pam-supastellar",
+    "repository": {
+      "url": "https://github.com/pam-supastellar/cashchat-mcp"
+    },
+    "slug": "cashchat-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kc4eau2urw"
+  }
+}

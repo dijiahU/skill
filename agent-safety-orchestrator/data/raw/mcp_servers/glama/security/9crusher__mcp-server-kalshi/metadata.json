@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "vgym13f776",
+  "namespace": "9crusher",
+  "slug": "mcp-server-kalshi",
+  "name": "MCP Server Kalshi",
+  "description": "Enables interaction with the Kalshi prediction market platform through their REST API. Supports trading and market operations with secure RSA key authentication for both production and demo environments.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with the Kalshi prediction market platform through their REST API. Supports trading and market operations with secure RSA key authentication for both production and demo environments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "The Kalshi API URL (e.g., https://api.elections.kalshi.com for production or https://demo-api.kalshi.co for demo)",
+          "type": "string"
+        },
+        "KALSHI_API_KEY": {
+          "description": "The API key for the corresponding Kalshi environment",
+          "type": "string"
+        },
+        "KALSHI_PRIVATE_KEY_PATH": {
+          "description": "A filepath to a file containing your Kalshi RSA private key",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "KALSHI_PRIVATE_KEY_PATH",
+        "KALSHI_API_KEY",
+        "BASE_URL"
+      ]
+    },
+    "id": "vgym13f776",
+    "name": "MCP Server Kalshi",
+    "namespace": "9crusher",
+    "repository": {
+      "url": "https://github.com/9crusher/mcp-server-kalshi"
+    },
+    "slug": "mcp-server-kalshi",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vgym13f776"
+  }
+}

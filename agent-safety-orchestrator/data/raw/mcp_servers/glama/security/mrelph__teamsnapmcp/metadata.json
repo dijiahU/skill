@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "xi51pveoof",
+  "namespace": "mrelph",
+  "slug": "TeamSnapMCP",
+  "name": "TeamSnap MCP Server",
+  "description": "Connects Claude to TeamSnap accounts to access teams, rosters, events, and availability data. Supports OAuth 2.0 authentication with optional AWS serverless deployment for permanent HTTPS callback URLs.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Connects Claude to TeamSnap accounts to access teams, rosters, events, and availability data. Supports OAuth 2.0 authentication with optional AWS serverless deployment for permanent HTTPS callback URLs.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TEAMSNAP_CLIENT_ID": {
+          "description": "Your TeamSnap OAuth Client ID from the TeamSnap Developer Portal",
+          "type": "string"
+        },
+        "TEAMSNAP_MCP_ENDPOINT": {
+          "description": "The AWS API Gateway endpoint URL for the MCP server (e.g., https://your-api-id.execute-api.us-west-2.amazonaws.com/mcp)",
+          "type": "string"
+        },
+        "TEAMSNAP_REDIRECT_URI": {
+          "description": "The OAuth redirect URI (use a tunnel URL like https://your-tunnel-url/callback for local development)",
+          "type": "string"
+        },
+        "TEAMSNAP_CLIENT_SECRET": {
+          "description": "Your TeamSnap OAuth Client Secret from the TeamSnap Developer Portal",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "TEAMSNAP_CLIENT_ID",
+            "TEAMSNAP_CLIENT_SECRET",
+            "TEAMSNAP_REDIRECT_URI"
+          ]
+        },
+        {
+          "required": [
+            "TEAMSNAP_MCP_ENDPOINT"
+          ]
+        }
+      ]
+    },
+    "id": "xi51pveoof",
+    "name": "TeamSnap MCP Server",
+    "namespace": "mrelph",
+    "repository": {
+      "url": "https://github.com/mrelph/TeamSnapMCP"
+    },
+    "slug": "TeamSnapMCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xi51pveoof"
+  }
+}

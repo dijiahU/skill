@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "l2ogeyw22z",
+  "namespace": "DojoCodingLabs",
+  "slug": "nanobanana-mcp",
+  "name": "nanobanana-mcp",
+  "description": "A security-hardened MCP server for generating and editing images using Google Gemini models. It provides tools for text-to-image creation and iterative image editing with strict input validation and secure file handling.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A security-hardened MCP server for generating and editing images using Google Gemini models. It provides tools for text-to-image creation and iterative image editing with strict input validation and secure file handling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GEMINI_API_KEY": {
+          "description": "Google Gemini API key",
+          "type": "string"
+        },
+        "NANOBANANA_MODEL": {
+          "description": "Model to use (e.g., gemini-2.5-flash-image, gemini-3-pro-image-preview, gemini-3.1-flash-image-preview). Defaults to gemini-2.5-flash-image.",
+          "type": "string",
+          "default": "gemini-2.5-flash-image"
+        },
+        "NANOBANANA_GEMINI_API_KEY": {
+          "description": "Override for GEMINI_API_KEY (takes priority)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GEMINI_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "NANOBANANA_GEMINI_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "l2ogeyw22z",
+    "name": "nanobanana-mcp",
+    "namespace": "DojoCodingLabs",
+    "repository": {
+      "url": "https://github.com/DojoCodingLabs/nanobanana-mcp"
+    },
+    "slug": "nanobanana-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/l2ogeyw22z"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "registry": "glama",
+  "id": "fs26cju84f",
+  "namespace": "FusionAuth",
+  "slug": "fusionauth-mcp-api",
+  "name": "FusionAuth API MCP Server",
+  "description": "This server provides a Model Context Protocol interface for the FusionAuth API, enabling users to manage users, applications, and authentication configurations through natural language. It supports over 300 tools for various operations, including creating, searching, and retrieving data from a FusionAuth instance.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "This server provides a Model Context Protocol interface for the FusionAuth API, enabling users to manage users, applications, and authentication configurations through natural language. It supports over 300 tools for various operations, including creating, searching, and retrieving data from a FusionAuth instance.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "USE_TOOLS": {
+          "description": "A comma-separated list of tool prefixes to restrict the available tools. Possible values include: create, delete, patch, update, retrieve, search, other, all. Default is 'all'.",
+          "type": "string",
+          "default": "all"
+        },
+        "API_BASE_URL": {
+          "description": "The base URL of your FusionAuth instance (e.g., http://localhost:9011).",
+          "type": "string"
+        },
+        "API_KEY_APIKEYAUTH": {
+          "description": "Your FusionAuth API key. This is used to authenticate requests to your FusionAuth instance.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_KEY_APIKEYAUTH",
+        "API_BASE_URL"
+      ]
+    },
+    "id": "fs26cju84f",
+    "name": "FusionAuth API MCP Server",
+    "namespace": "FusionAuth",
+    "repository": {
+      "url": "https://github.com/FusionAuth/fusionauth-mcp-api"
+    },
+    "slug": "fusionauth-mcp-api",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fs26cju84f"
+  }
+}

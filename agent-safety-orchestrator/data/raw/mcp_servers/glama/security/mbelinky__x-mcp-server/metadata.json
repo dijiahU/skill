@@ -1,0 +1,94 @@
+{
+  "registry": "glama",
+  "id": "j2y0u8sbqk",
+  "namespace": "mbelinky",
+  "slug": "x-mcp-server",
+  "name": "X (Twitter) MCP Server - Enhanced Edition",
+  "description": "An enhanced Model Context Protocol server that enables Claude to interact with Twitter/X, supporting tweet posting, searching, and deletion with both OAuth 1.0a and OAuth 2.0 authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An enhanced Model Context Protocol server that enables Claude to interact with Twitter/X, supporting tweet posting, searching, and deletion with both OAuth 1.0a and OAuth 2.0 authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Enable debug logging",
+          "type": "string"
+        },
+        "API_KEY": {
+          "description": "Twitter API Key (OAuth 1.0a)",
+          "type": "string"
+        },
+        "AUTH_TYPE": {
+          "description": "Authentication type (oauth2 for OAuth 2.0, defaults to OAuth 1.0a if not specified)",
+          "type": "string"
+        },
+        "ACCESS_TOKEN": {
+          "description": "Twitter Access Token (OAuth 1.0a)",
+          "type": "string"
+        },
+        "API_SECRET_KEY": {
+          "description": "Twitter API Secret Key (OAuth 1.0a)",
+          "type": "string"
+        },
+        "OAUTH2_CLIENT_ID": {
+          "description": "OAuth 2.0 Client ID",
+          "type": "string"
+        },
+        "ACCESS_TOKEN_SECRET": {
+          "description": "Twitter Access Token Secret (OAuth 1.0a)",
+          "type": "string"
+        },
+        "OAUTH2_ACCESS_TOKEN": {
+          "description": "OAuth 2.0 Access Token",
+          "type": "string"
+        },
+        "OAUTH2_CLIENT_SECRET": {
+          "description": "OAuth 2.0 Client Secret",
+          "type": "string"
+        },
+        "OAUTH2_REFRESH_TOKEN": {
+          "description": "OAuth 2.0 Refresh Token",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "API_KEY",
+            "API_SECRET_KEY",
+            "ACCESS_TOKEN",
+            "ACCESS_TOKEN_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "AUTH_TYPE",
+            "OAUTH2_CLIENT_ID",
+            "OAUTH2_CLIENT_SECRET",
+            "OAUTH2_ACCESS_TOKEN",
+            "OAUTH2_REFRESH_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "j2y0u8sbqk",
+    "name": "X (Twitter) MCP Server - Enhanced Edition",
+    "namespace": "mbelinky",
+    "repository": {
+      "url": "https://github.com/mbelinky/x-mcp-server"
+    },
+    "slug": "x-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j2y0u8sbqk"
+  }
+}

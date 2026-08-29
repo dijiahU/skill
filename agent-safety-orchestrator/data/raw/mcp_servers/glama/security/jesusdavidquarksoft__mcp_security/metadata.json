@@ -1,0 +1,91 @@
+{
+  "registry": "glama",
+  "id": "k759gj7hfh",
+  "namespace": "JesusDavidQuarksoft",
+  "slug": "MCP_Security",
+  "name": "DevSecOps MCP Server",
+  "description": "An MCP server that integrates SAST, DAST, and SCA security tools to enable AI-driven vulnerability scanning and automated security reporting. It allows AI assistants to execute and analyze results from tools like Semgrep, OWASP ZAP, and Trivy within a DevSecOps workflow.",
+  "discoveryQueries": [
+    "security",
+    "vulnerability",
+    "owasp",
+    "sast",
+    "dast"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "An MCP server that integrates SAST, DAST, and SCA security tools to enable AI-driven vulnerability scanning and automated security reporting. It allows AI assistants to execute and analyze results from tools like Semgrep, OWASP ZAP, and Trivy within a DevSecOps workflow.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ZAP_URL": {
+          "description": "URL for OWASP ZAP API (required if using ZAP in API mode; default is Docker)",
+          "type": "string"
+        },
+        "MCP_PORT": {
+          "description": "Port for the MCP server",
+          "type": "string",
+          "default": "3000"
+        },
+        "NODE_ENV": {
+          "description": "Environment mode (e.g., production, development)",
+          "type": "string",
+          "default": "production"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (info, debug, warn, error)",
+          "type": "string",
+          "default": "info"
+        },
+        "TRIVY_PATH": {
+          "description": "Path to the Trivy executable",
+          "type": "string",
+          "default": "trivy"
+        },
+        "ZAP_API_KEY": {
+          "description": "API key for OWASP ZAP authentication",
+          "type": "string"
+        },
+        "SONARQUBE_URL": {
+          "description": "URL for SonarQube server (required for SonarQube integration)",
+          "type": "string"
+        },
+        "SONARQUBE_TOKEN": {
+          "description": "Authentication token for SonarQube",
+          "type": "string"
+        },
+        "TRIVY_CACHE_DIR": {
+          "description": "Directory for Trivy scan cache",
+          "type": "string",
+          "default": "/tmp/trivy-cache"
+        },
+        "OSV_SCANNER_PATH": {
+          "description": "Path to the OSV Scanner executable",
+          "type": "string",
+          "default": "osv-scanner"
+        },
+        "SECURITY_STRICT_MODE": {
+          "description": "Enable strict security mode",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "k759gj7hfh",
+    "name": "DevSecOps MCP Server",
+    "namespace": "JesusDavidQuarksoft",
+    "repository": {
+      "url": "https://github.com/JesusDavidQuarksoft/MCP_Security"
+    },
+    "slug": "MCP_Security",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/k759gj7hfh"
+  }
+}

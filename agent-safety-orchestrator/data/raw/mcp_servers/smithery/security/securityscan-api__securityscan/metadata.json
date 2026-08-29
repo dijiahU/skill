@@ -1,0 +1,122 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "securityscan-api/securityscan",
+  "namespace": "securityscan-api",
+  "slug": "securityscan",
+  "displayName": "SecurityScan",
+  "description": "Scans GitHub repositories and skills for vulnerabilities like prompt injection, malware, and OWASP risks. Identifies security threats in external dependencies to ensure software health. Provides detailed reports and certification status to verify the safety and compliance of your projects.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "vulnerability",
+    "compliance",
+    "owasp",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "6d7482a4-3f4b-405f-a3ee-3b5f644333ce",
+    "qualifiedName": "securityscan-api/securityscan",
+    "namespace": "securityscan-api",
+    "slug": "securityscan",
+    "displayName": "SecurityScan",
+    "description": "Scans GitHub repositories and skills for vulnerabilities like prompt injection, malware, and OWASP risks. Identifies security threats in external dependencies to ensure software health. Provides detailed reports and certification status to verify the safety and compliance of your projects.",
+    "verified": false,
+    "useCount": 428,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-02T15:55:24.814Z",
+    "homepage": "https://smithery.ai/servers/securityscan-api/securityscan",
+    "bySmithery": false,
+    "owner": "org_01KNBVGWFSWG62X8B6YBYF8SCC",
+    "score": 0.02127659574468085
+  },
+  "detail": {
+    "qualifiedName": "securityscan-api/securityscan",
+    "displayName": "SecurityScan",
+    "description": "Scans GitHub repositories and skills for vulnerabilities like prompt injection, malware, and OWASP risks. Identifies security threats in external dependencies to ensure software health. Provides detailed reports and certification status to verify the safety and compliance of your projects.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://securityscan--securityscan-api.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://securityscan--securityscan-api.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "API Key",
+              "x-order": 0,
+              "description": "SecurityScan API key. Register free at https://apisecurityscan.net/auth/register",
+              "x-sensitive": true
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_skill",
+        "description": "Scan a GitHub skill for vulnerabilities: prompt injection, malware, OWASP LLM Top 10.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "skill_url": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_report",
+        "description": "Retrieve a previous scan result by scan_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scan_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_certification",
+        "description": "Check if a skill has a SecurityScan certification badge.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "skill_url": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "scan_deps",
+        "description": "Check external dependency health via DepScan.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scan_type": {
+              "enum": [
+                "single",
+                "deep"
+              ],
+              "type": "string"
+            },
+            "skill_url": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

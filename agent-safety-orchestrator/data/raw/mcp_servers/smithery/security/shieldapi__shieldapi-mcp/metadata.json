@@ -1,0 +1,241 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "ShieldAPI/shieldapi-mcp",
+  "namespace": "ShieldAPI",
+  "slug": "shieldapi-mcp",
+  "displayName": "Shield",
+  "description": "Protect digital identities and infrastructure by scanning for data breaches, malicious URLs, and compromised credentials. Secure interactions by detecting prompt injection attacks and evaluating plugin supply chain risks. Monitor the reputation of domains, IPs, and email addresses to defend against phishing and malware.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "vulnerability",
+    "secret",
+    "authentication",
+    "phishing",
+    "prompt injection",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "35c30f10-1411-410e-904d-9c4f1c5c1933",
+    "qualifiedName": "ShieldAPI/shieldapi-mcp",
+    "namespace": "shieldapi",
+    "slug": "shieldapi-mcp",
+    "displayName": "Shield",
+    "description": "Protect digital identities and infrastructure by scanning for data breaches, malicious URLs, and compromised credentials. Secure interactions by detecting prompt injection attacks and evaluating plugin supply chain risks. Monitor the reputation of domains, IPs, and email addresses to defend against phishing and malware.",
+    "iconUrl": "https://api.smithery.ai/servers/ShieldAPI/shieldapi-mcp/icon",
+    "verified": false,
+    "useCount": 489,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-04T10:24:54.512Z",
+    "homepage": "https://shield.vainplex.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVHG4PKZFPQCSGTHG18T9B",
+    "score": 0.03502854177477945
+  },
+  "detail": {
+    "qualifiedName": "ShieldAPI/shieldapi-mcp",
+    "displayName": "Shield",
+    "description": "Protect digital identities and infrastructure by scanning for data breaches, malicious URLs, and compromised credentials. Secure interactions by detecting prompt injection attacks and evaluating plugin supply chain risks. Monitor the reputation of domains, IPs, and email addresses to defend against phishing and malware.",
+    "iconUrl": "https://api.smithery.ai/servers/ShieldAPI/shieldapi-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://shieldapi-mcp--shieldapi.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://shieldapi-mcp--shieldapi.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "shieldapiUrl": {
+              "type": "string",
+              "default": "https://shield.vainplex.dev",
+              "x-order": 0,
+              "description": "ShieldAPI server URL"
+            },
+            "walletPrivateKey": {
+              "type": "string",
+              "x-order": 1,
+              "description": "Wallet private key for x402 USDC payments. Without this, runs in free/demo mode (3 calls/day)."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "shieldapi.check_password",
+        "description": "Check if a password has been exposed in data breaches (900M+ HIBP hashes). Returns breach count and exposure status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hash": {
+              "type": "string",
+              "description": "SHA-1 hash of the password (40 hex chars)"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.check_password_range",
+        "description": "k-Anonymity password range lookup via HIBP. Returns all matching hash suffixes and their breach counts for the given 5-char prefix.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefix": {
+              "type": "string",
+              "description": "First 5 characters of SHA-1 hash"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.check_email",
+        "description": "Check if an email has been exposed in known data breaches. Returns breach list, dates, and compromised data types.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Email address to check"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.check_domain",
+        "description": "Analyze domain reputation: DNS records, blacklist status (Spamhaus, SpamCop, SORBS), SPF/DMARC configuration, and SSL certificate details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to check (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.check_ip",
+        "description": "Analyze IP reputation: blacklist presence, Tor exit node detection, reverse DNS, and geolocation data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ip": {
+              "type": "string",
+              "description": "IPv4 address to check (e.g. 8.8.8.8)"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.check_url",
+        "description": "Scan a URL for phishing, malware, and brand impersonation. Uses URLhaus database and heuristic analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL to check"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.full_scan",
+        "description": "Comprehensive security scan that auto-detects the target type (URL, domain, IP, or email) and runs all applicable checks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "URL, domain, IP, or email to scan"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.check_prompt",
+        "description": "Detect prompt injection attacks in text. Scans for 200+ patterns across 8 categories including encoding tricks, multi-language payloads, and obfuscation. Response time <100ms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "Text to analyze for prompt injection"
+            },
+            "context": {
+              "enum": [
+                "user-input",
+                "skill-prompt",
+                "system-prompt"
+              ],
+              "type": "string",
+              "description": "Context of the prompt"
+            }
+          }
+        }
+      },
+      {
+        "name": "shieldapi.scan_skill",
+        "description": "Scan an AI skill/plugin for supply chain risks across 8 categories based on Snyk ToxicSkills taxonomy: data exfiltration, privilege escalation, secret exposure, and more.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Additional code files to analyze"
+            },
+            "skill": {
+              "type": "string",
+              "description": "SKILL.md content or skill name to scan"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "security_assessment",
+        "description": "Run a comprehensive security assessment on a target (URL, domain, IP, or email). Uses multiple ShieldAPI tools to build a complete threat profile.",
+        "arguments": [
+          {
+            "name": "target",
+            "description": "URL, domain, IP, or email to assess",
+            "required": true
+          },
+          {
+            "name": "depth",
+            "description": "Assessment depth: quick (full_scan only) or deep (all individual checks)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "quick_check",
+        "description": "Auto-detect the input type and run the appropriate security check. Accepts any URL, domain, IP, email, password hash, or text prompt.",
+        "arguments": [
+          {
+            "name": "input",
+            "description": "Any security target: URL, domain, IP, email, SHA-1 hash, or text to check for prompt injection",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

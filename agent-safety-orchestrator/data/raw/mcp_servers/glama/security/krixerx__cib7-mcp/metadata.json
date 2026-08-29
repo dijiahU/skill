@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "kntkjljxkc",
+  "namespace": "krixerx",
+  "slug": "cib7-mcp",
+  "name": "CIB Seven MCP Server",
+  "description": "Enables investigation and diagnosis of CIB Seven BPM process instances through the CIB Seven REST API. Supports querying process instances, incidents, activity history, and BPMN definitions with Keycloak authentication and configurable variable redaction.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables investigation and diagnosis of CIB Seven BPM process instances through the CIB Seven REST API. Supports querying process instances, incidents, activity history, and BPMN definitions with Keycloak authentication and configurable variable redaction.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CIB7_URL": {
+          "description": "CIB Seven REST API URL (e.g., http://localhost:6009/rest)",
+          "type": "string"
+        },
+        "KEYCLOAK_URL": {
+          "description": "Keycloak server URL (e.g., https://keycloak.example.com)",
+          "type": "string"
+        },
+        "KEYCLOAK_REALM": {
+          "description": "Keycloak realm name",
+          "type": "string"
+        },
+        "KEYCLOAK_CLIENT_ID": {
+          "description": "Keycloak client ID",
+          "type": "string"
+        },
+        "CIB7_REDACT_PATTERNS": {
+          "description": "Comma-delimited regex patterns for variable redaction (e.g., password.*,secret.*,token.*)",
+          "type": "string"
+        },
+        "KEYCLOAK_CLIENT_SECRET": {
+          "description": "Keycloak client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "CIB7_URL"
+          ]
+        },
+        {
+          "required": [
+            "CIB7_URL",
+            "KEYCLOAK_URL",
+            "KEYCLOAK_REALM",
+            "KEYCLOAK_CLIENT_ID",
+            "KEYCLOAK_CLIENT_SECRET"
+          ]
+        }
+      ]
+    },
+    "id": "kntkjljxkc",
+    "name": "CIB Seven MCP Server",
+    "namespace": "krixerx",
+    "repository": {
+      "url": "https://github.com/krixerx/cib7-mcp"
+    },
+    "slug": "cib7-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kntkjljxkc"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "symdex-100/symdex",
+  "namespace": "symdex-100",
+  "slug": "symdex",
+  "displayName": "Symdex",
+  "description": "Index and search codebases using structured schemas for deep code analysis. Audit specific domains or security-related functions to ensure code quality and safety. \n\nExplore complex codebases with high-level overviews to understand structure and patterns quickly.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "3d819671-c5f9-42ba-be6d-abf7f77fad10",
+    "qualifiedName": "symdex-100/symdex",
+    "namespace": "symdex-100",
+    "slug": "symdex",
+    "displayName": "Symdex",
+    "description": "Index and search codebases using structured schemas for deep code analysis. Audit specific domains or security-related functions to ensure code quality and safety. \n\nExplore complex codebases with high-level overviews to understand structure and patterns quickly.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": false,
+    "useCount": 989,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-07T19:13:59.651Z",
+    "homepage": "https://github.com/symdex-100/symdex",
+    "bySmithery": false,
+    "owner": "org_01KNBV593DTNZ1MXXJ096Y4508",
+    "score": 0.01282051282051282
+  },
+  "detail": {
+    "qualifiedName": "symdex-100/symdex",
+    "displayName": "Symdex",
+    "description": "Index and search codebases using structured schemas for deep code analysis. Audit specific domains or security-related functions to ensure code quality and safety. \n\nExplore complex codebases with high-level overviews to understand structure and patterns quickly.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://symdex--symdex-100.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://symdex--symdex-100.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [],
+    "resources": [
+      {
+        "name": "schema_domains",
+        "uri": "symdex://schema/domains",
+        "description": "Return the Cypher domain codes and their descriptions.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "schema_actions",
+        "uri": "symdex://schema/actions",
+        "description": "Return the Cypher action codes and their descriptions.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "schema_patterns",
+        "uri": "symdex://schema/patterns",
+        "description": "Return the Cypher pattern codes and their descriptions.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "schema_full",
+        "uri": "symdex://schema/full",
+        "description": "Return the complete Cypher-100 schema (domains, actions, patterns, common objects).",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "find_security_functions",
+        "description": "Pre-built prompt: find all security-related functions.",
+        "arguments": [
+          {
+            "name": "path",
+            "description": "Provide as a JSON string matching the following schema: {\"type\":\"string\"}",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "audit_domain",
+        "description": "Pre-built prompt: audit all functions in a specific domain.",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Provide as a JSON string matching the following schema: {\"type\":\"string\"}",
+            "required": true
+          },
+          {
+            "name": "path",
+            "description": "Provide as a JSON string matching the following schema: {\"type\":\"string\"}",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "explore_codebase",
+        "description": "Pre-built prompt: get a high-level overview of an indexed codebase.",
+        "arguments": [
+          {
+            "name": "path",
+            "description": "Provide as a JSON string matching the following schema: {\"type\":\"string\"}",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "when_to_use_symdex",
+        "description": "Guidance prompt: explains when and how AI agents should use Symdex tools.",
+        "arguments": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+skill: security-scan
+surface: claude-code
+models:
+  - claude-haiku
+  - claude-sonnet
+  - claude-opus
+
+cases:
+  - id: trigger-01
+    bucket: should-trigger
+    prompt: "Scan my codebase for hardcoded secrets and API keys."
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "secrets"
+        - "scan"
+
+  - id: trigger-02
+    bucket: should-trigger
+    prompt: "Run security scanning tools to find vulnerabilities in dependencies."
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "scan"
+        - "dependencies"
+        - "vulnerabilities"
+
+  - id: trigger-03
+    bucket: should-trigger
+    prompt: "Check for known CVEs in my npm packages."
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "CVE"
+        - "packages"
+
+  - id: trigger-04
+    bucket: should-trigger
+    prompt: "Use gitleaks and semgrep to scan my repository."
+    expect:
+      skill_selected: true
+      must_include_any:
+        - "gitleaks"
+        - "semgrep"
+
+  - id: no-trigger-01
+    bucket: should-not-trigger
+    prompt: "Explain how JWT authentication works."
+    expect:
+      skill_selected: false
+
+  - id: no-trigger-02
+    bucket: should-not-trigger
+    prompt: "Write a function to validate user input."
+    expect:
+      skill_selected: false
+
+  - id: no-trigger-03
+    bucket: should-not-trigger
+    prompt: "Review the logic in this authentication handler."
+    expect:
+      skill_selected: false
+
+  - id: edge-01
+    bucket: ambiguous
+    prompt: "Find all the secrets in my code."
+    expect:
+      notes: "Could trigger security-scan or be interpreted as a search task. Track consistency."
+
+  - id: edge-02
+    bucket: ambiguous
+    prompt: "Check my dependencies for issues."
+    expect:
+      notes: "May trigger security-scan or general dependency health check depending on context."
+
+metrics:
+  trigger_accuracy: true
+  non_trigger_accuracy: true
+  output_quality_llm_grade: true
+  latency_ms: true
+  input_tokens: true
+  output_tokens: true
+  tool_calls: true

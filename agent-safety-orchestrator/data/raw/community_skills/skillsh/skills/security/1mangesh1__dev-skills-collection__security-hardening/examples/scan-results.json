@@ -1,0 +1,30 @@
+{
+  "code_scan_example": {
+    "file": "app.py",
+    "issues_found": 3,
+    "vulnerabilities": [
+      {
+        "type": "SQL_INJECTION",
+        "line": 42,
+        "code": "query = f\"SELECT * FROM users WHERE id = {user_id}\"",
+        "severity": "CRITICAL",
+        "fix": "Use parameterized query: cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))"
+      },
+      {
+        "type": "HARDCODED_SECRET",
+        "line": 15,
+        "code": "API_KEY = 'sk_live_abc123'",
+        "severity": "CRITICAL",
+        "fix": "Move to environment variables: API_KEY = os.environ.get('API_KEY')"
+      },
+      {
+        "type": "MISSING_INPUT_VALIDATION",
+        "line": 100,
+        "code": "email = request.form.get('email')",
+        "severity": "HIGH",
+        "fix": "Validate: if not is_valid_email(email): raise ValueError('Invalid email')"
+      }
+    ],
+    "security_score": 45
+  }
+}

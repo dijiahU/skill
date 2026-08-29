@@ -1,0 +1,45 @@
+{
+  "registry": "glama",
+  "id": "bmrem5qdrh",
+  "namespace": "marc-shade",
+  "slug": "security-scanner-mcp",
+  "name": "Security Scanner MCP Server",
+  "description": "Enables comprehensive vulnerability scanning using Nuclei scanner with support for single targets, network ranges, and cluster-wide security assessments with customizable severity levels and automated scheduling.",
+  "discoveryQueries": [
+    "security",
+    "scanner",
+    "vulnerability"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables comprehensive vulnerability scanning using Nuclei scanner with support for single targets, network ranges, and cluster-wide security assessments with customizable severity levels and automated scheduling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NUCLEI_BIN": {
+          "description": "Path to the Nuclei binary executable",
+          "type": "string",
+          "default": "${HOME}/go/bin/nuclei"
+        },
+        "SCAN_RESULTS_DIR": {
+          "description": "Directory where scan results will be stored",
+          "type": "string",
+          "default": "${AGENTIC_SYSTEM_PATH:-/opt/agentic}/security-scans"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "bmrem5qdrh",
+    "name": "Security Scanner MCP Server",
+    "namespace": "marc-shade",
+    "repository": {
+      "url": "https://github.com/marc-shade/security-scanner-mcp"
+    },
+    "slug": "security-scanner-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bmrem5qdrh"
+  }
+}

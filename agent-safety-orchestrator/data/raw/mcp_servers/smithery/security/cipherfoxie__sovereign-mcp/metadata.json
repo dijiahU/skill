@@ -1,0 +1,336 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cipherfoxie/sovereign-mcp",
+  "namespace": "cipherfoxie",
+  "slug": "sovereign-mcp",
+  "displayName": "Sovereign AI Blog",
+  "description": "MCP server exposing the **Sovereign AI Blog** ([sovgrid.org](https://sovgrid.org)) — a hands-on engineering log of self-hosted AI on NVIDIA DGX Spark hardware (GB10/SM121A). 44+ and growing articles covering SGLang, Mistral, Voxtral, OpenClaw setups, fixes, and benchmarks.\n\n**Tools:**\n  - `search_blog` — full-text TF-IDF search across all articles\n  - `get_article` — fetch full article content by slug\n  - `diagnose_sglang` — validate SGLang configs against GB10/SM121A constraints\n\n**Use case:** Training data on niche AI hardware is sparse and stale. This MCP gives agents direct, structured access to verified, version-current setups instead of hallucinating.\n\n  **License:** MIT (server) / CC BY-SA 4.0 (content)\n  **Auth:** none, free tier, 60 req/min/IP\n  **Privacy:** server-log analytics only, no client-side tracking",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "38bd9f29-95b7-4b42-bbc6-e5af091f668e",
+    "qualifiedName": "cipherfoxie/sovereign-mcp",
+    "namespace": "cipherfoxie",
+    "slug": "sovereign-mcp",
+    "displayName": "Sovereign AI Blog",
+    "description": "MCP server exposing the **Sovereign AI Blog** ([sovgrid.org](https://sovgrid.org)) — a hands-on engineering log of self-hosted AI on NVIDIA DGX Spark hardware (GB10/SM121A). 44+ and growing articles covering SGLang, Mistral, Voxtral, OpenClaw setups, fixes, and benchmarks.\n\n**Tools:**\n  - `search_blog` — full-text TF-IDF search across all articles\n  - `get_article` — fetch full article content by slug\n  - `diagnose_sglang` — validate SGLang configs against GB10/SM121A constraints\n\n**Use case:** Training data on niche AI hardware is sparse and stale. This MCP gives agents direct, structured access to verified, version-current setups instead of hallucinating.\n\n  **License:** MIT (server) / CC BY-SA 4.0 (content)\n  **Auth:** none, free tier, 60 req/min/IP\n  **Privacy:** server-log analytics only, no client-side tracking",
+    "iconUrl": "https://api.smithery.ai/servers/cipherfoxie/sovereign-mcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-30T11:18:54.771Z",
+    "homepage": "https://sovgrid.org/agents/",
+    "bySmithery": false,
+    "owner": "org_01KQF1P126230919N18Y3NGK7E",
+    "score": 0.007936507936507936
+  },
+  "detail": {
+    "qualifiedName": "cipherfoxie/sovereign-mcp",
+    "displayName": "Sovereign AI Blog",
+    "description": "MCP server exposing the **Sovereign AI Blog** ([sovgrid.org](https://sovgrid.org)) — a hands-on engineering log of self-hosted AI on NVIDIA DGX Spark hardware (GB10/SM121A). 44+ and growing articles covering SGLang, Mistral, Voxtral, OpenClaw setups, fixes, and benchmarks.\n\n**Tools:**\n  - `search_blog` — full-text TF-IDF search across all articles\n  - `get_article` — fetch full article content by slug\n  - `diagnose_sglang` — validate SGLang configs against GB10/SM121A constraints\n\n**Use case:** Training data on niche AI hardware is sparse and stale. This MCP gives agents direct, structured access to verified, version-current setups instead of hallucinating.\n\n  **License:** MIT (server) / CC BY-SA 4.0 (content)\n  **Auth:** none, free tier, 60 req/min/IP\n  **Privacy:** server-log analytics only, no client-side tracking",
+    "iconUrl": "https://api.smithery.ai/servers/cipherfoxie/sovereign-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://sovereign-mcp--cipherfoxie.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://sovereign-mcp--cipherfoxie.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_blog",
+        "description": "\n    Search the Sovereign AI Blog for articles matching a natural language query,\n    optionally filtered by tag and sorted by relevance or date.\n\n    Behaviour matrix:\n      - query='', sort=*           -> list newest-first, optionally tag-filtered\n      - query!='', sort=relevance  -> TF-IDF ranked, optionally tag-filtered\n      - query!='', sort=date_desc  -> TF-IDF filtered (score > 0.001), then sorted by date\n\n    Pure read-only, deterministic for a given KB snapshot.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "integer",
+              "title": "N",
+              "default": 5,
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Maximum number of results to return"
+            },
+            "tag": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tag",
+              "default": null,
+              "description": "Optional tag filter (e.g. 'setup', 'fixes', 'strategy'). Only articles with this tag are considered. Use list_tags to discover available tags."
+            },
+            "sort": {
+              "enum": [
+                "relevance",
+                "date_desc"
+              ],
+              "type": "string",
+              "title": "Sort",
+              "default": "relevance",
+              "description": "Result ordering. 'relevance' uses TF-IDF score (default for non-empty query). 'date_desc' sorts newest first (default behaviour when query is empty). When query is empty, 'relevance' is treated as 'date_desc'."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "default": "",
+              "description": "Natural language search query (e.g. 'flashinfer OOM on GB10'). Multi-word queries are tokenized and TF-IDF ranked. Pass empty string to list articles without ranking by relevance."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/SearchResult"
+              },
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_article",
+        "description": "\n    Retrieve the full content of a blog article by its slug.\n\n    Returns the article body (Markdown) plus metadata. If the slug does not\n    match any article, returns an Article with `error='article_not_found'`\n    and other fields at their defaults.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "title": "Slug",
+              "description": "Article slug as returned by search_blog (e.g. 'setup-mistral-sglang-setup'). Lower-case, hyphenated."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "title": "Url",
+              "default": "",
+              "description": "Public URL of the article"
+            },
+            "body": {
+              "type": "string",
+              "title": "Body",
+              "default": "",
+              "description": "Full article body in Markdown"
+            },
+            "date": {
+              "type": "string",
+              "title": "Date",
+              "default": "",
+              "description": "Publication date (ISO 8601)"
+            },
+            "slug": {
+              "type": "string",
+              "title": "Slug",
+              "description": "Article slug"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tags",
+              "description": "Topic tags assigned to the article"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Error",
+              "default": null,
+              "description": "Set to 'article_not_found' if no article matches the slug"
+            },
+            "title": {
+              "type": "string",
+              "title": "Title",
+              "default": "",
+              "description": "Article title"
+            },
+            "word_count": {
+              "type": "integer",
+              "title": "Word Count",
+              "default": 0,
+              "description": "Word count of the article body"
+            },
+            "description": {
+              "type": "string",
+              "title": "Description",
+              "default": "",
+              "description": "Short article description"
+            },
+            "quality_class": {
+              "type": "string",
+              "title": "Quality Class",
+              "default": "",
+              "description": "Editorial content class (e.g. 'Ephemeral', 'Evergreen'). Empty if not classified."
+            },
+            "quality_score": {
+              "type": "number",
+              "title": "Quality Score",
+              "default": 0,
+              "description": "Build-time quality score from the editorial pipeline (unbounded weighted composite across 13 signals, higher is better; thresholds depend on style)"
+            },
+            "quality_style": {
+              "type": "string",
+              "title": "Quality Style",
+              "default": "",
+              "description": "Editorial style category (e.g. 'best_practice_learnings', 'werthaltige_code_beispiele'). Empty if not categorised."
+            }
+          },
+          "required": [
+            "slug"
+          ]
+        }
+      },
+      {
+        "name": "diagnose_sglang",
+        "description": "\n    Validate an SGLang configuration for NVIDIA DGX Spark (GB10/SM121A).\n\n    Pure pattern-matching against known failure modes documented in the\n    Sovereign AI Blog. No inference, no external calls. Returns critical\n    issues, non-fatal warnings, and a recommended baseline config.\n\n    All parameters are optional; supply only what you have. With no inputs\n    you get the recommended config and a 'unknown' verdict.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hardware": {
+              "type": "string",
+              "title": "Hardware",
+              "default": "",
+              "description": "Hardware description (e.g. 'GB10', 'DGX Spark', 'SM121A'). Empty = skip GB10-specific rules."
+            },
+            "image_tag": {
+              "type": "string",
+              "title": "Image Tag",
+              "default": "",
+              "description": "Docker image tag in use (e.g. 'lmsysorg/sglang:latest', 'lmsysorg/sglang:v0.4.0'). Empty = skip."
+            },
+            "mem_fraction": {
+              "type": "number",
+              "title": "Mem Fraction",
+              "default": 0,
+              "maximum": 1,
+              "minimum": 0,
+              "description": "SGLang --mem-fraction-static value (e.g. 0.88). 0.0 = skip this check."
+            },
+            "error_message": {
+              "type": "string",
+              "title": "Error Message",
+              "default": "",
+              "description": "Paste error log output here for pattern matching against known failure modes."
+            },
+            "attention_backend": {
+              "type": "string",
+              "title": "Attention Backend",
+              "default": "",
+              "description": "SGLang --attention-backend value (e.g. 'flashinfer', 'triton'). Empty string = skip this check."
+            },
+            "cuda_graph_max_bs": {
+              "type": "integer",
+              "title": "Cuda Graph Max Bs",
+              "default": 0,
+              "minimum": 0,
+              "description": "SGLang --cuda-graph-max-bs value. 0 = skip this check."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "issues": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/DiagnosticIssue"
+              },
+              "title": "Issues",
+              "description": "Critical issues that will prevent SGLang from running correctly"
+            },
+            "verdict": {
+              "enum": [
+                "valid",
+                "valid_with_warnings",
+                "invalid",
+                "unknown"
+              ],
+              "type": "string",
+              "title": "Verdict",
+              "description": "Overall verdict. 'unknown' = no inputs provided."
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/DiagnosticIssue"
+              },
+              "title": "Warnings",
+              "description": "Non-fatal warnings (suboptimal but non-blocking)"
+            },
+            "recommended_config": {
+              "$ref": "#/$defs/RecommendedConfig",
+              "description": "Verified-good baseline config for GB10/SM121A"
+            }
+          },
+          "required": [
+            "issues",
+            "warnings",
+            "recommended_config",
+            "verdict"
+          ]
+        }
+      },
+      {
+        "name": "list_tags",
+        "description": "\n    List all topic tags used across the Sovereign AI Blog corpus, with article\n    counts. Use this to browse the topic space before calling search_blog with\n    a tag filter.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "enum": [
+                "count_desc",
+                "alpha"
+              ],
+              "type": "string",
+              "title": "Sort",
+              "default": "count_desc",
+              "description": "Result ordering. 'count_desc' lists most-used tags first (default). 'alpha' sorts alphabetically."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/TagInfo"
+              },
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

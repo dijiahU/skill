@@ -1,0 +1,426 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "asancivieri/apilocker",
+  "namespace": "asancivieri",
+  "slug": "apilocker",
+  "displayName": "API Locker",
+  "description": "Encrypted credential vault with a 21-tool MCP server. Store and manage LLM API keys, service API keys, and OAuth credentials — then let your AI agent list, reveal, rotate, rename, pause, and proxy calls through them.\n",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "credential",
+    "secret",
+    "encryption",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "ed83c5da-3780-445d-b9ce-160d800c9c21",
+    "qualifiedName": "asancivieri/apilocker",
+    "namespace": "asancivieri",
+    "slug": "apilocker",
+    "displayName": "API Locker",
+    "description": "Encrypted credential vault with a 21-tool MCP server. Store and manage LLM API keys, service API keys, and OAuth credentials — then let your AI agent list, reveal, rotate, rename, pause, and proxy calls through them.\n",
+    "iconUrl": "https://api.smithery.ai/servers/asancivieri/apilocker/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-10T17:40:13.681Z",
+    "homepage": "https://smithery.ai/servers/asancivieri/apilocker",
+    "bySmithery": false,
+    "owner": "org_01KNW7FQG01B4H54J5A246PH4M",
+    "score": 0.011904761904761904
+  },
+  "detail": {
+    "qualifiedName": "asancivieri/apilocker",
+    "displayName": "API Locker",
+    "description": "Encrypted credential vault with a 21-tool MCP server. Store and manage LLM API keys, service API keys, and OAuth credentials — then let your AI agent list, reveal, rotate, rename, pause, and proxy calls through them.\n",
+    "iconUrl": "https://api.smithery.ai/servers/asancivieri/apilocker/icon",
+    "remote": true,
+    "deploymentUrl": "https://apilocker--asancivieri.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://apilocker--asancivieri.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_keys",
+        "description": "List credentials in the user's vault grouped by category (LLM / Service / OAuth). Returns metadata only — never raw secret values. Optionally filter by category, provider, or tag.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "description": "Filter by a tag."
+            },
+            "category": {
+              "enum": [
+                "llm",
+                "service",
+                "oauth"
+              ],
+              "type": "string",
+              "description": "Filter by category. Omit to return all."
+            },
+            "provider": {
+              "type": "string",
+              "description": "Filter by provider id (e.g. openai, stripe, google-oauth)."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_key_metadata",
+        "description": "Get full metadata for one credential by its alias (name). Returns provider, type, tags, paused state, rotation history. Does not reveal the secret value.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "description": "The credential alias (name)."
+            }
+          }
+        }
+      },
+      {
+        "name": "reveal_key",
+        "description": "Reveal the decrypted value of a credential by alias. For api_key credentials, returns the single secret string. For oauth2 credentials, returns the full multi-field object (client_id, client_secret, refresh_token, etc.). The agent should treat the response as sensitive — log it, store it, or pass it carefully.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "description": "The credential alias (name)."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_providers",
+        "description": "List all available provider templates. Useful for discovering what providers can be used when storing new credentials.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "enum": [
+                "llm",
+                "service",
+                "oauth"
+              ],
+              "type": "string",
+              "description": "Filter by category. Omit to return all."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_activity",
+        "description": "Get recent audit log entries showing how credentials have been used. Returns proxy calls, reveals, rotations, renames, pauses, etc. Each entry includes timestamp, status code, latency, and the credential involved.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max entries to return (default 50, max 200)."
+            },
+            "key_id": {
+              "type": "string",
+              "description": "Filter by a specific key ID."
+            },
+            "token_id": {
+              "type": "string",
+              "description": "Filter by a specific token ID."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_doctor",
+        "description": "Run a security health check on the vault. Returns warnings about stale rotations, unused keys, expiring tokens, stale devices. The same checks the CLI `apilocker doctor` command runs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "proxy_request",
+        "description": "Make an API request through the locker proxy. The real API key is injected automatically — the agent never sees the raw secret. Use this when you need to call an external API (OpenAI, Stripe, etc.) using a stored credential.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "object",
+              "description": "Request body (will be JSON-encoded)."
+            },
+            "path": {
+              "type": "string",
+              "description": "The API path to call (e.g. /v1/chat/completions)."
+            },
+            "key_id": {
+              "type": "string",
+              "description": "The key ID to use for this request (e.g. key_abc123)."
+            },
+            "method": {
+              "type": "string",
+              "default": "POST",
+              "description": "HTTP method (GET, POST, PUT, DELETE)."
+            },
+            "headers": {
+              "type": "object",
+              "description": "Additional headers to include."
+            }
+          }
+        }
+      },
+      {
+        "name": "store_key",
+        "description": "Store a new api_key credential in the vault. The secret is encrypted with AES-GCM before being stored. Use store_oauth_credential for multi-field OAuth credentials. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "The raw secret value."
+            },
+            "name": {
+              "type": "string",
+              "description": "Credential alias (e.g. OPENAI_API_KEY). Must be unique."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Tags for organization."
+            },
+            "base_url": {
+              "type": "string",
+              "description": "Optional base URL for proxy access. Omit for vault-only credentials."
+            },
+            "provider": {
+              "type": "string",
+              "description": "Provider id (e.g. openai, stripe). Use list_providers to discover available providers."
+            }
+          }
+        }
+      },
+      {
+        "name": "store_oauth_credential",
+        "description": "Store a new OAuth multi-field credential (client_id, client_secret, refresh_token, etc.). For OAuth providers like Google, GitHub, Slack, Microsoft, Notion, Spotify, Twitter, LinkedIn, Discord, Zoom, Dropbox, Salesforce, HubSpot. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Credential alias (e.g. google-oauth)."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "scopes": {
+              "type": "string",
+              "description": "Space-separated OAuth scopes."
+            },
+            "provider": {
+              "type": "string",
+              "description": "OAuth provider id (e.g. google-oauth, github-oauth)."
+            },
+            "client_id": {
+              "type": "string"
+            },
+            "token_url": {
+              "type": "string",
+              "description": "Optional override of the template default."
+            },
+            "redirect_uri": {
+              "type": "string"
+            },
+            "authorize_url": {
+              "type": "string",
+              "description": "Optional override of the template default."
+            },
+            "client_secret": {
+              "type": "string"
+            },
+            "refresh_token": {
+              "type": "string",
+              "description": "Optional."
+            }
+          }
+        }
+      },
+      {
+        "name": "rotate_key",
+        "description": "Replace a credential's value in place with a new one. The credential's name, provider, and all metadata stay the same. Scoped tokens that reference the key continue to work. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "description": "The credential alias to rotate."
+            },
+            "new_value": {
+              "type": "string",
+              "description": "The new secret value."
+            }
+          }
+        }
+      },
+      {
+        "name": "rename_key",
+        "description": "Rename a credential alias. The old name is remembered as a legacy alias forever, so existing references to the old name continue to work transparently. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "new_alias": {
+              "type": "string"
+            },
+            "old_alias": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "pause_key",
+        "description": "Pause proxy access for a credential without deleting it. Reveal/run/get/env operations still work on paused credentials. The proxy returns HTTP 423 for paused keys until they are resumed. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "resume_key",
+        "description": "Resume proxy access for a paused credential. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_key",
+        "description": "Permanently delete a credential. The encrypted blob is removed from KV and the metadata row is removed from D1. This cannot be undone. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "description": "The credential alias to delete."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_tokens",
+        "description": "List scoped access tokens for the user's account. Each token authorizes proxy/MCP access to a specific subset of credentials. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "create_token",
+        "description": "Create a new scoped access token. Returns the access token and (for rotating tokens) the refresh token. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "allowed_keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Array of key IDs (not aliases) the token can access."
+            },
+            "rotation_type": {
+              "enum": [
+                "static",
+                "hourly",
+                "daily",
+                "weekly",
+                "monthly"
+              ],
+              "type": "string",
+              "description": "How often the access token rotates. Defaults to static."
+            }
+          }
+        }
+      },
+      {
+        "name": "pause_token",
+        "description": "Pause a scoped token. Paused tokens cannot be used until resumed. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "resume_token",
+        "description": "Resume a paused scoped token. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "revoke_token",
+        "description": "Permanently revoke (delete) a scoped token. Cannot be undone. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_devices",
+        "description": "List all devices registered to the user's account. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "revoke_device",
+        "description": "Revoke a registered device. The device's master token immediately stops working. Requires master token auth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "device_id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

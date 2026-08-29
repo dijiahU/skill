@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "k80lhl6cgr",
+  "namespace": "AdJIa",
+  "slug": "mail-mcp-server",
+  "name": "Mail MCP Server",
+  "description": "An MCP server providing comprehensive email management through IMAP and SMTP, allowing users to search, read, and organize messages. It supports advanced features like folder manipulation, sending emails with attachments, and secure authentication for various email providers.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server providing comprehensive email management through IMAP and SMTP, allowing users to search, read, and organize messages. It supports advanced features like folder manipulation, sending emails with attachments, and secure authentication for various email providers.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "IMAP_SSL": {
+          "description": "Use SSL connection",
+          "type": "string",
+          "default": "true"
+        },
+        "SMTP_SSL": {
+          "description": "Use SSL/TLS (port 465)",
+          "type": "string",
+          "default": "true"
+        },
+        "IMAP_HOST": {
+          "description": "IMAP server hostname",
+          "type": "string",
+          "default": "imap.example.com"
+        },
+        "IMAP_PORT": {
+          "description": "IMAP server port",
+          "type": "string",
+          "default": "993"
+        },
+        "SMTP_HOST": {
+          "description": "SMTP server hostname",
+          "type": "string",
+          "default": "smtp.example.com"
+        },
+        "SMTP_PORT": {
+          "description": "SMTP server port",
+          "type": "string",
+          "default": "465"
+        },
+        "EMAIL_USER": {
+          "description": "Email username",
+          "type": "string"
+        },
+        "SMTP_STARTTLS": {
+          "description": "Use STARTTLS (port 587)",
+          "type": "string",
+          "default": "false"
+        },
+        "EMAIL_PASSWORD": {
+          "description": "Email password",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "EMAIL_USER",
+        "EMAIL_PASSWORD"
+      ]
+    },
+    "id": "k80lhl6cgr",
+    "name": "Mail MCP Server",
+    "namespace": "AdJIa",
+    "repository": {
+      "url": "https://github.com/AdJIa/mail-mcp-server"
+    },
+    "slug": "mail-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/k80lhl6cgr"
+  }
+}

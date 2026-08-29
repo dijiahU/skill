@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "ff7l2bsr4m",
+  "namespace": "yylgit",
+  "slug": "mcp-gateway-demo",
+  "name": "MCP Gateway Demo",
+  "description": "A reference implementation of an MCP server built with Express that integrates full OAuth 2.1 authorization and RFC9728 protected resource metadata. It enables secure, authenticated communication between MCP clients and servers using streamable HTTP transport and built-in authorization flows.",
+  "discoveryQueries": [
+    "authorization"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A reference implementation of an MCP server built with Express that integrates full OAuth 2.1 authorization and RFC9728 protected resource metadata. It enables secure, authenticated communication between MCP clients and servers using streamable HTTP transport and built-in authorization flows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "HTTP 端口",
+          "type": "string",
+          "default": "3000"
+        },
+        "JWT_SECRET": {
+          "description": "HS256 密钥（生产建议 RS256 + JWKS）",
+          "type": "string"
+        },
+        "AUTH_ISSUER": {
+          "description": "授权服务器 issuer（可与 MCP 同源）",
+          "type": "string"
+        },
+        "MCP_RESOURCE_URI": {
+          "description": "MCP 资源 canonical URI（用于 aud 校验与 metadata）",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MCP_RESOURCE_URI",
+        "AUTH_ISSUER",
+        "JWT_SECRET"
+      ]
+    },
+    "id": "ff7l2bsr4m",
+    "name": "MCP Gateway Demo",
+    "namespace": "yylgit",
+    "repository": {
+      "url": "https://github.com/yylgit/mcp-gateway-demo"
+    },
+    "slug": "mcp-gateway-demo",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ff7l2bsr4m"
+  }
+}

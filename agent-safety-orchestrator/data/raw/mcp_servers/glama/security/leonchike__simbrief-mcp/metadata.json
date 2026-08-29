@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "bule8g45sv",
+  "namespace": "leonchike",
+  "slug": "simbrief-mcp",
+  "name": "SimBrief Flight Planning MCP Server",
+  "description": "Enables access to SimBrief flight planning data through Claude Desktop with secure Google OAuth authentication. Provides tools to retrieve flight plans, dispatch briefings, NOTAMs, weather data, and other aviation planning information.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables access to SimBrief flight planning data through Claude Desktop with secure Google OAuth authentication. Provides tools to retrieve flight plans, dispatch briefings, NOTAMs, weather data, and other aviation planning information.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SENTRY_DSN": {
+          "description": "Sentry DSN for error tracking",
+          "type": "string"
+        },
+        "ENVIRONMENT": {
+          "description": "Environment name",
+          "type": "string",
+          "default": "production"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Google OAuth client ID",
+          "type": "string"
+        },
+        "SIMBRIEF_API_KEY": {
+          "description": "SimBrief API key for improved rate limits",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Google OAuth client secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "32-character random string for cookie signing",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "bule8g45sv",
+    "name": "SimBrief Flight Planning MCP Server",
+    "namespace": "leonchike",
+    "repository": {
+      "url": "https://github.com/leonchike/simbrief-mcp"
+    },
+    "slug": "simbrief-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bule8g45sv"
+  }
+}

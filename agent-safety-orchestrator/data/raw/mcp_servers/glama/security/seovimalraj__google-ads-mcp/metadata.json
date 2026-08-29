@@ -1,0 +1,83 @@
+{
+  "registry": "glama",
+  "id": "jajrpywni8",
+  "namespace": "seovimalraj",
+  "slug": "google-ads-mcp",
+  "name": "Google Ads MCP Server",
+  "description": "Enables interaction with Google Ads through secure OAuth authentication to discover keyword ideas, analyze historical search metrics, and generate forecasts for advertising campaigns. Built as a Next.js application with encrypted credential storage and rate limiting.",
+  "discoveryQueries": [
+    "credential",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables interaction with Google Ads through secure OAuth authentication to discover keyword ideas, analyze historical search metrics, and generate forecasts for advertising campaigns. Built as a Next.js application with encrypted credential storage and rate limiting.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NEXTAUTH_URL": {
+          "description": "Optional explicit base URL. When omitted the server uses the incoming request origin.",
+          "type": "string"
+        },
+        "ENCRYPTION_KEY": {
+          "description": "Base64 encoded 32-byte key for AES-256-GCM. Generate with `openssl rand -base64 32`.",
+          "type": "string"
+        },
+        "GADS_CLIENT_ID": {
+          "description": "OAuth client ID created in Google Cloud Console.",
+          "type": "string"
+        },
+        "GADS_DEV_TOKEN": {
+          "description": "Google Ads developer token approved for production.",
+          "type": "string"
+        },
+        "KV_REST_API_URL": {
+          "description": "Vercel KV REST endpoint. Omit to use in-memory storage locally.",
+          "type": "string"
+        },
+        "KV_REST_API_TOKEN": {
+          "description": "Vercel KV REST token with read/write permissions.",
+          "type": "string"
+        },
+        "GADS_CLIENT_SECRET": {
+          "description": "OAuth client secret that matches the client ID.",
+          "type": "string"
+        },
+        "NEXT_PUBLIC_APP_NAME": {
+          "description": "Display name shown on the OAuth confirmation page.",
+          "type": "string"
+        },
+        "GADS_LOGIN_CUSTOMER_ID": {
+          "description": "Optional manager account ID used for scoped access.",
+          "type": "string"
+        },
+        "KV_REST_API_READ_ONLY_TOKEN": {
+          "description": "Optional read-only token for GET operations.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GADS_CLIENT_ID",
+        "GADS_CLIENT_SECRET",
+        "GADS_DEV_TOKEN",
+        "ENCRYPTION_KEY",
+        "NEXT_PUBLIC_APP_NAME"
+      ]
+    },
+    "id": "jajrpywni8",
+    "name": "Google Ads MCP Server",
+    "namespace": "seovimalraj",
+    "repository": {
+      "url": "https://github.com/seovimalraj/google-ads-mcp"
+    },
+    "slug": "google-ads-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jajrpywni8"
+  }
+}

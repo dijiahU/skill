@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "blbjlwn0t1",
+  "namespace": "jim-coyne",
+  "slug": "Intersight_MCP",
+  "name": "Intersight MCP Server",
+  "description": "Enables LLMs to interact with Cisco Intersight APIs for managing data center infrastructure, including server monitoring, policy management, network configuration, and hardware telemetry across 199 tools.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables LLMs to interact with Cisco Intersight APIs for managing data center infrastructure, including server monitoring, policy management, network configuration, and hardware telemetry across 199 tools.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "HTTP server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "INTERSIGHT_BASE_URL": {
+          "description": "The base URL for Intersight API",
+          "type": "string",
+          "default": "https://intersight.com"
+        },
+        "INTERSIGHT_TOOL_MODE": {
+          "description": "Tool selection mode: core (65 tools) or all (199+ tools)",
+          "type": "string",
+          "default": "core"
+        },
+        "INTERSIGHT_API_KEY_ID": {
+          "description": "Your Intersight API Key ID",
+          "type": "string"
+        },
+        "INTERSIGHT_PRIVATE_KEY_PATH": {
+          "description": "Path to the private key file",
+          "type": "string",
+          "default": "/app/secrets/private_key.pem"
+        }
+      },
+      "type": "object",
+      "required": [
+        "INTERSIGHT_API_KEY_ID"
+      ]
+    },
+    "id": "blbjlwn0t1",
+    "name": "Intersight MCP Server",
+    "namespace": "jim-coyne",
+    "repository": {
+      "url": "https://github.com/jim-coyne/Intersight_MCP"
+    },
+    "slug": "Intersight_MCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/blbjlwn0t1"
+  }
+}

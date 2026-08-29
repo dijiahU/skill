@@ -1,0 +1,201 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "contact-e9h3/rnwy",
+  "namespace": "contact-e9h3",
+  "slug": "rnwy",
+  "displayName": "RNWY Trust Intelligence | AI Scanner",
+  "description": "Check if an AI agent is trustworthy before you hire it. Sybil detection, signed attestations, and reviewer wallet analysis across 150,000+ agents. Free, no key required.",
+  "discoveryQueries": [
+    "scanner",
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "8515eccc-234f-4c32-8c20-bc1626c4b7b9",
+    "qualifiedName": "contact-e9h3/rnwy",
+    "namespace": "contact-e9h3",
+    "slug": "rnwy",
+    "displayName": "RNWY Trust Intelligence | AI Scanner",
+    "description": "Check if an AI agent is trustworthy before you hire it. Sybil detection, signed attestations, and reviewer wallet analysis across 150,000+ agents. Free, no key required.",
+    "iconUrl": "https://api.smithery.ai/servers/contact-e9h3/rnwy/icon",
+    "verified": false,
+    "useCount": 64,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T13:45:39.784Z",
+    "homepage": "https://rnwy.com/",
+    "bySmithery": false,
+    "owner": "org_01KP0YNDW2FW81QGPZ1GESSB8V",
+    "score": 0.0196078431372549
+  },
+  "detail": {
+    "qualifiedName": "contact-e9h3/rnwy",
+    "displayName": "RNWY Trust Intelligence | AI Scanner",
+    "description": "Check if an AI agent is trustworthy before you hire it. Sybil detection, signed attestations, and reviewer wallet analysis across 150,000+ agents. Free, no key required.",
+    "iconUrl": "https://api.smithery.ai/servers/contact-e9h3/rnwy/icon",
+    "remote": true,
+    "deploymentUrl": "https://rnwy--contact-e9h3.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://rnwy--contact-e9h3.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "trust_check",
+        "description": "Pass/fail trust verdict for any AI agent across ERC-8004, Olas, or Virtuals registries. Returns score, tier, badges, and reasoning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Agent ID (token ID or Mech ID)"
+            },
+            "chain": {
+              "type": "string",
+              "description": "Chain slug: ethereum, base, bnb, gnosis, avalanche, celo, arbitrum, polygon, monad, megaeth, optimism"
+            },
+            "registry": {
+              "type": "string",
+              "description": "Registry: erc8004 (default), olas, virtuals"
+            },
+            "threshold": {
+              "type": "number",
+              "description": "Pass/fail threshold (default 50)"
+            }
+          }
+        }
+      },
+      {
+        "name": "reviewer_analysis",
+        "description": "Analyze wallet ages of every reviewer who left feedback on an agent. Detects sybil patterns like same-day wallet creation clusters.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Agent ID"
+            },
+            "chain": {
+              "type": "string",
+              "description": "Chain slug"
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_agents",
+        "description": "Side-by-side trust comparison of 2-10 agents, ranked by score with reviewer quality summary for each.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agents": {
+              "type": "string",
+              "description": "Comma-separated chain:id pairs. Example: base:1380,base:16907"
+            },
+            "threshold": {
+              "type": "number",
+              "description": "Pass/fail threshold (default 50)"
+            }
+          }
+        }
+      },
+      {
+        "name": "address_age",
+        "description": "Look up wallet age in days for any address. The uncheatable signal; time cannot be faked.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "description": "Chain slug (optional, defaults to base)"
+            },
+            "address": {
+              "type": "string",
+              "description": "Wallet address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "network_stats",
+        "description": "Network-wide statistics; total agents by registry, chain distribution, commerce job counts, and trust score tier distribution across 150,000+ indexed agents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "reviewer_wallet",
+        "description": "Behavior profile for any reviewer wallet; velocity, sweep patterns, score clustering, and sybil signals across the entire ERC-8004 ecosystem. Shows how this wallet behaves when reviewing agents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "description": "Chain slug: base, ethereum, bnb, etc."
+            },
+            "address": {
+              "type": "string",
+              "description": "Wallet address (0x...)"
+            },
+            "summary": {
+              "type": "boolean",
+              "description": "If true, omits individual review list (default true)"
+            }
+          }
+        }
+      },
+      {
+        "name": "commerce_stats",
+        "description": "Commerce activity for an agent or address; job count, unique counterparties, repeat client rate, total earnings. Covers Olas Mechs and Virtuals ACP protocols.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Agent ID. Use with chain and registry for linked agent commerce data."
+            },
+            "chain": {
+              "type": "string",
+              "description": "Chain slug (required with id)"
+            },
+            "address": {
+              "type": "string",
+              "description": "Wallet or contract address (0x...). Use this for Virtuals ACP lookups."
+            },
+            "registry": {
+              "type": "string",
+              "description": "Registry: erc8004, olas (default erc8004)"
+            }
+          }
+        }
+      },
+      {
+        "name": "risk_terms",
+        "description": "Counterparty risk intelligence for any agent. Returns risk tier (low/moderate/elevated/high/severe/critical), raw trust signals, data coverage, and methodology reference. Designed for marketplace operators and escrow providers setting transaction parameters before a deal. Full methodology: https://rnwy.com/risk-intelligence",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "description": "Chain slug: base, ethereum, bnb, gnosis, avalanche, celo, arbitrum, polygon, monad, megaeth, optimism"
+            },
+            "agent_id": {
+              "type": "number",
+              "description": "Agent ID (integer)"
+            },
+            "registry": {
+              "type": "string",
+              "description": "Registry: erc8004 (default), olas"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

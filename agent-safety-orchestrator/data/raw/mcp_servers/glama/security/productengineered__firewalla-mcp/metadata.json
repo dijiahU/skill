@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "gcvo83dyeu",
+  "namespace": "productengineered",
+  "slug": "firewalla-mcp",
+  "name": "firewalla-mcp-server",
+  "description": "A read-only MCP server that enables Claude to audit Firewalla network security configurations and monitor network activity. It provides tools to inspect devices, rules, alarms, and traffic flows without making any changes to the Firewalla system.",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A read-only MCP server that enables Claude to audit Firewalla network security configurations and monitor network activity. It provides tools to inspect devices, rules, alarms, and traffic flows without making any changes to the Firewalla system.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FIREWALLA_MSP_TOKEN": {
+          "description": "Personal access token from MSP Account Settings",
+          "type": "string"
+        },
+        "FIREWALLA_MSP_DOMAIN": {
+          "description": "Your MSP subdomain (no https://, no trailing slash), e.g., yourname.firewalla.net",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FIREWALLA_MSP_DOMAIN",
+        "FIREWALLA_MSP_TOKEN"
+      ]
+    },
+    "id": "gcvo83dyeu",
+    "name": "firewalla-mcp-server",
+    "namespace": "productengineered",
+    "repository": {
+      "url": "https://github.com/productengineered/firewalla-mcp"
+    },
+    "slug": "firewalla-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gcvo83dyeu"
+  }
+}

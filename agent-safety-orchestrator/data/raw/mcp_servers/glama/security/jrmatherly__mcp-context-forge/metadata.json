@@ -1,0 +1,119 @@
+{
+  "registry": "glama",
+  "id": "oylpyde1s9",
+  "namespace": "jrmatherly",
+  "slug": "mcp-context-forge",
+  "name": "ContextForge MCP Gateway",
+  "description": "A feature-rich gateway and proxy that federates MCP, REST, and gRPC services into a unified endpoint for AI clients. It enables virtualization of legacy APIs as MCP-compliant tools while providing built-in security, rate-limiting, and OpenTelemetry observability.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A feature-rich gateway and proxy that federates MCP, REST, and gRPC services into a unified endpoint for AI clients. It enables virtualization of legacy APIs as MCP-compliant tools while providing built-in security, rate-limiting, and OpenTelemetry observability.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_AUTH": {
+          "description": "Bearer token used when running mcpgateway.wrapper (e.g., 'Bearer your-token-here').",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "SQLAlchemy connection URL.",
+          "type": "string",
+          "default": "sqlite:///./mcp.db"
+        },
+        "JWT_SECRET_KEY": {
+          "description": "Secret key for signing JWT tokens (32+ chars). Generate with 'openssl rand -hex 32'.",
+          "type": "string",
+          "default": "my-test-key"
+        },
+        "MCP_SERVER_URL": {
+          "description": "The URL of the target MCP server for the mcpgateway.wrapper.",
+          "type": "string"
+        },
+        "SECURE_COOKIES": {
+          "description": "Set false for HTTP (non-HTTPS) dev environments.",
+          "type": "string",
+          "default": "true"
+        },
+        "BASIC_AUTH_USER": {
+          "description": "Username for HTTP Basic auth.",
+          "type": "string",
+          "default": "admin"
+        },
+        "BASIC_AUTH_PASSWORD": {
+          "description": "Password for HTTP Basic auth.",
+          "type": "string",
+          "default": "changeme"
+        },
+        "PLATFORM_ADMIN_EMAIL": {
+          "description": "Email for bootstrap admin user.",
+          "type": "string",
+          "default": "admin@example.com"
+        },
+        "MCPGATEWAY_UI_ENABLED": {
+          "description": "Enable Admin UI dashboard.",
+          "type": "string",
+          "default": "true"
+        },
+        "MCP_TOOL_CALL_TIMEOUT": {
+          "description": "Timeout for tool calls in seconds for the mcpgateway.wrapper.",
+          "type": "string",
+          "default": "120"
+        },
+        "AUTH_ENCRYPTION_SECRET": {
+          "description": "Passphrase for encrypting stored credentials. Generate with 'openssl rand -hex 32'.",
+          "type": "string",
+          "default": "my-test-salt"
+        },
+        "PLATFORM_ADMIN_PASSWORD": {
+          "description": "Password for bootstrap admin user.",
+          "type": "string",
+          "default": "changeme"
+        },
+        "PLATFORM_ADMIN_FULL_NAME": {
+          "description": "Display name for bootstrap admin.",
+          "type": "string",
+          "default": "Admin User"
+        },
+        "MCPGATEWAY_ADMIN_API_ENABLED": {
+          "description": "Enable Admin API endpoints.",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "JWT_SECRET_KEY",
+            "AUTH_ENCRYPTION_SECRET",
+            "PLATFORM_ADMIN_EMAIL",
+            "PLATFORM_ADMIN_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "MCP_AUTH",
+            "MCP_SERVER_URL"
+          ]
+        }
+      ]
+    },
+    "id": "oylpyde1s9",
+    "name": "ContextForge MCP Gateway",
+    "namespace": "jrmatherly",
+    "repository": {
+      "url": "https://github.com/jrmatherly/mcp-context-forge"
+    },
+    "slug": "mcp-context-forge",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/oylpyde1s9"
+  }
+}

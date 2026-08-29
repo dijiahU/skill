@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "dj4v1wxaoj",
+  "namespace": "vinaybist",
+  "slug": "MCP-H",
+  "name": "KubeGuard MCP Server",
+  "description": "Enables security analysis of Kubernetes Role configurations using LLM-assisted prompt chaining and rule-based assessment. Provides comprehensive security scoring, hardened role generation, and runtime permission usage correlation to identify privilege escalation risks and over-permissive configurations.",
+  "discoveryQueries": [
+    "security",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables security analysis of Kubernetes Role configurations using LLM-assisted prompt chaining and rule-based assessment. Provides comprehensive security scoring, hardened role generation, and runtime permission usage correlation to identify privilege escalation risks and over-permissive configurations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LLM_MODEL": {
+          "description": "Model to use",
+          "type": "string",
+          "default": "gpt-4o-mini"
+        },
+        "LLM_PROVIDER": {
+          "description": "LLM provider (openai/anthropic/none)",
+          "type": "string",
+          "default": "none"
+        },
+        "OPENAI_API_KEY": {
+          "description": "OpenAI API key",
+          "type": "string"
+        },
+        "ANTHROPIC_API_KEY": {
+          "description": "Anthropic API key",
+          "type": "string"
+        },
+        "SECURITY_SCORE_THRESHOLD": {
+          "description": "Security validation threshold",
+          "type": "string",
+          "default": "70"
+        },
+        "ENABLE_RUNTIME_SIMULATION": {
+          "description": "Enable usage simulation",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "dj4v1wxaoj",
+    "name": "KubeGuard MCP Server",
+    "namespace": "vinaybist",
+    "repository": {
+      "url": "https://github.com/vinaybist/MCP-H"
+    },
+    "slug": "MCP-H",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dj4v1wxaoj"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "registry": "glama",
+  "id": "smd6017v2m",
+  "namespace": "infamousjoeg",
+  "slug": "lunchmoney-mcp",
+  "name": "lunchmoney-mcp",
+  "description": "A comprehensive MCP server that enables AI assistants to manage Lunch Money finances through 37 tools for transactions, budgets, and accounts. It supports both local stdio and remote HTTP transport modes with secure, encrypted credential storage.",
+  "discoveryQueries": [
+    "credential"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A comprehensive MCP server that enables AI assistants to manage Lunch Money finances through 37 tools for transactions, budgets, and accounts. It supports both local stdio and remote HTTP transport modes with secure, encrypted credential storage.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "The port the server listens on in HTTP mode (default: 8080).",
+          "type": "string"
+        },
+        "BASE_URL": {
+          "description": "The base URL of the server (e.g., https://your-domain.com). Required for HTTP mode.",
+          "type": "string"
+        },
+        "OAUTH_SCOPES": {
+          "description": "Optional scopes for custom OAuth (defaults to openid,email).",
+          "type": "string",
+          "default": "openid,email"
+        },
+        "AUTH_PROVIDER": {
+          "description": "The OAuth provider for HTTP mode. Valid values: google, github, cyberark, custom.",
+          "type": "string"
+        },
+        "OAUTH_AUTH_URL": {
+          "description": "The authorization URL for custom OAuth providers.",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "Client ID for custom OAuth or fallback for CyberArk.",
+          "type": "string"
+        },
+        "OAUTH_TOKEN_URL": {
+          "description": "The token URL for custom OAuth providers.",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "GitHub OAuth Client ID.",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Google OAuth Client ID.",
+          "type": "string"
+        },
+        "CYBERARK_CLIENT_ID": {
+          "description": "CyberArk OAuth Client ID.",
+          "type": "string"
+        },
+        "CYBERARK_TENANT_URL": {
+          "description": "CyberArk Identity tenant URL (e.g., https://abc1234.id.cyberark.cloud).",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "Client Secret for custom OAuth or fallback for CyberArk.",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "GitHub OAuth Client Secret.",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Google OAuth Client Secret.",
+          "type": "string"
+        },
+        "LUNCH_MONEY_API_TOKEN": {
+          "description": "Your Lunch Money API token. Required for non-interactive environments like containers or CI/CD.",
+          "type": "string"
+        },
+        "CYBERARK_CLIENT_SECRET": {
+          "description": "CyberArk OAuth Client Secret.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "smd6017v2m",
+    "name": "lunchmoney-mcp",
+    "namespace": "infamousjoeg",
+    "repository": {
+      "url": "https://github.com/infamousjoeg/lunchmoney-mcp"
+    },
+    "slug": "lunchmoney-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/smd6017v2m"
+  }
+}

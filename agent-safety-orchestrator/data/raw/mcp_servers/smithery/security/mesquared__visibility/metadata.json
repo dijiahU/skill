@@ -1,0 +1,407 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "mesquared/visibility",
+  "namespace": "mesquared",
+  "slug": "visibility",
+  "displayName": "MeSquared AI Search Visibility",
+  "description": "Check how visible a business website is to AI search engines like ChatGPT, Perplexity, Claude, and Google AI Overviews. Returns a 0-100 visibility score, the top trust and citation issues, and a link to run the full scan on MeSquared Visibility.\n",
+  "discoveryQueries": [
+    "audit",
+    "trust",
+    "secret"
+  ],
+  "rawRecord": {
+    "id": "79a1fbb9-50a4-4c5e-8390-0aba94a733a7",
+    "qualifiedName": "mesquared/visibility",
+    "namespace": "mesquared",
+    "slug": "visibility",
+    "displayName": "MeSquared AI Search Visibility",
+    "description": "Check how visible a business website is to AI search engines like ChatGPT, Perplexity, Claude, and Google AI Overviews. Returns a 0-100 visibility score, the top trust and citation issues, and a link to run the full scan on MeSquared Visibility.\n",
+    "iconUrl": "https://api.smithery.ai/servers/mesquared/visibility/icon",
+    "verified": false,
+    "useCount": 1212,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-06T16:45:12.801Z",
+    "homepage": "https://visibility.mesquared.ai",
+    "bySmithery": false,
+    "owner": "org_01KNJ27C2D47V3N0BBDEJH9QMM",
+    "score": 0.023735955056179776
+  },
+  "detail": {
+    "qualifiedName": "mesquared/visibility",
+    "displayName": "MeSquared AI Search Visibility",
+    "description": "Check how visible a business website is to AI search engines like ChatGPT, Perplexity, Claude, and Google AI Overviews. Returns a 0-100 visibility score, the top trust and citation issues, and a link to run the full scan on MeSquared Visibility.\n",
+    "iconUrl": "https://api.smithery.ai/servers/mesquared/visibility/icon",
+    "remote": true,
+    "deploymentUrl": "https://visibility--mesquared.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://visibility--mesquared.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "visibility_audit_info",
+        "description": "Explain what the MeSquared Visibility quick scan measures, what it does not measure, and how to use the available scan tools.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "tools": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "purpose",
+                  "required_arguments"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "purpose": {
+                    "type": "string"
+                  },
+                  "required_arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "product": {
+              "type": "string"
+            },
+            "measures": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "free_scan_url": {
+              "type": "string"
+            },
+            "does_not_measure": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "product",
+            "free_scan_url",
+            "measures",
+            "does_not_measure",
+            "tools"
+          ]
+        }
+      },
+      {
+        "name": "scan_visibility",
+        "description": "Run a quick public-site AI readiness scan for one business website. Returns a 0-100 score for on-site crawlability, answer clarity, trust signals, schema/entity clarity, and the top issues making the site harder for AI systems and search engines to understand or trust.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The business website URL to scan, such as example.com."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "score": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "summary": {
+              "type": "string"
+            },
+            "audit_id": {
+              "type": "string"
+            },
+            "aeo_score": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "geo_score": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "seo_score": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "top_issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "severity",
+                  "category",
+                  "description"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "critical",
+                      "warning",
+                      "info"
+                    ],
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "full_scan_url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "score",
+            "seo_score",
+            "aeo_score",
+            "geo_score",
+            "top_issues",
+            "summary",
+            "full_scan_url",
+            "audit_id"
+          ]
+        }
+      },
+      {
+        "name": "compare_visibility",
+        "description": "Run quick public-site AI readiness scans for two business websites and compare their scores, score gap, trust/readability summaries, and top on-site issues.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "first_url": {
+              "type": "string",
+              "description": "The first business website URL, such as example.com."
+            },
+            "second_url": {
+              "type": "string",
+              "description": "The second business website URL, such as competitor.com."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "first": {
+              "type": "object",
+              "required": [
+                "url",
+                "score",
+                "seo_score",
+                "aeo_score",
+                "geo_score",
+                "summary",
+                "top_issues",
+                "audit_id"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "audit_id": {
+                  "type": "string"
+                },
+                "aeo_score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "geo_score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "seo_score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "top_issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "title",
+                      "severity",
+                      "category",
+                      "description"
+                    ],
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "type": "string"
+                      },
+                      "severity": {
+                        "enum": [
+                          "critical",
+                          "warning",
+                          "info"
+                        ],
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "second": {
+              "type": "object",
+              "required": [
+                "url",
+                "score",
+                "seo_score",
+                "aeo_score",
+                "geo_score",
+                "summary",
+                "top_issues",
+                "audit_id"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "audit_id": {
+                  "type": "string"
+                },
+                "aeo_score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "geo_score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "seo_score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                "top_issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "title",
+                      "severity",
+                      "category",
+                      "description"
+                    ],
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "type": "string"
+                      },
+                      "severity": {
+                        "enum": [
+                          "critical",
+                          "warning",
+                          "info"
+                        ],
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "winner": {
+              "enum": [
+                "first_url",
+                "second_url",
+                "tie"
+              ],
+              "type": "string"
+            },
+            "score_gap": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "full_scan_url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "winner",
+            "score_gap",
+            "first",
+            "second",
+            "full_scan_url"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "vvgto0hrn3",
+  "namespace": "matipojo",
+  "slug": "personal-context-mcp",
+  "name": "Personal Context MCP Server",
+  "description": "Enables managing personal information with dynamic topic-based organization (tasks, meetings, contacts, etc.), supporting optional OTP authentication and AES-256 encryption for sensitive data with automatic backups.",
+  "discoveryQueries": [
+    "encryption",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables managing personal information with dynamic topic-based organization (tasks, meetings, contacts, etc.), supporting optional OTP authentication and AES-256 encryption for sensitive data with automatic backups.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PERSONAL_INFO_DATA_DIR": {
+          "description": "Directory path where personal information data is stored",
+          "type": "string",
+          "default": "./data"
+        },
+        "PERSONAL_INFO_BACKUP_DIR": {
+          "description": "Directory path where backups are stored",
+          "type": "string",
+          "default": "./backups"
+        },
+        "PERSONAL_INFO_MAX_FILE_SIZE": {
+          "description": "Maximum file size in bytes (default 1MB)",
+          "type": "string",
+          "default": "1048576"
+        },
+        "PERSONAL_INFO_BACKUP_ENABLED": {
+          "description": "Enable automatic backups before data modifications",
+          "type": "string",
+          "default": "true"
+        },
+        "PERSONAL_INFO_ENCRYPTION_KEY": {
+          "description": "Encryption key for AES-256 encryption (optional, used when encryption is enabled)",
+          "type": "string",
+          "default": ""
+        },
+        "PERSONAL_INFO_ENCRYPTION_ENABLED": {
+          "description": "Enable AES-256 encryption for sensitive data",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "vvgto0hrn3",
+    "name": "Personal Context MCP Server",
+    "namespace": "matipojo",
+    "repository": {
+      "url": "https://github.com/matipojo/personal-context-mcp"
+    },
+    "slug": "personal-context-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vvgto0hrn3"
+  }
+}

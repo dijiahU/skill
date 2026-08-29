@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "vqpe0vvefw",
+  "namespace": "f",
+  "slug": "mcp-startup-framework",
+  "name": "MCP Startup Framework",
+  "description": "A comprehensive framework for building remote MCP servers on Cloudflare Workers featuring OAuth 2.1 authentication, PostgreSQL integration, and Stripe-powered paid tools. It enables developers to create scalable, platform-agnostic MCP tools with support for user registration and subscription-based functionality.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A comprehensive framework for building remote MCP servers on Cloudflare Workers featuring OAuth 2.1 authentication, PostgreSQL integration, and Stripe-powered paid tools. It enables developers to create scalable, platform-agnostic MCP tools with support for user registration and subscription-based functionality.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "The base URL where the worker or application is deployed",
+          "type": "string"
+        },
+        "JWT_SECRET": {
+          "description": "Secret key used for signing JWT tokens for authentication",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL connection string (e.g., postgresql://username:password@host:port/database)",
+          "type": "string"
+        },
+        "STRIPE_SECRET_KEY": {
+          "description": "Your Stripe secret API key for handling payments",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A 32-character key used to encrypt browser cookies",
+          "type": "string"
+        },
+        "STRIPE_PRICE_ID_FOR_PREMIUM_MATH": {
+          "description": "The Stripe Price ID associated with the premium math tool",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "COOKIE_ENCRYPTION_KEY",
+        "BASE_URL"
+      ]
+    },
+    "id": "vqpe0vvefw",
+    "name": "MCP Startup Framework",
+    "namespace": "f",
+    "repository": {
+      "url": "https://github.com/f/mcp-startup-framework"
+    },
+    "slug": "mcp-startup-framework",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vqpe0vvefw"
+  }
+}

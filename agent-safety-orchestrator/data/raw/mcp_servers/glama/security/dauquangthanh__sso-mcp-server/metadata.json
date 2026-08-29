@@ -1,0 +1,105 @@
+{
+  "registry": "glama",
+  "id": "d07hlqhamg",
+  "namespace": "DauQuangThanh",
+  "slug": "sso-mcp-server",
+  "name": "SSO MCP Server",
+  "description": "Provides Azure Entra ID authenticated access to organizational development resources including checklists, process documentation, and workflows with dual-mode authentication support.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides Azure Entra ID authenticated access to organizational development resources including checklists, process documentation, and workflows with dual-mode authentication support.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8080"
+        },
+        "AUTH_MODE": {
+          "description": "Authentication mode: 'local', 'cloud', or 'auto'",
+          "type": "string",
+          "default": "local"
+        },
+        "LOG_LEVEL": {
+          "description": "Log level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "PROCESS_DIR": {
+          "description": "Process documentation directory path",
+          "type": "string",
+          "default": "./processes"
+        },
+        "CHECKLIST_DIR": {
+          "description": "Checklist directory path",
+          "type": "string"
+        },
+        "JWKS_CACHE_TTL": {
+          "description": "JWKS cache TTL in seconds",
+          "type": "string",
+          "default": "3600"
+        },
+        "ALLOWED_ISSUERS": {
+          "description": "Comma-separated issuer URLs for cloud mode",
+          "type": "string"
+        },
+        "AZURE_CLIENT_ID": {
+          "description": "Azure app registration client ID (required for local mode)",
+          "type": "string"
+        },
+        "AZURE_TENANT_ID": {
+          "description": "Azure tenant ID (required for local mode)",
+          "type": "string"
+        },
+        "RESOURCE_IDENTIFIER": {
+          "description": "API resource URL (audience) for cloud mode",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "CHECKLIST_DIR",
+            "AZURE_CLIENT_ID",
+            "AZURE_TENANT_ID"
+          ]
+        },
+        {
+          "required": [
+            "CHECKLIST_DIR",
+            "RESOURCE_IDENTIFIER",
+            "ALLOWED_ISSUERS"
+          ]
+        },
+        {
+          "required": [
+            "CHECKLIST_DIR",
+            "AZURE_CLIENT_ID",
+            "AZURE_TENANT_ID",
+            "RESOURCE_IDENTIFIER",
+            "ALLOWED_ISSUERS"
+          ]
+        }
+      ]
+    },
+    "id": "d07hlqhamg",
+    "name": "SSO MCP Server",
+    "namespace": "DauQuangThanh",
+    "repository": {
+      "url": "https://github.com/DauQuangThanh/sso-mcp-server"
+    },
+    "slug": "sso-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/d07hlqhamg"
+  }
+}

@@ -1,0 +1,430 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "product_intelligence/shoptera",
+  "namespace": "product_intelligence",
+  "slug": "shoptera",
+  "displayName": "Shoptera",
+  "description": "Shoptera Product Intelligence\nSearch product catalogs across thousands of Central European e-shops. Semantic search, keyword matching, GTIN/EAN lookup — via REST API or MCP.\n\n~2,500 e-shops | ~8.5M products | 7 countries (CZ, SK, PL, HU, RO, DE, AT)\n\nLive stats: GET /stats/global\n\nQuickstart\nNo authentication required. Base URL: https://shoptera.ai/api\n\nSemantic search — natural language, understands intent:\n\ncurl \"https://shoptera.ai/api/v1/search?q=dárek+pro+zahradníka+do+500+Kč&max_price=500&currency=CZK&origin_country=CZ\"\nKeyword search — exact title matching, fast:\n\ncurl \"https://shoptera.ai/api/v1/search/text?title=Nike+Air+Max+90&brand=Nike\"\nGTIN/EAN lookup — find e-shops by barcode:\n\ncurl \"https://shoptera.ai/api/v1/search/gtin/5901234123457\"\nSaving tokens: Add fields to return only what you need (up to 70% smaller response):\n\ncurl \"https://shoptera.ai/api/v1/search?q=boty&limit=5&fields=title,price,product_url,cart_action\"\nQuick Install\nClaude Code (one command)\nclaude mcp add",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "e26bb2e1-cbd6-405c-a79b-b72902a2b5df",
+    "qualifiedName": "product_intelligence/shoptera",
+    "namespace": "product_intelligence",
+    "slug": "shoptera",
+    "displayName": "Shoptera",
+    "description": "Shoptera Product Intelligence\nSearch product catalogs across thousands of Central European e-shops. Semantic search, keyword matching, GTIN/EAN lookup — via REST API or MCP.\n\n~2,500 e-shops | ~8.5M products | 7 countries (CZ, SK, PL, HU, RO, DE, AT)\n\nLive stats: GET /stats/global\n\nQuickstart\nNo authentication required. Base URL: https://shoptera.ai/api\n\nSemantic search — natural language, understands intent:\n\ncurl \"https://shoptera.ai/api/v1/search?q=dárek+pro+zahradníka+do+500+Kč&max_price=500&currency=CZK&origin_country=CZ\"\nKeyword search — exact title matching, fast:\n\ncurl \"https://shoptera.ai/api/v1/search/text?title=Nike+Air+Max+90&brand=Nike\"\nGTIN/EAN lookup — find e-shops by barcode:\n\ncurl \"https://shoptera.ai/api/v1/search/gtin/5901234123457\"\nSaving tokens: Add fields to return only what you need (up to 70% smaller response):\n\ncurl \"https://shoptera.ai/api/v1/search?q=boty&limit=5&fields=title,price,product_url,cart_action\"\nQuick Install\nClaude Code (one command)\nclaude mcp add",
+    "iconUrl": "https://api.smithery.ai/servers/product_intelligence/shoptera/icon",
+    "verified": false,
+    "useCount": 577,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-04T13:59:51.614Z",
+    "homepage": "https://shoptera.ai",
+    "bySmithery": false,
+    "owner": "org_01KNJ25XMBHN3KGK5PNTAH4G3J",
+    "score": 0.00847457627118644
+  },
+  "detail": {
+    "qualifiedName": "product_intelligence/shoptera",
+    "displayName": "Shoptera",
+    "description": "Shoptera Product Intelligence\nSearch product catalogs across thousands of Central European e-shops. Semantic search, keyword matching, GTIN/EAN lookup — via REST API or MCP.\n\n~2,500 e-shops | ~8.5M products | 7 countries (CZ, SK, PL, HU, RO, DE, AT)\n\nLive stats: GET /stats/global\n\nQuickstart\nNo authentication required. Base URL: https://shoptera.ai/api\n\nSemantic search — natural language, understands intent:\n\ncurl \"https://shoptera.ai/api/v1/search?q=dárek+pro+zahradníka+do+500+Kč&max_price=500&currency=CZK&origin_country=CZ\"\nKeyword search — exact title matching, fast:\n\ncurl \"https://shoptera.ai/api/v1/search/text?title=Nike+Air+Max+90&brand=Nike\"\nGTIN/EAN lookup — find e-shops by barcode:\n\ncurl \"https://shoptera.ai/api/v1/search/gtin/5901234123457\"\nSaving tokens: Add fields to return only what you need (up to 70% smaller response):\n\ncurl \"https://shoptera.ai/api/v1/search?q=boty&limit=5&fields=title,price,product_url,cart_action\"\nQuick Install\nClaude Code (one command)\nclaude mcp add --transport http shoptera https://shoptera.ai/api/mcp\nCursor\nAdd to Cursor Settings → Features → MCP → Add New MCP Server, or edit ~/.cursor/mcp.json:\n\n{\n  \"mcpServers\": {\n    \"shoptera\": { \"url\": \"https://shoptera.ai/api/mcp\" }\n  }\n}\nWindsurf\nAdd via Cascade → MCP Servers → Add Server, or edit ~/.codeium/windsurf/mcp_config.json:\n\n{\n  \"mcpServers\": {\n    \"shoptera\": { \"url\": \"https://shoptera.ai/api/mcp\" }\n  }\n}\nVS Code (Copilot / Continue)\nEdit .vscode/mcp.json in your workspace:\n\n{\n  \"mcpServers\": {\n    \"shoptera\": { \"url\": \"https://shoptera.ai/api/mcp\" }\n  }\n}\nAny tool (universal installer)\nnpx add-mcp https://shoptera.ai/api/mcp -n shoptera -g -y\nAll Platforms\nPlatform\tSetup\tDetails\nClaude Code\tclaude mcp add --transport http shoptera https://shoptera.ai/api/mcp\tSkill guide\nCursor\tMCP config\tSettings → Features → MCP\nWindsurf\tMCP config\tCascade → MCP Servers\nVS Code\tMCP config\t.vscode/mcp.json\nOpenAI Codex\tAGENTS.md\tAgent config reference\nChatGPT\tOpenAPI spec\tCustom GPT actions. Instructions\nGemini\tGEMINI.md\tTool definitions and endpoints\nAny HTTP client\tExamples\tcurl, Python, JavaScript\nMCP Details\nEndpoint: https://shoptera.ai/api/mcp (streamable HTTP, stateless, no auth)\n\n3 tools: search_products, search_products_by_text, lookup_by_gtin\n\nCapabilities\nProduct Search — semantic vs keyword vs GTIN, when to use which, filters, scoring\nCart Actions — three action types, how to handle each\nData Coverage — countries, data freshness, live stats\nAPI Reference\nFull documentation: api/reference.md\n\nOpenAPI spec: api/openapi.yaml\n\nEndpoints\nMethod\tPath\tDescription\nGET\t/api/v1/search?q=...\tSemantic search (natural language)\nGET\t/api/v1/search/text?title=...\tKeyword search (exact title match)\nGET\t/api/v1/search/gtin/{gtin}\tGTIN/EAN barcode lookup\nGET\t/stats/global\tCatalog statistics\nCode Examples\nSemantic search — curl, Python, JavaScript\nKeyword search — curl, Python, JavaScript\nGTIN/EAN lookup — curl, Python, JavaScript\nCart actions — handling all three action types\n",
+    "iconUrl": "https://api.smithery.ai/servers/product_intelligence/shoptera/icon",
+    "remote": true,
+    "deploymentUrl": "https://shoptera-product-intelligence.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://shoptera-product-intelligence.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "serverUrl": {
+              "type": "string",
+              "default": "https://shoptera.ai/api/mcp",
+              "x-order": 0,
+              "description": "Shoptera MCP endpoint URL. No changes needed for standard usage."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_products",
+        "description": "Search products using natural language across ~8.5M products from 2,500+ Central European e-shops.\n\n    Returns a dict with 'results' (list of product objects) and 'total_found' (int).\n    Each product contains: title, description, price, currency, brand, category, gtin,\n    image_url, product_url, availability, eshop_name, eshop_domain, origin_country,\n    target_countries, score (0-1 relevance), and cart_action.\n\n    The cart_action object tells you how to add the product to cart:\n    - method=\"GET\": navigate to cart_action.url — product is added automatically.\n    - method=\"browser_click\": navigate to cart_action.url, then click the button matching cart_action.button_text.\n    - method=\"view_product\": show the product page URL to the user.\n\n    Use 'fields' parameter to return only needed fields and save tokens.\n    Prefer this tool for open-ended queries. Use search_products_by_text when you know the exact product name,\n    or lookup_by_gtin when you have a barcode number.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Brand",
+              "default": null,
+              "description": "Exact brand name filter (case-sensitive). Applied after semantic ranking."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 10,
+              "description": "Number of results to return. Range: 1-50. Default: 10."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Natural language search query. Understands intent, synonyms, and context across Czech, Slovak, German, Polish, Hungarian, Romanian, and English. Examples: 'dárek pro zahradníka do 500 Kč', 'children shoes size 28', 'silver pendant with amethyst'."
+            },
+            "fields": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fields",
+              "default": null,
+              "description": "List of field names to include in each result. Reduces response size by up to 70%. Available: title, description, price, currency, brand, category, gtin, image_url, product_url, availability, eshop_name, eshop_domain, origin_country, target_countries, score, cart_action. Default: all fields."
+            },
+            "category": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category",
+              "default": null,
+              "description": "Category keyword filter. Matches against the product's category field."
+            },
+            "currency": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Currency",
+              "default": null,
+              "description": "ISO 4217 currency code for price filters. Supported: CZK, EUR, PLN, HUF, RON."
+            },
+            "max_price": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Max Price",
+              "default": null,
+              "description": "Maximum price filter as a decimal number. Requires 'currency' to be set for meaningful results."
+            },
+            "min_price": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Min Price",
+              "default": null,
+              "description": "Minimum price filter as a decimal number. Requires 'currency' to be set for meaningful results."
+            },
+            "availability": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Availability",
+              "default": null,
+              "description": "Product availability filter. Values: 'in_stock', 'out_of_stock', 'preorder'."
+            },
+            "eshop_domain": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Eshop Domain",
+              "default": null,
+              "description": "Filter results to a specific e-shop by its domain, e.g. 'fantasyobchod.cz'."
+            },
+            "origin_country": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Origin Country",
+              "default": null,
+              "description": "2-letter ISO country code where the e-shop is based. Supported: CZ, SK, PL, HU, RO, DE, AT."
+            },
+            "target_country": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Country",
+              "default": null,
+              "description": "2-letter ISO country code to filter products available in that market."
+            }
+          }
+        }
+      },
+      {
+        "name": "lookup_by_gtin",
+        "description": "Look up products by exact GTIN/EAN/UPC barcode across all indexed e-shops.\n\n    Returns a dict with 'results' (list of product objects) and 'total_found' (int).\n    Each product contains: title, description, price, currency, brand, category, gtin,\n    image_url, product_url, availability, eshop_name, eshop_domain, origin_country,\n    target_countries, and cart_action.\n\n    The cart_action object tells you how to add the product to cart:\n    - method=\"GET\": navigate to cart_action.url — product is added automatically.\n    - method=\"browser_click\": navigate to cart_action.url, then click the button matching cart_action.button_text.\n    - method=\"view_product\": show the product page URL to the user.\n\n    Use this tool when you have a barcode number and want to compare prices across e-shops.\n    For natural language queries, use search_products instead.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "gtin": {
+              "type": "string",
+              "title": "Gtin",
+              "description": "GTIN, EAN, or UPC barcode number. Must be 8-14 digits without dashes or spaces. Supports EAN-8, EAN-13, UPC-A, and GTIN-14 formats."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 10,
+              "description": "Number of results to return. Range: 1-50. Default: 10."
+            },
+            "fields": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fields",
+              "default": null,
+              "description": "List of field names to include in each result. Reduces response size by up to 70%. Available: title, description, price, currency, brand, category, gtin, image_url, product_url, availability, eshop_name, eshop_domain, origin_country, target_countries, cart_action. Default: all fields."
+            },
+            "origin_country": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Origin Country",
+              "default": null,
+              "description": "2-letter ISO country code where the e-shop is based. Supported: CZ, SK, PL, HU, RO, DE, AT."
+            },
+            "target_country": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Country",
+              "default": null,
+              "description": "2-letter ISO country code to filter products available in that market."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_products_by_text",
+        "description": "Search products by exact keyword matching in titles across ~8.5M products from 2,500+ e-shops.\n\n    Returns a dict with 'results' (list of product objects) and 'total_found' (int).\n    Each product contains: title, description, price, currency, brand, category, gtin,\n    image_url, product_url, availability, eshop_name, eshop_domain, origin_country,\n    target_countries, and cart_action.\n\n    The cart_action object tells you how to add the product to cart:\n    - method=\"GET\": navigate to cart_action.url — product is added automatically.\n    - method=\"browser_click\": navigate to cart_action.url, then click the button matching cart_action.button_text.\n    - method=\"view_product\": show the product page URL to the user.\n\n    Faster and more deterministic than semantic search. Use this when you know the exact product name.\n    For open-ended natural language queries, use search_products instead.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Brand",
+              "default": null,
+              "description": "Exact brand name filter (case-sensitive). Applied after keyword matching."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 10,
+              "description": "Number of results to return. Range: 1-50. Default: 10."
+            },
+            "title": {
+              "type": "string",
+              "title": "Title",
+              "description": "Keywords to search in product titles. All words must be present in the title (AND logic). Examples: 'stříbrný přívěsek ametyst', 'Nike Air Max 90', 'dětské boty vel 28'."
+            },
+            "fields": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fields",
+              "default": null,
+              "description": "List of field names to include in each result. Reduces response size by up to 70%. Available: title, description, price, currency, brand, category, gtin, image_url, product_url, availability, eshop_name, eshop_domain, origin_country, target_countries, cart_action. Default: all fields."
+            },
+            "category": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category",
+              "default": null,
+              "description": "Category keyword filter. Matches against the product's category field."
+            },
+            "currency": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Currency",
+              "default": null,
+              "description": "ISO 4217 currency code for price filters. Supported: CZK, EUR, PLN, HUF, RON."
+            },
+            "max_price": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Max Price",
+              "default": null,
+              "description": "Maximum price filter as a decimal number. Requires 'currency' to be set for meaningful results."
+            },
+            "min_price": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Min Price",
+              "default": null,
+              "description": "Minimum price filter as a decimal number. Requires 'currency' to be set for meaningful results."
+            },
+            "origin_country": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Origin Country",
+              "default": null,
+              "description": "2-letter ISO country code where the e-shop is based. Supported: CZ, SK, PL, HU, RO, DE, AT."
+            },
+            "target_country": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Country",
+              "default": null,
+              "description": "2-letter ISO country code to filter products available in that market."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "catalog_stats",
+        "uri": "shoptera://catalog/stats",
+        "description": "Live catalog statistics — number of e-shops, products, and coverage by country.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "search_guide",
+        "uri": "shoptera://search/guide",
+        "description": "Documentation for all available search tools, parameters, and best practices.",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "product_search_guide",
+        "description": "Guide for choosing the right search tool based on user intent.",
+        "arguments": []
+      },
+      {
+        "name": "price_comparison",
+        "description": "Template for comparing prices of a specific product across e-shops.",
+        "arguments": [
+          {
+            "name": "product_name",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "iw7c7j9ifm",
+  "namespace": "flagify-com",
+  "slug": "soar-mcp",
+  "name": "SOAR MCP Server",
+  "description": "Integrates Security Orchestration, Automation and Response (SOAR) platform capabilities into AI clients like Claude Desktop and Cherry Studio. Enables users to execute security playbooks, manage security events, and perform automated threat response through natural language interactions.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Integrates Security Orchestration, Automation and Response (SOAR) platform capabilities into AI clients like Claude Desktop and Cherry Studio. Enables users to execute security playbooks, manage security events, and perform automated threat response through natural language interactions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Debug mode",
+          "type": "string",
+          "default": "0"
+        },
+        "API_URL": {
+          "description": "SOAR platform API address",
+          "type": "string"
+        },
+        "MCP_PORT": {
+          "description": "MCP server port",
+          "type": "string",
+          "default": "12345"
+        },
+        "API_TOKEN": {
+          "description": "API access token",
+          "type": "string"
+        },
+        "ADMIN_PORT": {
+          "description": "Web management interface port",
+          "type": "string",
+          "default": "12346"
+        },
+        "SSL_VERIFY": {
+          "description": "SSL certificate verification",
+          "type": "string",
+          "default": "1"
+        },
+        "DATABASE_URL": {
+          "description": "Database connection string",
+          "type": "string",
+          "default": "sqlite:///soar_mcp.db"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_URL",
+        "API_TOKEN"
+      ]
+    },
+    "id": "iw7c7j9ifm",
+    "name": "SOAR MCP Server",
+    "namespace": "flagify-com",
+    "repository": {
+      "url": "https://github.com/flagify-com/soar-mcp"
+    },
+    "slug": "soar-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/iw7c7j9ifm"
+  }
+}

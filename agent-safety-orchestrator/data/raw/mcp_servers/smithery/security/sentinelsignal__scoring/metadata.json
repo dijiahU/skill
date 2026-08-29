@@ -1,0 +1,201 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "sentinelsignal/scoring",
+  "namespace": "sentinelsignal",
+  "slug": "scoring",
+  "displayName": "Sentinel Signal MCP for Healthcare Claims Scoring",
+  "description": "Hosted MCP server for denial risk, prior authorization, reimbursement scoring, usage, and feedback. Includes no-signup trial keys and Smithery support.",
+  "discoveryQueries": [
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "588cd67f-5927-44cd-84d8-acf701c1e8aa",
+    "qualifiedName": "sentinelsignal/scoring",
+    "namespace": "sentinelsignal",
+    "slug": "scoring",
+    "displayName": "Sentinel Signal MCP for Healthcare Claims Scoring",
+    "description": "Hosted MCP server for denial risk, prior authorization, reimbursement scoring, usage, and feedback. Includes no-signup trial keys and Smithery support.",
+    "iconUrl": "https://api.smithery.ai/servers/sentinelsignal/scoring/icon",
+    "verified": false,
+    "useCount": 40,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-26T14:55:50.476Z",
+    "homepage": "https://sentinelsignal.io/portal",
+    "bySmithery": false,
+    "owner": "org_01KNBVE4Z0GD947PMASQCMXESN",
+    "score": 0.031213603540647564
+  },
+  "detail": {
+    "qualifiedName": "sentinelsignal/scoring",
+    "displayName": "Sentinel Signal MCP for Healthcare Claims Scoring",
+    "description": "Hosted MCP server for denial risk, prior authorization, reimbursement scoring, usage, and feedback. Includes no-signup trial keys and Smithery support.",
+    "iconUrl": "https://api.smithery.ai/servers/sentinelsignal/scoring/icon",
+    "remote": true,
+    "deploymentUrl": "https://scoring--sentinelsignal.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://scoring--sentinelsignal.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "sentinelApiKey": {
+              "type": "string",
+              "x-from": {
+                "header": "sentinelApiKey"
+              },
+              "x-order": 0,
+              "description": "Optional. Use your own Sentinel API key for account-bound quota and usage."
+            },
+            "sentinelApiBaseUrl": {
+              "type": "string",
+              "x-from": {
+                "query": "sentinelApiBaseUrl"
+              },
+              "default": "https://api.sentinelsignal.io",
+              "x-order": 1,
+              "description": "Optional override for private or self-hosted Sentinel API environments."
+            },
+            "sentinelTokenBaseUrl": {
+              "type": "string",
+              "x-from": {
+                "query": "sentinelTokenBaseUrl"
+              },
+              "default": "https://token.sentinelsignal.io",
+              "x-order": 2,
+              "description": "Optional override for minting trial keys outside the default hosted environment."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_workflows",
+        "description": "List supported workflows and current model versions via GET /v1/workflows",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_workflow_schema",
+        "description": "Fetch required fields, optional fields, enums, and an example payload for a workflow via GET /v1/workflows/{workflow}/schema",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "workflow": {
+              "type": "string",
+              "description": "Workflow identifier such as healthcare.denial, healthcare.prior_auth, or healthcare.reimbursement."
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_workflow_payload",
+        "description": "Validate and normalize a workflow payload without consuming a scoring call via POST /v1/workflows/{workflow}/validate",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "payload": {
+              "type": "object",
+              "description": "Workflow payload to validate before scoring."
+            },
+            "workflow": {
+              "type": "string",
+              "description": "Workflow identifier such as healthcare.denial, healthcare.prior_auth, or healthcare.reimbursement."
+            }
+          }
+        }
+      },
+      {
+        "name": "score_workflow",
+        "description": "Score denial risk, prior auth, and reimbursement workflows via POST /v1/score",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "options": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Optional scoring flags such as explanation or threshold controls."
+            },
+            "payload": {
+              "type": "object",
+              "description": "Structured workflow payload matching Sentinel /v1/score for the selected workflow."
+            },
+            "workflow": {
+              "type": "string",
+              "description": "Workflow identifier such as denial, prior_auth, reimbursement, or unified_score."
+            }
+          }
+        }
+      },
+      {
+        "name": "score_batch",
+        "description": "Score up to 25 workflow items sequentially in one request via POST /v1/score/batch",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "description": "List of scoring items, each containing workflow, payload, and optional options."
+            },
+            "continue_on_error": {
+              "type": "boolean",
+              "description": "When true, later items continue even if an earlier item fails."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_limits",
+        "description": "Retrieve plan limits, trial quota, and upgrade state via GET /v1/limits",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_usage",
+        "description": "Retrieve monthly scoring call usage via GET /v1/usage",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "month": {
+              "type": "string",
+              "description": "Optional billing month in YYYY-MM format."
+            }
+          }
+        }
+      },
+      {
+        "name": "submit_feedback",
+        "description": "Submit structured claims outcome feedback via POST /v1/feedback",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "feedback": {
+              "type": "object",
+              "description": "Structured feedback payload for a prior Sentinel scoring event."
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": [
+      {
+        "name": "claims_triage_prompt",
+        "description": "Help an agent choose the right healthcare claims workflow and required payload fields before scoring."
+      },
+      {
+        "name": "explain_score_prompt",
+        "description": "Help an agent interpret a Sentinel score and decide what operational action to take next."
+      }
+    ]
+  }
+}

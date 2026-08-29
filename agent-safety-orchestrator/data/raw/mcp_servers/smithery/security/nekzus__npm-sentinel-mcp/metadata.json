@@ -1,0 +1,503 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "Nekzus/npm-sentinel-mcp",
+  "namespace": "Nekzus",
+  "slug": "npm-sentinel-mcp",
+  "displayName": "NPM Sentinel MCP",
+  "description": "Provide AI-powered real-time analysis and intelligence on NPM packages, including security, dependencies, performance, and quality metrics. Enable faster and safer package management decisions by integrating with Claude and Anthropic AI. Deliver comprehensive insights such as vulnerability scanning, download trends, and maintenance status to optimize your npm ecosystem.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "vulnerability"
+  ],
+  "rawRecord": {
+    "id": "5dcdd4c9-21f1-4e59-afe1-a203168cf1ef",
+    "qualifiedName": "Nekzus/npm-sentinel-mcp",
+    "namespace": "nekzus",
+    "slug": "npm-sentinel-mcp",
+    "displayName": "NPM Sentinel MCP",
+    "description": "Provide AI-powered real-time analysis and intelligence on NPM packages, including security, dependencies, performance, and quality metrics. Enable faster and safer package management decisions by integrating with Claude and Anthropic AI. Deliver comprehensive insights such as vulnerability scanning, download trends, and maintenance status to optimize your npm ecosystem.",
+    "iconUrl": "https://api.smithery.ai/servers/Nekzus/npm-sentinel-mcp/icon",
+    "verified": false,
+    "useCount": 5824,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2025-04-19T20:55:07.772Z",
+    "homepage": "https://github.com/Nekzus/npm-sentinel-mcp#readme",
+    "bySmithery": false,
+    "owner": "org_01KNB5BBRV0442T8H6GCDDVDSE",
+    "score": 0.013888888888888888
+  },
+  "detail": {
+    "qualifiedName": "Nekzus/npm-sentinel-mcp",
+    "displayName": "NPM Sentinel MCP",
+    "description": "Provide AI-powered real-time analysis and intelligence on NPM packages, including security, dependencies, performance, and quality metrics. Enable faster and safer package management decisions by integrating with Claude and Anthropic AI. Deliver comprehensive insights such as vulnerability scanning, download trends, and maintenance status to optimize your npm ecosystem.",
+    "iconUrl": "https://api.smithery.ai/servers/Nekzus/npm-sentinel-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://npm-sentinel-mcp--nekzus.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://npm-sentinel-mcp--nekzus.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "npmLatest",
+        "description": "Latest version & changelog",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmSearch",
+        "description": "Search NPM packages",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results"
+            },
+            "query": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Search query"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmTrends",
+        "description": "Download trends & popularity",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "period": {
+              "enum": [
+                "last-week",
+                "last-month",
+                "last-year"
+              ],
+              "type": "string",
+              "description": "Period"
+            },
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmVulnerabilities",
+        "description": "Security analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmVersions",
+        "description": "Available versions list",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmDeps",
+        "description": "Deps & devDeps analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmTypes",
+        "description": "TS types availability",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmSize",
+        "description": "Package & bundle size",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmCompare",
+        "description": "Compare multiple packages",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmQuality",
+        "description": "Quality metrics analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmMaintenance",
+        "description": "Maintenance metrics analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmScore",
+        "description": "Consolidated package score",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmMaintainers",
+        "description": "Maintainers info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmPackageReadme",
+        "description": "Full README content",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmLicenseCompatibility",
+        "description": "License compatibility check",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            },
+            "projectLicense": {
+              "type": "string",
+              "maxLength": 50,
+              "description": "Target license"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmRepoStats",
+        "description": "Repository statistics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmDeprecated",
+        "description": "Check deprecation status",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmChangelogAnalysis",
+        "description": "Changelog & release history",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      },
+      {
+        "name": "npmAlternatives",
+        "description": "Find similar alternatives",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.@\\/-]+$",
+                "maxLength": 214
+              },
+              "maxItems": 50,
+              "description": "Package names array"
+            },
+            "ignoreCache": {
+              "type": "boolean",
+              "description": "Bypass cache"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

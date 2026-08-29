@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "d934x8a512",
+  "namespace": "bezael",
+  "slug": "mcp-calendar",
+  "name": "Google Calendar MCP Server",
+  "description": "Enables language models to interact with Google Calendar through OAuth2 authentication, allowing creation, retrieval, listing, updating, and deletion of calendar events.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables language models to interact with Google Calendar through OAuth2 authentication, allowing creation, retrieval, listing, updating, and deletion of calendar events.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "The logging level for the server",
+          "type": "string",
+          "default": "info"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth2 Client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_CALENDAR_ID": {
+          "description": "The ID of the Google Calendar to use",
+          "type": "string",
+          "default": "primary"
+        },
+        "GOOGLE_REDIRECT_URI": {
+          "description": "The OAuth2 redirect URI configured in Google Cloud Console",
+          "type": "string",
+          "default": "http://localhost:3000/oauth2callback"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth2 Client Secret from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_REFRESH_TOKEN": {
+          "description": "Your Google OAuth2 Refresh Token obtained from OAuth 2.0 Playground",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "GOOGLE_REFRESH_TOKEN"
+      ]
+    },
+    "id": "d934x8a512",
+    "name": "Google Calendar MCP Server",
+    "namespace": "bezael",
+    "repository": {
+      "url": "https://github.com/bezael/mcp-calendar"
+    },
+    "slug": "mcp-calendar",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/d934x8a512"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "registry": "glama",
+  "id": "wjp0vuqmco",
+  "namespace": "Pantheon-Security",
+  "slug": "notebooklm-mcp-secure",
+  "name": "NotebookLM MCP Server (Security Hardened)",
+  "description": "Enables AI agents to interact with Google NotebookLM and Gemini API for document analysis, deep research, and notebook creation with enterprise-grade security including post-quantum encryption and 14 security layers.",
+  "discoveryQueries": [
+    "security",
+    "encryption"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to interact with Google NotebookLM and Gemini API for document analysis, deep research, and notebook creation with enterprise-grade security including post-quantum encryption and 14 security layers.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GEMINI_API_KEY": {
+          "description": "Your Gemini API key (get from https://aistudio.google.com/apikey)",
+          "type": "string"
+        },
+        "NLMCP_AUTH_TOKEN": {
+          "description": "Token-based authentication token for MCP",
+          "type": "string"
+        },
+        "GEMINI_TIMEOUT_MS": {
+          "description": "API timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "NLMCP_AUTH_ENABLED": {
+          "description": "Enable MCP authentication",
+          "type": "string",
+          "default": "false"
+        },
+        "NLMCP_CERT_PINNING": {
+          "description": "Enable certificate pinning",
+          "type": "string",
+          "default": "true"
+        },
+        "NLMCP_AUDIT_ENABLED": {
+          "description": "Enable audit logging",
+          "type": "string",
+          "default": "true"
+        },
+        "NLMCP_SECRETS_BLOCK": {
+          "description": "Block operations on secret detection",
+          "type": "string",
+          "default": "false"
+        },
+        "GEMINI_DEFAULT_MODEL": {
+          "description": "Default Gemini model to use",
+          "type": "string",
+          "default": "gemini-2.5-flash"
+        },
+        "NLMCP_ENCRYPTION_KEY": {
+          "description": "Optional custom encryption key (base64-encoded 32 bytes)",
+          "type": "string"
+        },
+        "NLMCP_SECRETS_REDACT": {
+          "description": "Auto-redact detected secrets",
+          "type": "string",
+          "default": "true"
+        },
+        "NLMCP_SECRETS_SCANNING": {
+          "description": "Enable secrets scanning",
+          "type": "string",
+          "default": "true"
+        },
+        "NLMCP_USE_POST_QUANTUM": {
+          "description": "Enable post-quantum encryption",
+          "type": "string",
+          "default": "true"
+        },
+        "NLMCP_SESSION_INACTIVITY": {
+          "description": "Session inactivity timeout in seconds",
+          "type": "string",
+          "default": "1800"
+        },
+        "NLMCP_SESSION_MAX_LIFETIME": {
+          "description": "Maximum session lifetime in seconds",
+          "type": "string",
+          "default": "28800"
+        },
+        "GEMINI_DEEP_RESEARCH_ENABLED": {
+          "description": "Enable Gemini Deep Research feature",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "wjp0vuqmco",
+    "name": "NotebookLM MCP Server (Security Hardened)",
+    "namespace": "Pantheon-Security",
+    "repository": {
+      "url": "https://github.com/Pantheon-Security/notebooklm-mcp-secure"
+    },
+    "slug": "notebooklm-mcp-secure",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/wjp0vuqmco"
+  }
+}

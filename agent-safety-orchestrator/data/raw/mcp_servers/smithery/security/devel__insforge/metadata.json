@@ -1,0 +1,450 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "devel/insforge",
+  "namespace": "devel",
+  "slug": "insforge",
+  "displayName": "Insforge",
+  "description": "InsForge is a backend development platform designed for agentic coding. It enables coding agents to provision and operate backend infrastructure such as databases, authentication, storage, functions, deployment, and a model gateway. InsForge is suited for teams building applications with AI coding agents who want to move from idea to production without manual backend configuration.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "54a807c6-3721-46b4-a760-5fb846d8486a",
+    "qualifiedName": "devel/insforge",
+    "namespace": "devel",
+    "slug": "insforge",
+    "displayName": "Insforge",
+    "description": "InsForge is a backend development platform designed for agentic coding. It enables coding agents to provision and operate backend infrastructure such as databases, authentication, storage, functions, deployment, and a model gateway. InsForge is suited for teams building applications with AI coding agents who want to move from idea to production without manual backend configuration.",
+    "iconUrl": "https://api.smithery.ai/servers/devel/insforge/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-21T00:09:49.552Z",
+    "homepage": "https://insforge.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVBHQQ1TWTDJA8ZCPS7FFV",
+    "score": 0.011111111111111112
+  },
+  "detail": {
+    "qualifiedName": "devel/insforge",
+    "displayName": "Insforge",
+    "description": "InsForge is a backend development platform designed for agentic coding. It enables coding agents to provision and operate backend infrastructure such as databases, authentication, storage, functions, deployment, and a model gateway. InsForge is suited for teams building applications with AI coding agents who want to move from idea to production without manual backend configuration.",
+    "iconUrl": "https://api.smithery.ai/servers/devel/insforge/icon",
+    "remote": true,
+    "deploymentUrl": "https://insforge--devel.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://insforge--devel.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "fetch-docs",
+        "description": "Fetch Insforge documentation. Use \"instructions\" for essential backend setup (MANDATORY FIRST), or select specific SDK docs for database, auth, storage, functions, or AI integration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "docType": {
+              "enum": [
+                "instructions",
+                "auth-sdk",
+                "db-sdk",
+                "storage-sdk",
+                "functions-sdk",
+                "ai-integration-sdk",
+                "auth-components-react",
+                "auth-components-nextjs",
+                "real-time",
+                "deployment"
+              ],
+              "type": "string",
+              "description": "\n    Documentation type:\n      \"instructions\" (essential backend setup - use FIRST),\n      \"db-sdk\" (database operations),\n      \"storage-sdk\" (file storage),\n      \"functions-sdk\" (edge functions),\n      \"auth-sdk\" (direct SDK methods for custom auth flows),\n      \"auth-components-react\" (authentication components for React+Vite applications),\n      \"auth-components-nextjs\" (authentication components for Next.js applications),\n      \"ai-integration-sdk\" (AI features),\n      \"real-time\" (real-time pub/sub through WebSockets),\n      \"deployment\" (deploy frontend applications via MCP tool)\n    "
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch-sdk-docs",
+        "description": "Fetch Insforge SDK documentation for a specific feature and language combination.\n\nSupported features: db, storage, functions, auth, ai, realtime\nSupported languages: typescript, swift, kotlin, rest-api",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sdkFeature": {
+              "enum": [
+                "db",
+                "storage",
+                "functions",
+                "auth",
+                "ai",
+                "realtime"
+              ],
+              "type": "string",
+              "description": "\n    SDK feature categories:\n\n    - \"db\" - Database operations\n    - \"storage\" - File storage\n    - \"functions\" - Edge functions\n    - \"auth\" - User authentication\n    - \"ai\" - AI features\n    - \"realtime\" - Real-time WebSockets\n    "
+            },
+            "sdkLanguage": {
+              "enum": [
+                "typescript",
+                "swift",
+                "kotlin",
+                "rest-api"
+              ],
+              "type": "string",
+              "description": "\n    SDK languages:\n\n    - \"typescript\" - JavaScript/TypeScript SDK\n    - \"swift\" - Swift SDK\n    - \"kotlin\" - Kotlin SDK\n    - \"rest-api\" - REST API\n    "
+            }
+          }
+        }
+      },
+      {
+        "name": "get-anon-key",
+        "description": "Generate an anonymous JWT token that never expires. Requires admin API key. Use this for client-side applications that need public access.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get-table-schema",
+        "description": "Returns the detailed schema(including RLS, indexes, constraints, etc.) of a specific table",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            },
+            "tableName": {
+              "type": "string",
+              "description": "Name of the table"
+            }
+          }
+        }
+      },
+      {
+        "name": "get-backend-metadata",
+        "description": "Index all backend metadata",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            }
+          }
+        }
+      },
+      {
+        "name": "run-raw-sql",
+        "description": "Execute raw SQL query with optional parameters. Admin access required. Use with caution as it can modify data directly.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            },
+            "params": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      },
+      {
+        "name": "download-template",
+        "description": "CRITICAL: MANDATORY FIRST STEP for all new InsForge projects. Download pre-configured starter template to a temporary directory. After download, you MUST copy files to current directory using the provided command.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "frame": {
+              "enum": [
+                "react",
+                "nextjs"
+              ],
+              "type": "string",
+              "description": "Framework to use for the template (support React and Next.js)"
+            },
+            "projectName": {
+              "type": "string",
+              "description": "Name for the project directory (optional, defaults to \"insforge-react\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "bulk-upsert",
+        "description": "Bulk insert or update data from CSV or JSON file. Supports upsert operations with a unique key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "string",
+              "minLength": 1
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            },
+            "filePath": {
+              "type": "string",
+              "description": "Path to CSV or JSON file containing data to import"
+            },
+            "upsertKey": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "create-bucket",
+        "description": "Create new storage bucket",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            },
+            "isPublic": {
+              "type": "boolean",
+              "default": true
+            },
+            "bucketName": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "list-buckets",
+        "description": "Lists all storage buckets",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "delete-bucket",
+        "description": "Deletes a storage bucket",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            },
+            "bucketName": {
+              "type": "string",
+              "description": "Name of the bucket to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "create-function",
+        "description": "Create a new edge function that runs in Deno runtime. The code must be written to a file first for version control",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_-]+$"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "active"
+              ],
+              "type": "string",
+              "default": "active"
+            },
+            "codeFile": {
+              "type": "string",
+              "description": "Path to JavaScript file containing the function code. Must export: module.exports = async function(request) { return new Response(...) }"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "get-function",
+        "description": "Get details of a specific edge function including its code",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The slug identifier of the function"
+            }
+          }
+        }
+      },
+      {
+        "name": "update-function",
+        "description": "Update an existing edge function code or metadata",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "slug": {
+              "type": "string",
+              "description": "The slug identifier of the function to update"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "active"
+              ],
+              "type": "string"
+            },
+            "codeFile": {
+              "type": "string",
+              "description": "Path to JavaScript file containing the new function code. Must export: module.exports = async function(request) { return new Response(...) }"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete-function",
+        "description": "Delete an edge function permanently",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The slug identifier of the function to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "get-container-logs",
+        "description": "Get latest logs from a specific container/service. Use this to help debug problems with your app.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 20,
+              "description": "Number of logs to return (default: 20)"
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "API key for authentication (optional if provided via --api_key)"
+            },
+            "source": {
+              "enum": [
+                "insforge.logs",
+                "postgREST.logs",
+                "postgres.logs",
+                "function.logs"
+              ],
+              "type": "string",
+              "description": "Log source to retrieve"
+            }
+          }
+        }
+      },
+      {
+        "name": "create-deployment",
+        "description": "Deploy source code from a directory. This tool zips files, uploads to cloud storage, and triggers deployment with optional environment variables and project settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "envVars": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "key",
+                  "value"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "projectSettings": {
+              "type": "object",
+              "properties": {
+                "devCommand": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "buildCommand": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "rootDirectory": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "installCommand": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "outputDirectory": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "sourceDirectory": {
+              "type": "string",
+              "description": "Absolute path to the source directory containing files to deploy (e.g., /Users/name/project or C:\\Users\\name\\project). Do not use relative paths like \".\""
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

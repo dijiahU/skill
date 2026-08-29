@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "y0txxnj5ba",
+  "namespace": "dorianglz",
+  "slug": "bubble_mcp",
+  "name": "Bubble MCP",
+  "description": "Enables AI assistants to interact with Bubble.io applications through the Model Context Protocol for data discovery, CRUD operations, and workflow execution. It provides a standardized interface for managing Bubble database records while respecting privacy rules and security configurations.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Bubble.io applications through the Model Context Protocol for data discovery, CRUD operations, and workflow execution. It provides a standardized interface for managing Bubble database records while respecting privacy rules and security configurations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Set to 'true' to enable verbose logging for troubleshooting.",
+          "type": "string"
+        },
+        "MCP_MODE": {
+          "description": "Operational mode for the server. Options: 'read-only' (only allows viewing data) or 'read-write' (allows CRUD operations and workflow execution).",
+          "type": "string",
+          "default": "read-only"
+        },
+        "BUBBLE_BASE_URL": {
+          "description": "The base URL of your Bubble.io application (e.g., https://your-app.bubbleapps.io).",
+          "type": "string"
+        },
+        "BUBBLE_API_TOKEN": {
+          "description": "Your Bubble.io API token generated in Settings -> API.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "BUBBLE_BASE_URL",
+        "BUBBLE_API_TOKEN",
+        "MCP_MODE"
+      ]
+    },
+    "id": "y0txxnj5ba",
+    "name": "Bubble MCP",
+    "namespace": "dorianglz",
+    "repository": {
+      "url": "https://github.com/dorianglz/bubble_mcp"
+    },
+    "slug": "bubble_mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/y0txxnj5ba"
+  }
+}

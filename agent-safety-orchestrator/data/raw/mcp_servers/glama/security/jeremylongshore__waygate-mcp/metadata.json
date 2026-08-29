@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "miyazehz46",
+  "namespace": "jeremylongshore",
+  "slug": "waygate-mcp",
+  "name": "Waygate MCP",
+  "description": "A security-hardened, containerized MCP server framework that provides superior isolation and enterprise-grade security through Docker containers. Enables secure MCP command execution with comprehensive diagnostics, plugin architecture, and production-ready features like SSL/TLS and rate limiting.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A security-hardened, containerized MCP server framework that provides superior isolation and enterprise-grade security through Docker containers. Enables secure MCP command execution with comprehensive diagnostics, plugin architecture, and production-ready features like SSL/TLS and rate limiting.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WAYGATE_ENV": {
+          "description": "Environment mode (production/development)",
+          "type": "string",
+          "default": "production"
+        },
+        "WAYGATE_API_KEY": {
+          "description": "API key for authentication (Generate with: uuidgen)",
+          "type": "string"
+        },
+        "WAYGATE_LOG_LEVEL": {
+          "description": "Log level (DEBUG/INFO/WARNING/ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "WAYGATE_RATE_LIMIT": {
+          "description": "Requests per minute rate limit",
+          "type": "string",
+          "default": "100"
+        },
+        "WAYGATE_SECRET_KEY": {
+          "description": "Secret key for security (Generate with: openssl rand -base64 32)",
+          "type": "string"
+        },
+        "WAYGATE_CORS_ORIGINS": {
+          "description": "CORS allowed origins",
+          "type": "string",
+          "default": "[\"https://yourdomain.com\"]"
+        },
+        "WAYGATE_MAX_REQUEST_SIZE": {
+          "description": "Maximum request size in bytes (10MB)",
+          "type": "string",
+          "default": "10485760"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WAYGATE_SECRET_KEY",
+        "WAYGATE_API_KEY"
+      ]
+    },
+    "id": "miyazehz46",
+    "name": "Waygate MCP",
+    "namespace": "jeremylongshore",
+    "repository": {
+      "url": "https://github.com/jeremylongshore/waygate-mcp"
+    },
+    "slug": "waygate-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/miyazehz46"
+  }
+}

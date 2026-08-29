@@ -1,0 +1,934 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "lanonasis/lano-enterprise-mcp",
+  "namespace": "lanonasis",
+  "slug": "lano-enterprise-mcp",
+  "displayName": "Lano-enterprise-mcp",
+  "description": "Store and retrieve semantic memories using advanced vector search and intelligence-driven insight extraction. Organize knowledge across projects with secure access controls and comprehensive system health monitoring. Optimize your information flow by detecting duplicates and analyzing usage patterns for better decision support.",
+  "discoveryQueries": [
+    "secret"
+  ],
+  "rawRecord": {
+    "id": "2c65e99b-0806-4ba0-aca6-52102a0146ee",
+    "qualifiedName": "lanonasis/lano-enterprise-mcp",
+    "namespace": "lanonasis",
+    "slug": "lano-enterprise-mcp",
+    "displayName": "Lano-enterprise-mcp",
+    "description": "Store and retrieve semantic memories using advanced vector search and intelligence-driven insight extraction. Organize knowledge across projects with secure access controls and comprehensive system health monitoring. Optimize your information flow by detecting duplicates and analyzing usage patterns for better decision support.",
+    "iconUrl": "https://api.smithery.ai/servers/lanonasis/lano-enterprise-mcp/icon",
+    "verified": false,
+    "useCount": 20,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-01-18T08:34:50.775Z",
+    "homepage": "https://docs.lanonasis.com",
+    "bySmithery": false,
+    "owner": "org_01KNBMVWYW4SRRHRR73R4ZMRKP",
+    "score": 0.022727272727272728
+  },
+  "detail": {
+    "qualifiedName": "lanonasis/lano-enterprise-mcp",
+    "displayName": "Lano-enterprise-mcp",
+    "description": "Store and retrieve semantic memories using advanced vector search and intelligence-driven insight extraction. Organize knowledge across projects with secure access controls and comprehensive system health monitoring. Optimize your information flow by detecting duplicates and analyzing usage patterns for better decision support.",
+    "iconUrl": "https://api.smithery.ai/servers/lanonasis/lano-enterprise-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://lano-enterprise-mcp--lanonasis.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://lano-enterprise-mcp--lanonasis.run.tools",
+        "configSchema": {
+          "name": "lanonasis-enterprise-mcp",
+          "tools": [
+            {
+              "name": "list_memories",
+              "description": "List memories with pagination and filters"
+            },
+            {
+              "name": "create_memory",
+              "description": "Create a new memory with vector embedding"
+            },
+            {
+              "name": "create_memory_chunked",
+              "description": "Create memory with auto-chunking for large content"
+            },
+            {
+              "name": "get_memory",
+              "description": "Retrieve a specific memory by ID"
+            },
+            {
+              "name": "update_memory",
+              "description": "Update an existing memory"
+            },
+            {
+              "name": "delete_memory",
+              "description": "Delete a memory"
+            },
+            {
+              "name": "search_memories",
+              "description": "Semantic vector search across memories"
+            },
+            {
+              "name": "search_lanonasis_docs",
+              "description": "Search product documentation"
+            },
+            {
+              "name": "list_api_keys",
+              "description": "List API keys"
+            },
+            {
+              "name": "create_api_key",
+              "description": "Create new API key"
+            },
+            {
+              "name": "delete_api_key",
+              "description": "Delete an API key"
+            },
+            {
+              "name": "rotate_api_key",
+              "description": "Rotate API key secret"
+            },
+            {
+              "name": "revoke_api_key",
+              "description": "Revoke an API key"
+            },
+            {
+              "name": "list_projects",
+              "description": "List projects"
+            },
+            {
+              "name": "create_project",
+              "description": "Create a new project"
+            },
+            {
+              "name": "get_organization_info",
+              "description": "Get organization details"
+            },
+            {
+              "name": "get_health_status",
+              "description": "Get system health status"
+            },
+            {
+              "name": "get_auth_status",
+              "description": "Get authentication status"
+            },
+            {
+              "name": "get_config",
+              "description": "Get configuration"
+            },
+            {
+              "name": "set_config",
+              "description": "Set configuration"
+            },
+            {
+              "name": "intelligence_health_check",
+              "description": "Check AI services health"
+            },
+            {
+              "name": "intelligence_suggest_tags",
+              "description": "AI-powered tag suggestions"
+            },
+            {
+              "name": "intelligence_find_related",
+              "description": "Find semantically related memories"
+            },
+            {
+              "name": "intelligence_detect_duplicates",
+              "description": "Detect duplicate memories"
+            },
+            {
+              "name": "intelligence_extract_insights",
+              "description": "Extract insights from memories"
+            },
+            {
+              "name": "intelligence_analyze_patterns",
+              "description": "Analyze memory usage patterns"
+            },
+            {
+              "name": "memory_stats",
+              "description": "Get memory statistics"
+            },
+            {
+              "name": "memory_bulk_delete",
+              "description": "Bulk delete memories"
+            }
+          ],
+          "server": {
+            "url": "https://mcp.lanonasis.com",
+            "transports": [
+              "http",
+              "sse"
+            ]
+          },
+          "vendor": "Lanonasis",
+          "version": "1.0.0",
+          "homepage": "https://lanonasis.com",
+          "description": "Lanonasis Enterprise MCP - Memory Intelligence with AI-powered analysis, circuit breakers, and reliability patterns",
+          "capabilities": {
+            "tools": true,
+            "prompts": true,
+            "resources": true
+          },
+          "documentation": "https://docs.lanonasis.com",
+          "authentication": {
+            "type": "oauth2",
+            "oauth": {
+              "scopes": [
+                "mcp:full",
+                "memories:read",
+                "memories:write",
+                "profile"
+              ],
+              "token_url": "https://auth.lanonasis.com/oauth/token",
+              "pkce_required": true,
+              "authorization_url": "https://auth.lanonasis.com/oauth/authorize"
+            },
+            "fallback": {
+              "api_key": {
+                "header": "X-API-Key"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_memories",
+        "description": "List memories with pagination and filters. Returns paginated results sorted by the specified field.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "string",
+              "description": "Comma-separated list of tags to filter by"
+            },
+            "type": {
+              "enum": [
+                "context",
+                "project",
+                "knowledge",
+                "reference",
+                "personal",
+                "workflow"
+              ],
+              "type": "string",
+              "description": "Filter by memory type: context, project, knowledge, reference, personal, workflow"
+            },
+            "limit": {
+              "type": "number",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of memories to return (1-100)"
+            },
+            "offset": {
+              "type": "number",
+              "default": 0,
+              "minimum": 0,
+              "description": "Number of memories to skip for pagination"
+            },
+            "sortBy": {
+              "enum": [
+                "created_at",
+                "updated_at",
+                "title"
+              ],
+              "type": "string",
+              "default": "updated_at",
+              "description": "Field to sort results by"
+            },
+            "sortOrder": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string",
+              "default": "desc",
+              "description": "Sort direction: ascending or descending"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_memory",
+        "description": "Create a new memory with automatic vector embedding generation for semantic search. The content is processed to create searchable embeddings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Array of tags for organization and filtering"
+            },
+            "type": {
+              "enum": [
+                "context",
+                "project",
+                "knowledge",
+                "reference",
+                "personal",
+                "workflow"
+              ],
+              "type": "string",
+              "description": "Category: context (conversation), project (work), knowledge (learning), reference (docs), personal, workflow"
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "description": "Descriptive title for the memory (1-255 characters)"
+            },
+            "content": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The full content of the memory to store and embed"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Additional key-value metadata to store",
+              "additionalProperties": {}
+            }
+          }
+        }
+      },
+      {
+        "name": "create_memory_chunked",
+        "description": "Create memory entries from large content by automatically splitting into multiple chunks. Each chunk preserves context with overlap and is tagged for reassembly. Use this for documents, long conversations, or any content exceeding 8000 characters.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Array of tags for organization (chunked memories get additional 'chunked' and 'chunk-N-of-M' tags)"
+            },
+            "type": {
+              "enum": [
+                "context",
+                "project",
+                "knowledge",
+                "reference",
+                "personal",
+                "workflow"
+              ],
+              "type": "string",
+              "description": "Category: context (conversation), project (work), knowledge (learning), reference (docs), personal, workflow"
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "description": "Base title for the memory (chunks will have ' (Part N of M)' appended)"
+            },
+            "content": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The full content to store - will be automatically split if over 8000 characters"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Additional key-value metadata to store",
+              "additionalProperties": {}
+            },
+            "overlapSize": {
+              "type": "number",
+              "default": 200,
+              "maximum": 1000,
+              "minimum": 0,
+              "description": "Character overlap between chunks for context (default: 200)"
+            },
+            "maxChunkSize": {
+              "type": "number",
+              "default": 8000,
+              "maximum": 50000,
+              "minimum": 1000,
+              "description": "Maximum characters per chunk (default: 8000)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_memory",
+        "description": "Retrieve a specific memory by its unique identifier. Returns full memory details including content, metadata, and timestamps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique UUID identifier of the memory to retrieve"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_memory",
+        "description": "Update an existing memory's content, title, type, tags, or metadata. Only provided fields are updated; others remain unchanged.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique UUID identifier of the memory to update"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "New array of tags (replaces existing tags)"
+            },
+            "type": {
+              "enum": [
+                "context",
+                "project",
+                "knowledge",
+                "reference",
+                "personal",
+                "workflow"
+              ],
+              "type": "string",
+              "description": "New memory type category"
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "description": "New title for the memory (1-255 characters)"
+            },
+            "content": {
+              "type": "string",
+              "minLength": 1,
+              "description": "New content (will regenerate vector embedding)"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "New metadata object (merged with existing)",
+              "additionalProperties": {}
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_memory",
+        "description": "Permanently delete a memory by its ID. This action cannot be undone.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique UUID identifier of the memory to delete permanently"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_memories",
+        "description": "Search memories using semantic vector search. Finds memories with similar meaning to the query, not just keyword matches.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "context",
+                "project",
+                "knowledge",
+                "reference",
+                "personal",
+                "workflow"
+              ],
+              "type": "string",
+              "description": "Filter results to a specific memory type"
+            },
+            "limit": {
+              "type": "number",
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of results to return"
+            },
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Natural language search query for semantic matching"
+            },
+            "threshold": {
+              "type": "number",
+              "default": 0.8,
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Minimum similarity score (0-1, higher = more strict)"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_lanonasis_docs",
+        "description": "Search the Lanonasis documentation for guides, API references, and SDK information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Maximum number of documentation results"
+            },
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Search query for documentation"
+            },
+            "section": {
+              "enum": [
+                "all",
+                "api",
+                "guides",
+                "sdks"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Documentation section to search: all, api, guides, or sdks"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_api_keys",
+        "description": "List all API keys for the authenticated user. Shows key metadata but not the secret values.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Filter keys by project UUID"
+            },
+            "active_only": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, only return active (non-revoked) keys"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_api_key",
+        "description": "Create a new API key for programmatic access. The secret is only shown once upon creation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "description": "Descriptive name for the API key (e.g., 'Production Server')"
+            },
+            "project_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Associate key with a specific project"
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional description of the key's purpose"
+            },
+            "access_level": {
+              "enum": [
+                "public",
+                "authenticated",
+                "team",
+                "admin",
+                "enterprise"
+              ],
+              "type": "string",
+              "default": "authenticated",
+              "description": "Permission level: public (read-only), authenticated (standard), team, admin, enterprise"
+            },
+            "expires_in_days": {
+              "type": "number",
+              "default": 365,
+              "description": "Number of days until key expires (default: 365)"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_api_key",
+        "description": "Permanently delete an API key. This cannot be undone. Applications using this key will lose access.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the API key to permanently delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "rotate_api_key",
+        "description": "Generate a new secret for an existing API key. The old secret becomes invalid immediately.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the API key to rotate"
+            }
+          }
+        }
+      },
+      {
+        "name": "revoke_api_key",
+        "description": "Deactivate an API key without deleting it. The key can potentially be reactivated later.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the API key to revoke/deactivate"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_projects",
+        "description": "List all projects accessible to the user, optionally filtered by organization.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "organization_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Filter projects by organization UUID"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_project",
+        "description": "Create a new project for organizing memories and API keys. Projects help separate concerns and manage access.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "description": "Project name (1-255 characters)"
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional description of the project's purpose"
+            },
+            "organization_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Organization to create the project under"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_organization_info",
+        "description": "Get detailed information about an organization including settings, members count, and usage limits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "organization_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the organization to retrieve"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_health_status",
+        "description": "Get comprehensive system health status including API, database, and service availability.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_auth_status",
+        "description": "Get current authentication status, user information, and access level.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_config",
+        "description": "Retrieve a configuration setting by key. Returns the current value and metadata.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Configuration key to retrieve (e.g., 'embedding_model', 'max_memories')"
+            }
+          }
+        }
+      },
+      {
+        "name": "set_config",
+        "description": "Update a configuration setting. Some settings may require admin access.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Configuration key to update"
+            },
+            "value": {
+              "type": "string",
+              "description": "New value to set for the configuration key"
+            }
+          }
+        }
+      },
+      {
+        "name": "intelligence_health_check",
+        "description": "Check health status and availability of AI intelligence services including embedding and analysis endpoints.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "intelligence_suggest_tags",
+        "description": "Get AI-powered tag suggestions for a memory based on its content. Uses natural language understanding to recommend relevant tags.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the user who owns the memory"
+            },
+            "memory_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the memory to analyze for tag suggestions"
+            },
+            "max_suggestions": {
+              "type": "number",
+              "default": 5,
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Maximum number of tag suggestions to return (1-20)"
+            },
+            "include_existing_tags": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to consider existing tags when making suggestions"
+            }
+          }
+        }
+      },
+      {
+        "name": "intelligence_find_related",
+        "description": "Find semantically related memories using vector similarity search. Discovers connections between memories based on meaning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Maximum number of related memories to return (1-50)"
+            },
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the user who owns the memories"
+            },
+            "memory_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the source memory to find related content for"
+            },
+            "similarity_threshold": {
+              "type": "number",
+              "default": 0.7,
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Minimum similarity score (0-1, higher = more similar)"
+            }
+          }
+        }
+      },
+      {
+        "name": "intelligence_detect_duplicates",
+        "description": "Detect potential duplicate memories using semantic similarity analysis. Helps identify redundant content for cleanup.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the user whose memories to analyze"
+            },
+            "max_pairs": {
+              "type": "number",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of duplicate pairs to return"
+            },
+            "similarity_threshold": {
+              "type": "number",
+              "default": 0.9,
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Minimum similarity to consider as duplicate (0-1, higher = stricter)"
+            }
+          }
+        }
+      },
+      {
+        "name": "intelligence_extract_insights",
+        "description": "Extract actionable insights and summaries from memories using AI analysis. Great for decision support and knowledge synthesis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "description": "Focus topic to filter and focus insight extraction"
+            },
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the user whose memories to analyze"
+            },
+            "memory_type": {
+              "enum": [
+                "context",
+                "project",
+                "knowledge",
+                "reference",
+                "personal",
+                "workflow"
+              ],
+              "type": "string",
+              "description": "Filter to specific memory type for focused analysis"
+            },
+            "max_memories": {
+              "type": "number",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of memories to include in analysis"
+            }
+          }
+        }
+      },
+      {
+        "name": "intelligence_analyze_patterns",
+        "description": "Analyze usage patterns and trends across memories over time. Identifies what topics you focus on and how usage evolves.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the user whose patterns to analyze"
+            },
+            "time_range_days": {
+              "type": "number",
+              "default": 30,
+              "maximum": 365,
+              "minimum": 1,
+              "description": "Number of days to include in pattern analysis (1-365)"
+            }
+          }
+        }
+      },
+      {
+        "name": "memory_stats",
+        "description": "Get comprehensive statistics about memory usage including counts by type, storage used, and activity metrics.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "memory_bulk_delete",
+        "description": "Delete multiple memories at once. This is a destructive operation that cannot be undone.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Array of memory UUIDs to delete (1-100 at a time)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "docs://api-reference",
+        "uri": "docs://api-reference",
+        "description": "Complete API documentation for all endpoints",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "config://current",
+        "uri": "config://current",
+        "description": "View current server configuration",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "memory_workflow",
+        "description": "Guide for creating, organizing, and searching memories effectively",
+        "arguments": [
+          {
+            "name": "action",
+            "description": "The memory action to perform",
+            "required": true
+          },
+          {
+            "name": "context",
+            "description": "Additional context for the workflow",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "api_key_management",
+        "description": "Best practices for managing API keys securely"
+      },
+      {
+        "name": "intelligence_guide",
+        "description": "Guide to AI-powered memory analysis capabilities"
+      }
+    ]
+  }
+}

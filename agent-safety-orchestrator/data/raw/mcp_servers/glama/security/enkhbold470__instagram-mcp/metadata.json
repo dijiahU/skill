@@ -1,0 +1,73 @@
+{
+  "registry": "glama",
+  "id": "ejcpdtjnt9",
+  "namespace": "enkhbold470",
+  "slug": "instagram-mcp",
+  "name": "Instagram MCP Server",
+  "description": "Enables interaction with Instagram API functionality through a FastMCP-based server. Provides type-safe access to Instagram features with comprehensive error handling and multiple authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Instagram API functionality through a FastMCP-based server. Provides type-safe access to Instagram features with comprehensive error handling and multiple authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_KEY": {
+          "description": "API key for API key authentication",
+          "type": "string"
+        },
+        "BASIC_AUTH": {
+          "description": "Basic authentication credentials (base64 encoded)",
+          "type": "string"
+        },
+        "API_BASE_URL": {
+          "description": "Base URL for the API endpoint",
+          "type": "string"
+        },
+        "BEARER_TOKEN": {
+          "description": "Bearer token for OAuth2/Bearer authentication",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "API_BASE_URL",
+            "BEARER_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "API_BASE_URL",
+            "API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "API_BASE_URL",
+            "BASIC_AUTH"
+          ]
+        },
+        {
+          "required": [
+            "API_BASE_URL"
+          ]
+        }
+      ]
+    },
+    "id": "ejcpdtjnt9",
+    "name": "Instagram MCP Server",
+    "namespace": "enkhbold470",
+    "repository": {
+      "url": "https://github.com/enkhbold470/instagram-mcp"
+    },
+    "slug": "instagram-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ejcpdtjnt9"
+  }
+}

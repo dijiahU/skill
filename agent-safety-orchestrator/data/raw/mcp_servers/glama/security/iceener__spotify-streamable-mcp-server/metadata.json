@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "j8gg6i9x92",
+  "namespace": "iceener",
+  "slug": "spotify-streamable-mcp-server",
+  "name": "Spotify Streamable MCP Server",
+  "description": "Enables control of Spotify through natural language by searching the catalog, managing playback and devices, controlling playlists, and managing saved songs. Includes OAuth authentication and streamable HTTP transport for remote connectivity.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables control of Spotify through natural language by searching the catalog, managing playback and devices, controlling playlists, and managing saved songs. Includes OAuth authentication and streamable HTTP transport for remote connectivity.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "The host address for the server",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "PORT": {
+          "description": "The port for the HTTP server",
+          "type": "string",
+          "default": "3030"
+        },
+        "AUTH_ENABLED": {
+          "description": "Enable authentication",
+          "type": "string",
+          "default": "true"
+        },
+        "REDIRECT_URI": {
+          "description": "Authorization Server callback URI used to receive Spotify code",
+          "type": "string",
+          "default": "http://127.0.0.1:3031/spotify/callback"
+        },
+        "SPOTIFY_API_URL": {
+          "description": "Spotify API endpoint URL",
+          "type": "string",
+          "default": "https://api.spotify.com/v1"
+        },
+        "SPOTIFY_CLIENT_ID": {
+          "description": "Your Spotify developer app client ID",
+          "type": "string"
+        },
+        "SPOTIFY_ACCOUNTS_URL": {
+          "description": "Spotify accounts endpoint URL",
+          "type": "string",
+          "default": "https://accounts.spotify.com"
+        },
+        "SPOTIFY_CLIENT_SECRET": {
+          "description": "Your Spotify developer app client secret",
+          "type": "string"
+        },
+        "OAUTH_REDIRECT_ALLOWLIST": {
+          "description": "Comma-separated list of allowed redirect URIs for OAuth",
+          "type": "string",
+          "default": "https://claude.ai/api/mcp/auth_callback,https://claude.com/api/mcp/auth_callback"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SPOTIFY_CLIENT_ID",
+        "SPOTIFY_CLIENT_SECRET"
+      ]
+    },
+    "id": "j8gg6i9x92",
+    "name": "Spotify Streamable MCP Server",
+    "namespace": "iceener",
+    "repository": {
+      "url": "https://github.com/iceener/spotify-streamable-mcp-server"
+    },
+    "slug": "spotify-streamable-mcp-server",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j8gg6i9x92"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "srotzin-adqm/hiveconsult",
+  "namespace": "srotzin-adqm",
+  "slug": "hiveconsult",
+  "displayName": "Hive Consult",
+  "description": "Hive is a 70-service trust and settlement network built for autonomous AI agents.\n\nGive your agent a sovereign W3C DID, behavioral trust score, and access to 4 settlement rails (USDC / USDCx / ALEO / USAD) — all in one POST request.\n\n**What you get:**\n- `POST /v1/gate/onboard` — sovereign DID + API key, free\n- `GET /v1/trust/score/{did}` — behavioral trust score (0–100)\n- `POST /v1/bank/settle` — settle on USDC, USDCx (ZK), USAD (anonymous), or ALEO native\n- `POST /v1/law/dispute` — automated arbitration\n- Full MCP surface at `/mcp`\n\nFirst DID is always free. No vendor lock-in.",
+  "discoveryQueries": [
+    "trust",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "0769fae1-b510-4312-8da8-157520def133",
+    "qualifiedName": "srotzin-adqm/hiveconsult",
+    "namespace": "srotzin-adqm",
+    "slug": "hiveconsult",
+    "displayName": "Hive Consult",
+    "description": "Hive is a 70-service trust and settlement network built for autonomous AI agents.\n\nGive your agent a sovereign W3C DID, behavioral trust score, and access to 4 settlement rails (USDC / USDCx / ALEO / USAD) — all in one POST request.\n\n**What you get:**\n- `POST /v1/gate/onboard` — sovereign DID + API key, free\n- `GET /v1/trust/score/{did}` — behavioral trust score (0–100)\n- `POST /v1/bank/settle` — settle on USDC, USDCx (ZK), USAD (anonymous), or ALEO native\n- `POST /v1/law/dispute` — automated arbitration\n- Full MCP surface at `/mcp`\n\nFirst DID is always free. No vendor lock-in.",
+    "iconUrl": "https://api.smithery.ai/servers/srotzin-adqm/hiveconsult/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-15T02:10:40.489Z",
+    "homepage": "https://www.thehiveryiq.com",
+    "bySmithery": false,
+    "owner": "org_01KNK71CJ8RA26R1KKXHMSR8VV",
+    "score": 0.03822574828705373
+  },
+  "detail": {
+    "qualifiedName": "srotzin-adqm/hiveconsult",
+    "displayName": "Hive Consult",
+    "description": "Hive is a 70-service trust and settlement network built for autonomous AI agents.\n\nGive your agent a sovereign W3C DID, behavioral trust score, and access to 4 settlement rails (USDC / USDCx / ALEO / USAD) — all in one POST request.\n\n**What you get:**\n- `POST /v1/gate/onboard` — sovereign DID + API key, free\n- `GET /v1/trust/score/{did}` — behavioral trust score (0–100)\n- `POST /v1/bank/settle` — settle on USDC, USDCx (ZK), USAD (anonymous), or ALEO native\n- `POST /v1/law/dispute` — automated arbitration\n- Full MCP surface at `/mcp`\n\nFirst DID is always free. No vendor lock-in.",
+    "iconUrl": "https://api.smithery.ai/servers/srotzin-adqm/hiveconsult/icon",
+    "remote": true,
+    "deploymentUrl": "https://hiveconsult--srotzin-adqm.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://hiveconsult--srotzin-adqm.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "hiveconsult_reason",
+        "description": "Submit a question or problem for structured chain-of-thought reasoning. Returns step-by-step analysis with confidence score and recommendations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "description": "Agent DID (did:hive:...)"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Optional domain for specialized reasoning"
+            },
+            "context": {
+              "type": "string",
+              "description": "Optional additional context"
+            },
+            "question": {
+              "type": "string",
+              "description": "The question or problem to reason about"
+            },
+            "reasoning_depth": {
+              "enum": [
+                "quick",
+                "standard",
+                "deep"
+              ],
+              "type": "string",
+              "description": "Depth of reasoning. quick=$0.01, standard=$0.05, deep=$0.25"
+            }
+          }
+        }
+      },
+      {
+        "name": "hiveconsult_analyze",
+        "description": "Analyze data for trends, anomalies, forecasts, or comparisons. Returns structured findings with confidence scores.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "description": "Agent DID (did:hive:...)"
+            },
+            "data": {
+              "description": "Data to analyze (array, object, or value)"
+            },
+            "analysis_type": {
+              "enum": [
+                "trend",
+                "anomaly",
+                "forecast",
+                "comparison"
+              ],
+              "type": "string",
+              "description": "Type of analysis to perform"
+            }
+          }
+        }
+      },
+      {
+        "name": "hiveconsult_decide",
+        "description": "Decision support: rank options against weighted criteria. Returns scored and ranked options with reasoning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "description": "Agent DID (did:hive:...)"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Options to evaluate (minimum 2)"
+            },
+            "weights": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Optional weights for criteria (must match criteria length)"
+            },
+            "criteria": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Criteria to evaluate against"
+            }
+          }
+        }
+      },
+      {
+        "name": "hiveconsult_review",
+        "description": "Review code, contracts, documents, or strategies. Returns issues, recommendations, and risk score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "description": "Agent DID (did:hive:...)"
+            },
+            "content": {
+              "type": "string",
+              "description": "Content to review"
+            },
+            "review_type": {
+              "enum": [
+                "code",
+                "contract",
+                "document",
+                "strategy"
+              ],
+              "type": "string",
+              "description": "Type of review"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

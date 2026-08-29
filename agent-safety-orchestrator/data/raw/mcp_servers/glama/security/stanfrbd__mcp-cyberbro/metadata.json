@@ -1,0 +1,51 @@
+{
+  "registry": "glama",
+  "id": "n298puutfw",
+  "namespace": "stanfrbd",
+  "slug": "mcp-cyberbro",
+  "name": "Cyberbro MCP Server",
+  "description": "An MCP server that extracts Indicators of Compromise (IoCs) from unstructured text and checks their reputation across multiple threat intelligence services. It enables real-time analysis of IPs, domains, hashes, and URLs, providing enriched context for security workflows within LLMs.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that extracts Indicators of Compromise (IoCs) from unstructured text and checks their reputation across multiple threat intelligence services. It enables real-time analysis of IPs, domains, hashes, and URLs, providing enriched context for security workflows within LLMs.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_PREFIX": {
+          "description": "Custom prefix for the Cyberbro API. Defaults to 'api' in common configurations.",
+          "type": "string",
+          "default": "api"
+        },
+        "SSL_VERIFY": {
+          "description": "Set to 'false' to disable SSL verification for the Cyberbro URL. Useful for self-signed certificates or local testing.",
+          "type": "string"
+        },
+        "CYBERBRO_URL": {
+          "description": "The URL of the Cyberbro server (e.g., http://localhost:5000)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CYBERBRO_URL"
+      ]
+    },
+    "id": "n298puutfw",
+    "name": "Cyberbro MCP Server",
+    "namespace": "stanfrbd",
+    "repository": {
+      "url": "https://github.com/stanfrbd/mcp-cyberbro"
+    },
+    "slug": "mcp-cyberbro",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n298puutfw"
+  }
+}

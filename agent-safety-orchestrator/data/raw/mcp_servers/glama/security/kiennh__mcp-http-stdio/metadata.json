@@ -1,0 +1,51 @@
+{
+  "registry": "glama",
+  "id": "zudvzilos1",
+  "namespace": "Kiennh",
+  "slug": "mcp-http-stdio",
+  "name": "MCP HTTP-stdio Proxy",
+  "description": "A Node.js proxy that enables communication between stdio-based clients and HTTP-based Model Context Protocol servers. It facilitates protocol translation, session management, and authentication to allow remote HTTP servers to function as local stdio servers.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Node.js proxy that enables communication between stdio-based clients and HTTP-based Model Context Protocol servers. It facilitates protocol translation, session management, and authentication to allow remote HTTP servers to function as local stdio servers.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "UPSTREAM_AUTH": {
+          "description": "Optional authentication header value (e.g., Bearer ...).",
+          "type": "string"
+        },
+        "MCP_SESSION_ID": {
+          "description": "Manually specify an initial session ID.",
+          "type": "string"
+        },
+        "MCP_TIMEOUT_MS": {
+          "description": "Timeout for upstream requests in milliseconds.",
+          "type": "string",
+          "default": "15000"
+        },
+        "UPSTREAM_MCP_URL": {
+          "description": "The URL of the target HTTP MCP server.",
+          "type": "string",
+          "default": "http://localhost:8080/mcp"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "zudvzilos1",
+    "name": "MCP HTTP-stdio Proxy",
+    "namespace": "Kiennh",
+    "repository": {
+      "url": "https://github.com/Kiennh/mcp-http-stdio"
+    },
+    "slug": "mcp-http-stdio",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/zudvzilos1"
+  }
+}

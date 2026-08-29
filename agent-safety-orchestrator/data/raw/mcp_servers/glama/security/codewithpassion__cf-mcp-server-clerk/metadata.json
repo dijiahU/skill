@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "ozu4xdjwgp",
+  "namespace": "codewithpassion",
+  "slug": "cf-mcp-server-clerk",
+  "name": "MCP Server + Clerk OAuth",
+  "description": "A remote Model Context Protocol server template for Cloudflare Workers with built-in Clerk OAuth authentication and role-based access control. Enables secure deployment of MCP servers with user authentication and customizable tool access based on user roles.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A remote Model Context Protocol server template for Cloudflare Workers with built-in Clerk OAuth authentication and role-based access control. Enables secure deployment of MCP servers with user authentication and customizable tool access based on user roles.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CLERK_CLIENT_ID": {
+          "description": "Your Clerk OAuth application Client ID",
+          "type": "string"
+        },
+        "CLERK_SECRET_KEY": {
+          "description": "Your Clerk Secret Key from API Keys (starts with sk_live_ for production or sk_test_ for development)",
+          "type": "string"
+        },
+        "CLERK_FRONTEND_API": {
+          "description": "Your Clerk Frontend API URL (e.g., https://your-subdomain.clerk.accounts.dev)",
+          "type": "string"
+        },
+        "CLERK_CLIENT_SECRET": {
+          "description": "Your Clerk OAuth application Client Secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Cookie encryption key (generate with: openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CLERK_CLIENT_ID",
+        "CLERK_CLIENT_SECRET",
+        "CLERK_SECRET_KEY",
+        "CLERK_FRONTEND_API",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "ozu4xdjwgp",
+    "name": "MCP Server + Clerk OAuth",
+    "namespace": "codewithpassion",
+    "repository": {
+      "url": "https://github.com/codewithpassion/cf-mcp-server-clerk"
+    },
+    "slug": "cf-mcp-server-clerk",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ozu4xdjwgp"
+  }
+}

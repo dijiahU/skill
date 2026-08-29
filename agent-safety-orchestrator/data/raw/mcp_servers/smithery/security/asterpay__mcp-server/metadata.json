@@ -1,0 +1,96 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "asterpay/mcp-server",
+  "namespace": "asterpay",
+  "slug": "mcp-server",
+  "displayName": "AsterPay — EUR Settlement & Agent Trust API",
+  "description": "EUR settlement layer for AI agents. Convert USDC/EURC to EUR via SEPA Instant.\n\n**Free tools (no payment required):**\n- `check_agent_trust` — KYA trust score 0-100 for any Ethereum wallet\n- `get_trust_tier` — Trust tier classification (open/verified/trusted/enterprise)\n- `get_settlement_estimate` — Calculate EUR amount for USDC conversion\n- `discover_services` — List all available AsterPay API endpoints\n\n**Protocols:** x402, A2A, ERC-8004\n**Chains:** Base, Ethereum, Solana, XRPL, Polygon, BNB Chain\n**Docs:** https://asterpay.io/docs",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "2c4ba907-e498-41cd-8916-20b724364497",
+    "qualifiedName": "asterpay/mcp-server",
+    "namespace": "asterpay",
+    "slug": "mcp-server",
+    "displayName": "AsterPay — EUR Settlement & Agent Trust API",
+    "description": "EUR settlement layer for AI agents. Convert USDC/EURC to EUR via SEPA Instant.\n\n**Free tools (no payment required):**\n- `check_agent_trust` — KYA trust score 0-100 for any Ethereum wallet\n- `get_trust_tier` — Trust tier classification (open/verified/trusted/enterprise)\n- `get_settlement_estimate` — Calculate EUR amount for USDC conversion\n- `discover_services` — List all available AsterPay API endpoints\n\n**Protocols:** x402, A2A, ERC-8004\n**Chains:** Base, Ethereum, Solana, XRPL, Polygon, BNB Chain\n**Docs:** https://asterpay.io/docs",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/asterpay.io.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-14T09:45:23.565Z",
+    "homepage": "https://asterpay.io",
+    "bySmithery": false,
+    "owner": "org_01KNBVPNYXYK7R41VHX14M5CMZ",
+    "score": 0.030303030303030304
+  },
+  "detail": {
+    "qualifiedName": "asterpay/mcp-server",
+    "displayName": "AsterPay — EUR Settlement & Agent Trust API",
+    "description": "EUR settlement layer for AI agents. Convert USDC/EURC to EUR via SEPA Instant.\n\n**Free tools (no payment required):**\n- `check_agent_trust` — KYA trust score 0-100 for any Ethereum wallet\n- `get_trust_tier` — Trust tier classification (open/verified/trusted/enterprise)\n- `get_settlement_estimate` — Calculate EUR amount for USDC conversion\n- `discover_services` — List all available AsterPay API endpoints\n\n**Protocols:** x402, A2A, ERC-8004\n**Chains:** Base, Ethereum, Solana, XRPL, Polygon, BNB Chain\n**Docs:** https://asterpay.io/docs",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/asterpay.io.ico",
+    "remote": true,
+    "deploymentUrl": "https://mcp-server--asterpay.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-server--asterpay.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_agent_trust",
+        "description": "Check KYA trust score (0-100) for any Ethereum wallet address. Returns trust score, tier, sanctions status, and identity verification. Free — no payment required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "Ethereum wallet address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_trust_tier",
+        "description": "Get trust tier classification for a wallet. Returns: unknown, basic, verified, trusted, or enterprise. Free.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "Ethereum wallet address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_settlement_estimate",
+        "description": "Calculate how much EUR you get for a given USDC amount via SEPA Instant. Returns net EUR, fees, exchange rate, and estimated settlement time. Free.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "string",
+              "description": "USDC amount (e.g. \"100\" for 100 USDC)"
+            }
+          }
+        }
+      },
+      {
+        "name": "discover_services",
+        "description": "List all available AsterPay API endpoints with pricing and descriptions. Free.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

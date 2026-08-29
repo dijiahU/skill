@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "n0wvmdc6n7",
+  "namespace": "cycodehq",
+  "slug": "cycode-cli",
+  "name": "Cycode",
+  "description": "Boost security in your dev lifecycle via SAST, SCA, Secrets & IaC scanning",
+  "discoveryQueries": [
+    "security",
+    "sast"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "Boost security in your dev lifecycle via SAST, SCA, Secrets & IaC scanning",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CYCODE_API_URL": {
+          "description": "Cycode API URL",
+          "type": "string",
+          "default": "https://api.cycode.com"
+        },
+        "CYCODE_APP_URL": {
+          "description": "Cycode APP URL",
+          "type": "string",
+          "default": "https://app.cycode.com"
+        },
+        "CYCODE_CLIENT_ID": {
+          "description": "Your Cycode client ID for authentication",
+          "type": "string"
+        },
+        "CYCODE_CLIENT_SECRET": {
+          "description": "Your Cycode client secret key for authentication",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "CYCODE_CLIENT_ID",
+            "CYCODE_CLIENT_SECRET"
+          ]
+        }
+      ]
+    },
+    "id": "n0wvmdc6n7",
+    "name": "Cycode",
+    "namespace": "cycodehq",
+    "repository": {
+      "url": "https://github.com/cycodehq/cycode-cli"
+    },
+    "slug": "cycode-cli",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n0wvmdc6n7"
+  }
+}

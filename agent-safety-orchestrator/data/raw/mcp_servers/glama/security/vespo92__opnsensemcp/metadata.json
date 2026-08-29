@@ -1,0 +1,73 @@
+{
+  "registry": "glama",
+  "id": "gki9i56ydc",
+  "namespace": "vespo92",
+  "slug": "OPNSenseMCP",
+  "name": "OPNSense MCP Server",
+  "description": "A server that enables managing OPNSense firewalls through natural language interactions with Claude Desktop, supporting VLAN management, firewall rules configuration, and network interface queries.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A server that enables managing OPNSense firewalls through natural language interactions with Claude Desktop, supporting VLAN management, firewall rules configuration, and network interface queries.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OPNSENSE_HOST": {
+          "description": "The URL of your OPNsense firewall (e.g., https://your-opnsense-host:port)",
+          "type": "string"
+        },
+        "OPNSENSE_API_KEY": {
+          "description": "Your OPNsense API key",
+          "type": "string"
+        },
+        "OPNSENSE_SSH_HOST": {
+          "description": "Your OPNsense SSH host (optional, for advanced features)",
+          "type": "string"
+        },
+        "OPNSENSE_API_SECRET": {
+          "description": "Your OPNsense API secret",
+          "type": "string"
+        },
+        "OPNSENSE_VERIFY_SSL": {
+          "description": "Whether to verify SSL certificates",
+          "type": "string",
+          "default": "false"
+        },
+        "OPNSENSE_SSH_KEY_PATH": {
+          "description": "Path to SSH private key file (alternative to password)",
+          "type": "string"
+        },
+        "OPNSENSE_SSH_PASSWORD": {
+          "description": "Your OPNsense SSH password (optional, for advanced features)",
+          "type": "string"
+        },
+        "OPNSENSE_SSH_USERNAME": {
+          "description": "Your OPNsense SSH username (optional, for advanced features)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OPNSENSE_HOST",
+        "OPNSENSE_API_KEY",
+        "OPNSENSE_API_SECRET"
+      ]
+    },
+    "id": "gki9i56ydc",
+    "name": "OPNSense MCP Server",
+    "namespace": "vespo92",
+    "repository": {
+      "url": "https://github.com/vespo92/OPNSenseMCP"
+    },
+    "slug": "OPNSenseMCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gki9i56ydc"
+  }
+}

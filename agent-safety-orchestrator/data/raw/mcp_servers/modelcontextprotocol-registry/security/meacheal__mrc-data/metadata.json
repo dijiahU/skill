@@ -1,0 +1,48 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "ai.meacheal/mrc-data",
+  "slug": "meacheal__mrc-data",
+  "title": "MRC Data — China's Apparel Supply Chain Infrastructure",
+  "description": "China's apparel supply chain data for AI: 1,000+ suppliers, 350+ fabrics, 170+ clusters.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "ai.meacheal/mrc-data",
+      "description": "China's apparel supply chain data for AI: 1,000+ suppliers, 350+ fabrics, 170+ clusters.",
+      "title": "MRC Data — China's Apparel Supply Chain Infrastructure",
+      "version": "2.2.2",
+      "websiteUrl": "https://api.meacheal.ai",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://api.meacheal.ai/mcp",
+          "headers": [
+            {
+              "description": "Bearer token. Get a free API key (100 calls/day) at https://api.meacheal.ai/apply",
+              "isRequired": true,
+              "value": "Bearer {api_key}",
+              "isSecret": true,
+              "variables": {
+                "api_key": {
+                  "description": "Your MRC Data API key",
+                  "isRequired": true,
+                  "isSecret": true
+                }
+              },
+              "name": "Authorization"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-07T18:31:28.329956Z",
+        "publishedAt": "2026-04-07T18:31:28.329956Z",
+        "updatedAt": "2026-04-07T18:31:28.329956Z",
+        "isLatest": true
+      }
+    }
+  }
+}

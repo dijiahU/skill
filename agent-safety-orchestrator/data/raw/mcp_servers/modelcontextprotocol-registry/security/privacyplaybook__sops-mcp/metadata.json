@@ -1,0 +1,51 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.privacyplaybook/sops-mcp",
+  "slug": "privacyplaybook__sops-mcp",
+  "title": "",
+  "description": "MCP server for creating and managing SOPS-encrypted secrets",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.privacyplaybook/sops-mcp",
+      "description": "MCP server for creating and managing SOPS-encrypted secrets",
+      "repository": {
+        "url": "https://github.com/privacyplaybook/sops-mcp",
+        "source": "github"
+      },
+      "version": "0.10.0",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "sops-mcp",
+          "version": "0.10.0",
+          "runtimeHint": "python",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Age recipient public key. Required at startup.",
+              "isRequired": true,
+              "name": "SOPS_MCP_AGE_PUBLIC_KEY"
+            },
+            {
+              "description": "Age private key. Required at call time for any mutation tool (decrypt + re-encrypt). Read-only tools do not need it.",
+              "isSecret": true,
+              "name": "SOPS_AGE_KEY"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-27T00:22:08.224517Z",
+        "publishedAt": "2026-04-27T00:22:08.224517Z",
+        "updatedAt": "2026-04-27T00:22:08.224517Z",
+        "isLatest": true
+      }
+    }
+  }
+}

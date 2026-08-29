@@ -1,0 +1,83 @@
+{
+  "registry": "glama",
+  "id": "te9j9ysiyc",
+  "namespace": "liliangshan",
+  "slug": "mcp-server-apidebug",
+  "name": "mcp-server-apidebug",
+  "description": "A standalone MCP server for API debugging, login authentication, API configuration management, and indexed API execution.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A standalone MCP server for API debugging, login authentication, API configuration management, and indexed API execution.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CONFIG_DIR": {
+          "description": "Optional config directory override; generally not needed. When not set, uses `PROJECT_PATH/.setting/{TOOL_PREFIX}`.",
+          "type": "string",
+          "default": ""
+        },
+        "TOOL_PREFIX": {
+          "description": "Tool name prefix; default tools are `default_api_debug`, `default_api_config`, etc.",
+          "type": "string",
+          "default": "default"
+        },
+        "PROJECT_PATH": {
+          "description": "Project directory; uses current directory when not set.",
+          "type": "string",
+          "default": "."
+        },
+        "API_DEBUG_BASE_URL": {
+          "description": "API base URL; when configured, no need to set `baseUrl` via `api_config`.",
+          "type": "string",
+          "default": ""
+        },
+        "API_DEBUG_LOGIN_URL": {
+          "description": "Login API URL.",
+          "type": "string",
+          "default": "/api/login"
+        },
+        "API_DEBUG_LOGIN_BODY": {
+          "description": "Login request body, supports JSON string or plain string.",
+          "type": "string",
+          "default": "{\"username\":\"\",\"password\":\"\"}"
+        },
+        "API_DEBUG_LOGIN_METHOD": {
+          "description": "Login API method.",
+          "type": "string",
+          "default": "POST"
+        },
+        "API_DEBUG_ALLOWED_METHODS": {
+          "description": "Allowed HTTP methods, comma-separated.",
+          "type": "string",
+          "default": "GET,POST,PUT,DELETE,PATCH"
+        },
+        "API_DEBUG_LOGIN_DESCRIPTION": {
+          "description": "Login tool description.",
+          "type": "string",
+          "default": ""
+        },
+        "API_DEBUG_LOGIN_USER_HEADER": {
+          "description": "Header name for user ID (extracted from login response).",
+          "type": "string",
+          "default": "new-api-user"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "te9j9ysiyc",
+    "name": "mcp-server-apidebug",
+    "namespace": "liliangshan",
+    "repository": {
+      "url": "https://github.com/liliangshan/mcp-server-apidebug"
+    },
+    "slug": "mcp-server-apidebug",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/te9j9ysiyc"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "registry": "glama",
+  "id": "krcb8kf8y5",
+  "namespace": "JustlyAI",
+  "slug": "docketbird-mcp",
+  "name": "DocketBird MCP Server",
+  "description": "Enables searching and downloading court documents, listing cases, and retrieving case details via the DocketBird API. It supports secure OAuth 2.0 authentication for remote access and a standard local mode for personal use.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables searching and downloading court documents, listing cases, and retrieving case details via the DocketBird API. It supports secure OAuth 2.0 authentication for remote access and a standard local mode for personal use.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SERVER_URL": {
+          "description": "The URL where the server is hosted. Used for OAuth and metadata discovery when running in HTTP transport mode (e.g., http://localhost:8040).",
+          "type": "string"
+        },
+        "DOCKETBIRD_API_KEY": {
+          "description": "Your DocketBird API key. Required for authentication when running in stdio transport mode.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "DOCKETBIRD_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "SERVER_URL"
+          ]
+        }
+      ]
+    },
+    "id": "krcb8kf8y5",
+    "name": "DocketBird MCP Server",
+    "namespace": "JustlyAI",
+    "repository": {
+      "url": "https://github.com/JustlyAI/docketbird-mcp"
+    },
+    "slug": "docketbird-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/krcb8kf8y5"
+  }
+}

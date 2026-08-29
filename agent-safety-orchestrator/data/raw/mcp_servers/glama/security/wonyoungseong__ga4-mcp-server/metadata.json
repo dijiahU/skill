@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "iubyxfypmu",
+  "namespace": "wonyoungseong",
+  "slug": "ga4-mcp-server",
+  "name": "GA4 MCP Server",
+  "description": "Enables interaction with Google Analytics 4 to manage accounts, run standard or realtime reports, and validate event parameters. It supports dual authentication methods and integrates with GTM for end-to-end data collection orchestration.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Google Analytics 4 to manage accounts, run standard or realtime reports, and validate event parameters. It supports dual authentication methods and integrates with GTM for end-to-end data collection orchestration.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GA4_CLIENT_ID": {
+          "description": "OAuth client ID from the Google Cloud Console.",
+          "type": "string"
+        },
+        "GA4_ACCESS_TOKEN": {
+          "description": "OAuth access token for Google Analytics 4 API authentication.",
+          "type": "string"
+        },
+        "GA4_CLIENT_SECRET": {
+          "description": "OAuth client secret from the Google Cloud Console.",
+          "type": "string"
+        },
+        "GA4_REFRESH_TOKEN": {
+          "description": "OAuth refresh token for Google Analytics 4 API authentication.",
+          "type": "string"
+        },
+        "GA4_SERVICE_ACCOUNT_JSON": {
+          "description": "Google Analytics 4 Service Account credentials provided as a raw JSON string.",
+          "type": "string"
+        },
+        "GOOGLE_APPLICATION_CREDENTIALS": {
+          "description": "Path to the Google Analytics 4 Service Account JSON credentials file.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GA4_ACCESS_TOKEN",
+            "GA4_REFRESH_TOKEN",
+            "GA4_CLIENT_ID",
+            "GA4_CLIENT_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "GA4_SERVICE_ACCOUNT_JSON"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_APPLICATION_CREDENTIALS"
+          ]
+        },
+        {
+          "required": []
+        }
+      ]
+    },
+    "id": "iubyxfypmu",
+    "name": "GA4 MCP Server",
+    "namespace": "wonyoungseong",
+    "repository": {
+      "url": "https://github.com/wonyoungseong/ga4-mcp-server"
+    },
+    "slug": "ga4-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/iubyxfypmu"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "g9uzcqb3my",
+  "namespace": "ainetwork-ai",
+  "slug": "google-sheet-mcp",
+  "name": "Google Sheets MCP Server",
+  "description": "Enables AI agents to seamlessly interact with Google Sheets through secure OAuth 2.0 authentication. Supports reading, searching, updating spreadsheet data, and managing sheets with smart text replacement and batch operations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI agents to seamlessly interact with Google Sheets through secure OAuth 2.0 authentication. Supports reading, searching, updating spreadsheet data, and managing sheets with smart text replacement and batch operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "The Node.js environment mode",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "The logging level",
+          "type": "string"
+        },
+        "MCP_SERVER_HOST": {
+          "description": "The host for the MCP server",
+          "type": "string",
+          "default": "localhost"
+        },
+        "MCP_SERVER_PORT": {
+          "description": "The port for the MCP server",
+          "type": "string",
+          "default": "3000"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth 2.0 client ID",
+          "type": "string"
+        },
+        "GOOGLE_REDIRECT_URI": {
+          "description": "The OAuth 2.0 redirect URI",
+          "type": "string",
+          "default": "http://localhost:3000/oauth/callback"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth 2.0 client secret",
+          "type": "string"
+        },
+        "GOOGLE_SERVICE_ACCOUNT_KEY_PATH": {
+          "description": "Path to the Google service account key JSON file (optional)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    "id": "g9uzcqb3my",
+    "name": "Google Sheets MCP Server",
+    "namespace": "ainetwork-ai",
+    "repository": {
+      "url": "https://github.com/ainetwork-ai/google-sheet-mcp"
+    },
+    "slug": "google-sheet-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/g9uzcqb3my"
+  }
+}

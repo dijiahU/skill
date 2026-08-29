@@ -1,0 +1,399 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "csgaglobal/cobol-bridge",
+  "namespace": "csgaglobal",
+  "slug": "cobol-bridge",
+  "displayName": "COBOL Bridge",
+  "description": "AI-powered COBOL mainframe modernization platform with 11 MCP tools, 3 resources, and 3 prompts. Parse copybooks, assess CICS integrations, scan JCL batch jobs, map VSAM files, translate EBCDIC, bridge ISO 20022 payments, run post-quantum cryptography assessments, fingerprint regulatory compliance (SOC 2, GDPR, HIPAA), discover COBOL codebases, generate REST APIs from COBOL, and automate test suites. Includes migration guides, API references, and modernization assessment prompts for enterprise mainframe-to-cloud transitions.",
+  "discoveryQueries": [
+    "compliance",
+    "encryption",
+    "sbom"
+  ],
+  "rawRecord": {
+    "id": "dab5aace-6001-476c-a578-c6a1958c7009",
+    "qualifiedName": "csgaglobal/cobol-bridge",
+    "namespace": "csgaglobal",
+    "slug": "cobol-bridge",
+    "displayName": "COBOL Bridge",
+    "description": "AI-powered COBOL mainframe modernization platform with 11 MCP tools, 3 resources, and 3 prompts. Parse copybooks, assess CICS integrations, scan JCL batch jobs, map VSAM files, translate EBCDIC, bridge ISO 20022 payments, run post-quantum cryptography assessments, fingerprint regulatory compliance (SOC 2, GDPR, HIPAA), discover COBOL codebases, generate REST APIs from COBOL, and automate test suites. Includes migration guides, API references, and modernization assessment prompts for enterprise mainframe-to-cloud transitions.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/cobol-bridge.vercel.app.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-02T11:33:06.884Z",
+    "homepage": "https://csga-global.org/mcp/cobol-bridge",
+    "bySmithery": false,
+    "owner": "org_01KNBVERYPCM8BQ82T029C23TK",
+    "score": 0.024390243902439025
+  },
+  "detail": {
+    "qualifiedName": "csgaglobal/cobol-bridge",
+    "displayName": "COBOL Bridge",
+    "description": "AI-powered COBOL mainframe modernization platform with 11 MCP tools, 3 resources, and 3 prompts. Parse copybooks, assess CICS integrations, scan JCL batch jobs, map VSAM files, translate EBCDIC, bridge ISO 20022 payments, run post-quantum cryptography assessments, fingerprint regulatory compliance (SOC 2, GDPR, HIPAA), discover COBOL codebases, generate REST APIs from COBOL, and automate test suites. Includes migration guides, API references, and modernization assessment prompts for enterprise mainframe-to-cloud transitions.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/cobol-bridge.vercel.app.ico",
+    "remote": true,
+    "deploymentUrl": "https://cobol-bridge.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://cobol-bridge.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Optional API key for authenticated access"
+            },
+            "timeout": {
+              "type": "number",
+              "x-from": {
+                "query": "timeout"
+              },
+              "default": 30000,
+              "x-order": 2,
+              "description": "Request timeout in milliseconds"
+            },
+            "verbose": {
+              "type": "boolean",
+              "x-from": {
+                "query": "verbose"
+              },
+              "default": false,
+              "x-order": 3,
+              "description": "Enable verbose logging for debugging"
+            },
+            "outputFormat": {
+              "type": "string",
+              "x-from": {
+                "query": "outputFormat"
+              },
+              "default": "json",
+              "x-order": 1,
+              "description": "Preferred output format for tool results (json or text)"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "cobol.transform.records",
+        "description": "Parse COBOL copybooks into structured JSON with field types, sizes, and hierarchy. Extracts PIC clauses, REDEFINES, OCCURS, and 88-level conditions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "copybook": {
+              "type": "string",
+              "description": "Raw COBOL copybook source text to parse"
+            }
+          }
+        }
+      },
+      {
+        "name": "cobol.analyze.transactions",
+        "description": "Analyze CICS transaction programs for API bridge compatibility. Identifies EXEC CICS commands, BMS maps, COMMAREA structures, and modernization complexity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "CICS COBOL program source code"
+            },
+            "transactionId": {
+              "type": "string",
+              "description": "CICS transaction ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "cobol.analyze.jobs",
+        "description": "Scan JCL job streams to extract step dependencies, dataset usage, program calls, and scheduling metadata for batch modernization planning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "jcl": {
+              "type": "string",
+              "description": "JCL job stream source text"
+            }
+          }
+        }
+      },
+      {
+        "name": "cobol.discover.copybooks",
+        "description": "Map VSAM file structures (KSDS, ESDS, RRDS) to modern database schemas. Generates SQL DDL, index recommendations, and migration scripts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "targetDb": {
+              "enum": [
+                "postgresql",
+                "mysql",
+                "mongodb",
+                "dynamodb"
+              ],
+              "type": "string",
+              "description": "Target database platform"
+            },
+            "definition": {
+              "type": "string",
+              "description": "VSAM IDCAMS DEFINE or cluster definition"
+            }
+          }
+        }
+      },
+      {
+        "name": "cobol.transform.encoding",
+        "description": "Translate EBCDIC-encoded data to ASCII/UTF-8 with support for packed decimal (COMP-3), binary (COMP), and zoned decimal conversions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hexData": {
+              "type": "string",
+              "description": "EBCDIC hex string to translate"
+            },
+            "encoding": {
+              "enum": [
+                "text",
+                "packed-decimal",
+                "binary",
+                "zoned-decimal"
+              ],
+              "type": "string",
+              "description": "Encoding type of the input data"
+            }
+          }
+        }
+      },
+      {
+        "name": "bridge.output.payments",
+        "description": "Transform legacy payment messages from MT (SWIFT) to MX (ISO 20022) format. Generates pacs, camt, and pain message types with compliance validation and migration tracking.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mtMessage": {
+              "type": "string",
+              "description": "SWIFT MT message content (MT103, MT202, etc.)"
+            },
+            "targetFormat": {
+              "enum": [
+                "pacs.008",
+                "pacs.009",
+                "camt.053",
+                "camt.054",
+                "pain.001",
+                "pain.002"
+              ],
+              "type": "string",
+              "description": "Target ISO 20022 message type"
+            },
+            "validateCompliance": {
+              "type": "boolean",
+              "description": "Run compliance validation checks"
+            }
+          }
+        }
+      },
+      {
+        "name": "bridge.validate.encryption",
+        "description": "Assess cryptographic posture of COBOL systems for post-quantum readiness. Inventories crypto usage, maps to NIST-approved PQC algorithms (CRYSTALS-Kyber, CRYSTALS-Dilithium, SPHINCS+), and generates migration roadmaps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "COBOL source code or system configuration to analyze"
+            },
+            "standard": {
+              "enum": [
+                "nist",
+                "cnsa-2.0",
+                "etsi"
+              ],
+              "type": "string",
+              "description": "PQC standard framework to assess against"
+            }
+          }
+        }
+      },
+      {
+        "name": "bridge.validate.compliance",
+        "description": "Map COBOL systems to 76+ global regulations including DORA, GDPR, Basel III, SOX, PCI-DSS, HIPAA, and MiFID II. Performs gap analysis and generates compliance evidence documentation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "COBOL source code or system documentation to fingerprint"
+            },
+            "industry": {
+              "enum": [
+                "banking",
+                "insurance",
+                "healthcare",
+                "government",
+                "retail"
+              ],
+              "type": "string",
+              "description": "Industry vertical for targeted compliance"
+            },
+            "regulations": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "DORA",
+                  "GDPR",
+                  "BASEL_III",
+                  "SOX",
+                  "PCI_DSS",
+                  "HIPAA",
+                  "MIFID_II",
+                  "CCPA",
+                  "GLBA",
+                  "FISMA"
+                ],
+                "type": "string"
+              },
+              "description": "Specific regulations to check against"
+            }
+          }
+        }
+      },
+      {
+        "name": "cobol.discover.programs",
+        "description": "AI-powered COBOL codebase discovery and cataloging. Performs dependency mapping, complexity analysis (cyclomatic, Halstead), dead code detection, and generates comprehensive modernization inventory.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "COBOL source code to analyze"
+            },
+            "programName": {
+              "type": "string",
+              "description": "Program name for catalog entry"
+            },
+            "includeMetrics": {
+              "type": "boolean",
+              "description": "Include detailed complexity metrics"
+            }
+          }
+        }
+      },
+      {
+        "name": "bridge.output.interface",
+        "description": "Generate REST, GraphQL, and gRPC API definitions from COBOL copybooks and program interfaces. Produces OpenAPI 3.0 specs, GraphQL schemas, and Protocol Buffer definitions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiType": {
+              "enum": [
+                "rest",
+                "graphql",
+                "grpc"
+              ],
+              "type": "string",
+              "description": "Target API type to generate"
+            },
+            "copybook": {
+              "type": "string",
+              "description": "COBOL copybook or WORKING-STORAGE to generate API from"
+            },
+            "serviceName": {
+              "type": "string",
+              "description": "Name for the generated API service"
+            }
+          }
+        }
+      },
+      {
+        "name": "bridge.output.tests",
+        "description": "Capture COBOL program behavior as test baselines and detect regressions with intelligent diffing. Generates test cases from production data patterns, validates I/O transformations, and creates regression test suites.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "COBOL program source code to generate tests for"
+            },
+            "testType": {
+              "enum": [
+                "unit",
+                "integration",
+                "regression",
+                "boundary"
+              ],
+              "type": "string",
+              "description": "Type of tests to generate"
+            },
+            "programName": {
+              "type": "string",
+              "description": "Program name for test suite"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "api-reference",
+        "uri": "cobol-bridge://docs/api-reference"
+      },
+      {
+        "name": "iso20022-migration-guide",
+        "uri": "cobol-bridge://docs/iso20022-guide"
+      },
+      {
+        "name": "regulatory-frameworks",
+        "uri": "cobol-bridge://docs/regulatory-frameworks"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "modernization-assessment",
+        "description": "Complete COBOL modernization assessment with risk scoring and migration roadmap",
+        "arguments": [
+          {
+            "name": "programSource",
+            "description": "COBOL source code or program description to assess",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "iso20022-migration",
+        "description": "Plan and execute ISO 20022 MT to MX migration for SWIFT messages",
+        "arguments": [
+          {
+            "name": "messageType",
+            "description": "SWIFT MT message type (e.g., MT103, MT202, MT940)",
+            "required": true
+          },
+          {
+            "name": "sampleMessage",
+            "description": "Optional sample MT message for conversion testing",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "security-audit",
+        "description": "Full security audit including PQC readiness, regulatory compliance, and vulnerability assessment",
+        "arguments": [
+          {
+            "name": "target",
+            "description": "System, application, or COBOL program to audit",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

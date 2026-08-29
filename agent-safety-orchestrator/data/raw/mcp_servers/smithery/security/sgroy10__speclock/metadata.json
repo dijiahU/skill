@@ -1,0 +1,695 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "sgroy10/speclock",
+  "namespace": "sgroy10",
+  "slug": "speclock",
+  "displayName": "SpecLock - AI Constraint Engine",
+  "description": "AI Constraint Engine with AI Patch Firewall. 42 MCP tools. Patch Gateway (ALLOW/WARN/BLOCK verdicts), diff-native review (10 scored signals, hard escalation rules), Spec Compiler, Code Graph, Typed constraints, Python SDK, ROS2. Works with Claude Code, Cursor, Windsurf, Cline, Bolt.new, Lovable. 1073 tests. Free and open source. By Sandeep Roy.",
+  "discoveryQueries": [
+    "audit",
+    "policy",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "81b6549d-650c-4afe-bd2a-5a2b208481cc",
+    "qualifiedName": "sgroy10/speclock",
+    "namespace": "sgroy10",
+    "slug": "speclock",
+    "displayName": "SpecLock - AI Constraint Engine",
+    "description": "AI Constraint Engine with AI Patch Firewall. 42 MCP tools. Patch Gateway (ALLOW/WARN/BLOCK verdicts), diff-native review (10 scored signals, hard escalation rules), Spec Compiler, Code Graph, Typed constraints, Python SDK, ROS2. Works with Claude Code, Cursor, Windsurf, Cline, Bolt.new, Lovable. 1073 tests. Free and open source. By Sandeep Roy.",
+    "verified": false,
+    "useCount": 2081,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-25T05:11:28.857Z",
+    "homepage": "https://smithery.ai/servers/sgroy10/speclock",
+    "bySmithery": false,
+    "owner": "org_01KNBVDK8WNFGGC12YDPB3P06J",
+    "score": 0.017857142857142856
+  },
+  "detail": {
+    "qualifiedName": "sgroy10/speclock",
+    "displayName": "SpecLock - AI Constraint Engine",
+    "description": "AI Constraint Engine with AI Patch Firewall. 42 MCP tools. Patch Gateway (ALLOW/WARN/BLOCK verdicts), diff-native review (10 scored signals, hard escalation rules), Spec Compiler, Code Graph, Typed constraints, Python SDK, ROS2. Works with Claude Code, Cursor, Windsurf, Cline, Bolt.new, Lovable. 1073 tests. Free and open source. By Sandeep Roy.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://speclock--sgroy10.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://speclock--sgroy10.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "speclock_init",
+        "description": "Initialize SpecLock in the current project directory.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_get_context",
+        "description": "THE KEY TOOL. Returns the full structured context pack.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "markdown",
+                "json"
+              ],
+              "type": "string",
+              "default": "markdown"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_set_goal",
+        "description": "Set or update the project goal.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_add_lock",
+        "description": "Add a non-negotiable constraint (SpecLock).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "agent"
+              ],
+              "type": "string",
+              "default": "agent"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_remove_lock",
+        "description": "Remove (deactivate) a SpecLock by its ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lockId": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_add_decision",
+        "description": "Record an architectural or design decision.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "agent"
+              ],
+              "type": "string",
+              "default": "agent"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_add_note",
+        "description": "Add a pinned note for reference.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pinned": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_set_deploy_facts",
+        "description": "Record deployment configuration facts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "branch": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "autoDeploy": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_log_change",
+        "description": "Manually log a significant change.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_get_changes",
+        "description": "Get recent file changes tracked by SpecLock.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_get_events",
+        "description": "Get the event log, optionally filtered by type.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1
+            },
+            "since": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_check_conflict",
+        "description": "Check if a proposed action conflicts with any active SpecLock. In hard mode, blocks above threshold.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "proposedAction": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_session_briefing",
+        "description": "Start a new session and get a full briefing.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "toolName": {
+              "enum": [
+                "claude-code",
+                "cursor",
+                "codex",
+                "windsurf",
+                "cline",
+                "unknown"
+              ],
+              "type": "string",
+              "default": "unknown"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_session_summary",
+        "description": "End the current session and record what was accomplished.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_checkpoint",
+        "description": "Create a named git tag checkpoint for easy rollback.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_repo_status",
+        "description": "Get current git repository status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_suggest_locks",
+        "description": "AI-powered lock suggestions based on project patterns.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_detect_drift",
+        "description": "Scan recent changes for constraint violations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_health",
+        "description": "Health check with completeness score and multi-agent timeline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_apply_template",
+        "description": "Apply a pre-built constraint template (nextjs, react, express, supabase, stripe, security-hardened).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_report",
+        "description": "Violation report — how many times SpecLock blocked changes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_audit",
+        "description": "Audit staged files against active locks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_verify_audit",
+        "description": "Verify the integrity of the HMAC audit chain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_export_compliance",
+        "description": "Generate compliance reports (SOC 2, HIPAA, CSV).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "soc2",
+                "hipaa",
+                "csv"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_set_enforcement",
+        "description": "Set enforcement mode: advisory (warn) or hard (block).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "advisory",
+                "hard"
+              ],
+              "type": "string"
+            },
+            "blockThreshold": {
+              "type": "integer",
+              "default": 70,
+              "maximum": 100,
+              "minimum": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_override_lock",
+        "description": "Override a lock with justification. Logged to audit trail.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lockId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_semantic_audit",
+        "description": "Semantic pre-commit: analyzes code changes vs locks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_override_history",
+        "description": "Show lock override history.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lockId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_policy_evaluate",
+        "description": "Evaluate policy-as-code rules against proposed actions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "actionType": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_policy_manage",
+        "description": "Policy CRUD: list, add, remove policy rules.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "list",
+                "add",
+                "remove"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_telemetry",
+        "description": "Opt-in usage analytics summary.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "status",
+                "enable",
+                "disable",
+                "report"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_guard_file",
+        "description": "Add SPECLOCK-GUARD header to lock specific files.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "string"
+            },
+            "lockId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_auto_guard",
+        "description": "Auto-guard files related to lock keywords.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_add_typed_lock",
+        "description": "Add typed constraint (numerical/range/state/temporal).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "type": "string"
+            },
+            "value": {},
+            "metric": {
+              "type": "string"
+            },
+            "operator": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "constraintType": {
+              "enum": [
+                "numerical",
+                "range",
+                "state",
+                "temporal"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_check_typed",
+        "description": "Check proposed values against typed constraints.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "value": {},
+            "metric": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_list_typed_locks",
+        "description": "List all typed constraints with current thresholds.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_update_threshold",
+        "description": "Update typed lock thresholds dynamically.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "value": {},
+            "lockId": {
+              "type": "string"
+            },
+            "operator": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_compile_spec",
+        "description": "Compile natural language (PRDs, READMEs) into structured constraints via Gemini Flash.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "autoApply": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_build_graph",
+        "description": "Build/refresh code dependency graph from imports (JS/TS/Python).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_blast_radius",
+        "description": "Calculate blast radius — transitive dependents, impact %, depth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_map_locks",
+        "description": "Map active locks to actual code files via the dependency graph.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "speclock_review_patch",
+        "description": "ALLOW/WARN/BLOCK verdict — combines semantic conflict + lock-file mapping + blast radius.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_review_patch_diff",
+        "description": "Diff-native review — parses actual diffs for interface breaks, protected symbols, dependency drift, schema changes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "diff": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "speclock_parse_diff",
+        "description": "Parse unified diff into structured changes — imports, exports, symbols, routes, schema detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "diff": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

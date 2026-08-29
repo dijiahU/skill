@@ -1,0 +1,510 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "thinkneo-ai/control-plane",
+  "namespace": "thinkneo-ai",
+  "slug": "control-plane",
+  "displayName": "ThinkNEO Control Plane",
+  "description": "Enterprise AI Control Plane — governance layer between your AI applications and providers (OpenAI, Anthropic, Google, Mistral, and more). Spend tracking, runtime guardrails, policy enforcement, hard budget limits, compliance readiness (SOC2/GDPR/HIPAA), and real-time provider health.",
+  "discoveryQueries": [
+    "guardrail",
+    "audit",
+    "policy",
+    "compliance",
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "a37b9472-ee0c-4175-b1dd-81ffc52afce3",
+    "qualifiedName": "thinkneo-ai/control-plane",
+    "namespace": "thinkneo-ai",
+    "slug": "control-plane",
+    "displayName": "ThinkNEO Control Plane",
+    "description": "Enterprise AI Control Plane — governance layer between your AI applications and providers (OpenAI, Anthropic, Google, Mistral, and more). Spend tracking, runtime guardrails, policy enforcement, hard budget limits, compliance readiness (SOC2/GDPR/HIPAA), and real-time provider health.",
+    "iconUrl": "https://thinkneo.ai/icon500x500.png",
+    "verified": false,
+    "useCount": 250,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-23T19:57:00.373Z",
+    "homepage": "https://thinkneo.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBVVTHWPMGZ1PP6HAAG5B2T",
+    "score": 0.03125
+  },
+  "detail": {
+    "qualifiedName": "thinkneo-ai/control-plane",
+    "displayName": "ThinkNEO Control Plane",
+    "description": "Enterprise AI Control Plane — governance layer between your AI applications and providers (OpenAI, Anthropic, Google, Mistral, and more). Spend tracking, runtime guardrails, policy enforcement, hard budget limits, compliance readiness (SOC2/GDPR/HIPAA), and real-time provider health.",
+    "iconUrl": "https://thinkneo.ai/icon500x500.png",
+    "remote": true,
+    "deploymentUrl": "https://control-plane--thinkneo-ai.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://control-plane--thinkneo-ai.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "ThinkNEO API Key",
+              "secret": true,
+              "x-order": 0,
+              "description": "Required for authenticated tools (spend tracking, guardrails, policy, budget, alerts, and compliance). Public tools (provider_status, schedule_demo) work without a key. Get yours at https://thinkneo.ai/talk-sales"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "thinkneo_check_spend",
+        "description": "Check AI spend summary for a workspace, team, or project. Returns cost breakdown by provider, model, and time period. Requires authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "period": {
+              "type": "string",
+              "title": "Period",
+              "default": "this-month",
+              "description": "Time period for the report: today, this-week, this-month, last-month, or custom"
+            },
+            "end_date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Date",
+              "default": null,
+              "description": "End date for a custom period in ISO format (YYYY-MM-DD). Only used when period='custom'"
+            },
+            "group_by": {
+              "type": "string",
+              "title": "Group By",
+              "default": "provider",
+              "description": "Dimension to group costs by: provider, model, team, or project"
+            },
+            "workspace": {
+              "type": "string",
+              "title": "Workspace",
+              "description": "Workspace name or ID (e.g., 'prod-engineering', 'finance-team')"
+            },
+            "start_date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Date",
+              "default": null,
+              "description": "Start date for a custom period in ISO format (YYYY-MM-DD). Only used when period='custom'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "thinkneo_evaluate_guardrail",
+        "description": "Evaluate a prompt or text against ThinkNEO guardrail policies before sending it to an AI provider. Returns risk assessment, violations found, and recommendations. Requires authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "title": "Text",
+              "description": "The prompt or text content to evaluate for policy violations (max 32,000 characters)"
+            },
+            "workspace": {
+              "type": "string",
+              "title": "Workspace",
+              "description": "Workspace whose guardrail policies to apply for this evaluation"
+            },
+            "guardrail_mode": {
+              "type": "string",
+              "title": "Guardrail Mode",
+              "default": "monitor",
+              "description": "Evaluation mode: 'monitor' (log violations only) or 'enforce' (block the request on violation)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "thinkneo_check_policy",
+        "description": "Check if a specific model, provider, or action is allowed by the governance policies configured for a workspace. Requires authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Model",
+              "default": null,
+              "description": "AI model name to check (e.g., gpt-4o, claude-sonnet-4-6, gemini-2.0-flash)"
+            },
+            "action": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Action",
+              "default": null,
+              "description": "Specific action to check (e.g., create-completion, use-tool, fine-tune)"
+            },
+            "provider": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Provider",
+              "default": null,
+              "description": "AI provider to check (e.g., openai, anthropic, google, mistral)"
+            },
+            "workspace": {
+              "type": "string",
+              "title": "Workspace",
+              "description": "Workspace name or ID whose governance policies to check against"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "thinkneo_get_budget_status",
+        "description": "Get current budget utilization and enforcement status for a workspace. Shows spend vs limit, alert thresholds, and projected overage. Requires authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "workspace": {
+              "type": "string",
+              "title": "Workspace",
+              "description": "Workspace name or ID to retrieve current budget status for"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "thinkneo_list_alerts",
+        "description": "List active alerts and incidents for a workspace. Includes budget alerts, policy violations, guardrail triggers, and provider issues. Requires authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of alerts to return (1–100)"
+            },
+            "severity": {
+              "type": "string",
+              "title": "Severity",
+              "default": "all",
+              "description": "Filter alerts by severity level: critical, warning, info, or all"
+            },
+            "workspace": {
+              "type": "string",
+              "title": "Workspace",
+              "description": "Workspace name or ID to list active alerts for"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "thinkneo_get_compliance_status",
+        "description": "Get compliance and audit readiness status for a workspace. Shows governance score, pending actions, and compliance gaps. Requires authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "framework": {
+              "type": "string",
+              "title": "Framework",
+              "default": "general",
+              "description": "Compliance framework to assess: soc2 (SOC 2 Type II), gdpr (GDPR), hipaa (HIPAA), or general (ThinkNEO AI governance)"
+            },
+            "workspace": {
+              "type": "string",
+              "title": "Workspace",
+              "description": "Workspace name or ID to evaluate compliance readiness for"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "thinkneo_provider_status",
+        "description": "Get real-time health and performance status of AI providers routed through the ThinkNEO gateway. Shows latency, error rates, and availability. No authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Provider",
+              "default": null,
+              "description": "Specific provider to check: openai, anthropic, google, mistral, xai, cohere, or together. Omit to get status for all providers."
+            },
+            "workspace": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace",
+              "default": null,
+              "description": "Workspace context for provider routing configuration (optional)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "thinkneo_schedule_demo",
+        "description": "Schedule a demo or discovery call with the ThinkNEO team. Collects contact information and preferences. No authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role",
+              "default": null,
+              "description": "Contact's role: cto, cfo, security, engineering, or other"
+            },
+            "email": {
+              "type": "string",
+              "title": "Email",
+              "description": "Business email address to receive follow-up from the ThinkNEO team"
+            },
+            "company": {
+              "type": "string",
+              "title": "Company",
+              "description": "Company or organization name"
+            },
+            "context": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Context",
+              "default": null,
+              "description": "Additional context such as current AI providers used, request volume, or specific use case"
+            },
+            "interest": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Interest",
+              "default": null,
+              "description": "Primary area of interest: guardrails, finops, observability, governance, or full platform"
+            },
+            "contact_name": {
+              "type": "string",
+              "title": "Contact Name",
+              "description": "Full name of the person requesting the demo"
+            },
+            "preferred_dates": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Preferred Dates",
+              "default": null,
+              "description": "Preferred meeting dates, times, and timezone (e.g., 'Tuesdays or Thursdays, 9-11am EST')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "ThinkNEO Getting Started",
+        "uri": "thinkneo://docs/getting-started",
+        "description": "Quick-start guide for connecting your AI applications to the ThinkNEO control plane.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "Supported AI Providers",
+        "uri": "thinkneo://docs/supported-providers",
+        "description": "List of AI providers supported by the ThinkNEO gateway with available models.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "thinkneo_governance_audit",
+        "description": "Run a full governance audit for a workspace: check budget status, list active alerts, and review compliance readiness.",
+        "arguments": [
+          {
+            "name": "workspace",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "thinkneo_policy_preflight",
+        "description": "Pre-flight check before switching to a new AI model or provider: verify it's allowed by workspace policy and evaluate guardrail compliance.",
+        "arguments": [
+          {
+            "name": "workspace",
+            "required": true
+          },
+          {
+            "name": "provider",
+            "required": true
+          },
+          {
+            "name": "model",
+            "required": true
+          },
+          {
+            "name": "sample_prompt",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

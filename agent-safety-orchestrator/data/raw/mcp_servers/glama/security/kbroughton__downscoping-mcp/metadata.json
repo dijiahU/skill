@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "ry1x38s69z",
+  "namespace": "kbroughton",
+  "slug": "downscoping-mcp",
+  "name": "downscoping-mcp",
+  "description": "A security-focused tool that implements least-privilege credential injection for Claude Code by intercepting Bash and MCP tool calls to swap in minimum-privilege tokens. It enables secure execution of CLI commands and MCP operations by matching tool arguments against declarative YAML policies to prevent unauthorized access.",
+  "discoveryQueries": [
+    "security",
+    "credential",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A security-focused tool that implements least-privilege credential injection for Claude Code by intercepting Bash and MCP tool calls to swap in minimum-privilege tokens. It enables secure execution of CLI commands and MCP operations by matching tool arguments against declarative YAML policies to prevent unauthorized access.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PYTHONPATH": {
+          "description": "The path to the 'src' directory of the downscoping-mcp repository, required for the python module to be found.",
+          "type": "string"
+        },
+        "CLAUDE_PLUGIN_ROOT": {
+          "description": "The root path where the downscoping-mcp plugin is installed, often used to resolve other paths.",
+          "type": "string"
+        },
+        "GCLOUD_TOKEN_EDITOR": {
+          "description": "A Google Cloud auth token with editor-level access.",
+          "type": "string"
+        },
+        "GCLOUD_TOKEN_VIEWER": {
+          "description": "A Google Cloud auth token with viewer-level access.",
+          "type": "string"
+        },
+        "GITHUB_TOKEN_READONLY": {
+          "description": "A GitHub fine-grained token with limited permissions (e.g., contents:read, issues:read) used as a read-only slot.",
+          "type": "string"
+        },
+        "GITHUB_INTEGRATION_SRC": {
+          "description": "Path to the source directory of an upstream MCP server to be proxied by this server.",
+          "type": "string"
+        },
+        "GITHUB_TOKEN_ORG_WRITE": {
+          "description": "A GitHub fine-grained token with elevated permissions (e.g., issues:write, pull_requests:write) used for write operations.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "PYTHONPATH"
+      ]
+    },
+    "id": "ry1x38s69z",
+    "name": "downscoping-mcp",
+    "namespace": "kbroughton",
+    "repository": {
+      "url": "https://github.com/kbroughton/downscoping-mcp"
+    },
+    "slug": "downscoping-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ry1x38s69z"
+  }
+}

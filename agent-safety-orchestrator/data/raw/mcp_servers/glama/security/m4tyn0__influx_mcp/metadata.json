@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "hes3qwxn82",
+  "namespace": "m4tyn0",
+  "slug": "influx_mcp",
+  "name": "InfluxDB MCP Server",
+  "description": "A Model Context Protocol server that provides secure, read-only access to time-series data stored in InfluxDB 1.8 via JWT authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server that provides secure, read-only access to time-series data stored in InfluxDB 1.8 via JWT authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JWT_SECRET": {
+          "description": "Secret key for JWT token generation and verification",
+          "type": "string"
+        },
+        "INFLUXDB_SSL": {
+          "description": "Whether to use SSL for connecting to InfluxDB",
+          "type": "string",
+          "default": "false"
+        },
+        "INFLUXDB_HOST": {
+          "description": "The hostname or IP address of your InfluxDB instance",
+          "type": "string"
+        },
+        "INFLUXDB_PORT": {
+          "description": "The port of your InfluxDB instance",
+          "type": "string",
+          "default": "8086"
+        },
+        "JWT_ALGORITHM": {
+          "description": "Algorithm to use for JWT",
+          "type": "string",
+          "default": "HS256"
+        },
+        "INFLUXDB_TIMEOUT": {
+          "description": "Timeout in seconds for InfluxDB connection",
+          "type": "string",
+          "default": "10"
+        },
+        "INFLUXDB_PASSWORD": {
+          "description": "Password for your InfluxDB instance",
+          "type": "string"
+        },
+        "INFLUXDB_USERNAME": {
+          "description": "Username for your InfluxDB instance",
+          "type": "string"
+        },
+        "INFLUXDB_VERIFY_SSL": {
+          "description": "Whether to verify SSL certificates",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": [
+        "INFLUXDB_HOST",
+        "INFLUXDB_USERNAME",
+        "INFLUXDB_PASSWORD",
+        "JWT_SECRET"
+      ]
+    },
+    "id": "hes3qwxn82",
+    "name": "InfluxDB MCP Server",
+    "namespace": "m4tyn0",
+    "repository": {
+      "url": "https://github.com/m4tyn0/influx_mcp"
+    },
+    "slug": "influx_mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hes3qwxn82"
+  }
+}

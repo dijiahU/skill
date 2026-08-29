@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "f9srgy3ip8",
+  "namespace": "aserper",
+  "slug": "shopify-mcp",
+  "name": "Shopify MCP Server",
+  "description": "Provides full access to the Shopify Admin GraphQL API through 75 tools for managing products, orders, customers, inventory, and analytics. It supports both static token and OAuth authentication while featuring cost-aware rate limiting for efficient store management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides full access to the Shopify Admin GraphQL API through 75 tools for managing products, orders, customers, inventory, and analytics. It supports both static token and OAuth authentication while featuring cost-aware rate limiting for efficient store management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SHOPIFY_CLIENT_ID": {
+          "description": "OAuth client ID from Partners Dashboard",
+          "type": "string"
+        },
+        "SHOPIFY_API_VERSION": {
+          "description": "Shopify API version",
+          "type": "string",
+          "default": "2026-01"
+        },
+        "SHOPIFY_ACCESS_TOKEN": {
+          "description": "Admin API access token from a Custom App",
+          "type": "string"
+        },
+        "SHOPIFY_STORE_DOMAIN": {
+          "description": "Your store domain (e.g. my-store.myshopify.com)",
+          "type": "string"
+        },
+        "SHOPIFY_CLIENT_SECRET": {
+          "description": "OAuth client secret from Partners Dashboard",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SHOPIFY_ACCESS_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "SHOPIFY_CLIENT_ID",
+            "SHOPIFY_CLIENT_SECRET"
+          ]
+        }
+      ],
+      "required": [
+        "SHOPIFY_STORE_DOMAIN"
+      ]
+    },
+    "id": "f9srgy3ip8",
+    "name": "Shopify MCP Server",
+    "namespace": "aserper",
+    "repository": {
+      "url": "https://github.com/aserper/shopify-mcp"
+    },
+    "slug": "shopify-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/f9srgy3ip8"
+  }
+}

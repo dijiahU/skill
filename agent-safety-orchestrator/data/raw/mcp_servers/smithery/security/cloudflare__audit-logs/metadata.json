@@ -1,0 +1,225 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cloudflare/audit-logs",
+  "namespace": "cloudflare",
+  "slug": "audit-logs",
+  "displayName": "Cloudflare Audit Logs",
+  "description": "Audit log queries and reporting. Query audit logs and generate compliance reports.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "a1aa9db8-3d0c-4786-83a4-ae2054aa6ea2",
+    "qualifiedName": "cloudflare/audit-logs",
+    "namespace": "cloudflare",
+    "slug": "audit-logs",
+    "displayName": "Cloudflare Audit Logs",
+    "description": "Audit log queries and reporting. Query audit logs and generate compliance reports.",
+    "iconUrl": "https://api.smithery.ai/servers/cloudflare%2Faudit-logs/icon",
+    "verified": true,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T16:51:30.902Z",
+    "homepage": "https://smithery.ai/servers/cloudflare/audit-logs",
+    "bySmithery": true,
+    "owner": "org_01KPBXJTDN7ASH7MJ3958C05QY",
+    "score": 0.0078125
+  },
+  "detail": {
+    "qualifiedName": "cloudflare/audit-logs",
+    "displayName": "Cloudflare Audit Logs",
+    "description": "Audit log queries and reporting. Query audit logs and generate compliance reports.",
+    "iconUrl": "https://api.smithery.ai/servers/cloudflare%2Faudit-logs/icon",
+    "remote": true,
+    "deploymentUrl": "https://cloudflare-audit-logs.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://cloudflare-audit-logs.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "accounts_list",
+        "description": "List all accounts in your Cloudflare account",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "set_active_account",
+        "description": "Set active account to be used for tool calls that require accountId",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "activeAccountIdParam": {
+              "type": "string",
+              "description": "The accountId present in the users Cloudflare account, that should be the active accountId."
+            }
+          }
+        }
+      },
+      {
+        "name": "auditlogs_by_account_id",
+        "description": "Find all audit logs (a list of who made what change when) for a Cloudflare Account by ID.\n\t\tThis can be used to query activity on your Cloudflare account at a particular time.\n\t\tSince and before are required to look at a slice of time and are dates with or without a time up to millisecond precision e.g YYYY-MM-DDTHH:mm:ss.sssZ.\n\t\tThere can be more than one page of results and they can be paginated using the returned cursor",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "maximum": 1000,
+              "minimum": 1,
+              "description": "The number of results to return (max 1000)."
+            },
+            "since": {
+              "type": "string",
+              "pattern": "^(\\d{4}-\\d{2}-\\d{2}|(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z))$",
+              "description": "The start of the time slice to look at. Can be YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss.sssZ"
+            },
+            "before": {
+              "type": "string",
+              "pattern": "^(\\d{4}-\\d{2}-\\d{2}|(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z))$",
+              "description": "The end of the time slice to look at. Can be YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss.sssZ"
+            },
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor for fetching the next set of results."
+            },
+            "raw_uri": {
+              "type": "string",
+              "description": "The URI accessed in the request."
+            },
+            "zone_id": {
+              "type": "string",
+              "description": "The ID of the zone associated with the log."
+            },
+            "actor_id": {
+              "type": "string",
+              "description": "The unique identifier of the actor."
+            },
+            "direction": {
+              "enum": [
+                "desc",
+                "asc"
+              ],
+              "type": "string",
+              "description": "The sort direction of the logs (asc or desc)."
+            },
+            "zone_name": {
+              "type": "string",
+              "description": "The name of the zone associated with the log."
+            },
+            "actor_type": {
+              "enum": [
+                "cloudflare_admin",
+                "account",
+                "user",
+                "system"
+              ],
+              "type": "string",
+              "description": "The type of actor (e.g., user, token)."
+            },
+            "raw_method": {
+              "type": "string",
+              "description": "The HTTP method used in the request (e.g., GET, POST)."
+            },
+            "action_type": {
+              "enum": [
+                "create",
+                "delete",
+                "view",
+                "update",
+                "login"
+              ],
+              "type": "string",
+              "description": "The type of action that was performed."
+            },
+            "actor_email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email of the actor who triggered the event."
+            },
+            "resource_id": {
+              "type": "string",
+              "description": "The unique identifier of the resource affected."
+            },
+            "account_name": {
+              "type": "string",
+              "description": "The account name to filter audit logs by."
+            },
+            "audit_log_id": {
+              "type": "string",
+              "description": "The unique identifier of the audit log entry."
+            },
+            "action_result": {
+              "enum": [
+                "success",
+                "failure",
+                ""
+              ],
+              "type": "string",
+              "description": "Whether the action was a success or failure."
+            },
+            "actor_context": {
+              "enum": [
+                "api_key",
+                "api_token",
+                "dash",
+                "oauth",
+                "origin_ca_key"
+              ],
+              "type": "string",
+              "description": "The context in which the actor was operating."
+            },
+            "raw_cf_ray_id": {
+              "type": "string",
+              "description": "The Cloudflare Ray ID associated with the request."
+            },
+            "resource_type": {
+              "type": "string",
+              "description": "The type of resource affected."
+            },
+            "actor_token_id": {
+              "type": "string",
+              "description": "The API token ID used by the actor."
+            },
+            "resource_scope": {
+              "enum": [
+                "memberships",
+                "accounts",
+                "user",
+                "zones"
+              ],
+              "type": "string",
+              "description": "The scope of the resource (e.g., account, zone)."
+            },
+            "raw_status_code": {
+              "type": "number",
+              "description": "The HTTP status code returned by the request."
+            },
+            "actor_ip_address": {
+              "type": "string",
+              "description": "The IP address of the actor."
+            },
+            "actor_token_name": {
+              "type": "string",
+              "description": "The name of the API token used by the actor."
+            },
+            "resource_product": {
+              "type": "string",
+              "description": "The Cloudflare product related to the resource."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

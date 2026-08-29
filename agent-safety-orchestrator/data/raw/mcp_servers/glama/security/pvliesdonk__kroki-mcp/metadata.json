@@ -1,0 +1,84 @@
+{
+  "registry": "glama",
+  "id": "vvtn9opewv",
+  "namespace": "pvliesdonk",
+  "slug": "kroki-mcp",
+  "name": "Kroki MCP",
+  "description": "A production-ready MCP server scaffold that features built-in authentication, Docker support, and a comprehensive CI/CD release pipeline. It provides a standardized template for deploying servers with multi-transport support and configurable read-only modes.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A production-ready MCP server scaffold that features built-in authentication, Docker support, and a comprehensive CI/CD release pipeline. It provides a standardized template for deploying servers with multi-transport support and configurable read-only modes.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_SERVER_BASE_URL": {
+          "description": "Public base URL — required for OIDC (e.g. https://mcp.example.com)",
+          "type": "string"
+        },
+        "MCP_SERVER_HTTP_PATH": {
+          "description": "Mount path for HTTP transport",
+          "type": "string",
+          "default": "/mcp"
+        },
+        "MCP_SERVER_LOG_LEVEL": {
+          "description": "Log level (DEBUG, INFO, WARNING, ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "MCP_SERVER_READ_ONLY": {
+          "description": "Disable write tools",
+          "type": "string",
+          "default": "true"
+        },
+        "MCP_SERVER_SERVER_NAME": {
+          "description": "Server name shown to clients",
+          "type": "string",
+          "default": "mcp-server"
+        },
+        "MCP_SERVER_BEARER_TOKEN": {
+          "description": "Static bearer token",
+          "type": "string"
+        },
+        "MCP_SERVER_INSTRUCTIONS": {
+          "description": "System instructions for LLM context",
+          "type": "string"
+        },
+        "MCP_SERVER_OIDC_CLIENT_ID": {
+          "description": "OIDC client ID",
+          "type": "string"
+        },
+        "MCP_SERVER_OIDC_CONFIG_URL": {
+          "description": "OIDC discovery endpoint",
+          "type": "string"
+        },
+        "MCP_SERVER_OIDC_CLIENT_SECRET": {
+          "description": "OIDC client secret",
+          "type": "string"
+        },
+        "MCP_SERVER_OIDC_JWT_SIGNING_KEY": {
+          "description": "JWT signing key — required on Linux/Docker to survive restarts",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "vvtn9opewv",
+    "name": "Kroki MCP",
+    "namespace": "pvliesdonk",
+    "repository": {
+      "url": "https://github.com/pvliesdonk/kroki-mcp"
+    },
+    "slug": "kroki-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vvtn9opewv"
+  }
+}

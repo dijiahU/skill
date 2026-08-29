@@ -1,0 +1,86 @@
+{
+  "registry": "glama",
+  "id": "xkq3xtmf3h",
+  "namespace": "MidwestMountaineer",
+  "slug": "Unifi-MCP-Server",
+  "name": "UniFi MCP Server",
+  "description": "Enables AI assistants to manage and monitor UniFi Network Controllers through natural language. Provides 25 read-only tools for discovering devices and clients, viewing security configurations, analyzing network statistics, and exporting configuration data.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to manage and monitor UniFi Network Controllers through natural language. Provides 25 read-only tools for discovering devices and clients, viewing security configurations, analyzing network statistics, and exporting configuration data.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Log verbosity level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "UNIFI_HOST": {
+          "description": "Controller IP address",
+          "type": "string"
+        },
+        "UNIFI_PORT": {
+          "description": "Controller port",
+          "type": "string",
+          "default": "443"
+        },
+        "UNIFI_SITE": {
+          "description": "Site name",
+          "type": "string",
+          "default": "default"
+        },
+        "UNIFI_API_KEY": {
+          "description": "API key (required for UniFi OS)",
+          "type": "string"
+        },
+        "UNIFI_PASSWORD": {
+          "description": "Password (for traditional controllers)",
+          "type": "string"
+        },
+        "UNIFI_USERNAME": {
+          "description": "Username (for traditional controllers)",
+          "type": "string"
+        },
+        "UNIFI_VERIFY_SSL": {
+          "description": "Verify SSL certificates",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "UNIFI_HOST",
+            "UNIFI_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "UNIFI_HOST",
+            "UNIFI_USERNAME",
+            "UNIFI_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "xkq3xtmf3h",
+    "name": "UniFi MCP Server",
+    "namespace": "MidwestMountaineer",
+    "repository": {
+      "url": "https://github.com/MidwestMountaineer/Unifi-MCP-Server"
+    },
+    "slug": "Unifi-MCP-Server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xkq3xtmf3h"
+  }
+}

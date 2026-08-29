@@ -1,0 +1,1489 @@
+[
+  {
+    "id": "detect-direct-prompt-injection",
+    "parent_archetype": "detect-prompt-injection",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM01.direct",
+    "definition": "Detect injection attempts in the user-supplied input itself (not in fetched content), where the user tries to override the system prompt or operator instructions.",
+    "scope_in": "\"ignore previous instructions\"-style overrides, role swap requests in user message, system prompt overwrite attempts, instruction-as-data smuggling in user text, unicode Cf / bidi-override / zero-width characters hiding instructions",
+    "scope_out": "instructions hidden in tool/web/file output → `detect-indirect-prompt-injection`; jailbreak templates targeting safety policy → `detect-jailbreak-template`",
+    "signal_phrases": "prompt injection, direct injection, system prompt override, ignore previous, instruction smuggling, role swap",
+    "related": [
+      "detect-indirect-prompt-injection",
+      "detect-jailbreak-template",
+      "detect-roleplay-escape"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-indirect-prompt-injection",
+    "parent_archetype": "detect-prompt-injection",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM01.indirect",
+    "definition": "Detect injection instructions hidden in **content fetched from external sources** (web pages, file contents, MCP responses, API JSON, RAG documents) that target the LLM rather than the user.",
+    "scope_in": "HTML/markdown content with hidden instructions, instructions in fetched email/PR/issue bodies, RAG document poisoning, instructions in API JSON fields, HTML comment / `<!-- ... -->` with hidden instructions",
+    "scope_out": "payload-level malicious binaries → `detect-malicious-payload-in-tool-output`; user's own input → `detect-direct-prompt-injection`",
+    "signal_phrases": "indirect injection, fetched content injection, RAG poisoning, document instruction, hidden instruction in tool output",
+    "related": [
+      "detect-direct-prompt-injection",
+      "detect-malicious-payload-in-tool-output",
+      "detect-hidden-instruction-in-tool-description"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-jailbreak-template",
+    "parent_archetype": "detect-prompt-injection",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM01.jailbreak",
+    "definition": "Detect prompts matching known jailbreak / red-team templates designed to elicit policy-violating responses.",
+    "scope_in": "DAN-style templates, fictional-framing escapes (\"write a story where...\"), prefix-suffix manipulation, well-known jailbreak corpora matches",
+    "scope_out": "zero-day jailbreaks discovered via behavior → `enforce-output-content-policy`; safety policy enforcement on output → `enforce-output-content-policy`",
+    "signal_phrases": "jailbreak, jailbreak detection, jailbreak template, DAN, red team prompt, anti-policy prompt",
+    "related": [
+      "detect-direct-prompt-injection",
+      "detect-roleplay-escape",
+      "enforce-output-content-policy"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-system-prompt-extraction",
+    "parent_archetype": "detect-prompt-injection",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM07 (System Prompt Leakage)",
+    "definition": "Detect attempts to extract / dump / repeat back the agent's system prompt or hidden operator instructions.",
+    "scope_in": "\"repeat the text above\", \"what are your instructions\", base64/translation-based extraction, indirect leakage via summarization request",
+    "scope_out": "redacting system prompt **after** generation → `redact-output-system-prompt`; jailbreak that doesn't target prompt extraction → `detect-jailbreak-template`",
+    "signal_phrases": "system prompt leak, prompt extraction, instruction extraction, prompt dump, repeat instructions",
+    "related": [
+      "redact-output-system-prompt",
+      "detect-jailbreak-template"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-roleplay-escape",
+    "parent_archetype": "detect-prompt-injection",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM01.roleplay",
+    "definition": "Detect role-play / persona-switch attempts intended to bypass safety constraints by recasting the agent as a different entity.",
+    "scope_in": "\"pretend you are X with no rules\", DAN-derivative personas, character framing, hypothetical framing for harmful content",
+    "scope_out": "legitimate persona configuration via system prompt → not a detection target; intent ambiguity in benign requests → `classify-request-ambiguity-level`",
+    "signal_phrases": "role-play escape, persona switch, character jailbreak, \"pretend you are\", hypothetical framing",
+    "related": [
+      "detect-jailbreak-template",
+      "detect-direct-prompt-injection"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "classify-request-ambiguity-level",
+    "parent_archetype": "classify-input-intent-ambiguity",
+    "phase": "input-understanding",
+    "attack_surface": "自定义.intent-ambiguity",
+    "definition": "Score / classify how ambiguous a user request is along axes that affect downstream safety (target scope, irreversibility, recipient), after using bounded non-mutating discovery when it can safely resolve missing context.",
+    "scope_in": "classifier returning `unambiguous / mildly-ambiguous / safety-critical-ambiguous`, scoring of pronouns / \"the old files\" / \"those records\", reclassification after read-only discovery such as listing candidates or inspecting metadata",
+    "scope_out": "detecting destructive verbs alone → `detect-destructive-action-keyword`; asking the user back → `elicit-clarification-before-act`",
+    "signal_phrases": "ambiguity classifier, intent ambiguity, request clarity, ambiguity scoring, scope clarity check",
+    "related": [
+      "detect-destructive-action-keyword",
+      "elicit-clarification-before-act"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-destructive-action-keyword",
+    "parent_archetype": "classify-input-intent-ambiguity",
+    "phase": "input-understanding",
+    "attack_surface": "自定义.destructive-intent",
+    "definition": "Match user-input verbs / phrases that imply destructive or irreversible actions (delete, drop, force-push, send-money) before they reach planning.",
+    "scope_in": "\"delete all\", \"drop table\", \"wipe\", \"send X to Y\", \"force push\", verb lists pulled from SlowMist red-line conventions",
+    "scope_out": "tool-call argument destructive flags → `detect-destructive-flag` (tool layer); workspace-boundary enforcement → `enforce-filesystem-sandbox`",
+    "signal_phrases": "destructive intent, dangerous keyword, red-line keyword, irreversible action keyword, blacklist keyword",
+    "related": [
+      "classify-request-ambiguity-level",
+      "detect-destructive-flag",
+      "request-human-confirmation"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "elicit-clarification-before-act",
+    "parent_archetype": "classify-input-intent-ambiguity",
+    "phase": "input-understanding",
+    "attack_surface": "自定义.clarification-gating",
+    "definition": "Generate a clarification question and pause before the first side effect when material safety ambiguity remains after any available bounded, non-mutating discovery.",
+    "scope_in": "clarification-prompt generation, \"did you mean X or Y\" gating, hold-and-ask flow at the mutation boundary when multiple materially different targets remain",
+    "scope_out": "safe read-only discovery that can reduce ambiguity → perform it first; human approval for high-risk actions → `request-human-confirmation`; pure scoring → `classify-request-ambiguity-level`",
+    "signal_phrases": "clarification, ask user back, disambiguate, gating clarification, \"did you mean\"",
+    "related": [
+      "classify-request-ambiguity-level",
+      "request-human-confirmation"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-pii-in-input",
+    "parent_archetype": "scan-input-for-pii-and-secrets",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM02",
+    "definition": "Detect PII (names, addresses, emails, phone numbers, SSN/government IDs, biometrics) in user-supplied input before it gets logged / forwarded to external tools.",
+    "scope_in": "regex / NER PII detection on user message, GDPR / HIPAA category classification, government ID format validation, medical record numbers (MRN / NHS), crypto-wallet address (BTC / ETH / etc.)",
+    "scope_out": "PII in agent **output** → `redact-output-pii`; payment card specifically → `detect-payment-card-data`; auth tokens → `detect-credential-in-input`",
+    "signal_phrases": "PII detection, GDPR detector, NER, sensitive entity, personal data scanner, HIPAA detector",
+    "related": [
+      "detect-payment-card-data",
+      "detect-credential-in-input",
+      "redact-output-pii",
+      "redact-input-pii"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-payment-card-data",
+    "parent_archetype": "scan-input-for-pii-and-secrets",
+    "phase": "input-understanding",
+    "attack_surface": "PCI DSS",
+    "definition": "Detect payment card numbers (PAN, CVV, expiry, magstripe data) using Luhn validation + format heuristics.",
+    "scope_in": "Luhn-validated card numbers, magstripe parses, BIN range matching, PAN truncation enforcement, IBAN / SWIFT BIC",
+    "scope_out": "PII generally → `detect-pii-in-input`; outbound output redaction → `redact-output-pii`",
+    "signal_phrases": "PAN, payment card, PCI DSS, Luhn, credit card detector",
+    "related": [
+      "detect-pii-in-input",
+      "redact-input-pii"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-credential-in-input",
+    "parent_archetype": "scan-input-for-pii-and-secrets",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM02.credential",
+    "definition": "Detect API keys, OAuth tokens, JWT, session cookies, cloud access keys, database connection strings in user input or pasted content.",
+    "scope_in": "AWS/GCP/Azure key patterns, OpenAI/Anthropic key prefixes, JWT structure, generic high-entropy string detection, .env content paste",
+    "scope_out": "private signing keys → `detect-private-key-input`; secrets in code repositories → `detect-hardcoded-secret-in-code`; secrets in tool **arguments** → `detect-secret-in-args`",
+    "signal_phrases": "API key detection, secret scanner, token detection, credential leakage scanner, .env detector",
+    "related": [
+      "detect-private-key-input",
+      "detect-hardcoded-secret-in-code",
+      "detect-secret-in-args"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-private-key-input",
+    "parent_archetype": "scan-input-for-pii-and-secrets",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM02.crypto",
+    "definition": "Detect private cryptographic keys (RSA / EC / SSH / PGP / wallet seed phrases / mnemonic) in input.",
+    "scope_in": "PEM-encoded private key, OpenSSH key block, BIP39 seed phrases, PGP private key, X.509 private key",
+    "scope_out": "API keys/tokens (not asymmetric crypto) → `detect-credential-in-input`; key inside source code → `detect-hardcoded-secret-in-code`",
+    "signal_phrases": "private key detector, PEM private key, BIP39 seed, mnemonic phrase, PGP key block",
+    "related": [
+      "detect-credential-in-input",
+      "detect-hardcoded-secret-in-code"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "redact-input-pii",
+    "parent_archetype": "scan-input-for-pii-and-secrets",
+    "phase": "input-understanding",
+    "attack_surface": "OWASP LLM02.preprocess",
+    "definition": "Replace detected PII / secrets / credentials in user input with redaction tokens before passing to downstream prompts or logs.",
+    "scope_in": "format-preserving tokenization, \"[REDACTED-EMAIL]\"-style placeholder, hashed pseudonyms, full erasure",
+    "scope_out": "redaction of agent's **output** → `redact-output-pii` / `redact-output-secret`; detection only (no replacement) → the corresponding `detect-*` atoms",
+    "signal_phrases": "input redaction, tokenization, PII replacement, redaction placeholder, pre-redact",
+    "related": [
+      "detect-pii-in-input",
+      "detect-credential-in-input",
+      "redact-output-pii"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "evaluate-opa-rego-rule",
+    "parent_archetype": "enforce-policy-as-code",
+    "phase": "planning",
+    "attack_surface": "policy-as-code",
+    "definition": "Evaluate a planned action against an OPA / Rego / Cedar / similar policy engine and return allow/deny + matching rule ids.",
+    "scope_in": "OPA evaluation, Rego rule packs, Cedar policies, AWS IAM-style policy decisions",
+    "scope_out": "RBAC-only role checks → `check-rbac-role`; tool-permission scope (not policy engine) → `verify-allowed-tool-list`",
+    "signal_phrases": "OPA, Rego, Cedar, policy engine, policy-as-code, policy decision point",
+    "related": [
+      "check-rbac-role",
+      "evaluate-content-moderation-rule",
+      "evaluate-regulatory-compliance-rule"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "evaluate-content-moderation-rule",
+    "parent_archetype": "enforce-policy-as-code",
+    "phase": "planning",
+    "attack_surface": "content-policy",
+    "definition": "Apply explicit content moderation rules (toxicity / hate speech / NSFW / disinformation flags) as a planning gate, not just on output.",
+    "scope_in": "classifier-as-policy, content moderation API gate, planning-time content rejection",
+    "scope_out": "post-generation output review → `enforce-disallowed-content-rule`; agent-output safety more generally → archetype `enforce-output-content-policy`",
+    "signal_phrases": "content policy, moderation rule, toxicity gate, NSFW gate",
+    "related": [
+      "evaluate-regulatory-compliance-rule",
+      "enforce-disallowed-content-rule"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "verify-allowed-tool-list",
+    "parent_archetype": "check-tool-permission-scope",
+    "phase": "planning",
+    "attack_surface": "OWASP LLM06.least-privilege",
+    "definition": "Reject tool invocations not in the explicit allowlist for the agent / task / session.",
+    "scope_in": "allowed-tools enum check, tool-allowlist policy, per-task tool denylist, ephemeral allowlist by session",
+    "scope_out": "resource-level scope (e.g., which file path) → `verify-resource-namespace-scope`; capability tokens → `verify-capability-token`",
+    "signal_phrases": "tool allowlist, allowed tools, tool whitelist, tool denylist, tool gating",
+    "related": [
+      "verify-resource-namespace-scope",
+      "verify-capability-token",
+      "check-rbac-role"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "verify-resource-namespace-scope",
+    "parent_archetype": "check-tool-permission-scope",
+    "phase": "planning",
+    "attack_surface": "OWASP LLM06.resource-scope",
+    "definition": "Verify the resource (file path, DB schema, repo, account, S3 bucket, project ID) targeted by a tool call is within the namespace authorized for the current task.",
+    "scope_in": "path-namespace check, repo-allowlist check, AWS account/project allowlist, DB schema allowlist",
+    "scope_out": "filesystem sandbox enforcement (chroot-style) → `enforce-filesystem-sandbox`; tool allowlist → `verify-allowed-tool-list`",
+    "signal_phrases": "resource scope, namespace check, path allowlist, repo allowlist, project scope",
+    "related": [
+      "verify-allowed-tool-list",
+      "enforce-filesystem-sandbox",
+      "enforce-network-egress-allowlist"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "verify-capability-token",
+    "parent_archetype": "check-tool-permission-scope",
+    "phase": "planning",
+    "attack_surface": "capability-security",
+    "definition": "Validate a presented capability token (macaroon, biscuit, signed grant, sealed object reference) and bind it to the planned operation's scope.",
+    "scope_in": "macaroon verification, biscuit verification, capability URL validation, signed grant binding",
+    "scope_out": "API key auth (bearer-style) → `verify-allowed-tool-list` if it just gates tool use; RBAC role check → `check-rbac-role`",
+    "signal_phrases": "capability token, macaroon, biscuit, capability-based security, sealed reference",
+    "related": [
+      "verify-allowed-tool-list",
+      "check-rbac-role"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "check-rbac-role",
+    "parent_archetype": "check-tool-permission-scope",
+    "phase": "planning",
+    "attack_surface": "access-control",
+    "definition": "Verify the agent / current task / current user holds an RBAC or ABAC role authorized for the planned action.",
+    "scope_in": "role lookup, role-action matrix, attribute-based check, RBAC enforcement gate",
+    "scope_out": "capability tokens (not role-based) → `verify-capability-token`; tool allowlist → `verify-allowed-tool-list`; full policy engine evaluation (OPA / Rego, including RBAC-as-policy) → `evaluate-opa-rego-rule`",
+    "signal_phrases": "RBAC, ABAC, role check, role-based access, authorization gate",
+    "related": [
+      "verify-allowed-tool-list",
+      "verify-capability-token",
+      "verify-resource-namespace-scope",
+      "evaluate-opa-rego-rule"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "compare-plan-vs-stated-intent",
+    "parent_archetype": "detect-task-overreach",
+    "phase": "planning",
+    "attack_surface": "OWASP LLM06.scope-creep",
+    "definition": "Compare the agent's generated plan against the user's elicited intent and return a similarity / divergence score.",
+    "scope_in": "plan-intent embedding similarity, plan-step justification labeling, scope-divergence scoring",
+    "scope_out": "just listing side effects → `enumerate-task-side-effects`; flagging specific steps → `flag-unjustified-side-effect`",
+    "signal_phrases": "plan vs intent, intent alignment, scope divergence, plan validation against intent",
+    "related": [
+      "enumerate-task-side-effects",
+      "flag-unjustified-side-effect",
+      "detect-autonomy-budget-exceeded"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "flag-unjustified-side-effect",
+    "parent_archetype": "detect-task-overreach",
+    "phase": "planning",
+    "attack_surface": "OWASP LLM06",
+    "definition": "Identify individual planned steps whose side effects (writes / sends / spends) are not justified by the user-stated goal.",
+    "scope_in": "per-step justification check, \"why is this step needed\" annotation enforcement, unjustified-write detection",
+    "scope_out": "blanket plan/intent comparison → `compare-plan-vs-stated-intent`; budget-based limits → `detect-autonomy-budget-exceeded`",
+    "signal_phrases": "unjustified step, unnecessary side effect, scope creep flag, step-level justification",
+    "related": [
+      "compare-plan-vs-stated-intent",
+      "enumerate-task-side-effects"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-autonomy-budget-exceeded",
+    "parent_archetype": "detect-task-overreach",
+    "phase": "planning",
+    "attack_surface": "OWASP LLM06.autonomy-budget",
+    "definition": "Detect when the cumulative scope (number of writes, money spent, external messages, irreversible actions) exceeds the autonomy budget set for this task.",
+    "scope_in": "per-task action quota, per-session write quota, per-session spend cap, action-counter gate",
+    "scope_out": "per-tool rate limit (latency/cost) → `enforce-tool-call-rate-limit`; cost cap on $ → `enforce-cost-cap-per-task`",
+    "signal_phrases": "autonomy budget, action budget, scope budget, autonomy quota, irreversible action quota",
+    "related": [
+      "enforce-tool-call-rate-limit",
+      "enforce-cost-cap-per-task",
+      "request-human-confirmation"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enumerate-task-side-effects",
+    "parent_archetype": "detect-task-overreach",
+    "phase": "planning",
+    "attack_surface": "自定义.side-effect-graph",
+    "definition": "Enumerate all observable side effects of a planned multi-step task (writes, network calls, money moves, message sends, state mutations) before any action is taken.",
+    "scope_in": "side-effect graph extraction from plan, write-set / read-set analysis, money-flow extraction, dry-run side-effect listing",
+    "scope_out": "comparing those side effects against user intent → `compare-plan-vs-stated-intent`; flagging unjustified ones → `flag-unjustified-side-effect`; per-call budget gate → `detect-autonomy-budget-exceeded`",
+    "signal_phrases": "side-effect graph, write-set extraction, dry-run plan, plan side-effect inventory",
+    "related": [
+      "compare-plan-vs-stated-intent",
+      "flag-unjustified-side-effect",
+      "detect-autonomy-budget-exceeded"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-shell-command-injection",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "cmd-injection",
+    "definition": "Detect shell metacharacters / argument escapes / unsafe quoting that introduce an executable payload in commands the agent is about to run via shell, exec, or subprocess.",
+    "scope_in": "dangerous command substitution such as `$(curl ...)`, pipe-to-shell execution, `/dev/tcp`, untrusted argument interpolation in bash/sh, `subprocess.run(shell=True)`, makefile targets, or container `cmd`",
+    "scope_out": "SQL queries → `detect-sql-injection`; HTTP request body content → `detect-unsafe-url` (if URL) or `enforce-output-content-policy`; OS-level sandbox → `enforce-process-sandbox`",
+    "signal_phrases": "shell injection, command injection, shell metacharacter, $(), backtick, exec injection, popen safety",
+    "related": [
+      "detect-sql-injection",
+      "detect-path-traversal",
+      "detect-destructive-flag",
+      "enforce-process-sandbox"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-sql-injection",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP A03 (Injection) / SQLi",
+    "definition": "Detect SQL injection patterns / unparameterized query construction in DB calls the agent is about to execute.",
+    "scope_in": "string-concat SQL, missing parameterization, ORM raw query inspection, NoSQL operator injection",
+    "scope_out": "shell calls → `detect-shell-command-injection`; SAST on stored code → `detect-injection-flaw`",
+    "signal_phrases": "SQL injection, NoSQL injection, parameterized query enforcement, query sanitization",
+    "related": [
+      "detect-shell-command-injection",
+      "detect-injection-flaw",
+      "validate-tool-argument-schema"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-path-traversal",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "path-traversal",
+    "definition": "Detect `..`, absolute paths escaping workspace, symlink traversal, encoded traversal sequences in file path arguments.",
+    "scope_in": "`../` detection, absolute-path-outside-workspace check, encoded path (`%2e%2e/`) detection, symlink-target follow",
+    "scope_out": "enforcing the workspace at OS level → `enforce-filesystem-sandbox`; workspace boundary archetype itself → use `enforce-filesystem-sandbox`",
+    "signal_phrases": "path traversal, ../, directory traversal, symlink escape, path canonicalization",
+    "related": [
+      "enforce-filesystem-sandbox",
+      "verify-resource-namespace-scope"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-destructive-flag",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "destructive-args",
+    "definition": "Detect destructive flags / parameters in tool calls (`rm -rf`, `--force`, `DROP TABLE`, `git push --force`, `chmod 777`, `kubectl delete --all`) and destructive resource replacement such as overwriting an existing database file.",
+    "scope_in": "command-flag denylist, destructive-arg pattern match, irreversible-flag detection, force-flag check, `mv`/`cp` replacement of a `.db`/`.sqlite` destination",
+    "scope_out": "input keyword detection (before tool layer) → `detect-destructive-action-keyword`; user-intent ambiguity → `classify-request-ambiguity-level`",
+    "signal_phrases": "destructive flag, force flag, --force, rm -rf, kubectl delete, drop table, database replacement, destructive-arg detector",
+    "related": [
+      "detect-destructive-action-keyword",
+      "detect-shell-command-injection",
+      "request-human-confirmation"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-unsafe-url",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "SSRF",
+    "definition": "Detect URLs targeting metadata endpoints (169.254.169.254, link-local), private networks, malicious hosts, or with embedded credentials.",
+    "scope_in": "SSRF target detection, internal-IP allowlist enforcement, malicious-host blocklist, suspicious-URL signature",
+    "scope_out": "network egress allowlist enforcement → `enforce-network-egress-allowlist`; MCP-specific SSRF → `detect-mcp-ssrf`",
+    "signal_phrases": "SSRF, unsafe URL, metadata endpoint, link-local IP, malicious host, URL allowlist",
+    "related": [
+      "enforce-network-egress-allowlist",
+      "detect-mcp-ssrf"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-secret-in-args",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM02 (output-side leak via tool args)",
+    "definition": "Detect API keys / tokens / passwords being passed in tool call arguments where they shouldn't be (URL query params, log message fields, bug-report bodies).",
+    "scope_in": "secret in HTTP query string, secret in webhook body, secret in third-party-API arg field, secret in log line",
+    "scope_out": "secret in user input → `detect-credential-in-input`; secret in code → `detect-hardcoded-secret-in-code`; secret in agent output to user → `redact-output-secret`",
+    "signal_phrases": "secret in tool call, credential leakage to tool, secret in URL, secret in argument, leaking key to webhook",
+    "related": [
+      "detect-credential-in-input",
+      "redact-output-secret",
+      "detect-data-exfiltration"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-overbroad-resource-selector",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM06.overbroad-scope",
+    "definition": "Detect wildcards / bulk selectors / \"all\" semantics in tool args that affect more resources than the task requires (`*`, `all`, `--recursive`, no `WHERE` clause, repo `*`, label `*`).",
+    "scope_in": "wildcard arg detection, missing WHERE/scope filter, recursive-flag without justification, \"all-instances\" selector",
+    "scope_out": "resource-namespace scope (which is allowed at all) → `verify-resource-namespace-scope`; rate limit → `enforce-tool-call-rate-limit`",
+    "signal_phrases": "overbroad selector, wildcard arg, missing where clause, --recursive risk, all-instances flag",
+    "related": [
+      "verify-resource-namespace-scope",
+      "detect-destructive-flag"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "validate-tool-argument-schema",
+    "parent_archetype": "validate-tool-argument-safety",
+    "phase": "tool-invocation",
+    "attack_surface": "schema-violation",
+    "definition": "Validate tool-call arguments against the tool's declared JSON Schema / OpenAPI / function signature, rejecting type mismatches / missing required / extra fields.",
+    "scope_in": "JSON Schema validation, OpenAPI request validation, MCP tool-call schema check, type coercion safety check",
+    "scope_out": "semantic safety of values (injection, secrets) → other `validate-tool-argument-safety/*`; tool-trust → `validate-agent-tool-trust`",
+    "signal_phrases": "argument schema validation, JSON Schema validator, tool-call schema check, OpenAPI validator",
+    "related": [
+      "detect-shell-command-injection",
+      "detect-overbroad-resource-selector"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-filesystem-sandbox",
+    "parent_archetype": "constrain-workspace-boundary",
+    "phase": "tool-invocation",
+    "attack_surface": "sandbox-fs",
+    "definition": "Restrict the agent's file read/write operations to a declared workspace via OS-level mechanisms (chroot, bind-mount, container FS, capability-based FS).",
+    "scope_in": "chroot, Docker volume mount, namespace-isolated FS, AppArmor/SELinux FS profile, jailbird FS",
+    "scope_out": "`..` detection in args → `detect-path-traversal`; resource-namespace policy decision → `verify-resource-namespace-scope`",
+    "signal_phrases": "filesystem sandbox, chroot, FS jail, container FS isolation, AppArmor profile, mount namespace",
+    "related": [
+      "detect-path-traversal",
+      "enforce-process-sandbox",
+      "verify-resource-namespace-scope"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-network-egress-allowlist",
+    "parent_archetype": "constrain-workspace-boundary",
+    "phase": "tool-invocation",
+    "attack_surface": "egress-firewall",
+    "definition": "Restrict outbound network calls to an allowlist of hostnames / IP ranges / ports at the network or proxy layer.",
+    "scope_in": "egress firewall rule, HTTP proxy allowlist, DNS allowlist, container network policy",
+    "scope_out": "arg-level URL safety check → `detect-unsafe-url`; data exfiltration content detection → `detect-data-exfiltration`",
+    "signal_phrases": "egress firewall, network allowlist, outbound allowlist, HTTP proxy filter, DNS sinkhole",
+    "related": [
+      "detect-unsafe-url",
+      "detect-data-exfiltration",
+      "enforce-process-sandbox"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-process-sandbox",
+    "parent_archetype": "constrain-workspace-boundary",
+    "phase": "tool-invocation",
+    "attack_surface": "sandbox-proc",
+    "definition": "Restrict the agent's process / subprocess capabilities (seccomp, capabilities drop, gVisor, Firecracker, container with no-new-privileges).",
+    "scope_in": "seccomp profile, container with `--security-opt no-new-privileges`, gVisor, Firecracker, capability drop, syscall allowlist",
+    "scope_out": "filesystem-only isolation → `enforce-filesystem-sandbox`; network-only isolation → `enforce-network-egress-allowlist`",
+    "signal_phrases": "seccomp, syscall filter, gVisor, Firecracker, no-new-privileges, capability drop, process sandbox",
+    "related": [
+      "enforce-filesystem-sandbox",
+      "enforce-network-egress-allowlist",
+      "detect-sandbox-escape-attempt"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-sandbox-escape-attempt",
+    "parent_archetype": "constrain-workspace-boundary",
+    "phase": "tool-invocation",
+    "attack_surface": "sandbox-escape",
+    "definition": "Detect runtime indicators that the agent or its tools are trying to escape the sandbox (mount manipulation, ptrace, kernel-module load, escape-via-shared-volume).",
+    "scope_in": "ptrace / module-load detection, mount-syscall anomaly, container-breakout signature, suspicious socket-to-host",
+    "scope_out": "pre-execution permission check → `verify-allowed-tool-list`; arg-level destructive flag → `detect-destructive-flag`",
+    "signal_phrases": "sandbox escape, container breakout, ptrace abuse, module load, mount escape, escape detector",
+    "related": [
+      "enforce-process-sandbox",
+      "enforce-filesystem-sandbox",
+      "incident-response-handler"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-subagent-scope-isolation",
+    "parent_archetype": "constrain-workspace-boundary",
+    "phase": "tool-invocation",
+    "attack_surface": "multi-agent privilege escalation",
+    "definition": "Isolate a subagent's workspace, capability scope, and resource access so it cannot escalate beyond what the parent delegated to it.",
+    "scope_in": "per-subagent FS namespace, scoped-down capability token issuance, parent-permission strict subset enforcement, separate execution sandbox",
+    "scope_out": "filesystem sandbox in general → `enforce-filesystem-sandbox`; race-condition / shared-state safety → `enforce-swarm-race-condition-safety`",
+    "signal_phrases": "subagent isolation, delegated scope, child-agent sandbox, scope-reduction enforcement",
+    "related": [
+      "enforce-filesystem-sandbox",
+      "enforce-process-sandbox",
+      "verify-delegation-chain"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-swarm-race-condition-safety",
+    "parent_archetype": "constrain-workspace-boundary",
+    "phase": "tool-invocation",
+    "attack_surface": "multi-agent shared state",
+    "definition": "Prevent race conditions and state-corruption in multi-agent shared-blackboard or shared-workspace environments via locking, transactional updates, or CRDT-based coordination.",
+    "scope_in": "shared-blackboard mutex, CRDT-based merge, optimistic-concurrency check, multi-agent lock acquisition + timeout",
+    "scope_out": "per-subagent isolation → `enforce-subagent-scope-isolation`; rate limit on shared resource → `enforce-tool-call-rate-limit`",
+    "signal_phrases": "swarm race condition, multi-agent lock, shared blackboard safety, CRDT coordination",
+    "related": [
+      "enforce-subagent-scope-isolation",
+      "enforce-tool-call-rate-limit"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "check-tool-typosquat-name",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "typosquatting (UseAI-pro T1)",
+    "definition": "Detect tool / skill / package names that look-alike a known popular package (homoglyph, near-edit-distance, brandjack).",
+    "scope_in": "levenshtein-distance to known-good list, homoglyph detection (l→1, o→0, Cyrillic look-alikes), brandjack name-similarity check",
+    "scope_out": "package CVE check → `check-package-cve`; install hook audit → `audit-install-hook`",
+    "signal_phrases": "typosquat, typosquatting, name similarity, homoglyph, brandjack, near-clone name",
+    "related": [
+      "verify-tool-publisher-identity",
+      "check-package-typosquat"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "verify-skill-signature",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "skill-supply-chain",
+    "definition": "Verify cryptographic signature / SHA256 checksum / sigstore attestation of a skill / tool / MCP server before installation or invocation.",
+    "scope_in": "GPG signature check, sigstore / cosign verification, SHA256 manifest check, signed-feed verification (ClawSec-style), model-artifact signature (weights / configs / containers)",
+    "scope_out": "package-registry signature → `check-package-cve` (covers CVE feed integrity); signature on agent output → `enable-tamper-evident-storage`",
+    "signal_phrases": "skill signature, signed skill, sigstore, cosign, checksum verification, signed feed",
+    "related": [
+      "verify-tool-publisher-identity",
+      "check-package-cve"
+    ],
+    "requires_network": "false (bundled pubkey; optional online revocation via `SKILL_REVOCATION_URL`)",
+    "fail_policy": "fail-closed",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "verify-tool-publisher-identity",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "provenance",
+    "definition": "Verify the publisher / maintainer / org of a tool / skill against a curated allowlist or reputation source.",
+    "scope_in": "org-allowlist enforcement, GitHub-org provenance check, npm-publisher reputation, reputation-score lookup",
+    "scope_out": "signature verification → `verify-skill-signature`; install-hook content audit → `audit-install-hook`",
+    "signal_phrases": "publisher allowlist, maintainer reputation, org provenance, publisher identity, reputation score",
+    "related": [
+      "verify-skill-signature",
+      "check-tool-typosquat-name"
+    ],
+    "requires_network": "false (local publisher allowlist by default; optional online reputation via user-configured endpoint)",
+    "fail_policy": "fail-closed",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-hidden-instruction-in-tool-description",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "tool-poisoning",
+    "definition": "Scan a tool / skill description / SKILL.md / MCP `tool.description` for instructions targeting the LLM (rather than the human reader).",
+    "scope_in": "hidden \"always do X\"-style instruction in tool description, invisible-character payloads, \"instructions for assistant\" sections, white-on-white text",
+    "scope_out": "prompt injection in fetched runtime content → `detect-indirect-prompt-injection`; YARA-style binary payload → `detect-malicious-payload-in-tool-output`",
+    "signal_phrases": "tool poisoning, skill poisoning, hidden instruction, hidden prompt in description, instruction-in-description scanner",
+    "related": [
+      "detect-indirect-prompt-injection",
+      "detect-tool-loader-exploit"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-tool-loader-exploit",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "skill-loader-exploit (UseAI-pro T6)",
+    "definition": "Detect skills / tools that exploit the host's loader behavior (auto-execute on install, sideload via `npx` post-install, hijack global config).",
+    "scope_in": "install-time auto-exec detection, package post-install hook audit, agent-startup-config hijack",
+    "scope_out": "install-script content malicious-pattern → `audit-install-hook` / `detect-malicious-postinstall-script`; permission overrequest → `detect-skill-permission-overrequest`",
+    "signal_phrases": "skill loader exploit, install-time exec, post-install hijack, loader abuse, autoload exploit",
+    "related": [
+      "audit-install-hook",
+      "detect-malicious-postinstall-script",
+      "detect-skill-permission-overrequest"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-skill-permission-overrequest",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM06.overprivilege (UseAI-pro T11)",
+    "definition": "Detect skills / tools requesting a permission combination broader than their stated functionality justifies (e.g., a markdown formatter requesting network + shell).",
+    "scope_in": "permission-vs-functionality mismatch, \"shell + network\" combo flag, broad-FS-write request, dangerous-perm combo detection",
+    "scope_out": "at-runtime permission scope → `check-tool-permission-scope` archetype; least-priv enforcement → `verify-allowed-tool-list`",
+    "signal_phrases": "over-privilege, over-permission, perm combo flag, dangerous permissions, permission audit",
+    "related": [
+      "verify-allowed-tool-list",
+      "detect-tool-loader-exploit"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-mcp-confused-deputy",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "MCP-spec.confused-deputy",
+    "definition": "Detect / prevent the MCP \"confused deputy\" pattern where a server uses its higher privileges on behalf of a less-privileged caller without scope check.",
+    "scope_in": "MCP server caller-vs-resource scope check, MCP token re-binding, principal propagation enforcement",
+    "scope_out": "token passthrough specifically → `detect-mcp-token-passthrough`; SSRF specifically → `detect-mcp-ssrf`",
+    "signal_phrases": "confused deputy, MCP confused deputy, deputy attack, principal propagation, MCP scope check",
+    "related": [
+      "detect-mcp-token-passthrough",
+      "detect-mcp-session-hijacking",
+      "detect-mcp-ssrf"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-mcp-token-passthrough",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "MCP-spec.token-passthrough",
+    "definition": "Detect MCP servers that pass an upstream token to downstream services without rebinding scope or validating audience.",
+    "scope_in": "token forwarded to backend without scope reduction, audience claim not validated, OAuth token reuse beyond scope",
+    "scope_out": "confused-deputy pattern (broader) → `detect-mcp-confused-deputy`; non-MCP credential leakage → `detect-secret-in-args`",
+    "signal_phrases": "token passthrough, MCP token leak, audience validation, OAuth scope misuse, token rebinding",
+    "related": [
+      "detect-mcp-confused-deputy",
+      "detect-secret-in-args"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-mcp-session-hijacking",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "MCP-spec.session-hijack",
+    "definition": "Detect MCP session hijacking vectors — session ID prediction / fixation, prompt injection across sessions, impersonation via stolen session IDs.",
+    "scope_in": "predictable session ID detection, session-fixation check, cross-session prompt-injection vector, session-impersonation indicator",
+    "scope_out": "prompt injection in general → `detect-prompt-injection` archetype; SSRF → `detect-mcp-ssrf`",
+    "signal_phrases": "MCP session hijack, session fixation, session prediction, MCP impersonation",
+    "related": [
+      "detect-mcp-confused-deputy",
+      "detect-indirect-prompt-injection"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-mcp-ssrf",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "tool-invocation",
+    "attack_surface": "MCP-spec.SSRF",
+    "definition": "Detect SSRF vectors specific to MCP servers: server fetching attacker-controlled URLs, internal-network enumeration via MCP resource fetch.",
+    "scope_in": "MCP `resource.fetch` with attacker URL, MCP server internal-IP fetch, link-local fetch from MCP context",
+    "scope_out": "general unsafe URL in any tool arg → `detect-unsafe-url`; egress firewall enforcement → `enforce-network-egress-allowlist`",
+    "signal_phrases": "MCP SSRF, MCP server SSRF, server-side request forgery in MCP, MCP resource fetch SSRF",
+    "related": [
+      "detect-unsafe-url",
+      "enforce-network-egress-allowlist"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-delayed-payload-pattern",
+    "parent_archetype": "validate-agent-tool-trust",
+    "phase": "input-understanding",
+    "attack_surface": "time-bomb / dormant-payload",
+    "definition": "Detect patterns in skill code or agent configuration that indicate delayed activation of malicious behavior — triggers based on usage count, date, environment, or specific user.",
+    "scope_in": "usage-count counter check, time-bomb date comparison, environment-specific branch (prod-only logic), targeted-user trigger",
+    "scope_out": "install-time auto-exec → `detect-tool-loader-exploit`; hidden instructions in description → `detect-hidden-instruction-in-tool-description`",
+    "signal_phrases": "time bomb, dormant payload, delayed activation, conditional malware, environment trigger",
+    "related": [
+      "detect-tool-loader-exploit",
+      "detect-hidden-instruction-in-tool-description",
+      "match-yara-rule"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "check-package-typosquat",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM03.typosquat",
+    "definition": "Detect typosquat / brandjack package names in dependency manifests (npm / pip / cargo / go.mod) before install.",
+    "scope_in": "npm/pip/cargo/go.mod dependency name fuzzy-match to top-N popular packages, brandjack near-clone name detection",
+    "scope_out": "tool-name typosquat (not a package) → `check-tool-typosquat-name`; transitive dep audit → `check-dependency-confusion`",
+    "signal_phrases": "package typosquat, dependency typosquat, npm squatting, pip typosquat, name-similarity scanner",
+    "related": [
+      "check-tool-typosquat-name",
+      "check-package-cve",
+      "check-dependency-confusion"
+    ],
+    "requires_network": "false (bundled top-N popular package name DB; refresh via `safety-orch refresh-db`)",
+    "fail_policy": "fail-closed",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "check-package-cve",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM03.cve",
+    "definition": "Look up packages / versions against CVE / advisory feeds (NVD, GitHub Advisory, OSV, RustSec) and surface vulnerable matches.",
+    "scope_in": "NVD / OSV / GHSA lookup, version-range CVE match, advisory-feed integration, CVSS-score gating, container-image CVE scan (Trivy / Grype)",
+    "scope_out": "SAST on the package source → `run-sast-scan`; SBOM completeness → `check-sbom-completeness`",
+    "signal_phrases": "CVE check, vulnerability database lookup, NVD scanner, OSV lookup, advisory feed, CVSS gate",
+    "related": [
+      "check-package-typosquat",
+      "check-sbom-completeness",
+      "run-sast-scan"
+    ],
+    "requires_network": "true (default endpoints: osv.dev `/v1/querybatch`, GHSA, NVD; supports offline `osv-export` snapshot fallback)",
+    "fail_policy": "fail-soft-block",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "check-dependency-confusion",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "dep-confusion",
+    "definition": "Detect dependency-confusion risk: an internal-package name being satisfiable from a public registry with higher version.",
+    "scope_in": "internal/public registry shadow check, scope-jacking detection, namespace-overshadow detection",
+    "scope_out": "typosquat (similar but distinct name) → `check-package-typosquat`; install-hook abuse → `audit-install-hook`",
+    "signal_phrases": "dependency confusion, registry shadowing, scope jacking, namespace shadow, internal-vs-public dep",
+    "related": [
+      "check-package-typosquat",
+      "audit-install-hook"
+    ],
+    "requires_network": "true (public registry metadata, cache-backed; internal package inventory from `SAFETY_ORCH_INTERNAL_PACKAGES_JSON`)",
+    "fail_policy": "fail-closed",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "audit-install-hook",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "postinstall-hook",
+    "definition": "Audit npm `postinstall` / pip `setup.py` / cargo build scripts / Makefile install targets for malicious behavior before allowing install.",
+    "scope_in": "npm postinstall script content audit, pip setup.py exec inspection, cargo build script audit, install-script-source review, Docker image tag-pinning audit",
+    "scope_out": "detected malicious script content match → `detect-malicious-postinstall-script` (more specific); install-time loader exploit → `detect-tool-loader-exploit`",
+    "signal_phrases": "postinstall audit, install hook check, setup.py audit, install-script review, build-script audit",
+    "related": [
+      "detect-malicious-postinstall-script",
+      "detect-tool-loader-exploit"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "check-package-recency-anomaly",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "supply-chain.recency",
+    "definition": "Flag packages with anomalous publish patterns (very recent first publish, single-maintainer, sudden ownership change, version skip, abandoned).",
+    "scope_in": "first-publish < N days check, sole-maintainer flag, ownership-change detection, abandoned-package detection",
+    "scope_out": "known CVE → `check-package-cve`; typosquat → `check-package-typosquat`",
+    "signal_phrases": "package recency anomaly, ownership change, recently published, abandoned package, sole maintainer flag",
+    "related": [
+      "check-package-typosquat",
+      "verify-tool-publisher-identity"
+    ],
+    "requires_network": "true (registry.npmjs.org / pypi.org / crates.io package metadata endpoints; ETag-cached)",
+    "fail_policy": "fail-open-warn",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-malicious-postinstall-script",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "postinstall-malicious",
+    "definition": "Detect concrete malicious patterns inside postinstall scripts (cred exfil, reverse shell, crypto miner install, persistence write).",
+    "scope_in": "reverse-shell pattern, base64-decoded payload exec, env-var exfil, miner-binary download",
+    "scope_out": "just auditing the hook exists / runs → `audit-install-hook`; reverse-shell at runtime → covered separately by sandbox detection",
+    "signal_phrases": "malicious postinstall, reverse shell in install, install-time miner, install exfil, malicious build script",
+    "related": [
+      "audit-install-hook",
+      "detect-tool-loader-exploit"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-hallucinated-package",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "slopsquatting / LLM-induced supply chain",
+    "definition": "Detect package names in generated code or import statements that do not exist in any known registry, preventing slopsquatting attacks where attackers pre-register hallucinated names.",
+    "scope_in": "registry-existence lookup (npm / PyPI / crates.io / Maven Central / Go modules), missing-package check on LLM-generated imports, slopsquatting susceptibility check",
+    "scope_out": "typosquatted real packages → `check-package-typosquat`; dependency confusion → `check-dependency-confusion`",
+    "signal_phrases": "hallucinated package, slopsquatting, non-existent dependency, LLM-suggested fake package, import-validation",
+    "related": [
+      "check-package-typosquat",
+      "check-dependency-confusion"
+    ],
+    "requires_network": "true (npm / PyPI / crates.io / Maven Central / Go modules registry existence check)",
+    "fail_policy": "fail-open-warn",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "audit-ci-workflow-security",
+    "parent_archetype": "detect-supply-chain-risk",
+    "phase": "tool-invocation",
+    "attack_surface": "CI/CD supply chain",
+    "definition": "Audit CI/CD workflow files (GitHub Actions, GitLab CI, Jenkins, CircleCI) for supply-chain risks including action-version pinning, trigger safety (pull_request_target), secret exposure, and dependency injection points.",
+    "scope_in": "GitHub Actions YAML audit, action-version SHA pinning check, dangerous-trigger detection (`pull_request_target`), workflow-permissions audit",
+    "scope_out": "package CVE scanning → `check-package-cve`; install-hook content → `audit-install-hook`; SAST scan of source → `run-sast-scan`",
+    "signal_phrases": "CI pipeline audit, GitHub Actions audit, workflow security, action pinning, pull_request_target risk",
+    "related": [
+      "check-package-cve",
+      "audit-install-hook",
+      "run-sast-scan"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "run-sast-scan",
+    "parent_archetype": "scan-code-for-vulnerabilities",
+    "phase": "tool-invocation",
+    "attack_surface": "SAST",
+    "definition": "Run a static analysis tool over agent-generated or user-supplied source and produce findings with location + severity.",
+    "scope_in": "semgrep / codeql / bandit / gosec runs, language-specific lint with security rules",
+    "scope_out": "secret in code → `detect-hardcoded-secret-in-code`; specific injection class → `detect-injection-flaw`; arg-level shell injection → `detect-shell-command-injection`",
+    "signal_phrases": "SAST, semgrep, codeql, bandit, gosec, security linter, static analysis",
+    "related": [
+      "detect-hardcoded-secret-in-code",
+      "detect-injection-flaw",
+      "detect-insecure-cryptography"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-hardcoded-secret-in-code",
+    "parent_archetype": "scan-code-for-vulnerabilities",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM02.code-secret",
+    "definition": "Detect secrets / API keys / private keys hardcoded in source files (vs in user input or tool args).",
+    "scope_in": "source-file secret scan, gitleaks / trufflehog-style scan, repo history secret scan",
+    "scope_out": "secret in user input → `detect-credential-in-input`; secret in tool args → `detect-secret-in-args`; secret in agent output → `redact-output-secret`",
+    "signal_phrases": "hardcoded secret, gitleaks, trufflehog, repo secret scan, source secret detection",
+    "related": [
+      "detect-credential-in-input",
+      "detect-secret-in-args",
+      "redact-output-secret"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-insecure-cryptography",
+    "parent_archetype": "scan-code-for-vulnerabilities",
+    "phase": "tool-invocation",
+    "attack_surface": "weak-crypto",
+    "definition": "Detect use of weak / deprecated crypto primitives (MD5, SHA1, DES, RC4, ECB mode, weak RSA modulus, hardcoded IV).",
+    "scope_in": "weak-cipher detection, deprecated-mode use, weak-modulus check, hardcoded-IV / hardcoded-salt",
+    "scope_out": "misuse of TLS at runtime → covered by SAST or runtime check; private key leak in code → `detect-hardcoded-secret-in-code`",
+    "signal_phrases": "weak crypto, MD5 use, SHA1 use, DES, ECB mode, hardcoded IV, weak cipher",
+    "related": [
+      "run-sast-scan",
+      "detect-hardcoded-secret-in-code"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-unsafe-deserialization",
+    "parent_archetype": "scan-code-for-vulnerabilities",
+    "phase": "tool-invocation",
+    "attack_surface": "deserialization",
+    "definition": "Detect use of unsafe deserialization (Python pickle, Java serializable, Ruby Marshal, PHP unserialize) on attacker-controlled data.",
+    "scope_in": "pickle.load on untrusted input, Java ObjectInputStream on untrusted input, YAML.unsafe_load, Erlang `:erlang.binary_to_term/1` on untrusted",
+    "scope_out": "schema validation → `validate-tool-argument-schema`; SAST find of any deserialization → `run-sast-scan` (deser is a sub-class)",
+    "signal_phrases": "unsafe deserialization, pickle injection, Java deserialization, yaml.unsafe_load",
+    "related": [
+      "run-sast-scan",
+      "detect-injection-flaw"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-injection-flaw",
+    "parent_archetype": "scan-code-for-vulnerabilities",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP A03 (Injection)",
+    "definition": "Detect injection-class flaws (XSS, LDAP, XPath, template injection, SSTI) in source code beyond shell/SQL.",
+    "scope_in": "XSS sink detection, template injection (Jinja2, ERB), SSTI patterns, LDAP/XPath injection",
+    "scope_out": "SQL injection in tool arg → `detect-sql-injection`; shell injection in tool arg → `detect-shell-command-injection`",
+    "signal_phrases": "XSS, SSTI, template injection, LDAP injection, XPath injection, injection sink",
+    "related": [
+      "run-sast-scan",
+      "detect-sql-injection",
+      "detect-shell-command-injection"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "match-yara-rule",
+    "parent_archetype": "detect-malicious-payload-in-tool-output",
+    "phase": "tool-invocation",
+    "attack_surface": "signature-match",
+    "definition": "Run YARA rules against tool-returned files / blobs / strings for malware family signatures.",
+    "scope_in": "YARA rule execution, YARA rule pack management, YARA-X scanning",
+    "scope_out": "hash-based IOC match → `check-malware-hash-ioc`; archive bomb → `detect-archive-bomb`",
+    "signal_phrases": "YARA, YARA rule, malware signature, YARA-X, signature scan",
+    "related": [
+      "check-malware-hash-ioc",
+      "strip-active-html-script"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "check-malware-hash-ioc",
+    "parent_archetype": "detect-malicious-payload-in-tool-output",
+    "phase": "tool-invocation",
+    "attack_surface": "IOC",
+    "definition": "Compare file hashes / URL / domain / IP IOCs from tool responses against threat-intel feeds (VirusTotal, AlienVault OTX, MISP).",
+    "scope_in": "VT hash lookup, OTX/MISP IOC match, domain blocklist match, IP reputation check, phishing-URL feed lookup (PhishTank / OpenPhish)",
+    "scope_out": "pattern-based content match → `match-yara-rule`; URL allowlist (egress, not IOC) → `enforce-network-egress-allowlist`",
+    "signal_phrases": "IOC match, hash IOC, threat intel feed, VirusTotal, MISP, OTX",
+    "related": [
+      "match-yara-rule",
+      "enforce-network-egress-allowlist"
+    ],
+    "requires_network": "true (VirusTotal / AlienVault OTX / MISP; rate-limited public APIs)",
+    "requires_api_key": "VIRUSTOTAL_API_KEY (atom auto-disabled and Router status shows \"待激活\" if missing)",
+    "fail_policy": "fail-open-warn",
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-archive-bomb",
+    "parent_archetype": "detect-malicious-payload-in-tool-output",
+    "phase": "tool-invocation",
+    "attack_surface": "zip-bomb",
+    "definition": "Detect zip / tar / gzip archives with abnormal expansion ratio or recursive nesting that would exhaust resources on extraction.",
+    "scope_in": "zip-bomb expansion-ratio check, nested-archive depth limit, decompressed-size cap, quine-zip detection",
+    "scope_out": "rate-limit / quota exhaustion (general) → `enforce-rate-and-quota-limits` archetype; OOM-targeting payload → `detect-runaway-loop`",
+    "signal_phrases": "zip bomb, archive bomb, decompression bomb, gzip bomb, expansion ratio",
+    "related": [
+      "detect-suspicious-mime-type",
+      "enforce-tool-call-rate-limit"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-suspicious-mime-type",
+    "parent_archetype": "detect-malicious-payload-in-tool-output",
+    "phase": "tool-invocation",
+    "attack_surface": "MIME-mismatch",
+    "definition": "Detect MIME-type / declared-extension mismatch (executable masquerading as image, polyglot files, MIME sniffing risk).",
+    "scope_in": "magic-byte vs declared-extension check, polyglot file detection, MIME-type whitelist enforcement",
+    "scope_out": "full malware scan → `match-yara-rule`; HTML active content → `strip-active-html-script`",
+    "signal_phrases": "MIME mismatch, MIME sniffing, polyglot file, magic byte check, file-type spoof",
+    "related": [
+      "match-yara-rule",
+      "strip-active-html-script"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "strip-active-html-script",
+    "parent_archetype": "detect-malicious-payload-in-tool-output",
+    "phase": "tool-invocation",
+    "attack_surface": "HTML-active-content",
+    "definition": "Strip / sanitize active content (script tags, on* event handlers, iframe, javascript: URLs) from HTML returned by tools before rendering or feeding to LLM.",
+    "scope_in": "DOMPurify-style sanitization, script-tag strip, event-handler-attr removal, javascript: URL strip",
+    "scope_out": "hidden text instructions to LLM → `detect-indirect-prompt-injection`; YARA on HTML → `match-yara-rule`",
+    "signal_phrases": "HTML sanitization, DOMPurify, script tag strip, on-attribute strip, active content strip",
+    "related": [
+      "detect-indirect-prompt-injection",
+      "detect-suspicious-mime-type"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-tool-call-rate-limit",
+    "parent_archetype": "enforce-rate-and-quota-limits",
+    "phase": "tool-invocation",
+    "attack_surface": "DoS",
+    "definition": "Throttle / cap tool invocations per second / per minute / per task to prevent runaway loops or DoS against external APIs.",
+    "scope_in": "per-tool rate limit, per-task call cap, sliding-window throttle, exponential backoff on 429",
+    "scope_out": "$ cost cap → `enforce-cost-cap-per-task`; token budget → `enforce-token-budget-cap`; runaway-loop detection → `detect-runaway-loop`",
+    "signal_phrases": "tool rate limit, call throttle, sliding-window limit, backoff on 429, per-tool quota",
+    "related": [
+      "enforce-token-budget-cap",
+      "enforce-cost-cap-per-task",
+      "detect-runaway-loop"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-token-budget-cap",
+    "parent_archetype": "enforce-rate-and-quota-limits",
+    "phase": "tool-invocation",
+    "attack_surface": "OWASP LLM10.token-budget",
+    "definition": "Cap LLM token usage per task / per session / per user to prevent budget exhaustion or \"denial of wallet\".",
+    "scope_in": "per-task token budget, prompt + completion accounting, budget-enforcement gate",
+    "scope_out": "$ cost (different unit) → `enforce-cost-cap-per-task`; tool API rate → `enforce-tool-call-rate-limit`",
+    "signal_phrases": "token budget, token cap, token quota, denial of wallet, token accounting",
+    "related": [
+      "enforce-cost-cap-per-task",
+      "enforce-tool-call-rate-limit"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "enforce-cost-cap-per-task",
+    "parent_archetype": "enforce-rate-and-quota-limits",
+    "phase": "tool-invocation",
+    "attack_surface": "cost-cap",
+    "definition": "Cap monetary cost ($) per task / session / day across all paid tool/API calls.",
+    "scope_in": "per-task $ budget, per-day spend cap, paid-API spend tracker, cost-aware throttle, per-transaction spend cap (single-call max)",
+    "scope_out": "token-only budget → `enforce-token-budget-cap`; per-tool rate → `enforce-tool-call-rate-limit`",
+    "signal_phrases": "cost cap, $ budget, denial of wallet, spend cap, cost-aware throttle",
+    "related": [
+      "enforce-token-budget-cap",
+      "enforce-tool-call-rate-limit"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-runaway-loop",
+    "parent_archetype": "enforce-rate-and-quota-limits",
+    "phase": "tool-invocation",
+    "attack_surface": "runaway-loop",
+    "definition": "Detect agent loops (same tool call N times, agent stuck oscillating, tool recursion) and break out before resource exhaustion.",
+    "scope_in": "same-call detection, oscillation detection, per-tool repeat-count gate, recursion-depth check",
+    "scope_out": "budget-only enforcement → `enforce-cost-cap-per-task`; archive-bomb → `detect-archive-bomb`",
+    "signal_phrases": "runaway loop, agent loop detection, infinite loop break, oscillation detection, recursion limit",
+    "related": [
+      "enforce-tool-call-rate-limit",
+      "enforce-cost-cap-per-task"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "redact-output-pii",
+    "parent_archetype": "redact-sensitive-output",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM02.output-pii",
+    "definition": "Redact PII / regulated personal data from agent output before returning to user, writing to logs, or sending to downstream systems.",
+    "scope_in": "output-side PII detector + replacement, log scrubbing, downstream-write redaction, GDPR-aware output filter",
+    "scope_out": "input-side redaction → `redact-input-pii`; secrets specifically → `redact-output-secret`",
+    "signal_phrases": "output PII redaction, log scrubbing, GDPR output redaction, output redaction",
+    "related": [
+      "redact-input-pii",
+      "redact-output-secret",
+      "detect-pii-in-input"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "redact-output-secret",
+    "parent_archetype": "redact-sensitive-output",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM02.output-secret",
+    "definition": "Redact API keys / tokens / private keys / connection strings from agent output / logs / outbound messages.",
+    "scope_in": "output-side secret pattern match + redaction, log token scrubbing, outbound-message secret strip",
+    "scope_out": "secret in input → `detect-credential-in-input`; secret in tool args → `detect-secret-in-args`",
+    "signal_phrases": "output secret redaction, token scrubbing, key redaction, secrets-in-output filter",
+    "related": [
+      "detect-credential-in-input",
+      "detect-secret-in-args",
+      "redact-output-pii"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "redact-output-system-prompt",
+    "parent_archetype": "redact-sensitive-output",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM07.system-prompt",
+    "definition": "Detect and remove system-prompt / hidden-instruction / operator-context content from agent output before user sees it.",
+    "scope_in": "system-prompt fingerprint match in output, system-prompt fragment removal, operator-context strip",
+    "scope_out": "detecting **attempts** to extract system prompt → `detect-system-prompt-extraction`; general output policy → `enforce-output-content-policy`",
+    "signal_phrases": "system prompt redaction, prompt leak filter, operator-context strip, hidden instruction strip",
+    "related": [
+      "detect-system-prompt-extraction",
+      "enforce-output-content-policy"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "redact-output-internal-infra",
+    "parent_archetype": "redact-sensitive-output",
+    "phase": "output-generation",
+    "attack_surface": "infra-disclosure",
+    "definition": "Redact internal infrastructure details (internal hostnames, IP addresses, k8s namespace names, internal URL paths, file system layout) from agent output.",
+    "scope_in": "internal-host pattern match, IP-range scrubbing, internal-URL strip, FS-path obfuscation",
+    "scope_out": "PII / secret-specific redaction → respective siblings; SSRF mitigation → `enforce-network-egress-allowlist`",
+    "signal_phrases": "internal infra redaction, hostname scrub, IP scrub, internal URL strip, infra-detail filter",
+    "related": [
+      "redact-output-pii",
+      "redact-output-secret"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-markdown-image-beacon",
+    "parent_archetype": "detect-data-exfiltration",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM02.exfil",
+    "definition": "Detect markdown image references / inline images whose URL contains user data and points to an attacker-controlled host (beacon).",
+    "scope_in": "`![](attacker.com/?data=...)` detection, image-URL parameter inspection, image-host allowlist",
+    "scope_out": "general unsafe URL → `detect-unsafe-url`; egress firewall → `enforce-network-egress-allowlist`",
+    "signal_phrases": "image beacon, markdown image exfil, image URL data leak, beacon URL detection",
+    "related": [
+      "detect-base64-payload-in-output",
+      "detect-covert-channel-in-tool-call",
+      "enforce-network-egress-allowlist"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-base64-payload-in-output",
+    "parent_archetype": "detect-data-exfiltration",
+    "phase": "output-generation",
+    "attack_surface": "covert-channel",
+    "definition": "Detect long base64 / hex / URL-encoded blobs in agent output that could carry exfiltrated data.",
+    "scope_in": "long-base64 detection in output, hex/url-encoded long-string detection, suspicious-encoding pattern",
+    "scope_out": "detected secret strings → `redact-output-secret`; image beacon URLs → `detect-markdown-image-beacon`",
+    "signal_phrases": "base64 in output, encoded payload exfil, hex-encoded leak, suspicious encoding",
+    "related": [
+      "detect-markdown-image-beacon",
+      "detect-covert-channel-in-tool-call"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "detect-dns-exfiltration-pattern",
+    "parent_archetype": "detect-data-exfiltration",
+    "phase": "tool-invocation",
+    "attack_surface": "dns-tunnel",
+    "definition": "Detect DNS-tunneling patterns in DNS lookups initiated by the agent (long subdomain encoding, high-entropy labels, abnormal TXT-record query frequency).",
+    "scope_in": "long-subdomain entropy check, TXT-record query count anomaly, DNS-tunnel signature",
+    "scope_out": "HTTP exfil → `detect-markdown-image-beacon`; egress allowlist enforcement → `enforce-network-egress-allowlist`",
+    "signal_phrases": "DNS exfiltration, DNS tunnel, DNS exfil, long subdomain leak, dnscat",
+    "related": [
+      "enforce-network-egress-allowlist",
+      "detect-covert-channel-in-tool-call"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "detect-covert-channel-in-tool-call",
+    "parent_archetype": "detect-data-exfiltration",
+    "phase": "tool-invocation",
+    "attack_surface": "covert-channel",
+    "definition": "Detect covert exfiltration in legitimate-looking tool calls (data hidden in HTTP headers, in user-agent, in cookie values, in webhook fields the user didn't ask about).",
+    "scope_in": "HTTP header content inspection, user-agent abuse, cookie-content leak, webhook-field exfil",
+    "scope_out": "arg-level secret leak → `detect-secret-in-args`; URL beacon → `detect-markdown-image-beacon`",
+    "signal_phrases": "covert channel, HTTP header leak, user-agent exfil, cookie exfil, webhook exfil",
+    "related": [
+      "detect-secret-in-args",
+      "detect-markdown-image-beacon",
+      "detect-dns-exfiltration-pattern"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "review-generated-code-output",
+    "parent_archetype": "enforce-output-content-policy",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM05.code-output",
+    "definition": "Review code blocks / scripts in agent output for dangerous instructions (rm -rf, curl|bash, fork bomb, hardcoded backdoor) before showing to user.",
+    "scope_in": "dangerous-shell-pattern in code block, suspicious `curl ... | sh`, fork-bomb pattern, backdoor-pattern in generated code",
+    "scope_out": "SAST on user-supplied code → `run-sast-scan`; tool-arg shell injection → `detect-shell-command-injection`",
+    "signal_phrases": "generated code review, output code danger filter, curl-pipe-sh detector, output-code firewall",
+    "related": [
+      "review-generated-message-output",
+      "enforce-disallowed-content-rule"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "review-generated-message-output",
+    "parent_archetype": "enforce-output-content-policy",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM09 / LLM05",
+    "definition": "Review free-text agent messages (replies / emails / Slack / PR comments) for policy-prohibited content, false claims with high confidence, or operator-impersonation.",
+    "scope_in": "outgoing-message review, false-claim hedging enforcement, impersonation gate, persuasion-tactic flag",
+    "scope_out": "code-block review → `review-generated-code-output`; secret in message → `redact-output-secret`",
+    "signal_phrases": "message review, output-message policy, hedging enforcement, impersonation filter",
+    "related": [
+      "review-generated-code-output",
+      "enforce-disallowed-content-rule",
+      "redact-output-secret"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "review-generated-file-write",
+    "parent_archetype": "enforce-output-content-policy",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM05.file-write",
+    "definition": "Review the content the agent is about to write to a file before the write commits (config files, code files, env files).",
+    "scope_in": "pre-write content scan, env-file write gate, config-write content review, drop-into-prod gate",
+    "scope_out": "filesystem boundary → `enforce-filesystem-sandbox`; SAST on the new code → `run-sast-scan`",
+    "signal_phrases": "pre-write review, file-write content gate, config-drop review, env-file write gate",
+    "related": [
+      "enforce-filesystem-sandbox",
+      "run-sast-scan"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "detect-dangerous-instruction-in-output",
+    "parent_archetype": "enforce-output-content-policy",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM05.harmful-output",
+    "definition": "Detect dangerous operational instructions in agent output (instructions to user that could harm them or third parties: malware-write, unsafe medical/legal advice, financial-fraud guidance).",
+    "scope_in": "harmful-instruction classifier, dual-use-output filter, dangerous-advice gating",
+    "scope_out": "pure toxicity / NSFW (planning-side) → `evaluate-content-moderation-rule`; code-block scan → `review-generated-code-output`",
+    "signal_phrases": "dangerous instruction filter, harmful output detector, dual-use output filter",
+    "related": [
+      "enforce-disallowed-content-rule",
+      "review-generated-code-output"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "enforce-disallowed-content-rule",
+    "parent_archetype": "enforce-output-content-policy",
+    "phase": "output-generation",
+    "attack_surface": "OWASP LLM09",
+    "definition": "Apply the deployer's disallowed-content rule pack to agent output post-generation (block / rewrite / escalate / redact).",
+    "scope_in": "output-side content rule pack, classifier-as-policy on output, post-gen rewrite, post-gen escalation",
+    "scope_out": "pre-planning content moderation → `evaluate-content-moderation-rule`; system-prompt redaction → `redact-output-system-prompt`",
+    "signal_phrases": "output content policy, post-gen rule, output rewrite, content-policy enforcement on output",
+    "related": [
+      "evaluate-content-moderation-rule",
+      "review-generated-message-output",
+      "redact-output-system-prompt"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "record-decision-trace",
+    "parent_archetype": "audit-trail-recording",
+    "phase": "cross-cutting",
+    "attack_surface": "forensics",
+    "definition": "Record the agent's decision points (which tool, which args, which rationale, which model, which temperature) for forensic replay.",
+    "scope_in": "decision-log writer, rationale capture, per-decision metadata persistence, forensic-replay-friendly format",
+    "scope_out": "tool-call invocation logs (specific) → `record-tool-invocation-trace`; prompt+context snapshot → `record-prompt-and-context-snapshot`",
+    "signal_phrases": "decision trace, decision log, rationale capture, agent decision audit",
+    "related": [
+      "record-tool-invocation-trace",
+      "record-prompt-and-context-snapshot",
+      "enable-tamper-evident-storage"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "record-tool-invocation-trace",
+    "parent_archetype": "audit-trail-recording",
+    "phase": "cross-cutting",
+    "attack_surface": "forensics",
+    "definition": "Record every tool invocation (timestamp, tool, args, response, side-effect summary) to an append-only log.",
+    "scope_in": "per-tool-call log entry, append-only invocation store, structured invocation event",
+    "scope_out": "prompt snapshot → `record-prompt-and-context-snapshot`; tamper-evidence on the log itself → `enable-tamper-evident-storage`",
+    "signal_phrases": "tool invocation log, tool call audit, invocation trace, append-only tool log",
+    "related": [
+      "record-decision-trace",
+      "enable-tamper-evident-storage"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "record-prompt-and-context-snapshot",
+    "parent_archetype": "audit-trail-recording",
+    "phase": "cross-cutting",
+    "attack_surface": "forensics",
+    "definition": "Snapshot the full prompt + context (system prompt, retrieved context, RAG chunks, tool outputs in context) at each decision boundary.",
+    "scope_in": "full-context snapshot writer, RAG-chunk retention with provenance, prompt-version tracking",
+    "scope_out": "tool-only invocation log → `record-tool-invocation-trace`; tamper-evidence → `enable-tamper-evident-storage`",
+    "signal_phrases": "prompt snapshot, context snapshot, RAG chunk capture, prompt-version log",
+    "related": [
+      "record-decision-trace",
+      "enable-tamper-evident-storage"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "halt-in-flight-action",
+    "parent_archetype": "incident-response-handler",
+    "phase": "cross-cutting",
+    "attack_surface": "agent-IR",
+    "definition": "Stop in-flight tool calls / generations / writes the moment a security event is detected.",
+    "scope_in": "agent-kill-switch, in-flight-call interrupt, generation-stop signal, atomic-rollback hook",
+    "scope_out": "longer-term resource isolation → `isolate-affected-resource`; human escalation → archetype `escalate-to-human-sentinel`",
+    "signal_phrases": "agent kill switch, halt agent, in-flight halt, generation interrupt, immediate stop",
+    "related": [
+      "snapshot-agent-state",
+      "isolate-affected-resource",
+      "request-human-confirmation"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "snapshot-agent-state",
+    "parent_archetype": "incident-response-handler",
+    "phase": "cross-cutting",
+    "attack_surface": "agent-IR",
+    "definition": "Capture full agent state (working memory, plan, context, recent tool calls, env vars) at incident time for triage.",
+    "scope_in": "state-dump writer, memory snapshot, plan capture, env capture, IR-time triage bundle",
+    "scope_out": "routine audit logging → `record-prompt-and-context-snapshot`; tamper-evidence → `enable-tamper-evident-storage`",
+    "signal_phrases": "state snapshot, agent state dump, IR snapshot, triage bundle, incident memory dump",
+    "related": [
+      "halt-in-flight-action",
+      "record-prompt-and-context-snapshot"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "isolate-affected-resource",
+    "parent_archetype": "incident-response-handler",
+    "phase": "cross-cutting",
+    "attack_surface": "agent-IR",
+    "definition": "Quarantine resources touched by the suspect actions (revoke tokens, isolate file outputs, network-fence the affected scope).",
+    "scope_in": "token-revocation on incident, file-quarantine, network-isolate, downstream-system fence",
+    "scope_out": "pre-incident network policy → `enforce-network-egress-allowlist`; pre-incident permission scope → `verify-allowed-tool-list`",
+    "signal_phrases": "resource isolation, token revoke, quarantine, IR isolation, network fence on incident",
+    "related": [
+      "halt-in-flight-action",
+      "enforce-network-egress-allowlist"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "notify-oncall-and-open-ticket",
+    "parent_archetype": "incident-response-handler",
+    "phase": "cross-cutting",
+    "attack_surface": "agent-IR",
+    "definition": "Page on-call / open a tracking ticket (PagerDuty, Opsgenie, Jira, Linear) with incident metadata when triggered.",
+    "scope_in": "pager integration, ticket auto-open, IR-context attachment, severity-based routing",
+    "scope_out": "human-confirmation gate (per-action) → archetype `escalate-to-human-sentinel`; routine audit log → `record-decision-trace`",
+    "signal_phrases": "oncall notify, ticket open on incident, pager integration, IR ticket auto-open",
+    "related": [
+      "request-human-confirmation",
+      "execute-recovery-playbook"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "execute-recovery-playbook",
+    "parent_archetype": "incident-response-handler",
+    "phase": "cross-cutting",
+    "attack_surface": "agent-IR",
+    "definition": "Execute a predefined recovery playbook (restore from backup, roll back commit, rotate credentials, redeploy clean image) automatically or with one-click.",
+    "scope_in": "playbook executor, restore-from-backup runbook, credential-rotation runbook, redeploy runbook",
+    "scope_out": "snapshot capture → `snapshot-agent-state`; IR ticket → `notify-oncall-and-open-ticket`",
+    "signal_phrases": "recovery playbook, IR runbook, automated rollback, credential rotation runbook",
+    "related": [
+      "isolate-affected-resource",
+      "notify-oncall-and-open-ticket"
+    ],
+    "enforcement_mode": "hybrid"
+  },
+  {
+    "id": "request-human-confirmation",
+    "parent_archetype": "escalate-to-human-sentinel",
+    "phase": "cross-cutting",
+    "attack_surface": "HITL",
+    "definition": "Pause autonomous execution and emit an explicit confirmation request to the human operator before proceeding with a flagged action.",
+    "scope_in": "confirmation-request emit, pause-and-await flow, irreversibility-triggered confirmation, blast-radius-triggered confirmation",
+    "scope_out": "clarification (intent-ambiguity, not risk-driven) → `elicit-clarification-before-act`; routine notification → `notify-oncall-and-open-ticket`",
+    "signal_phrases": "human in the loop, confirmation gate, approval gate, pause for confirmation, kill switch",
+    "related": [
+      "present-risk-rationale",
+      "await-human-decision-or-timeout",
+      "log-human-decision-outcome"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "present-risk-rationale",
+    "parent_archetype": "escalate-to-human-sentinel",
+    "phase": "cross-cutting",
+    "attack_surface": "HITL",
+    "definition": "Present the human operator with the risk classification, evidence, proposed action, and reversibility / blast-radius summary so they can make an informed decision.",
+    "scope_in": "risk-summary card, evidence bundle attachment, blast-radius summary, reversibility note",
+    "scope_out": "just emitting the gate → `request-human-confirmation`; capturing the response → `log-human-decision-outcome`",
+    "signal_phrases": "risk rationale, risk-summary card, blast-radius summary, evidence card, decision context",
+    "related": [
+      "request-human-confirmation",
+      "log-human-decision-outcome"
+    ],
+    "enforcement_mode": "skill"
+  },
+  {
+    "id": "await-human-decision-or-timeout",
+    "parent_archetype": "escalate-to-human-sentinel",
+    "phase": "cross-cutting",
+    "attack_surface": "HITL",
+    "definition": "Wait for human decision; on timeout default to fail-safe (block by default, never auto-allow).",
+    "scope_in": "blocking wait with timeout, fail-safe-default-deny, deadline-driven escalation, timeout-policy gate",
+    "scope_out": "emitting the gate → `request-human-confirmation`; recording the outcome → `log-human-decision-outcome`",
+    "signal_phrases": "await human decision, fail-safe default, timeout-on-confirm, default-deny on timeout",
+    "related": [
+      "request-human-confirmation",
+      "log-human-decision-outcome"
+    ],
+    "enforcement_mode": "hook"
+  },
+  {
+    "id": "log-human-decision-outcome",
+    "parent_archetype": "escalate-to-human-sentinel",
+    "phase": "cross-cutting",
+    "attack_surface": "HITL",
+    "definition": "Persist the human decision (allow / deny / modify) along with rationale + identity for later audit and Sentinel-model training-data feedback.",
+    "scope_in": "decision-outcome log entry, identity binding, rationale capture, training-data export hook",
+    "scope_out": "general decision trace → `record-decision-trace`; tamper-evident storage → `enable-tamper-evident-storage`",
+    "signal_phrases": "human decision log, HITL outcome log, approval log, decision-feedback capture",
+    "related": [
+      "record-decision-trace",
+      "enable-tamper-evident-storage"
+    ],
+    "enforcement_mode": "hook"
+  }
+]

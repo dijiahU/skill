@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Checkpoint",
+  "description": "Checkpoint for safe resumption and rollback in agentic plans",
+  "type": "object",
+  "required": ["id", "plan_id", "created", "completed_tasks", "current_task"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^cp-[0-9]{3}$",
+      "description": "Checkpoint identifier",
+      "examples": ["cp-001", "cp-002"]
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "Associated plan ID"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When checkpoint was created"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this checkpoint represents"
+    },
+    "completed_tasks": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Task IDs completed at this checkpoint"
+    },
+    "current_task": {
+      "type": "string",
+      "description": "Task ID in progress when checkpoint created"
+    },
+    "remaining_tasks": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Task IDs still pending"
+    },
+    "git": {
+      "type": "object",
+      "properties": {
+        "commit_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{7,40}$",
+          "description": "Git commit hash at checkpoint"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Git tag name for this checkpoint"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch name at checkpoint"
+        },
+        "patch_file": {
+          "type": "string",
+          "description": "Path to patch file for this checkpoint"
+        },
+        "is_clean": {
+          "type": "boolean",
+          "description": "Was working tree clean at checkpoint?"
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "description": "Application state at checkpoint",
+      "properties": {
+        "database_version": {"type": "string"},
+        "config_version": {"type": "string"},
+        "dependencies_hash": {"type": "string"}
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "tasks_completed": {"type": "number"},
+        "tasks_remaining": {"type": "number"},
+        "percent_complete": {"type": "number"},
+        "estimated_remaining_hours": {"type": "number"},
+        "elapsed_hours": {"type": "number"}
+      }
+    },
+    "next_steps": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "What to do next from this checkpoint"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Context, issues, or important information"
+    },
+    "rollback_safe": {
+      "type": "boolean",
+      "description": "Is it safe to rollback to this checkpoint?"
+    },
+    "rollback_instructions": {
+      "type": "string",
+      "description": "How to rollback to this checkpoint safely"
+    }
+  }
+}

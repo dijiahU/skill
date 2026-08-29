@@ -1,0 +1,188 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "wolfpack/intelligence",
+  "namespace": "wolfpack",
+  "slug": "intelligence",
+  "displayName": "Wolfpack Intelligence",
+  "description": "On-chain security and intelligence MCP server for Base chain trading agents. 4 tools: token risk analysis (GoPlus + DexScreener + Dune), fast security check, narrative momentum scoring, and agent trust ratings. All tools return structured JSON with 0-100 scores.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "trust",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "ebc5d6d0-cf36-4359-b9b4-3c895097163a",
+    "qualifiedName": "wolfpack/intelligence",
+    "namespace": "wolfpack",
+    "slug": "intelligence",
+    "displayName": "Wolfpack Intelligence",
+    "description": "On-chain security and intelligence MCP server for Base chain trading agents. 4 tools: token risk analysis (GoPlus + DexScreener + Dune), fast security check, narrative momentum scoring, and agent trust ratings. All tools return structured JSON with 0-100 scores.",
+    "iconUrl": "https://api.smithery.ai/servers/wolfpack/intelligence/icon",
+    "verified": false,
+    "useCount": 416,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-28T10:08:28.337Z",
+    "homepage": "https://wolfpack-production.up.railway.app",
+    "bySmithery": false,
+    "owner": "org_01KNBVFMCGMH2J1C1P6PTKD4WT",
+    "score": 0.028620689655172414
+  },
+  "detail": {
+    "qualifiedName": "wolfpack/intelligence",
+    "displayName": "Wolfpack Intelligence",
+    "description": "On-chain security and intelligence MCP server for Base chain trading agents. 4 tools: token risk analysis (GoPlus + DexScreener + Dune), fast security check, narrative momentum scoring, and agent trust ratings. All tools return structured JSON with 0-100 scores.",
+    "iconUrl": "https://api.smithery.ai/servers/wolfpack/intelligence/icon",
+    "remote": true,
+    "deploymentUrl": "https://intelligence--wolfpack.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://intelligence--wolfpack.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "enum": [
+                "base",
+                "ethereum"
+              ],
+              "type": "string",
+              "default": "base",
+              "x-order": 0,
+              "description": "Default blockchain network for all queries"
+            },
+            "analysis_depth": {
+              "enum": [
+                "standard",
+                "deep"
+              ],
+              "type": "string",
+              "default": "standard",
+              "x-order": 1,
+              "description": "Default analysis depth for token risk analysis"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "token_risk_analysis",
+        "description": "Comprehensive multi-source token risk scoring. Combines GoPlus honeypot detection, DexScreener liquidity analysis, Dune on-chain analytics, and SocialData narrative monitoring. Returns a 0-100 risk score with detailed check results. Response time ~3-5 seconds.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "description": "Blockchain network. Default: \"base\". Supports: base, ethereum"
+            },
+            "token_address": {
+              "type": "string",
+              "description": "0x-prefixed contract address on Base chain (40 hex characters)"
+            },
+            "analysis_depth": {
+              "type": "string",
+              "description": "Analysis depth: \"standard\" (GoPlus + DexScreener, ~3s) or \"deep\" (adds Dune + social, ~8s)"
+            }
+          }
+        }
+      },
+      {
+        "name": "security_check",
+        "description": "Fast GoPlus-only token security scan. Returns honeypot status, contract verification, ownership flags, and holder concentration. Sub-second response time. No social or on-chain analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "description": "Blockchain network. Default: \"base\". Supports: base, ethereum"
+            },
+            "token_address": {
+              "type": "string",
+              "description": "0x-prefixed contract address to scan for security issues"
+            }
+          }
+        }
+      },
+      {
+        "name": "narrative_momentum",
+        "description": "Score the momentum of a crypto narrative or topic. Analyzes Twitter/X social signals with crypto-tuned VADER sentiment, engagement quality, influencer ratio, and optional on-chain corroboration. Returns 0-100 momentum score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Narrative topic, token name, or project to analyze (e.g. \"DEGEN on Base\", \"Virtuals Protocol\")"
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Additional keywords to include in social search. Improves signal quality."
+            },
+            "contracts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Contract addresses for on-chain corroboration of social signals"
+            }
+          }
+        }
+      },
+      {
+        "name": "agent_trust_score",
+        "description": "Composite agent reliability rating. Scores any ERC-8004/ACP registered agent on 4 pillars: ACP performance (40%), network position (25%), operational health (25%), metadata compliance (10%). Accepts agent_address (0x hex) or agent_id (number). Returns trust score 0-100 with breakdown.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "number",
+              "description": "ACP/ERC-8004 numeric agent ID"
+            },
+            "agent_address": {
+              "type": "string",
+              "description": "0x-prefixed wallet address of the agent to score"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "service_catalog",
+        "uri": "https://wolfpack-production.up.railway.app/api/v1/mcp",
+        "description": "Wolfpack intelligence service catalog — lists all available tools, pricing, and capabilities.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "pre_trade_screen",
+        "description": "Run a full pre-trade security screening on a Base chain token. Combines quick security check with deep risk analysis. Returns a go/no-go recommendation.",
+        "arguments": [
+          {
+            "name": "token_address",
+            "description": "0x-prefixed contract address on Base",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "agent_due_diligence",
+        "description": "Evaluate the trustworthiness of an ACP agent before transacting with it. Returns trust score with detailed breakdown.",
+        "arguments": [
+          {
+            "name": "agent_address",
+            "description": "0x-prefixed wallet address of the ACP agent",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

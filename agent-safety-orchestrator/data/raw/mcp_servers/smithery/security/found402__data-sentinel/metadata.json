@@ -1,0 +1,116 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "found402/data-sentinel",
+  "namespace": "found402",
+  "slug": "data-sentinel",
+  "displayName": "data-sentinel",
+  "description": "Data Sentinel — deep second-pass security scan that catches what PII scrubbers miss. Detects JWTs, bearer tokens, AWS keys, private keys, connection strings, IBANs, crypto wallets, medical record numbers, internal IPs, and base64 blobs. Returns masked matches with confidence levels. GDPR and AI TRiSM aligned. $0.003/req via x402 on Base.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "credential",
+    "secret",
+    "compliance",
+    "encryption"
+  ],
+  "rawRecord": {
+    "id": "133c57a7-97e3-4368-9abd-fae6da207df7",
+    "qualifiedName": "found402/data-sentinel",
+    "namespace": "found402",
+    "slug": "data-sentinel",
+    "displayName": "data-sentinel",
+    "description": "Data Sentinel — deep second-pass security scan that catches what PII scrubbers miss. Detects JWTs, bearer tokens, AWS keys, private keys, connection strings, IBANs, crypto wallets, medical record numbers, internal IPs, and base64 blobs. Returns masked matches with confidence levels. GDPR and AI TRiSM aligned. $0.003/req via x402 on Base.",
+    "iconUrl": "https://api.smithery.ai/servers/found402/data-sentinel/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-16T17:11:48.326Z",
+    "homepage": "https://data-sentinel.fly.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVQABVMKJ0B6XQRVEMJVFJ",
+    "score": 0.017699115044247787
+  },
+  "detail": {
+    "qualifiedName": "found402/data-sentinel",
+    "displayName": "data-sentinel",
+    "description": "Data Sentinel — deep second-pass security scan that catches what PII scrubbers miss. Detects JWTs, bearer tokens, AWS keys, private keys, connection strings, IBANs, crypto wallets, medical record numbers, internal IPs, and base64 blobs. Returns masked matches with confidence levels. GDPR and AI TRiSM aligned. $0.003/req via x402 on Base.",
+    "iconUrl": "https://api.smithery.ai/servers/found402/data-sentinel/icon",
+    "remote": true,
+    "deploymentUrl": "https://data-sentinel--found402.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://data-sentinel--found402.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_leaks",
+        "description": "Deep second-pass scan for sensitive data that may have slipped through initial PII scrubbing. Detects JWT tokens, API keys, private keys, connection strings, internal IPs, medical records, crypto wallets, encoded secrets, and more.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "The text to scan for leaked sensitive data"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "clean": {
+              "type": "boolean",
+              "description": "True if no sensitive data was found"
+            },
+            "leaks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "description": "Category of leak (jwt_token, aws_key, internal_ip, etc.)"
+                  },
+                  "match": {
+                    "type": "string",
+                    "description": "Masked version of the matched sensitive data"
+                  },
+                  "context": {
+                    "type": "string",
+                    "description": "Surrounding text for locating the leak"
+                  },
+                  "confidence": {
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ],
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Individual leak signals with masked matches"
+            },
+            "leak_count": {
+              "type": "integer",
+              "description": "Number of sensitive items detected"
+            },
+            "categories_found": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Unique categories of leaks detected"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

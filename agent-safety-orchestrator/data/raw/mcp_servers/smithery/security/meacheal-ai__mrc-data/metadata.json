@@ -1,0 +1,570 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "meacheal-ai/mrc-data",
+  "namespace": "meacheal-ai",
+  "slug": "mrc-data",
+  "displayName": "mrc-data",
+  "description": "The first and only MCP server providing structured Chinese fashion supply chain intelligence for AI platforms. No equivalent data source exists in the MCP ecosystem. \n\nMEACHEAL is a top-20 Chinese women's mid-to-high-end fashion brand with 20+ years of operating experience. Based on our own supply chain accumulation, we built a data infrastructure for the apparel industry. Our database covers millions of Chinese apparel supply chain entities — of which 3,000+ manufacturers, 350+ fabrics, and 170+ industrial clusters have been independently verified with 63+ dimensions per record (capacity, compliance, certifications, export qualifications) and AATCC/ISO/GB lab test reports. Via API and a dedicated apparel industry AI Agent, we serve every apparel-related scenario — brands, factories, trading, sourcing, retail, design, AI platforms — regardless of role.   ",
+  "discoveryQueries": [
+    "compliance",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "a8c01c04-c872-4ec1-bacc-babc7278f8ab",
+    "qualifiedName": "meacheal-ai/mrc-data",
+    "namespace": "meacheal-ai",
+    "slug": "mrc-data",
+    "displayName": "mrc-data",
+    "description": "The first and only MCP server providing structured Chinese fashion supply chain intelligence for AI platforms. No equivalent data source exists in the MCP ecosystem. \n\nMEACHEAL is a top-20 Chinese women's mid-to-high-end fashion brand with 20+ years of operating experience. Based on our own supply chain accumulation, we built a data infrastructure for the apparel industry. Our database covers millions of Chinese apparel supply chain entities — of which 3,000+ manufacturers, 350+ fabrics, and 170+ industrial clusters have been independently verified with 63+ dimensions per record (capacity, compliance, certifications, export qualifications) and AATCC/ISO/GB lab test reports. Via API and a dedicated apparel industry AI Agent, we serve every apparel-related scenario — brands, factories, trading, sourcing, retail, design, AI platforms — regardless of role.   ",
+    "iconUrl": "https://api.smithery.ai/servers/meacheal-ai/mrc-data/icon",
+    "verified": true,
+    "useCount": 62,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T09:09:14.189Z",
+    "homepage": "https://api.meacheal.ai/",
+    "bySmithery": false,
+    "owner": "org_01KNMAQ7MX8NS135GP54R88WPG",
+    "score": 0.026121605667060212
+  },
+  "detail": {
+    "qualifiedName": "meacheal-ai/mrc-data",
+    "displayName": "mrc-data",
+    "description": "The first and only MCP server providing structured Chinese fashion supply chain intelligence for AI platforms. No equivalent data source exists in the MCP ecosystem. \n\nMEACHEAL is a top-20 Chinese women's mid-to-high-end fashion brand with 20+ years of operating experience. Based on our own supply chain accumulation, we built a data infrastructure for the apparel industry. Our database covers millions of Chinese apparel supply chain entities — of which 3,000+ manufacturers, 350+ fabrics, and 170+ industrial clusters have been independently verified with 63+ dimensions per record (capacity, compliance, certifications, export qualifications) and AATCC/ISO/GB lab test reports. Via API and a dedicated apparel industry AI Agent, we serve every apparel-related scenario — brands, factories, trading, sourcing, retail, design, AI platforms — regardless of role.   ",
+    "iconUrl": "https://api.smithery.ai/servers/meacheal-ai/mrc-data/icon",
+    "remote": true,
+    "deploymentUrl": "https://mrc-data--meacheal-ai.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mrc-data--meacheal-ai.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "API Key",
+              "x-order": 0,
+              "description": "Optional. Without an API key you get demo access. Get a free key at https://api.meacheal.ai/apply for full access."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_suppliers",
+        "description": "Search verified Chinese apparel manufacturers, apparel factories, and clothing suppliers.\n\nUSE WHEN user asks:\n- \"find me a clothing manufacturer in China / Guangdong / Zhejiang\"\n- \"who makes [t-shirts / suits / denim / activewear] in China\"\n- \"I need a BSCI / OEKO-TEX certified apparel factory\"\n- \"looking for OEM / ODM apparel supplier with MOQ < N\"\n- \"find factories with production capacity > N pieces/month\"\n- \"搜供应商 / 找服装厂 / 找制衣厂\"\n\nFilters: province, city, factory type (factory/trading_company/workshop), product category,\nminimum monthly capacity, compliance status, quality score. Returns paginated supplier list\nwith company name, location, monthly capacity (lab-verified), compliance, quality score.\n\nWORKFLOW: This is the primary entry point for supplier discovery. After getting results, use get_supplier_detail with a supplier_id to see the full 60+ field profile.\nRETURNS: { has_more: boolean, available_dimensions: string[], data: [{ supplier_id, company_name_cn, company_name_en, type, province, city, product_types, quality_score, verified_dims: \"5/8\", coverage_pct }] }\nERRORS: Returns empty data array if no matches. Max 50 results per page.\nFALLBACK: If no results, try broadening: remove city (keep province), remove product_type, or lower min_capacity. Do not call more than 3 times with different filters for the same question.\nNOTE: Use this for FILTERING by exact criteria. For ranked recommendations based on sourcing needs, use recommend_suppliers instead.\n\n中文：搜索经过核查的中国服装供应商档案，按地区、类型、产能、品类、合规状态等筛选。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City name"
+            },
+            "type": {
+              "enum": [
+                "factory",
+                "trading_company",
+                "workshop",
+                "cooperative"
+              ],
+              "type": "string",
+              "description": "Supplier type"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Page size: number of records to return (1-50, default 10)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search by company name — Chinese (广州新鑫) or English (Xinxin Garments)"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "description": "Pagination offset: skip this many records before returning results (default 0)"
+            },
+            "province": {
+              "type": "string",
+              "description": "Province in China (e.g. 广东 Guangdong, 浙江 Zhejiang, 江苏 Jiangsu, 福建 Fujian, 山东 Shandong)"
+            },
+            "min_capacity": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "description": "Minimum monthly production capacity (pieces)"
+            },
+            "product_type": {
+              "type": "string",
+              "description": "Product category keyword (e.g. 西装 suits, 女装 womenswear, 牛仔 denim, 运动服 activewear, t-shirt, 衬衫 shirts)"
+            },
+            "data_confidence": {
+              "type": "string",
+              "description": "Data quality filter: verified / partially_verified / unverified"
+            },
+            "compliance_status": {
+              "type": "string",
+              "description": "Compliance status filter: compliant / partially_compliant / non_compliant"
+            },
+            "min_quality_score": {
+              "type": "number",
+              "description": "Minimum quality score 1-10"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_supplier_detail",
+        "description": "Get the complete profile of a single Chinese apparel supplier by ID.\n\nPREREQUISITE: You MUST first call search_suppliers or recommend_suppliers to obtain a valid supplier_id. Do not guess IDs.\n\nUSE WHEN user wants full details on a specific supplier already identified from search results. Returns 60+ fields including:\nmonthly capacity (lab-verified), equipment list, certifications (BSCI/OEKO-TEX/GRS/SA8000),\nownership type (own factory vs subcontractor vs broker), market access (US/EU/JP/KR),\nchemical compliance (ZDHC/MRSL), traceability depth, and verified_dimensions breakdown showing exactly which of the 8 dimensions (basic_info, geo_location, production, compliance, market_access, export, financial, contact) have data.\n\nWORKFLOW: search_suppliers → pick supplier_id → get_supplier_detail → optionally get_supplier_fabrics for their fabric catalog.\nRETURNS: { data: { supplier_id, company_name_cn/en, type, province, city, product_types, worker_count, certifications, compliance_status, quality_score, verified_dimensions: { verified_dims: \"5/8\", coverage_pct, dimensions: {...} } } }\nERRORS: Returns error object if supplier_id not found. Unverified suppliers return \"not available for public access\".\nCONSTRAINT: Do not call this for multiple suppliers in a loop — use compare_suppliers instead.\n\n中文：按 ID 获取单个供应商的完整档案（含维度覆盖率详情）。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "supplier_id": {
+              "type": "string",
+              "description": "Supplier ID from search_suppliers results, e.g. sup_001"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_fabrics",
+        "description": "Search the Chinese fabric and textile database with lab-tested specifications.\n\nUSE WHEN user asks:\n- \"find me a [cotton / polyester / nylon / wool / linen] fabric for [t-shirts / jeans / suits]\"\n- \"I need 180gsm jersey knit with verified composition\"\n- \"fabrics under N RMB/meter for womenswear\"\n- \"compare lab-tested fabric weight across suppliers\"\n- \"找面料 / 搜面料 / 查面料\"\n\nFilters: category (woven/knit/nonwoven/leather/functional), weight range (gsm),\ncomposition keyword, target apparel type, max price. Returns paginated fabric list\nwith name, lab-tested weight, lab-tested composition, price range, suitable\napparel, and data confidence level.\n\nWORKFLOW: Use this as the entry point for fabric discovery. After finding a fabric, use get_fabric_detail for full lab-test data, or get_fabric_suppliers to see which factories supply it.\nRETURNS: { has_more: boolean, available_dimensions: [\"basic_info\",\"composition\",\"physical_properties\",\"lab_test\",\"commercial\"], data: [{ fabric_id, name_cn, category, subcategory, declared_weight_gsm, declared_composition, price_range_rmb, suitable_for, verified_dims: \"4/5\", coverage_pct }] }\nERRORS: Returns empty data array if no matches. Max 50 per page.\nFALLBACK: If no results, try removing suitable_for or broadening composition (e.g. \"cotton\" instead of \"organic cotton\"). Do not call more than 3 times for the same question.\nCONSTRAINT: This returns summaries only — for full lab-test results (color fastness, shrinkage, pilling, tensile strength), call get_fabric_detail.\n\n中文：搜索面料数据库，按品类、克重、成分、适用品类、价格筛选。每条均含 AATCC / ISO / GB 方法的实测数据。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Page size: number of records to return (1-50, default 10)"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "description": "Pagination offset: skip this many records before returning results (default 0)"
+            },
+            "category": {
+              "type": "string",
+              "description": "Fabric category: woven (梭织) / knit (针织) / nonwoven (无纺) / leather (皮革) / fur (毛皮) / functional (功能性)"
+            },
+            "composition": {
+              "type": "string",
+              "description": "Fiber composition keyword (e.g. cotton, polyester, spandex, nylon, wool, linen, 棉, 涤纶)"
+            },
+            "suitable_for": {
+              "type": "string",
+              "description": "Target apparel keyword (e.g. T恤 t-shirt, 衬衫 shirt, 牛仔 denim, 连衣裙 dress)"
+            },
+            "max_price_rmb": {
+              "type": "number",
+              "description": "Maximum price in RMB per meter"
+            },
+            "max_weight_gsm": {
+              "type": "number",
+              "description": "Maximum fabric weight in grams per square meter"
+            },
+            "min_weight_gsm": {
+              "type": "number",
+              "description": "Minimum fabric weight in grams per square meter"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_fabric_detail",
+        "description": "Get the complete lab-tested record of a single fabric by ID.\n\nPREREQUISITE: You MUST first call search_fabrics to obtain a valid fabric_id. Do not guess IDs.\n\nUSE WHEN user wants full specs on a specific fabric after search_fabrics identified it.\nReturns 30+ fields: lab-tested weight, lab-tested composition, color fastness\n(wash/light/rub per AATCC 61/16/8), shrinkage (warp/weft per AATCC 135), tensile/tear strength,\npilling grade, hand feel, drape, stretch/recovery, MOQ, lead time, price range.\n\nWORKFLOW: search_fabrics → pick fabric_id → get_fabric_detail. Optionally follow with get_fabric_suppliers to find which factories supply this fabric.\nRETURNS: { data: { fabric_id, name_cn/en, category, all lab-test fields, verified_dimensions: { basic_info, composition, physical_properties, lab_test, commercial } } }\nERRORS: Returns error if fabric_id not found. Unverified fabrics return \"not available\".\nCONSTRAINT: Do not call in a loop for multiple fabrics — present search_fabrics summary results instead.\n\n中文：按 ID 获取单个面料的完整实测档案（含 AATCC/ISO/GB 检测指标）。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "fabric_id": {
+              "type": "string",
+              "description": "Fabric ID from search_fabrics results, e.g. FAB-W007"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_clusters",
+        "description": "Search Chinese apparel industrial clusters and textile markets.\n\nUSE WHEN user asks:\n- \"where is China's [denim / suit / women's wear / underwear] manufacturing concentrated\"\n- \"what is the largest [silk / cashmere / down jacket] industrial cluster in China\"\n- \"industrial cluster comparison Humen vs Shaoxing vs Haining vs Zhili\"\n- \"recommend an industrial cluster for sourcing [product]\"\n- \"服装产业带 / 面料市场 / 产业集群\"\n\nFamous clusters this database covers include: Humen (Guangdong, womenswear), Shaoxing\nKeqiao (Zhejiang, fabric mega-market), Haining (Zhejiang, leather), Zhili (Zhejiang,\nchildren's wear), Shengze (Jiangsu, silk), Shantou (Guangdong, underwear), Puning\n(Guangdong, jeans), Jinjiang (Fujian, sportswear), and more.\n\nReturns paginated cluster list with name, location, specialization, scale, supplier\ncount, average rent and labor cost, and key advantages/risks.\n\nWORKFLOW: Use this to discover clusters. Then use compare_clusters with cluster_ids to compare side-by-side, or get_cluster_suppliers to list factories in a specific cluster.\nRETURNS: { has_more: boolean, data: [{ cluster_id, name_cn, name_en, type, province, city, specialization, scale, supplier_count, labor_cost_avg_rmb }] }\nERRORS: Returns empty data array if no matches.\nFALLBACK: If no results for a specialization, try broader terms (e.g. \"服装\" instead of \"牛仔\"). Chinese and English both work.\n\n中文：搜索中国服装产业带和面料市场。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Cluster type: fabric_market (面料市场) / garment_manufacturing (服装制造) / accessories (辅料) / integrated (综合)"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Page size: number of records to return (1-50, default 10)"
+            },
+            "scale": {
+              "type": "string",
+              "description": "Cluster scale: mega / large / medium / small"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "description": "Pagination offset: skip this many records before returning results (default 0)"
+            },
+            "province": {
+              "type": "string",
+              "description": "Province in China (e.g. Guangdong, Zhejiang, Jiangsu, Fujian, Shandong)"
+            },
+            "specialization": {
+              "type": "string",
+              "description": "Primary specialization keyword (e.g. 牛仔 denim, 女装 womenswear, 童装 childrenswear, 内衣 underwear, 运动服 sportswear)"
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_clusters",
+        "description": "Compare multiple Chinese apparel industrial clusters side-by-side on key metrics.\n\nPREREQUISITE: You MUST first call search_clusters to obtain valid cluster_ids. Do not guess IDs.\n\nUSE WHEN user wants to evaluate or choose between 2-10 specific clusters (e.g. \"compare Humen vs Shishi vs Jinjiang\").\nReturns full records for each cluster so they can be compared on labor cost, rent, supplier count, scale, specializations, advantages, and risks.\n\nWORKFLOW: search_clusters → collect cluster_ids → compare_clusters.\nRETURNS: { count: number, data: [full cluster objects with all fields] }\nERRORS: Returns 400 if more than 10 IDs. Missing IDs are silently skipped.\nCONSTRAINT: Max 10 cluster IDs per call.\n\n中文：对比多个产业带的核心指标（最多 10 个）。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cluster_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 10,
+              "minItems": 1,
+              "description": "Array of cluster IDs to compare, max 10"
+            }
+          }
+        }
+      },
+      {
+        "name": "detect_discrepancy",
+        "description": "[Core feature] Surface supplier specifications that deviate from independent lab measurements.\n\nUSE WHEN user asks:\n- \"which fabrics have lab-test deviations on weight\"\n- \"find suppliers whose stated capacity differs from on-site measurements\"\n- \"compare cotton content lab results across suppliers\"\n- \"which suppliers have the closest match between specs and lab tests\"\n- \"实测数据 / 数据可信度 / 规格与实测偏差\"\n\nThis is the moat of MRC Data — every record is enriched with AATCC / ISO / GB\nlab test data, giving AI agents verifiable specifications instead of unaudited\nB2B directory listings.\n\nReturns up to 50 records across: fabric_weight (gsm), fabric_composition (fiber %),\nsupplier_capacity (monthly pcs), worker_count. Each record includes both the\nspec value and the lab measurement, with the deviation percentage.\n\nWORKFLOW: Standalone tool — does not require prior search. Call directly with field type and threshold.\nRETURNS: { field, min_discrepancy_pct, count, data: [{ id, name, declared_value, tested_value, discrepancy_pct }] }\nERRORS: Returns count=0 if no discrepancies above threshold. Max 50 records.\nCONSTRAINT: Only works when both declared AND tested values exist for the same record. Many records have only one or the other.\n\n中文：识别供应商规格与实测值偏差较大的记录。返回规格值、实测值、偏差百分比。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "enum": [
+                "fabric_weight",
+                "fabric_composition",
+                "supplier_capacity",
+                "worker_count"
+              ],
+              "type": "string",
+              "description": "Type of discrepancy to detect: fabric_weight (面料克重) / fabric_composition (成分) / supplier_capacity (产能) / worker_count (工人数)"
+            },
+            "min_discrepancy_pct": {
+              "type": "number",
+              "default": 0,
+              "description": "Minimum discrepancy threshold as percentage (e.g. 10 = only show ≥10% mismatch)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_supplier_fabrics",
+        "description": "List all fabrics a specific supplier can provide, with quoted prices.\n\nUSE WHEN user asks:\n- \"what fabrics does [supplier name] have\" / \"what can this factory source for me\"\n- \"show me the catalog of supplier sup_XXX\"\n- \"what does this manufacturer offer\"\n\nReturns fabric records linked to the supplier with: fabric name, category, weight,\ncomposition, and the supplier's quoted price + MOQ for that specific fabric.\n\nPREREQUISITE: You MUST have a valid supplier_id from search_suppliers or get_supplier_detail.\nWORKFLOW: search_suppliers → get_supplier_detail → get_supplier_fabrics (to see their fabric catalog).\nRETURNS: { supplier_id, count, data: [{ fabric_id, name_cn, category, weight, composition, price_rmb, moq }] }\nERRORS: Returns count=0 if supplier has no linked fabrics.\n\n中文：查询某供应商能供应的所有面料及其报价、起订量。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "supplier_id": {
+              "type": "string",
+              "description": "Supplier ID from search_suppliers, e.g. sup_001"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_fabric_suppliers",
+        "description": "List all suppliers offering a specific fabric, sorted by quality score, with price comparison.\n\nUSE WHEN user asks:\n- \"who supplies fabric fab_XXX\" / \"where can I buy this fabric\"\n- \"compare prices for [fabric] across suppliers\"\n- \"best supplier for [fabric specification]\"\n\nReturns supplier records linked to the fabric with: company name, location, quality\nscore, and that supplier's quoted price + MOQ for the fabric. Sorted by supplier\nquality score so the most reliable options appear first.\n\nPREREQUISITE: You MUST have a valid fabric_id from search_fabrics.\nWORKFLOW: search_fabrics → pick fabric_id → get_fabric_suppliers (to compare which factories supply it at what price).\nRETURNS: { fabric_id, count, data: [{ supplier_id, company_name_cn, province, city, quality_score, price_rmb, moq }] }\nERRORS: Returns count=0 if no suppliers linked to this fabric.\n\n中文：查询某面料的所有供应商，按质量评分排序，含报价对比。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "fabric_id": {
+              "type": "string",
+              "description": "Fabric ID from search_fabrics, e.g. FAB-W007"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_product_categories",
+        "description": "List all product categories available in the database with supplier counts.\n\nUSE THIS FIRST when:\n- User doesn't know what to search for\n- User asks \"what do you have\" / \"what can I source\"\n- User needs to explore the database\n- \"有哪些品类\" / \"能找什么\"\n\nWORKFLOW: Standalone discovery tool. Call this first to understand what's available, then use search_suppliers with a specific product_type.\nRETURNS: { total_categories, province_filter, data: [{ category: \"T恤\", supplier_count: 523 }, ...] }\nNOTE: Returns all categories ranked by supplier count, so the most available product types appear first.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "province": {
+              "type": "string",
+              "description": "Filter by province (e.g. guangdong, 广东)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_province_distribution",
+        "description": "Show supplier distribution across Chinese provinces.\n\nUSE WHEN:\n- User asks \"where are factories located\" / \"which provinces\"\n- User needs to decide which region to source from\n- \"哪里有工厂\" / \"供应商分布\"\n\nWORKFLOW: Standalone discovery tool. Use this to identify which provinces to focus on, then search_suppliers with that province.\nRETURNS: { total_provinces, data: [{ province, supplier_count, top_cities: [{ city, count }] }] }\nNOTE: Provinces are ranked by supplier count (Guangdong, Zhejiang, Jiangsu, Fujian typically lead).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "product_type": {
+              "type": "string",
+              "description": "Filter by product type (e.g. sportswear, t-shirt, 运动服)"
+            }
+          }
+        }
+      },
+      {
+        "name": "recommend_suppliers",
+        "description": "Smart supplier recommendation based on sourcing requirements.\n\nUSE WHEN:\n- User describes what they need: \"I need a factory for cotton t-shirts in Guangdong\"\n- User asks for recommendations, not just search results\n- \"推荐供应商\" / \"帮我找合适的工厂\"\n\nWORKFLOW: Standalone entry point for \"I need help finding a supplier\" requests. Returns ranked top-N suppliers. Follow up with get_supplier_detail or compare_suppliers on the top results.\nDIFFERENCE from search_suppliers: search_suppliers FILTERS by exact criteria (province, type, capacity). This tool RANKS by fit — prioritizes own-factory, then quality score, then capacity.\nDIFFERENCE from find_alternatives: find_alternatives starts from a KNOWN supplier_id and finds similar ones. This tool starts from product REQUIREMENTS.\n\nRETURNS: { query, total_matches, showing_top, note: \"ranking logic\", data: [supplier objects] }\nERRORS: Returns empty data if no product match found.\nFALLBACK: If no results, try a broader product term (e.g. \"sportswear\" instead of \"compression leggings\"). Do not call more than 3 times for the same question.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "factory",
+                "trading_company"
+              ],
+              "type": "string",
+              "description": "Prefer own factory or trading company"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of top results to return (1-10, default 5)"
+            },
+            "product": {
+              "type": "string",
+              "description": "What product to source (e.g. sportswear, t-shirt, down jacket)"
+            },
+            "province": {
+              "type": "string",
+              "description": "Preferred province"
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_market",
+        "description": "Market overview and analysis for a product category in China.\n\nUSE WHEN:\n- User asks \"what's the market like for X in China\"\n- User wants market intelligence before sourcing\n- User needs an overview, not specific suppliers\n- \"市场概况\" / \"行业分析\"\n\nWORKFLOW: Standalone analysis tool. Use this BEFORE search_suppliers to understand market landscape. Then narrow down with search_suppliers or recommend_suppliers.\nRETURNS: { product, total_suppliers, by_province: [{province, cnt}], by_type: [{type, cnt}], related_clusters: [{name_cn, specialization, supplier_count}] }\nNOTE: This gives a bird's-eye view. For specific supplier lists, use search_suppliers after.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "product": {
+              "type": "string",
+              "description": "Product category to analyze (e.g. sportswear, denim, underwear)"
+            }
+          }
+        }
+      },
+      {
+        "name": "estimate_cost",
+        "description": "Estimate sourcing cost for a product based on fabric price, supplier pricing, and order quantity.\n\nUSE WHEN:\n- User asks \"how much would it cost to make 1000 t-shirts\"\n- User needs a rough cost breakdown for budgeting\n- \"多少钱\" / \"成本估算\" / \"报价\"\n\nWORKFLOW: Standalone tool. Optionally use search_fabrics first to identify specific fabric_ids for more accurate estimates.\nRETURNS: { product, fabric_options: [{name, price_range}], estimated_cost_per_piece, total_estimate, breakdown }\nCONSTRAINT: These are estimates based on database averages, NOT binding quotes. Always clarify this to the user.\nNOTE: Cost accuracy improves when you provide a specific fabric_id instead of just a product name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "product": {
+              "type": "string",
+              "description": "Product type (e.g. t-shirt, hoodie, down jacket)"
+            },
+            "province": {
+              "type": "string",
+              "description": "Preferred sourcing province"
+            },
+            "quantity": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "description": "Order quantity in pieces"
+            },
+            "fabric_category": {
+              "type": "string",
+              "description": "Fabric category: knit, woven, functional"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_compliance",
+        "description": "Check if a supplier meets compliance requirements for a target export market.\n\nUSE WHEN:\n- User asks \"can this factory export to the US/EU/Japan\"\n- User needs to verify certifications for a specific market\n- \"能不能出口美国\" / \"合规检查\" / \"认证要求\"\n\nPREREQUISITE: You MUST have a valid supplier_id from search_suppliers.\nWORKFLOW: search_suppliers → check_compliance (to verify if a specific supplier can export to target market).\nRETURNS: { supplier, target_market, passed: [string], issues: [string], market_requirements: {field: value} }\nERRORS: Returns error if supplier_id not found. Returns note if compliance data is incomplete.\nNOTE: Many suppliers have incomplete compliance data. Missing data = \"not confirmed\", not \"non-compliant\".",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "supplier_id": {
+              "type": "string",
+              "description": "Supplier ID from search_suppliers, e.g. sup_001"
+            },
+            "target_market": {
+              "enum": [
+                "us",
+                "eu",
+                "japan",
+                "korea"
+              ],
+              "type": "string",
+              "description": "Target export market"
+            }
+          }
+        }
+      },
+      {
+        "name": "find_alternatives",
+        "description": "Find alternative suppliers similar to a given supplier.\n\nUSE WHEN:\n- User says \"this supplier is too expensive / too slow / too far\"\n- User needs backup options for an existing supplier\n- \"有没有替代\" / \"找类似的\" / \"换一家\"\n\nFinds suppliers that make the same products, optionally in a different\nprovince or with different attributes. Results exclude the original supplier.\n\nPREREQUISITE: You MUST have a valid supplier_id from search_suppliers, get_supplier_detail, or recommend_suppliers.\nWORKFLOW: search_suppliers → identify a candidate → find_alternatives (to get backup options) → compare_suppliers (to evaluate them side-by-side).\nDIFFERENCE from recommend_suppliers: recommend_suppliers starts from product REQUIREMENTS. This tool starts from a KNOWN supplier_id and finds similar alternatives.\nDIFFERENCE from search_suppliers: search_suppliers filters by criteria. This tool uses an existing supplier as the baseline reference.\n\nRETURNS: { reference_supplier, alternatives: [supplier objects], attribution }\nERRORS: Returns error if supplier_id not found. Returns empty alternatives if no similar suppliers exist.\nCONSTRAINT: Max 10 alternatives per call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of top results to return (1-10, default 5)"
+            },
+            "reason": {
+              "enum": [
+                "cheaper",
+                "faster",
+                "closer",
+                "better_quality",
+                "any"
+              ],
+              "type": "string",
+              "default": "any",
+              "description": "Why looking for alternatives"
+            },
+            "province": {
+              "type": "string",
+              "description": "Preferred province for alternatives"
+            },
+            "supplier_id": {
+              "type": "string",
+              "description": "Current supplier ID to find alternatives for"
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_suppliers",
+        "description": "Compare multiple suppliers side by side on all dimensions.\n\nUSE WHEN user asks:\n- \"compare these 3 factories\"\n- \"which supplier is better between X and Y\"\n- \"对比供应商\"\n\nPREREQUISITE: You MUST have valid supplier_ids from search_suppliers. Do not guess IDs.\nWORKFLOW: search_suppliers → collect supplier_ids → compare_suppliers (for side-by-side comparison).\nRETURNS: { count, data: [full supplier profiles with all fields] }\nERRORS: Missing IDs are silently skipped.\nCONSTRAINT: Max 10 supplier IDs per call. Use this instead of calling get_supplier_detail in a loop.\nDIFFERENCE from get_supplier_detail: This returns multiple suppliers at once for comparison. get_supplier_detail returns one with verified_dimensions breakdown.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "supplier_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 10,
+              "minItems": 1,
+              "description": "Array of supplier IDs from search_suppliers, e.g. ['sup_001', 'sup_002'], max 10"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_cluster_suppliers",
+        "description": "List all suppliers in a specific industrial cluster.\n\nUSE WHEN user asks:\n- \"what factories are in Humen cluster\"\n- \"show me suppliers in Keqiao fabric market\"\n- \"虎门产业带有哪些供应商\"\n\nPREREQUISITE: You MUST have a valid cluster_id from search_clusters.\nWORKFLOW: search_clusters → pick cluster_id → get_cluster_suppliers (to see all factories in that cluster).\nRETURNS: { cluster_id, has_more, data: [supplier summary objects sorted by quality_score] }\nERRORS: Returns empty data if cluster has no linked suppliers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Page size: number of records to return (1-50, default 20)"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "description": "Pagination offset: skip this many records before returning results (default 0)"
+            },
+            "cluster_id": {
+              "type": "string",
+              "description": "Cluster ID from search_clusters, e.g. humen_women, keqiao_fabric, shishi_casual"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_stats",
+        "description": "Get overall database statistics: total counts of suppliers, fabrics, clusters, and links.\n\nUSE WHEN user asks: \"how big is your database\", \"what's the coverage\", \"data overview\", \"get_stats\".\n\nWORKFLOW: Standalone discovery tool — call this first when a user asks about data scale or freshness. For static metadata (geographic scope, top provinces, data standards), use the database-overview resource (mrc://overview) instead. For per-product distribution, use get_product_categories or get_province_distribution.\nRETURNS: { database, generated_at, tables: { suppliers: { total, by_confidence, last_updated }, fabrics: {...}, clusters: {...}, supplier_fabrics: { total } } }\nNOTE: Only reports verified + partially_verified records. Unverified reserve data is excluded from counts.\nDIFFERENCE from database-overview resource: This is dynamic (live counts + last_updated). The resource is static (geographic scope, data standards).\n\n中文：获取数据库整体统计（供应商总数、面料总数、产业带总数、关联记录数）。",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "database-overview",
+        "uri": "mrc://overview",
+        "description": "Database coverage summary returning current MRC Data scale and scope.\n\nUSE WHEN: User asks \"how big is your database\", \"what data do you have\", \"coverage overview\", \"what regions\", \"data freshness\".\nRETURNS: JSON with name, description, coverage (suppliers/fabrics/clusters/links counts), geographic_scope (Mainland China + HK/Macau), top_provinces, data_standards (AATCC/ISO/GB), api_docs URL, attribution.\nNOTE: This is a static resource — no parameters needed. For per-table verification breakdown, use the get_stats tool instead.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "find-supplier",
+        "description": "Find verified Chinese apparel suppliers/manufacturers by product type and location.\n\nUSE WHEN: User wants to discover factories making a specific product, optionally filtered by region.\nTRIGGERS: \"find me a [product] factory in [region]\", \"who manufactures [product] in China\", \"找[品类]工厂 in [省份/城市]\", \"需要[产品]制造商\".\nWORKFLOW: This prompt instructs the agent to call search_suppliers. After results, follow up with get_supplier_detail for full profiles or compare_suppliers to compare options.\nINPUT: product (required) — e.g. sportswear, t-shirt, down jacket, denim. location (optional) — Province or city.\nOUTPUT: A user message instructing the agent to query MRC Data and present supplier list with name, location, product types, and factory type.",
+        "arguments": [
+          {
+            "name": "product",
+            "description": "Product type to source (e.g. sportswear, t-shirt, down jacket, denim, hoodie)",
+            "required": true
+          },
+          {
+            "name": "location",
+            "description": "Preferred province or city (e.g. Guangdong, Dongguan, Zhejiang, Humen)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "find-fabric",
+        "description": "Find lab-tested Chinese apparel fabrics by fiber composition and target use case.\n\nUSE WHEN: User needs to source a specific fabric type, optionally for a specific apparel category.\nTRIGGERS: \"find [fiber] fabric for [product]\", \"what fabrics work for [product]\", \"[fiber]面料 for [品类]\", \"需要做[产品]的面料\".\nWORKFLOW: This prompt instructs the agent to call search_fabrics. After results, follow up with get_fabric_detail for full lab-test data, or get_fabric_suppliers to find which factories supply each fabric.\nINPUT: material (required) — fiber keyword like cotton, polyester, linen, silk, wool, nylon. use (optional) — target apparel like t-shirt, dress, jacket, denim.\nOUTPUT: A user message instructing the agent to query MRC Data and present fabric list with weight, composition, price range, and suitable apparel.",
+        "arguments": [
+          {
+            "name": "material",
+            "description": "Fiber type or composition keyword (e.g. cotton, polyester, linen, silk, wool, nylon, spandex)",
+            "required": true
+          },
+          {
+            "name": "use",
+            "description": "Target apparel category (e.g. t-shirt, dress, jacket, denim, sportswear)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "compare-clusters",
+        "description": "Compare multiple Chinese apparel industrial clusters side-by-side for sourcing decisions.\n\nUSE WHEN: User wants to evaluate or choose between specific clusters (e.g. Humen vs Shishi vs Jinjiang for sportswear).\nTRIGGERS: \"compare [cluster1] vs [cluster2]\", \"which cluster is better for [product]\", \"对比[产业带]\", \"选址参考\".\nWORKFLOW: This prompt instructs the agent to first call search_clusters to find each cluster's ID, then call compare_clusters with the IDs to get full side-by-side comparison.\nINPUT: clusters (required) — comma-separated cluster names like \"Humen, Shishi, Jinjiang\" or \"虎门, 石狮, 晋江\".\nOUTPUT: A user message instructing the agent to compare clusters on specialization, scale, supplier count, labor cost, and key advantages/risks. Famous clusters covered: Humen (Guangdong, womenswear), Shaoxing Keqiao (Zhejiang, fabric mega-market), Haining (Zhejiang, leather), Zhili (Zhejiang, children's wear), Shengze (Jiangsu, silk), Shantou (Guangdong, underwear), Puning (Guangdong, jeans), Jinjiang (Fujian, sportswear).",
+        "arguments": [
+          {
+            "name": "clusters",
+            "description": "Comma-separated cluster names to compare, e.g. 'Humen, Shishi, Jinjiang' or '虎门, 石狮, 晋江'",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

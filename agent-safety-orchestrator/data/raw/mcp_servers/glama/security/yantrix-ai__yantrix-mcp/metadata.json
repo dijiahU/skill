@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "ftp47eq8iw",
+  "namespace": "yantrix-ai",
+  "slug": "yantrix-mcp",
+  "name": "Yantrix MCP",
+  "description": "Dynamic MCP server — 30+ tools across fact verification, agent memory, Indian NLP, contract risk, security threat modelling, sales call intelligence and more. x402/USDC micropayments on Base.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Dynamic MCP server — 30+ tools across fact verification, agent memory, Indian NLP, contract risk, security threat modelling, sales call intelligence and more. x402/USDC micropayments on Base.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEV_MODE": {
+          "description": "Skip payment validation (local testing only)",
+          "type": "string",
+          "default": "false"
+        },
+        "X_PAYMENT_HEADER": {
+          "description": "x402 payment proof for USDC micropayments",
+          "type": "string"
+        },
+        "YANTRIX_REGISTRY_URL": {
+          "description": "Custom registry URL",
+          "type": "string",
+          "default": "https://registry.yantrix.ai/mcp-registry.json"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "X_PAYMENT_HEADER"
+          ]
+        },
+        {
+          "required": [
+            "DEV_MODE"
+          ]
+        }
+      ]
+    },
+    "id": "ftp47eq8iw",
+    "name": "Yantrix MCP",
+    "namespace": "yantrix-ai",
+    "repository": {
+      "url": "https://github.com/yantrix-ai/yantrix-mcp"
+    },
+    "slug": "yantrix-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ftp47eq8iw"
+  }
+}

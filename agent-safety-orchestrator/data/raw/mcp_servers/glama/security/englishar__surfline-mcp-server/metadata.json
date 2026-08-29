@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "ejn295fyi5",
+  "namespace": "englishar",
+  "slug": "surfline-mcp-server",
+  "name": "Surfline MCP Server",
+  "description": "Enables access to comprehensive surf forecasts from Surfline including current conditions, swell analysis, forecaster insights, tides, and timing information for Santa Cruz surf spots. Provides detailed 8-hour forecasts with expert observations through secure Google OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables access to comprehensive surf forecasts from Surfline including current conditions, swell analysis, forecaster insights, tides, and timing information for Santa Cruz surf spots. Provides detailed 8-hour forecasts with expert observations through secure Google OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth 2.0 Client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth 2.0 Client Secret from Google Cloud Console",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random 32-byte hex string for encrypting cookies (can be generated with: openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "ejn295fyi5",
+    "name": "Surfline MCP Server",
+    "namespace": "englishar",
+    "repository": {
+      "url": "https://github.com/englishar/surfline-mcp-server"
+    },
+    "slug": "surfline-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ejn295fyi5"
+  }
+}

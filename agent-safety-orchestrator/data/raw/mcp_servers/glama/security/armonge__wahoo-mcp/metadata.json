@@ -1,0 +1,73 @@
+{
+  "registry": "glama",
+  "id": "ub02hlhfdl",
+  "namespace": "armonge",
+  "slug": "wahoo-mcp",
+  "name": "Wahoo MCP Server",
+  "description": "An MCP server for interacting with the Wahoo Cloud API to manage workouts, routes, training plans, and power zones. It enables users to list, retrieve, and create fitness data through secure OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server for interacting with the Wahoo Cloud API to manage workouts, routes, training plans, and power zones. It enables users to list, retrieve, and create fitness data through secure OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WAHOO_AUTH_HOST": {
+          "description": "Auth server bind address (default: localhost)",
+          "type": "string",
+          "default": "localhost"
+        },
+        "WAHOO_AUTH_PORT": {
+          "description": "Auth server port (default: 8080)",
+          "type": "string",
+          "default": "8080"
+        },
+        "WAHOO_CLIENT_ID": {
+          "description": "Your Wahoo Client ID",
+          "type": "string"
+        },
+        "WAHOO_TOKEN_FILE": {
+          "description": "Path to store OAuth tokens (required)",
+          "type": "string"
+        },
+        "WAHOO_CLIENT_SECRET": {
+          "description": "Your Wahoo Client Secret",
+          "type": "string"
+        },
+        "WAHOO_REDIRECT_HOST": {
+          "description": "OAuth callback host (default: uses WAHOO_AUTH_HOST)",
+          "type": "string"
+        },
+        "WAHOO_REDIRECT_PORT": {
+          "description": "OAuth callback port (default: uses WAHOO_AUTH_PORT)",
+          "type": "string"
+        },
+        "WAHOO_REDIRECT_SCHEME": {
+          "description": "URL scheme - http or https (default: http)",
+          "type": "string",
+          "default": "http"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WAHOO_TOKEN_FILE"
+      ]
+    },
+    "id": "ub02hlhfdl",
+    "name": "Wahoo MCP Server",
+    "namespace": "armonge",
+    "repository": {
+      "url": "https://github.com/armonge/wahoo-mcp"
+    },
+    "slug": "wahoo-mcp",
+    "spdxLicense": {
+      "name": "GPL 3.0",
+      "url": "https://spdx.org/licenses/GPL-3.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ub02hlhfdl"
+  }
+}

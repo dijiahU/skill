@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "k1l7v19ile",
+  "namespace": "Jovancoding",
+  "slug": "network-ai",
+  "name": "Network AI",
+  "description": "Multi-agent swarm orchestrator for AI workflows. Exposes blackboard read/write, agent dispatch, permission gating (AuthGuardian), token budget enforcement (FederatedBudget), and audit log tools over MCP. Supports 14 AI framework adapters including LangChain, AutoGen, CrewAI, Codex, and A2A — mix any frameworks in one swarm with race-condition-safe shared state.(Traffic light for agents)",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Multi-agent swarm orchestrator for AI workflows. Exposes blackboard read/write, agent dispatch, permission gating (AuthGuardian), token budget enforcement (FederatedBudget), and audit log tools over MCP. Supports 14 AI framework adapters including LangChain, AutoGen, CrewAI, Codex, and A2A — mix any frameworks in one swarm with race-condition-safe shared state.(Traffic light for agents)",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "data": {
+          "description": "The data directory for persistence (default is ./data).",
+          "type": "string"
+        },
+        "port": {
+          "description": "The port to run the server on (default is 3001).",
+          "type": "string"
+        },
+        "board": {
+          "description": "Specify the name or path for the shared blackboard.",
+          "type": "string"
+        },
+        "ceiling": {
+          "description": "Set the hard token ceiling for the federated budget.",
+          "type": "string"
+        },
+        "no-token": {
+          "description": "Disable HMAC-signed permission tokens.",
+          "type": "string"
+        },
+        "audit-log": {
+          "description": "Specify the path for the append-only audit log file.",
+          "type": "string"
+        },
+        "no-budget": {
+          "description": "Disable the federated token tracking/budget system.",
+          "type": "string"
+        },
+        "no-control": {
+          "description": "Disable live orchestrator configuration tools.",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "API key required if running agents or pipelines that utilize OpenAI models.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "k1l7v19ile",
+    "name": "Network AI",
+    "namespace": "Jovancoding",
+    "repository": {
+      "url": "https://github.com/Jovancoding/Network-AI"
+    },
+    "slug": "network-ai",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/k1l7v19ile"
+  }
+}

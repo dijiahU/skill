@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "b8hz1b6h22",
+  "namespace": "wyre-technology",
+  "slug": "rocketcyber-mcp",
+  "name": "rocketcyber-mcp",
+  "description": "An MCP server for the RocketCyber Managed SOC platform that provides read-only access to security data including incidents, agents, and events. It enables users to monitor and query security information through 10 specialized tools and resources.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server for the RocketCyber Managed SOC platform that provides read-only access to security data including incidents, agents, and events. It enables users to monitor and query security information through 10 specialized tools and resources.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Log level: error, warn, info, debug",
+          "type": "string",
+          "default": "info"
+        },
+        "LOG_FORMAT": {
+          "description": "Log format: json or simple",
+          "type": "string",
+          "default": "simple"
+        },
+        "MCP_HTTP_HOST": {
+          "description": "HTTP host (when using http transport)",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_HTTP_PORT": {
+          "description": "HTTP port (when using http transport)",
+          "type": "string",
+          "default": "8080"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport type: stdio or http",
+          "type": "string",
+          "default": "stdio"
+        },
+        "ROCKETCYBER_REGION": {
+          "description": "API region: us or eu",
+          "type": "string",
+          "default": "us"
+        },
+        "ROCKETCYBER_API_KEY": {
+          "description": "RocketCyber API key",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ROCKETCYBER_API_KEY"
+      ]
+    },
+    "id": "b8hz1b6h22",
+    "name": "rocketcyber-mcp",
+    "namespace": "wyre-technology",
+    "repository": {
+      "url": "https://github.com/wyre-technology/rocketcyber-mcp"
+    },
+    "slug": "rocketcyber-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b8hz1b6h22"
+  }
+}

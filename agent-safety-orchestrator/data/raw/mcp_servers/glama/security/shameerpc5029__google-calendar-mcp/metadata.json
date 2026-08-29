@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "bj3az11o1v",
+  "namespace": "Shameerpc5029",
+  "slug": "google-calendar-mcp",
+  "name": "Google Calendar MCP Server",
+  "description": "Enables Claude to interact with Google Calendar through natural conversation, allowing users to view schedules, create meetings with Google Meet, cancel events, and search calendars using Nango for OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to interact with Google Calendar through natural conversation, allowing users to view schedules, create meetings with Google Meet, cancel events, and search calendars using Nango for OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NANGO_CONNECTION_ID": {
+          "description": "The connection ID created when a user connects their Google account",
+          "type": "string"
+        },
+        "NANGO_INTEGRATION_ID": {
+          "description": "The ID of your Google Calendar integration in Nango",
+          "type": "string"
+        },
+        "NANGO_NANGO_BASE_URL": {
+          "description": "The base URL for the Nango API",
+          "type": "string",
+          "default": "https://api.nango.dev"
+        },
+        "NANGO_NANGO_SECRET_KEY": {
+          "description": "Your Nango secret key found in your Nango project settings",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NANGO_NANGO_SECRET_KEY",
+        "NANGO_CONNECTION_ID",
+        "NANGO_INTEGRATION_ID"
+      ]
+    },
+    "id": "bj3az11o1v",
+    "name": "Google Calendar MCP Server",
+    "namespace": "Shameerpc5029",
+    "repository": {
+      "url": "https://github.com/Shameerpc5029/google-calendar-mcp"
+    },
+    "slug": "google-calendar-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bj3az11o1v"
+  }
+}

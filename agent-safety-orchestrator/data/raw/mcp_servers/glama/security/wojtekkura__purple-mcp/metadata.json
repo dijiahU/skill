@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "xfg9rj9o0b",
+  "namespace": "wojtekkura",
+  "slug": "purple-mcp",
+  "name": "Purple AI MCP Server",
+  "description": "Enables read-only access to SentinelOne's platform through MCP, allowing security investigations, threat hunting, and asset inventory queries via natural language.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables read-only access to SentinelOne's platform through MCP, allowing security investigations, threat hunting, and asset inventory queries via natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PURPLEMCP_CONSOLE_TOKEN": {
+          "description": "Service user token (Account or Site level). Optional if token is stored in credential manager.",
+          "type": "string"
+        },
+        "PURPLEMCP_STATELESS_HTTP": {
+          "description": "Enable stateless HTTP mode for serverless deployments (e.g., Amazon Bedrock AgentCore)",
+          "type": "string"
+        },
+        "PURPLEMCP_TRANSPORT_MODE": {
+          "description": "MCP transport mode: stdio, sse, or streamable-http",
+          "type": "string",
+          "default": "stdio"
+        },
+        "PURPLEMCP_CONSOLE_BASE_URL": {
+          "description": "Console URL (e.g., https://your-console.sentinelone.net)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "PURPLEMCP_CONSOLE_BASE_URL"
+      ]
+    },
+    "id": "xfg9rj9o0b",
+    "name": "Purple AI MCP Server",
+    "namespace": "wojtekkura",
+    "repository": {
+      "url": "https://github.com/wojtekkura/purple-mcp"
+    },
+    "slug": "purple-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xfg9rj9o0b"
+  }
+}

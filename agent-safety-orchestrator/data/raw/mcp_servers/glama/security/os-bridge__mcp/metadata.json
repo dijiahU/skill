@@ -1,0 +1,77 @@
+{
+  "registry": "glama",
+  "id": "epo9uf2rsu",
+  "namespace": "os-bridge",
+  "slug": "mcp",
+  "name": "Knowledge Base Tools",
+  "description": "Provides AI agents with tools to navigate, search, and manage a hierarchical knowledge base of themes, skills, and learning resources with tenant-aware JWT authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides AI agents with tools to navigate, search, and manage a hierarchical knowledge base of themes, skills, and learning resources with tenant-aware JWT authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Host to bind",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "Port number (default: 8100 - port 8000 is used by the Django backend)",
+          "type": "string",
+          "default": "8100"
+        },
+        "BACKEND_URL": {
+          "description": "Fallback backend URL if MCP_BACKEND_URL is not set",
+          "type": "string"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport type - sse (Server-Sent Events) or streamable-http",
+          "type": "string",
+          "default": "sse"
+        },
+        "MCP_BACKEND_URL": {
+          "description": "Backend URL with tenant placeholder, e.g., http://tenant.localhost:8000 (can use BACKEND_URL as fallback)",
+          "type": "string"
+        },
+        "MCP_JWT_SECRET_KEY": {
+          "description": "Secret key for JWT token verification (can use CHAINLIT_JWT_SECRET_KEY as fallback)",
+          "type": "string"
+        },
+        "CHAINLIT_JWT_SECRET_KEY": {
+          "description": "Fallback secret key for JWT token verification if MCP_JWT_SECRET_KEY is not set",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MCP_JWT_SECRET_KEY",
+            "MCP_BACKEND_URL"
+          ]
+        },
+        {
+          "required": [
+            "CHAINLIT_JWT_SECRET_KEY",
+            "BACKEND_URL"
+          ]
+        }
+      ]
+    },
+    "id": "epo9uf2rsu",
+    "name": "Knowledge Base Tools",
+    "namespace": "os-bridge",
+    "repository": {
+      "url": "https://github.com/os-bridge/mcp"
+    },
+    "slug": "mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/epo9uf2rsu"
+  }
+}

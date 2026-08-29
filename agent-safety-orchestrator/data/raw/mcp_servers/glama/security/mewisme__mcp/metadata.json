@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "tpj8m8o0gc",
+  "namespace": "mewisme",
+  "slug": "mcp",
+  "name": "mcp-management",
+  "description": "A Node.js MCP server that loads plugins, registers tools via the MCP SDK, and exposes functionality over stdio with built-in persistence and a Next.js web UI. It provides a management stack for MCP tools with plugin lifecycle management and security controls.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A Node.js MCP server that loads plugins, registers tools via the MCP SDK, and exposes functionality over stdio with built-in persistence and a Next.js web UI. It provides a management stack for MCP tools with plugin lifecycle management and security controls.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_DATA_DIR": {
+          "description": "Directory for JSON state and logs; default is ~/.mcp-management on the current user.",
+          "type": "string",
+          "default": "~/.mcp-management"
+        },
+        "MCP_FS_ALLOWED_ROOTS": {
+          "description": "Comma-separated paths for filesystem-related tooling; respects blocked OS paths.",
+          "type": "string"
+        },
+        "MCP_IN_MEMORY_PERSISTENCE": {
+          "description": "Enable in-memory persistence; set to true or use when NODE_ENV=test.",
+          "type": "string",
+          "default": "false"
+        },
+        "MCP_ALLOW_EXTERNAL_PLUGINS": {
+          "description": "Allow external plugin loaders (path, package, bundle); set to true to enable.",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "tpj8m8o0gc",
+    "name": "mcp-management",
+    "namespace": "mewisme",
+    "repository": {
+      "url": "https://github.com/mewisme/mcp"
+    },
+    "slug": "mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tpj8m8o0gc"
+  }
+}

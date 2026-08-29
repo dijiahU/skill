@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "lbv2hd5gih",
+  "namespace": "evolv3ai",
+  "slug": "scorecard-mcp",
+  "name": "Scorecard MCP Server",
+  "description": "Enables Claude and other MCP-compatible clients to access Scorecard's evaluation tools for running experiments, generating synthetic data, and analyzing model performance. It is designed to be deployed on Cloudflare Workers and integrates securely with Scorecard's API using Clerk for authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude and other MCP-compatible clients to access Scorecard's evaluation tools for running experiments, generating synthetic data, and analyzing model performance. It is designed to be deployed on Cloudflare Workers and integrates securely with Scorecard's API using Clerk for authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CLERK_DOMAIN": {
+          "description": "Clerk Dashboard -> Configure -> API Keys -> Frontend API URL. Override this with the Clerk development URL if using with local Scorecard server",
+          "type": "string"
+        },
+        "CLERK_CLIENT_ID": {
+          "description": "Clerk Dashboard -> Configure -> OAuth Applications",
+          "type": "string"
+        },
+        "CLERK_CLIENT_SECRET": {
+          "description": "Clerk Dashboard -> Configure -> OAuth Applications. Cannot be viewed after initial generation",
+          "type": "string"
+        },
+        "CLERK_PUBLISHABLE_KEY": {
+          "description": "Clerk Dashboard -> Configure -> API Keys -> Publishable Key. Override this with the pk_test_* one if using with local Scorecard server",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CLERK_CLIENT_ID",
+        "CLERK_CLIENT_SECRET",
+        "CLERK_DOMAIN",
+        "CLERK_PUBLISHABLE_KEY"
+      ]
+    },
+    "id": "lbv2hd5gih",
+    "name": "Scorecard MCP Server",
+    "namespace": "evolv3ai",
+    "repository": {
+      "url": "https://github.com/evolv3ai/scorecard-mcp"
+    },
+    "slug": "scorecard-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lbv2hd5gih"
+  }
+}

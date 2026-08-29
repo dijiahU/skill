@@ -1,0 +1,100 @@
+{
+  "registry": "glama",
+  "id": "fzku23efhy",
+  "namespace": "huchunlinnk",
+  "slug": "mcp-remote-server-kubernetes",
+  "name": "MCP Remote Server for Kubernetes",
+  "description": "Provides Kubernetes cluster management capabilities through natural language via MCP protocol over HTTP/SSE. Supports Pod, Service, Deployment operations, log retrieval, and resource management with JWT authentication and RBAC permissions.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides Kubernetes cluster management capabilities through natural language via MCP protocol over HTTP/SSE. Supports Pod, Service, Deployment operations, log retrieval, and resource management with JWT authentication and RBAC permissions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Server host",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "LOG_FILE": {
+          "description": "Log file path (optional)",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Log level (error, warn, info, debug, verbose)",
+          "type": "string",
+          "default": "info"
+        },
+        "JWT_SECRET": {
+          "description": "JWT secret key for authentication",
+          "type": "string"
+        },
+        "KUBECONFIG": {
+          "description": "Path to your kubeconfig file",
+          "type": "string"
+        },
+        "LOG_FORMAT": {
+          "description": "Log format (combined, json, simple)",
+          "type": "string"
+        },
+        "LOG_CONSOLE": {
+          "description": "Enable console logging",
+          "type": "string",
+          "default": "true"
+        },
+        "AUTH_ENABLED": {
+          "description": "Enable authentication",
+          "type": "string",
+          "default": "true"
+        },
+        "K8S_NAMESPACE": {
+          "description": "Default Kubernetes namespace",
+          "type": "string",
+          "default": "default"
+        },
+        "JWT_EXPIRES_IN": {
+          "description": "JWT token expiration time",
+          "type": "string",
+          "default": "24h"
+        },
+        "K8S_IN_CLUSTER": {
+          "description": "Whether running inside Kubernetes cluster",
+          "type": "string",
+          "default": "false"
+        },
+        "MCP_AUTH_TOKEN": {
+          "description": "MCP authentication token for client integration",
+          "type": "string"
+        },
+        "MCP_SERVER_URL": {
+          "description": "MCP server URL for client integration",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "fzku23efhy",
+    "name": "MCP Remote Server for Kubernetes",
+    "namespace": "huchunlinnk",
+    "repository": {
+      "url": "https://github.com/huchunlinnk/mcp-remote-server-kubernetes"
+    },
+    "slug": "mcp-remote-server-kubernetes",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fzku23efhy"
+  }
+}

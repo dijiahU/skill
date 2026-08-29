@@ -1,0 +1,51 @@
+{
+  "registry": "glama",
+  "id": "d2zo2kwwe8",
+  "namespace": "rm-rf-prod",
+  "slug": "ws-mcp",
+  "name": "ws-mcp",
+  "description": "A self-hosted MCP server that fetches live documentation and performs code audits using real-time authoritative references to prevent AI hallucinations. It provides tools for searching documentation across 330+ libraries and scanning local source code for security, performance, and accessibility issues.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A self-hosted MCP server that fetches live documentation and performs code audits using real-time authoritative references to prevent AI hallucinations. It provides tools for searching documentation across 330+ libraries and scanning local source code for security, performance, and accessibility issues.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GT_CACHE_DIR": {
+          "description": "Disk cache location for persistent cross-session caching",
+          "type": "string",
+          "default": "~/.gt-mcp-cache"
+        },
+        "GT_CONCURRENCY": {
+          "description": "Parallel fetch limit in gt_auto_scan",
+          "type": "string",
+          "default": "6"
+        },
+        "GT_GITHUB_TOKEN": {
+          "description": "GitHub API auth — raises rate limit from 60 to 5,000 req/hr",
+          "type": "string",
+          "default": ""
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "d2zo2kwwe8",
+    "name": "ws-mcp",
+    "namespace": "rm-rf-prod",
+    "repository": {
+      "url": "https://github.com/rm-rf-prod/GroundTruth-MCP"
+    },
+    "slug": "ws-mcp",
+    "spdxLicense": {
+      "name": "Elastic License 2.0",
+      "url": "https://spdx.org/licenses/Elastic-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/d2zo2kwwe8"
+  }
+}

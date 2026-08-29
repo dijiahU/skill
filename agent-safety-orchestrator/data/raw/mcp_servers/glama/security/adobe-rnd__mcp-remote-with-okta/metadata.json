@@ -1,0 +1,103 @@
+{
+  "registry": "glama",
+  "id": "kci2q7ua67",
+  "namespace": "adobe-rnd",
+  "slug": "mcp-remote-with-okta",
+  "name": "MCP Remote with Adobe and Okta Authentication",
+  "description": "A wrapper for mcp-remote that provides secure authentication for protected MCP servers using Adobe IMS or Okta OAuth flows. It features automated token management, validation, and background refreshing for seamless access to remote resources.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A wrapper for mcp-remote that provides secure authentication for protected MCP servers using Adobe IMS or Okta OAuth flows. It features automated token management, validation, and background refreshing for seamless access to remote resources.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG_MODE": {
+          "description": "Enable debug mode for troubleshooting",
+          "type": "string",
+          "default": "false"
+        },
+        "OKTA_SCOPE": {
+          "description": "OAuth scope for Okta",
+          "type": "string",
+          "default": "openid profile email"
+        },
+        "ADOBE_SCOPE": {
+          "description": "OAuth scope for Adobe IMS",
+          "type": "string",
+          "default": "AdobeID,openid"
+        },
+        "AUTH_METHOD": {
+          "description": "Authentication method ('jwt' or 'access_token')",
+          "type": "string",
+          "default": "jwt"
+        },
+        "OKTA_DOMAIN": {
+          "description": "Your Okta domain (e.g., dev-12345.okta.com). Required if AUTH_PROVIDER is 'okta'.",
+          "type": "string"
+        },
+        "AUTO_REFRESH": {
+          "description": "Enable automatic token refresh",
+          "type": "string",
+          "default": "true"
+        },
+        "REDIRECT_URI": {
+          "description": "OAuth redirect URI",
+          "type": "string",
+          "default": "http://localhost:8080/callback"
+        },
+        "ADOBE_IMS_ENV": {
+          "description": "IMS environment ('prod', 'stage', 'dev')",
+          "type": "string",
+          "default": "prod"
+        },
+        "AUTH_PROVIDER": {
+          "description": "Authentication provider ('adobe' or 'okta')",
+          "type": "string",
+          "default": "adobe"
+        },
+        "OKTA_CLIENT_ID": {
+          "description": "Client ID for Okta. Required if AUTH_PROVIDER is 'okta'.",
+          "type": "string"
+        },
+        "ADOBE_CLIENT_ID": {
+          "description": "Client ID for Adobe IMS. Required if AUTH_PROVIDER is 'adobe'.",
+          "type": "string"
+        },
+        "REFRESH_THRESHOLD": {
+          "description": "Auto-refresh threshold in minutes",
+          "type": "string",
+          "default": "10"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ADOBE_CLIENT_ID"
+          ]
+        },
+        {
+          "required": [
+            "AUTH_PROVIDER",
+            "OKTA_CLIENT_ID",
+            "OKTA_DOMAIN"
+          ]
+        }
+      ]
+    },
+    "id": "kci2q7ua67",
+    "name": "MCP Remote with Adobe and Okta Authentication",
+    "namespace": "adobe-rnd",
+    "repository": {
+      "url": "https://github.com/adobe-rnd/mcp-remote-with-okta"
+    },
+    "slug": "mcp-remote-with-okta",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kci2q7ua67"
+  }
+}

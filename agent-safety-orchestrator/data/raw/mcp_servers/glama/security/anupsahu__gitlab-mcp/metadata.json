@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "dskfzrf0en",
+  "namespace": "anupsahu",
+  "slug": "gitlab-mcp",
+  "name": "GitLab MCP Server",
+  "description": "Enables interaction with GitLab repositories through secure OAuth 2.0 authentication. Supports comprehensive GitLab operations including merge requests, issues, file management, commits, and branch operations through natural language.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with GitLab repositories through secure OAuth 2.0 authentication. Supports comprehensive GitLab operations including merge requests, issues, file management, commits, and branch operations through natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "USE_OAUTH": {
+          "description": "Enable OAuth 2.0 authentication",
+          "type": "string",
+          "default": "false"
+        },
+        "GITLAB_API_URL": {
+          "description": "GitLab API URL",
+          "type": "string",
+          "default": "https://gitlab.com/api/v4"
+        },
+        "GITLAB_PROJECT_ID": {
+          "description": "Default project ID",
+          "type": "string"
+        },
+        "GITLAB_READ_ONLY_MODE": {
+          "description": "Enable read-only mode",
+          "type": "string",
+          "default": "false"
+        },
+        "GITLAB_ALLOWED_PROJECT_IDS": {
+          "description": "Comma-separated list of allowed project IDs",
+          "type": "string"
+        },
+        "GITLAB_PERSONAL_ACCESS_TOKEN": {
+          "description": "Personal access token (if not using OAuth)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "USE_OAUTH"
+          ]
+        },
+        {
+          "required": [
+            "GITLAB_PERSONAL_ACCESS_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "dskfzrf0en",
+    "name": "GitLab MCP Server",
+    "namespace": "anupsahu",
+    "repository": {
+      "url": "https://github.com/anupsahu/gitlab-mcp"
+    },
+    "slug": "gitlab-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dskfzrf0en"
+  }
+}

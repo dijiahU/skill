@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "wtijgr4h26",
+  "namespace": "piskunproject",
+  "slug": "notion-mcp-server",
+  "name": "Notion MCP Server",
+  "description": "Connects Claude Desktop and other MCP clients directly to Notion with secure SSE support for CRUD operations. Designed for cloud deployment with bearer authentication, rate limiting, and security headers.",
+  "discoveryQueries": [
+    "security",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Connects Claude Desktop and other MCP clients directly to Notion with secure SSE support for CRUD operations. Designed for cloud deployment with bearer authentication, rate limiting, and security headers.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "Override OpenAPI server base URL",
+          "type": "string"
+        },
+        "NOTION_TOKEN": {
+          "description": "Your Notion integration token",
+          "type": "string"
+        },
+        "SECRET_TOKEN": {
+          "description": "Bearer token required to access /sse and /message",
+          "type": "string"
+        },
+        "NOTION_API_VERSION": {
+          "description": "Notion API version to use",
+          "type": "string",
+          "default": "2022-06-28"
+        },
+        "OPENAPI_MCP_HEADERS": {
+          "description": "JSON string of headers; overrides NOTION_TOKEN when present",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NOTION_TOKEN",
+        "SECRET_TOKEN"
+      ]
+    },
+    "id": "wtijgr4h26",
+    "name": "Notion MCP Server",
+    "namespace": "piskunproject",
+    "repository": {
+      "url": "https://github.com/piskunproject/notion-mcp-server"
+    },
+    "slug": "notion-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/wtijgr4h26"
+  }
+}

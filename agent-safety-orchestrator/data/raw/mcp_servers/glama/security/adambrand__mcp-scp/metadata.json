@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "m3xxxgckl6",
+  "namespace": "adambrand",
+  "slug": "mcp-scp",
+  "name": "MCP SCP Server",
+  "description": "Enables secure file transfer operations with remote Linux and Windows systems via SCP/SFTP protocols. Supports uploading, downloading, listing, and managing files on remote servers through SSH authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure file transfer operations with remote Linux and Windows systems via SCP/SFTP protocols. Supports uploading, downloading, listing, and managing files on remote servers through SSH authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SSH_KEY": {
+          "description": "Path to the SSH private key file for key authentication",
+          "type": "string"
+        },
+        "SSH_HOST": {
+          "description": "The SSH server hostname or IP address",
+          "type": "string"
+        },
+        "SSH_PORT": {
+          "description": "The SSH port number (defaults to 22)",
+          "type": "string",
+          "default": "22"
+        },
+        "SSH_USER": {
+          "description": "The SSH username",
+          "type": "string"
+        },
+        "SSH_TIMEOUT": {
+          "description": "The SSH connection timeout in milliseconds (defaults to 60 seconds)",
+          "type": "string",
+          "default": "60000"
+        },
+        "SSH_PASSWORD": {
+          "description": "The SSH password for password authentication",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SSH_HOST",
+            "SSH_USER",
+            "SSH_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SSH_HOST",
+            "SSH_USER",
+            "SSH_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "m3xxxgckl6",
+    "name": "MCP SCP Server",
+    "namespace": "adambrand",
+    "repository": {
+      "url": "https://github.com/adambrand/mcp-scp"
+    },
+    "slug": "mcp-scp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/m3xxxgckl6"
+  }
+}

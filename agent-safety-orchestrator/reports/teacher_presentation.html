@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>Safety Orchestrator — 项目汇报</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F2EA;
+  --paper:#FBF8F1;
+  --ink:#1B1A17;
+  --ink-2:#3A3833;
+  --muted:#7A766D;
+  --line:#D9D2C2;
+  --line-2:#E8E2D3;
+  --accent:#1F3B6E;
+  --accent-soft:#E9EEF8;
+  --skill:#6D3FA3;     /* LLM judgment */
+  --skill-bg:#F1EAF8;
+  --hybrid:#B25E1A;    /* fast-path + LLM fallback */
+  --hybrid-bg:#F8EBDB;
+  --hook:#1F6D55;      /* deterministic rule */
+  --hook-bg:#E4EFEA;
+  --block:#A11D24;
+  --block-bg:#F7E0E0;
+  --warn:#9A6A00;
+  --warn-bg:#F7ECCD;
+  --pass:#1F6D55;
+  --pass-bg:#E4EFEA;
+  --phase-input:#1F3B6E;
+  --phase-plan:#7A5500;
+  --phase-tool:#A1421D;
+  --phase-out:#6D3FA3;
+  --phase-cross:#1F6D55;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Inter","PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.55}
+a{color:var(--accent);text-decoration:none}
+h1,h2,h3,h4{font-family:"Fraunces","Songti SC",serif;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:0.86em}
+.page{max-width:1180px;margin:0 auto;padding:48px 36px 96px}
+/* ---------- Hero ---------- */
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:36px;border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:28px 0 32px;margin-bottom:36px}
+.hero .eyebrow{font-size:12.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.hero h1{font-size:54px;line-height:1.02;margin:14px 0 14px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .sub{font-size:17px;color:var(--ink-2);max-width:48ch}
+.hero .meta{font-size:13px;color:var(--muted);margin-top:24px;display:flex;gap:24px;flex-wrap:wrap}
+.hero .meta b{color:var(--ink);font-weight:600}
+.hero .figure{background:var(--paper);border:1px solid var(--line);padding:24px;align-self:stretch}
+.hero .figure h4{margin:0 0 16px;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);font-weight:600;font-family:"Inter",sans-serif}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.kpi{border-top:1px solid var(--line)}
+.kpi .n{font-family:"Fraunces",serif;font-size:42px;line-height:1;font-weight:600;color:var(--ink);margin-top:10px}
+.kpi .lbl{font-size:12px;color:var(--muted);letter-spacing:0.04em;margin-top:6px}
+.kpi .hint{font-size:11.5px;color:var(--muted);margin-top:2px}
+/* ---------- Section ---------- */
+section{margin:54px 0}
+.section-hd{display:flex;align-items:baseline;gap:18px;border-bottom:1px solid var(--ink);padding-bottom:10px;margin-bottom:24px}
+.section-hd .idx{font-family:"Fraunces",serif;font-style:italic;color:var(--muted);font-size:18px}
+.section-hd h2{margin:0;font-size:28px}
+.section-hd .tag{margin-left:auto;font-size:12px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase}
+.lead{font-size:16px;color:var(--ink-2);max-width:70ch;margin-bottom:24px}
+/* ---------- Architecture diagram ---------- */
+.arch{background:var(--paper);border:1px solid var(--line);padding:28px}
+.arch-row{display:grid;grid-template-columns:140px 1fr;gap:24px;padding:18px 0;border-bottom:1px dashed var(--line-2)}
+.arch-row:last-child{border-bottom:none}
+.arch-row .lab{font-family:"Fraunces",serif;font-size:18px;font-weight:600;color:var(--ink)}
+.arch-row .lab .small{display:block;font-family:"Inter",sans-serif;font-weight:500;font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:0.04em;text-transform:uppercase}
+.arch-row .body{font-size:14.5px;color:var(--ink-2)}
+.arch-row .body code{background:#fff;border:1px solid var(--line);padding:1px 6px;border-radius:3px}
+.arrow{display:flex;justify-content:center;color:var(--muted);font-size:18px;letter-spacing:0.4em;margin:2px 0}
+/* ---------- Legend ---------- */
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;font-size:13px;color:var(--ink-2)}
+.legend-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper);padding:6px 12px;border-radius:999px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.dot.skill{background:var(--skill)}.dot.hybrid{background:var(--hybrid)}.dot.hook{background:var(--hook)}
+.dot.phase-input{background:var(--phase-input)}.dot.phase-plan{background:var(--phase-plan)}
+.dot.phase-tool{background:var(--phase-tool)}.dot.phase-out{background:var(--phase-out)}.dot.phase-cross{background:var(--phase-cross)}
+/* ---------- Skill grid ---------- */
+.phase-block{margin-bottom:28px}
+.phase-title{display:flex;align-items:baseline;gap:12px;margin:0 0 12px}
+.phase-title h3{margin:0;font-size:19px}
+.phase-title .ph-tag{font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;padding:3px 10px;border-radius:999px}
+.phase-title .ct{font-size:13px;color:var(--muted);margin-left:auto}
+.phase-title.input .ph-tag{background:var(--phase-input)}
+.phase-title.plan .ph-tag{background:var(--phase-plan)}
+.phase-title.tool .ph-tag{background:var(--phase-tool)}
+.phase-title.output .ph-tag{background:var(--phase-out)}
+.phase-title.cross .ph-tag{background:var(--phase-cross)}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.card .ttl{display:flex;align-items:baseline;gap:10px;justify-content:space-between}
+.card .ttl h4{margin:0;font-size:15.5px;font-family:"Inter",sans-serif;font-weight:600}
+.card .ttl .n{font-size:12px;color:var(--muted)}
+.card p{margin:0;font-size:13.5px;color:var(--ink-2)}
+.card .modes{display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px}
+.mode{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;font-weight:500}
+.mode.skill{background:var(--skill-bg);color:var(--skill)}
+.mode.hybrid{background:var(--hybrid-bg);color:var(--hybrid)}
+.mode.hook{background:var(--hook-bg);color:var(--hook)}
+/* ---------- Hook table ---------- */
+.hooks-table{display:grid;grid-template-columns:160px 200px 1fr 60px;background:var(--paper);border:1px solid var(--line)}
+.hooks-table > div{padding:14px 16px;border-bottom:1px solid var(--line-2);font-size:14px}
+.hooks-table .hd{background:#EFEADC;font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+.hooks-table .ev{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink)}
+.hooks-table .matcher code{background:#fff;border:1px solid var(--line);padding:1px 6px}
+.hooks-table .atoms{color:var(--ink-2);font-size:13px}
+.hooks-table .count{font-family:"Fraunces",serif;font-size:18px;color:var(--ink);text-align:right}
+.hooks-table > div:nth-last-child(-n+4){border-bottom:none}
+/* ---------- Example walkthrough ---------- */
+.example-intro{background:#FFFEFA;border:1px solid var(--line);padding:22px 24px;margin-bottom:24px}
+.example-intro .uq{font-family:"JetBrains Mono",monospace;font-size:14px;background:#fff;border-left:3px solid var(--block);padding:14px 16px;margin-top:14px;color:var(--ink)}
+.example-intro .uq .who{font-family:"Inter",sans-serif;font-size:11.5px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;display:block}
+.step{display:grid;grid-template-columns:90px 1fr;gap:24px;padding:22px 0;border-bottom:1px solid var(--line-2)}
+.step:last-child{border-bottom:none}
+.step .num{font-family:"Fraunces",serif;font-size:42px;line-height:1;color:var(--muted);font-weight:500}
+.step .num .lbl{display:block;font-size:11px;font-family:"Inter",sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-top:6px;font-weight:600}
+.step h3{margin:0 0 6px;font-size:18px;font-family:"Inter",sans-serif;font-weight:600}
+.step .where{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.step .where code{background:var(--paper);border:1px solid var(--line);padding:1px 6px;font-size:11.5px}
+.step .what{font-size:14.5px;color:var(--ink-2);margin-bottom:10px}
+.findings{display:flex;flex-direction:column;gap:6px}
+.finding{display:grid;grid-template-columns:90px 1fr 86px;gap:14px;align-items:start;padding:8px 12px;background:var(--paper);border:1px solid var(--line-2);font-size:13.5px}
+.finding .id{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-2)}
+.finding .id .who{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
+.finding .verdict{justify-self:end;align-self:start;font-size:11px;letter-spacing:0.08em;font-weight:600;text-transform:uppercase;padding:3px 10px;border-radius:3px}
+.verdict.block{background:var(--block-bg);color:var(--block)}
+.verdict.warn{background:var(--warn-bg);color:var(--warn)}
+.verdict.pass{background:var(--pass-bg);color:var(--pass)}
+.verdict.escalate{background:#E7E2F3;color:#4B2D86}
+.outcome{margin-top:36px;border-top:1px solid var(--ink);padding-top:22px;background:#FFFEFA}
+.outcome h3{margin:0 0 12px;font-size:20px}
+.outcome ul{margin:0;padding-left:18px}
+.outcome li{margin-bottom:6px;font-size:14.5px;color:var(--ink-2)}
+/* ---------- Footer ---------- */
+footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  .hooks-table{grid-template-columns:1fr;font-size:13px}
+  .hooks-table .count{text-align:left}
+  .step{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Agent Safety / 项目汇报 · 2026-05-18</div>
+      <h1>Safety Orchestrator<br/><em>把零散的安全 skill 蒸馏成统一可调用的能力库</em></h1>
+      <p class="sub">把社区上分散的 LLM agent 安全 skill 提炼为 <b>95 个原子能力</b>，按 agent 的 5 个执行阶段聚合成 <b>14 个 archetype skill</b> + 1 个 Router meta-skill；再把其中能用确定性规则替代 LLM 判断的部分下沉成 <b>6 个 hook</b>，自动在工具调用前后执行。<b>Training-free</b>，最终是一个 18 文件的 Claude Code skill bundle。</p>
+      <div class="meta">
+        <div><b>词表版本</b> v1.1 (freeze)</div>
+        <div><b>Bundle</b> 18 个文件 · ~3300 行</div>
+        <div><b>验证</b> pilot/ podman 4.6.1 build pass</div>
+      </div>
+    </div>
+    <div class="figure">
+      <h4>规模一览</h4>
+      <div class="kpis">
+        <div class="kpi"><div class="lbl">原子能力总数</div><div class="n">95</div><div class="hint">v1 freeze 已冻结</div></div>
+        <div class="kpi"><div class="lbl">Archetype skill</div><div class="n">19</div><div class="hint">14 个对外暴露 + 5 个纯 hook</div></div>
+        <div class="kpi"><div class="lbl">Hook matcher 脚本</div><div class="n">6</div><div class="hint">承担 60 个 hook + 21 个 hybrid 原子</div></div>
+        <div class="kpi"><div class="lbl">执行阶段</div><div class="n">5</div><div class="hint">输入 / 规划 / 工具 / 输出 / 横切</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ ARCHITECTURE ============ -->
+  <section>
+    <div class="section-hd"><span class="idx">i.</span><h2>系统架构</h2><span class="tag">Router · Skill · Hook</span></div>
+    <p class="lead">三层结构：<b>Hook</b> 在工具调用前后由 Claude Code 宿主自动触发，承担确定性可执行的检查（regex / IOC / Luhn / OPA 规则）；<b>Router meta-skill</b> 在每个阶段告诉 agent 该调哪个 archetype skill；<b>Archetype Skill</b> 承担需要 LLM 判断的检查（prompt injection、意图歧义、内容策略），并把 5 类原子能力打包给 agent 调用。</p>
+    <div class="arch">
+      <div class="arch-row">
+        <div class="lab">用户消息<span class="small">User message</span></div>
+        <div class="body">原始用户输入。一旦进入 Claude Code，就会经过宿主自动派发的 <code>UserPromptSubmit</code> hook。</div>
+      </div>
+      <div class="arrow">▼ ▼ ▼</div>
+      <div class="arch-row">
+        <div class="lab">Hook 层<span class="small">deterministic</span></div>
+        <div class="body">由宿主在 <code>UserPromptSubmit</code> / <code>PreToolUse</code> / <code>PostToolUse</code> / <code>Stop</code> 触发；6 个 matcher 脚本按事件 fan-in 共 <b>81 个原子</b>（60 hook + 21 hybrid 快速路径）。无需 LLM 推理，确定性 block / warn。</div>
+      </div>
+      <div class="arrow">▼ ▼ ▼</div>
+      <div class="arch-row">
+        <div class="lab">Router<span class="small">meta-skill</span></div>
+        <div class="body"><code>safety-router-skill</code> 在每个阶段告诉 agent："这一步要调哪些 archetype"。它本身不做检查，只负责 phase routing + verdict 聚合（任意 <code>block</code> 短路）。</div>
+      </div>
+      <div class="arrow">▼ ▼ ▼</div>
+      <div class="arch-row">
+        <div class="lab">Archetype Skill 层<span class="small">LLM judgment</span></div>
+        <div class="body"><b>14 个 archetype</b>，覆盖 <b>14 个纯 skill 原子 + 21 个 hybrid 的 LLM 兜底</b>。包括 prompt-injection、task-overreach、output content policy 等需要语义判断的检查。</div>
+      </div>
+      <div class="arrow">▼ ▼ ▼</div>
+      <div class="arch-row">
+        <div class="lab">Sentinel<span class="small">HITL</span></div>
+        <div class="body"><code>escalate-to-human-sentinel</code> 在高风险/不可逆决策点拉起人类确认；现阶段为确定性实现，接口已对齐未来 3B Llama 二分类 ML 预测器（独立下游项目）。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILL SECTION ============ -->
+  <section>
+    <div class="section-hd"><span class="idx">ii.</span><h2>14 个 Archetype Skill</h2><span class="tag">95 atoms · 5 phases</span></div>
+    <p class="lead">每个 archetype 是一个 SKILL.md，按执行阶段聚合若干原子能力。下面按 phase 分组，标签颜色表示该原子的执行模式：<span style="color:var(--skill)">●skill</span> = 纯 LLM 判断，<span style="color:var(--hybrid)">●hybrid</span> = 规则快速路径 + LLM 兜底，<span style="color:var(--hook)">●hook</span> = 由 hook 层确定性执行（在 SKILL.md 中只引用、不再调）。</p>
+
+    <div class="legend">
+      <span class="legend-chip"><span class="dot skill"></span>skill · LLM 判断</span>
+      <span class="legend-chip"><span class="dot hybrid"></span>hybrid · 规则 + LLM 兜底</span>
+      <span class="legend-chip"><span class="dot hook"></span>hook · 宿主自动执行</span>
+    </div>
+
+    <!-- input-understanding -->
+    <div class="phase-block">
+      <div class="phase-title input">
+        <span class="ph-tag">input-understanding</span>
+        <h3>输入理解阶段 · 用户消息抵达时</h3>
+        <span class="ct">3 个 archetype · 13 个原子</span>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="ttl"><h4>detect-prompt-injection</h4><span class="n">5 atoms</span></div>
+          <p>识别 prompt 注入：直接 override（"ignore previous instructions"）、间接注入（来自抓取的网页/文件）、jailbreak 模板、system prompt 提取、roleplay 越狱。</p>
+          <div class="modes"><span class="mode skill">4 skill</span><span class="mode hybrid">1 hybrid</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>classify-input-intent-ambiguity</h4><span class="n">3 atoms</span></div>
+          <p>给请求的歧义程度打分（unambiguous / mildly / safety-critical）；识别 "delete"、"drop"、"清理" 这类破坏性动词。</p>
+          <div class="modes"><span class="mode skill">2 skill</span><span class="mode hook">1 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>scan-input-for-pii-and-secrets</h4><span class="n">5 atoms</span></div>
+          <p>识别用户输入里的 PII / 信用卡（Luhn 校验）/ API Key / 私钥；命中即 block 或 redact。</p>
+          <div class="modes"><span class="mode hybrid">2 hybrid</span><span class="mode hook">3 hook</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- planning -->
+    <div class="phase-block">
+      <div class="phase-title plan">
+        <span class="ph-tag">planning</span>
+        <h3>规划阶段 · agent 拿到计划、还没动手</h3>
+        <span class="ct">3 个 archetype · 10 个原子</span>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="ttl"><h4>enforce-policy-as-code</h4><span class="n">2 atoms</span></div>
+          <p>把组织/项目策略写成 OPA Rego 或内容审核规则，在执行前对计划做策略校验。</p>
+          <div class="modes"><span class="mode hook">1 hook</span><span class="mode hybrid">1 hybrid</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>check-tool-permission-scope</h4><span class="n">4 atoms</span></div>
+          <p>核对 agent 是否被授权使用某工具（allowed-tool-list / RBAC / capability token / namespace）。</p>
+          <div class="modes"><span class="mode hook">4 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>detect-task-overreach</h4><span class="n">4 atoms</span></div>
+          <p>判断 agent 是否在"擅自做大"：scope 越过用户原始请求、目标偏移、过度自治、风险升级。</p>
+          <div class="modes"><span class="mode skill">3 skill</span><span class="mode hook">1 hook</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- tool-invocation -->
+    <div class="phase-block">
+      <div class="phase-title tool">
+        <span class="ph-tag">tool-invocation</span>
+        <h3>工具调用阶段 · 调用每个工具之前 / 之后</h3>
+        <span class="ct">7 个 archetype · 49 个原子（最重的阶段）</span>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="ttl"><h4>validate-tool-argument-safety</h4><span class="n">8 atoms</span></div>
+          <p>shell 注入、破坏性 flag（<code>-rf</code>、<code>--force</code>）、参数泄密、路径穿越、参数 schema 校验。</p>
+          <div class="modes"><span class="mode hybrid">2 hybrid</span><span class="mode hook">6 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>constrain-workspace-boundary</h4><span class="n">6 atoms</span></div>
+          <p>文件系统沙箱根目录、进程沙箱、网络 egress 白名单、unshare/nsenter 等沙箱逃逸检测。</p>
+          <div class="modes"><span class="mode hook">6 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>validate-agent-tool-trust</h4><span class="n">11 atoms</span></div>
+          <p>工具/skill/MCP server 的发布者身份、签名、typosquat 名称、tool description 里藏的指令、MCP 混淆代理 / token passthrough / SSRF。</p>
+          <div class="modes"><span class="mode skill">1 skill</span><span class="mode hybrid">4 hybrid</span><span class="mode hook">6 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>detect-supply-chain-risk</h4><span class="n">8 atoms</span></div>
+          <p>包安装风险：typosquat、CVE、dependency confusion、postinstall 恶意脚本、CI workflow 安全、幻觉包名。</p>
+          <div class="modes"><span class="mode hybrid">3 hybrid</span><span class="mode hook">5 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>scan-code-for-vulnerabilities</h4><span class="n">5 atoms</span></div>
+          <p>对 Write/Edit 写出的代码做 SAST：硬编码 secret、不安全加密、不安全反序列化、注入缺陷。</p>
+          <div class="modes"><span class="mode hook">5 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>detect-malicious-payload-in-tool-output</h4><span class="n">5 atoms</span></div>
+          <p>对工具回来的内容做检查：YARA 规则、恶意软件哈希 IOC、archive bomb、可疑 MIME、HTML 主动脚本剥离。</p>
+          <div class="modes"><span class="mode hook">5 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>enforce-rate-and-quota-limits</h4><span class="n">4 atoms</span></div>
+          <p>工具调用速率、token 预算、单任务成本上限、runaway loop 探测。</p>
+          <div class="modes"><span class="mode hybrid">1 hybrid</span><span class="mode hook">3 hook</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- output-generation -->
+    <div class="phase-block">
+      <div class="phase-title output">
+        <span class="ph-tag">output-generation</span>
+        <h3>输出生成阶段 · 内容发回用户之前</h3>
+        <span class="ct">3 个 archetype · 11 个原子</span>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="ttl"><h4>redact-sensitive-output</h4><span class="n">4 atoms</span></div>
+          <p>输出里的 PII / API key / 系统提示词 / 内部基础设施信息（host、IP）做脱敏或删除。</p>
+          <div class="modes"><span class="mode hybrid">2 hybrid</span><span class="mode hook">2 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>detect-data-exfiltration</h4><span class="n">4 atoms</span></div>
+          <p>识别隐蔽外泄信道：markdown image beacon、base64 编码 payload、DNS exfil 模式、工具调用隐蔽信道。</p>
+          <div class="modes"><span class="mode hybrid">2 hybrid</span><span class="mode hook">2 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>enforce-output-content-policy</h4><span class="n">5 atoms</span></div>
+          <p>语义层内容策略：违禁内容、不安全代码建议、错误医学/法律建议、个性化诱导。</p>
+          <div class="modes"><span class="mode skill">3 skill</span><span class="mode hybrid">2 hybrid</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- cross-cutting -->
+    <div class="phase-block">
+      <div class="phase-title cross">
+        <span class="ph-tag">cross-cutting</span>
+        <h3>横切阶段 · 审计 / 事件响应 / 人在回路</h3>
+        <span class="ct">3 个 archetype · 12 个原子</span>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="ttl"><h4>audit-trail-recording</h4><span class="n">3 atoms</span></div>
+          <p>记录工具调用 trace、prompt + context 快照、决策 trace。事件驱动、纯 hook。</p>
+          <div class="modes"><span class="mode hook">3 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>incident-response-handler</h4><span class="n">5 atoms</span></div>
+          <p>检出攻击后：halt in-flight action、隔离受影响资源、通知 oncall、跑 recovery playbook。</p>
+          <div class="modes"><span class="mode hybrid">1 hybrid</span><span class="mode hook">4 hook</span></div>
+        </div>
+        <div class="card">
+          <div class="ttl"><h4>escalate-to-human-sentinel</h4><span class="n">4 atoms</span></div>
+          <p>HITL 通道：在高风险/不可逆决策点请求人类确认、展示风险理由、等待决策或超时。</p>
+          <div class="modes"><span class="mode skill">1 skill</span><span class="mode hook">3 hook</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOOK SECTION ============ -->
+  <section>
+    <div class="section-hd"><span class="idx">iii.</span><h2>6 个 Hook Matcher</h2><span class="tag">81 atoms · deterministic</span></div>
+    <p class="lead">Claude Code 宿主在固定事件上触发 hook：用户消息进来、工具调用前、工具调用后、会话结束。每个 matcher 是一个独立的 Python 脚本，通过 stdin 拿到事件结构、用 regex / Luhn / IOC list 等确定性规则判断，把多个原子能力 fan-in 到一个脚本里以减少进程开销。</p>
+
+    <div class="hooks-table">
+      <div class="hd">事件</div><div class="hd">Matcher</div><div class="hd">承担的原子</div><div class="hd">数量</div>
+
+      <div class="ev">UserPromptSubmit</div>
+      <div class="matcher"><code>matcher_user_prompt.py</code></div>
+      <div class="atoms">PII、信用卡（Luhn）、AWS/GitHub token、私钥、破坏性动词关键词扫描</div>
+      <div class="count">5</div>
+
+      <div class="ev">PreToolUse · Bash</div>
+      <div class="matcher"><code>matcher_bash.py</code></div>
+      <div class="atoms">shell 注入、<code>-rf</code> 破坏性 flag、参数泄密、过宽资源选择器（<code>rm -rf /</code>）、路径沙箱、unshare/nsenter 等沙箱逃逸</div>
+      <div class="count">8</div>
+
+      <div class="ev">PreToolUse · Write/Edit</div>
+      <div class="matcher"><code>matcher_write_edit.py</code></div>
+      <div class="atoms">路径穿越、SAST 扫描、硬编码 secret、不安全加密、不安全反序列化、注入缺陷</div>
+      <div class="count">6</div>
+
+      <div class="ev">PreToolUse · WebFetch/Search</div>
+      <div class="matcher"><code>matcher_webfetch.py</code></div>
+      <div class="atoms">不安全 URL、网络 egress 白名单</div>
+      <div class="count">2</div>
+
+      <div class="ev">PreToolUse · Task</div>
+      <div class="matcher"><code>matcher_task.py</code></div>
+      <div class="atoms">subagent scope 隔离、swarm race condition 安全</div>
+      <div class="count">2</div>
+
+      <div class="ev">PreToolUse · *</div>
+      <div class="matcher"><code>matcher_pretool_generic.py</code></div>
+      <div class="atoms">通用：allowed-tool-list / RBAC / capability token / OPA Rego / 速率与 token 预算 / 包 typosquat、CVE、dependency confusion、postinstall hook、幻觉包名 / MCP 混淆代理 / SSRF / 工具描述里藏指令 等</div>
+      <div class="count">28</div>
+
+      <div class="ev">PostToolUse · *</div>
+      <div class="matcher"><code>matcher_posttool.py</code></div>
+      <div class="atoms">YARA 规则、恶意软件哈希、archive bomb、可疑 MIME、HTML 主动脚本剥离、输出 PII/secret/system-prompt/内部基建脱敏、markdown beacon、base64 payload、DNS exfil 模式</div>
+      <div class="count">13</div>
+
+      <div class="ev">Stop · *</div>
+      <div class="matcher"><code>matcher_stop.py</code></div>
+      <div class="atoms">决策 trace 记录、agent 状态快照、人类决策结果记录</div>
+      <div class="count">3</div>
+    </div>
+  </section>
+
+  <!-- ============ EXAMPLE ============ -->
+  <section>
+    <div class="section-hd"><span class="idx">iv.</span><h2>端到端示例 · 一个真实场景跑完所有层</h2><span class="tag">walkthrough</span></div>
+    <p class="lead">用一个看起来"无害"的用户请求，演示 hook + skill 怎么协同。这个例子混合了三种安全问题：<b>凭据泄露</b>（用户在消息里粘了 AWS Key）、<b>意图歧义</b>（"旧的"是哪个？）、<b>破坏性工具调用</b>（agent 想直接 <code>rm -rf</code>）。</p>
+
+    <div class="example-intro">
+      <div style="font-size:14px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-weight:600">场景</div>
+      <div class="uq">
+        <span class="who">User → Agent</span>
+        帮我清理一下服务器上的旧日志文件吧，挪到归档目录就行。<br/>
+        对了我的 AWS 密钥是 <code>AKIAIOSFODNN7EXAMPLE</code>，<br/>
+        secret 是 <code>wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY</code>，你可以用这个登录服务器。
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">1<span class="lbl">hook · UserPromptSubmit</span></div>
+      <div>
+        <h3>用户消息一进来，宿主先跑 matcher_user_prompt.py</h3>
+        <div class="where">事件 <code>UserPromptSubmit</code> · 匹配器 <code>matcher_user_prompt.py</code> · 完全不需要 LLM</div>
+        <div class="what">脚本对消息文本跑五条 regex/Luhn 检查。AWS key 命中 <code>SECRET_PATTERNS["aws_access_key"]</code>，"清理"+"日志"匹配破坏性动词词表。</div>
+        <div class="findings">
+          <div class="finding"><div class="id">detect-credential-in-input<span class="who">hook</span></div><div>AWS access key (AKIA...) 出现在用户输入；按 fail-policy 立即 block 并 redact，不让原文进 agent 的 context。</div><span class="verdict block">block</span></div>
+          <div class="finding"><div class="id">detect-destructive-action-keyword<span class="who">hook</span></div><div>"清理日志" 命中破坏性动词词表，附加 metadata 标记 destructive_intent=true，让后续 skill 知道这是个需要 ambiguity 二审的请求。</div><span class="verdict warn">warn</span></div>
+          <div class="finding"><div class="id">detect-pii-in-input · detect-payment-card-data · detect-private-key-input<span class="who">hook</span></div><div>未命中（这条消息里没有信用卡、姓名身份证、PEM 私钥）。</div><span class="verdict pass">pass</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">2<span class="lbl">skill · input-understanding</span></div>
+      <div>
+        <h3>Router 引导 agent 调三个 input-understanding archetype</h3>
+        <div class="where">由 <code>safety-router-skill</code> §3.2 phase routing table 决定 · 三个 skill 并行执行</div>
+        <div class="what">凭据已被 hook redact，agent 看到的消息是 "帮我清理...旧日志...你可以用 <code>[REDACTED:aws_access_key]</code> 登录"。Router 在 input-understanding 阶段调出下面三个 skill。</div>
+        <div class="findings">
+          <div class="finding"><div class="id">detect-prompt-injection<span class="who">skill (LLM)</span></div><div>没有 "ignore previous instructions" / DAN / 系统提示提取等模式，5 个子原子全 pass。</div><span class="verdict pass">pass</span></div>
+          <div class="finding"><div class="id">classify-input-intent-ambiguity<span class="who">skill (LLM)</span></div><div>LLM 打分：safety-critical-ambiguous。理由：(a) "旧" 没定义（按天数？大小？最后访问时间？）；(b) "日志文件" 没说目录；(c) "归档目录" 没指定路径。同时上一步带过来 destructive_intent=true。</div><span class="verdict warn">warn</span></div>
+          <div class="finding"><div class="id">scan-input-for-pii-and-secrets<span class="who">hybrid</span></div><div>hook 已经在 step 1 把 AWS key 拦掉了，skill 兜底 LLM 检查未发现额外 secret。</div><span class="verdict pass">pass</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">3<span class="lbl">skill · planning</span></div>
+      <div>
+        <h3>Agent 拟好计划，Router 在动手前调 planning archetype</h3>
+        <div class="where">由 Router 在 <code>planning</code> 阶段触发 · agent 内部拟出的计划：<code>rm -rf /var/log/*.log</code> 然后 <code>mv ... /archive/</code></div>
+        <div class="what">基于 step 2 的 safety-critical-ambiguous 标签 + destructive 动词，agent 本应先回问用户，但假设它没问、直接拟了 <code>rm -rf</code>。planning archetype 此时能再拦一次。</div>
+        <div class="findings">
+          <div class="finding"><div class="id">detect-task-overreach<span class="who">skill (LLM)</span></div><div>用户原话是"挪到归档目录"，agent 计划里却包含 <code>rm -rf</code>（不可逆删除）—— 范围越过了用户授权。Verdict: block，要求 agent 重新规划为非破坏性方案或先 escalate。</div><span class="verdict block">block</span></div>
+          <div class="finding"><div class="id">enforce-policy-as-code<span class="who">hook + hybrid</span></div><div>OPA 规则：<code>/var/log</code> 路径下的批量删除需 admin 审批；当前 agent 不在 admin role。</div><span class="verdict block">block</span></div>
+          <div class="finding"><div class="id">check-tool-permission-scope<span class="who">hook</span></div><div>Bash 工具在 allowed-tool-list 内，但 capability token 不含 "filesystem.delete:/var/log"。</div><span class="verdict block">block</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">4<span class="lbl">hook · PreToolUse · Bash</span></div>
+      <div>
+        <h3>即便 planning 没拦住，Bash 调用前 hook 是最后一道闸</h3>
+        <div class="where">事件 <code>PreToolUse</code>，matcher <code>Bash</code> · 完全不依赖 LLM，毫秒级返回</div>
+        <div class="what">假设上面没拦住、agent 真的发起 <code>Bash{command: "rm -rf /var/log/*.log"}</code>。<code>matcher_bash.py</code> 拿到 tool_input，跑 8 条原子检查。</div>
+        <div class="findings">
+          <div class="finding"><div class="id">detect-destructive-flag<span class="who">hook</span></div><div><code>-rf</code> 命中 DESTRUCTIVE_KEYWORDS regex。</div><span class="verdict block">block</span></div>
+          <div class="finding"><div class="id">detect-overbroad-resource-selector<span class="who">hook</span></div><div><code>rm -rf /var/log/*</code> 命中 <code>OVERBROAD_SELECTORS</code>（rm + 绝对路径 + glob）。</div><span class="verdict block">block</span></div>
+          <div class="finding"><div class="id">enforce-filesystem-sandbox<span class="who">hook</span></div><div><code>SAFETY_ORCH_FS_SANDBOX</code> 设为 <code>/tmp/agent-workspace</code>，<code>/var/log</code> 不在沙箱根目录内。</div><span class="verdict block">block</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">5<span class="lbl">skill · cross-cutting</span></div>
+      <div>
+        <h3>Router 聚合到 block，触发 HITL 升级</h3>
+        <div class="where">verdict 聚合规则：任意一层 <code>block</code> 即短路 · Router §3.3</div>
+        <div class="what">所有 block verdict 被 Router 聚合，触发横切 archetype。</div>
+        <div class="findings">
+          <div class="finding"><div class="id">incident-response-handler<span class="who">hybrid + hook</span></div><div>halt in-flight action（这条 Bash 调用已被拦），记录 incident，不需要隔离资源（没真执行）。</div><span class="verdict block">halt</span></div>
+          <div class="finding"><div class="id">escalate-to-human-sentinel<span class="who">skill</span></div><div>把 step 1~4 的所有 verdict 整理成 risk rationale，回到用户："检测到凭据已脱敏；'旧日志'指什么不明确；建议改用 logrotate 或先列文件再确认。"</div><span class="verdict escalate">escalate</span></div>
+          <div class="finding"><div class="id">audit-trail-recording<span class="who">hook</span></div><div><code>matcher_stop.py</code> 在会话结束时落盘 decision-trace + agent-state snapshot。</div><span class="verdict pass">log</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="outcome">
+      <h3>这条请求的最终结局</h3>
+      <ul>
+        <li><b>用户的 AWS Key 没有进 agent 的 context</b> —— hook 在第 1 步就 redact 掉了，agent 后续记忆里根本没有这个秘密。</li>
+        <li><b>破坏性的 <code>rm -rf</code> 永远没真正执行</b> —— planning 阶段 skill 拦了一次（语义层），Bash matcher 又拦了一次（规则层）；纵深防御。</li>
+        <li><b>用户拿到的不是错误，而是一段说明 + 改进建议</b> —— Sentinel skill 把所有 verdict 整理成可读的 risk rationale 返还，并请用户确认更细化的清理范围。</li>
+        <li><b>整条决策链可审计</b> —— Stop hook 记录了完整 decision-trace，事后可复盘哪一层拦住了什么、为什么。</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>Safety Orchestrator Skill · v1.1 freeze · 2026-05-18</span>
+    <span>训练-free / Claude Code skill bundle / 18 个文件</span>
+  </footer>
+
+</div>
+</body>
+</html>

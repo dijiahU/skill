@@ -1,0 +1,95 @@
+{
+  "registry": "glama",
+  "id": "gj8smvu5h7",
+  "namespace": "itunified-io",
+  "slug": "mcp-tailscale",
+  "name": "mcp-tailscale",
+  "description": "Production-ready MCP server for Tailscale management with 48 tools across 9 domains: Devices, DNS/Split DNS, ACL policies, Auth Keys, Users, Webhooks, Posture Integrations, Tailnet Settings, and Diagnostics. Supports stdio and SSE transport with Bearer token authentication. Built with TypeScript strict mode, Zod validation, and zero shell execution. AGPL-3.0 + Commercial dual-licensed.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Production-ready MCP server for Tailscale management with 48 tools across 9 domains: Devices, DNS/Split DNS, ACL policies, Auth Keys, Users, Webhooks, Posture Integrations, Tailnet Settings, and Diagnostics. Supports stdio and SSE transport with Bearer token authentication. Built with TypeScript strict mode, Zod validation, and zero shell execution. AGPL-3.0 + Commercial dual-licensed.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TAILSCALE_API_KEY": {
+          "description": "Tailscale API key (from admin console > Settings > Keys). Required if OAuth is not used.",
+          "type": "string"
+        },
+        "TAILSCALE_API_URL": {
+          "description": "API base URL (override for testing)",
+          "type": "string",
+          "default": "https://api.tailscale.com"
+        },
+        "TAILSCALE_TAILNET": {
+          "description": "Tailnet name (e.g., example.com or your org name)",
+          "type": "string"
+        },
+        "TAILSCALE_TIMEOUT": {
+          "description": "Request timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "TAILSCALE_MCP_HOST": {
+          "description": "Host for SSE transport server.",
+          "type": "string",
+          "default": "localhost"
+        },
+        "TAILSCALE_MCP_PORT": {
+          "description": "Port for SSE transport server.",
+          "type": "string",
+          "default": "3000"
+        },
+        "TAILSCALE_MCP_TRANSPORT": {
+          "description": "Transport mode (stdio or sse). Default is stdio.",
+          "type": "string",
+          "default": "stdio"
+        },
+        "TAILSCALE_MCP_AUTH_TOKEN": {
+          "description": "Secret token for SSE transport. The server will not start without this if transport is set to sse.",
+          "type": "string"
+        },
+        "TAILSCALE_OAUTH_CLIENT_ID": {
+          "description": "OAuth client ID (from admin console > Settings > OAuth). Required if API key is not used.",
+          "type": "string"
+        },
+        "TAILSCALE_OAUTH_CLIENT_SECRET": {
+          "description": "OAuth client secret. Required if API key is not used.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "TAILSCALE_TAILNET",
+            "TAILSCALE_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "TAILSCALE_TAILNET",
+            "TAILSCALE_OAUTH_CLIENT_ID",
+            "TAILSCALE_OAUTH_CLIENT_SECRET"
+          ]
+        }
+      ]
+    },
+    "id": "gj8smvu5h7",
+    "name": "mcp-tailscale",
+    "namespace": "itunified-io",
+    "repository": {
+      "url": "https://github.com/itunified-io/mcp-tailscale"
+    },
+    "slug": "mcp-tailscale",
+    "spdxLicense": {
+      "name": "AGPL 3.0",
+      "url": "https://spdx.org/licenses/AGPL-3.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gj8smvu5h7"
+  }
+}

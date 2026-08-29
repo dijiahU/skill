@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "hnkzlqoh92",
+  "namespace": "spences10",
+  "slug": "mcp-turso-cloud",
+  "name": "mcp-turso-cloud",
+  "description": "🗂️ A Model Context Protocol (MCP) server that provides integration with Turso databases for LLMs. This server implements a two-level authentication system to handle both organization-level and database-level operations, making it easy to manage and query Turso databases directly from LLMs.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "🗂️ A Model Context Protocol (MCP) server that provides integration with Turso databases for LLMs. This server implements a two-level authentication system to handle both organization-level and database-level operations, making it easy to manage and query Turso databases directly from LLMs.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TURSO_API_TOKEN": {
+          "description": "Your Turso Platform API token",
+          "type": "string"
+        },
+        "TOKEN_EXPIRATION": {
+          "description": "Expiration time for generated database tokens",
+          "type": "string",
+          "default": "7d"
+        },
+        "TOKEN_PERMISSION": {
+          "description": "Permission level for generated tokens",
+          "type": "string",
+          "default": "full-access"
+        },
+        "TURSO_ORGANIZATION": {
+          "description": "Your Turso organization name",
+          "type": "string"
+        },
+        "TURSO_DEFAULT_DATABASE": {
+          "description": "Default database to use when none is specified",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "TURSO_API_TOKEN",
+        "TURSO_ORGANIZATION"
+      ]
+    },
+    "id": "hnkzlqoh92",
+    "name": "mcp-turso-cloud",
+    "namespace": "spences10",
+    "repository": {
+      "url": "https://github.com/spences10/mcp-turso-cloud"
+    },
+    "slug": "mcp-turso-cloud",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hnkzlqoh92"
+  }
+}

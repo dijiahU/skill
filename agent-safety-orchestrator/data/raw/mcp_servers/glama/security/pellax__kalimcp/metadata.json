@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "e3kqn7k913",
+  "namespace": "pellax",
+  "slug": "kaliMCP",
+  "name": "Kali Linux MCP Server",
+  "description": "Provides secure access to Kali Linux security tools through a dockerized environment for authorized penetration testing and defensive security. Enables network scanning, web application testing, system enumeration, and credential testing with built-in input sanitization and network restrictions.",
+  "discoveryQueries": [
+    "security",
+    "credential"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Provides secure access to Kali Linux security tools through a dockerized environment for authorized penetration testing and defensive security. Enables network scanning, web application testing, system enumeration, and credential testing with built-in input sanitization and network restrictions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Server host",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "MCP_PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8000"
+        },
+        "MCP_OUTPUT_LIMIT": {
+          "description": "Maximum output size in bytes",
+          "type": "string",
+          "default": "10000"
+        },
+        "WPSCAN_API_TOKEN": {
+          "description": "Optional WPScan API token for vulnerability data",
+          "type": "string"
+        },
+        "MCP_MAX_EXEC_TIME": {
+          "description": "Command timeout in seconds",
+          "type": "string",
+          "default": "300"
+        },
+        "MCP_ALLOWED_NETWORKS": {
+          "description": "Comma-separated list of allowed target networks",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "e3kqn7k913",
+    "name": "Kali Linux MCP Server",
+    "namespace": "pellax",
+    "repository": {
+      "url": "https://github.com/pellax/kaliMCP"
+    },
+    "slug": "kaliMCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/e3kqn7k913"
+  }
+}

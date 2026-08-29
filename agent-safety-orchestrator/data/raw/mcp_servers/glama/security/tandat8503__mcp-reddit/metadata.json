@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "oijy9yd722",
+  "namespace": "tandat8503",
+  "slug": "mcp-reddit",
+  "name": "Reddit MCP Server",
+  "description": "Enables interaction with Reddit through a comprehensive API interface supporting both read-only operations (browsing posts, comments, user profiles) and authenticated actions (posting, commenting, voting) via OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Reddit through a comprehensive API interface supporting both read-only operations (browsing posts, comments, user profiles) and authenticated actions (posting, commenting, voting) via OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TIMEOUT_SECONDS": {
+          "description": "Request timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "REDDIT_CLIENT_ID": {
+          "description": "Your Reddit app client ID",
+          "type": "string"
+        },
+        "REDDIT_USER_AGENT": {
+          "description": "User agent string for Reddit API requests (format: Your-App-Name/1.0.0 (by /u/YourUsername))",
+          "type": "string"
+        },
+        "REDDIT_OAUTH_SCOPES": {
+          "description": "OAuth scopes for Reddit API access",
+          "type": "string",
+          "default": "read submit vote history privatemessages subscribe"
+        },
+        "REDDIT_REDIRECT_URI": {
+          "description": "OAuth2 redirect URI (must match Reddit app configuration exactly)",
+          "type": "string",
+          "default": "http://localhost:8080/callback"
+        },
+        "REDDIT_CLIENT_SECRET": {
+          "description": "Your Reddit app client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "REDDIT_CLIENT_ID",
+        "REDDIT_CLIENT_SECRET",
+        "REDDIT_USER_AGENT"
+      ]
+    },
+    "id": "oijy9yd722",
+    "name": "Reddit MCP Server",
+    "namespace": "tandat8503",
+    "repository": {
+      "url": "https://github.com/tandat8503/mcp-reddit"
+    },
+    "slug": "mcp-reddit",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/oijy9yd722"
+  }
+}

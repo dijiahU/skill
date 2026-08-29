@@ -1,0 +1,93 @@
+{
+  "registry": "glama",
+  "id": "nelt6j4yxe",
+  "namespace": "NorthSeacoder",
+  "slug": "fe-testgen-mcp",
+  "name": "Frontend Test Generation & Code Review MCP Server",
+  "description": "Enables AI-powered frontend code review and unit test generation for Phabricator diffs, supporting React/TypeScript analysis, multi-dimensional code review (performance, security, accessibility, i18n), and intelligent test case generation with Vitest/Jest support.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI-powered frontend code review and unit test generation for Phabricator diffs, supporting React/TypeScript analysis, multi-dimensional code review (performance, security, accessibility, i18n), and intelligent test case generation with Vitest/Jest support.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CACHE_DIR": {
+          "description": "Cache directory path",
+          "type": "string",
+          "default": ".cache"
+        },
+        "STATE_DIR": {
+          "description": "State directory path",
+          "type": "string",
+          "default": ".state"
+        },
+        "MODEL_TOP_P": {
+          "description": "Model top_p parameter (range 0-1)",
+          "type": "string",
+          "default": "1"
+        },
+        "OPENAI_MODEL": {
+          "description": "OpenAI model to use",
+          "type": "string",
+          "default": "gpt-4"
+        },
+        "OPENAI_API_KEY": {
+          "description": "OpenAI API Key (required)",
+          "type": "string"
+        },
+        "EMBEDDING_MODEL": {
+          "description": "Embedding model to use",
+          "type": "string",
+          "default": "text-embedding-3-small"
+        },
+        "OPENAI_BASE_URL": {
+          "description": "OpenAI API base URL",
+          "type": "string",
+          "default": "https://api.openai.com/v1"
+        },
+        "PHABRICATOR_HOST": {
+          "description": "Phabricator host URL (required)",
+          "type": "string"
+        },
+        "MODEL_TEMPERATURE": {
+          "description": "Model temperature parameter (range 0-2)",
+          "type": "string",
+          "default": "0"
+        },
+        "PHABRICATOR_TOKEN": {
+          "description": "Phabricator API token (required)",
+          "type": "string"
+        },
+        "EMBEDDING_BASE_URL": {
+          "description": "Embedding API base URL (defaults to OPENAI_BASE_URL if not specified)",
+          "type": "string"
+        },
+        "ALLOW_PUBLISH_COMMENTS": {
+          "description": "Allow publishing comments to Phabricator (set to true to enable)",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OPENAI_API_KEY",
+        "PHABRICATOR_HOST",
+        "PHABRICATOR_TOKEN"
+      ]
+    },
+    "id": "nelt6j4yxe",
+    "name": "Frontend Test Generation & Code Review MCP Server",
+    "namespace": "NorthSeacoder",
+    "repository": {
+      "url": "https://github.com/NorthSeacoder/fe-testgen-mcp"
+    },
+    "slug": "fe-testgen-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nelt6j4yxe"
+  }
+}

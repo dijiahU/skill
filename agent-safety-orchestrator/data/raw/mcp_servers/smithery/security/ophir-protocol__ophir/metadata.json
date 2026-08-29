@@ -1,0 +1,151 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "ophir-protocol/ophir",
+  "namespace": "ophir-protocol",
+  "slug": "ophir",
+  "displayName": "Ophir",
+  "description": "Discover service providers across any category, negotiate pricing automatically, and secure the best quotes with binding SLA terms. Monitor active agreements for compliance and resolve disputes with cryptographic evidence.",
+  "discoveryQueries": [
+    "compliance",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "533caa25-9b28-49b8-b71a-93c9d15fd4bf",
+    "qualifiedName": "ophir-protocol/ophir",
+    "namespace": "ophir-protocol",
+    "slug": "ophir",
+    "displayName": "Ophir",
+    "description": "Discover service providers across any category, negotiate pricing automatically, and secure the best quotes with binding SLA terms. Monitor active agreements for compliance and resolve disputes with cryptographic evidence.",
+    "iconUrl": "https://api.smithery.ai/servers/ophir-protocol/ophir/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-06T08:58:21.189Z",
+    "homepage": "https://smithery.ai/servers/ophir-protocol/ophir",
+    "bySmithery": false,
+    "owner": "org_01KNBVJRSKB2RBW0DKX6JYS6MC",
+    "score": 0.02900900900900901
+  },
+  "detail": {
+    "qualifiedName": "ophir-protocol/ophir",
+    "displayName": "Ophir",
+    "description": "Discover service providers across any category, negotiate pricing automatically, and secure the best quotes with binding SLA terms. Monitor active agreements for compliance and resolve disputes with cryptographic evidence.",
+    "iconUrl": "https://api.smithery.ai/servers/ophir-protocol/ophir/icon",
+    "remote": true,
+    "deploymentUrl": "https://ophir--ophir-protocol.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://ophir--ophir-protocol.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "ophir_discover",
+        "description": "Use when you need to find AI service providers. Returns a list of available providers with their models, pricing, and capabilities. Call this first before negotiating. Optionally filter by service category or minimum reputation score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Service category to filter by (e.g. \"inference\", \"translation\", \"code_review\"). Omit to list all providers."
+            },
+            "min_reputation": {
+              "type": "number",
+              "description": "Minimum reputation score (0-100) to filter sellers. Only providers at or above this score are returned."
+            }
+          }
+        }
+      },
+      {
+        "name": "ophir_negotiate",
+        "description": "Use when you want to get the best deal on AI inference. Automatically discovers providers, collects quotes, and accepts the cheapest one that meets your requirements. Returns the best quote with pricing and SLA details. This is the main tool — use it for one-shot negotiation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "currency": {
+              "type": "string",
+              "description": "Payment currency (default: \"USDC\")"
+            },
+            "max_budget": {
+              "type": "string",
+              "description": "Maximum price per unit willing to pay (e.g. \"0.01\")"
+            },
+            "requirements": {
+              "type": "object",
+              "description": "Specific requirements for the service (e.g. {\"model\": \"gpt-4\", \"max_tokens\": 4096})"
+            },
+            "service_category": {
+              "type": "string",
+              "description": "Category of service needed (e.g. \"inference\", \"translation\", \"code_review\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "ophir_accept_quote",
+        "description": "Use when you have received multiple quotes from ophir_negotiate and want to accept a specific one instead of the auto-selected best. Requires the rfq_id and quote_id from a previous negotiation. Creates a signed agreement with the chosen seller.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rfq_id": {
+              "type": "string",
+              "description": "The RFQ ID from a previous ophir_negotiate call"
+            },
+            "quote_id": {
+              "type": "string",
+              "description": "The specific quote ID to accept"
+            }
+          }
+        }
+      },
+      {
+        "name": "ophir_check_agreement",
+        "description": "Use when you need to check the status of an existing agreement. Returns pricing, SLA terms, escrow status, and compliance details for a given agreement ID. Call this to verify an agreement is still active before using a service.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agreement_id": {
+              "type": "string",
+              "description": "The agreement ID to check"
+            }
+          }
+        }
+      },
+      {
+        "name": "ophir_list_agreements",
+        "description": "Use when you need to see all available service categories and their known sellers. Returns a summary of service categories, seller counts, and price ranges. No parameters required. Call this to get an overview before discovering or negotiating.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "ophir_dispute",
+        "description": "Use when a service provider is not meeting SLA terms and you need to file a dispute or check compliance. Requires an active agreement ID. Returns current SLA metrics, targets, and compliance status. Use this to gather evidence before escalating.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agreement_id": {
+              "type": "string",
+              "description": "The agreement ID to check SLA compliance for"
+            }
+          }
+        }
+      },
+      {
+        "name": "ophir_health",
+        "description": "Use to verify the Ophir MCP server is running and connected. Returns the server version, configured registry URL, number of known sellers, and connection status. Call this to diagnose connection issues or confirm the server is operational.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

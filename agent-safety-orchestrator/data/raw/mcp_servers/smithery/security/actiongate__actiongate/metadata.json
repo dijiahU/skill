@@ -1,0 +1,229 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "actiongate/actiongate",
+  "namespace": "actiongate",
+  "slug": "actiongate",
+  "displayName": "ActionGate",
+  "description": "Evaluate risk scores and simulate outcomes to make informed business decisions. Automate policy enforcement using specialized decision endpoints for secure transaction management. Streamline governance by integrating real-time gating into your automated workflows.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "id": "fddcdbd7-f01e-463f-98c5-f3fe871cc6cb",
+    "qualifiedName": "actiongate/actiongate",
+    "namespace": "actiongate",
+    "slug": "actiongate",
+    "displayName": "ActionGate",
+    "description": "Evaluate risk scores and simulate outcomes to make informed business decisions. Automate policy enforcement using specialized decision endpoints for secure transaction management. Streamline governance by integrating real-time gating into your automated workflows.",
+    "verified": false,
+    "useCount": 2726,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-06T19:17:38.093Z",
+    "homepage": "https://smithery.ai/servers/actiongate/actiongate",
+    "bySmithery": false,
+    "owner": "org_01KNBVK0BSQJWG2Y5GGC9VY8GM",
+    "score": 0.029411764705882353
+  },
+  "detail": {
+    "qualifiedName": "actiongate/actiongate",
+    "displayName": "ActionGate",
+    "description": "Evaluate risk scores and simulate outcomes to make informed business decisions. Automate policy enforcement using specialized decision endpoints for secure transaction management. Streamline governance by integrating real-time gating into your automated workflows.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://actiongate--actiongate.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://actiongate--actiongate.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "risk_score",
+        "description": "Score the risk of a proposed agent action before execution. Paid via x402.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "actor": {
+              "type": "object",
+              "required": [
+                "actor_id"
+              ],
+              "properties": {
+                "actor_id": {
+                  "type": "string",
+                  "description": "Stable actor identifier for the agent or wallet operator."
+                },
+                "wallet_address": {
+                  "type": "string",
+                  "description": "Optional onchain wallet address associated with the acting agent."
+                }
+              },
+              "description": "Actor metadata for the agent proposing the action."
+            },
+            "action": {
+              "type": "object",
+              "required": [
+                "action_type"
+              ],
+              "properties": {
+                "action_type": {
+                  "type": "string",
+                  "description": "The proposed action category, such as transfer, swap, or approve."
+                }
+              },
+              "description": "Action payload to evaluate. Additional action-specific fields are accepted as passthrough."
+            },
+            "context": {
+              "type": "object",
+              "description": "Optional execution context such as chain state, balances, or treasury metadata.",
+              "additionalProperties": true
+            },
+            "request_id": {
+              "type": "string",
+              "description": "Optional caller-supplied request identifier for tracing and receipts."
+            }
+          }
+        }
+      },
+      {
+        "name": "simulate",
+        "description": "Estimate cost, failure risk, and notable side effects for a proposed action. Paid via x402.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "actor": {
+              "type": "object",
+              "required": [
+                "actor_id"
+              ],
+              "properties": {
+                "actor_id": {
+                  "type": "string",
+                  "description": "Stable actor identifier for the agent or wallet operator."
+                },
+                "wallet_address": {
+                  "type": "string",
+                  "description": "Optional onchain wallet address associated with the acting agent."
+                }
+              },
+              "description": "Actor metadata for the agent proposing the action."
+            },
+            "action": {
+              "type": "object",
+              "required": [
+                "action_type"
+              ],
+              "properties": {
+                "action_type": {
+                  "type": "string",
+                  "description": "The proposed action category, such as transfer, swap, or approve."
+                }
+              },
+              "description": "Action payload to evaluate. Additional action-specific fields are accepted as passthrough."
+            },
+            "context": {
+              "type": "object",
+              "description": "Optional execution context such as chain state, balances, or treasury metadata.",
+              "additionalProperties": true
+            },
+            "request_id": {
+              "type": "string",
+              "description": "Optional caller-supplied request identifier for tracing and receipts."
+            }
+          }
+        }
+      },
+      {
+        "name": "policy_gate",
+        "description": "Apply treasury policy to a proposed action and return allow, deny, or allow-with-limits. Paid via x402.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "actor": {
+              "type": "object",
+              "required": [
+                "actor_id"
+              ],
+              "properties": {
+                "actor_id": {
+                  "type": "string",
+                  "description": "Stable actor identifier for the agent or wallet operator."
+                },
+                "wallet_address": {
+                  "type": "string",
+                  "description": "Optional onchain wallet address associated with the acting agent."
+                }
+              },
+              "description": "Actor metadata for the agent proposing the action."
+            },
+            "action": {
+              "type": "object",
+              "required": [
+                "action_type"
+              ],
+              "properties": {
+                "action_type": {
+                  "type": "string",
+                  "description": "The proposed action category, such as transfer, swap, or approve."
+                }
+              },
+              "description": "Action payload to evaluate. Additional action-specific fields are accepted as passthrough."
+            },
+            "policy": {
+              "type": "object",
+              "description": "Policy pack input, including policy_id and any policy-specific override values.",
+              "additionalProperties": true
+            },
+            "context": {
+              "type": "object",
+              "description": "Optional execution context such as chain state, balances, or treasury metadata.",
+              "additionalProperties": true
+            },
+            "request_id": {
+              "type": "string",
+              "description": "Optional caller-supplied request identifier for tracing and receipts."
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": [
+      {
+        "name": "review_treasury_transfer",
+        "description": "Guide an agent through the recommended ActionGate evaluation flow for a treasury transfer.",
+        "arguments": [
+          {
+            "name": "actor_id",
+            "description": "Stable identifier for the acting agent.",
+            "required": true
+          },
+          {
+            "name": "amount",
+            "description": "Transfer amount to review, expressed as a string.",
+            "required": true
+          },
+          {
+            "name": "asset_symbol",
+            "description": "Asset ticker, such as USDC or ETH.",
+            "required": true
+          },
+          {
+            "name": "destination",
+            "description": "Destination wallet, contract, or recipient label.",
+            "required": true
+          },
+          {
+            "name": "policy_id",
+            "description": "Optional policy pack identifier to use during policy gating.",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

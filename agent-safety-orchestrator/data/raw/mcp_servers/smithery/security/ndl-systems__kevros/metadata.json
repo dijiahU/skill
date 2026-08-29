@@ -1,0 +1,515 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "ndl-systems/kevros",
+  "namespace": "ndl-systems",
+  "slug": "kevros",
+  "displayName": "Kevros",
+  "description": "Runtime intelligence for autonomous AI agents. Kevros verifies every agent action before execution, issues cryptographic release tokens, and records every decision in a hash-chained provenance ledger.\n\nALLOW, CLAMP, or DENY. Every action gets a deterministic decision and a signed release token. No token, no execution. Fail-closed by design.\n\nAttest to completed actions. Bind intents to commands and verify outcomes matched. Generate certifier-grade compliance bundles any auditor can verify independently. No Kevros access required.\n\nPeer trust built in. Any agent can check another agent's trust score, verify their release tokens, and validate credentials. No prior relationship needed.\n\nFree tier: 1,000 calls/month, auto-provisions on first use. No signup, no credit card. Pay-per-call via API key or x402 USDC wallet.\n\n9 tools, 2 resources, 2 prompts.",
+  "discoveryQueries": [
+    "audit",
+    "policy",
+    "trust",
+    "compliance",
+    "encryption",
+    "authorization",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "ddeb42fd-e8de-4929-b76d-319837e9362b",
+    "qualifiedName": "ndl-systems/kevros",
+    "namespace": "ndl-systems",
+    "slug": "kevros",
+    "displayName": "Kevros",
+    "description": "Runtime intelligence for autonomous AI agents. Kevros verifies every agent action before execution, issues cryptographic release tokens, and records every decision in a hash-chained provenance ledger.\n\nALLOW, CLAMP, or DENY. Every action gets a deterministic decision and a signed release token. No token, no execution. Fail-closed by design.\n\nAttest to completed actions. Bind intents to commands and verify outcomes matched. Generate certifier-grade compliance bundles any auditor can verify independently. No Kevros access required.\n\nPeer trust built in. Any agent can check another agent's trust score, verify their release tokens, and validate credentials. No prior relationship needed.\n\nFree tier: 1,000 calls/month, auto-provisions on first use. No signup, no credit card. Pay-per-call via API key or x402 USDC wallet.\n\n9 tools, 2 resources, 2 prompts.",
+    "iconUrl": "https://api.smithery.ai/servers/ndl-systems/kevros/icon",
+    "verified": false,
+    "useCount": 6,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-24T22:36:46.795Z",
+    "homepage": "https://www.taskhawktech.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBVBQV0V7HR370YMTHQN56S",
+    "score": 0.011235955056179775
+  },
+  "detail": {
+    "qualifiedName": "ndl-systems/kevros",
+    "displayName": "Kevros",
+    "description": "Runtime intelligence for autonomous AI agents. Kevros verifies every agent action before execution, issues cryptographic release tokens, and records every decision in a hash-chained provenance ledger.\n\nALLOW, CLAMP, or DENY. Every action gets a deterministic decision and a signed release token. No token, no execution. Fail-closed by design.\n\nAttest to completed actions. Bind intents to commands and verify outcomes matched. Generate certifier-grade compliance bundles any auditor can verify independently. No Kevros access required.\n\nPeer trust built in. Any agent can check another agent's trust score, verify their release tokens, and validate credentials. No prior relationship needed.\n\nFree tier: 1,000 calls/month, auto-provisions on first use. No signup, no credit card. Pay-per-call via API key or x402 USDC wallet.\n\n9 tools, 2 resources, 2 prompts.",
+    "iconUrl": "https://api.smithery.ai/servers/ndl-systems/kevros/icon",
+    "remote": true,
+    "deploymentUrl": "https://kevros--ndl-systems.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://kevros--ndl-systems.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-to": {
+                "header": "X-API-Key"
+              },
+              "x-from": {
+                "header": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Your Kevros API key (kvrs_...). Leave blank to auto-provision a free-tier key on first call."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "verify",
+        "description": "Verify an action against policy bounds before executing it. Returns ALLOW (proceed), CLAMP (proceed with modified values), or DENY (stop). Every verification is recorded in a hash-chained provenance ledger. Cost: $0.01 per call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Unique identifier of the agent requesting verification"
+            },
+            "action_type": {
+              "type": "string",
+              "description": "Category of action to verify (e.g. 'deploy', 'trade', 'send_email')"
+            },
+            "template_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Named policy template (e.g. 'robotics-arm', 'financial-transaction'). Merged with policy_context."
+            },
+            "action_payload": {
+              "type": "object",
+              "description": "Action parameters to verify against policy bounds",
+              "additionalProperties": true
+            },
+            "policy_context": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional policy overrides such as max_values or forbidden_keys"
+            },
+            "idempotency_key": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional key for idempotent retries  -  same key returns cached result"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "attest",
+        "description": "Create a hash-chained provenance record for an action you've taken. Each attestation extends the append-only evidence chain. The hash can be independently verified by any third party. Cost: $0.02 per call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional metadata such as environment, trigger, or session info"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Unique identifier of the attesting agent"
+            },
+            "action_payload": {
+              "type": "object",
+              "description": "Structured data describing the action (hashed into provenance)",
+              "additionalProperties": true
+            },
+            "action_description": {
+              "type": "string",
+              "description": "Human-readable description of the action taken"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "bind",
+        "description": "Declare an intent and cryptographically bind it to a command. Proves that the command was issued in service of the declared intent. Use verify-outcome after execution to close the loop. Cost: $0.02 per call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Unique identifier of the agent declaring intent"
+            },
+            "goal_state": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Expected end state for outcome verification"
+            },
+            "intent_type": {
+              "type": "string",
+              "description": "Category of intent (e.g. 'navigation', 'transaction', 'deployment')"
+            },
+            "intent_source": {
+              "type": "string",
+              "default": "AI_PLANNER",
+              "description": "Origin of intent: AI_PLANNER, HUMAN_OPERATOR, or SYSTEM"
+            },
+            "command_payload": {
+              "type": "object",
+              "description": "The command that will be executed to fulfill this intent",
+              "additionalProperties": true
+            },
+            "parent_intent_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "ID of parent intent for hierarchical intent chains"
+            },
+            "intent_description": {
+              "type": "string",
+              "description": "Human-readable description of what the agent intends to do"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "verify-outcome",
+        "description": "Verify that an executed action achieved its declared intent. Closes the loop: intent -> command -> action -> outcome -> verification. Free (included with bind).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Unique identifier of the agent whose outcome is being verified"
+            },
+            "intent_id": {
+              "type": "string",
+              "description": "ID of the original intent from governance_bind"
+            },
+            "tolerance": {
+              "type": "number",
+              "default": 0.1,
+              "description": "Numeric tolerance for goal matching (0.1 = 10% deviation allowed)"
+            },
+            "binding_id": {
+              "type": "string",
+              "description": "ID of the intent-command binding from governance_bind"
+            },
+            "actual_state": {
+              "type": "object",
+              "description": "Observed end state after action execution, compared against goal_state",
+              "additionalProperties": true
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "bundle",
+        "description": "Generate a certifier-grade compliance evidence bundle. Contains hash-chained provenance, intent bindings, PQC attestations, and verification instructions. Independently verifiable without Kevros access. Cost: $0.05 per call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Agent whose provenance records to include in the bundle"
+            },
+            "max_records": {
+              "type": "integer",
+              "default": 10000,
+              "description": "Maximum number of provenance records to include"
+            },
+            "time_range_end": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "ISO 8601 end time filter (inclusive)"
+            },
+            "time_range_start": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "ISO 8601 start time filter (inclusive)"
+            },
+            "include_intent_chains": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include intent-command binding chains in the bundle"
+            },
+            "include_pqc_signatures": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include post-quantum ML-DSA-87 block signatures"
+            },
+            "include_verification_instructions": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include step-by-step verification procedure for auditors"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "health",
+        "description": "Check the governance gateway health status. Free.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "verbose": {
+              "type": "boolean",
+              "default": false,
+              "description": "Return additional details such as chain length and PQC signing status"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "status",
+        "description": "Check your current usage and quota: calls used, calls remaining, tier, rate limits, and billing status. Free.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_chain_details": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include hash-chain integrity check and latest provenance epoch"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check-peer",
+        "description": "Check another agent's trust score and governance history. Returns trust score (0-100), chain length, attestation count, and tier. Free, no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "ID of the peer agent to look up"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "verify-token",
+        "description": "Verify a release token from another agent. Confirms the token is authentic and was issued by the Kevros gateway. Free, no API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "release_token": {
+              "type": "string",
+              "description": "Release token string received from governance_verify"
+            },
+            "token_preimage": {
+              "type": "string",
+              "description": "Token preimage string received alongside the release token"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "agent_card_resource",
+        "uri": "kevros://agent-card",
+        "description": "A2A agent card for the Kevros Runtime Intelligence Gateway.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "trust_status_resource",
+        "uri": "kevros://trust-status",
+        "description": "Current governance chain status.",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "verify-before-act",
+        "description": "Pre-flight governance check. Generates a verify request for an action before executing it.",
+        "arguments": [
+          {
+            "name": "action_type",
+            "required": true
+          },
+          {
+            "name": "action_description",
+            "required": true
+          },
+          {
+            "name": "agent_id",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "governance-audit",
+        "description": "Generate a compliance audit bundle for an agent's actions over a time range.",
+        "arguments": [
+          {
+            "name": "agent_id",
+            "required": true
+          },
+          {
+            "name": "time_range_start",
+            "required": false
+          },
+          {
+            "name": "time_range_end",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

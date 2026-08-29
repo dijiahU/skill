@@ -1,0 +1,472 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "statsreceipt/trust-engine",
+  "namespace": "statsreceipt",
+  "slug": "trust-engine",
+  "displayName": "StatsReceipt Trust Engine",
+  "description": "# 🧾 StatsReceipt Creator Receipt Engine\nGenerate high-impact, aesthetic receipts for your social metrics and SaaS revenue via AI.\n\nThe **StatsReceipt Creator Receipt Engine** is an MCP server designed for the new era of transparency. It allows AI agents to transform raw metrics into professional, shareable \"Receipt Cards\"—making your growth visible and hard to ignore.\n\n### 🛠️ Key Features:\n- **Verified MRR**: Seamless integration with TrustMRR.com for Stripe-verified SaaS revenue proof. 🛡️\n- **Creator Receipt Generation**: Turn any social media handle (X, TikTok, Instagram, LinkedIn) into a professional metadata receipt with a unique, trackable URL. 🧾✨\n- **Agent-Driven Workflow**: Designed for Claude, Cursor, and ChatGPT. Agents can now \"act\" on your behalf to document your progress.\n\n### 🚀 Why focus on Receipts?\nIn a world of \"Inspect Element\" and fake screenshots, a live link from StatsReceipt provides a superior level of credibility and branding. Your audience gets a proof-of-w",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "38ee825b-63b6-4619-a7c7-7a4eb1cc03d5",
+    "qualifiedName": "statsreceipt/trust-engine",
+    "namespace": "statsreceipt",
+    "slug": "trust-engine",
+    "displayName": "StatsReceipt Trust Engine",
+    "description": "# 🧾 StatsReceipt Creator Receipt Engine\nGenerate high-impact, aesthetic receipts for your social metrics and SaaS revenue via AI.\n\nThe **StatsReceipt Creator Receipt Engine** is an MCP server designed for the new era of transparency. It allows AI agents to transform raw metrics into professional, shareable \"Receipt Cards\"—making your growth visible and hard to ignore.\n\n### 🛠️ Key Features:\n- **Verified MRR**: Seamless integration with TrustMRR.com for Stripe-verified SaaS revenue proof. 🛡️\n- **Creator Receipt Generation**: Turn any social media handle (X, TikTok, Instagram, LinkedIn) into a professional metadata receipt with a unique, trackable URL. 🧾✨\n- **Agent-Driven Workflow**: Designed for Claude, Cursor, and ChatGPT. Agents can now \"act\" on your behalf to document your progress.\n\n### 🚀 Why focus on Receipts?\nIn a world of \"Inspect Element\" and fake screenshots, a live link from StatsReceipt provides a superior level of credibility and branding. Your audience gets a proof-of-w",
+    "iconUrl": "https://api.smithery.ai/servers/statsreceipt/trust-engine/icon",
+    "verified": false,
+    "useCount": 5,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-03T08:47:36.882Z",
+    "homepage": "https://statsreceipt.com/changelog",
+    "bySmithery": false,
+    "owner": "org_01KNBW1E3J4E7814MZ45KJJ714",
+    "score": 0.015873015873015872
+  },
+  "detail": {
+    "qualifiedName": "statsreceipt/trust-engine",
+    "displayName": "StatsReceipt Trust Engine",
+    "description": "# 🧾 StatsReceipt Creator Receipt Engine\nGenerate high-impact, aesthetic receipts for your social metrics and SaaS revenue via AI.\n\nThe **StatsReceipt Creator Receipt Engine** is an MCP server designed for the new era of transparency. It allows AI agents to transform raw metrics into professional, shareable \"Receipt Cards\"—making your growth visible and hard to ignore.\n\n### 🛠️ Key Features:\n- **Verified MRR**: Seamless integration with TrustMRR.com for Stripe-verified SaaS revenue proof. 🛡️\n- **Creator Receipt Generation**: Turn any social media handle (X, TikTok, Instagram, LinkedIn) into a professional metadata receipt with a unique, trackable URL. 🧾✨\n- **Agent-Driven Workflow**: Designed for Claude, Cursor, and ChatGPT. Agents can now \"act\" on your behalf to document your progress.\n\n### 🚀 Why focus on Receipts?\nIn a world of \"Inspect Element\" and fake screenshots, a live link from StatsReceipt provides a superior level of credibility and branding. Your audience gets a proof-of-work link, not just a static image.\n\n### 🔐 Security:\nConnection is secured via **Bearer Token**. Maintain control over your generation engine while empowering your AI assistants.\n",
+    "iconUrl": "https://api.smithery.ai/servers/statsreceipt/trust-engine/icon",
+    "remote": true,
+    "deploymentUrl": "https://trust-engine--statsreceipt.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://trust-engine--statsreceipt.run.tools",
+        "configSchema": {
+          "mcp": {
+            "name": "StatsReceipt",
+            "links": {
+              "pricing": "https://statsreceipt.com/pricing",
+              "homepage": "https://statsreceipt.com",
+              "documentation": "https://statsreceipt.com/api-docs"
+            },
+            "tools": [
+              {
+                "name": "generate_creator_receipt",
+                "title": "Creator Impact Receipt Generator",
+                "annotations": {
+                  "readOnlyHint": true,
+                  "idempotentHint": true
+                },
+                "description": "[Creator Metrics] Creates an aesthetic, professional-grade metric receipt for a social media creator. Best used for sharing impact with a credible link. Supported: X, Instagram, TikTok, LinkedIn.",
+                "inputSchema": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "platform",
+                    "followers"
+                  ],
+                  "properties": {
+                    "likes": {
+                      "type": "number",
+                      "title": "Likes/Hearts",
+                      "minimum": 0,
+                      "description": "Total user engagement"
+                    },
+                    "posts": {
+                      "type": "number",
+                      "title": "Posts",
+                      "minimum": 0,
+                      "description": "Total posts published"
+                    },
+                    "theme": {
+                      "enum": [
+                        "standard",
+                        "midnight",
+                        "gold",
+                        "aura",
+                        "retro",
+                        "gloss",
+                        "barbie",
+                        "cyberpunk",
+                        "neobrutalism",
+                        "mystic",
+                        "zima"
+                      ],
+                      "type": "string",
+                      "title": "Visual Theme",
+                      "default": "standard",
+                      "description": "Select the visual style. 'gold' and 'zima' are premium/paid styles."
+                    },
+                    "views": {
+                      "type": "number",
+                      "title": "Views",
+                      "minimum": 0,
+                      "description": "Total reach/impressions"
+                    },
+                    "growth": {
+                      "type": "number",
+                      "title": "Growth %",
+                      "minimum": -100,
+                      "description": "30-day viral growth percentage"
+                    },
+                    "layout": {
+                      "enum": [
+                        "auto",
+                        "standard",
+                        "compact",
+                        "deep-dive",
+                        "canvas"
+                      ],
+                      "type": "string",
+                      "title": "Layout Format",
+                      "default": "auto",
+                      "description": "Choose the orientation and density. 'canvas' is the most premium format."
+                    },
+                    "replies": {
+                      "type": "number",
+                      "title": "Comments",
+                      "minimum": 0,
+                      "description": "Content reply count"
+                    },
+                    "reposts": {
+                      "type": "number",
+                      "title": "Shares",
+                      "minimum": 0,
+                      "description": "Content share count"
+                    },
+                    "platform": {
+                      "enum": [
+                        "x",
+                        "instagram",
+                        "tiktok",
+                        "linkedin"
+                      ],
+                      "type": "string",
+                      "title": "Source Platform",
+                      "description": "Source social media network"
+                    },
+                    "username": {
+                      "type": "string",
+                      "title": "Username Handle",
+                      "description": "The creator's handle as it appears on the profile (e.g., 'elonmusk')"
+                    },
+                    "followers": {
+                      "type": "number",
+                      "title": "Followers",
+                      "minimum": 0,
+                      "description": "Total public follower count"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "generate_verified_mrr_receipt",
+                "title": "SaaS MRR Verification Engine",
+                "annotations": {
+                  "readOnlyHint": true,
+                  "idempotentHint": true
+                },
+                "description": "[Business Metrics] Generates a verified financial receipt for a SaaS startup by fetching official data from TrustMRR.com. Use this for investor updates or 'build in public' reports to provide trust and proof of revenue.",
+                "inputSchema": {
+                  "type": "object",
+                  "required": [
+                    "brandName"
+                  ],
+                  "properties": {
+                    "theme": {
+                      "enum": [
+                        "standard",
+                        "midnight",
+                        "gold",
+                        "aura",
+                        "retro",
+                        "gloss",
+                        "barbie",
+                        "cyberpunk",
+                        "neobrutalism",
+                        "mystic",
+                        "zima"
+                      ],
+                      "type": "string",
+                      "title": "Style",
+                      "default": "standard",
+                      "description": "Select a professional theme. 'gold' is exclusive for high-impact announcements."
+                    },
+                    "layout": {
+                      "enum": [
+                        "auto",
+                        "standard",
+                        "compact",
+                        "deep-dive",
+                        "canvas"
+                      ],
+                      "type": "string",
+                      "title": "Layout",
+                      "default": "auto",
+                      "description": "Choose orientation. 'deep-dive' is best for technical investor clarity, 'canvas' is for high impact social sharing."
+                    },
+                    "brandName": {
+                      "type": "string",
+                      "title": "TrustMRR Slug",
+                      "description": "The startup identifier on trustmrr.com (e.g., 'superx')"
+                    }
+                  }
+                }
+              }
+            ],
+            "pricing": {
+              "model": "Freemium with Pro Upgrades",
+              "plans": [
+                {
+                  "id": "starter",
+                  "name": "Social Free",
+                  "price": "0",
+                  "limits": "3 daily receipts per user",
+                  "features": [
+                    "Watermarked output",
+                    "Basic styles only",
+                    "Public sharing link"
+                  ],
+                  "description": "Basic social metrics sharing"
+                },
+                {
+                  "id": "creator-pro",
+                  "name": "Creator Pro",
+                  "price": "9.99 (One-time)",
+                  "limits": "Unlimited social receipts",
+                  "features": [
+                    "No watermark on social receipts",
+                    "All Premium styles included",
+                    "Priority support"
+                  ],
+                  "description": "Unlimited social metrics flex"
+                },
+                {
+                  "id": "founder-pro",
+                  "name": "Founder Pro",
+                  "price": "9.99/mo | 49/year | 99 Lifetime",
+                  "limits": "Unlimited MRR & Social receipts",
+                  "features": [
+                    "Includes all Creator Pro features",
+                    "Unlimited Verified SaaS MRR receipts",
+                    "Exclusive 'Deep Dive' analytical layout",
+                    "Priority support & API beta access"
+                  ],
+                  "description": "Ultimate revenue verification for Founders"
+                }
+              ],
+              "currency": "USD",
+              "checkout_url": "https://statsreceipt.com/pricing"
+            },
+            "prompts": [
+              {
+                "name": "generate-viral-receipt",
+                "title": "Draft Viral Social Receipt",
+                "arguments": [
+                  {
+                    "name": "handle",
+                    "title": "Creator Handle",
+                    "required": true,
+                    "description": "The creator's handle"
+                  }
+                ],
+                "description": "Create a high-impact social media verification receipt with premium visual styles."
+              },
+              {
+                "name": "verify-saas-mrr",
+                "title": "Verify Startup Revenue",
+                "arguments": [
+                  {
+                    "name": "brand",
+                    "title": "Startup Name",
+                    "required": true,
+                    "description": "The startup brand name"
+                  }
+                ],
+                "description": "Draft a verified MRR link for your SaaS startup with professional business layouts."
+              }
+            ],
+            "version": "1.5.0",
+            "description": "Professional Creator Receipt Engine for Social Metrics and SaaS MRR Verification."
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "generate_creator_receipt",
+        "description": "[Creator Metrics] Creates an aesthetic, professional-grade metric receipt for a social media creator. Best used for sharing impact with a credible link. Supported: X, Instagram, TikTok, LinkedIn.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "likes": {
+              "type": "number",
+              "title": "Likes/Hearts",
+              "minimum": 0,
+              "description": "Total user engagement"
+            },
+            "posts": {
+              "type": "number",
+              "title": "Posts",
+              "minimum": 0,
+              "description": "Total posts published"
+            },
+            "theme": {
+              "enum": [
+                "standard",
+                "midnight",
+                "gold",
+                "aura",
+                "retro",
+                "gloss",
+                "barbie",
+                "cyberpunk",
+                "neobrutalism",
+                "mystic",
+                "zima"
+              ],
+              "type": "string",
+              "title": "Visual Theme",
+              "default": "standard",
+              "description": "Select the visual style. 'gold' and 'zima' are premium/paid styles."
+            },
+            "views": {
+              "type": "number",
+              "title": "Views",
+              "minimum": 0,
+              "description": "Total reach/impressions"
+            },
+            "growth": {
+              "type": "number",
+              "title": "Growth %",
+              "minimum": -100,
+              "description": "30-day viral growth percentage"
+            },
+            "layout": {
+              "enum": [
+                "auto",
+                "standard",
+                "compact",
+                "deep-dive",
+                "canvas"
+              ],
+              "type": "string",
+              "title": "Layout Format",
+              "default": "auto",
+              "description": "Choose the orientation and density. 'canvas' is the most premium format."
+            },
+            "replies": {
+              "type": "number",
+              "title": "Comments",
+              "minimum": 0,
+              "description": "Content reply count"
+            },
+            "reposts": {
+              "type": "number",
+              "title": "Shares",
+              "minimum": 0,
+              "description": "Content share count"
+            },
+            "platform": {
+              "enum": [
+                "x",
+                "instagram",
+                "tiktok",
+                "linkedin"
+              ],
+              "type": "string",
+              "title": "Source Platform",
+              "description": "Source social media network"
+            },
+            "username": {
+              "type": "string",
+              "title": "Username Handle",
+              "description": "The creator's handle as it appears on the profile (e.g., 'elonmusk')"
+            },
+            "followers": {
+              "type": "number",
+              "title": "Followers",
+              "minimum": 0,
+              "description": "Total public follower count"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_verified_mrr_receipt",
+        "description": "[Business Metrics] Generates a verified financial receipt for a SaaS startup by fetching official data from TrustMRR.com.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "theme": {
+              "enum": [
+                "standard",
+                "midnight",
+                "gold",
+                "aura",
+                "retro",
+                "gloss",
+                "barbie",
+                "cyberpunk",
+                "neobrutalism",
+                "mystic",
+                "zima"
+              ],
+              "type": "string",
+              "title": "Style",
+              "default": "standard",
+              "description": "Select a professional theme. 'gold' is exclusive for high-impact announcements."
+            },
+            "layout": {
+              "enum": [
+                "auto",
+                "standard",
+                "compact",
+                "deep-dive",
+                "canvas"
+              ],
+              "type": "string",
+              "title": "Layout",
+              "default": "auto",
+              "description": "Choose orientation. 'deep-dive' is best for technical investor clarity, 'canvas' is for high impact social sharing."
+            },
+            "brandName": {
+              "type": "string",
+              "title": "TrustMRR Slug",
+              "description": "The startup identifier on trustmrr.com (e.g., 'superx')"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Verification Guidelines",
+        "uri": "statsreceipt://docs/verify-guidelines",
+        "description": "Official guide on how to fairly and accurately verify social and SaaS metrics.",
+        "mimeType": "text/markdown"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "generate-viral-receipt",
+        "description": "Create a high-impact social media verification receipt with premium visual styles.",
+        "arguments": [
+          {
+            "name": "handle",
+            "description": "The creator's handle",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "verify-saas-mrr",
+        "description": "Draft a verified MRR link for your SaaS startup with professional business layouts.",
+        "arguments": [
+          {
+            "name": "brand",
+            "description": "The startup brand name",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

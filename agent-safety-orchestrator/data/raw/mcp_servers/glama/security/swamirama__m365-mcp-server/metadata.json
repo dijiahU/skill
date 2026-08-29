@@ -1,0 +1,103 @@
+{
+  "registry": "glama",
+  "id": "htdq7q910x",
+  "namespace": "SwamiRama",
+  "slug": "m365-mcp-server",
+  "name": "m365-mcp-server",
+  "description": "A production-ready MCP server that provides secure, delegated access to Microsoft 365 services including Email, SharePoint, OneDrive, and Calendar. It enables AI models to search messages, browse files, manage calendar events, and parse document contents using OAuth 2.1 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A production-ready MCP server that provides secure, delegated access to Microsoft 365 services including Email, SharePoint, OneDrive, and Calendar. It enables AI models to search messages, browse files, manage calendar events, and parse document contents using OAuth 2.1 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Environment mode",
+          "type": "string",
+          "default": "development"
+        },
+        "LOG_LEVEL": {
+          "description": "Log level (trace/debug/info/warn/error)",
+          "type": "string",
+          "default": "info"
+        },
+        "REDIS_URL": {
+          "description": "Redis URL (required in production)",
+          "type": "string"
+        },
+        "SESSION_SECRET": {
+          "description": "Session encryption key (32+ chars)",
+          "type": "string"
+        },
+        "AZURE_CLIENT_ID": {
+          "description": "Azure AD app client ID",
+          "type": "string"
+        },
+        "AZURE_TENANT_ID": {
+          "description": "Azure AD tenant ID",
+          "type": "string"
+        },
+        "MCP_SERVER_PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "AZURE_CLIENT_SECRET": {
+          "description": "Azure AD app client secret",
+          "type": "string"
+        },
+        "MCP_SERVER_BASE_URL": {
+          "description": "Public URL (HTTPS required in production)",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "FILE_PARSE_TIMEOUT_MS": {
+          "description": "Document parsing timeout",
+          "type": "string",
+          "default": "30000"
+        },
+        "FILE_PARSE_MAX_OUTPUT_KB": {
+          "description": "Max parsed text output size",
+          "type": "string",
+          "default": "500"
+        },
+        "OAUTH_SIGNING_KEY_PUBLIC": {
+          "description": "RSA public key PEM (required in production)",
+          "type": "string"
+        },
+        "OAUTH_SIGNING_KEY_PRIVATE": {
+          "description": "RSA private key PEM (required in production)",
+          "type": "string"
+        },
+        "OAUTH_ALLOWED_REDIRECT_PATTERNS": {
+          "description": "Comma-separated URI patterns for DCR",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AZURE_CLIENT_ID",
+        "AZURE_CLIENT_SECRET",
+        "AZURE_TENANT_ID",
+        "SESSION_SECRET"
+      ]
+    },
+    "id": "htdq7q910x",
+    "name": "m365-mcp-server",
+    "namespace": "SwamiRama",
+    "repository": {
+      "url": "https://github.com/SwamiRama/m365-mcp-server"
+    },
+    "slug": "m365-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/htdq7q910x"
+  }
+}

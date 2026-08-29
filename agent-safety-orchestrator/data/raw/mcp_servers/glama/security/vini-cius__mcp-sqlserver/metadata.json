@@ -1,0 +1,86 @@
+{
+  "registry": "glama",
+  "id": "sqnbex201n",
+  "namespace": "vini-cius",
+  "slug": "mcp-sqlserver",
+  "name": "SQL Server MCP Service",
+  "description": "A secure Model Context Protocol service that enables executing SQL Server queries with built-in protection against SQL injection and destructive operations.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A secure Model Context Protocol service that enables executing SQL Server queries with built-in protection against SQL injection and destructive operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ORIGIN": {
+          "description": "Allowed CORS origins (comma-separated)",
+          "type": "string"
+        },
+        "NODE_ENV": {
+          "description": "Node environment (development/production)",
+          "type": "string",
+          "default": "development"
+        },
+        "SQL_PORT": {
+          "description": "SQL Server port",
+          "type": "string",
+          "default": "1433"
+        },
+        "SQL_USER": {
+          "description": "Database username",
+          "type": "string"
+        },
+        "HTTP_PORT": {
+          "description": "HTTP server port",
+          "type": "string",
+          "default": "3333"
+        },
+        "SQL_SERVER": {
+          "description": "SQL Server hostname/IP",
+          "type": "string",
+          "default": "localhost"
+        },
+        "SQL_ENCRYPT": {
+          "description": "Enable encryption",
+          "type": "string",
+          "default": "true"
+        },
+        "SQL_DATABASE": {
+          "description": "Database name",
+          "type": "string",
+          "default": "master"
+        },
+        "SQL_PASSWORD": {
+          "description": "Database password",
+          "type": "string"
+        },
+        "SQL_TRUST_CERT": {
+          "description": "Trust server certificate",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SQL_USER",
+        "SQL_PASSWORD"
+      ]
+    },
+    "id": "sqnbex201n",
+    "name": "SQL Server MCP Service",
+    "namespace": "vini-cius",
+    "repository": {
+      "url": "https://github.com/vini-cius/mcp-sqlserver"
+    },
+    "slug": "mcp-sqlserver",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sqnbex201n"
+  }
+}

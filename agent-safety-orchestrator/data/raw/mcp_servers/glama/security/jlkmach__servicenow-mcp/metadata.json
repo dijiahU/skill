@@ -1,0 +1,99 @@
+{
+  "registry": "glama",
+  "id": "s1cnz03pbg",
+  "namespace": "JLKmach",
+  "slug": "servicenow-mcp",
+  "name": "ServiceNow MCP Server",
+  "description": "Enables Claude to interact with ServiceNow instances through comprehensive API integration. Supports incident management, service catalog operations, change requests, knowledge base management, user administration, and agile project management with multiple authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to interact with ServiceNow instances through comprehensive API integration. Supports incident management, service catalog operations, change requests, knowledge base management, user administration, and agile project management with multiple authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_TOOL_PACKAGE": {
+          "description": "The tool package to load (e.g., service_desk, catalog_builder, change_coordinator, knowledge_author, platform_developer, system_administrator, agile_management, full, none)",
+          "type": "string",
+          "default": "full"
+        },
+        "SERVICENOW_API_KEY": {
+          "description": "Your ServiceNow API key (required for API key auth)",
+          "type": "string"
+        },
+        "SERVICENOW_PASSWORD": {
+          "description": "Your ServiceNow password (required for basic auth)",
+          "type": "string"
+        },
+        "SERVICENOW_USERNAME": {
+          "description": "Your ServiceNow username (required for basic auth)",
+          "type": "string"
+        },
+        "SERVICENOW_AUTH_TYPE": {
+          "description": "The authentication type to use (basic, oauth, or api_key)",
+          "type": "string",
+          "default": "basic"
+        },
+        "SERVICENOW_CLIENT_ID": {
+          "description": "Your OAuth client ID (required for OAuth auth)",
+          "type": "string"
+        },
+        "SERVICENOW_TOKEN_URL": {
+          "description": "The OAuth token URL (required for OAuth auth, e.g., https://your-instance.service-now.com/oauth_token.do)",
+          "type": "string"
+        },
+        "SERVICENOW_INSTANCE_URL": {
+          "description": "The URL of your ServiceNow instance (e.g., https://your-instance.service-now.com)",
+          "type": "string"
+        },
+        "SERVICENOW_CLIENT_SECRET": {
+          "description": "Your OAuth client secret (required for OAuth auth)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_USERNAME",
+            "SERVICENOW_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_CLIENT_ID",
+            "SERVICENOW_CLIENT_SECRET",
+            "SERVICENOW_TOKEN_URL"
+          ]
+        },
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_API_KEY"
+          ]
+        }
+      ],
+      "required": [
+        "SERVICENOW_INSTANCE_URL"
+      ]
+    },
+    "id": "s1cnz03pbg",
+    "name": "ServiceNow MCP Server",
+    "namespace": "JLKmach",
+    "repository": {
+      "url": "https://github.com/JLKmach/servicenow-mcp"
+    },
+    "slug": "servicenow-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/s1cnz03pbg"
+  }
+}

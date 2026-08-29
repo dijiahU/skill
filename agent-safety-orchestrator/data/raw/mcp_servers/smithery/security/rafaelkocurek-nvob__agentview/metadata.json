@@ -1,0 +1,1378 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "rafaelkocurek-nvob/agentview",
+  "namespace": "rafaelkocurek-nvob",
+  "slug": "agentview",
+  "displayName": "agentview",
+  "description": "# agentView\n\nPremium digital signage control plane for AI agents. Create and manage displays, send HTML or live URLs to any screen, allocate licenses, and orchestrate organizations and team members — all through natural language.\n\n## What you can do\n\n- **Send content to any display**: `send_html` for rich cinematic layouts, `send_url` for live web pages, `clear_display` to reset\n- **Pair new screens instantly**: open [display.agentview.de](https://display.agentview.de) on any TV or browser, read the 6-character code, call `pair_by_code`, and the display is live\n- **Manage fleets**: create organizations, invite members, allocate licenses, assign grants, lock displays\n- **Design cinematic content**: the `render_premium_display_html` prompt plus the `agentview://public/design-system` resource give you a full signage design system — glassmorphism panels, fluid typography, public-API integrations, no API keys needed\n\n## Authentication\n\nConnect with **OAuth 2.1 + PKCE** (with Dynamic Client ",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "f4bc8058-e7ee-4916-907f-9facb301ebb0",
+    "qualifiedName": "rafaelkocurek-nvob/agentview",
+    "namespace": "rafaelkocurek-nvob",
+    "slug": "agentview",
+    "displayName": "agentview",
+    "description": "# agentView\n\nPremium digital signage control plane for AI agents. Create and manage displays, send HTML or live URLs to any screen, allocate licenses, and orchestrate organizations and team members — all through natural language.\n\n## What you can do\n\n- **Send content to any display**: `send_html` for rich cinematic layouts, `send_url` for live web pages, `clear_display` to reset\n- **Pair new screens instantly**: open [display.agentview.de](https://display.agentview.de) on any TV or browser, read the 6-character code, call `pair_by_code`, and the display is live\n- **Manage fleets**: create organizations, invite members, allocate licenses, assign grants, lock displays\n- **Design cinematic content**: the `render_premium_display_html` prompt plus the `agentview://public/design-system` resource give you a full signage design system — glassmorphism panels, fluid typography, public-API integrations, no API keys needed\n\n## Authentication\n\nConnect with **OAuth 2.1 + PKCE** (with Dynamic Client ",
+    "iconUrl": "https://api.smithery.ai/servers/rafaelkocurek-nvob/agentview/icon",
+    "verified": false,
+    "useCount": 139,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-09T21:31:13.831Z",
+    "homepage": "https://agentview.de",
+    "bySmithery": false,
+    "owner": "org_01KNSY5X5TF6RNV5K5C0XGKN7B",
+    "score": 0.011764705882352941
+  },
+  "detail": {
+    "qualifiedName": "rafaelkocurek-nvob/agentview",
+    "displayName": "agentview",
+    "description": "# agentView\n\nPremium digital signage control plane for AI agents. Create and manage displays, send HTML or live URLs to any screen, allocate licenses, and orchestrate organizations and team members — all through natural language.\n\n## What you can do\n\n- **Send content to any display**: `send_html` for rich cinematic layouts, `send_url` for live web pages, `clear_display` to reset\n- **Pair new screens instantly**: open [display.agentview.de](https://display.agentview.de) on any TV or browser, read the 6-character code, call `pair_by_code`, and the display is live\n- **Manage fleets**: create organizations, invite members, allocate licenses, assign grants, lock displays\n- **Design cinematic content**: the `render_premium_display_html` prompt plus the `agentview://public/design-system` resource give you a full signage design system — glassmorphism panels, fluid typography, public-API integrations, no API keys needed\n\n## Authentication\n\nConnect with **OAuth 2.1 + PKCE** (with Dynamic Client Registration). No API keys to paste — Smithery handles the browser handshake automatically, then your agent gets scoped access tokens for the duration of the session.\n\n## Learn more\n\n- Homepage: [agentview.de](https://agentview.de)\n- Setup guide for AI agents: [agentview.de/agent-instructions](https://agentview.de/agent-instructions)\n- Developer docs: [agentview.de/developers.html](https://agentview.de/developers.html)\n",
+    "iconUrl": "https://api.smithery.ai/servers/rafaelkocurek-nvob/agentview/icon",
+    "remote": true,
+    "deploymentUrl": "https://agentview.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agentview.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "create_auth_session",
+        "description": "Creates a browser-based login session and returns a loginUrl the user must open to authenticate. Use this as the first step when your client cannot complete OAuth 2.1 with PKCE itself. Do not use this if you already have a valid Bearer token. Returns sessionRequestId (needed for get_auth_session), loginUrl, pollUrl and expiresIn (seconds until the login window closes, default 600). After calling this, instruct the user to open the loginUrl, then poll get_auth_session until status becomes active.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "enum": [
+                "content_only",
+                "admin"
+              ],
+              "type": "string",
+              "description": "Requested access scope. Must be either 'content_only' (read and send content to displays) or 'admin' (content_only plus create/delete/rename displays). Defaults to 'content_only'."
+            },
+            "agent_identifier": {
+              "type": "string",
+              "description": "Optional display name of the MCP client or agent, shown to the user in the browser consent screen. Example: 'ChatGPT' or 'my-home-automation'."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_auth_session",
+        "description": "Polls the status of a login session created by create_auth_session and returns the agent token once the user completes the browser login. Use this after create_auth_session; poll every 2-3 seconds until the status is no longer 'pending'. Do not use this for any other purpose. Returns one of three states: 'pending' (user has not logged in yet — keep polling), 'active' (login succeeded — response includes token as a raw JWT string and tokenExpiresAt as ISO 8601 timestamp), or 'expired' (login window or token timed out — call create_auth_session again). When status is active the current MCP session is automatically authenticated; you can call protected tools immediately.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "session_request_id": {
+              "type": "string",
+              "description": "The sessionRequestId string returned by create_auth_session. Must be passed exactly as received."
+            }
+          }
+        }
+      },
+      {
+        "name": "authenticate",
+        "description": "Validates a JWT agent token and caches the resulting identity on the current MCP session so that subsequent protected tool calls succeed without resending the token. Use this only if your client cannot reliably send an Authorization: Bearer header on every request; modern streamable HTTP clients should send the header instead. Do not call this if the session was already auto-authenticated by get_auth_session. Returns authenticated (boolean), sessionBound (whether the identity was cached on this session), userId, name, email, scope and expiresAt (ISO 8601).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "jwt": {
+              "type": "string",
+              "description": "Alias for token. Use this if your wrapper cannot send the 'token' field reliably."
+            },
+            "token": {
+              "type": "string",
+              "description": "The raw JWT token string returned by get_auth_session or an OAuth access token. Pass the opaque token exactly as received — do not add a 'Bearer ' prefix and do not expand or decode the JWT claims."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Alias for token. Use this if your wrapper follows OAuth naming conventions."
+            }
+          }
+        }
+      },
+      {
+        "name": "logout",
+        "description": "Clears the cached authentication identity from the current MCP session. Use this when the user wants to end the session or switch accounts. This does not revoke the underlying JWT token — it only removes the session-local cache. After logout, protected tools will require re-authentication. Returns loggedOut (boolean) and sessionBound (boolean).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_public_status",
+        "description": "Returns the server's public readiness status, version string and discovery URLs. Use this before authenticating to verify the server is reachable and to obtain entry-point URLs. No authentication required. Returns status ('ready'), server name, version, statusUrl and instructionsUrl.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search",
+        "description": "Searches agentView resources by keyword and returns a ranked list of matching resource URIs with titles and snippets. Use this to discover resources before calling fetch for full details. Do not use this if you already know the exact resource URI — call fetch directly instead. Without authentication only public documentation resources are searched; with authentication your account and accessible displays are included. Returns query, resourceType, count and a results array where each entry has uri, type, title, snippet and requiresAuthentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Maximum number of results to return. Integer between 1 and 20 inclusive. Defaults to 5."
+            },
+            "query": {
+              "type": "string",
+              "description": "Free-text search terms. Examples: a display name, 'account', 'OAuth', 'status'. At least one of query or resource_type should be provided."
+            },
+            "resource_type": {
+              "enum": [
+                "all",
+                "documentation",
+                "status",
+                "account",
+                "display",
+                "api"
+              ],
+              "type": "string",
+              "description": "Restricts results to a specific resource category. Must be one of: 'all', 'documentation', 'status', 'account', 'display', 'api'. Defaults to 'all' when omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch",
+        "description": "Retrieves the full details of a single agentView resource identified by its URI. Use this after search to read the complete content of a discovered resource, or directly when you already know the URI. Public URIs (e.g. agentview://public/status, agentview://public/instructions) require no authentication; private URIs (e.g. agentview://account/me, agentview://display/{id}) require a valid session. Returns uri, type, title, text (human-readable content) and data (structured details).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uri": {
+              "type": "string",
+              "description": "The resource URI to fetch. Must use the agentview:// scheme. Examples: 'agentview://public/status', 'agentview://account/me', 'agentview://display/ABCD1234'."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_pricing",
+        "description": "Returns agentView plan pricing, features and upgrade options. Use this when the user asks about pricing, costs, plan differences or what an additional display costs. No authentication required. Returns an array of plans with name, price, included displays and features, plus the per-display add-on price and a link to the pricing page.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_public_apis",
+        "description": "Searches a curated catalog of 600+ free, public APIs that require no authentication and work over HTTPS — ideal for embedding live data in display HTML pages via fetch(). Covers 47 categories including weather, news, finance, sports, images, food, entertainment, science, geocoding and more. Use this when generating HTML that needs live data from the internet. Returns matching APIs with documentation links, CORS support info and ready-to-use fetch() code hints. No authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Maximum results to return, 1-20. Defaults to 10."
+            },
+            "query": {
+              "type": "string",
+              "description": "Free-text search terms. Examples: 'weather forecast', 'random quotes', 'cat pictures', 'bitcoin price', 'jokes'."
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by category ID. Examples: 'weather', 'finance', 'animals', 'food-drink', 'sports-fitness', 'news', 'entertainment'. Use 'all' or omit for all categories."
+            },
+            "cors_only": {
+              "type": "boolean",
+              "description": "When true, only return APIs with confirmed CORS support (safe for browser-side fetch in HTML). Defaults to false."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_account",
+        "description": "Returns the authenticated user's account profile including userId, name, email, plan with feature details, personal display limits (maxPersonalDisplays, currentPersonalDisplays, remainingPersonalDisplays), total accessible displays across all organizations, organization memberships summary and points balance. Use this to answer questions about the user's subscription, display quota, organization memberships or plan capabilities. Requires authentication with at least content_only scope. Do not use this to list displays — use list_displays instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_displays",
+        "description": "Returns all displays accessible to the authenticated user as an array with count and display details. Use this to discover available display IDs before reading or modifying a specific display with get_display or send_html. Requires authentication with at least content_only scope; admin is not required. Each display entry includes id (8-character alphanumeric profile ID), name, status, locked, displayUrl, setupUrl, pairingUrl and other management links plus a compact runtime summary such as screen resolution, touch support, deviceClass and deviceFamily when known. Do not use this to get full details of one display — use get_display with the display_id instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            },
+            "session_request_id": {
+              "type": "string",
+              "description": "Optional session request ID returned by create_auth_session. Pass this instead of access_token for simpler, more reliable authentication — the server resolves the identity server-side."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_organizations",
+        "description": "Returns all organizations the authenticated user belongs to with their role, display count, member count and allocated slots. Use this to answer questions about the user's organizations, how many displays an organization has, or team membership. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_organization",
+        "description": "Returns full details of a specific organization including its displays, members with roles, allocated slots and remaining capacity. Use this after list_organizations to inspect a specific organization's state. Requires authentication with at least content_only scope and the user must be a member of the organization.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID. Obtain this from list_organizations or from get_account."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "invite_member",
+        "description": "Creates an invite link to add a new member to an organization. The invite is valid for 7 days. Optionally bind it to a specific email address so only that person can accept it. Requires admin scope and the user must be an admin or owner of the organization. Returns the inviteUrl to share with the invitee.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "admin",
+                "manager",
+                "viewer"
+              ],
+              "type": "string",
+              "description": "The role for the invited member. Must be one of: 'admin' (manage members and displays), 'manager' (manage displays and content), 'viewer' (read-only dashboard access)."
+            },
+            "email": {
+              "type": "string",
+              "description": "Optional email address to bind the invite to. If set, only this email address can accept the invite."
+            },
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID to invite a member to. Obtain this from list_organizations."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_billing_url",
+        "description": "Returns a URL to the user's billing and subscription page where they can purchase or manage premium display licenses. Use this when the user wants to buy more licenses, upgrade their plan, or manage their subscription. The agent should present the URL to the user and offer to allocate and assign the new licenses once the purchase is complete. Requires content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "allocate_licenses",
+        "description": "Allocates premium display licenses from the authenticated user's Premium plan to an organization. Premium users have a pool of allocatable licenses (base + purchased extras) that can be distributed across organizations. Requires admin scope and a Premium plan.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID to allocate licenses to. Obtain this from list_organizations."
+            },
+            "licenses": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of premium display licenses to allocate to this organization. Set to 0 to deallocate all licenses from this org."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "create_organization",
+        "description": "Creates a new organization and makes the authenticated user the owner. Use this when the user wants to set up a shared display fleet. Returns orgId, name, slug, type and yourRole. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Friendly name for the organization. Example: 'Marketing Team'."
+            },
+            "type": {
+              "enum": [
+                "organization",
+                "family"
+              ],
+              "type": "string",
+              "description": "Organization type. Defaults to 'organization' if omitted."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "rename_organization",
+        "description": "Renames an existing organization. Requires admin scope and admin or owner role in the organization.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The new name for the organization."
+            },
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID to rename."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_organization",
+        "description": "Permanently deletes an organization, releasing all its displays and removing all members. Only the owner can delete. This cannot be undone. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID to delete."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "update_member_role",
+        "description": "Changes a member's role within an organization. Cannot change your own role or the owner's role. Requires admin scope and admin or owner role.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "The new role. Valid roles depend on organization type (e.g. 'admin', 'manager', 'viewer')."
+            },
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "target_user_id": {
+              "type": "string",
+              "description": "The user ID of the member whose role to change."
+            }
+          }
+        }
+      },
+      {
+        "name": "remove_member",
+        "description": "Removes a member from an organization. Transfers their owned displays to a successor, unassigns their license allocations, and removes their display grants. Cannot remove the last owner. Requires admin scope and admin or owner role.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "target_user_id": {
+              "type": "string",
+              "description": "The user ID of the member to remove."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_org_displays",
+        "description": "Returns all displays in an organization with their real-time connection status, online/offline state, and license info. Use this for fleet monitoring. Requires content_only scope and organization membership.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_license_info",
+        "description": "Returns the authenticated user's complete license allocation overview: total premium licenses, personal usage, allocatable licenses, per-organization allocations, and free licenses. Use this to understand available capacity before allocating licenses. Requires content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "remove_display_from_org",
+        "description": "Removes a display from an organization, clearing its group assignment and all display grants. The display becomes unassigned. Requires admin scope and admin or owner role.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID."
+            },
+            "display_id": {
+              "type": "string",
+              "description": "The display profile ID to remove."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "set_display_grant",
+        "description": "Grants a specific user access to a specific display within an organization. Creates or updates the grant. The target user must be a member of the organization. Access levels: 'view' (see status) or 'control' (send content). Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID."
+            },
+            "display_id": {
+              "type": "string",
+              "description": "The display profile ID."
+            },
+            "access_level": {
+              "enum": [
+                "view",
+                "control"
+              ],
+              "type": "string",
+              "description": "Access level: 'view' or 'control'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "target_user_id": {
+              "type": "string",
+              "description": "The user ID to grant access to."
+            }
+          }
+        }
+      },
+      {
+        "name": "remove_display_grant",
+        "description": "Removes a user's access grant from a display within an organization. Requires admin scope and admin or owner role.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID."
+            },
+            "display_id": {
+              "type": "string",
+              "description": "The display profile ID."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "target_user_id": {
+              "type": "string",
+              "description": "The user ID whose grant to remove."
+            }
+          }
+        }
+      },
+      {
+        "name": "broadcast_content",
+        "description": "Sends HTML content to multiple displays at once. Provide display_ids to target specific displays or set all to true to target all accessible displays. Locked displays are skipped. Returns sent and skipped lists with reasons. Requires content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "all": {
+              "type": "boolean",
+              "description": "Set to true to target all accessible displays."
+            },
+            "html": {
+              "type": "string",
+              "description": "Complete HTML document to render. Mutually exclusive with base64_html."
+            },
+            "duration": {
+              "type": "integer",
+              "description": "How long content stays in seconds. 0 = indefinite."
+            },
+            "base64_html": {
+              "type": "string",
+              "description": "Base64-encoded HTML string. Mutually exclusive with html."
+            },
+            "description": {
+              "type": "string",
+              "description": "Short description of the content being sent."
+            },
+            "display_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Array of display profile IDs to target. Provide this or set all to true."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "session_request_id": {
+              "type": "string",
+              "description": "Optional session request ID."
+            },
+            "content_description": {
+              "type": "string",
+              "description": "Optional semantic description of the content."
+            }
+          }
+        }
+      },
+      {
+        "name": "create_org_display",
+        "description": "Creates a new display directly within an organization WITHOUT pairing it to physical hardware. The display starts offline and uncoupled. For physical screens, ALWAYS prefer pair_by_code instead — it creates and pairs in one step. Use create_org_display only for administrative pre-provisioning when the screen is not yet available. The display is owned by the organization, not by a personal user. Requires admin scope and manager or higher role in the organization. The organization must have available licenses (use allocate_licenses first if needed).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Friendly name for the new display. Example: 'Lobby Screen'."
+            },
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID to create the display in. Obtain this from list_organizations."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_display",
+        "description": "Returns the full details of a single display including its live state, current content, pairing links, screen and viewport facts, touch capability, runtime classification, hardware/UI settings, and the latest reported browser/runtime facts. Use this when you already know the display ID and need its complete state before sending content or managing it. Do not use this to discover displays — use list_displays first. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID, e.g. 'ABCD1234'. Obtain this from list_displays or from a previous create_display call."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            },
+            "session_request_id": {
+              "type": "string",
+              "description": "Optional session request ID returned by create_auth_session. Pass this instead of access_token for simpler, more reliable authentication — the server resolves the identity server-side."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_display_capabilities",
+        "description": "Returns resolved display capabilities for a display, including effective network mode plus concrete browser/runtime facts such as screen, viewport, touch/input hints, browser and engine version, platform classification, feature support, known limitations, graphics hints, and a recommended delivery mode. Call this before generating or sending HTML so your agent can match the content to the real display browser. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "session_request_id": {
+              "type": "string",
+              "description": "Optional session request ID returned by create_auth_session. Pass this instead of access_token for simpler, more reliable authentication — the server resolves the identity server-side."
+            }
+          }
+        }
+      },
+      {
+        "name": "create_display",
+        "description": "Creates a personal display WITHOUT pairing it to physical hardware. The display starts offline and uncoupled. For physical screens, ALWAYS prefer pair_by_code instead — it creates and pairs in one step. Use create_display only when: (a) the user explicitly wants to pre-provision a display before the screen is available, or (b) the user needs a virtual/headless display for API-only content delivery. Do not call this just to check capacity — use get_account to inspect remainingDisplays first. Requires admin scope; list_displays and send_html only need content_only. Returns id, name, displayUrl, setupUrl, managedUrl, pairingUrl, pairingExpiresAt, approvalUrl and status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Optional friendly name for the new display. If omitted, a default name is assigned. Example: 'Lobby Screen'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "rename_display",
+        "description": "Changes the friendly name of an existing display. Use this when the user wants to update only the display name without affecting its content or state. Requires admin scope. Returns id and the updated name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The new friendly display name. Non-empty string."
+            },
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to rename, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_display",
+        "description": "Permanently deletes a display and all its associated content. This action cannot be undone. Use this only when the user explicitly confirms they want to remove the display. Requires admin scope. Returns id, name and deleted (boolean true).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to delete, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "send_html",
+        "description": "Pushes raw HTML content to a display, immediately replacing whatever is currently shown to viewers. Prefer this over send_url unless the user explicitly wants an external page rendered as-is. Include a human-readable description whenever possible so later get_display_content calls can summarize intent without immediately reading raw HTML. Before generating complex HTML, inspect get_display_capabilities for the target display so you know the real browser/runtime limits. When the user does not supply a detailed design system, default to premium digital-signage quality: full-screen layout, strong visual hierarchy, atmospheric background treatment, refined typography, robust fallback data, and no action buttons unless touch interaction is explicitly requested. For the full creative brief, load render_premium_display_html or read agentview://public/design-system before generating the HTML. Requires authentication with at least content_only scope; the user must be allowed to manage the target display. Exactly one of html or base64_html must be provided. Returns id, name, duration, file (stored filename) and version (content version ID).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "html": {
+              "type": "string",
+              "description": "Complete HTML document or fragment to render on the display. Mutually exclusive with base64_html — provide exactly one."
+            },
+            "token": {
+              "type": "string",
+              "description": "Display-specific preview token for unauthenticated demo-sign access. This is NOT the auth/JWT token. Omit this for normal authenticated usage."
+            },
+            "duration": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "How long the content stays on the display in seconds. 0 means indefinite (content persists until replaced). Defaults to 0 when omitted."
+            },
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to send content to, e.g. 'ABCD1234'."
+            },
+            "base64_html": {
+              "type": "string",
+              "description": "Base64-encoded HTML string (standard base64, not base64url). Use this instead of html only when the HTML contains characters that cannot survive JSON string transport. Mutually exclusive with html."
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 1000,
+              "minLength": 1,
+              "description": "Mandatory short human-readable description of the HTML upload (1-1000 characters), e.g. 'Weekly KPI dashboard with revenue and uptime'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically. This is different from 'token' which is a display-specific preview token."
+            },
+            "content_description": {
+              "type": "string",
+              "description": "Optional alias for description. If both are provided, description wins."
+            }
+          }
+        }
+      },
+      {
+        "name": "send_url",
+        "description": "Loads a web page by URL on a display using a full-page iframe, immediately replacing whatever is currently shown. Use this when the user wants to show an external website, dashboard or web app on a display. Provide content_description whenever available so get_display_content can communicate intent without forcing read_display_html. The URL must be an absolute HTTP or HTTPS address. Check get_display_capabilities first to confirm connectivity and browser/runtime support before relying on a remote page. Use this only when the external page already has the desired design quality; otherwise prefer send_html and load render_premium_display_html or read agentview://public/design-system so you can generate a premium display-native experience yourself. Requires authentication with at least content_only scope. Returns id, name, duration, file and version.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The absolute HTTP or HTTPS URL to load on the display. Example: 'https://example.com/dashboard'."
+            },
+            "duration": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "How long the content stays on the display in seconds. 0 means indefinite. Defaults to 0."
+            },
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "content_description": {
+              "type": "string",
+              "description": "Optional human-readable summary of what this URL content is about (recommended)."
+            }
+          }
+        }
+      },
+      {
+        "name": "clear_display",
+        "description": "Removes the current live content from a display and returns it to its idle/default state. Viewers will immediately see the change. Use this when the user wants to blank or reset a display. This does not delete the display itself — use delete_display for that. Requires authentication with at least content_only scope. Returns id and status ('cleared').",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to clear, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "set_idle_content",
+        "description": "Sets or clears the default idle content for a display. Idle content is shown whenever the display has no active live content. Provide html to set idle content, or omit it to clear idle content. Provide content_description to make later state reads easier for agents. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "html": {
+              "type": "string",
+              "description": "Complete HTML to use as idle content. Omit this to clear custom idle content."
+            },
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "content_description": {
+              "type": "string",
+              "description": "Optional human-readable summary for the idle/default content."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_display_content",
+        "description": "Returns the current content state of a display including active live content, content URL, a live preview link (displayUrl), idle content and delivery status. Check currentContentDescription first to understand intent; call read_display_html only when you truly need raw source edits. The displayUrl is a browser-openable live preview that renders exactly what the display shows in real time. Requires content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "read_display_html",
+        "description": "Reads the raw HTML source code currently shown on a display. Use this to inspect, modify or reuse existing content. Typical workflow: read_display_html to get the HTML, make changes, then send_html to push it back. Returns the complete HTML string plus metadata. If no live content is active, returns idle content if set. Requires content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "content_type": {
+              "enum": [
+                "live",
+                "idle"
+              ],
+              "type": "string",
+              "description": "Which content to read: 'live' (default) returns the active content, 'idle' returns the idle/default content."
+            }
+          }
+        }
+      },
+      {
+        "name": "lock_display",
+        "description": "Locks a display so that content changes such as send_html, send_url and clear_display are rejected until unlock_display is called. Use this when the user wants to protect a display from accidental content changes. The display continues showing its current content. Requires admin scope. Returns id and locked (boolean true). To reverse this, use unlock_display.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to lock, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "unlock_display",
+        "description": "Unlocks a previously locked display so that content changes (send_html, send_url, clear_display) are accepted again. Use this when the user wants to resume managing a locked display. Requires admin scope. Returns id and locked (boolean false). To lock again, use lock_display.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to unlock, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            }
+          }
+        }
+      },
+      {
+        "name": "configure_display",
+        "description": "Updates hardware permission and UI settings for a display. Use this when the user wants to enable or disable camera, microphone or geolocation access, set the preferred display language, toggle the mouse cursor or badge overlay visibility, or change the watermark position. All parameters except display_id are optional — only provided settings are changed. If the display is online, changes are pushed immediately via SignalR. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "allow_camera": {
+              "type": "boolean",
+              "description": "Allow embedded content to request camera access. Default is false."
+            },
+            "allow_microphone": {
+              "type": "boolean",
+              "description": "Allow embedded content to request microphone access. Default is false."
+            },
+            "allow_geolocation": {
+              "type": "boolean",
+              "description": "Allow embedded content to request geolocation access. Default is false."
+            },
+            "show_mouse_cursor": {
+              "type": "boolean",
+              "description": "Show a visible mouse cursor on the display surface. Default is true."
+            },
+            "preferred_language": {
+              "enum": [
+                "de",
+                "en",
+                "zh"
+              ],
+              "type": "string",
+              "description": "Preferred language for the display shell. Omit to leave unchanged."
+            },
+            "show_badge_overlay": {
+              "type": "boolean",
+              "description": "Show the AI connect badge overlay on the display. Default is true."
+            },
+            "watermark_position": {
+              "enum": [
+                "BottomLeft",
+                "BottomRight",
+                "TopLeft",
+                "TopRight"
+              ],
+              "type": "string",
+              "description": "Position of the badge watermark on the display."
+            }
+          }
+        }
+      },
+      {
+        "name": "pair_by_code",
+        "description": "PREFERRED way to set up a physical display. Ask the user to open https://display.agentview.de on the target TV/screen, read the 6-character code, and share it. Then call this tool. This creates and pairs the display in one step — no orphaned or offline displays. Two modes: (1) New display — provide code + profile_name to create and pair in one step. This is the recommended default for first-time setup. (2) Rebind — provide code + target_display_id to move an existing display profile to new hardware. Call list_displays first to get the target_display_id. Always prefer this over create_display or create_org_display for physical devices. Use create_display/create_org_display only for pre-provisioning when the screen is not yet available. Requires admin scope. Returns profileId, name, linkedHardwareId and mode ('new' or 'rebind').",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The 6-character pairing code shown on the display (e.g. 'AB3K7F')."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "profile_name": {
+              "type": "string",
+              "description": "Friendly name for the display (required for new pairing, ignored for rebind). Example: 'Lobby Screen'."
+            },
+            "target_display_id": {
+              "type": "string",
+              "description": "To rebind: the existing display profile ID to switch to the new hardware. Omit for new display pairing."
+            }
+          }
+        }
+      },
+      {
+        "name": "claim_display",
+        "description": "Converts an unclaimed guest or pending display into a managed personal display owned by the authenticated user. This permanently transfers ownership and counts against the user's display quota. Use this only when the user explicitly wants to adopt an existing hardware or demo display that is already running. For first-time physical setup, prefer pair_by_code instead. Requires admin scope. Returns profileId (the new managed display ID) and name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The short ID of the pending, guest or demo display to claim. This is the hardware or temporary ID shown on the device."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication. Pass the token returned by get_auth_session when your MCP client does not send it as an Authorization: Bearer HTTP header automatically."
+            },
+            "profile_name": {
+              "type": "string",
+              "description": "Friendly name to assign to the newly claimed display. Non-empty string. Example: 'Reception Kiosk'."
+            }
+          }
+        }
+      },
+      {
+        "name": "assign_license",
+        "description": "Assigns a premium license token to a display, removing its watermark and making it ad-free. The user must have unassigned premium licenses available. Each license also adds +30 MB to the display's context storage pool (personal or group). Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to assign a license to, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "unassign_license",
+        "description": "Removes a premium license token from a display, restoring the watermark and ad eligibility. The license returns to the user's available pool. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_id": {
+              "type": "string",
+              "description": "The 8-character alphanumeric display profile ID to remove a license from, e.g. 'ABCD1234'."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "create_api_key",
+        "description": "Creates a long-lived API key for server-to-server integration without OAuth. The raw key is returned only once — store it securely. The user must explicitly consent to creating the key. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Human-readable name for the key. Example: 'Home Assistant', 'CI Pipeline'."
+            },
+            "scope": {
+              "enum": [
+                "content_only",
+                "admin"
+              ],
+              "type": "string",
+              "description": "Scope for the key: 'content_only' (send content, list displays) or 'admin' (full management). Defaults to 'content_only'."
+            },
+            "org_id": {
+              "type": "string",
+              "description": "Optional organization ID. If set, the key acts on behalf of this organization."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "expires_in_days": {
+              "type": "integer",
+              "description": "Optional expiration in days. If not set, the key never expires."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_api_keys",
+        "description": "Lists all API keys for the current user. Returns key metadata (prefix, name, scope, dates) but never the raw key. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "revoke_api_key",
+        "description": "Permanently revokes an API key. This is irreversible — the key will immediately stop working. Requires admin scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key_id": {
+              "type": "string",
+              "description": "The ID of the key to revoke (from list_api_keys)."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "upload_asset",
+        "description": "Upload one or more files (images, fonts, CSS, video, etc.) as assets and receive stable URLs. Use these URLs in your HTML with <img src> or @font-face. Assets are cached on displays. Pass files as base64-encoded data. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Array of file objects, each with 'name' (filename with extension) and 'data' (base64-encoded content)."
+            },
+            "group_id": {
+              "type": "string",
+              "description": "Optional group ID to associate the assets with."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "descriptions": {
+              "type": "object",
+              "description": "JSON object mapping each filename to a human-readable description."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_assets",
+        "description": "Lists the authenticated user's uploaded assets with optional filtering by type, search term, and group. Returns asset URLs that can be used in HTML content. Check this before uploading to avoid duplicates. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "image",
+                "video",
+                "audio",
+                "font",
+                "document",
+                "data"
+              ],
+              "type": "string",
+              "description": "Filter by MIME category."
+            },
+            "limit": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Maximum results (default: 50, max: 200)."
+            },
+            "search": {
+              "type": "string",
+              "description": "Search in filename and description (case-insensitive)."
+            },
+            "group_id": {
+              "type": "string",
+              "description": "Only assets of this group. Omit for personal assets."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_asset",
+        "description": "Returns metadata for a single asset including its URL. Use this to verify an asset still exists before referencing it in HTML. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset_id": {
+              "type": "string",
+              "description": "The asset ID (e.g. 'ast_01H7KXZ...')."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "update_asset",
+        "description": "Updates the name and/or description of an existing asset. The URL does not change. At least one of name or description must be provided. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "New filename for the asset."
+            },
+            "asset_id": {
+              "type": "string",
+              "description": "The asset ID to update."
+            },
+            "description": {
+              "type": "string",
+              "description": "New description for the asset."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_asset",
+        "description": "Deletes one or more assets. Displays referencing deleted assets will show broken images. Requires authentication with at least content_only scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "One or more asset IDs to delete."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            }
+          }
+        }
+      },
+      {
+        "name": "set_org_connectivity",
+        "description": "Sets the default connectivity mode and global whitelist for an organization. These settings apply to all displays in the org unless overridden at the display level. Use this when an org admin wants to declare their network topology. Requires admin scope and Org-Admin role.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "org_id": {
+              "type": "string",
+              "description": "The organization ID."
+            },
+            "access_token": {
+              "type": "string",
+              "description": "Optional JWT access token for authentication."
+            },
+            "global_whitelist": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Org-wide whitelist of allowed URL patterns. Pass an empty array to clear."
+            },
+            "default_connectivity_mode": {
+              "enum": [
+                "full-access",
+                "whitelist-only",
+                "isolated",
+                "inherit"
+              ],
+              "type": "string",
+              "description": "Default connectivity mode for all org displays."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Public status",
+        "uri": "agentview://public/status",
+        "description": "Server health, MCP discovery endpoints and public readiness information.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Agent instructions",
+        "uri": "agentview://public/instructions",
+        "description": "Recommended authentication and usage flow for MCP clients.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "Premium display design system",
+        "uri": "agentview://public/design-system",
+        "description": "Default premium digital-signage brief for generating high-end display HTML.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "Developer documentation",
+        "uri": "agentview://public/developers",
+        "description": "Technical MCP and OAuth integration reference.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "MCP capability status",
+        "uri": "agentview://public/mcp",
+        "description": "Supported protocol versions, transports, resources, prompts, completions and subscription capabilities.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "OAuth status",
+        "uri": "agentview://public/oauth",
+        "description": "Authorization endpoints, supported scopes, token methods, PKCE and protected resource metadata.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Support diagnostics",
+        "uri": "agentview://public/support",
+        "description": "Recommended evidence and checks for MCP, OAuth, session and interoperability troubleshooting.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "Public API catalog",
+        "uri": "agentview://public/apis",
+        "description": "Catalog of 603 free, no-auth public APIs for embedding live data in display HTML via fetch().",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "onboard_first_display",
+        "description": "Guide the assistant through helping a user create and understand their first display.",
+        "arguments": [
+          {
+            "name": "goal",
+            "description": "Optional end goal, for example 'show a welcome page on a lobby screen'.",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "recover_mcp_auth",
+        "description": "Guide the assistant through diagnosing MCP OAuth, discovery and session failures.",
+        "arguments": [
+          {
+            "name": "client_name",
+            "description": "Optional MCP client name such as ChatGPT, Claude Desktop or Antigravity.",
+            "required": false
+          },
+          {
+            "name": "symptom",
+            "description": "Optional short symptom description such as 'redirect loop' or '401 on first tool call'.",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "render_premium_display_html",
+        "description": "Load the premium agentView creative brief for generating polished, high-end digital signage HTML from a one-shot request.",
+        "arguments": [
+          {
+            "name": "brief",
+            "description": "The one-shot request or content brief that should become display HTML.",
+            "required": true
+          },
+          {
+            "name": "category",
+            "description": "Optional category such as dashboard, welcome screen, menu board or event schedule.",
+            "required": false
+          },
+          {
+            "name": "touch_mode",
+            "description": "Optional interaction mode: display-first, touch or control-panel.",
+            "required": false
+          },
+          {
+            "name": "data_mode",
+            "description": "Optional data strategy: live-with-fallback, static or mock-only.",
+            "required": false
+          },
+          {
+            "name": "brand_direction",
+            "description": "Optional visual direction such as Apple-like, luxury hospitality or industrial operations.",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

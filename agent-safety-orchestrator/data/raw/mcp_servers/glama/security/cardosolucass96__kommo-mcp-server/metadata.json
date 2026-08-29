@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "f96hi7nzep",
+  "namespace": "cardosolucass96",
+  "slug": "kommo-mcp-server",
+  "name": "Kommo MCP Server",
+  "description": "Enables integration with Kommo CRM to manage leads, add notes and tasks, update custom fields, and list pipelines. Supports multi-tenant authentication and includes an approval system for bulk operations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables integration with Kommo CRM to manage leads, add notes and tasks, update custom fields, and list pipelines. Supports multi-tenant authentication and includes an approval system for bulk operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "The host address on which the server will listen",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "The port number on which the server will run",
+          "type": "string",
+          "default": "3000"
+        },
+        "MCP_PASSWORD": {
+          "description": "Required password for MCP authentication. This is MANDATORY - the server will not start without it. Never use weak or default passwords in production.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MCP_PASSWORD"
+      ]
+    },
+    "id": "f96hi7nzep",
+    "name": "Kommo MCP Server",
+    "namespace": "cardosolucass96",
+    "repository": {
+      "url": "https://github.com/cardosolucass96/kommo-mcp-server"
+    },
+    "slug": "kommo-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/f96hi7nzep"
+  }
+}

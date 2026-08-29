@@ -1,0 +1,168 @@
+{
+  "registry": "glama",
+  "id": "o1wdex3bxn",
+  "namespace": "san-npm",
+  "slug": "mcp-services",
+  "name": "mcp-services",
+  "description": "Multi-tool MCP server for AI agents with 29 tools across web scraping, SEO analysis, screenshot and PDF generation, domain intelligence, content extraction, multi-chain EVM blockchain queries, and security toolkit. Free tier available with no auth required.",
+  "discoveryQueries": [
+    "security",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "attributes": [],
+    "description": "Multi-tool MCP server for AI agents with 29 tools across web scraping, SEO analysis, screenshot and PDF generation, domain intelligence, content extraction, multi-chain EVM blockchain queries, and security toolkit. Free tier available with no auth required.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3100"
+        },
+        "API_KEYS": {
+          "description": "Comma-separated valid API keys",
+          "type": "string"
+        },
+        "REDIS_URL": {
+          "description": "Optional Redis backend for shared/distributed rate-limits",
+          "type": "string"
+        },
+        "STRIPE_SK": {
+          "description": "Stripe API key for Pro subscriptions",
+          "type": "string"
+        },
+        "VT_API_KEY": {
+          "description": "VirusTotal API key (free: 4/min, 500/day)",
+          "type": "string"
+        },
+        "TRUST_PROXY": {
+          "description": "Express trust proxy setting (false, true, hop count like 1, or subnet names/CIDRs like loopback/10.0.0.0/8)",
+          "type": "string",
+          "default": "false"
+        },
+        "ADMIN_SECRET": {
+          "description": "Secret for admin endpoints",
+          "type": "string"
+        },
+        "MAX_BROWSERS": {
+          "description": "Max concurrent browser instances",
+          "type": "string",
+          "default": "3"
+        },
+        "CHROMIUM_PATH": {
+          "description": "Path to Chromium",
+          "type": "string",
+          "default": "/usr/bin/chromium-browser"
+        },
+        "X402_RECEIVER": {
+          "description": "x402 payment receiver address",
+          "type": "string"
+        },
+        "FREE_WINDOW_MS": {
+          "description": "Free-tier rate-limit window in ms",
+          "type": "string",
+          "default": "86400000"
+        },
+        "MAX_SSE_PER_IP": {
+          "description": "Max concurrent SSE sessions per client IP",
+          "type": "string",
+          "default": "5"
+        },
+        "MEMORY_DB_PATH": {
+          "description": "SQLite memory database path",
+          "type": "string",
+          "default": "./data/memory.db"
+        },
+        "X402_PRICE_USD": {
+          "description": "x402 price per call",
+          "type": "string",
+          "default": "0.005"
+        },
+        "X402_TEST_MODE": {
+          "description": "Set to 1 only for local/offline testing; ignored in production",
+          "type": "string",
+          "default": "0"
+        },
+        "FREE_DAILY_LIMIT": {
+          "description": "Free tier request limit",
+          "type": "string",
+          "default": "10"
+        },
+        "MAX_SSE_SESSIONS": {
+          "description": "Max MCP SSE sessions",
+          "type": "string",
+          "default": "50"
+        },
+        "ABUSEIPDB_API_KEY": {
+          "description": "AbuseIPDB API key (free: 1000/day)",
+          "type": "string"
+        },
+        "ETHERSCAN_API_KEY": {
+          "description": "Etherscan API key (free: 5/sec)",
+          "type": "string"
+        },
+        "SSE_ALLOWED_HOSTS": {
+          "description": "Comma-separated allowlist for Host header on /mcp/sse + /mcp/messages (e.g. mcp.example.com,localhost)",
+          "type": "string"
+        },
+        "ALLOW_APIKEY_QUERY": {
+          "description": "Allow deprecated ?apikey= auth during migration. Default is true in non-production, false in production",
+          "type": "string",
+          "default": "true"
+        },
+        "X402_TX_CACHE_FILE": {
+          "description": "Persistent replay-protection cache for used x402 tx hashes",
+          "type": "string",
+          "default": "./data/x402-tx-cache.json"
+        },
+        "SSE_ALLOWED_ORIGINS": {
+          "description": "Optional comma-separated allowlist for Origin header (full origins like https://app.example.com)",
+          "type": "string"
+        },
+        "SSE_CONNECT_WINDOW_MS": {
+          "description": "SSE connect rate-limit window in ms",
+          "type": "string",
+          "default": "60000"
+        },
+        "STRIPE_WEBHOOK_SECRET": {
+          "description": "Stripe webhook signing secret",
+          "type": "string"
+        },
+        "CHECKOUT_LIMIT_PER_HOUR": {
+          "description": "Per-IP Stripe checkout creation limit",
+          "type": "string",
+          "default": "5"
+        },
+        "X402_MAX_TX_AGE_SECONDS": {
+          "description": "Maximum accepted payment tx age in seconds (stale txs are rejected)",
+          "type": "string",
+          "default": "86400"
+        },
+        "SSE_CONNECT_MAX_PER_WINDOW": {
+          "description": "Max SSE connection attempts per IP per window",
+          "type": "string",
+          "default": "30"
+        },
+        "STRIPE_WEBHOOK_IP_ALLOWLIST": {
+          "description": "Optional CSV allowlist for webhook source IPs",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "o1wdex3bxn",
+    "name": "mcp-services",
+    "namespace": "san-npm",
+    "repository": {
+      "url": "https://github.com/san-npm/mcp-services"
+    },
+    "slug": "mcp-services",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/o1wdex3bxn"
+  }
+}

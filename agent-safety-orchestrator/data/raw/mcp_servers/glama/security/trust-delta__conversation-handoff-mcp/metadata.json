@@ -1,0 +1,85 @@
+{
+  "registry": "glama",
+  "id": "kqn97orskf",
+  "namespace": "trust-delta",
+  "slug": "conversation-handoff-mcp",
+  "name": "Conversation Handoff MCP",
+  "description": "Enables transferring conversation context between different AI chats or projects with automatic server discovery and memory-based storage. Supports saving, loading, and managing conversation histories in a human-readable Markdown format.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables transferring conversation context between different AI chats or projects with automatic server discovery and memory-based storage. Supports saving, loading, and managing conversation histories in a human-readable Markdown format.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HANDOFF_SERVER": {
+          "description": "Server connection mode: 'none' for standalone, or explicit server URL (e.g., 'http://localhost:3000'). Default is auto-discovery mode.",
+          "type": "string"
+        },
+        "HANDOFF_MAX_COUNT": {
+          "description": "Maximum number of handoffs",
+          "type": "string",
+          "default": "100"
+        },
+        "HANDOFF_PORT_RANGE": {
+          "description": "Port range for auto-discovery",
+          "type": "string",
+          "default": "1099-1200"
+        },
+        "HANDOFF_SERVER_TTL": {
+          "description": "Server auto-shutdown after inactivity in milliseconds (0 = disabled). Default is 24 hours.",
+          "type": "string",
+          "default": "86400000"
+        },
+        "HANDOFF_RETRY_COUNT": {
+          "description": "Auto-reconnect retry count",
+          "type": "string",
+          "default": "30"
+        },
+        "HANDOFF_MAX_KEY_LENGTH": {
+          "description": "Maximum key length",
+          "type": "string",
+          "default": "100"
+        },
+        "HANDOFF_RETRY_INTERVAL": {
+          "description": "Auto-reconnect interval in milliseconds",
+          "type": "string",
+          "default": "10000"
+        },
+        "HANDOFF_MAX_TITLE_LENGTH": {
+          "description": "Maximum title length",
+          "type": "string",
+          "default": "200"
+        },
+        "HANDOFF_MAX_SUMMARY_BYTES": {
+          "description": "Maximum summary size in bytes (default 10KB)",
+          "type": "string",
+          "default": "10240"
+        },
+        "HANDOFF_MAX_CONVERSATION_BYTES": {
+          "description": "Maximum conversation size in bytes (default 1MB)",
+          "type": "string",
+          "default": "1048576"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "kqn97orskf",
+    "name": "Conversation Handoff MCP",
+    "namespace": "trust-delta",
+    "repository": {
+      "url": "https://github.com/trust-delta/conversation-handoff-mcp"
+    },
+    "slug": "conversation-handoff-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kqn97orskf"
+  }
+}

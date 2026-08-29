@@ -1,0 +1,2084 @@
+# ADR: MCP Servers Manager - Architecture Decision Record
+
+**Status:** Proposed
+**Date:** 2025-01-13
+**Decision Makers:** Product Team, Engineering Team
+**Stakeholders:** Claude Owl Users, Claude Code Users
+
+---
+
+## ⚠️ CRITICAL DESIGN CONSTRAINT
+
+**Claude Owl is a STANDALONE desktop application, NOT project-aware.**
+
+Users launch Claude Owl from the Applications folder with no project context. Therefore:
+- ✗ **NOT supported:** Project-level MCP server configs (.mcp.json)
+- ✗ **NOT supported:** Scope selection (user/project/local)
+- ✓ **SUPPORTED ONLY:** User-level global MCP servers (~/.claude/mcp-servers.json)
+
+For project-specific MCP servers, users must edit `.mcp.json` directly in their project.
+
+---
+
+## Context
+
+Model Context Protocol (MCP) is a standardized protocol that enables Claude Code to connect to external data sources and tools through MCP servers. Currently, users must:
+
+1. Manually run CLI commands to add MCP servers (`claude mcp add ...`)
+2. Edit `.mcp.json` files by hand with complex JSON syntax
+3. Debug connection issues via terminal commands (`/mcp` in Claude Code)
+4. Manage environment variables and authentication tokens manually
+5. Remember arcane syntax like `--` separators and `cmd /c` wrappers on Windows
+
+### User Pain Points (From Reddit Post Analysis)
+
+The Reddit post "Setting Up MCP Servers in Claude Code: A Tech Ritual for the Quietly Desperate" reveals critical UX failures:
+
+**Pain Point #1: Cognitive Overload**
+- Users face "trial and error" with "slightly less will to live"
+- Complex command syntax with obscure flags (`-s user`, `--`, `npx -y`)
+- Platform-specific quirks (Windows requires `cmd /c` wrapper)
+- No discoverability of available MCP servers
+
+**Pain Point #2: Environment Variable Hell**
+- API keys must be embedded in terminal commands
+- No secure storage or management interface
+- Variables like `BRAVE_API_KEY` must be remembered and typed correctly
+- No validation until runtime failure
+
+**Pain Point #3: Connection Debugging**
+- "Connection problems: Type /mcp in Claude Code to see which servers are napping"
+- Users have no visibility into why servers fail
+- No structured troubleshooting guidance
+- No way to test connections before use
+
+**Pain Point #4: Special Cases**
+- Browser Tools requires 3 separate steps (extension install, server start, MCP add)
+- Some servers need a persistent background process
+- No guidance on which servers are "essential" vs experimental
+
+**Pain Point #5: Documentation Fatigue**
+- Users resort to copy-pasting bash scripts blindly
+- Four hours wasted debugging issues
+- "Good luck with that!" attitude toward Windows users
+
+### Current State in features.md
+
+The planned MCP Manager (v0.2) includes:
+
+```
+## 8. MCP Servers Manager
+
+### MCP Server List ⏳ **PLANNED v0.2**
+- Server Overview (connection status, type, tools count)
+- Enable/disable toggle
+
+### MCP Configuration ⏳ **PLANNED v0.2**
+- Server Setup (name, type, command/URL, args, env vars)
+- .mcp.json Editor (visual form + raw JSON)
+
+### MCP Tools & Testing ⏳ **PLANNED v0.2**
+- Tools Browser (list tools from servers)
+- Connection Testing (test button, diagnostics, logs)
+```
+
+**Gap Analysis:** The current plan lacks:
+- ❌ Server marketplace/discovery
+- ❌ Guided setup wizards
+- ❌ Comprehensive testing flows
+- ❌ Secure environment variable management
+- ❌ Platform-specific handling (Windows wrappers)
+- ❌ Background process management (Browser Tools)
+- ❌ OAuth flow handling
+- ❌ Server templates/presets
+
+---
+
+## Decision
+
+We will build the **MCP Servers Manager** as a comprehensive, user-friendly interface that **abstracts away the command-line complexity** while providing power-user capabilities. The implementation will be split into three phases:
+
+### Phase 1: Core MCP Management (v0.2)
+Foundation for viewing, configuring, and testing MCP servers.
+
+### Phase 2: Marketplace & Discovery (v0.3)
+Curated server marketplace with one-click installation.
+
+### Phase 3: Advanced Features (v0.4)
+OAuth, background processes, enterprise management.
+
+---
+
+## Detailed Design
+
+### 1. Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Renderer Process                        │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  MCP Servers Page                                      │ │
+│  │  ├─ Server List (cards with status indicators)        │ │
+│  │  ├─ Connection Tester (live testing interface)        │ │
+│  │  ├─ Server Configuration Form (add/edit)              │ │
+│  │  └─ Tools Browser (view exposed tools/resources)      │ │
+│  └────────────────────────────────────────────────────────┘ │
+│                           ↕ IPC                             │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                      Main Process                           │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  MCPService                                            │ │
+│  │  ├─ listServers() - Parse .mcp.json                   │ │
+│  │  ├─ addServer() - Write config, validate              │ │
+│  │  ├─ testConnection() - Spawn process, check health    │ │
+│  │  ├─ getServerTools() - Query MCP protocol             │ │
+│  │  └─ validateConfig() - Schema + security checks       │ │
+│  └────────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  ClaudeService Integration                             │ │
+│  │  ├─ executeClaudeMCP('list') - Run `claude mcp list`  │ │
+│  │  ├─ executeClaudeMCP('add') - Run `claude mcp add`    │ │
+│  │  └─ executeClaudeMCP('get') - Get server details      │ │
+│  └────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 2. User Flows
+
+#### Flow A: Add New MCP Server (Stdio)
+
+**Current (CLI):**
+```bash
+claude mcp add sequential-thinking -s user \
+  -- npx -y @modelcontextprotocol/server-sequential-thinking
+```
+
+**Proposed (Visual UI):**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Add MCP Server                                    [×]   │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Server Name *                                           │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ sequential-thinking                                │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Transport Type *                                        │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ ◉ Stdio (local process)                            │ │
+│  │ ○ HTTP (remote server)                             │ │
+│  │ ○ SSE (deprecated)                                 │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Command *                                               │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ npx                                              ▼ │ │
+│  └────────────────────────────────────────────────────┘ │
+│  📝 Common: npx, node, python, python3, /absolute/path  │
+│                                                          │
+│  Arguments                                               │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ -y                                                 │ │
+│  │ @modelcontextprotocol/server-sequential-thinking  │ │
+│  │ [+ Add Argument]                                   │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Environment Variables                                   │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ No environment variables                           │ │
+│  │ [+ Add Variable]                                   │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Scope *                                                 │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ ◉ User (available in all projects)                 │ │
+│  │ ○ Project (shared via .mcp.json)                   │ │
+│  │ ○ Local (only this project, private)               │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ ⚡ Test Connection Before Saving                    │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│         [Cancel]  [Test Connection]  [Add Server]       │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Validation:**
+- ✅ Server name: lowercase-with-hyphens, unique
+- ✅ Command: executable exists (npx, node, python)
+- ✅ Arguments: parsed correctly (multi-line → array)
+- ⚠️ Windows detection: auto-prepend `cmd /c` for npx
+- 🔒 Security: warn if command contains shell operators (`;`, `&&`, `|`)
+
+#### Flow B: Test MCP Server Connection
+
+**Current (CLI):**
+```bash
+# User must:
+1. Start Claude Code
+2. Type /mcp
+3. Parse cryptic status messages
+4. Guess what's wrong
+```
+
+**Proposed (Visual UI):**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Testing: sequential-thinking                            │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Step 1: Spawning Process                          ✓    │
+│  ├─ Command: npx -y @modelcontextprotocol/...           │
+│  └─ PID: 12345                                           │
+│                                                          │
+│  Step 2: Waiting for MCP Initialization            ✓    │
+│  ├─ Protocol version: 1.0                                │
+│  └─ Server capabilities: tools, resources                │
+│                                                          │
+│  Step 3: Fetching Available Tools                  ✓    │
+│  ├─ Found 3 tools:                                       │
+│  │   • think_sequentially                                │
+│  │   • break_down_problem                                │
+│  │   • analyze_step                                      │
+│  └─ Latency: 245ms                                       │
+│                                                          │
+│  Step 4: Health Check                               ✓    │
+│  └─ Server responding normally                           │
+│                                                          │
+│  🎉 Connection Successful                                │
+│                                                          │
+│  [View Server Logs]  [View Tools Details]  [Close]      │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Error State Example:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Testing: brave-search                              [×]  │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Step 1: Spawning Process                          ✓    │
+│  Step 2: Waiting for MCP Initialization            ✗    │
+│                                                          │
+│  ❌ Connection Failed                                    │
+│                                                          │
+│  Error: Server initialization timeout after 5s           │
+│                                                          │
+│  Common Causes:                                          │
+│  • Missing environment variable (BRAVE_API_KEY)          │
+│  • npm package not installed                             │
+│  • Firewall blocking connection                          │
+│                                                          │
+│  Server Logs (last 10 lines):                            │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ Error: BRAVE_API_KEY environment variable not set │ │
+│  │ at BraveSearchServer.initialize (index.js:42)     │ │
+│  │ ...                                                │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  💡 Suggested Fix:                                       │
+│  Add environment variable BRAVE_API_KEY with your API key│
+│  from https://brave.com/search/api/                      │
+│                                                          │
+│  [Edit Server Config]  [View Full Logs]  [Close]        │
+└──────────────────────────────────────────────────────────┘
+```
+
+#### Flow C: HTTP Server with OAuth
+
+**Current (CLI):**
+```bash
+claude mcp add --transport http notion https://mcp.notion.com/mcp
+# Then manually open Claude Code and type /mcp to authenticate
+```
+
+**Proposed (Visual UI):**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Add HTTP MCP Server                               [×]   │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Server Name *                                           │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ notion                                             │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Server URL *                                            │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ https://mcp.notion.com/mcp                         │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  HTTP Headers (optional)                                 │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ Authorization: Bearer ${NOTION_TOKEN}              │ │
+│  │ [+ Add Header]                                     │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Environment Variables                                   │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ Key: NOTION_TOKEN                                  │ │
+│  │ Value: [••••••••••••••••] [👁️ Show]                │ │
+│  │ [+ Add Variable]                                   │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  🔐 OAuth 2.0 Configuration (detected)                   │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ ☑ This server requires OAuth authentication        │ │
+│  │                                                     │ │
+│  │ [🔗 Authenticate with Notion]                       │ │
+│  │                                                     │ │
+│  │ Status: Not authenticated                           │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│         [Cancel]  [Test Connection]  [Add Server]       │
+└──────────────────────────────────────────────────────────┘
+```
+
+**OAuth Flow:**
+1. User clicks "Authenticate with Notion"
+2. System opens browser to OAuth URL
+3. User completes auth in browser
+4. Token stored securely in system keychain
+5. UI shows "✓ Authenticated as [email]"
+6. Auto-refresh tokens handled transparently
+
+#### Flow D: Filesystem Server with Path Selection
+
+**Current (CLI):**
+```bash
+claude mcp add filesystem -s user \
+  -- npx -y @modelcontextprotocol/server-filesystem \
+     ~/Documents ~/Desktop ~/Downloads ~/Projects
+```
+
+**Proposed (Visual UI):**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Add Filesystem MCP Server                         [×]   │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Server Name *                                           │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ filesystem                                         │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Template: @modelcontextprotocol/server-filesystem      │
+│                                                          │
+│  Allowed Paths *                                         │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ 📁 /Users/john/Documents        [Browse] [Remove]  │ │
+│  │ 📁 /Users/john/Desktop          [Browse] [Remove]  │ │
+│  │ 📁 /Users/john/Projects         [Browse] [Remove]  │ │
+│  │                                                     │ │
+│  │ [+ Add Path] [+ Add Multiple Paths]                │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  ⚠️ Security Warning                                     │
+│  This server will give Claude Code read/write access to  │
+│  the selected folders. Only include paths you trust.     │
+│                                                          │
+│  Dangerous paths detected:                               │
+│  • None (✓ safe configuration)                           │
+│                                                          │
+│  Scope: ◉ User  ○ Project  ○ Local                       │
+│                                                          │
+│         [Cancel]  [Test Connection]  [Add Server]       │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Security Validation:**
+- 🚫 Block sensitive paths: `/etc`, `/System`, `C:\Windows`
+- ⚠️ Warn on home directory root: `~` (too broad)
+- ✅ Recommend: specific subdirectories only
+- 🔍 Show preview of files Claude will access
+
+---
+
+### 3. Server Marketplace & Discovery (Phase 2)
+
+**Problem:** Users don't know what MCP servers exist or which ones are trustworthy.
+
+**Solution:** Curated marketplace with categories, ratings, and one-click install.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  MCP Server Marketplace                                  │
+├──────────────────────────────────────────────────────────┤
+│  Search: [                                           🔍] │
+│                                                          │
+│  Categories:  [All] [Essential] [Automation] [Data]     │
+│               [AI Tools] [Web] [APIs] [File Systems]     │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+│  Essential Servers                                       │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🧠 Sequential Thinking              ⭐⭐⭐⭐⭐      │ │
+│  │  Helps Claude solve problems step-by-step           │ │
+│  │  By: Anthropic  •  234K installs  •  No API key     │ │
+│  │                                    [✓ Installed]    │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  📁 Filesystem Access                ⭐⭐⭐⭐⭐      │ │
+│  │  Let Claude read/write files in allowed folders     │ │
+│  │  By: Anthropic  •  189K installs  •  No API key     │ │
+│  │                                    [+ Install]      │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🌐 Playwright                       ⭐⭐⭐⭐☆       │ │
+│  │  Multi-browser automation (Chrome/Firefox/Safari)    │ │
+│  │  By: Microsoft  •  98K installs  •  No API key      │ │
+│  │                                    [+ Install]      │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Web & Scraping                                          │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🔍 Brave Search                     ⭐⭐⭐⭐☆   🔑  │ │
+│  │  Web search with privacy-focused results             │ │
+│  │  By: Brave  •  45K installs  •  API key required    │ │
+│  │                                    [+ Install]      │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🔥 Firecrawl                        ⭐⭐⭐⭐☆   🔑  │ │
+│  │  Advanced web scraping and data extraction           │ │
+│  │  By: Firecrawl  •  32K installs  •  API key req.    │ │
+│  │                                    [+ Install]      │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  [Show All Servers →]                                    │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Server Detail View:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  ← Back to Marketplace                                   │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  🧠 Sequential Thinking                                  │
+│  ⭐⭐⭐⭐⭐ (4,523 ratings)  •  234,891 installs           │
+│                                                          │
+│  By: Anthropic (Verified Publisher ✓)                    │
+│  License: MIT  •  Version: 1.2.0  •  Updated: 3 days ago│
+│                                                          │
+│  [+ Install]  [View on GitHub]  [Report Issue]          │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+│  About                                                   │
+│  ───────────────────────────────────────────────────────│
+│  Enables Claude to think through complex problems using  │
+│  chain-of-thought reasoning. Breaks down tasks into      │
+│  logical steps for better accuracy and explainability.   │
+│                                                          │
+│  Tools Provided                                          │
+│  ───────────────────────────────────────────────────────│
+│  • think_sequentially - Generate step-by-step reasoning  │
+│  • break_down_problem - Decompose complex tasks          │
+│  • analyze_step - Evaluate individual steps              │
+│                                                          │
+│  Requirements                                            │
+│  ───────────────────────────────────────────────────────│
+│  ✓ Node.js 18+ (detected: v20.11.0)                     │
+│  ✓ npx command (detected)                                │
+│  ✓ No API keys required                                  │
+│  ✓ No additional configuration needed                    │
+│                                                          │
+│  Configuration                                           │
+│  ───────────────────────────────────────────────────────│
+│  Scope: ◉ User (recommended)  ○ Project  ○ Local         │
+│                                                          │
+│  [+ Install Sequential Thinking]                         │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+│  Reviews                                                 │
+│  ───────────────────────────────────────────────────────│
+│  ⭐⭐⭐⭐⭐ "Game changer for complex debugging tasks"     │
+│  by @dev_mike • 2 weeks ago                              │
+│                                                          │
+│  ⭐⭐⭐⭐⭐ "Should be installed by default"               │
+│  by @sarah_codes • 1 month ago                           │
+│                                                          │
+│  [View All Reviews]                                      │
+└──────────────────────────────────────────────────────────┘
+```
+
+**One-Click Install Flow:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Installing: Sequential Thinking                         │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  ⏳ Step 1: Downloading package...               [████] │
+│  ✓ Step 2: Configuring MCP server                       │
+│  ⏳ Step 3: Testing connection...               [████--]│
+│                                                          │
+│  Installing via:                                         │
+│  npx -y @modelcontextprotocol/server-sequential-thinking│
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Success:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  ✓ Installation Complete                                 │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Sequential Thinking is now ready to use!                │
+│                                                          │
+│  The following tools are now available in Claude Code:   │
+│  • think_sequentially                                    │
+│  • break_down_problem                                    │
+│  • analyze_step                                          │
+│                                                          │
+│  [View Server Details]  [Test Connection]  [Close]      │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 4. Server List & Management
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  MCP Servers                                             │
+├──────────────────────────────────────────────────────────┤
+│  [+ Add Server]  [📦 Browse Marketplace]  [Import]      │
+│                                                          │
+│  Filter: [All Servers ▼]  [All Scopes ▼]  Search: [   ]│
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+│  User Servers (available in all projects)                │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🧠 sequential-thinking             ✓ Connected     │ │
+│  │  Stdio • npx • 3 tools • User scope                 │ │
+│  │  [Test] [Edit] [Disable] [Remove]                   │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  📁 filesystem                      ✓ Connected     │ │
+│  │  Stdio • npx • 12 tools • User scope                │ │
+│  │  Paths: ~/Documents, ~/Projects (2 more)            │ │
+│  │  [Test] [Edit] [Disable] [Remove]                   │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🔍 brave-search                    ✗ Auth Required │ │
+│  │  Stdio • npx • 0 tools • User scope                 │ │
+│  │  Missing: BRAVE_API_KEY                              │ │
+│  │  [🔑 Add API Key] [Edit] [Remove]                    │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🌐 playwright                      ⚠️ Timeout       │ │
+│  │  Stdio • npx • 0 tools • User scope                 │ │
+│  │  Last error: Connection timeout (10s)                │ │
+│  │  [View Logs] [Test Again] [Edit] [Remove]           │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Project Servers (shared in .mcp.json)                   │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🔗 notion                          ✓ Connected     │ │
+│  │  HTTP • https://mcp.notion.com • 8 tools            │ │
+│  │  Authenticated as: john@example.com                  │ │
+│  │  [Test] [Edit] [Disable] [Remove]                   │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  [Refresh All] [Test All Connections]                   │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Status Indicators:**
+- ✓ Connected (green) - Server responding, tools available
+- ⚠️ Warning (yellow) - Connected but issues (slow, partial tools)
+- ✗ Error (red) - Connection failed, auth required, or timeout
+- ⏸️ Disabled (gray) - User manually disabled
+- ⏳ Testing (blue) - Connection test in progress
+
+---
+
+### 5. Server Tools Browser
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Server: sequential-thinking                             │
+├──────────────────────────────────────────────────────────┤
+│  [← Back to Servers]                                     │
+│                                                          │
+│  Status: ✓ Connected  •  Latency: 245ms  •  3 tools     │
+│                                                          │
+│  Available Tools                                         │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🛠️ think_sequentially                              │ │
+│  │  Generate step-by-step reasoning for complex tasks   │ │
+│  │                                                     │ │
+│  │  Input Schema:                                      │ │
+│  │  {                                                  │ │
+│  │    "problem": "string",                             │ │
+│  │    "context": "string (optional)"                   │ │
+│  │  }                                                  │ │
+│  │                                                     │ │
+│  │  [▶ Test Tool]  [View Full Schema]                  │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🛠️ break_down_problem                              │ │
+│  │  Decompose a complex task into smaller subtasks      │ │
+│  │  [▶ Test Tool]  [View Full Schema]                  │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🛠️ analyze_step                                    │ │
+│  │  Evaluate the correctness of a reasoning step        │ │
+│  │  [▶ Test Tool]  [View Full Schema]                  │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Available Resources                                     │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  No resources provided by this server               │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Available Prompts                                       │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  No prompts provided by this server                 │ │
+│  └────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 6. Environment Variable Manager
+
+**Current Problem:** API keys hardcoded in terminal commands or stored insecurely.
+
+**Solution:** Secure environment variable management with system keychain integration.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Environment Variables                                   │
+├──────────────────────────────────────────────────────────┤
+│  These variables are available to your MCP servers.      │
+│  Sensitive values are stored securely in your system     │
+│  keychain.                                               │
+│                                                          │
+│  [+ Add Variable]  [Import from .env]  [Export]         │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+│  User-Level Variables (all projects)                     │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  BRAVE_API_KEY                                      │ │
+│  │  Value: [••••••••••••••••••••] [👁️ Show] [Edit]    │ │
+│  │  Used by: brave-search                              │ │
+│  │  [Delete]                                           │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  FIRECRAWL_API_KEY                                  │ │
+│  │  Value: [••••••••••••••••••••] [👁️ Show] [Edit]    │ │
+│  │  Used by: firecrawl                                 │ │
+│  │  [Delete]                                           │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Project-Level Variables (this project only)             │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  NOTION_TOKEN                                       │ │
+│  │  Value: [••••••••••••••••••••] [👁️ Show] [Edit]    │ │
+│  │  Used by: notion                                    │ │
+│  │  [Delete]                                           │ │
+│  └────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Add Variable Dialog:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Add Environment Variable                          [×]   │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Variable Name *                                         │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ BRAVE_API_KEY                                      │ │
+│  └────────────────────────────────────────────────────┘ │
+│  📝 Use UPPERCASE_WITH_UNDERSCORES                       │
+│                                                          │
+│  Value *                                                 │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ [••••••••••••••••••••]                [👁️ Show]     │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Scope *                                                 │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ ◉ User (available in all projects)                 │ │
+│  │ ○ Project (only this project)                      │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  🔒 Storage                                              │
+│  This value will be stored securely in your system       │
+│  keychain and never written to disk in plain text.       │
+│                                                          │
+│  [Get API Key from Brave →]                              │
+│                                                          │
+│                        [Cancel]  [Add Variable]          │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 7. Server Configuration Templates
+
+**Problem:** Users copy-paste bash scripts without understanding.
+
+**Solution:** Pre-configured templates with guided setup.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Add MCP Server                                    [×]   │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Start from template or create custom configuration      │
+│                                                          │
+│  Popular Templates                                       │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🧠 Sequential Thinking                             │ │
+│  │  Anthropic's chain-of-thought reasoning             │ │
+│  │  [Use Template]                                     │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  📁 Filesystem Access                               │ │
+│  │  Read/write files in selected folders              │ │
+│  │  [Use Template]                                     │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🌐 Playwright                                      │ │
+│  │  Multi-browser automation                           │ │
+│  │  [Use Template]                                     │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  🔍 Brave Search                          API key ↗ │ │
+│  │  Privacy-focused web search                          │ │
+│  │  [Use Template]                                     │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  [View All Templates (12) →]                            │
+│                                                          │
+│  Or create from scratch:                                 │
+│  [Create Custom Server]                                  │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 8. Connection Diagnostics
+
+**Comprehensive troubleshooting interface:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Connection Diagnostics: brave-search                    │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Overview                                                │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  Status: ✗ Connection Failed                        │ │
+│  │  Last tested: 2 minutes ago                          │ │
+│  │  Transport: Stdio                                    │ │
+│  │  Scope: User                                         │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Pre-Flight Checks                                       │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  ✓ npx command found at /usr/local/bin/npx          │ │
+│  │  ✓ Node.js version 20.11.0 (>= 18.0.0 required)     │ │
+│  │  ✗ Environment variable BRAVE_API_KEY not set       │ │
+│  │  ✓ Network connectivity OK                           │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Error Details                                           │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  Error: Server initialization failed                 │ │
+│  │  Code: ENV_VAR_MISSING                               │ │
+│  │  Timestamp: 2025-01-13T15:23:45Z                     │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Server Logs (last 50 lines)                             │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ [2025-01-13 15:23:44] Starting brave-search...      │ │
+│  │ [2025-01-13 15:23:44] Loading configuration...      │ │
+│  │ [2025-01-13 15:23:45] Error: BRAVE_API_KEY env var  │ │
+│  │                       is required but not set        │ │
+│  │ [2025-01-13 15:23:45] Server failed to initialize   │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  Suggested Fixes                                         │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │  1. Add the missing environment variable             │ │
+│  │     [🔑 Add BRAVE_API_KEY]                           │ │
+│  │                                                     │ │
+│  │  2. Get an API key from Brave Search                 │ │
+│  │     [Open Brave Search API →]                        │ │
+│  │                                                     │ │
+│  │  3. View setup documentation                         │ │
+│  │     [View Brave Search Setup Guide →]                │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                          │
+│  [Test Again]  [Edit Server Config]  [Close]            │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Implementation Plan - CLI Delegation Approach
+
+### Overview
+
+This implementation plan focuses on **wrapping `claude mcp` CLI commands** rather than implementing MCP protocol or config file management ourselves.
+
+### Feature Parity Mapping
+
+| `claude mcp` Command | UI Feature | Priority |
+|---------------------|------------|----------|
+| `claude mcp add` | Add Server Form | P0 (Must Have) |
+| `claude mcp list` | Server List/Grid View | P0 (Must Have) |
+| `claude mcp get <name>` | Server Detail View | P0 (Must Have) |
+| `claude mcp remove` | Remove Server Button | P0 (Must Have) |
+| `--scope user\|project\|local` | Scope Selector Dropdown | P0 (Must Have) |
+| `--transport stdio\|http\|sse` | Transport Type Selector | P0 (Must Have) |
+| `--env KEY=value` | Environment Variables Editor | P1 (Should Have) |
+| `--header "Key: Value"` | HTTP Headers Editor | P1 (Should Have) |
+| `claude mcp add-json` | Import from JSON File | P2 (Nice to Have) |
+| `claude mcp add-from-claude-desktop` | Import from Claude Desktop | P2 (Nice to Have) |
+| `claude mcp reset-project-choices` | Reset Project Choices Button | P2 (Nice to Have) |
+
+### Phase 1: Core MCP Management (v0.2) - 2 weeks
+
+#### Week 1: Backend Foundation (CLI Integration)
+
+**Task 1.1: Extend ClaudeService with MCP commands** (2 hours)
+- File: `src/main/services/ClaudeService.ts`
+- Add methods:
+  ```typescript
+  async addMCPServer(options: MCPAddOptions): Promise<MCPCommandResult>
+  async removeMCPServer(name: string, scope: MCPScope): Promise<MCPCommandResult>
+  async listMCPServers(scope?: MCPScope): Promise<MCPServer[]>
+  async getMCPServer(name: string): Promise<MCPServer | null>
+  ```
+- Implementation pattern:
+  ```typescript
+  async addMCPServer(options: MCPAddOptions): Promise<MCPCommandResult> {
+    const cmd = this.buildMCPAddCommand(options);
+    const { stdout, stderr } = await execAsync(cmd);
+    return this.parseMCPCommandOutput(stdout, stderr);
+  }
+  ```
+
+**Task 1.2: Create MCP types** (1 hour)
+- File: `src/shared/types/mcp.types.ts`
+- Define:
+  ```typescript
+  export type MCPTransport = 'stdio' | 'http' | 'sse';
+  export type MCPScope = 'user' | 'project' | 'local';
+
+  export interface MCPAddOptions {
+    name: string;
+    transport: MCPTransport;
+    scope: MCPScope;
+    command?: string;        // For stdio
+    args?: string[];         // For stdio
+    url?: string;            // For HTTP/SSE
+    env?: Record<string, string>;
+    headers?: Record<string, string>;
+  }
+
+  export interface MCPServer {
+    name: string;
+    transport: MCPTransport;
+    scope: MCPScope;
+    command?: string;
+    args?: string[];
+    url?: string;
+    status?: 'connected' | 'error' | 'unknown';
+  }
+
+  export interface MCPCommandResult {
+    success: boolean;
+    message?: string;
+    error?: string;
+  }
+  ```
+
+**Task 1.3: Create IPC handlers** (2 hours)
+- File: `src/main/ipc/mcpHandlers.ts`
+- Implement:
+  ```typescript
+  ipcMain.handle(MCP_CHANNELS.ADD_SERVER, async (_, request: AddMCPServerRequest) => {
+    console.log('[MCPHandlers] Add server request:', request);
+    try {
+      const result = await claudeService.addMCPServer(request);
+      return { success: result.success, data: result };
+    } catch (error) {
+      console.error('[MCPHandlers] Add server failed:', error);
+      return { success: false, error: error.message };
+    }
+  });
+
+  ipcMain.handle(MCP_CHANNELS.LIST_SERVERS, async (_, scope?: MCPScope) => { ... });
+  ipcMain.handle(MCP_CHANNELS.REMOVE_SERVER, async (_, name: string, scope: MCPScope) => { ... });
+  ipcMain.handle(MCP_CHANNELS.GET_SERVER, async (_, name: string) => { ... });
+  ```
+
+**Task 1.4: Update preload.ts** (30 minutes)
+- File: `src/preload/index.ts`
+- Expose MCP methods:
+  ```typescript
+  contextBridge.exposeInMainWorld('electronAPI', {
+    // ... existing methods
+    addMCPServer: (options: MCPAddOptions) => ipcRenderer.invoke(MCP_CHANNELS.ADD_SERVER, options),
+    listMCPServers: (scope?: MCPScope) => ipcRenderer.invoke(MCP_CHANNELS.LIST_SERVERS, scope),
+    removeMCPServer: (name: string, scope: MCPScope) => ipcRenderer.invoke(MCP_CHANNELS.REMOVE_SERVER, name, scope),
+    getMCPServer: (name: string) => ipcRenderer.invoke(MCP_CHANNELS.GET_SERVER, name),
+  });
+  ```
+
+**Task 1.5: Command builder with input sanitization** (3 hours)
+- File: `src/main/services/ClaudeService.ts`
+- Implement:
+  ```typescript
+  private buildMCPAddCommand(options: MCPAddOptions): string {
+    const parts = ['claude', 'mcp', 'add', this.escapeArg(options.name)];
+
+    parts.push('--transport', options.transport);
+    parts.push('--scope', options.scope);
+
+    // Environment variables
+    if (options.env) {
+      for (const [key, value] of Object.entries(options.env)) {
+        parts.push('--env', this.escapeArg(`${key}=${value}`));
+      }
+    }
+
+    // HTTP headers
+    if (options.headers) {
+      for (const [key, value] of Object.entries(options.headers)) {
+        parts.push('--header', this.escapeArg(`${key}: ${value}`));
+      }
+    }
+
+    // Command and args (stdio only)
+    if (options.command) {
+      parts.push('--', this.escapeArg(options.command));
+      if (options.args) {
+        parts.push(...options.args.map(arg => this.escapeArg(arg)));
+      }
+    }
+
+    // URL (HTTP/SSE only)
+    if (options.url) {
+      parts.push(this.escapeArg(options.url));
+    }
+
+    return parts.join(' ');
+  }
+
+  private escapeArg(arg: string): string {
+    // Escape shell special characters
+    if (arg.includes(' ') || arg.includes('"') || arg.includes("'")) {
+      return `"${arg.replace(/"/g, '\\"')}"`;
+    }
+    return arg;
+  }
+  ```
+
+**Task 1.6: CLI output parsing** (2 hours)
+- Parse `claude mcp list --format json` output
+- Handle error messages from CLI
+- Extract server details from JSON
+
+#### Week 2: UI Implementation
+
+**Task 2.1: Create React hook for MCP operations** (2 hours)
+- File: `src/renderer/hooks/useMCPServers.ts`
+- Implement:
+  ```typescript
+  export function useMCPServers(scope?: MCPScope) {
+    const [servers, setServers] = useState<MCPServer[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const refresh = useCallback(async () => {
+      setLoading(true);
+      try {
+        const result = await window.electronAPI.listMCPServers(scope);
+        setServers(result.data || []);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }, [scope]);
+
+    useEffect(() => { refresh(); }, [refresh]);
+
+    const addServer = async (options: MCPAddOptions) => {
+      const result = await window.electronAPI.addMCPServer(options);
+      if (result.success) await refresh();
+      return result;
+    };
+
+    const removeServer = async (name: string, scope: MCPScope) => {
+      const result = await window.electronAPI.removeMCPServer(name, scope);
+      if (result.success) await refresh();
+      return result;
+    };
+
+    return { servers, loading, error, addServer, removeServer, refresh };
+  }
+  ```
+
+**Task 2.2: Build MCPServersPage** (3 hours)
+- File: `src/renderer/pages/MCPPage.tsx`
+- Replace placeholder with:
+  - Tab navigation (Installed Servers / Add Server / Marketplace)
+  - Server list/grid view
+  - Scope filter dropdown
+  - Search bar
+
+**Task 2.3: Build ServerCard component** (2 hours)
+- File: `src/renderer/components/MCPManager/ServerCard.tsx`
+- Display:
+  - Server name and transport type
+  - Scope badge (User/Project/Local)
+  - Status indicator (from `claude mcp list` output)
+  - Action buttons (View Details / Remove)
+
+**Task 2.4: Build AddServerForm component** (4 hours)
+- File: `src/renderer/components/MCPManager/AddServerForm.tsx`
+- Form fields:
+  - Server name (text input, validated)
+  - Transport type (radio: stdio/http/sse)
+  - Scope (dropdown: user/project/local)
+  - **Conditional fields based on transport:**
+    - Stdio: Command input, Arguments array editor
+    - HTTP/SSE: URL input, Headers editor
+  - Environment variables (key-value pairs)
+  - Submit button (calls `addServer()`)
+- Validation:
+  - Name: lowercase-with-hyphens, no special chars
+  - URL: valid HTTP/HTTPS
+  - Command: non-empty for stdio
+
+**Task 2.5: Build ServerDetailView component** (2 hours)
+- File: `src/renderer/components/MCPManager/ServerDetailView.tsx`
+- Display:
+  - Full server configuration
+  - Command/URL (copy button)
+  - Environment variables (masked)
+  - Edit button (future: opens edit form)
+  - Remove button
+
+**Task 2.6: Styling and UX polish** (2 hours)
+- CSS for MCP components
+- Loading states
+- Error states with retry buttons
+- Success/failure toasts
+
+#### Testing & Documentation (Week 2 continued)
+
+**Task 3.1: Unit tests for ClaudeService MCP methods** (3 hours)
+- File: `tests/unit/services/ClaudeService.test.ts`
+- Test:
+  - Command building with various options
+  - Input sanitization (escape quotes, spaces)
+  - CLI output parsing
+  - Error handling
+
+**Task 3.2: Unit tests for useMCPServers hook** (2 hours)
+- File: `tests/unit/hooks/useMCPServers.test.ts`
+- Test:
+  - Server list loading
+  - Add server flow
+  - Remove server flow
+  - Error handling
+
+**Task 3.3: Component tests** (2 hours)
+- Test AddServerForm validation
+- Test ServerCard rendering
+- Test MCPServersPage tab navigation
+
+**Task 3.4: Integration testing** (2 hours)
+- Manual testing with real `claude mcp` commands
+- Test on macOS (primary platform)
+- Verify CLI output parsing
+
+### Changes Required in Current Implementation
+
+**Current State:**
+- `src/renderer/pages/MCPPage.tsx` - Placeholder page with "coming soon" message
+
+**Required Changes:**
+1. ✅ **Keep:** Basic page structure
+2. 🔄 **Replace:** Placeholder content with actual MCP management UI
+3. ➕ **Add:** New files (services, handlers, components, hooks, types)
+4. 🔄 **Update:** IPC channels, preload exposure
+5. ➕ **Add:** Comprehensive logging (following CLAUDE.md logging guidelines)
+
+**Migration Strategy:**
+- No migration needed - feature is net-new
+- No breaking changes to existing code
+- MCP page is already in navigation menu
+
+---
+
+### Phase 2: Marketplace & Discovery (v0.3) - 2 weeks
+
+#### Week 3: Marketplace Backend (CLI-Driven)
+
+**Task 4.1: Create marketplace registry** (3 hours)
+- File: `src/shared/data/mcp-marketplace.json`
+- Schema:
+  ```json
+  {
+    "servers": [
+      {
+        "id": "sequential-thinking",
+        "name": "Sequential Thinking",
+        "description": "Chain-of-thought reasoning for complex problems",
+        "author": "Anthropic",
+        "verified": true,
+        "category": "essential",
+        "installCommand": "claude mcp add sequential-thinking --scope user --transport stdio -- npx -y @modelcontextprotocol/server-sequential-thinking",
+        "requirements": {
+          "node": ">=18.0.0",
+          "apiKey": false
+        },
+        "tags": ["reasoning", "anthropic", "free"]
+      }
+    ],
+    "categories": [
+      { "id": "essential", "name": "Essential", "icon": "⭐" },
+      { "id": "web", "name": "Web & Search", "icon": "🌐" },
+      { "id": "automation", "name": "Automation", "icon": "🤖" },
+      { "id": "data", "name": "Data & APIs", "icon": "📊" }
+    ]
+  }
+  ```
+- Populate with 12+ servers (sequentual-thinking, filesystem, playwright, brave-search, etc.)
+
+**Task 4.2: Marketplace service** (2 hours)
+- File: `src/main/services/MarketplaceService.ts`
+- Methods:
+  ```typescript
+  async getMarketplaceServers(): Promise<MarketplaceServer[]>
+  async searchServers(query: string): Promise<MarketplaceServer[]>
+  async filterByCategory(category: string): Promise<MarketplaceServer[]>
+  async installFromMarketplace(serverId: string): Promise<MCPCommandResult> {
+    const server = this.marketplace.servers.find(s => s.id === serverId);
+    // Execute the pre-built install command
+    await execAsync(server.installCommand);
+  }
+  ```
+
+**Task 4.3: Marketplace IPC handlers** (1 hour)
+- Add to `src/main/ipc/mcpHandlers.ts`:
+  ```typescript
+  ipcMain.handle(MCP_CHANNELS.GET_MARKETPLACE, async () => { ... });
+  ipcMain.handle(MCP_CHANNELS.INSTALL_FROM_MARKETPLACE, async (_, serverId) => { ... });
+  ```
+
+#### Week 4: Marketplace UI
+
+**Task 4.4: MarketplaceTab component** (4 hours)
+- File: `src/renderer/components/MCPManager/MarketplaceTab.tsx`
+- Features:
+  - Grid view of marketplace servers
+  - Category filter (tabs or dropdown)
+  - Search input
+  - Server cards with:
+    - Name, description, author
+    - Verified badge
+    - Requirements (Node.js, API key needed)
+    - Install button
+
+**Task 4.5: One-click installation flow** (3 hours)
+- Click "Install" → Execute `server.installCommand`
+- Show progress modal
+- Parse CLI output for success/errors
+- Display success toast + redirect to installed servers tab
+- Handle errors with actionable messages
+
+**Task 4.6: Server templates in Add Server form** (2 hours)
+- Add "Quick Start Templates" section to AddServerForm
+- Show popular servers (from marketplace)
+- Click template → pre-fill form fields
+- User can customize before submitting
+
+### Phase 3: Advanced Features (v0.4) - 1 week
+
+**Note:** Many features previously planned (OAuth, background processes, connection testing) are now **handled by Claude Code** via the CLI. This phase focuses on UI conveniences.
+
+#### Week 5: Bulk Operations & Import/Export
+
+**Task 5.1: Import from JSON** (2 hours)
+- Button in UI: "Import from JSON File"
+- Opens file picker
+- Executes `claude mcp add-json <path>`
+- Shows import results (success count, errors)
+
+**Task 5.2: Import from Claude Desktop** (1 hour)
+- Button in UI: "Import from Claude Desktop"
+- Executes `claude mcp add-from-claude-desktop`
+- Shows migration results
+
+**Task 5.3: Bulk remove** (2 hours)
+- Multi-select in server list
+- "Remove Selected" button
+- Confirmation dialog
+- Execute `claude mcp remove` for each selected server
+
+**Task 5.4: Reset project choices** (1 hour)
+- Button in settings/debug section
+- Executes `claude mcp reset-project-choices`
+- Confirmation dialog with explanation
+
+**Task 5.5: Environment variables UI** (4 hours)
+- Separate "Environment Variables" page/tab
+- List all env vars used by MCP servers
+- Add/edit/delete interface
+- Uses `--env` flag when adding servers
+- Future: Integration with shell environment
+
+**Task 5.6: Export configurations** (2 hours)
+- Export button → generates JSON file
+- Uses `claude mcp list --format json` to get current state
+- Allows sharing configs with teammates
+
+#### Week 6: Polish & Documentation
+
+**Task 6.1: Error handling improvements** (3 hours)
+- Parse CLI error messages
+- Map to user-friendly explanations
+- Suggest fixes based on error type:
+  - "Server already exists" → Show edit option
+  - "Invalid scope" → Explain scopes
+  - "Command not found" → Link to installation guide
+
+**Task 6.2: Loading states & UX polish** (2 hours)
+- Skeleton loaders for server list
+- Progress indicators for CLI commands
+- Success/error toasts
+- Smooth transitions
+
+**Task 6.3: Help & documentation** (2 hours)
+- Inline help tooltips
+- "What's this?" links to Claude Code docs
+- Example commands shown in UI
+- Link to MCP marketplace (external)
+
+**Task 6.4: Testing & QA** (4 hours)
+- End-to-end testing (add, list, remove servers)
+- Test with various server types (stdio, http, sse)
+- Test error scenarios
+- Cross-platform testing (macOS primary, Windows/Linux if available)
+
+**Task 6.5: User documentation** (2 hours)
+- Update FEATURES.md with MCP Manager details
+- Add screenshots to README
+- Create user guide for common workflows
+
+---
+
+## Technical Decisions
+
+### 1. MCP Protocol Communication & Server Management
+
+**Decision:** Delegate **ALL** MCP server management to `claude mcp` CLI commands instead of reimplementing configuration logic.
+
+**Implementation Strategy:**
+```typescript
+// Instead of writing to .claude.json ourselves:
+await fs.writeFile('~/.claude.json', JSON.stringify(mcpConfig));
+
+// We call the Claude CLI and let it handle everything:
+await execAsync(`claude mcp add ${name} --scope user --transport stdio -- ${command} ${args.join(' ')}`);
+```
+
+**Commands We Delegate:**
+```bash
+# Core server management
+claude mcp add <name> --transport <stdio|http|sse> --scope <user|project|local> -- <command> [args...]
+claude mcp remove <name> --scope <user|project|local>
+claude mcp list [--scope <user|project|local>] [--format <json|table>]
+claude mcp get <name>
+
+# Environment variables & headers
+claude mcp add ... --env KEY=value --env KEY2=value2
+claude mcp add ... --header "Authorization: Bearer ${TOKEN}"
+
+# Bulk operations
+claude mcp add-json <path>              # Import from JSON file
+claude mcp add-from-claude-desktop      # Migrate from Claude Desktop
+claude mcp reset-project-choices        # Reset project scope choices
+```
+
+**Rationale:**
+- ✅ **Single Source of Truth:** Claude Code handles ALL server config logic, validation, file writes
+- ✅ **Feature Parity Guaranteed:** New `claude mcp` features automatically available
+- ✅ **No Config Format Coupling:** Don't need to know internal structure of `.claude.json`
+- ✅ **Scope Logic Delegated:** User/project/local handled by Claude Code, not us
+- ✅ **No Platform Quirks:** Windows `cmd /c` handling done by Claude Code
+- ✅ **Simpler Testing:** Test UI inputs → CLI calls, not config file manipulation
+- ✅ **Easier Maintenance:** Focus on UX, not MCP protocol internals
+- ❌ Requires Claude Code installed (acceptable - we're a Claude Code companion tool)
+- ❌ Small CLI execution delay (typically <100ms, negligible)
+
+**Alternative Considered:** Implement config file management ourselves
+- ❌ Must parse and write `.claude.json` manually
+- ❌ Must implement scope resolution logic (user vs project vs local)
+- ❌ Must handle config merging and validation
+- ❌ Must maintain compatibility as config format evolves
+- ❌ Must test on all platforms (macOS/Windows/Linux)
+- ❌ Duplicates Claude Code functionality
+- ✅ Would work without Claude Code (not our use case)
+
+### 2. Environment Variable Storage
+
+**Decision:** Delegate environment variable handling to `claude mcp` CLI flags.
+
+**Implementation Strategy:**
+```typescript
+// Instead of managing keychain ourselves:
+await keychain.setPassword('claude-owl', 'BRAVE_API_KEY', apiKeyValue);
+
+// We pass env vars as CLI flags (Claude Code handles storage):
+await execAsync(`claude mcp add brave-search --env BRAVE_API_KEY=${apiKeyValue} ...`);
+```
+
+**Rationale:**
+- ✅ **Simplified Architecture:** No need for platform-specific keychain integration
+- ✅ **Security Handled by Claude Code:** Trust Claude Code's env var management
+- ✅ **Less Code to Maintain:** No macOS Keychain/Windows Credential Manager/Linux Secret Service
+- ✅ **Consistent with CLI:** Same behavior as terminal users experience
+- ⚠️ **Future Enhancement:** May add keychain UI for managing env vars separately
+
+**Note:** Environment variables are stored by Claude Code in:
+- User scope: `~/.claude.json` (with references like `${BRAVE_API_KEY}`)
+- Actual values: User's shell environment or Claude Code's secure storage
+
+### 3. Server Connection Testing
+
+**Decision:** Delegate connection testing to Claude Code's MCP runtime.
+
+**Implementation Strategy:**
+```typescript
+// Instead of spawning processes ourselves and testing MCP handshake:
+const process = spawn(command, args, { env });
+await waitForMCPInitialization(process);
+
+// We rely on Claude Code's built-in validation:
+// 1. Add server via CLI (validates at add-time)
+await execAsync(`claude mcp add ${name} ...`);
+
+// 2. Query server status via CLI
+const { stdout } = await execAsync('claude mcp list --format json');
+const servers = JSON.parse(stdout);
+const serverStatus = servers.find(s => s.name === name);
+```
+
+**Rationale:**
+- ✅ **No Protocol Implementation:** Claude Code handles MCP handshake
+- ✅ **Consistent Behavior:** Same validation as CLI users get
+- ✅ **Simpler Testing:** Just parse CLI output
+- ⚠️ **Future Enhancement:** May add live connection testing UI in Phase 3
+
+### 4. Marketplace Data Source
+
+**Decision:** Start with curated JSON registry, use `claude mcp add` for installations.
+
+**Phase 1 (v0.3):** Local JSON file with server templates
+```json
+{
+  "servers": [
+    {
+      "id": "sequential-thinking",
+      "name": "Sequential Thinking",
+      "description": "Chain-of-thought reasoning",
+      "author": "Anthropic",
+      "verified": true,
+      "category": "essential",
+      "installCommand": "claude mcp add sequential-thinking --scope user --transport stdio -- npx -y @modelcontextprotocol/server-sequential-thinking",
+      "requirements": {
+        "node": ">=18.0.0",
+        "apiKey": false
+      }
+    }
+  ]
+}
+```
+
+**Installation Flow:**
+```typescript
+async installFromMarketplace(serverId: string): Promise<void> {
+  const template = marketplaceRegistry.servers.find(s => s.id === serverId);
+
+  // Execute the pre-built install command
+  await execAsync(template.installCommand);
+
+  // Verify installation
+  const { stdout } = await execAsync('claude mcp list --format json');
+  const installed = JSON.parse(stdout).find(s => s.name === serverId);
+
+  if (!installed) {
+    throw new Error('Installation failed');
+  }
+}
+```
+
+**Rationale:**
+- ✅ Store install commands, not config objects
+- ✅ One-click install executes verified CLI commands
+- ✅ Easy to maintain and update templates
+- ✅ Users can copy install commands for terminal use
+
+### 5. Windows Platform Support
+
+**Decision:** Claude Code CLI handles platform quirks; we don't need special logic.
+
+**Rationale:**
+- ✅ `claude mcp add` works the same on Windows/macOS/Linux
+- ✅ No need to detect platform or prepend `cmd /c`
+- ✅ Claude Code team maintains cross-platform compatibility
+- ✅ Simpler codebase with no platform-specific code paths
+
+---
+
+## User Experience Principles
+
+### 1. Progressive Disclosure
+- **Essential First:** Show common options by default
+- **Advanced Hidden:** Environment variables, headers behind "Advanced" section
+- **Help When Needed:** Inline tooltips, documentation links
+
+### 2. Feedback & Visibility
+- **Always Show Status:** Connection indicators on every server card
+- **Explain Failures:** "Connection failed" → "Missing API key BRAVE_API_KEY"
+- **Progress Indicators:** Installation progress, testing progress
+- **Success Confirmation:** "✓ Server installed and tested successfully"
+
+### 3. Safety & Reversibility
+- **Confirm Destructive Actions:** "Remove server?" with undo option
+- **Backup Before Changes:** Auto-backup `.mcp.json` before edits
+- **Disable vs Delete:** Default to "Disable" instead of "Remove"
+- **Security Warnings:** Warn when granting filesystem access
+
+### 4. Discoverability
+- **Marketplace Prominent:** Easy to find new servers
+- **Templates Visible:** Show templates before custom config
+- **Categorization:** Group servers by use case
+- **Search Everything:** Search by name, description, tools
+
+### 5. Error Recovery
+- **Actionable Errors:** "Add API key" button, not just error text
+- **Suggested Fixes:** "Did you mean X?" suggestions
+- **Documentation Links:** Link to setup guides for complex servers
+- **Copy-Paste Logs:** Easy to copy error logs for support
+
+---
+
+## Success Metrics
+
+### Quantitative Metrics
+
+**Adoption Rate:**
+- % of Claude Owl users who install at least one MCP server
+- Target: 60% within first month
+- Average servers installed per user
+- Target: 3-5 servers
+
+**Task Completion:**
+- % of users who successfully install a server without errors
+- Target: 90% success rate
+- Time to install first server
+- Target: < 2 minutes
+
+**Error Reduction:**
+- % reduction in MCP-related support requests
+- Target: 80% reduction vs CLI-only
+- Connection test success rate
+- Target: 95% of tests provide actionable feedback
+
+**Engagement:**
+- Daily active users viewing MCP manager
+- Average time spent in MCP manager
+- Marketplace browse-to-install conversion rate
+- Target: 30% conversion
+
+### Qualitative Metrics
+
+**User Satisfaction:**
+- Post-feature NPS score
+- Target: NPS > 50
+- User feedback on ease of use
+- Feature request themes
+
+**Usability Testing:**
+- Task completion rate in usability studies
+- Target: 90% complete tasks without help
+- Time to complete common tasks
+- User confusion points
+
+---
+
+## Risks & Mitigations
+
+### Risk 1: MCP Protocol Changes
+**Impact:** High - Could break connection testing
+**Probability:** Medium - Protocol is still evolving
+**Mitigation:**
+- Use official `claude mcp` CLI (delegates protocol handling)
+- Version check and warn if Claude Code is outdated
+- Maintain backward compatibility for 2 versions
+
+### Risk 2: Platform-Specific Bugs
+**Impact:** High - Windows users unable to use feature
+**Probability:** Medium - Platform quirks are common
+**Mitigation:**
+- Early testing on all platforms (macOS/Windows/Linux)
+- CI/CD with cross-platform tests
+- Fallback to manual CLI if detection fails
+
+### Risk 3: Security Vulnerabilities
+**Impact:** Critical - API keys leaked, shell injection
+**Probability:** Low - If we follow best practices
+**Mitigation:**
+- Security audit of command execution code
+- Input sanitization and validation
+- System keychain for secrets (never plain text)
+- Warn users about dangerous configurations
+
+### Risk 4: OAuth Flow Complexity
+**Impact:** Medium - Users can't auth with remote servers
+**Probability:** Medium - OAuth is inherently complex
+**Mitigation:**
+- Start with non-OAuth servers in v0.2
+- Add OAuth in v0.4 after core features solid
+- Fallback to manual token entry if OAuth fails
+
+### Risk 5: Server Marketplace Stale
+**Impact:** Medium - Users install outdated servers
+**Probability:** Medium - Manual updates required
+**Mitigation:**
+- Plan remote registry for v0.5
+- Version checking and update prompts
+- Community contributions via GitHub
+
+---
+
+## Alternative Approaches Considered
+
+### Alternative 1: No Marketplace (Templates Only)
+**Why Rejected:**
+- Users still don't know what servers exist
+- Copy-paste from Reddit continues
+- Misses opportunity to curate quality
+
+### Alternative 2: Auto-Install Popular Servers
+**Why Rejected:**
+- Security concern (installing without consent)
+- Disk space usage
+- Users may not want specific servers
+
+### Alternative 3: In-App Terminal for MCP Commands
+**Why Rejected:**
+- Still requires CLI knowledge
+- Doesn't solve discoverability problem
+- More complex than abstraction layer
+
+### Alternative 4: Direct MCP Protocol Client
+**Why Rejected:**
+- Duplicates Claude Code functionality
+- Must maintain protocol compatibility
+- More code to test and debug
+
+---
+
+## Success Criteria
+
+We will consider the MCP Servers Manager feature successful if:
+
+### Must Have (Launch Blockers)
+- ✅ Users can add stdio MCP servers without CLI
+- ✅ Users can add HTTP MCP servers without CLI
+- ✅ Connection testing identifies 90% of common errors
+- ✅ Environment variables stored securely (keychain)
+- ✅ Works on macOS, Windows, Linux
+- ✅ Marketplace with 12+ curated servers
+- ✅ One-click install for marketplace servers
+
+### Should Have (Post-Launch)
+- ✅ OAuth authentication for remote servers
+- ✅ Background process management
+- ✅ Bulk operations (test all, update all)
+- ✅ Import/export configurations
+
+### Nice to Have (Future)
+- ⏳ Remote marketplace with auto-updates
+- ⏳ Community server submissions
+- ⏳ Server health monitoring
+- ⏳ Usage analytics (which tools used most)
+
+---
+
+## Open Questions
+
+1. **Should we support editing the raw `.mcp.json` directly?**
+   - Pro: Power users want direct access
+   - Con: Can break validation, bypass security checks
+   - **Proposal:** Read-only JSON viewer with "Edit in External Editor" button
+
+2. **How do we handle servers that require multiple setup steps? (Browser Tools)**
+   - Option A: Multi-step wizard in UI
+   - Option B: External documentation link
+   - **Proposal:** Hybrid - show steps in UI, link to docs for details
+
+3. **Should we rate-limit connection testing to prevent DoS?**
+   - Risk: User clicks "Test All" with 20 servers
+   - **Proposal:** Limit to 5 concurrent tests, queue the rest
+
+4. **How do we handle MCP server updates?**
+   - Option A: User responsibility (reinstall)
+   - Option B: Claude Owl checks for updates
+   - **Proposal:** Phase 1 = manual, Phase 2 = auto-check
+
+5. **Should we support custom marketplaces? (like plugins)**
+   - Pro: Enterprises can host internal server catalog
+   - Con: More complexity, security risks
+   - **Proposal:** v0.5 feature if demand exists
+
+---
+
+## Appendix A: MCP Configuration Formats
+
+### User-Level Config
+**Location:** `~/.claude/mcp-servers.json`
+
+```json
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/john/Documents",
+        "/Users/john/Projects"
+      ]
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+### Project-Level Config
+**Location:** `.mcp.json` (version controlled)
+
+```json
+{
+  "mcpServers": {
+    "notion": {
+      "type": "http",
+      "url": "https://mcp.notion.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${NOTION_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+### HTTP Server Config
+```json
+{
+  "api-server": {
+    "type": "http",
+    "url": "${API_BASE_URL:-https://api.example.com}/mcp",
+    "headers": {
+      "Authorization": "Bearer ${API_KEY}",
+      "X-Custom-Header": "value"
+    }
+  }
+}
+```
+
+---
+
+## Appendix B: Error Messages & Recovery
+
+### Error: Missing Environment Variable
+```
+❌ Connection Failed: Missing Environment Variable
+
+Server: brave-search
+Missing: BRAVE_API_KEY
+
+The Brave Search server requires an API key to function.
+
+How to fix:
+1. Get an API key from https://brave.com/search/api/
+2. Add the variable in Settings > Environment Variables
+3. Test the connection again
+
+[🔑 Add API Key]  [Get API Key →]  [View Setup Guide]
+```
+
+### Error: Command Not Found
+```
+❌ Connection Failed: Command Not Found
+
+Server: playwright
+Command: npx
+
+The 'npx' command is not available on your system.
+
+How to fix:
+1. Install Node.js from https://nodejs.org/
+2. Verify installation: run 'npx --version' in terminal
+3. Restart Claude Owl
+4. Test the connection again
+
+[Download Node.js →]  [View Troubleshooting Guide]
+```
+
+### Error: Connection Timeout
+```
+❌ Connection Failed: Timeout
+
+Server: playwright
+Timeout: 10 seconds
+
+The server took too long to respond.
+
+Common causes:
+• Server is downloading dependencies (first run)
+• Network connectivity issues
+• Server configuration error
+
+How to fix:
+1. Try again (first run may take longer)
+2. Check your internet connection
+3. View server logs for details
+
+[Test Again]  [View Logs]  [Increase Timeout]
+```
+
+### Error: Permission Denied
+```
+❌ Connection Failed: Permission Denied
+
+Server: filesystem
+Path: /System/Library
+
+Access to this path is not allowed.
+
+For security, Claude Owl prevents access to:
+• System directories (/System, /Library, /etc)
+• Root directory (/)
+• Other users' home directories
+
+How to fix:
+1. Remove the restricted path
+2. Add a more specific subdirectory
+3. Ensure you have read/write permissions
+
+[Edit Server Config]  [View Security Guidelines]
+```
+
+---
+
+## Appendix C: Testing Strategy
+
+### Unit Tests
+
+**MCPService Tests:**
+```typescript
+describe('MCPService', () => {
+  it('should list all servers from user config', async () => {
+    const servers = await mcpService.listServers();
+    expect(servers).toContainEqual(
+      expect.objectContaining({ name: 'sequential-thinking' })
+    );
+  });
+
+  it('should add stdio server to user config', async () => {
+    await mcpService.addServer({
+      name: 'test-server',
+      transport: 'stdio',
+      command: 'npx',
+      args: ['-y', 'test-package'],
+      scope: 'user'
+    });
+    // Verify file written correctly
+  });
+
+  it('should detect Windows and prepend cmd /c', () => {
+    const [cmd, args] = mcpService.prepareCommand('npx', ['-y', 'pkg']);
+    if (process.platform === 'win32') {
+      expect(cmd).toBe('cmd');
+      expect(args).toEqual(['/c', 'npx', '-y', 'pkg']);
+    }
+  });
+
+  it('should expand environment variables', () => {
+    process.env.TEST_VAR = 'test-value';
+    const expanded = mcpService.expandEnvVars('${TEST_VAR}');
+    expect(expanded).toBe('test-value');
+  });
+
+  it('should validate server names', () => {
+    expect(mcpService.validateServerName('valid-name')).toBe(true);
+    expect(mcpService.validateServerName('Invalid_Name')).toBe(false);
+  });
+});
+```
+
+### Integration Tests
+
+**End-to-End MCP Flow:**
+```typescript
+describe('MCP Integration', () => {
+  it('should add, test, and remove a server', async () => {
+    // Add server
+    const addResult = await window.electronAPI.addMCPServer({
+      name: 'test-server',
+      transport: 'stdio',
+      command: 'node',
+      args: ['test-server.js'],
+      scope: 'user'
+    });
+    expect(addResult.success).toBe(true);
+
+    // Test connection
+    const testResult = await window.electronAPI.testMCPConnection('test-server');
+    expect(testResult.success).toBe(true);
+    expect(testResult.tools).toBeDefined();
+
+    // Remove server
+    const removeResult = await window.electronAPI.removeMCPServer('test-server');
+    expect(removeResult.success).toBe(true);
+  });
+});
+```
+
+### Manual Testing Checklist
+
+**Cross-Platform:**
+- [ ] Install stdio server on macOS
+- [ ] Install stdio server on Windows (verify cmd /c wrapper)
+- [ ] Install stdio server on Linux
+- [ ] Install HTTP server on all platforms
+
+**Connection Testing:**
+- [ ] Test successful connection (all green steps)
+- [ ] Test timeout error (server too slow)
+- [ ] Test missing environment variable error
+- [ ] Test command not found error
+- [ ] Test permission denied error
+
+**Marketplace:**
+- [ ] Browse servers
+- [ ] Search servers
+- [ ] Filter by category
+- [ ] Install from marketplace (one-click)
+- [ ] View server details
+
+**Environment Variables:**
+- [ ] Add variable to keychain
+- [ ] Show/hide variable value
+- [ ] Edit variable
+- [ ] Delete variable
+- [ ] Import from .env file
+
+**Security:**
+- [ ] Verify API keys stored in keychain (not plain text)
+- [ ] Verify command injection blocked
+- [ ] Verify sensitive paths blocked
+- [ ] Verify shell operators sanitized
+
+---
+
+## Summary: Why CLI Delegation is the Right Approach
+
+### Benefits of CLI Delegation
+
+**For Development:**
+- ✅ **80% Less Code:** No need to implement MCP protocol, config parsing, scope resolution, validation
+- ✅ **Simpler Architecture:** UI → IPC → CLI wrapper (3 layers vs 7+ layers)
+- ✅ **Faster Development:** ~3 weeks instead of ~6 weeks for full implementation
+- ✅ **Easier Testing:** Test CLI command construction and output parsing, not MCP protocol
+- ✅ **Less Surface Area for Bugs:** Delegating to Claude Code means fewer edge cases to handle
+
+**For Maintenance:**
+- ✅ **Future-Proof:** New `claude mcp` features automatically available (e.g., new transports, auth methods)
+- ✅ **No Config Format Lock-In:** If `.claude.json` format changes, Claude Code handles it
+- ✅ **Cross-Platform Automatically:** Windows/macOS/Linux quirks handled by Claude Code team
+- ✅ **Security Updates:** Claude Code team maintains security best practices
+
+**For Users:**
+- ✅ **Consistent Behavior:** Same validation and error messages as CLI
+- ✅ **No Hidden Magic:** Users can copy CLI commands from UI for terminal use
+- ✅ **Reliable:** Trust Claude Code's official implementation, not our reimplementation
+- ✅ **Better Error Messages:** Claude Code provides detailed, tested error messages
+
+### Implementation Effort Comparison
+
+| Approach | Lines of Code | Complexity | Maintenance Burden |
+|----------|---------------|------------|-------------------|
+| **CLI Delegation (Chosen)** | ~2,000 LOC | Low | Minimal |
+| Custom Implementation | ~8,000 LOC | High | Significant |
+
+### Task Breakdown Summary
+
+| Phase | Duration | Key Deliverables |
+|-------|----------|-----------------|
+| **Phase 1: Core** | 2 weeks | Add/remove/list servers, Basic UI |
+| **Phase 2: Marketplace** | 2 weeks | Server discovery, One-click install |
+| **Phase 3: Advanced** | 1 week | Bulk ops, Import/export, Polish |
+| **Total** | **5 weeks** | **Full MCP management with marketplace** |
+
+**Reduced from:** Original plan of 6 weeks (now 5 weeks, 20% faster)
+
+---
+
+## Conclusion
+
+The MCP Servers Manager will transform Claude Owl from a configuration viewer into a powerful management tool. By **delegating to `claude mcp` CLI** instead of reimplementing MCP protocol, we:
+
+1. **Deliver faster** (5 weeks vs 6 weeks)
+2. **Write less code** (2K LOC vs 8K LOC)
+3. **Maintain easier** (CLI changes handled by Claude Code team)
+4. **Provide better UX** (consistent with CLI users' experience)
+
+**Key Differentiators:**
+1. ✅ **Zero CLI knowledge required** - Visual forms with validation
+2. ✅ **Marketplace discovery** - No more Reddit copy-paste
+3. ✅ **One-click installation** - Execute verified commands
+4. ✅ **Scope management** - User/project/local made simple
+5. ✅ **Feature parity guaranteed** - Wraps official `claude mcp` commands
+
+**Expected Impact:**
+- 80% reduction in MCP setup time (from 4 hours → 15 minutes)
+- 90% successful first-time installations
+- 60% adoption rate within first month
+- Significant reduction in support requests
+
+This implementation aligns with Claude Owl's mission: **Make Claude Code accessible to users who prefer visual tools, while maintaining power user capabilities.**
+
+---
+
+## Next Steps
+
+1. ✅ Review and approve ADR with CLI delegation approach
+2. 📝 Create GitHub issues for Phase 1 tasks (break down each task from implementation plan)
+3. 🔨 Begin backend implementation (Week 1)
+   - Start with Task 1.1: Extend ClaudeService with MCP commands
+   - Create mcp.types.ts
+   - Build command construction and sanitization
+4. 📊 Weekly progress reviews
+5. 🧪 User testing with beta users (after Phase 1 complete)
+6. 🚀 Launch Phase 1 in v0.2 release
+7. 📦 Iterate on marketplace (Phase 2) based on user feedback
+8. ✨ Polish and advanced features (Phase 3)
+
+**Questions or Feedback?**
+Please comment on this ADR document or open a GitHub discussion.
+
+---
+
+## Appendix D: Example CLI Command Construction
+
+### Example 1: Stdio Server with Environment Variables
+
+**User Input:**
+```typescript
+{
+  name: "brave-search",
+  transport: "stdio",
+  scope: "user",
+  command: "npx",
+  args: ["-y", "@modelcontextprotocol/server-brave-search"],
+  env: {
+    "BRAVE_API_KEY": "abc123xyz"
+  }
+}
+```
+
+**Constructed Command:**
+```bash
+claude mcp add brave-search \
+  --transport stdio \
+  --scope user \
+  --env BRAVE_API_KEY=abc123xyz \
+  -- npx -y @modelcontextprotocol/server-brave-search
+```
+
+### Example 2: HTTP Server with Headers
+
+**User Input:**
+```typescript
+{
+  name: "notion",
+  transport: "http",
+  scope: "project",
+  url: "https://mcp.notion.com/mcp",
+  headers: {
+    "Authorization": "Bearer ${NOTION_TOKEN}"
+  },
+  env: {
+    "NOTION_TOKEN": "secret_abc123"
+  }
+}
+```
+
+**Constructed Command:**
+```bash
+claude mcp add notion \
+  --transport http \
+  --scope project \
+  --env NOTION_TOKEN=secret_abc123 \
+  --header "Authorization: Bearer ${NOTION_TOKEN}" \
+  https://mcp.notion.com/mcp
+```
+
+### Example 3: Input Sanitization
+
+**User Input with Special Characters:**
+```typescript
+{
+  name: "custom-server",
+  command: "node",
+  args: ["/path/with spaces/server.js", "arg with \"quotes\""]
+}
+```
+
+**Constructed Command:**
+```bash
+claude mcp add custom-server \
+  --transport stdio \
+  --scope user \
+  -- node "/path/with spaces/server.js" "arg with \"quotes\""
+```
+
+**Security Note:** The `escapeArg()` function prevents command injection by properly quoting arguments.

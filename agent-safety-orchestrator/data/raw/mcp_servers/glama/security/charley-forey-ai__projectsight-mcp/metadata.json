@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "yeuktyq6m5",
+  "namespace": "Charley-Forey-AI",
+  "slug": "ProjectSight-MCP",
+  "name": "ProjectSight MCP Server",
+  "description": "Provides access to the ProjectSight API for managing construction portfolios, projects, and records like ActionItems, RFIs, and Submittals. It features a modular architecture supporting CRUD operations, workflow state management, and OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides access to the ProjectSight API for managing construction portfolios, projects, and records like ActionItems, RFIs, and Submittals. It features a modular architecture supporting CRUD operations, workflow state management, and OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "The host to bind to when running in HTTP mode.",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "The port to bind to when running in HTTP mode.",
+          "type": "string",
+          "default": "8000"
+        },
+        "CLIENT_ID": {
+          "description": "Your Consumer Key (CLIENT_ID) from Trimble API Cloud.",
+          "type": "string"
+        },
+        "PORTFOLIO_ID": {
+          "description": "Either an integer AccountID (e.g., 1, 2, 3) or a Portfolio GUID in UUID format.",
+          "type": "string"
+        },
+        "CLIENT_SECRET": {
+          "description": "Your Consumer Secret (CLIENT_SECRET) from Trimble API Cloud.",
+          "type": "string"
+        },
+        "APPLICATION_NAME": {
+          "description": "Your Application Name from Trimble API Cloud.",
+          "type": "string"
+        },
+        "PROJECTSIGHT_SCOPE": {
+          "description": "The API subscription region scope (e.g., ProjectSight_-_US1, ProjectSight_-_EU1, or ProjectSight_-_US2).",
+          "type": "string",
+          "default": "ProjectSight_-_US1"
+        },
+        "PROJECTSIGHT_API_URL": {
+          "description": "The base URL for the ProjectSight API.",
+          "type": "string",
+          "default": "https://cloud.api.trimble.com/projectsight/us1/1.0"
+        }
+      },
+      "type": "object",
+      "required": [
+        "APPLICATION_NAME",
+        "CLIENT_ID",
+        "CLIENT_SECRET",
+        "PORTFOLIO_ID"
+      ]
+    },
+    "id": "yeuktyq6m5",
+    "name": "ProjectSight MCP Server",
+    "namespace": "Charley-Forey-AI",
+    "repository": {
+      "url": "https://github.com/Charley-Forey-AI/ProjectSight-MCP"
+    },
+    "slug": "ProjectSight-MCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/yeuktyq6m5"
+  }
+}

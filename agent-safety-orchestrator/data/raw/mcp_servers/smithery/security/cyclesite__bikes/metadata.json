@@ -1,0 +1,1586 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cyclesite/bikes",
+  "namespace": "cyclesite",
+  "slug": "bikes",
+  "displayName": "Cyclesite.  The UKs Trusted bike marketplace",
+  "description": "MCP server for Cyclesite — UK's used-bike marketplace. Live UK inventory search, sold-price valuation from real completed sales, aggregated stolen-bike check, brand/model catalogue, plus full write-side over OAuth: publish, mark sold, message sellers, save alerts, reserve listings.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "1889c0f9-bb80-4037-975e-afff62e281f1",
+    "qualifiedName": "cyclesite/bikes",
+    "namespace": "cyclesite",
+    "slug": "bikes",
+    "displayName": "Cyclesite.  The UKs Trusted bike marketplace",
+    "description": "MCP server for Cyclesite — UK's used-bike marketplace. Live UK inventory search, sold-price valuation from real completed sales, aggregated stolen-bike check, brand/model catalogue, plus full write-side over OAuth: publish, mark sold, message sellers, save alerts, reserve listings.",
+    "iconUrl": "https://api.smithery.ai/servers/cyclesite/bikes/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-07T20:43:51.959Z",
+    "homepage": "https://www.cyclesite.co.uk",
+    "bySmithery": false,
+    "owner": "org_01KNJ262M5NPQMJVT3Z4KPZQF9",
+    "score": 0.012048192771084338
+  },
+  "detail": {
+    "qualifiedName": "cyclesite/bikes",
+    "displayName": "Cyclesite.  The UKs Trusted bike marketplace",
+    "description": "MCP server for Cyclesite — UK's used-bike marketplace. Live UK inventory search, sold-price valuation from real completed sales, aggregated stolen-bike check, brand/model catalogue, plus full write-side over OAuth: publish, mark sold, message sellers, save alerts, reserve listings.",
+    "iconUrl": "https://api.smithery.ai/servers/cyclesite/bikes/icon",
+    "remote": true,
+    "deploymentUrl": "https://bikes--cyclesite.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://bikes--cyclesite.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_bikes",
+        "description": "Search live UK used-bike listings on Cyclesite (the UK's used bicycle marketplace). Filter by brand, category, city, price range, and condition. Returns up to 5 active listings with specs and listing URLs. Live data — refreshed continuously as new bikes are listed. Example queries: 'a Trek Domane in Manchester under £2,000', 'gravel bike, very good condition, near Bristol'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "UK city."
+            },
+            "brand": {
+              "type": "string",
+              "description": "Bike brand (e.g. Trek, Specialized, Canyon)."
+            },
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string",
+              "description": "Bike category."
+            },
+            "maxPrice": {
+              "type": "number",
+              "description": "Maximum price in GBP."
+            },
+            "minPrice": {
+              "type": "number",
+              "description": "Minimum price in GBP."
+            },
+            "condition": {
+              "enum": [
+                "Excellent",
+                "Very_Good",
+                "Good",
+                "Fair",
+                "Poor",
+                "For_Parts"
+              ],
+              "type": "string",
+              "description": "Condition rating."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "listings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "number"
+                  },
+                  "brand": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "isEbike": {
+                    "type": "boolean"
+                  },
+                  "priceGbp": {
+                    "type": "number",
+                    "description": "Price in GBP."
+                  },
+                  "condition": {
+                    "type": "string"
+                  },
+                  "frameSize": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "attribution": {
+              "type": "string",
+              "description": "Citation string — include verbatim when surfacing data."
+            },
+            "resultsCount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "attribution",
+            "resultsCount",
+            "listings"
+          ]
+        }
+      },
+      {
+        "name": "get_recent_listings",
+        "description": "What's new on Cyclesite right now — up to 10 of the freshest active UK listings, refreshed every 15 minutes. Use when the user asks 'what's new today?' or 'any new road bikes this week?' rather than for a specific filter. Optional category + maxPrice filters. Live data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "How many listings to return (1-10, default 10)."
+            },
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string"
+            },
+            "maxPrice": {
+              "type": "number",
+              "description": "Maximum price in GBP."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "listings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "number"
+                  },
+                  "brand": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "isEbike": {
+                    "type": "boolean"
+                  },
+                  "priceGbp": {
+                    "type": "number",
+                    "description": "Price in GBP."
+                  },
+                  "condition": {
+                    "type": "string"
+                  },
+                  "frameSize": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "attribution": {
+              "type": "string",
+              "description": "Citation string — include verbatim when surfacing data."
+            },
+            "resultsCount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "attribution",
+            "resultsCount",
+            "listings"
+          ]
+        }
+      },
+      {
+        "name": "get_listing_detail",
+        "description": "Full details for a specific bike listing on Cyclesite — specs, condition, frame number presence, photos, delivery, seller's city. Provide the URL slug returned by search_bikes or get_recent_listings. Example: after the user says 'tell me more about that 2022 Trek Domane', call this with the slug from the prior result.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Listing URL slug (e.g. \"used-trek-domane-sl-6-2022\")."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "find_similar_listings",
+        "description": "Given a Cyclesite listing slug, return up to 5 similar active listings (same category, ±25% price, same brand or frame size weighted higher). Use when the user is interested in one bike and wants alternatives. Example: 'show me bikes like that one'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Source listing URL slug."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "listings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "number"
+                  },
+                  "brand": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "isEbike": {
+                    "type": "boolean"
+                  },
+                  "priceGbp": {
+                    "type": "number",
+                    "description": "Price in GBP."
+                  },
+                  "condition": {
+                    "type": "string"
+                  },
+                  "frameSize": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "attribution": {
+              "type": "string",
+              "description": "Citation string — include verbatim when surfacing data."
+            },
+            "resultsCount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "attribution",
+            "resultsCount",
+            "listings"
+          ]
+        }
+      },
+      {
+        "name": "search_by_location",
+        "description": "Find Cyclesite listings within a radius of a UK location (lat/lng). Radius capped at 50 miles. Returns up to 10 listings ordered by distance. Live UK marketplace data. Example: 'used bikes within 25 miles of LE10 0AA' (geocode the postcode first, then call this).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "number",
+              "description": "Latitude (UK only, 49.5–61.0)."
+            },
+            "lng": {
+              "type": "number",
+              "description": "Longitude (UK only, -8.5–2.0)."
+            },
+            "limit": {
+              "type": "number",
+              "description": "1-10, default 5."
+            },
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string"
+            },
+            "maxPrice": {
+              "type": "number"
+            },
+            "radiusMiles": {
+              "type": "number",
+              "description": "Search radius in miles (1-50, default 25)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "listings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "number"
+                  },
+                  "brand": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "isEbike": {
+                    "type": "boolean"
+                  },
+                  "priceGbp": {
+                    "type": "number",
+                    "description": "Price in GBP."
+                  },
+                  "condition": {
+                    "type": "string"
+                  },
+                  "frameSize": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "attribution": {
+              "type": "string",
+              "description": "Citation string — include verbatim when surfacing data."
+            },
+            "resultsCount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "attribution",
+            "resultsCount",
+            "listings"
+          ]
+        }
+      },
+      {
+        "name": "recommend_bike_for_budget",
+        "description": "Curated picks from Cyclesite's live UK inventory for a budget and intent. Prefers higher-engagement listings. Returns up to 5 picks with a one-line rationale each. Example queries: 'a road bike for £1,500 for weekend rides', 'best e-MTB I can buy under £3,000', 'commuter bike in London under £400'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "UK city to focus on (optional)."
+            },
+            "limit": {
+              "type": "number",
+              "description": "1-10, default 5."
+            },
+            "useCase": {
+              "type": "string",
+              "description": "Free-text intent (e.g. \"commuting\", \"weekend trail\", \"first road bike\")."
+            },
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string"
+            },
+            "budgetGbp": {
+              "type": "number",
+              "description": "Maximum budget in GBP."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "list_brands",
+        "description": "Paginated UK bike-brand catalogue from Cyclesite, ordered by stock level. Use to validate a brand name, surface options to a user, or paginate the catalogue. Stock counts are returned as bands (none / 1-5 / 6-25 / 26-100 / 100+) — Cyclesite doesn't expose precise per-brand inventory. Example: 'what brands of e-bike are available?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string",
+              "description": "Optional search filter (case-insensitive contains)."
+            },
+            "limit": {
+              "type": "number",
+              "description": "1-50, default 25."
+            },
+            "offset": {
+              "type": "number",
+              "description": "0-500."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            },
+            "brands": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "verified": {
+                    "type": "boolean"
+                  },
+                  "stockBand": {
+                    "enum": [
+                      "none",
+                      "1-5",
+                      "6-25",
+                      "26-100",
+                      "100+"
+                    ],
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "offset": {
+              "type": "number"
+            },
+            "hasMore": {
+              "type": "boolean"
+            },
+            "attribution": {
+              "type": "string",
+              "description": "Citation string — include verbatim when surfacing data."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_models_for_brand",
+        "description": "Models for a brand on Cyclesite (paginated). Returns model names, year ranges, in-stock flag. Example: \"what Trek road bikes are available?\" → list_brands(q:\"Trek\") → list_models_for_brand(brandSlug:\"trek\", category:\"road\").",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "1-50, default 25."
+            },
+            "offset": {
+              "type": "number",
+              "description": "0-500."
+            },
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string"
+            },
+            "brandSlug": {
+              "type": "string",
+              "description": "Brand slug from list_brands (lowercase, hyphenated)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_model_info",
+        "description": "Cyclesite catalogue entry for a brand+model: category, year range, AI-generated description, key specs, market summary. Reference data — refreshed when models are added or specs change. Example: 'tell me about the Specialized Allez'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_spec_sheet",
+        "description": "Aggregated spec sheet for a brand+model[+year], derived from Cyclesite's live UK inventory plus the catalogue record. Returns the most-common frame material, wheel size, groupset, brakes, weight, and (for e-bikes) motor and battery specs. Example: 'what groupset does a Canyon Endurace usually have?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "compare_bikes",
+        "description": "Side-by-side comparison of up to 3 bikes (each by brand+model[+year]). Returns spec sheets and valuations together so the user can pick. Reuses get_spec_sheet + get_valuation server-side. Example: 'compare a Trek Domane SL 6 against a Specialized Roubaix Comp'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "bikes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "brand",
+                  "model"
+                ],
+                "properties": {
+                  "year": {
+                    "type": "number"
+                  },
+                  "brand": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_size_guide",
+        "description": "Frame-size recommendation for a rider's height and bike category, sourced from Cyclesite's real UK listings (riders' declared heights against frame sizes they bought). Falls back to industry-standard charts when the dataset is thin. Example: 'I'm 178cm — what road-bike size do I need?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string"
+            },
+            "heightCm": {
+              "type": "number",
+              "description": "Rider height in centimetres (120-220)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_valuation",
+        "description": "What a used UK bike is worth right now — Cyclesite's flagship tool. Returns median, range, condition breakdown, confidence level, 90-day price trend, and comparable active listings. Sourced from real completed UK sales (sold-price data, refreshed nightly), not asking prices. The data Cyclesite is uniquely the source for. Example: 'what's a 2022 Trek Domane SL 6 worth?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "summary": {
+              "type": "string",
+              "description": "One-sentence summary safe to quote verbatim."
+            },
+            "confidence": {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            "priceTrend": {
+              "enum": [
+                "rising",
+                "stable",
+                "falling"
+              ],
+              "type": "string"
+            },
+            "attribution": {
+              "type": "string",
+              "description": "Citation string — include verbatim when surfacing data."
+            },
+            "maxPriceGbp": {
+              "type": "number",
+              "description": "Price in GBP."
+            },
+            "minPriceGbp": {
+              "type": "number",
+              "description": "Price in GBP."
+            },
+            "avgDaysToSell": {
+              "type": "number"
+            },
+            "medianPriceGbp": {
+              "type": "number",
+              "description": "Price in GBP."
+            },
+            "recentSalesCount": {
+              "type": "number"
+            },
+            "conditionBreakdown": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "number"
+                  },
+                  "median": {
+                    "type": "number",
+                    "description": "Price in GBP."
+                  }
+                }
+              }
+            },
+            "activeListingsCount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "attribution",
+            "summary"
+          ]
+        }
+      },
+      {
+        "name": "suggest_listing_price",
+        "description": "For a seller about to list: suggested ask, floor, and ceiling for their bike's brand+model[+condition] on the UK market. Same Cyclesite sold-price corpus as get_valuation but framed as seller guidance. Example: 'I'm selling a 2021 Specialized Allez in good condition — what should I ask?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "condition": {
+              "enum": [
+                "Excellent",
+                "Very_Good",
+                "Good",
+                "Fair",
+                "Poor",
+                "For_Parts"
+              ],
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_market_index",
+        "description": "Current UK used-bike market prices by category, from Cyclesite's nightly index. Returns median + range per category (road, mtb, gravel, e-bike, etc.). Example: 'how does the UK used-bike market look right now?'. Refreshed nightly from completed sales.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_market_health",
+        "description": "Buyer's-vs-seller's market signal for the UK used-bike market — should the user buy or sell now? Composite indicator from days-to-sell, asking-vs-sold-price spread, and inventory levels. Example: 'is now a good time to buy a road bike?'. Refreshed nightly.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_depreciation",
+        "description": "Brands ranked by how well (or poorly) they hold their value, from Cyclesite's UK sold-price corpus. Returns top N brands by % retained vs new RRP. Example: 'which bike brands hold their value best?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "enum": [
+                "best",
+                "worst"
+              ],
+              "type": "string"
+            },
+            "limit": {
+              "type": "number",
+              "description": "1-20, default 10."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_price_trends",
+        "description": "UK used-bike price trends over the last N months by category, from Cyclesite's index series. Example: 'how have road-bike prices changed in 2026?'. Monthly data, refreshed at month-end.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "months": {
+              "type": "number",
+              "description": "1-24."
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "grade_listing_quality",
+        "description": "Categorical quality grade for a Cyclesite listing (excellent / good / fair / weak) plus up to 2 wins and 2 flags. Helps a buyer assess trustworthiness; helps a seller self-audit. Example: 'is this listing trustworthy?' (provide the slug). Note: returns the *categorical* judgement only, not the underlying score (intentional to avoid gaming).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "draft_listing",
+        "description": "Sell-side helper: turn a seller's raw facts into a polished Cyclesite listing draft (title, description, suggested price, photo plan). Does NOT publish — for actual publication use publish_listing (requires OAuth). Useful for previewing what a listing would look like. Example: 'help me draft a listing for my 2021 Specialized Allez, very good condition, in Bristol'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            },
+            "year": {
+              "type": "number"
+            },
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "groupset": {
+              "type": "string"
+            },
+            "willShip": {
+              "type": "boolean"
+            },
+            "condition": {
+              "enum": [
+                "Excellent",
+                "Very_Good",
+                "Good",
+                "Fair",
+                "Poor",
+                "For_Parts"
+              ],
+              "type": "string"
+            },
+            "frameSize": {
+              "type": "string"
+            },
+            "knownIssues": {
+              "type": "string",
+              "description": "Honest declaration of any issues."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "check_stolen",
+        "description": "Check if a UK bicycle is reported stolen by serial number. Cyclesite aggregates lookups across UK stolen-bike databases — the unique data we own. Per-serial rate-limited (3/hour) to prevent enumeration. Example: 'is the bike with serial WTU123456 reported stolen?'. Live data — cross-references multiple registries on every call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "serial": {
+              "type": "string",
+              "description": "Frame/serial number (4-50 chars)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "action": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "CLEAR",
+                "STOLEN",
+                "POSSIBLE_MATCH",
+                "UNKNOWN"
+              ],
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "checkedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "confidence": {
+              "type": "number"
+            },
+            "attribution": {
+              "type": "string",
+              "description": "Citation string — include verbatim when surfacing data."
+            },
+            "sourcesChecked": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "confidenceLabel": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "attribution"
+          ]
+        }
+      },
+      {
+        "name": "report_stolen",
+        "description": "Step-by-step guidance for reporting a stolen UK bike: police, insurance, listing alerts. Returns a 5-step checklist plus the official Cyclesite report URL. Example: 'my bike was just stolen, what do I do?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "serial": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_buying_guide",
+        "description": "Search Cyclesite's expert buying guides (24+ articles by cycling-journalism authors). Returns up to 3 matching guides with title, excerpt, difficulty, reading time, and URL. Use for educational queries that don't need live inventory. Example: 'how do I choose a bike size?', 'tips for buying a used e-bike'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "1-5, default 3."
+            },
+            "query": {
+              "type": "string",
+              "description": "What to search for (e.g. \"first road bike\", \"bike sizing\")."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "publish_listing",
+        "description": "Publish a Cyclesite listing on the user's behalf. Multi-step: first call (no draftId) returns a phone-friendly photo upload URL; once 3+ photos are uploaded, the next call returns either step:'live' (during launch promo, no fee) or step:'payment_required' with a Stripe Checkout URL for the £10.99 listing fee. Idempotent — keep calling with the same draftId until step:'live'. Requires OAuth scope `listings:publish`. Example flow: user says 'sell my Trek Domane' → call publish_listing → assistant directs user to upload URL → user uploads → call again → step:'live' → seller receives a confirmation email with a 24h undo link.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "UK city."
+            },
+            "year": {
+              "type": "number"
+            },
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string",
+              "description": "Listing title (10-160 chars)."
+            },
+            "draftId": {
+              "type": "string",
+              "description": "Returned by a previous call. Omit on first call."
+            },
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string"
+            },
+            "groupset": {
+              "type": "string"
+            },
+            "priceGbp": {
+              "type": "number"
+            },
+            "willShip": {
+              "type": "boolean"
+            },
+            "condition": {
+              "enum": [
+                "Excellent",
+                "Very_Good",
+                "Good",
+                "Fair",
+                "Poor",
+                "For_Parts"
+              ],
+              "type": "string"
+            },
+            "frameSize": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string",
+              "description": "Listing description (30-5000 chars)."
+            },
+            "frameSerial": {
+              "type": "string",
+              "description": "Frame/serial number — runs a stolen-bike check before publish."
+            },
+            "knownIssues": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "step": {
+              "enum": [
+                "photos_required",
+                "payment_required",
+                "live"
+              ],
+              "type": "string"
+            },
+            "draftId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "message": {
+              "type": "string"
+            },
+            "listingUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "paymentUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "photosNeeded": {
+              "type": "number"
+            },
+            "listingFeeGbp": {
+              "type": "number",
+              "description": "Price in GBP."
+            },
+            "photoUploadUrl": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "step",
+            "message"
+          ]
+        }
+      },
+      {
+        "name": "list_my_listings",
+        "description": "Show the authenticated user's Cyclesite listings (draft / active / sold). Requires OAuth scope `listings:read`. Example: 'how are my listings doing?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "1-20."
+            },
+            "status": {
+              "enum": [
+                "active",
+                "draft",
+                "sold",
+                "all"
+              ],
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "mark_as_sold",
+        "description": "Mark a Cyclesite listing as sold (optionally with the final sale price). Requires OAuth scope `listings:manage`. Example: 'mark my Trek Domane as sold for £1,750'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "listingId": {
+              "type": "string"
+            },
+            "salePriceGbp": {
+              "type": "number"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_my_enquiries",
+        "description": "Show buyer enquiries on the authenticated user's Cyclesite listings. Requires OAuth scope `listings:read`. Example: 'any messages about my Trek?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "1-20."
+            },
+            "listingId": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "respond_to_enquiry",
+        "description": "Reply to a buyer enquiry on the authenticated user's listing. Requires OAuth scope `enquiries:respond`. Example: 'reply to that enquiry — say it's still available, collection only'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "answer": {
+              "type": "string",
+              "description": "Reply text (1-2000 chars)."
+            },
+            "enquiryId": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "save_search",
+        "description": "Subscribe the user to alerts for new Cyclesite listings matching a filter — the AI assistant will then proactively notify them when a matching bike appears (price drop or fresh listing). Requires OAuth scope `listings:read` (read-only on data, but this is technically a write — it creates a SavedSearch row on the user's account). Examples: 'let me know when a Trek Domane SL 6 in Manchester under £2,000 appears', 'alert me to any e-MTB drops below £2,500 in Yorkshire'. Each user is capped at 50 active alerts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "UK city to focus on."
+            },
+            "name": {
+              "type": "string",
+              "description": "Optional human-readable name (e.g. \"Trek Domane in Manchester\")."
+            },
+            "brand": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "category": {
+              "enum": [
+                "road",
+                "mtb",
+                "gravel",
+                "hybrid",
+                "ebike",
+                "kids",
+                "bmx",
+                "folding",
+                "city",
+                "touring",
+                "triathlon",
+                "track",
+                "cyclocross",
+                "cargo",
+                "other"
+              ],
+              "type": "string"
+            },
+            "maxPrice": {
+              "type": "number"
+            },
+            "minPrice": {
+              "type": "number"
+            },
+            "condition": {
+              "enum": [
+                "Excellent",
+                "Very_Good",
+                "Good",
+                "Fair",
+                "Poor",
+                "For_Parts"
+              ],
+              "type": "string"
+            },
+            "alertFrequency": {
+              "enum": [
+                "instant",
+                "daily",
+                "weekly"
+              ],
+              "type": "string",
+              "description": "How often to send digest. Default: instant."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "make_enquiry",
+        "description": "Send an enquiry to a Cyclesite seller on the buyer's behalf — Cyclesite becomes the messaging layer for the AI conversation. Per-buyer-per-listing daily cap (2/day) prevents spam. The seller is emailed; the buyer's reply appears via get_my_enquiries. Requires OAuth scope `enquiries:respond` (note: the scope name is shared with seller-side replies). Example: 'message the seller of that Trek and ask if they'd take £1,400 collection only in Manchester next Saturday'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "The buyer's question to the seller (10-2000 chars)."
+            },
+            "listingId": {
+              "type": "string",
+              "description": "Bike ID from search_bikes / get_listing_detail."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "reserve_listing",
+        "description": "Hold a Cyclesite listing for 24 hours so other buyers can't claim it while the user decides. Optional refundable deposit via Stripe (returned if the user doesn't proceed; applied to the bike if they do). The first UK marketplace where a buyer can COMMIT inside an AI conversation. Requires OAuth scope `listings:manage`. Example: 'put a hold on that Trek for me, I want to view it Saturday'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "listingId": {
+              "type": "string"
+            },
+            "depositGbp": {
+              "type": "number",
+              "description": "Optional refundable deposit (£10-£500). When set, user pays via Stripe Checkout."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Cyclesite Marketplace Overview",
+        "uri": "cyclesite://marketplace-overview",
+        "description": "Machine-readable marketplace capabilities and live headline numbers.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "How to Sell a Bike",
+        "uri": "cyclesite://selling-guide",
+        "description": "Step-by-step seller guide for Cyclesite (photos, pricing, listing, shipping).",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "Buying Guides Index",
+        "uri": "cyclesite://buying-guides",
+        "description": "Index of expert buying guides with categories and excerpts.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Bike Categories",
+        "uri": "cyclesite://bike-categories",
+        "description": "15 supported bike categories with display labels and category-page URLs.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Live Brand Inventory (Top 200)",
+        "uri": "cyclesite://brands",
+        "description": "Top 200 brands by active listing count. Use list_brands for paginated full catalogue.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "value_my_bike",
+        "description": "Get a Cyclesite valuation for a bike you own.",
+        "arguments": [
+          {
+            "name": "brand",
+            "description": "e.g. Trek",
+            "required": true
+          },
+          {
+            "name": "model",
+            "description": "e.g. Domane SL 6",
+            "required": true
+          },
+          {
+            "name": "condition",
+            "description": "Excellent / Very_Good / Good / Fair / Poor",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "find_a_bike",
+        "description": "Get curated picks within a budget and intent.",
+        "arguments": [
+          {
+            "name": "budgetGbp",
+            "description": "Maximum spend in GBP",
+            "required": true
+          },
+          {
+            "name": "useCase",
+            "description": "e.g. \"weekend road rides\", \"school commute\"",
+            "required": true
+          },
+          {
+            "name": "city",
+            "description": "UK city (optional)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "sell_my_bike",
+        "description": "Draft a listing from a few facts and get a suggested price.",
+        "arguments": [
+          {
+            "name": "brand",
+            "description": "e.g. Specialized",
+            "required": true
+          },
+          {
+            "name": "model",
+            "description": "e.g. Allez",
+            "required": true
+          },
+          {
+            "name": "condition",
+            "description": "Excellent / Very_Good / Good / Fair / Poor",
+            "required": false
+          },
+          {
+            "name": "knownIssues",
+            "description": "Anything wrong with it",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "is_this_stolen",
+        "description": "Check a serial number against UK stolen-bike databases.",
+        "arguments": [
+          {
+            "name": "serial",
+            "description": "Frame / serial number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "good_time_to_buy",
+        "description": "Read the current UK used-bike market — buyer or seller market.",
+        "arguments": [
+          {
+            "name": "category",
+            "description": "Optional category (road, mtb, ebike, …)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "whats_new",
+        "description": "Browse the freshest active listings.",
+        "arguments": [
+          {
+            "name": "category",
+            "description": "Optional category",
+            "required": false
+          },
+          {
+            "name": "maxPrice",
+            "description": "Optional GBP cap",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "frame_size",
+        "description": "Size guidance for a rider height and bike type.",
+        "arguments": [
+          {
+            "name": "heightCm",
+            "description": "Your height in cm",
+            "required": true
+          },
+          {
+            "name": "category",
+            "description": "Bike category",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "compare_two_bikes",
+        "description": "Side-by-side spec + valuation comparison.",
+        "arguments": [
+          {
+            "name": "bikeA",
+            "description": "Brand and model, e.g. \"Trek Domane SL 6\"",
+            "required": true
+          },
+          {
+            "name": "bikeB",
+            "description": "Brand and model, e.g. \"Specialized Roubaix Comp\"",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "alert_me",
+        "description": "Subscribe to push alerts when a matching bike appears.",
+        "arguments": [
+          {
+            "name": "brand",
+            "description": "e.g. Trek",
+            "required": false
+          },
+          {
+            "name": "category",
+            "description": "Optional category",
+            "required": false
+          },
+          {
+            "name": "maxPrice",
+            "description": "GBP cap",
+            "required": false
+          },
+          {
+            "name": "city",
+            "description": "UK city",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

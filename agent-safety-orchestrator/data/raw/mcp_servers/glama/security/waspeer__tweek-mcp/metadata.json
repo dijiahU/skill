@@ -1,0 +1,66 @@
+{
+  "registry": "glama",
+  "id": "bngsb2tjpz",
+  "namespace": "waspeer",
+  "slug": "tweek-mcp",
+  "name": "Tweek MCP Server",
+  "description": "An MCP server that integrates with the Tweek API to manage calendars, tasks, and custom colors. It enables users to perform full task CRUD operations, list accessible calendars, and fetch color preferences through secure authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that integrates with the Tweek API to manage calendars, tasks, and custom colors. It enables users to perform full task CRUD operations, list accessible calendars, and fetch color preferences through secure authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TWEEK_API_KEY": {
+          "description": "Your Tweek API key",
+          "type": "string"
+        },
+        "TWEEK_API_BASE": {
+          "description": "Tweek API base URL",
+          "type": "string",
+          "default": "https://tweek.so/api/v1"
+        },
+        "TWEEK_TOKENS_PATH": {
+          "description": "Path to token storage file",
+          "type": "string",
+          "default": "~/.tweek-mcp/tokens.json"
+        },
+        "TWEEK_ENCRYPTION_KEY": {
+          "description": "32-byte key for AES-GCM token encryption",
+          "type": "string"
+        },
+        "TWEEK_REQUEST_TIMEOUT_MS": {
+          "description": "HTTP request timeout (milliseconds)",
+          "type": "string",
+          "default": "30000"
+        },
+        "TWEEK_TOKEN_REFRESH_BUFFER_SEC": {
+          "description": "Proactive token refresh window (seconds)",
+          "type": "string",
+          "default": "60"
+        }
+      },
+      "type": "object",
+      "required": [
+        "TWEEK_API_KEY"
+      ]
+    },
+    "id": "bngsb2tjpz",
+    "name": "Tweek MCP Server",
+    "namespace": "waspeer",
+    "repository": {
+      "url": "https://github.com/waspeer/tweek-mcp"
+    },
+    "slug": "tweek-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bngsb2tjpz"
+  }
+}

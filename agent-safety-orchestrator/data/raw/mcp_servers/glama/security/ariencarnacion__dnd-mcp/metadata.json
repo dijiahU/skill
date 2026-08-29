@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "lc3u81lmbw",
+  "namespace": "AriEncarnacion",
+  "slug": "dnd-mcp",
+  "name": "Remote MCP Server with GitHub OAuth",
+  "description": "A Cloudflare Workers-deployed MCP server that provides secure remote access to MCP tools through GitHub OAuth authentication. Includes example tools for basic math operations, user info retrieval, and image generation with configurable user access controls.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Cloudflare Workers-deployed MCP server that provides secure remote access to MCP tools through GitHub OAuth authentication. Includes example tools for basic math operations, user info retrieval, and image generation with configurable user access controls.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GITHUB_CLIENT_ID": {
+          "description": "Your GitHub OAuth App Client ID",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Your GitHub OAuth App Client Secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Random string for cookie encryption (e.g. generated with openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "lc3u81lmbw",
+    "name": "Remote MCP Server with GitHub OAuth",
+    "namespace": "AriEncarnacion",
+    "repository": {
+      "url": "https://github.com/AriEncarnacion/dnd-mcp"
+    },
+    "slug": "dnd-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lc3u81lmbw"
+  }
+}

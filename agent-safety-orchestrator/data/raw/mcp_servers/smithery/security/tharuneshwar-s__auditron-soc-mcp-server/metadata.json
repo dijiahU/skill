@@ -1,0 +1,146 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "tharuneshwar-s/auditron-soc-mcp-server",
+  "namespace": "tharuneshwar-s",
+  "slug": "auditron-soc-mcp-server",
+  "displayName": "Auditron",
+  "description": "Run cloud compliance audits across AWS, Azure, and GCP. Discover provider-specific audit controls and execute targeted checks to surface misconfigurations and risks. Streamline multi-cloud security assessments with fast, repeatable evaluations.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "vulnerability",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "2c0225f8-e149-4678-98d2-436ba830306f",
+    "qualifiedName": "tharuneshwar-s/auditron-soc-mcp-server",
+    "namespace": "tharuneshwar-s",
+    "slug": "auditron-soc-mcp-server",
+    "displayName": "Auditron",
+    "description": "Run cloud compliance audits across AWS, Azure, and GCP. Discover provider-specific audit controls and execute targeted checks to surface misconfigurations and risks. Streamline multi-cloud security assessments with fast, repeatable evaluations.",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2025-09-09T11:56:14.402Z",
+    "homepage": "https://smithery.ai/servers/tharuneshwar-s/auditron-soc-mcp-server",
+    "bySmithery": false,
+    "owner": "org_01KNBR02715E4NHG6TD135SMWQ",
+    "score": 0.010752688172043012
+  },
+  "detail": {
+    "qualifiedName": "tharuneshwar-s/auditron-soc-mcp-server",
+    "displayName": "Auditron",
+    "description": "Run cloud compliance audits across AWS, Azure, and GCP. Discover provider-specific audit controls and execute targeted checks to surface misconfigurations and risks. Streamline multi-cloud security assessments with fast, repeatable evaluations.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://auditron-soc-mcp-server--tharuneshwar-s.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://auditron-soc-mcp-server--tharuneshwar-s.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "rootGet",
+        "description": "A simple health check endpoint to confirm the service is running.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "listToolsToolsGet",
+        "description": "Provides a structured, machine-readable list of all available audit controls,\ncategorized by cloud provider. This is the primary discovery endpoint for an agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "auditAwsAuditAwsPost",
+        "description": "Executes a list of specified audit controls for Amazon Web Services.\n\nThis endpoint accepts parameters and/or request body.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User ID for credential retrieval"
+            },
+            "controls": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "not": {}
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "auditAzureAuditAzurePost",
+        "description": "Executes a list of specified audit controls for Microsoft Azure.\n\nThis endpoint accepts parameters and/or request body.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User ID for credential retrieval"
+            },
+            "controls": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "not": {}
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "auditGcpAuditGcpPost",
+        "description": "Executes a list of specified audit controls for Google Cloud Platform.\n\nThis endpoint accepts parameters and/or request body.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User ID for credential retrieval"
+            },
+            "controls": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "not": {}
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

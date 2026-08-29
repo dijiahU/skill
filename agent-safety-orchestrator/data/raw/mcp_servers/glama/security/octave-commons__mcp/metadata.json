@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "pfhatqiwcn",
+  "namespace": "octave-commons",
+  "slug": "mcp",
+  "name": "Promethean OS MCP",
+  "description": "A unified MCP server with composable tools for GitHub operations, file management, shell execution, kanban boards, Discord messaging, and package management. Features role-based security, HTTP/stdio transports, and a web-based development UI.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A unified MCP server with composable tools for GitHub operations, file management, shell execution, kanban boards, Discord messaging, and package management. Features role-based security, HTTP/stdio transports, and a web-based development UI.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_USER_ID": {
+          "description": "User identifier for RBAC authentication",
+          "type": "string"
+        },
+        "GITHUB_TOKEN": {
+          "description": "GitHub token for authenticating with GitHub's GraphQL API (required for GitHub review tools)",
+          "type": "string"
+        },
+        "MCP_USER_ROLE": {
+          "description": "User role for RBAC authorization (guest | user | developer | admin)",
+          "type": "string"
+        },
+        "MCP_CONFIG_JSON": {
+          "description": "Legacy environment variable containing inline JSON configuration",
+          "type": "string"
+        },
+        "MCP_EXEC_CONFIG": {
+          "description": "Explicit JSON file path for exec command allowlist configuration",
+          "type": "string"
+        },
+        "MCP_STRICT_MODE": {
+          "description": "Enable strict mode for enhanced security validation",
+          "type": "string"
+        },
+        "MCP_DEFAULT_ROLE": {
+          "description": "Default role when no user role is specified",
+          "type": "string",
+          "default": "guest"
+        },
+        "GITHUB_GRAPHQL_URL": {
+          "description": "Optional GitHub GraphQL URL for GitHub API requests",
+          "type": "string"
+        },
+        "MCP_EXEC_COMMANDS_JSON": {
+          "description": "Inline JSON payload for exec command allowlist configuration",
+          "type": "string"
+        },
+        "MCP_REQUIRE_AUTH_DANGEROUS": {
+          "description": "Require authentication for dangerous operations",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "pfhatqiwcn",
+    "name": "Promethean OS MCP",
+    "namespace": "octave-commons",
+    "repository": {
+      "url": "https://github.com/octave-commons/mcp"
+    },
+    "slug": "mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pfhatqiwcn"
+  }
+}

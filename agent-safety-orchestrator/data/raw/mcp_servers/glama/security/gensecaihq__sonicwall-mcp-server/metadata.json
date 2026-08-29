@@ -1,0 +1,102 @@
+{
+  "registry": "glama",
+  "id": "ocqt3j5gun",
+  "namespace": "gensecaihq",
+  "slug": "Sonicwall-MCP-Server",
+  "name": "SonicWall MCP Server",
+  "description": "Enables intelligent analysis of SonicWall firewall logs through natural language queries. Provides real-time threat detection, network security monitoring, and log analysis with support for both SonicOS 7.x and 8.x versions.",
+  "discoveryQueries": [
+    "security",
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables intelligent analysis of SonicWall firewall logs through natural language queries. Provides real-time threat detection, network security monitoring, and log analysis with support for both SonicOS 7.x and 8.x versions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Port for the MCP server",
+          "type": "string",
+          "default": "3000"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level for the server",
+          "type": "string",
+          "default": "info"
+        },
+        "API_TIMEOUT": {
+          "description": "API timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "MAX_RETRIES": {
+          "description": "Maximum number of API retries",
+          "type": "string",
+          "default": "3"
+        },
+        "CORS_ORIGINS": {
+          "description": "Comma-separated list of allowed CORS origins",
+          "type": "string",
+          "default": "https://claude.ai,https://localhost:3000"
+        },
+        "CACHE_MAX_SIZE": {
+          "description": "Maximum cache size for performance tuning",
+          "type": "string",
+          "default": "1000"
+        },
+        "RATE_LIMIT_MAX": {
+          "description": "Maximum number of requests for rate limiting",
+          "type": "string",
+          "default": "100"
+        },
+        "SONICWALL_HOST": {
+          "description": "The IP address or hostname of your SonicWall device",
+          "type": "string"
+        },
+        "MCP_BEARER_TOKEN": {
+          "description": "Optional bearer token for additional MCP security",
+          "type": "string"
+        },
+        "CACHE_TTL_SECONDS": {
+          "description": "Cache time-to-live in seconds",
+          "type": "string",
+          "default": "300"
+        },
+        "SONICWALL_VERSION": {
+          "description": "SonicOS version (7 for SonicOS 7.x or 8 for SonicOS 8.x)",
+          "type": "string"
+        },
+        "SONICWALL_PASSWORD": {
+          "description": "Password for SonicWall admin access",
+          "type": "string"
+        },
+        "SONICWALL_USERNAME": {
+          "description": "Username for SonicWall admin access",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SONICWALL_HOST",
+        "SONICWALL_USERNAME",
+        "SONICWALL_PASSWORD",
+        "SONICWALL_VERSION"
+      ]
+    },
+    "id": "ocqt3j5gun",
+    "name": "SonicWall MCP Server",
+    "namespace": "gensecaihq",
+    "repository": {
+      "url": "https://github.com/gensecaihq/Sonicwall-MCP-Server"
+    },
+    "slug": "Sonicwall-MCP-Server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ocqt3j5gun"
+  }
+}

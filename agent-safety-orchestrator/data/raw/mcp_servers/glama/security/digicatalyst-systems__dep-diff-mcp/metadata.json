@@ -1,0 +1,40 @@
+{
+  "registry": "glama",
+  "id": "ws641bth7d",
+  "namespace": "DigiCatalyst-Systems",
+  "slug": "dep-diff-mcp",
+  "name": "dep-diff-mcp",
+  "description": "Translates a lockfile diff into a human-readable upgrade plan. For every dependency bump (npm or PyPI) returns semver class, breaking changes from GitHub release notes, CVEs fixed in the range, migration guide links, and a clear per-package recommendation. Bulk tool ranks up to 50 package changes in parallel by risk (security > caution > review > likely-safe > safe).",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Translates a lockfile diff into a human-readable upgrade plan. For every dependency bump (npm or PyPI) returns semver class, breaking changes from GitHub release notes, CVEs fixed in the range, migration guide links, and a clear per-package recommendation. Bulk tool ranks up to 50 package changes in parallel by risk (security > caution > review > likely-safe > safe).",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GITHUB_TOKEN": {
+          "description": "GitHub token for accessing the GitHub API to read release notes. Optional but recommended to avoid rate limits (60 requests per hour without a token). The server resolves a token in this order: 1. GITHUB_TOKEN environment variable, if set. 2. gh auth token — if the GitHub CLI is installed and authenticated, the server uses that token automatically. 3. Anonymous (60 req/hr). For security, use a fine-grained token with public repository read-only access and rotate periodically.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ws641bth7d",
+    "name": "dep-diff-mcp",
+    "namespace": "DigiCatalyst-Systems",
+    "repository": {
+      "url": "https://github.com/DigiCatalyst-Systems/dep-diff-mcp"
+    },
+    "slug": "dep-diff-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ws641bth7d"
+  }
+}

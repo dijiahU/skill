@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "jzelb7vhvt",
+  "namespace": "darwinz",
+  "slug": "workmail-mcp-server",
+  "name": "WorkMail MCP Server",
+  "description": "Enables Claude Desktop to securely access Amazon WorkMail email and calendar functionality through a local MCP server. Provides tools for reading, searching, and sending emails, as well as managing calendar events with built-in security protections.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables Claude Desktop to securely access Amazon WorkMail email and calendar functionality through a local MCP server. Provides tools for reading, searching, and sending emails, as well as managing calendar events with built-in security protections.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WORKMAIL_MCP_LOG_LEVEL": {
+          "description": "Log verbosity: error, warn, info, debug",
+          "type": "string",
+          "default": "info"
+        },
+        "WORKMAIL_MCP_MAX_EMAILS": {
+          "description": "Max emails returned per request (1-100)",
+          "type": "string",
+          "default": "25"
+        },
+        "WORKMAIL_MCP_RATE_LIMIT": {
+          "description": "Max requests per minute (1-60)",
+          "type": "string",
+          "default": "30"
+        },
+        "WORKMAIL_MCP_EWS_ENDPOINT": {
+          "description": "WorkMail EWS endpoint URL",
+          "type": "string",
+          "default": "https://ews.mail.us-west-2.awsapps.com/EWS/Exchange.asmx"
+        },
+        "WORKMAIL_MCP_MAX_CALENDAR_DAYS": {
+          "description": "Max calendar date range in days (1-90)",
+          "type": "string",
+          "default": "30"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "jzelb7vhvt",
+    "name": "WorkMail MCP Server",
+    "namespace": "darwinz",
+    "repository": {
+      "url": "https://github.com/darwinz/workmail-mcp-server"
+    },
+    "slug": "workmail-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jzelb7vhvt"
+  }
+}

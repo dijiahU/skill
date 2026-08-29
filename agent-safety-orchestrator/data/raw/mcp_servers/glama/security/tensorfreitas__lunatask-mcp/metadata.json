@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "rp0272ut46",
+  "namespace": "tensorfreitas",
+  "slug": "lunatask-mcp",
+  "name": "LunaTask MCP Server",
+  "description": "An unofficial bridge that enables AI models to interact with the LunaTask API for managing tasks, notes, journal entries, and contacts. It supports creating and updating productivity data while respecting LunaTask's end-to-end encryption for sensitive fields.",
+  "discoveryQueries": [
+    "encryption"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An unofficial bridge that enables AI models to interact with the LunaTask API for managing tasks, notes, journal entries, and contacts. It supports creating and updating productivity data while respecting LunaTask's end-to-end encryption for sensitive fields.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "port": {
+          "description": "Port for future HTTP transport (currently unused as server only supports stdio transport).",
+          "type": "string",
+          "default": "8080"
+        },
+        "token": {
+          "description": "LunaTask API bearer token. Required to authenticate with the LunaTask API if not provided in the configuration file.",
+          "type": "string"
+        },
+        "base_url": {
+          "description": "LunaTask API base URL.",
+          "type": "string",
+          "default": "https://api.lunatask.app/v1/"
+        },
+        "log_level": {
+          "description": "Logging level. Valid values: DEBUG, INFO, WARNING, ERROR, CRITICAL.",
+          "type": "string",
+          "default": "INFO"
+        },
+        "config_file": {
+          "description": "Path to the custom TOML configuration file (defaults to ./config.toml).",
+          "type": "string"
+        },
+        "rate_limit_rpm": {
+          "description": "Rate limit in requests per minute.",
+          "type": "string",
+          "default": "60"
+        },
+        "rate_limit_burst": {
+          "description": "Rate limit burst size.",
+          "type": "string",
+          "default": "10"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "config_file"
+          ]
+        },
+        {
+          "required": [
+            "token"
+          ]
+        }
+      ]
+    },
+    "id": "rp0272ut46",
+    "name": "LunaTask MCP Server",
+    "namespace": "tensorfreitas",
+    "repository": {
+      "url": "https://github.com/tensorfreitas/lunatask-mcp"
+    },
+    "slug": "lunatask-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rp0272ut46"
+  }
+}

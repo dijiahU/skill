@@ -1,0 +1,1810 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "sweeppea/mcpserver",
+  "namespace": "sweeppea",
+  "slug": "mcpserver",
+  "displayName": "Sweeppea MCP",
+  "description": "Sweeppea MCP: Professional US & Canada Sweepstakes Compliance\n\nManage sweepstakes, participants, and winner drawings directly through a unified interface. Create official rules, schedule events, and handle support tickets to streamline your promotion workflow while ensuring legal compliance across the United States and Canada.\n\n🚀 How It Works\nThe Sweeppea MCP Server acts as a secure bridge between AI assistants and the official Sweeppea API. It translates natural language interactions into structured API calls, giving your AI assistant control over:\n\nParticipant Management & Winner Drawings.\n\nLegally Compliant Official Rules Generation.\n\nPromotion Calendars & Event Scheduling.\n\nReal-time Billing & Data Insights.\n\nArchitecture Flow\nYour AI Assistant → MCP (Protocol) → Sweeppea MCP Server → Sweeppea API v3\n\n🔐 Authentication & Pricing\nThis MCP server requires a Sweeppea API Key tied to an active subscription.\n\nWhy a Professional Service?\nRunning sweepstakes in the United States and/or C",
+  "discoveryQueries": [
+    "credential",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "048adc47-6afa-4ab6-b080-5bd2ade61293",
+    "qualifiedName": "sweeppea/mcpserver",
+    "namespace": "sweeppea",
+    "slug": "mcpserver",
+    "displayName": "Sweeppea MCP",
+    "description": "Sweeppea MCP: Professional US & Canada Sweepstakes Compliance\n\nManage sweepstakes, participants, and winner drawings directly through a unified interface. Create official rules, schedule events, and handle support tickets to streamline your promotion workflow while ensuring legal compliance across the United States and Canada.\n\n🚀 How It Works\nThe Sweeppea MCP Server acts as a secure bridge between AI assistants and the official Sweeppea API. It translates natural language interactions into structured API calls, giving your AI assistant control over:\n\nParticipant Management & Winner Drawings.\n\nLegally Compliant Official Rules Generation.\n\nPromotion Calendars & Event Scheduling.\n\nReal-time Billing & Data Insights.\n\nArchitecture Flow\nYour AI Assistant → MCP (Protocol) → Sweeppea MCP Server → Sweeppea API v3\n\n🔐 Authentication & Pricing\nThis MCP server requires a Sweeppea API Key tied to an active subscription.\n\nWhy a Professional Service?\nRunning sweepstakes in the United States and/or C",
+    "iconUrl": "https://api.smithery.ai/servers/sweeppea/mcpserver/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-04T21:38:50.916Z",
+    "homepage": "https://mcpdocs.sweeppea.com",
+    "bySmithery": false,
+    "owner": "org_01KNBVHB4TEF6AWMDB9PY4R11E",
+    "score": 0.011904761904761904
+  },
+  "detail": {
+    "qualifiedName": "sweeppea/mcpserver",
+    "displayName": "Sweeppea MCP",
+    "description": "Sweeppea MCP: Professional US & Canada Sweepstakes Compliance\n\nManage sweepstakes, participants, and winner drawings directly through a unified interface. Create official rules, schedule events, and handle support tickets to streamline your promotion workflow while ensuring legal compliance across the United States and Canada.\n\n🚀 How It Works\nThe Sweeppea MCP Server acts as a secure bridge between AI assistants and the official Sweeppea API. It translates natural language interactions into structured API calls, giving your AI assistant control over:\n\nParticipant Management & Winner Drawings.\n\nLegally Compliant Official Rules Generation.\n\nPromotion Calendars & Event Scheduling.\n\nReal-time Billing & Data Insights.\n\nArchitecture Flow\nYour AI Assistant → MCP (Protocol) → Sweeppea MCP Server → Sweeppea API v3\n\n🔐 Authentication & Pricing\nThis MCP server requires a Sweeppea API Key tied to an active subscription.\n\nWhy a Professional Service?\nRunning sweepstakes in the United States and/or Canada is legally complex. Each jurisdiction has its own regulations, including registration requirements, bonding thresholds, and prize disclosure laws.\n\nSweeppea manages this complexity by generating official rules that comply with federal and state-level consumer protection statutes. The platform also handles multi-state eligibility and enforces entry limits, providing an auditable record of every participant and winner draw. Your API Key grants access to a system built specifically to keep sweepstakes legally defensible.",
+    "iconUrl": "https://api.smithery.ai/servers/sweeppea/mcpserver/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcpserver--sweeppea.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcpserver--sweeppea.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "SWEEPPEA_API_KEY",
+            "PROTOCOL_VERSION"
+          ],
+          "properties": {
+            "PROTOCOL_VERSION": {
+              "type": "string",
+              "x-to": {
+                "header": "MCP-Protocol-Version"
+              },
+              "x-from": {
+                "header": "PROTOCOL_VERSION"
+              },
+              "default": "2025-11-25",
+              "x-order": 1,
+              "description": "MCP protocol version defined by Sweeppea."
+            },
+            "SWEEPPEA_API_KEY": {
+              "type": "string",
+              "x-to": {
+                "header": "Authorization"
+              },
+              "x-from": {
+                "header": "SWEEPPEA_API_KEY"
+              },
+              "x-order": 0,
+              "description": "Sweeppea API Key. Important: Must include the 'Bearer' prefix (Example: Bearer sk_123...)."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "hello_world",
+        "description": "Returns a simple Hello World greeting message",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name to include in greeting (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_business",
+        "description": "Get business information for a Sweeppea account. Returns company details, address, and business settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_plan",
+        "description": "Get plan details for a Sweeppea subscription. Returns pricing, limits, features, and usage information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_profile",
+        "description": "Get user profile information for a Sweeppea account. Returns user details like name, email, and account settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "health_check",
+        "description": "Verify connection to Sweeppea API and validate your API key. Use this to test if your credentials are working correctly.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "fetch_billing_consumptions",
+        "description": "Get monthly and yearly billing consumption totals for your account. Shows aggregated usage data from billing transactions and data transfers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "fetch_billing_transactions",
+        "description": "Get all billing transactions for your account including invoices, amounts, and status. Results are sorted by creation date (newest first).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "fetch_data_transfer",
+        "description": "Get data transfer records for a specific sweepstakes including bytes transferred, payment status, and rates. Use fetch_sweepstakes first to get the sweepstakes_token.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token to fetch data transfer records from (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_wallet_transactions",
+        "description": "Get all wallet transactions for your account including credits, debits, and payment details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "create_calendar_event",
+        "description": "Create a new calendar event with title, dates, and optional details like location, time, and notifications. DATE RULE: The API server uses UTC. Today's date may be rejected as \"past\" depending on the user's local timezone. To be safe, always use tomorrow's date or later when creating events. NEVER use today's date — it will fail with \"Cannot Create Events In The Past\". If the user asks to create an event for today, explain this limitation and suggest tomorrow instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "description": "Event color in hex format, e.g., #FF5733 (optional)"
+            },
+            "title": {
+              "type": "string",
+              "description": "Event title (required)"
+            },
+            "status": {
+              "type": "string",
+              "description": "Event status (optional)"
+            },
+            "all_day": {
+              "type": "boolean",
+              "description": "Whether this is an all-day event (optional, default: false)"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End date in ISO 8601 format, e.g., 2026-01-20 (required)"
+            },
+            "end_time": {
+              "type": "string",
+              "description": "End time in HH:MM format, e.g., 17:00 (optional)"
+            },
+            "latitude": {
+              "type": "number",
+              "description": "Location latitude coordinate (optional)"
+            },
+            "location": {
+              "type": "string",
+              "description": "Event location (optional)"
+            },
+            "completed": {
+              "type": "boolean",
+              "description": "Mark event as completed (optional, default: false)"
+            },
+            "event_url": {
+              "type": "string",
+              "description": "URL associated with the event (optional)"
+            },
+            "longitude": {
+              "type": "number",
+              "description": "Location longitude coordinate (optional)"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in ISO 8601 format, e.g., 2026-01-20 (required)"
+            },
+            "start_time": {
+              "type": "string",
+              "description": "Start time in HH:MM format, e.g., 09:00 (optional)"
+            },
+            "description": {
+              "type": "string",
+              "description": "Event description (optional)"
+            },
+            "notification": {
+              "type": "string",
+              "description": "Notification settings (optional)"
+            },
+            "private_event": {
+              "type": "boolean",
+              "description": "Whether this is a private event (optional, default: false)"
+            },
+            "people_involved": {
+              "type": "string",
+              "description": "People involved in the event (optional)"
+            },
+            "sms_notification": {
+              "type": "boolean",
+              "description": "Enable SMS notifications (optional, default: false)"
+            },
+            "repeat_this_event": {
+              "type": "string",
+              "description": "Repeat configuration for recurring events (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_calendar_event",
+        "description": "Permanently delete a calendar event. Use fetch_calendar_events first to get the event_token. WARNING: This action cannot be undone.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "event_token": {
+              "type": "string",
+              "description": "The event token to delete (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_calendar_events",
+        "description": "Get all calendar events for your account. Returns events with their details including dates, times, location, and status. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information (titles, dates, times, locations).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_calendar_event",
+        "description": "Get a single calendar event by its token. Use fetch_calendar_events first to get event tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "event_token": {
+              "type": "string",
+              "description": "The event token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_calendar_event",
+        "description": "Update an existing calendar event. Use fetch_calendar_events first to get the event_token. Supports partial updates - only provide fields you want to change. Note: Cannot update events to past dates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "description": "New event color in hex format (optional)"
+            },
+            "title": {
+              "type": "string",
+              "description": "New event title (optional)"
+            },
+            "status": {
+              "type": "string",
+              "description": "New event status (optional)"
+            },
+            "all_day": {
+              "type": "boolean",
+              "description": "Whether this is an all-day event (optional)"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "New end date in ISO 8601 format (optional)"
+            },
+            "end_time": {
+              "type": "string",
+              "description": "New end time in HH:MM format (optional)"
+            },
+            "latitude": {
+              "type": "number",
+              "description": "New location latitude coordinate (optional)"
+            },
+            "location": {
+              "type": "string",
+              "description": "New event location (optional)"
+            },
+            "completed": {
+              "type": "boolean",
+              "description": "Mark event as completed (optional)"
+            },
+            "event_url": {
+              "type": "string",
+              "description": "New URL associated with the event (optional)"
+            },
+            "longitude": {
+              "type": "number",
+              "description": "New location longitude coordinate (optional)"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "New start date in ISO 8601 format (optional)"
+            },
+            "start_time": {
+              "type": "string",
+              "description": "New start time in HH:MM format (optional)"
+            },
+            "description": {
+              "type": "string",
+              "description": "New event description (optional)"
+            },
+            "event_token": {
+              "type": "string",
+              "description": "The event token to update (UUID format, required)"
+            },
+            "notification": {
+              "type": "string",
+              "description": "New notification settings (optional)"
+            },
+            "private_event": {
+              "type": "boolean",
+              "description": "Whether this is a private event (optional)"
+            },
+            "people_involved": {
+              "type": "string",
+              "description": "New people involved in the event (optional)"
+            },
+            "sms_notification": {
+              "type": "boolean",
+              "description": "Enable SMS notifications (optional)"
+            },
+            "repeat_this_event": {
+              "type": "string",
+              "description": "New repeat configuration (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_documentation",
+        "description": "Get help and support documentation articles. Supports pagination and search by title or content. Returns up to 10 documents per page.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "description": "Page number to retrieve (default: 1)"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Number of documents per page, max 10 (default: 5)"
+            },
+            "search": {
+              "type": "string",
+              "description": "Search term to filter documents by title or content"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_entry_fields",
+        "description": "Get all form fields for a sweepstakes entry page. Use fetch_sweepstakes first to get the sweepstakes_token. Call this before add_participant to discover required fields. Returns field names, types, and whether they are required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_entry_settings",
+        "description": "Get entry page settings for a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token. Returns all configuration: display, colors, spacing, entry settings, compliance, confirmation page, winners page, age gate, AMOE, geolocation, analytics, social media follows, sharing rewards, bonus entries, and sponsor profiles. Use this before update_entry_settings to see current values. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_entry_settings",
+        "description": "Update entry page settings for a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token, and get_entry_settings to see current values before updating. LIMIT: You can update between 1 and 5 fields per request. If the user needs to update more than 5 fields, break the updates into multiple requests of up to 5 fields each. Inform the user about this limit. ALLOWED FIELDS: EntryPageHeadline, EntryPageDescription, EntryPageAbbreviatedRules, EntryPageWidth, EntryPageWidthMeasure, EntryPageBorder, EntryPageRadius, EntryPageBackgroundColor, EntryPageBackgroundInnerColor, EntryPageTextColor, EntryPageButtonColor, EntryPageMarginTop, EntryPageMarginBottom, EntryPageShowOverlay, BonusEntriesSwitch, BonusEntriesValue, EmailOptInSwitch, EmailOptInMessage, SMSTextOptInSwitch, TermsConditionsSwitch, TermsConditionsMessage, SelectedOfficialRules, ReCaptcha, ConfirmationPageHeadline, ConfirmationPageDescription, WebExpirationMessage, ExternalConfirmationPageURI, ConfirmationYoutubeUrl, ActivateWinnersSwitch, WinnersPageHeadline, WinnersPageDescription, ExternalWinnersPageURI, ActivateAgeGateSwitch, AgeGateHeadline, AgeGateDescription, AgeGateMinAge, AgeGateBackgroundColor, AgeGateTextColor, ActivateAmoeSwitch, AmoeHeadline, AmoeDescription, AmoeEntries, EnableInternationalAMOEForm, GeoLocation, GeoLocationIsRequiredToRenderPage, AllowParticipantsWithinFences, CollectStatistics, EnableShareWidget, EnableProgressBar, EnableSweepstakesCountdown, EnableNumberOfParticipants, EnableSocialWidget, FollowFacebookSwitch, FollowXSwitch, FollowInstagramSwitch, FollowTikTokSwitch, FollowLinkedInSwitch, FollowPinterestSwitch, FollowThreadsSwitch, FollowRedditSwitch, FollowSnapchatSwitch, FollowYoutubeSwitch, FollowTwitchSwitch, BothSocialShareParticipantsAwardedSwitch, BothEmailShareParticipantsAwardedSwitch, BonusEntriesOnRegister, BonusEntriesOnShareFacebook, BonusEntriesOnShareX, BonusEntriesOnShareInstagram, BonusEntriesOnShareTikTok, BonusEntriesOnShareLinkedIn, BonusEntriesOnSharePinterest, BonusEntriesOnShareThreads, BonusEntriesOnShareReddit, BonusEntriesOnShareSnapchat, BonusEntriesOnShareWhatsApp, BonusEntriesOnShareTelegram, BonusEntriesOnShareGenericLink, BonusEntriesOnShareEmail, BonusEntriesFollowFacebook, BonusEntriesFollowX, BonusEntriesFollowInstagram, BonusEntriesFollowTikTok, BonusEntriesFollowLinkedIn, BonusEntriesFollowPinterest, BonusEntriesFollowThreads, BonusEntriesFollowReddit, BonusEntriesFollowSnapchat, BonusEntriesFollowYoutube, BonusEntriesFollowTwitch, SponsorFacebookProfile, SponsorXProfile, SponsorInstagramProfile, SponsorTikTokProfile, SponsorLinkedInProfile, SponsorPinterestProfile, SponsorThreadsProfile, SponsorRedditProfile, SponsorSnapchatProfile, SponsorYoutubeProfile, SponsorTwitchProfile. COLOR FIELDS: EntryPageBackgroundColor, EntryPageBackgroundInnerColor, EntryPageTextColor, EntryPageButtonColor use format { \"hexa\": \"#RRGGBB\" }. AgeGateBackgroundColor, AgeGateTextColor use format { \"hex\": \"#RRGGBB\" }. EntryPageWidthMeasure only accepts \"%\" or \"px\". DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "settings": {
+              "type": "object",
+              "description": "Object with 1 to 5 settings fields to update. Field names must be PascalCase as listed in the tool description. Example: { \"EntryPageHeadline\": \"Win Big!\", \"BonusEntriesSwitch\": true }"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_group",
+        "description": "Create a new group within a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token. Groups are used to organize and segment participants.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "group_name": {
+              "type": "string",
+              "description": "The name of the group (must be unique within the sweepstakes)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_group",
+        "description": "Permanently delete a group from a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token, then fetch_groups to get the group_token. WARNING: Cannot delete primary groups, locked groups, or groups with participants.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "group_token": {
+              "type": "string",
+              "description": "The group token to delete (UUID format)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_groups",
+        "description": "Get all groups from a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token. Groups are used to organize and segment participants. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information (group names, statuses).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_group",
+        "description": "Update the name of an existing group within a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token, then fetch_groups to get the group_token.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "group_name": {
+              "type": "string",
+              "description": "The new name for the group (must be unique within the sweepstakes)"
+            },
+            "group_token": {
+              "type": "string",
+              "description": "The group token to update (UUID format)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_note",
+        "description": "Create a new note. Content is automatically encrypted using AES-256-CBC encryption before storage. FORMAT: Only these HTML tags are allowed: <h1>, <h2>, <h3>, <h4>, <h5>, <h6>, <p>, <a>, <br>, <strong>, <i>, <ul>, <ol>, <li>. NEVER insert scripts, iframes, event handlers (onclick, onerror, etc.), style tags, or any executable code. SPACING: Do NOT use <br>&nbsp; between sections — it creates ugly blank blocks in the UI. Instead, rely on natural HTML block element spacing. Place content directly inside tags: <h3>Title</h3><p>Text</p><ul><li>Item</li></ul>. Only use <br> inside a <p> tag when you need a line break within a paragraph.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Note title (max 100 characters, must be unique)"
+            },
+            "pinned": {
+              "type": "boolean",
+              "description": "Pin note to top of list (default: false)"
+            },
+            "content": {
+              "type": "string",
+              "description": "Note content (max 100,000 characters, will be encrypted). Allowed HTML: <h1>-<h6>, <p>, <a>, <br>, <strong>, <i>, <ul>, <ol>, <li>. No scripts, iframes, or executable code."
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_note",
+        "description": "Permanently delete a note. Use fetch_notes first to get the note_token. WARNING: This action cannot be undone.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "note_token": {
+              "type": "string",
+              "description": "The note token to delete (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_notes",
+        "description": "Get all notes for your account. Notes are automatically decrypted and returned in reverse chronological order. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information (titles, content, dates).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_note",
+        "description": "Fetch a single note by its token. Use fetch_notes first to get the note_token. The note content is automatically decrypted in the response. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "note_token": {
+              "type": "string",
+              "description": "The unique token (UUID) of the note to retrieve"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_note",
+        "description": "Update an existing note. Use fetch_notes first to get the note_token. Supports partial updates - only provide the fields you want to change. FORMAT: Only these HTML tags are allowed: <h1>, <h2>, <h3>, <h4>, <h5>, <h6>, <p>, <a>, <br>, <strong>, <i>, <ul>, <ol>, <li>. NEVER insert scripts, iframes, event handlers (onclick, onerror, etc.), style tags, or any executable code. SPACING: Do NOT use <br>&nbsp; between sections — it creates ugly blank blocks in the UI. Instead, rely on natural HTML block element spacing. Place content directly inside tags: <h3>Title</h3><p>Text</p><ul><li>Item</li></ul>. Only use <br> inside a <p> tag when you need a line break within a paragraph.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "New title (max 100 characters, must be unique)"
+            },
+            "pinned": {
+              "type": "boolean",
+              "description": "Pin or unpin the note"
+            },
+            "content": {
+              "type": "string",
+              "description": "New content (max 100,000 characters, will be encrypted). Allowed HTML: <h1>-<h6>, <p>, <a>, <br>, <strong>, <i>, <ul>, <ol>, <li>. No scripts, iframes, or executable code."
+            },
+            "note_token": {
+              "type": "string",
+              "description": "The note token to update (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "add_participant",
+        "description": "Add a new participant to a sweepstakes. Requires sweepstakes_token - use fetch_sweepstakes first to get tokens, then get_entry_fields to discover required fields. Field names must use underscores instead of spaces (e.g., \"First_Name\" not \"First Name\"). RULES: Only ONE participant at a time. NEVER add participants in bulk, batch, or loops. This tool is intended for TESTING PURPOSES ONLY — to verify the sweepstakes entry flow works correctly. Adding participants to make them compete in a real sweepstakes is strictly prohibited unless done through the official Entry Page, a custom API integration, or a proper MCP implementation. If a user requests mass loading (e.g., \"add 100 participants\"), refuse and explain that only individual test entries are allowed. HONESTY: After calling this tool, report EXACTLY what the API returned. If the API returns an error, report the error truthfully. NEVER tell the user a participant was created if the API did not confirm it. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Participant email address (used as KeyEmail)"
+            },
+            "phone": {
+              "type": "string",
+              "description": "Participant phone number (used as KeyPhoneNumber, optional)"
+            },
+            "fields": {
+              "type": "object",
+              "description": "Form fields object. Keys must use underscores for spaces (e.g., {\"First_Name\": \"John\", \"Last_Name\": \"Doe\"})"
+            },
+            "bonus_entries": {
+              "type": "number",
+              "description": "Number of bonus entries (optional, default: 0)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "count_participants",
+        "description": "Get participant counts for a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token. Supports filtering by type (all, participants, amoe, optouts) and date range.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "type": "string",
+              "description": "End date filter (ISO 8601 format, e.g., 2025-12-31)"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date filter (ISO 8601 format, e.g., 2025-01-01)"
+            },
+            "filter_type": {
+              "enum": [
+                "all",
+                "participants",
+                "amoe",
+                "optouts"
+              ],
+              "type": "string",
+              "description": "Filter type: all (default), participants, amoe (alternate method of entry), or optouts"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_participant",
+        "description": "Permanently delete a participant from a sweepstakes. WARNING: This action cannot be undone. Use get_participant first to verify the participant details before deleting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "participant_token": {
+              "type": "string",
+              "description": "The participant token to delete (UUID format)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_participants",
+        "description": "Get a paginated list of participants from a sweepstakes (20 per page). Use fetch_sweepstakes first to get the sweepstakes_token. Supports search by name, email, or phone, and filtering by opt-in date or date range. Results are sorted by creation date (newest first). For full participant details, use get_participant with a specific email, phone, or token. NEVER fabricate or hallucinate participant data — only report what the API returns. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information (names, emails, phones, dates).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "description": "Page number for pagination (default: 1, 20 results per page)"
+            },
+            "search": {
+              "type": "string",
+              "description": "Search by first name, last name, email, or phone number (case-insensitive)"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End of date range filter (YYYY-MM-DD, requires start_date)"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start of date range filter (YYYY-MM-DD, requires end_date)"
+            },
+            "opt_in_date": {
+              "type": "string",
+              "description": "Filter by specific opt-in date (YYYY-MM-DD)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_participant",
+        "description": "Fetch full details of a single participant from a sweepstakes by token, email, or phone. At least one search parameter is required. Use fetch_sweepstakes first to get the sweepstakes_token. For listing participants, use fetch_participants instead. NEVER fabricate, invent, or hallucinate participant data under any circumstance. If no result is returned by the API, report exactly that — do not guess names, emails, or counts. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Participant email address - use this OR participant_token OR phone"
+            },
+            "phone": {
+              "type": "string",
+              "description": "Participant phone number (10 digits) - use this OR participant_token OR email"
+            },
+            "participant_token": {
+              "type": "string",
+              "description": "The participant token (UUID format) - use this OR email OR phone"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_rule",
+        "description": "Create a new official rules document for a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token. SECONDARY RULES WARNING: Before creating rules, call fetch_rules to check if the sweepstakes already has primary rules. If primary rules already exist, WARN the user that the new rules will be created as SECONDARY and will NOT be the ones published on the Entry Page or assigned to the short URL (swpp.me/r/[handler]). The short URL always points to the primary rules. The user can change which rules are primary in the Official Rules section of the app. Only proceed after the user acknowledges this. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of the official rules document (max 100 characters)"
+            },
+            "document_content": {
+              "type": "string",
+              "description": "Full HTML content of the official rules (max 1,000,000 characters)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_rules_wizard",
+        "description": "Generate official sweepstakes rules via the 14-step wizard. MANDATORY WORKFLOW: Before calling this tool you MUST call fetch_sweepstakes to identify the target sweepstakes and get its token, dates, and name. Then call get_business and get_profile to pre-fill sponsor information (name, address, city, state, zip, phone, email). This reduces the number of questions you need to ask the user. Only ask the user for information you cannot obtain from those endpoints. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally for tool chaining only. STEP-BY-STEP RULE: You MUST follow the wizard steps in strict sequential order (A through N). Ask each question one at a time or in small logical groups. Do NOT skip steps or assume answers. Always wait for the user to respond before moving to the next step. Maintain order throughout the entire process. NO FABRICATION RULE: NEVER invent, assume, or fabricate any data for the wizard fields. Every value must come from the user directly or from a pre-fetch API call (fetch_sweepstakes, get_business, get_profile). If a required value is missing, ask the user — do not fill it with placeholder or guessed data. NO PAST DATES RULE: All dates and times must be in the present or future — never accept past dates. If the user provides today's date, verify the time has not already passed. This applies to start_date, end_date, winner_drawing_date, winner_notification_date, and all entry_period_items dates. If a date or time is in the past, reject it and ask the user to provide a valid future date/time. PRIMARY RULES LINK: After successfully creating rules, if the result indicates the document is primary (is_primary: true), provide the user with the public rules URL: https://swpp.me/r/[handler] where [handler] is the sweepstakes handler/keyword in lowercase (obtained from fetch_sweepstakes during the mandatory pre-fetch step). PLAIN LANGUAGE RULE: Always write options in simple, everyday language that anyone can understand. Never use math symbols like >=, <=, <, > in user-facing text. Instead of \">=5000\" write \"$5,000 or more\". Instead of \"<5000\" write \"Less than $5,000\". Describe everything as if explaining to someone with no technical background. QUESTION FORMAT: Number each question sequentially (1, 2, 3...) and list the options within each question using lowercase letters (a, b, c...). The user can reply with just the number and letter. Group related questions together. Example: \"1. Prize value: a) $5,000 or more, b) Less than $5,000 | 2. Alcohol related: a) Yes, b) No | 3. Entry method: a) Website, b) SMS, c) Social Media...\" This makes the process faster and reduces typing. Never use bullet points — always numbered questions with lettered options. SECONDARY RULES WARNING: Before creating rules, call fetch_rules to check if the sweepstakes already has primary rules. If primary rules already exist, WARN the user that the new rules will be created as SECONDARY and will NOT be the ones published on the Entry Page or assigned to the short URL (swpp.me/r/[handler]). The short URL always points to the primary rules. The user can change which rules are primary in the Official Rules section of the app. Only proceed after the user acknowledges this. ENUM REFERENCE — method_of_entry: 1=Website, 2=SMS, 3=Social Media, 4=Other, 5=Purchase ($1=1 entry), 6=Purchase (1 order=1 entry), 7=Donation, 8=Subscription. states: 1=All 50 + DC, 2=All 50 + DC + PR, 3=All 50 + DC + All Territories, 4=Select specific states, 5=US & Canada (excl. Quebec), 6=US & Canada (excl. Quebec) + PR, 7=US & UK, 8=US & Mexico, 9=Worldwide, 10=US, Canada (excl. Quebec) & Mexico. min_age: 1=18+, 2=21+, 3=13+ with parental consent. arv: 1=ARV >= $5000, 2=ARV < $5000. alcohol_sweeps: 1=alcohol-related, 2=non-alcohol. entry_period_selector: 1=single drawing period, 2=multiple entry periods. sweeppea_entry_page: 1=Sweeppea hosted page, 2=custom URL, 3=none.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "arv": {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "number",
+              "description": "Approximate Retail Value threshold. 1 = ARV >= $5,000. 2 = ARV < $5,000."
+            },
+            "states": {
+              "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              "type": "number",
+              "description": "Geographic eligibility. 1=All 50+DC, 2=+PR, 3=+All Territories, 4=Select specific, 5=US&Canada, 6=US&Canada+PR, 7=US&UK, 8=US&Mexico, 9=Worldwide, 10=US,Canada,Mexico."
+            },
+            "min_age": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "Minimum age: 1=18+, 2=21+, 3=13+ with parental consent."
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End date (YYYY-MM-DD)."
+            },
+            "end_time": {
+              "type": "string",
+              "description": "End time (e.g. \"11:59 PM\" or \"23:59\")."
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date (YYYY-MM-DD)."
+            },
+            "start_time": {
+              "type": "string",
+              "description": "Start time (e.g. \"09:00 AM\" or \"14:00\")."
+            },
+            "prize_value": {
+              "type": "number",
+              "description": "Total prize value in USD. Must be > 0."
+            },
+            "end_timezone": {
+              "type": "string",
+              "description": "End timezone."
+            },
+            "sponsor_city": {
+              "type": "string",
+              "description": "Sponsor city. Pre-fill from get_business."
+            },
+            "sponsor_name": {
+              "type": "string",
+              "description": "Legal sponsor name. Pre-fill from get_business."
+            },
+            "sponsor_email": {
+              "type": "string",
+              "description": "Sponsor email (optional). Pre-fill from get_profile."
+            },
+            "sponsor_state": {
+              "type": "string",
+              "description": "Sponsor state or abbreviation. Pre-fill from get_business."
+            },
+            "alcohol_sweeps": {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "number",
+              "description": "Is this an alcohol-related sweepstakes? 1 = Yes, 2 = No."
+            },
+            "list_of_states": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Array of state names. Required when states = 4."
+            },
+            "rules_language": {
+              "type": "string",
+              "description": "Rules language code. Default: \"en\"."
+            },
+            "start_timezone": {
+              "type": "string",
+              "description": "Start timezone (e.g. \"US/Eastern\", \"EST\", \"CST\")."
+            },
+            "method_of_entry": {
+              "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ],
+              "type": "number",
+              "description": "Entry method: 1=Website, 2=SMS, 3=Social Media, 4=Other, 5=Purchase ($1=1 entry), 6=Purchase (1 order=1 entry), 7=Donation, 8=Subscription."
+            },
+            "sponsor_address": {
+              "type": "string",
+              "description": "Sponsor street address. Pre-fill from get_business."
+            },
+            "winners_to_draw": {
+              "type": "number",
+              "description": "Number of winners to draw (>= 1). Required when entry_period_selector = 1."
+            },
+            "prize_is_vehicle": {
+              "type": "boolean",
+              "description": "Is the prize a vehicle?"
+            },
+            "sponsor_zip_code": {
+              "type": "string",
+              "description": "Sponsor zip code (5 digits). Pre-fill from get_business."
+            },
+            "sweepstakes_name": {
+              "type": "string",
+              "description": "Official promotional name (6-60 characters)."
+            },
+            "custom_entry_page": {
+              "type": "string",
+              "description": "Custom entry page URL (min 11 chars). Required when sweeppea_entry_page = 2."
+            },
+            "other_description": {
+              "type": "string",
+              "description": "Other entry method description. Required when method_of_entry = 4."
+            },
+            "prize_description": {
+              "type": "string",
+              "description": "Detailed prize description (max 5000 chars)."
+            },
+            "sponsor_telephone": {
+              "type": "string",
+              "description": "Sponsor phone number (optional). Pre-fill from get_profile."
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "Sweepstakes token (UUID). Get via fetch_sweepstakes."
+            },
+            "entry_period_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "end_date": {
+                    "type": "string"
+                  },
+                  "end_time": {
+                    "type": "string"
+                  },
+                  "start_date": {
+                    "type": "string"
+                  },
+                  "start_time": {
+                    "type": "string"
+                  },
+                  "prize_value": {
+                    "type": "number"
+                  },
+                  "drawing_date": {
+                    "type": "string"
+                  },
+                  "winners_drawn": {
+                    "type": "number"
+                  },
+                  "notification_date": {
+                    "type": "string"
+                  },
+                  "prize_description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Array of period objects. Required when entry_period_selector = 2. Each object: { start_date, start_time, end_date, end_time, drawing_date, winners_drawn, notification_date, prize_description, prize_value }."
+            },
+            "privacy_policy_url": {
+              "type": "string",
+              "description": "Privacy policy URL (min 11 chars, must include http/https)."
+            },
+            "sweeppea_entry_page": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "1 = Sweeppea hosted page, 2 = custom URL, 3 = none."
+            },
+            "winner_drawing_date": {
+              "type": "string",
+              "description": "Drawing date (YYYY-MM-DD). Required when entry_period_selector = 1."
+            },
+            "winner_drawing_time": {
+              "type": "string",
+              "description": "Drawing time. Required when entry_period_selector = 1."
+            },
+            "prize_include_travel": {
+              "type": "boolean",
+              "description": "Does the prize include travel?"
+            },
+            "entry_period_selector": {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "number",
+              "description": "1 = single drawing period, 2 = multiple entry periods."
+            },
+            "winner_drawing_timezone": {
+              "type": "string",
+              "description": "Drawing timezone. Required when entry_period_selector = 1."
+            },
+            "winner_notification_date": {
+              "type": "string",
+              "description": "Winner notification date (YYYY-MM-DD). Required when entry_period_selector = 1."
+            },
+            "winner_notification_time": {
+              "type": "string",
+              "description": "Winner notification time. Required when entry_period_selector = 1."
+            },
+            "sponsor_offering_multiplier": {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "number",
+              "description": "Is sponsor offering entry multiplier? 1=Yes, 2=No. Default: 2."
+            },
+            "winner_notification_timezone": {
+              "type": "string",
+              "description": "Winner notification timezone. Required when entry_period_selector = 1."
+            },
+            "sponsor_ecommerce_store_url_a": {
+              "type": "string",
+              "description": "Ecommerce store URL. Required when method_of_entry = 5."
+            },
+            "sponsor_ecommerce_store_url_b": {
+              "type": "string",
+              "description": "Ecommerce store URL. Required when method_of_entry = 6."
+            },
+            "sponsor_ecommerce_store_url_c": {
+              "type": "string",
+              "description": "Ecommerce/subscription store URL. Required when method_of_entry = 8."
+            },
+            "social_media_entry_description": {
+              "type": "string",
+              "description": "Social media entry details. Required when method_of_entry = 3."
+            },
+            "sponsor_asking_to_submit_video": {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "number",
+              "description": "Asking for video submission? 1=Yes, 2=No. Default: 2."
+            },
+            "limit_or_max_number_of_entries_amoe": {
+              "type": "number",
+              "description": "Max entries via AMOE (>= 1). Required when method_of_entry is 5, 6, 7, or 8."
+            },
+            "sponsor_awarding_bonus_email_social": {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "number",
+              "description": "Awarding bonus for email/social? 1=Yes, 2=No. Default: 2."
+            },
+            "total_number_of_entries_awarded_amoe": {
+              "type": "number",
+              "description": "Total entries awarded via AMOE (>= 1). Required when method_of_entry is 5, 6, 7, or 8."
+            },
+            "sponsor_donations_acceptance_page_url": {
+              "type": "string",
+              "description": "Donations acceptance page URL. Required when method_of_entry = 7."
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_rule",
+        "description": "Permanently delete an official rules document from a sweepstakes. Use fetch_rules first to get the rules_token. WARNING: This action cannot be undone.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rules_token": {
+              "type": "string",
+              "description": "The rules token to delete (UUID format)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_rules",
+        "description": "Get all official rules for a sweepstakes including primary and secondary rules. Use fetch_sweepstakes first to get the sweepstakes_token.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token to fetch rules from (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_rule",
+        "description": "Update an existing official rules document. Use fetch_rules first to get the rules_token. UPDATABLE FIELDS: Only these fields can be modified: title, document_content, abbreviated_rules_shopify. NOT UPDATABLE: sweepstakes association, primary status, creation date, and any other field NOT listed above cannot be changed after creation. Do NOT tell the user they can update fields that are not supported by this endpoint. If they ask to change something not updatable, explain it cannot be modified after creation. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "New title for the rules document (max 100 characters)"
+            },
+            "rules_token": {
+              "type": "string",
+              "description": "The rules token to update (UUID format)"
+            },
+            "document_content": {
+              "type": "string",
+              "description": "New HTML content for the rules (max 1,000,000 characters)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            },
+            "abbreviated_rules_shopify": {
+              "type": "string",
+              "description": "Abbreviated rules for Shopify integration (max 1,000,000 characters)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_ticket",
+        "description": "Create a new support ticket with title, description, and priority level. FORMAT: Only these HTML tags are allowed in description: <b>, <strong>, <i>, <hr>, <br>. NEVER insert scripts, iframes, event handlers (onclick, onerror, etc.), style tags, or any executable code. SPACING: Do NOT use <br>&nbsp; — it creates ugly blank blocks in the UI. Use <br> for line breaks within text only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Ticket subject/title (max 200 characters)"
+            },
+            "priority": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "Priority level: 1 (Low), 2 (Medium), 3 (High)"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed description of the issue (max 20,000 characters). Allowed HTML: <b>, <strong>, <i>, <hr>, <br>. No scripts, iframes, or executable code."
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_ticket",
+        "description": "Permanently delete an open support ticket. Use fetch_open_tickets first to get the case_id. WARNING: This action cannot be undone. Only open tickets can be deleted.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "case_id": {
+              "type": "string",
+              "description": "The case number of the ticket to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_closed_tickets",
+        "description": "Get closed/resolved support tickets with pagination (20 per page) and search. Returns summary info only — use get_ticket with the case number to get full ticket details including notes, files, and collaborators. Supports filtering by subject/description text, platform (renaissance, api, general, overture, winners), and priority (1=Low, 2=Medium, 3=High). DISPLAY RULE: NEVER show tokens (UUIDs) to the user.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "description": "Page number for pagination (default: 1, 20 tickets per page)"
+            },
+            "search": {
+              "type": "string",
+              "description": "Search by subject or description (case-insensitive)"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Filter by platform: renaissance, api, general, overture, winners"
+            },
+            "priority": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "Filter by priority: 1 (Low), 2 (Medium), 3 (High)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_open_tickets",
+        "description": "Get open support tickets with pagination (20 per page) and search. Returns summary info only — use get_ticket with the case number to get full ticket details including notes, files, and collaborators. Supports filtering by subject/description text, platform (renaissance, api, general, overture, winners), and priority (1=Low, 2=Medium, 3=High). DISPLAY RULE: NEVER show tokens (UUIDs) to the user.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "description": "Page number for pagination (default: 1, 20 tickets per page)"
+            },
+            "search": {
+              "type": "string",
+              "description": "Search by subject or description (case-insensitive)"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Filter by platform: renaissance, api, general, overture, winners"
+            },
+            "priority": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "Filter by priority: 1 (Low), 2 (Medium), 3 (High)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_ticket",
+        "description": "Get full details of a support ticket by case number. Use fetch_open_tickets or fetch_closed_tickets first to find tickets, then use this tool with the case number to get complete information including notes, files, collaborators, and statistics. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Present only human-readable information (case number, subject, dates, notes).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "case_number": {
+              "type": "string",
+              "description": "The ticket case number (e.g., \"HYXTNJV\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "resolve_ticket",
+        "description": "Close/resolve an open support ticket. Use fetch_open_tickets first to get the case_id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "case_id": {
+              "type": "string",
+              "description": "The case number of the ticket to close (e.g., \"ABC1234\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_ticket",
+        "description": "Update an open support ticket. Use fetch_open_tickets first to get the case_id. Only open tickets can be updated. FORMAT: Only these HTML tags are allowed in description: <b>, <strong>, <i>, <hr>, <br>. NEVER insert scripts, iframes, event handlers (onclick, onerror, etc.), style tags, or any executable code. SPACING: Do NOT use <br>&nbsp; — it creates ugly blank blocks in the UI. Use <br> for line breaks within text only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "New ticket subject (max 200 characters)"
+            },
+            "case_id": {
+              "type": "string",
+              "description": "The case number of the ticket to update"
+            },
+            "description": {
+              "type": "string",
+              "description": "New ticket description (max 20,000 characters). Allowed HTML: <b>, <strong>, <i>, <hr>, <br>. No scripts, iframes, or executable code."
+            }
+          }
+        }
+      },
+      {
+        "name": "clone_sweepstakes",
+        "description": "Clone an existing sweepstakes with new parameters. Use fetch_sweepstakes first to get the handler of the sweepstakes to clone. Creates a complete copy including entry pages, calendar events, short links, groups, and all configurations. CRITICAL: This is a billable operation. ALWAYS confirm with the user before cloning. NEVER clone multiple sweepstakes in batch or loops without explicit user approval for each one. LIMITS: Maximum 3 active sweepstakes and 10 total (active + inactive). Before cloning, use fetch_sweepstakes to verify the account has not reached these limits. If limits are reached, refuse the operation and inform the user. Ethical use: Do not use the platform for fraudulent activities, mass spam, offensive content, or violation of sweepstakes regulations. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "handler": {
+              "type": "string",
+              "description": "The identifier (handler) of the original sweepstakes to clone"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End date in YYYY-MM-DD format"
+            },
+            "end_time": {
+              "type": "string",
+              "description": "End time in HH:MM format (24-hour)"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in YYYY-MM-DD format"
+            },
+            "start_time": {
+              "type": "string",
+              "description": "Start time in HH:MM format (24-hour)"
+            },
+            "handler_new": {
+              "type": "string",
+              "description": "The unique identifier (handler) for the newly created sweepstakes"
+            },
+            "sweepstakes_name": {
+              "type": "string",
+              "description": "Display name for the cloned sweepstakes"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_sweepstakes",
+        "description": "Create a new sweepstakes programmatically. Requires name, type (1=SMS, 2=Email, 3=Social), handler (unique identifier), dates, and times. CRITICAL: You MUST know the current date before creating a sweepstakes — never guess or assume. Start dates must be today or in the future. This is a billable operation that creates real production data. ALWAYS confirm with the user before creating. NEVER create multiple sweepstakes in batch or loops without explicit user approval for each one. If user requests bulk creation (e.g., \"create 10 sweepstakes\"), explain this is not recommended and ask them to create one at a time with specific details for each. LIMITS: Maximum 3 active sweepstakes and 10 total (active + inactive). Before creating, use fetch_sweepstakes to verify the account has not reached these limits. If limits are reached, refuse the operation and inform the user. Ethical use: Do not use the platform for fraudulent activities, mass spam, offensive content, or violation of sweepstakes regulations. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "handler": {
+              "type": "string",
+              "description": "Unique identifier (max 20 alphanumeric chars, auto-converted to uppercase)"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End date in YYYY-MM-DD format (cannot precede start_date)"
+            },
+            "end_time": {
+              "type": "string",
+              "description": "End time in HH:MM format 24-hour (default: 23:59)"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in YYYY-MM-DD format (must be today or future)"
+            },
+            "start_time": {
+              "type": "string",
+              "description": "Start time in HH:MM format 24-hour (default: 00:00)"
+            },
+            "sweepstakes_name": {
+              "type": "string",
+              "description": "User-defined name for the sweepstakes"
+            },
+            "sweepstakes_type": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "Sweepstakes type: 1 (SMS), 2 (Email), or 3 (Social). Default: 2 (Email)"
+            },
+            "delete_if_deleted": {
+              "type": "boolean",
+              "description": "Auto-delete related data when sweepstakes deleted (default: false)"
+            },
+            "sync_with_winners": {
+              "type": "boolean",
+              "description": "Sync with Winners app (default: false)"
+            },
+            "create_in_calendar": {
+              "type": "boolean",
+              "description": "Create calendar event for this sweepstakes (default: false)"
+            },
+            "delete_if_acct_deleted": {
+              "type": "boolean",
+              "description": "Delete sweepstakes if account is deleted (default: false)"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_sweepstakes",
+        "description": "Permanently delete a sweepstakes and all associated data including participants, statistics, and automations. Use fetch_sweepstakes first to get the sweepstakes_token. CRITICAL: This is a DESTRUCTIVE operation that cannot be undone. ALWAYS ask for explicit user confirmation before deleting, showing the sweepstakes name. NEVER delete multiple sweepstakes in batch or loops. If user requests bulk deletion, refuse and ask them to delete one at a time after reviewing each.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The unique identifier (token) of the sweepstakes to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_sweepstakes",
+        "description": "Get all sweepstakes associated with your account. Returns a list of all sweepstakes with their details. DISPLAY RULE: NEVER show tokens (UUIDs) to the user — not sweepstakes tokens, user tokens, participant tokens, or any internal identifiers. Use tokens internally for tool chaining but present only human-readable information (names, dates, statuses) to the user.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "pause_sweepstakes",
+        "description": "Pause a sweepstakes, setting it to inactive status while preserving all data. Use fetch_sweepstakes first to get the sweepstakes_token. Participants will not be able to enter while paused.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The unique identifier (token) of the sweepstakes to pause"
+            }
+          }
+        }
+      },
+      {
+        "name": "unpause_sweepstakes",
+        "description": "Reactivate a paused sweepstakes, allowing participants to enter again. Use fetch_sweepstakes first to get the sweepstakes_token.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The unique identifier (token) of the sweepstakes to unpause"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_sweepstakes",
+        "description": "Update an existing sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token. UPDATABLE FIELDS: Only these fields can be modified: sweepstakes_name, start_date, end_date, start_time, end_time. NOT UPDATABLE: handler, sweepstakes_type, calendar settings, sync options, and any other field NOT listed above cannot be changed after creation. Do NOT tell the user they can update fields that are not supported by this endpoint. If they ask to change something not updatable, explain it cannot be modified after creation. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "type": "string",
+              "description": "New end date in YYYY-MM-DD format (cannot precede start_date)"
+            },
+            "end_time": {
+              "type": "string",
+              "description": "New end time in HH:MM format 24-hour"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "New start date in YYYY-MM-DD format (must be today or future)"
+            },
+            "start_time": {
+              "type": "string",
+              "description": "New start time in HH:MM format 24-hour"
+            },
+            "sweepstakes_name": {
+              "type": "string",
+              "description": "New name for the sweepstakes (max 200 characters)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The unique token (UUID) of the sweepstakes to update"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_todo",
+        "description": "Create a new internal To-Do item. ADMIN ONLY: This tool requires admin privileges. Non-admin users will receive a 403 Forbidden error from the API. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only. FORMAT: Only these HTML tags are allowed in description: <b>, <strong>, <i>, <hr>, <br>. NEVER insert scripts, iframes, event handlers (onclick, onerror, etc.), style tags, or any executable code. SPACING: Do NOT use <br>&nbsp; — it creates ugly blank blocks in the UI. Use <br> for line breaks within text only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pin": {
+              "type": "boolean",
+              "description": "Pin this To-Do to the top. Default: false."
+            },
+            "title": {
+              "type": "string",
+              "description": "To-Do title (max 200 characters)."
+            },
+            "deadline": {
+              "type": "string",
+              "description": "Deadline date in ISO 8601 format (e.g. \"2026-03-01\")."
+            },
+            "priority": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "Priority level: 1 = Low, 2 = Medium, 3 = High."
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed description (max 20,000 characters). Allowed HTML: <b>, <strong>, <i>, <hr>, <br>. No scripts, iframes, or executable code."
+            },
+            "resource_affected": {
+              "type": "string",
+              "description": "Resource affected (e.g. \"renaissance\", \"api\", \"aws\", \"general\"). Default: \"general\"."
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_todos",
+        "description": "Get all To-Do items with pagination (20 per page), search, and advanced filters. ADMIN ONLY: This tool requires admin privileges. Non-admin users will receive a 403 Forbidden error from the API. DISPLAY RULE: Never display tokens (UUIDs) to the user — use them internally only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "description": "Page number (default: 1, 20 items per page)."
+            },
+            "year": {
+              "type": "number",
+              "description": "Filter by creation year (ignored if date_from/date_to provided)."
+            },
+            "month": {
+              "type": "number",
+              "description": "Filter by creation month 1-12 (requires year parameter)."
+            },
+            "pinned": {
+              "type": "boolean",
+              "description": "Filter pinned items only when true."
+            },
+            "search": {
+              "type": "string",
+              "description": "Search by title or description (case-insensitive)."
+            },
+            "status": {
+              "enum": [
+                "pending",
+                "completed"
+              ],
+              "type": "string",
+              "description": "Filter by status: \"pending\" or \"completed\"."
+            },
+            "date_to": {
+              "type": "string",
+              "description": "End date filter in ISO 8601 format (e.g. \"2026-12-31\")."
+            },
+            "priority": {
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "type": "number",
+              "description": "Filter by priority: 1 = Low, 2 = Medium, 3 = High."
+            },
+            "resource": {
+              "type": "string",
+              "description": "Filter by resource affected (e.g. \"renaissance\", \"api\", \"aws\", \"general\")."
+            },
+            "date_from": {
+              "type": "string",
+              "description": "Start date filter in ISO 8601 format (e.g. \"2026-01-01\")."
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_areacodes",
+        "description": "Search US telephone area codes by code number or state name. Returns up to 10 results. Omit search to get all area codes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Search term: area code number or state name (optional, omit to get all)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_countries",
+        "description": "Search countries by name, international dial code, or ISO abbreviation. Returns up to 10 results with English/Spanish names. Omit search to get all countries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Search term: country name, dial code (e.g. \"+34\"), or ISO code (e.g. \"US\") (optional, omit to get all)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_states",
+        "description": "Get all US states including DC, Puerto Rico, and US territories. Returns full names and two-letter abbreviations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "fetch_timezones",
+        "description": "Get all available timezones with IANA identifiers, abbreviations, and UTC offsets. Use this tool whenever a timezone needs to be determined for any operation. DEFAULT: If the correct timezone cannot be determined, always use TimezoneId 7 (Eastern Standard Time - America/New_York).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "fetch_zipcodes",
+        "description": "Search US zip codes by zip code, city, or state name. Returns up to 10 results with city and state details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Search term: zip code, city name, or state name (case-insensitive)"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_scheduled_drawing",
+        "description": "Delete a pending scheduled drawing. Use fetch_scheduled_drawings first to get the schedule_token. WARNING: This action cannot be undone. Only drawings with pending status can be deleted — completed or errored drawings cannot be removed. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "schedule_token": {
+              "type": "string",
+              "description": "The scheduled drawing token to delete (UUID format)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "draw_winners",
+        "description": "Draw winners from a sweepstakes immediately. Use fetch_sweepstakes first to get the sweepstakes_token, and fetch_groups to get available groups. CRITICAL: This is a production operation that selects real winners. ALWAYS confirm with the user before drawing — including the number of winners and which group to draw from. Uses weighted random selection favoring participants with bonus entries. Cannot draw from paused or archived sweepstakes. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information (names, emails).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "group": {
+              "type": "string",
+              "description": "Group token to draw from, or \"allgroups\" for all participants"
+            },
+            "exclude_spam": {
+              "type": "boolean",
+              "description": "Exclude flagged spam participants (default: true)"
+            },
+            "how_many_winners": {
+              "type": "number",
+              "description": "Number of winners to pick (must be >= 1)"
+            },
+            "completed_entries": {
+              "type": "boolean",
+              "description": "Only include participants with completed entries (default: true)"
+            },
+            "include_opted_out": {
+              "type": "boolean",
+              "description": "Include participants who opted out (default: false)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_scheduled_drawings",
+        "description": "Get all scheduled drawings for a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token. Returns all scheduled drawings regardless of status, sorted by creation date (newest first). DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information (dates, times, status, winner counts).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch_winners",
+        "description": "Get winners from a sweepstakes with pagination. Use fetch_sweepstakes first to get the sweepstakes_token. Winners are sorted by draw date (most recent first). Supports search by email or phone. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information (names, emails, draw dates).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "description": "Page number for pagination (default: 1)"
+            },
+            "search": {
+              "type": "string",
+              "description": "Search filter for email or phone number (optional)"
+            },
+            "items_per_page": {
+              "type": "number",
+              "description": "Results per page (default: 10)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "schedule_drawing",
+        "description": "Schedule a future winner drawing for a sweepstakes. Use fetch_sweepstakes first to get the sweepstakes_token, and fetch_groups for group tokens. CRITICAL: This is a production operation. ALWAYS confirm with the user before scheduling. Requires at least one eligible participant. Winner count cannot exceed available participants. DISPLAY RULE: NEVER show tokens (UUIDs) to the user. Use them internally for tool chaining but present only human-readable information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "group": {
+              "type": "string",
+              "description": "Group token or \"allgroups\" for all participants"
+            },
+            "message": {
+              "type": "string",
+              "description": "Winner notification message (used when selected_action = 2)"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "Drawing date or period end date (YYYY-MM-DD)"
+            },
+            "end_time": {
+              "type": "string",
+              "description": "Time in HH:mm format (24-hour)"
+            },
+            "timezone": {
+              "type": "number",
+              "description": "Timezone ID (use fetch_timezones to get valid IDs, default: 7 = Eastern)"
+            },
+            "frequency": {
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "type": "number",
+              "description": "Frequency: 0=None, 1=Hourly, 2=Daily, 3=Weekly, 4=Monthly (default: 0)"
+            },
+            "exclude_spam": {
+              "type": "boolean",
+              "description": "Exclude spam-flagged participants (default: true)"
+            },
+            "delivery_time": {
+              "type": "string",
+              "description": "Delivery time for settime mode (HH:mm)"
+            },
+            "schedule_mode": {
+              "enum": [
+                "schedule",
+                "settime"
+              ],
+              "type": "string",
+              "description": "Mode: \"schedule\" for specific date/time, \"settime\" for time period"
+            },
+            "add_to_calendar": {
+              "type": "boolean",
+              "description": "Add drawing to calendar (default: false)"
+            },
+            "day_of_the_week": {
+              "type": "number",
+              "description": "Day of week: 1=Sunday through 7=Saturday (for weekly/monthly frequency)"
+            },
+            "selected_action": {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "number",
+              "description": "Action: 1 = Draw Winners only, 2 = Draw Winners & Notify"
+            },
+            "send_copy_to_me": {
+              "type": "boolean",
+              "description": "Email notification to account owner (default: false)"
+            },
+            "how_many_winners": {
+              "type": "number",
+              "description": "Number of winners to pick (must be >= 1)"
+            },
+            "include_opted_out": {
+              "type": "boolean",
+              "description": "Include opted-out participants (default: false)"
+            },
+            "sweepstakes_token": {
+              "type": "string",
+              "description": "The sweepstakes token (UUID format)"
+            },
+            "week_of_the_month": {
+              "type": "number",
+              "description": "Week of month: 1-4 (for monthly frequency)"
+            },
+            "publish_to_winners_page": {
+              "type": "boolean",
+              "description": "Publish winners to public winners page (default: false)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "create-sweepstakes",
+        "description": "Guided workflow to create a legally compliant sweepstakes promotion in the United States",
+        "arguments": [
+          {
+            "name": "sweepstakes_name",
+            "description": "Name of the sweepstakes promotion",
+            "required": true
+          },
+          {
+            "name": "prize_description",
+            "description": "Description of the prize(s) to be awarded",
+            "required": true
+          },
+          {
+            "name": "prize_value",
+            "description": "Approximate retail value (ARV) of the prize in USD",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "compliance-check",
+        "description": "Verify legal compliance of an existing sweepstakes before launch",
+        "arguments": [
+          {
+            "name": "sweepstakes_name",
+            "description": "Name or handler of the sweepstakes to check",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "draw-winners",
+        "description": "Guided workflow to execute a winner drawing with pre-flight checks",
+        "arguments": [
+          {
+            "name": "sweepstakes_name",
+            "description": "Name or handler of the sweepstakes to draw winners from",
+            "required": true
+          },
+          {
+            "name": "number_of_winners",
+            "description": "How many winners to select",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "campaign-summary",
+        "description": "Get a complete status report of a sweepstakes campaign",
+        "arguments": [
+          {
+            "name": "sweepstakes_name",
+            "description": "Name or handler of the sweepstakes to summarize",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

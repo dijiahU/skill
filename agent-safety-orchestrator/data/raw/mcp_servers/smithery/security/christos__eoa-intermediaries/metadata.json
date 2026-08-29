@@ -1,0 +1,235 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "christos/eoa-intermediaries",
+  "namespace": "christos",
+  "slug": "eoa-intermediaries",
+  "displayName": "Greek Insurance Registry",
+  "description": "Locate and verify insurance intermediaries registered in Greece using various search parameters. Retrieve detailed professional information through VAT numbers, registration codes, or geographic locations. Streamline compliance and due diligence by accessing up-to-date legal status and certification data for insurance professionals.\nSource code: https://github.com/conetgr/eoa-mcp-server",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "7bc1bcee-947f-4fc2-bf85-2b1fffd6389b",
+    "qualifiedName": "christos/eoa-intermediaries",
+    "namespace": "christos",
+    "slug": "eoa-intermediaries",
+    "displayName": "Greek Insurance Registry",
+    "description": "Locate and verify insurance intermediaries registered in Greece using various search parameters. Retrieve detailed professional information through VAT numbers, registration codes, or geographic locations. Streamline compliance and due diligence by accessing up-to-date legal status and certification data for insurance professionals.\nSource code: https://github.com/conetgr/eoa-mcp-server",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": false,
+    "useCount": 2225,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-11T17:58:56.214Z",
+    "homepage": "https://github.com/conetgr/eoa-mcp-server",
+    "bySmithery": false,
+    "owner": "org_01KNBQYN4GWS9GFMP2YCD6FN1H",
+    "score": 0.011363636363636364
+  },
+  "detail": {
+    "qualifiedName": "christos/eoa-intermediaries",
+    "displayName": "Greek Insurance Registry",
+    "description": "Locate and verify insurance intermediaries registered in Greece using various search parameters. Retrieve detailed professional information through VAT numbers, registration codes, or geographic locations. Streamline compliance and due diligence by accessing up-to-date legal status and certification data for insurance professionals.\nSource code: https://github.com/conetgr/eoa-mcp-server",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://eoa-intermediaries--christos.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://eoa-intermediaries--christos.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_intermediaries",
+        "description": "Search Greek insurance intermediaries by query and filters (name, VAT, GEMI, categories, license status, legal type, etc.)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "vat": {
+              "type": "string",
+              "description": "VAT number, exactly 9 digits"
+            },
+            "gemi": {
+              "type": "string",
+              "description": "GEMI registration number"
+            },
+            "page": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "Search by name (maps to filter.name)"
+            },
+            "order_by": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Sort fields: vatnumber, gemiTradeName, keeeLicenceExpiration, lastUpdate (prefix - for descending)"
+            },
+            "page_size": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 50,
+              "minimum": 1
+            },
+            "include_total": {
+              "type": "boolean",
+              "default": false
+            },
+            "legaltype_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Legal type IDs (use list_legal_types for mapping)"
+            },
+            "main_activity": {
+              "enum": [
+                "any",
+                "main",
+                "secondary"
+              ],
+              "type": "string",
+              "description": "Main activity filter"
+            },
+            "license_status": {
+              "enum": [
+                "active",
+                "expired",
+                "no_info"
+              ],
+              "type": "string",
+              "description": "License status filter"
+            },
+            "keee_categories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "KEEE category values"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_intermediary_by_vat",
+        "description": "Get a single insurance intermediary by VAT number (9 digits)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "vat": {
+              "type": "string",
+              "description": "Greek VAT number, exactly 9 digits"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_intermediary_by_gemi",
+        "description": "Get a single insurance intermediary by GEMI registration number",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "gemi": {
+              "type": "string",
+              "description": "GEMI (ΓΕ.ΜΗ.) registration number"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_intermediaries_in_bbox",
+        "description": "Search insurance intermediaries within a geographic bounding box (latitude/longitude bounds)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            },
+            "query": {
+              "type": "string"
+            },
+            "order_by": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "page_size": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 50,
+              "minimum": 1
+            },
+            "latitude_to": {
+              "type": "number",
+              "description": "Maximum latitude"
+            },
+            "longitude_to": {
+              "type": "number",
+              "description": "Maximum longitude"
+            },
+            "include_total": {
+              "type": "boolean",
+              "default": false
+            },
+            "latitude_from": {
+              "type": "number",
+              "description": "Minimum latitude"
+            },
+            "legaltype_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "main_activity": {
+              "enum": [
+                "any",
+                "main",
+                "secondary"
+              ],
+              "type": "string"
+            },
+            "license_status": {
+              "enum": [
+                "active",
+                "expired",
+                "no_info"
+              ],
+              "type": "string"
+            },
+            "longitude_from": {
+              "type": "number",
+              "description": "Minimum longitude"
+            },
+            "keee_categories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "list_legal_types",
+        "description": "Return the mapping of legal type IDs to Greek descriptions. No inputs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

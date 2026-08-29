@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "ekmejlc7p8",
+  "namespace": "nextlevelbuilder",
+  "slug": "goclaw-mcp",
+  "name": "GoClaw MCP Server",
+  "description": "Enables AI assistants to manage GoClaw AI gateway infrastructure through a comprehensive suite of 66 tools for managing agents, sessions, and configurations. It provides real-time gateway context and guided workflows with enterprise-grade security features like audit logging and secret scrubbing.",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "secret"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to manage GoClaw AI gateway infrastructure through a comprehensive suite of 66 tools for managing agents, sessions, and configurations. It provides real-time gateway context and guided workflows with enterprise-grade security features like audit logging and secret scrubbing.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GOCLAW_TOKEN": {
+          "description": "Bearer token (determines RBAC role)",
+          "type": "string"
+        },
+        "GOCLAW_SERVER": {
+          "description": "GoClaw gateway URL",
+          "type": "string"
+        },
+        "GOCLAW_USER_ID": {
+          "description": "Default user ID for multi-tenant scoping",
+          "type": "string"
+        },
+        "GOCLAW_MCP_PORT": {
+          "description": "HTTP transport port",
+          "type": "string",
+          "default": "3100"
+        },
+        "GOCLAW_LOG_LEVEL": {
+          "description": "Log level: debug, info, warn, error",
+          "type": "string",
+          "default": "info"
+        },
+        "GOCLAW_MCP_RATE_LIMIT_RPM": {
+          "description": "Rate limit per session (req/min)",
+          "type": "string",
+          "default": "60"
+        },
+        "GOCLAW_MCP_ALLOWED_ORIGINS": {
+          "description": "Comma-separated allowed origins",
+          "type": "string",
+          "default": "localhost"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOCLAW_SERVER"
+      ]
+    },
+    "id": "ekmejlc7p8",
+    "name": "GoClaw MCP Server",
+    "namespace": "nextlevelbuilder",
+    "repository": {
+      "url": "https://github.com/nextlevelbuilder/goclaw-mcp"
+    },
+    "slug": "goclaw-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ekmejlc7p8"
+  }
+}

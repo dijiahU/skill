@@ -1,0 +1,64 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.NexusFeed/nexusfeed-abc",
+  "slug": "NexusFeed__nexusfeed-abc",
+  "title": "",
+  "description": "US liquor license compliance records (CA, TX, NY, FL, IL) with verifiable provenance.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.NexusFeed/nexusfeed-abc",
+      "description": "US liquor license compliance records (CA, TX, NY, FL, IL) with verifiable provenance.",
+      "repository": {
+        "url": "https://github.com/NexusFeed/nexusfeed-mcp",
+        "source": "github"
+      },
+      "version": "1.1.1",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "registryBaseUrl": "https://pypi.org",
+          "identifier": "nexusfeed-mcp",
+          "version": "1.1.1",
+          "runtimeHint": "uvx",
+          "transport": {
+            "type": "stdio"
+          },
+          "runtimeArguments": [
+            {
+              "value": "nexusfeed-mcp",
+              "type": "named",
+              "name": "--from"
+            },
+            {
+              "value": "nexusfeed-abc",
+              "type": "positional"
+            }
+          ],
+          "environmentVariables": [
+            {
+              "description": "NexusFeed API base URL",
+              "default": "https://api.nexusfeed.dev",
+              "name": "MCP_API_BASE_URL"
+            },
+            {
+              "description": "NexusFeed API key. Get one via RapidAPI: rapidapi.com/ladourv/api/abc-license-compliance-api",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "MCP_API_KEY"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-13T07:42:10.282857Z",
+        "publishedAt": "2026-04-13T07:42:10.282857Z",
+        "updatedAt": "2026-04-13T07:42:10.282857Z",
+        "isLatest": true
+      }
+    }
+  }
+}

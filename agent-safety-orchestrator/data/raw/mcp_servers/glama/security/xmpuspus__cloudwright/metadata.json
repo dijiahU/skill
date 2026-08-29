@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "mcxjqn5iz8",
+  "namespace": "xmpuspus",
+  "slug": "cloudwright",
+  "name": "cloudwright-mcp",
+  "description": "AI-powered cloud architecture - describe infrastructure in natural language, get Terraform, cost estimates, and compliance reports",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "AI-powered cloud architecture - describe infrastructure in natural language, get Terraform, cost estimates, and compliance reports",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OPENAI_API_KEY": {
+          "description": "OpenAI API key for LLM operations (design, modify, chat, adr).",
+          "type": "string"
+        },
+        "ANTHROPIC_API_KEY": {
+          "description": "Anthropic API key for LLM operations (design, modify, chat, adr).",
+          "type": "string"
+        },
+        "CLOUDWRIGHT_MODEL": {
+          "description": "Override the LLM model (e.g., 'gpt-5', 'claude-opus-4-6').",
+          "type": "string"
+        },
+        "CLOUDWRIGHT_API_KEY": {
+          "description": "API key for web server authentication (fail-fast if not set).",
+          "type": "string"
+        },
+        "CLOUDWRIGHT_LOG_FORMAT": {
+          "description": "Log format (e.g., 'json', 'console').",
+          "type": "string"
+        },
+        "CLOUDWRIGHT_TRUST_PROXY": {
+          "description": "Enable trust for X-Forwarded-For headers behind a reverse proxy.",
+          "type": "string"
+        },
+        "CLOUDWRIGHT_CORS_ORIGINS": {
+          "description": "CORS origins for web UI (comma-separated list).",
+          "type": "string"
+        },
+        "CLOUDWRIGHT_LLM_PROVIDER": {
+          "description": "LLM provider to use (e.g., 'openai', 'anthropic'). Auto-detects from API keys if not set.",
+          "type": "string",
+          "default": "anthropic"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ANTHROPIC_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "OPENAI_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "mcxjqn5iz8",
+    "name": "cloudwright-mcp",
+    "namespace": "xmpuspus",
+    "repository": {
+      "url": "https://github.com/xmpuspus/cloudwright"
+    },
+    "slug": "cloudwright",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mcxjqn5iz8"
+  }
+}

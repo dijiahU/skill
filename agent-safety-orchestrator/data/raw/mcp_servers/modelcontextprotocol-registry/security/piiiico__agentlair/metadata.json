@@ -1,0 +1,56 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.piiiico/agentlair",
+  "slug": "piiiico__agentlair",
+  "title": "AgentLair",
+  "description": "Give AI agents a real @agentlair.dev email address and encrypted vault. Send/receive email.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.piiiico/agentlair",
+      "description": "Give AI agents a real @agentlair.dev email address and encrypted vault. Send/receive email.",
+      "title": "AgentLair",
+      "repository": {
+        "url": "https://github.com/piiiico/agentlair",
+        "source": "github"
+      },
+      "version": "1.1.2",
+      "websiteUrl": "https://agentlair.dev",
+      "packages": [
+        {
+          "registryType": "npm",
+          "identifier": "@agentlair/mcp",
+          "version": "1.1.2",
+          "runtimeHint": "npx",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "AgentLair API key. Get one free at https://agentlair.dev",
+              "isRequired": true,
+              "format": "string",
+              "isSecret": true,
+              "name": "AGENTLAIR_API_KEY"
+            }
+          ]
+        }
+      ],
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://agentlair-mcp-server.amdal-dev.workers.dev/mcp"
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-03-28T06:50:19.266429Z",
+        "publishedAt": "2026-03-28T06:50:19.266429Z",
+        "updatedAt": "2026-03-28T06:50:19.266429Z",
+        "isLatest": false
+      }
+    }
+  }
+}

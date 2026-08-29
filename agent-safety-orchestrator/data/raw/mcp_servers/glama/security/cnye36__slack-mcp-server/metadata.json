@@ -1,0 +1,88 @@
+{
+  "registry": "glama",
+  "id": "b0y29g7jv5",
+  "namespace": "cnye36",
+  "slug": "slack-mcp-server",
+  "name": "Slack MCP Server",
+  "description": "Enables AI assistants to interact with Slack workspaces through secure OAuth 2.0 authentication. Supports posting messages, reading channel history, and listing channels across multiple workspaces with production-ready security features.",
+  "discoveryQueries": [
+    "security",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Slack workspaces through secure OAuth 2.0 authentication. Supports posting messages, reading channel history, and listing channels across multiple workspaces with production-ready security features.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Server host",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8080"
+        },
+        "LOG_LEVEL": {
+          "description": "Log level: trace, debug, info, warn, error, fatal",
+          "type": "string",
+          "default": "info"
+        },
+        "SLACK_SCOPES": {
+          "description": "Comma-separated bot scopes (e.g., chat:write,channels:history,channels:read)",
+          "type": "string"
+        },
+        "SESSION_TTL_MS": {
+          "description": "MCP session timeout in milliseconds (default: 15 minutes)",
+          "type": "string",
+          "default": "900000"
+        },
+        "ALLOWED_ORIGINS": {
+          "description": "Comma-separated allowed origins for CORS",
+          "type": "string"
+        },
+        "PUBLIC_BASE_URL": {
+          "description": "Public URL for OAuth redirects",
+          "type": "string",
+          "default": "http://localhost:8080"
+        },
+        "SLACK_CLIENT_ID": {
+          "description": "Slack app client ID",
+          "type": "string"
+        },
+        "SLACK_REDIRECT_URI": {
+          "description": "OAuth callback URL (e.g., https://yourdomain.com/slack/oauth/callback)",
+          "type": "string"
+        },
+        "SLACK_CLIENT_SECRET": {
+          "description": "Slack app client secret",
+          "type": "string"
+        },
+        "AFFINITYBOTS_MCP_API_KEY": {
+          "description": "API key for MCP endpoint (recommended for security)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SLACK_CLIENT_ID",
+        "SLACK_CLIENT_SECRET",
+        "SLACK_REDIRECT_URI",
+        "SLACK_SCOPES"
+      ]
+    },
+    "id": "b0y29g7jv5",
+    "name": "Slack MCP Server",
+    "namespace": "cnye36",
+    "repository": {
+      "url": "https://github.com/cnye36/slack-mcp-server"
+    },
+    "slug": "slack-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b0y29g7jv5"
+  }
+}

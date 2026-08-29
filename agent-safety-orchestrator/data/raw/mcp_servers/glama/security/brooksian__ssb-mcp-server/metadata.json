@@ -1,0 +1,124 @@
+{
+  "registry": "glama",
+  "id": "gccnnmqc4p",
+  "namespace": "BrooksIan",
+  "slug": "SSB-MCP-Server",
+  "name": "SSB MCP Server",
+  "description": "Provides comprehensive access to SQL Stream Builder (SSB) functionality with 80+ MCP tools for managing streams, jobs, tables, and real-time data processing. Supports both standalone SSB deployments and Cloudera Data Platform with multiple authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides comprehensive access to SQL Stream Builder (SSB) functionality with 80+ MCP tools for managing streams, jobs, tables, and real-time data processing. Supports both standalone SSB deployments and Cloudera Data Platform with multiple authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SSB_USER": {
+          "description": "SSB username (e.g., admin) - for direct SSB authentication",
+          "type": "string"
+        },
+        "KNOX_USER": {
+          "description": "Knox username for basic auth - for Knox authentication",
+          "type": "string"
+        },
+        "KNOX_TOKEN": {
+          "description": "Knox JWT token for authentication - for Knox authentication",
+          "type": "string"
+        },
+        "KNOX_COOKIE": {
+          "description": "Alternative: provide full cookie string instead of token - for Knox authentication",
+          "type": "string"
+        },
+        "SSB_API_BASE": {
+          "description": "Full SSB API URL (e.g., http://localhost:18121 or https://ssb-gateway.yourshere.cloudera.site/ssb/api/v1)",
+          "type": "string"
+        },
+        "SSB_PASSWORD": {
+          "description": "SSB password (e.g., admin) - for direct SSB authentication",
+          "type": "string"
+        },
+        "SSB_READONLY": {
+          "description": "Read-only mode (default: true for CDP deployments, false for standalone)",
+          "type": "string",
+          "default": "true"
+        },
+        "KNOX_PASSWORD": {
+          "description": "Knox password for basic auth - for Knox authentication",
+          "type": "string"
+        },
+        "KNOX_CA_BUNDLE": {
+          "description": "Path to CA certificate bundle",
+          "type": "string"
+        },
+        "KNOX_VERIFY_SSL": {
+          "description": "Verify SSL certificates",
+          "type": "string",
+          "default": "true"
+        },
+        "TIMEOUT_SECONDS": {
+          "description": "HTTP timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "KNOX_GATEWAY_URL": {
+          "description": "Knox gateway URL (e.g., https://host:8444/gateway/ssb) - for Knox authentication",
+          "type": "string"
+        },
+        "KNOX_PASSCODE_TOKEN": {
+          "description": "Alternative: Knox passcode token (auto-exchanged for JWT) - for Knox authentication",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SSB_API_BASE",
+            "SSB_USER",
+            "SSB_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "KNOX_GATEWAY_URL",
+            "KNOX_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "KNOX_GATEWAY_URL",
+            "KNOX_COOKIE"
+          ]
+        },
+        {
+          "required": [
+            "KNOX_GATEWAY_URL",
+            "KNOX_PASSCODE_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "KNOX_GATEWAY_URL",
+            "KNOX_USER",
+            "KNOX_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "gccnnmqc4p",
+    "name": "SSB MCP Server",
+    "namespace": "BrooksIan",
+    "repository": {
+      "url": "https://github.com/BrooksIan/SSB-MCP-Server"
+    },
+    "slug": "SSB-MCP-Server",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gccnnmqc4p"
+  }
+}

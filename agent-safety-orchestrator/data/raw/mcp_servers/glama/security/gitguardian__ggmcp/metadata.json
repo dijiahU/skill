@@ -1,0 +1,76 @@
+{
+  "registry": "glama",
+  "id": "hx4xddypuj",
+  "namespace": "GitGuardian",
+  "slug": "ggmcp",
+  "name": "GitGuardian MCP Server",
+  "description": "Enables AI agents to scan projects for leaked secrets and manage security incidents using GitGuardian's comprehensive API. It supports automated secret detection, honeytoken creation, and remediation workflows to secure codebases without context switching.",
+  "discoveryQueries": [
+    "security",
+    "secret"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to scan projects for leaked secrets and manage security incidents using GitGuardian's comprehensive API. It supports automated secret detection, honeytoken creation, and remediation workflows to secure codebases without context switching.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Host address for HTTP/SSE transport",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "MCP_PORT": {
+          "description": "Port for HTTP/SSE transport (when set, enables HTTP transport instead of stdio, requires ENABLE_LOCAL_OAUTH=false)",
+          "type": "string"
+        },
+        "GITGUARDIAN_URL": {
+          "description": "GitGuardian instance URL",
+          "type": "string",
+          "default": "https://dashboard.gitguardian.com"
+        },
+        "ENABLE_LOCAL_OAUTH": {
+          "description": "Enable local OAuth flow (stdio mode only, cannot be used with MCP_PORT)",
+          "type": "string",
+          "default": "true"
+        },
+        "GITGUARDIAN_SCOPES": {
+          "description": "OAuth scopes to request (e.g., 'scan,incidents:read,sources:read,honeytokens:read,honeytokens:write')",
+          "type": "string"
+        },
+        "GITGUARDIAN_CLIENT_ID": {
+          "description": "OAuth client ID",
+          "type": "string",
+          "default": "ggshield_oauth"
+        },
+        "GITGUARDIAN_TOKEN_NAME": {
+          "description": "Name for the OAuth token (Auto-generated based on server type if not set)",
+          "type": "string"
+        },
+        "GITGUARDIAN_TOKEN_LIFETIME": {
+          "description": "Token lifetime in days (e.g., '30', '60', or 'never')",
+          "type": "string",
+          "default": "30"
+        },
+        "GITGUARDIAN_PERSONAL_ACCESS_TOKEN": {
+          "description": "Personal Access Token for authentication (alternative to OAuth)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "hx4xddypuj",
+    "name": "GitGuardian MCP Server",
+    "namespace": "GitGuardian",
+    "repository": {
+      "url": "https://github.com/GitGuardian/ggmcp"
+    },
+    "slug": "ggmcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hx4xddypuj"
+  }
+}

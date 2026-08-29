@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "mj0pwt3snf",
+  "namespace": "RusticEagle",
+  "slug": "ism-mcp",
+  "name": "ISM MCP Server",
+  "description": "Serves the Australian Cyber Security Centre Information Security Manual (ISM) via MCP, providing access to all historical and current versions, search, and comparison tools.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Serves the Australian Cyber Security Centre Information Security Manual (ISM) via MCP, providing access to all historical and current versions, search, and comparison tools.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Host for HTTP server (when MCP_TRANSPORT=http).",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "Port for HTTP server (when MCP_TRANSPORT=http).",
+          "type": "string",
+          "default": "8080"
+        },
+        "MCP_HTTP_PATH": {
+          "description": "URL path for MCP endpoint (when MCP_TRANSPORT=http).",
+          "type": "string",
+          "default": "/mcp"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport type: stdio (default) or http.",
+          "type": "string",
+          "default": "stdio"
+        },
+        "ISM_MCP_CACHE_DIR": {
+          "description": "Override on-disk cache directory.",
+          "type": "string",
+          "default": "~/.cache/ism-mcp/"
+        },
+        "ISM_MCP_TAGS_TTL_MS": {
+          "description": "Tag-list cache TTL in milliseconds (default 6h).",
+          "type": "string",
+          "default": "21600000"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "mj0pwt3snf",
+    "name": "ISM MCP Server",
+    "namespace": "RusticEagle",
+    "repository": {
+      "url": "https://github.com/RusticEagle/ism-mcp"
+    },
+    "slug": "ism-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mj0pwt3snf"
+  }
+}

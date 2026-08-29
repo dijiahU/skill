@@ -1,0 +1,49 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "ai.gossiper/shopify-admin-mcp",
+  "slug": "gossiper__shopify-admin-mcp",
+  "title": "Gossiper Shopify Admin MCP Server",
+  "description": "Control Shopify Admin tasks with agents or via prompt. Ultra slim integration, fast and secure.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "ai.gossiper/shopify-admin-mcp",
+      "description": "Control Shopify Admin tasks with agents or via prompt. Ultra slim integration, fast and secure.",
+      "title": "Gossiper Shopify Admin MCP Server",
+      "version": "1.0.0",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://mcp.gossiper.io/mcp",
+          "headers": [
+            {
+              "description": "API key for authentication, alternative to OAuth",
+              "isSecret": true,
+              "name": "X-API-Key"
+            }
+          ]
+        },
+        {
+          "type": "sse",
+          "url": "https://mcp.gossiper.io/mcp",
+          "headers": [
+            {
+              "description": "API key for authentication, alternative to OAuth",
+              "isSecret": true,
+              "name": "X-API-Key"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-01-06T18:20:42.175634Z",
+        "publishedAt": "2026-01-06T18:20:42.175634Z",
+        "updatedAt": "2026-01-06T18:20:42.175634Z",
+        "isLatest": true
+      }
+    }
+  }
+}

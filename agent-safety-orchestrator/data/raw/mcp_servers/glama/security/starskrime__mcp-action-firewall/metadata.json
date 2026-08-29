@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "bwr1idi9jw",
+  "namespace": "starskrime",
+  "slug": "mcp-action-firewall",
+  "name": "MCP Action Firewall",
+  "description": "A transparent proxy that intercepts high-risk tool calls and requires OTP-based human approval before they can be executed. It acts as a configurable circuit breaker between AI agents and target MCP servers to prevent unauthorized or dangerous actions.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A transparent proxy that intercepts high-risk tool calls and requires OTP-based human approval before they can be executed. It acts as a configurable circuit breaker between AI agents and target MCP servers to prevent unauthorized or dangerous actions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "name": {
+          "description": "Activates per-server rules from your config. Without it, only global rules apply.",
+          "type": "string"
+        },
+        "config": {
+          "description": "Custom config file path. Without it, uses firewall_config.json in your current directory, or the bundled defaults.",
+          "type": "string"
+        },
+        "target": {
+          "description": "The full command to launch the real MCP server. This is the server you want to protect (e.g., 'npx @modelcontextprotocol/server-github').",
+          "type": "string"
+        },
+        "verbose": {
+          "description": "Turns on debug logging (written to stderr, won't interfere with MCP traffic).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "target"
+      ]
+    },
+    "id": "bwr1idi9jw",
+    "name": "MCP Action Firewall",
+    "namespace": "starskrime",
+    "repository": {
+      "url": "https://github.com/starskrime/mcp-action-firewall"
+    },
+    "slug": "mcp-action-firewall",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bwr1idi9jw"
+  }
+}

@@ -1,0 +1,1086 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "lexbeam-software/eu-ai-act",
+  "namespace": "lexbeam-software",
+  "slug": "eu-ai-act",
+  "displayName": "EU AI Act Compliance",
+  "description": "Risk classification, deadlines, obligations, penalties, and FAQ for the EU AI Act (Regulation 2024/1689). Free, no API key required. By Lexbeam Software.",
+  "discoveryQueries": [
+    "policy",
+    "compliance",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "e71ee2eb-38d1-42bf-96d1-cdad28c229a4",
+    "qualifiedName": "lexbeam-software/eu-ai-act",
+    "namespace": "lexbeam-software",
+    "slug": "eu-ai-act",
+    "displayName": "EU AI Act Compliance",
+    "description": "Risk classification, deadlines, obligations, penalties, and FAQ for the EU AI Act (Regulation 2024/1689). Free, no API key required. By Lexbeam Software.",
+    "iconUrl": "https://api.smithery.ai/servers/lexbeam-software/eu-ai-act/icon",
+    "verified": false,
+    "useCount": 41,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-03T07:47:04.485Z",
+    "homepage": "https://www.lexbeam.com",
+    "bySmithery": false,
+    "owner": "org_01KNBW1DB3RY25EB0D186YH0VG",
+    "score": 0.010309278350515464
+  },
+  "detail": {
+    "qualifiedName": "lexbeam-software/eu-ai-act",
+    "displayName": "EU AI Act Compliance",
+    "description": "Risk classification, deadlines, obligations, penalties, and FAQ for the EU AI Act (Regulation 2024/1689). Free, no API key required. By Lexbeam Software.",
+    "iconUrl": "https://api.smithery.ai/servers/lexbeam-software/eu-ai-act/icon",
+    "remote": true,
+    "deploymentUrl": "https://eu-ai-act--lexbeam-software.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://eu-ai-act--lexbeam-software.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "euaiact_classify_system",
+        "description": "Classify an AI system's risk level under the EU AI Act (Regulation 2024/1689). Accepts a free-text description, a use_case, and/or structured signals (domain, biometric flags, synthetic content, etc.). Signals take precedence over text matching for deterministic classification. Returns risk classification, applicable Annex III category, relevant articles, provider/deployer determination, matched signals, and follow-up questions the agent should relay. Note: Art. 6(3) exceptions require documented justification and cannot be auto-applied; use euaiact_assess_art6_3_exception.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "provider",
+                "deployer",
+                "unknown"
+              ],
+              "type": "string",
+              "default": "unknown"
+            },
+            "signals": {
+              "type": "object",
+              "properties": {
+                "domain": {
+                  "enum": [
+                    "employment",
+                    "education",
+                    "biometrics",
+                    "critical_infrastructure",
+                    "law_enforcement",
+                    "migration",
+                    "justice",
+                    "essential_services",
+                    "health",
+                    "gpai",
+                    "product_safety",
+                    "other"
+                  ],
+                  "type": "string",
+                  "description": "Primary sector where the system operates"
+                },
+                "uses_biometrics": {
+                  "type": "boolean",
+                  "description": "System processes biometric data (face, fingerprint, iris, voice, gait)"
+                },
+                "biometric_realtime": {
+                  "type": "boolean",
+                  "description": "Biometric processing happens in real time"
+                },
+                "biometric_law_enforcement": {
+                  "type": "boolean",
+                  "description": "Biometric system is used by or for law enforcement"
+                },
+                "affects_fundamental_rights": {
+                  "type": "boolean",
+                  "description": "System materially affects health, safety, or fundamental rights of natural persons"
+                },
+                "generates_synthetic_content": {
+                  "type": "boolean",
+                  "description": "System generates or manipulates images, audio, video, or text (Art. 50(2)/(4))"
+                },
+                "interacts_with_natural_persons": {
+                  "type": "boolean",
+                  "description": "System is designed to interact directly with natural persons (Art. 50(1))"
+                },
+                "targets_children_or_vulnerable": {
+                  "type": "boolean",
+                  "description": "System is directed at or materially affects children or other vulnerable groups (Art. 5(1)(b))"
+                },
+                "is_safety_component_of_regulated_product": {
+                  "type": "boolean",
+                  "description": "System is a safety component of a product covered by EU harmonisation legislation (Annex I)"
+                },
+                "performs_social_scoring_by_public_authority": {
+                  "type": "boolean",
+                  "description": "System is used by or on behalf of a public authority to score natural persons (Art. 5(1)(c))"
+                },
+                "performs_emotion_recognition_workplace_or_school": {
+                  "type": "boolean",
+                  "description": "System infers emotions of natural persons in the workplace or educational institutions (Art. 5(1)(f))"
+                }
+              },
+              "additionalProperties": false
+            },
+            "use_case": {
+              "type": "string",
+              "description": "Specific context where the system is deployed"
+            },
+            "description": {
+              "type": "string",
+              "description": "Free-text description of the AI system and its functionalities"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "basis": {
+              "enum": [
+                "signals",
+                "text",
+                "default"
+              ],
+              "type": "string"
+            },
+            "caveat": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "confidence": {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            "lexbeam_url": {
+              "type": "string"
+            },
+            "next_questions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "matched_signals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "missing_signals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "relevant_articles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "annex_iii_category": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "number",
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "number": {
+                      "type": "number"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "role_determination": {
+              "enum": [
+                "provider",
+                "deployer",
+                "both",
+                "uncertain"
+              ],
+              "type": "string"
+            },
+            "obligations_summary": {
+              "type": "string"
+            },
+            "risk_classification": {
+              "enum": [
+                "prohibited",
+                "high-risk",
+                "limited",
+                "minimal",
+                "insufficient_information"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "risk_classification",
+            "confidence",
+            "annex_iii_category",
+            "relevant_articles",
+            "role_determination",
+            "obligations_summary",
+            "caveat",
+            "matched_signals",
+            "missing_signals",
+            "next_questions",
+            "basis"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_check_deadlines",
+        "description": "Returns key implementation milestones and deadlines for the EU AI Act with days remaining, a `next_milestone` shortcut, and the current status of the Digital Omnibus simplification proposal. Use `only_upcoming: true` to drop past milestones.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "area": {
+              "type": "string",
+              "description": "Optional filter by compliance area (e.g. 'GPAI', 'high-risk', 'prohibited')"
+            },
+            "only_upcoming": {
+              "type": "boolean",
+              "description": "If true, return only milestones that have not yet come into effect."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "milestones": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "description",
+                  "status",
+                  "articles",
+                  "key_obligations",
+                  "days_remaining",
+                  "is_past"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "enum": [
+                      "in_effect",
+                      "upcoming",
+                      "proposal_only"
+                    ],
+                    "type": "string"
+                  },
+                  "is_past": {
+                    "type": "boolean"
+                  },
+                  "articles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "days_remaining": {
+                    "type": "number"
+                  },
+                  "key_obligations": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "next_milestone": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "date",
+                    "name",
+                    "days_remaining"
+                  ],
+                  "properties": {
+                    "date": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "days_remaining": {
+                      "type": "number"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "digital_omnibus": {
+              "type": "object",
+              "required": [
+                "name",
+                "status",
+                "proposal_date",
+                "description",
+                "key_changes",
+                "impact_on_ai_act"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "key_changes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "proposal_date": {
+                  "type": "string"
+                },
+                "impact_on_ai_act": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "milestones",
+            "next_milestone",
+            "digital_omnibus"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_get_obligations",
+        "description": "Returns specific compliance obligations for providers or deployers based on AI system risk level.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "enum": [
+                "provider",
+                "deployer"
+              ],
+              "type": "string",
+              "description": "Provider or deployer role"
+            },
+            "risk_level": {
+              "enum": [
+                "high-risk",
+                "limited",
+                "minimal",
+                "gpai"
+              ],
+              "type": "string",
+              "description": "AI system risk level. Use 'gpai' for general-purpose AI model obligations (Art. 51-56)."
+            },
+            "filter_keyword": {
+              "type": "string",
+              "description": "Optional keyword filter for obligations"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string"
+            },
+            "penalties": {
+              "type": "object",
+              "required": [
+                "max_fine",
+                "basis"
+              ],
+              "properties": {
+                "basis": {
+                  "type": "string"
+                },
+                "max_fine": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "risk_level": {
+              "type": "string"
+            },
+            "lexbeam_url": {
+              "type": "string"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "obligation",
+                  "article",
+                  "deadline",
+                  "details",
+                  "category"
+                ],
+                "properties": {
+                  "article": {
+                    "type": "string"
+                  },
+                  "details": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "deadline": {
+                    "type": "string"
+                  },
+                  "obligation": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "role",
+            "risk_level",
+            "obligations",
+            "penalties"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_answer_question",
+        "description": "Search frequently asked questions about the EU AI Act and get best-match answers with article references. Covers classification, deadlines, roles, governance, documentation, risk assessment, penalties, GPAI systemic risk, FRIA, transparency, and sector-specific guidance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "description": "User question about the EU AI Act"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "answer": {
+              "type": "string"
+            },
+            "question": {
+              "type": "string"
+            },
+            "confidence": {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            "lexbeam_url": {
+              "type": "string"
+            },
+            "article_references": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "question",
+            "answer",
+            "confidence",
+            "article_references"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_calculate_penalty",
+        "description": "Calculates the maximum possible fine for an EU AI Act violation based on violation type, global annual turnover, and SME status. Implements the Art. 99 penalty framework including the SME/startup protection rule (Art. 99(6)). Returns a comparative block so the agent can show the SME reduction to the user.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "is_sme": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the entity is an SME or startup (eligible for lower fines under Art. 99(6))"
+            },
+            "violation_type": {
+              "enum": [
+                "prohibited",
+                "high_risk",
+                "false_info"
+              ],
+              "type": "string",
+              "description": "Type of AI Act violation: 'prohibited' (Art. 5), 'high_risk' (Annex III obligations), or 'false_info' (misleading regulators)"
+            },
+            "annual_turnover_eur": {
+              "type": "number",
+              "description": "Global annual turnover in EUR"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "is_sme": {
+              "type": "boolean"
+            },
+            "max_fine": {
+              "type": "object",
+              "required": [
+                "fixed_cap_eur",
+                "turnover_based_eur",
+                "applicable_fine_eur",
+                "explanation"
+              ],
+              "properties": {
+                "explanation": {
+                  "type": "string"
+                },
+                "fixed_cap_eur": {
+                  "type": "number"
+                },
+                "turnover_based_eur": {
+                  "type": "number"
+                },
+                "applicable_fine_eur": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            },
+            "comparative": {
+              "type": "object",
+              "required": [
+                "non_sme_applicable_fine_eur",
+                "sme_applicable_fine_eur",
+                "reduction_eur"
+              ],
+              "properties": {
+                "reduction_eur": {
+                  "type": "number"
+                },
+                "sme_applicable_fine_eur": {
+                  "type": "number"
+                },
+                "non_sme_applicable_fine_eur": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            },
+            "tier_details": {
+              "type": "object",
+              "required": [
+                "name",
+                "article",
+                "description"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "article": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "violation_type": {
+              "type": "string"
+            },
+            "annual_turnover_eur": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "violation_type",
+            "is_sme",
+            "annual_turnover_eur",
+            "max_fine",
+            "tier_details"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_get_article",
+        "description": "Retrieve an operational summary of a specific article of the EU AI Act (Regulation 2024/1689), plus a stable EUR-Lex URL to the canonical text. Supports a subset of the most-cited articles (Art. 3, 4, 5, 6, 9-17, 26, 27, 43, 47, 49, 50, 51, 53, 55, 72, 73, 99, 100, 113). For articles outside this subset the tool returns the EUR-Lex base URL. Use this tool to ground citations and quote article text with a link.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "article": {
+              "type": "string",
+              "description": "Article number (e.g. '5', '6', '50', 'Art. 99'). Case-insensitive; 'Art.' prefix optional."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "note": {
+              "type": "string"
+            },
+            "article": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "number",
+                    "title",
+                    "summary",
+                    "related_annexes"
+                  ],
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "number": {
+                      "type": "string"
+                    },
+                    "summary": {
+                      "type": "string"
+                    },
+                    "related_annexes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "available": {
+              "type": "boolean"
+            },
+            "eurlex_url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "available",
+            "article",
+            "eurlex_url"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_check_gpai_systemic_risk",
+        "description": "Determine whether a general-purpose AI model qualifies as a GPAI model with systemic risk under Art. 51. A model is presumed to have high-impact capabilities when cumulative training compute exceeds 10^25 FLOPs (Art. 51(2)). The Commission may also designate models with equivalent capabilities or impact under Art. 51(1)(b). Returns baseline GPAI obligations under Art. 53 plus systemic-risk-only obligations under Art. 55, and the Art. 52 notification duty.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model_name": {
+              "type": "string",
+              "description": "Optional model name for traceability in the response."
+            },
+            "training_flops": {
+              "type": "number",
+              "description": "Cumulative training compute in FLOPs (e.g. 2e25). Art. 51(2) presumes systemic risk when > 1e25."
+            },
+            "commission_designated": {
+              "type": "boolean",
+              "description": "Whether the Commission has formally designated the model as GPAI with systemic risk under Art. 51(1)(b)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "model_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "flops_threshold": {
+              "type": "number"
+            },
+            "notification_duty": {
+              "type": "string"
+            },
+            "relevant_articles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "crosses_flops_threshold": {
+              "type": "boolean"
+            },
+            "systemic_risk_designation": {
+              "enum": [
+                "threshold_met",
+                "commission_designated",
+                "none"
+              ],
+              "type": "string"
+            },
+            "is_gpai_with_systemic_risk": {
+              "type": "boolean"
+            },
+            "baseline_obligations_art_53": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "obligation",
+                  "article",
+                  "deadline",
+                  "details",
+                  "category"
+                ],
+                "properties": {
+                  "article": {
+                    "type": "string"
+                  },
+                  "details": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "deadline": {
+                    "type": "string"
+                  },
+                  "obligation": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "systemic_risk_obligations_art_55": {
+              "type": "array",
+              "items": {
+                "$ref": "#/properties/baseline_obligations_art_53/items"
+              }
+            }
+          },
+          "required": [
+            "model_name",
+            "crosses_flops_threshold",
+            "flops_threshold",
+            "systemic_risk_designation",
+            "is_gpai_with_systemic_risk",
+            "baseline_obligations_art_53",
+            "systemic_risk_obligations_art_55",
+            "notification_duty",
+            "relevant_articles"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_assess_art6_3_exception",
+        "description": "Walk through the Art. 6(3) exception for Annex III high-risk AI systems. An Annex III system is NOT high-risk if it does not pose a significant risk to health, safety, or fundamental rights, AND falls under one of the four conditions: (a) narrow procedural task, (b) improves prior human activity, (c) detects patterns without replacing human assessment, (d) preparatory task. CRITICAL: The exception does NOT apply if the system performs profiling of natural persons (Art. 6(3) second subparagraph). Providers invoking the exception must document the assessment (Art. 6(4)) and still register in the EU database (Art. 49(2)).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "annex_iii_number": {
+              "type": "integer",
+              "maximum": 8,
+              "minimum": 1,
+              "description": "Annex III category number (1-8). Provide if known — helps the response reference the right rules."
+            },
+            "preparatory_task": {
+              "type": "boolean",
+              "description": "Art. 6(3)(d): intended to perform a preparatory task for an assessment relevant to an Annex III use case."
+            },
+            "performs_profiling": {
+              "type": "boolean",
+              "description": "Does the system perform profiling of natural persons? If true, Art. 6(3) exception is UNAVAILABLE regardless of other conditions (Art. 6(3) second subparagraph)."
+            },
+            "documented_assessment": {
+              "type": "boolean",
+              "description": "Has the provider documented the Art. 6(3) exception assessment? Required by Art. 6(4) regardless of which condition applies."
+            },
+            "narrow_procedural_task": {
+              "type": "boolean",
+              "description": "Art. 6(3)(a): intended to perform a narrow procedural task (e.g. transform unstructured to structured data, classify documents, detect duplicates)."
+            },
+            "improves_prior_human_activity": {
+              "type": "boolean",
+              "description": "Art. 6(3)(b): intended to improve the result of a previously completed human activity (e.g. improve drafting style)."
+            },
+            "detects_patterns_without_replacing_human_review": {
+              "type": "boolean",
+              "description": "Art. 6(3)(c): intended to detect decision-making patterns or deviations, not replace/influence human assessment without proper review."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "reasoning": {
+              "type": "string"
+            },
+            "registration_duty": {
+              "type": "string"
+            },
+            "relevant_articles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exception_available": {
+              "type": "boolean"
+            },
+            "conditions_evaluated": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "condition",
+                  "article",
+                  "applies"
+                ],
+                "properties": {
+                  "applies": {
+                    "type": "boolean"
+                  },
+                  "article": {
+                    "type": "string"
+                  },
+                  "condition": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "documentation_reminder": {
+              "type": "string"
+            },
+            "profiling_blocks_exception": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "exception_available",
+            "reasoning",
+            "conditions_evaluated",
+            "profiling_blocks_exception",
+            "documentation_reminder",
+            "registration_duty",
+            "relevant_articles"
+          ]
+        }
+      },
+      {
+        "name": "euaiact_annex_iv_checklist",
+        "description": "Return the full Annex IV technical documentation requirements that a provider of a high-risk AI system must prepare under Art. 11 before placing the system on the market. Nine items cover: general description, detailed elements and development process, monitoring/functioning/control, performance metrics appropriateness, risk management system, lifecycle changes, harmonised standards applied, EU declaration of conformity, and post-market monitoring plan. Use `format: \"checklist\"` to also receive a markdown checklist suitable for audit prep. SMEs may provide the information in a simplified manner.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "json",
+                "checklist"
+              ],
+              "type": "string",
+              "default": "json",
+              "description": "Output shape: 'json' returns structured items; 'checklist' adds a markdown checklist string."
+            },
+            "sme_simplified": {
+              "type": "boolean",
+              "description": "Indicate whether SME-simplified preparation is being used (Art. 11(1) second subparagraph)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "number",
+                  "title",
+                  "description",
+                  "sub_items",
+                  "related_articles"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "number": {
+                    "type": "number"
+                  },
+                  "sub_items": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "related_articles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "sme_note": {
+              "type": "string"
+            },
+            "total_items": {
+              "type": "number"
+            },
+            "relevant_articles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "checklist_markdown": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "items",
+            "total_items",
+            "relevant_articles"
+          ]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "EU AI Act Timeline",
+        "uri": "euaiact://timeline",
+        "description": "Key implementation milestones and deadlines of the EU AI Act (Regulation 2024/1689).",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "EU AI Act Risk Levels",
+        "uri": "euaiact://risk-levels",
+        "description": "Overview of the four AI Act risk categories: prohibited, high-risk, limited risk, and minimal risk.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "EU AI Act Annex III — High-Risk Categories",
+        "uri": "euaiact://annex/iii",
+        "description": "Full Annex III high-risk AI system categories (1-8) with descriptions, examples, and relevant articles. Source: Regulation (EU) 2024/1689, Annex III (public domain).",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "EU AI Act Annex IV — Technical Documentation",
+        "uri": "euaiact://annex/iv",
+        "description": "Full Annex IV technical documentation requirements (items 1-9) that providers of high-risk AI systems must prepare under Art. 11. Public-domain EU text.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "classify-my-system",
+        "description": "Classify an AI system under the EU AI Act risk framework. Provide a description and the tool will determine if it's prohibited, high-risk, limited risk, or minimal risk. Provide structured signals (domain, uses_biometrics, etc.) for deterministic classification on canonical cases.",
+        "arguments": [
+          {
+            "name": "system_description",
+            "description": "Describe the AI system and its intended use case",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "compliance-checklist",
+        "description": "Generate a compliance checklist for an AI system based on its risk level and your role (provider or deployer).",
+        "arguments": [
+          {
+            "name": "risk_level",
+            "description": "Risk level: high-risk, limited, gpai, or minimal",
+            "required": true
+          },
+          {
+            "name": "role",
+            "description": "Your role: provider or deployer",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "penalty-risk-assessment",
+        "description": "Calculate potential fines for EU AI Act non-compliance based on violation type and company size.",
+        "arguments": [
+          {
+            "name": "violation_type",
+            "description": "Type: prohibited, high_risk, or false_info",
+            "required": true
+          },
+          {
+            "name": "annual_turnover",
+            "description": "Company annual turnover in EUR (e.g. 50000000)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "ground-citation",
+        "description": "Ground a citation to a specific EU AI Act article by retrieving the article text and EUR-Lex URL.",
+        "arguments": [
+          {
+            "name": "article",
+            "description": "Article number (e.g. '5', '50', '99')",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

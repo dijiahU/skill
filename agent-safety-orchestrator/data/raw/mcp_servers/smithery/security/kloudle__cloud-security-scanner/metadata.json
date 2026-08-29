@@ -1,0 +1,87 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "kloudle/cloud-security-scanner",
+  "namespace": "kloudle",
+  "slug": "cloud-security-scanner",
+  "displayName": "cloud-security-scanner",
+  "description": " Cloud security scanning tools for AI agents. 7 purpose-built AWS scanners that check for misconfigurations across S3, IAM, EC2, EKS, RDS, CloudTrail, and CloudWatch Logs.          \n                                                                                                                                                                                      \n  Each scanner is a static ~2MB binary that outputs JSONL. Checks include public access, missing encryption, stale credentials, weak password policies, disabled logging, and more.   \n                                                                                                                                                                                      \n  ## Tools                                                                                                                                                                            \n                                         \n  - **search** — Find scanners by capability",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "audit",
+    "vulnerability",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "4cbde4d7-0234-45db-ad6f-e753a0eb9bd2",
+    "qualifiedName": "kloudle/cloud-security-scanner",
+    "namespace": "kloudle",
+    "slug": "cloud-security-scanner",
+    "displayName": "cloud-security-scanner",
+    "description": " Cloud security scanning tools for AI agents. 7 purpose-built AWS scanners that check for misconfigurations across S3, IAM, EC2, EKS, RDS, CloudTrail, and CloudWatch Logs.          \n                                                                                                                                                                                      \n  Each scanner is a static ~2MB binary that outputs JSONL. Checks include public access, missing encryption, stale credentials, weak password policies, disabled logging, and more.   \n                                                                                                                                                                                      \n  ## Tools                                                                                                                                                                            \n                                         \n  - **search** — Find scanners by capability",
+    "iconUrl": "https://api.smithery.ai/servers/kloudle/cloud-security-scanner/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-19T14:06:29.494Z",
+    "homepage": "https://kloudle.com",
+    "bySmithery": false,
+    "owner": "org_01KPK0NPQRTT9J8T485TAVK42S",
+    "score": 0.049910873440285206
+  },
+  "detail": {
+    "qualifiedName": "kloudle/cloud-security-scanner",
+    "displayName": "cloud-security-scanner",
+    "description": " Cloud security scanning tools for AI agents. 7 purpose-built AWS scanners that check for misconfigurations across S3, IAM, EC2, EKS, RDS, CloudTrail, and CloudWatch Logs.          \n                                                                                                                                                                                      \n  Each scanner is a static ~2MB binary that outputs JSONL. Checks include public access, missing encryption, stale credentials, weak password policies, disabled logging, and more.   \n                                                                                                                                                                                      \n  ## Tools                                                                                                                                                                            \n                                         \n  - **search** — Find scanners by capability (e.g. \"encryption\", \"public access\", \"iam\")                                                                                              \n  - **get** — Get download URL, SHA256 hash, and a ready-to-run shell command for any scanner\n                                                                                                                                                                                      \n  ## Scanners                    \n                                                                                                                                                                                      \n  | Scanner | Service | Checks |                                                                                                                                                      \n  |---|---|---|                          \n  | k5e-aws-s3 | S3 | encryption, public access, versioning, logging, lifecycle |                                                                                                     \n  | k5e-aws-iam | IAM | root MFA, stale access keys, password policy |                                                                                                                \n  | k5e-aws-ec2 | EC2 | public SSH, security groups, EBS encryption, IMDSv2 |                                                                                                         \n  | k5e-aws-eks | EKS | public endpoint, logging, secrets encryption |                                                                                                                \n  | k5e-aws-rds | RDS | public access, encryption, backups |                                                                                                                          \n  | k5e-aws-cloudtrail | CloudTrail | multi-region, log validation, KMS encryption |                                                                                                  \n  | k5e-aws-cloudwatch-logs | CloudWatch Logs | retention, encryption, metric filters |                                                                                               \n                                                                                                                                                                                      \n  Built by [Kloudle](https://kloudle.com).",
+    "iconUrl": "https://api.smithery.ai/servers/kloudle/cloud-security-scanner/icon",
+    "remote": true,
+    "deploymentUrl": "https://cloud-security-scanner--kloudle.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://cloud-security-scanner--kloudle.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search",
+        "description": "Find k5e cloud security scanners by capability. Returns matching binaries with name, description, check count, and severity breakdown.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query (e.g., 's3 encryption', 'iam', 'public access')"
+            }
+          }
+        }
+      },
+      {
+        "name": "get",
+        "description": "Get full metadata, SHA256 hash, download URL, and ready-to-run shell command for a k5e binary. Pass args to get a complete command; omit for a template with placeholders.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "args": {
+              "type": "object",
+              "description": "CLI args as key-value pairs (e.g., {'region': 'us-east-1'})",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Binary name (e.g., 'k5e-aws-s3')"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

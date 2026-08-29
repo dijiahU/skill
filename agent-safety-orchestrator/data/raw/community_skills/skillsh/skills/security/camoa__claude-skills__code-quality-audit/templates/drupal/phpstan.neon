@@ -1,0 +1,58 @@
+#
+# PHPStan 2.x configuration for Drupal custom modules
+# Copy to project root as phpstan.neon
+#
+# Usage:
+#   ddev exec vendor/bin/phpstan analyse
+#
+# Required packages:
+#   composer require --dev phpstan/phpstan phpstan/extension-installer \
+#     mglaman/phpstan-drupal phpstan/phpstan-deprecation-rules
+#
+# Note: phpstan/extension-installer auto-loads extensions.
+#       Do NOT add an includes: block - it causes duplicate loading errors.
+#
+
+parameters:
+    # Analysis level (0-10, higher = stricter)
+    # Level 8 is recommended for SOLID compliance
+    level: 8
+
+    # Paths to analyse
+    paths:
+        - web/modules/custom
+
+    # Paths to exclude
+    excludePaths:
+        - web/modules/custom/*/tests/*
+        - web/modules/custom/*/*.module
+        - web/modules/custom/*/*.install
+
+    # Drupal root for context
+    drupal:
+        drupal_root: web
+
+    # Treat phpdoc types as certain
+    treatPhpDocTypesAsCertain: false
+
+    # Report unused parameters
+    reportUnmatchedIgnoredErrors: true
+
+    # Ignore specific errors (add as needed)
+    ignoreErrors:
+        # Drupal magic methods
+        - '#Call to an undefined method Drupal\\Core\\Entity\\EntityInterface::#'
+
+        # Common Drupal patterns
+        - '#Cannot call method [a-zA-Z]+\(\) on array\|null#'
+
+        # Form API callbacks
+        - '#Parameter \#1 \$form of method .+::submitForm\(\) expects array, array<string, mixed> given#'
+
+    # Parallel processing
+    parallel:
+        maximumNumberOfProcesses: 4
+
+    # Pollute scope with loop variables
+    polluteScopeWithLoopInitialAssignments: true
+    polluteScopeWithAlwaysIterableForeach: true

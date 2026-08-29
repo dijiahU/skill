@@ -1,0 +1,88 @@
+{
+  "registry": "glama",
+  "id": "wx4uj0yx5i",
+  "namespace": "piyushptiwari1",
+  "slug": "mcpkernel",
+  "name": "MCPGuard",
+  "description": "A security gateway that enforces policies, tracks data taints, and sandboxes tool calls between AI agents and MCP servers. It provides a secure chokepoint to prevent prompt injection and ensure OWASP ASI compliance through audit logging and deterministic execution.",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "compliance",
+    "owasp",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A security gateway that enforces policies, tracks data taints, and sandboxes tool calls between AI agents and MCP servers. It provides a secure chokepoint to prevent prompt injection and ensure OWASP ASI compliance through audit logging and deterministic execution.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCPGUARD_PROXY__HOST": {
+          "description": "Host for the security gateway. Default: 127.0.0.1",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "MCPGUARD_PROXY__PORT": {
+          "description": "Port for the security gateway. Default: 8000",
+          "type": "string",
+          "default": "8000"
+        },
+        "MCPGUARD_TAINT__MODE": {
+          "description": "Taint tracking mode. Options: decorator, ebpf, hybrid, disabled. Default: hybrid",
+          "type": "string",
+          "default": "hybrid"
+        },
+        "MCPGUARD_SANDBOX__BACKEND": {
+          "description": "Execution backend for tools. Options: docker, firecracker, wasm, microsandbox. Default: docker",
+          "type": "string",
+          "default": "docker"
+        },
+        "MCPGUARD_POLICY__POLICY_PATHS": {
+          "description": "Paths to YAML policy files, typically provided as a list or string.",
+          "type": "string"
+        },
+        "MCPGUARD_POLICY__DEFAULT_ACTION": {
+          "description": "Default action for policy evaluation (e.g., allow, deny, audit, sandbox). Default: deny",
+          "type": "string",
+          "default": "deny"
+        },
+        "MCPGUARD_OBSERVABILITY__LOG_LEVEL": {
+          "description": "Logging level for the server. Default: info",
+          "type": "string",
+          "default": "info"
+        },
+        "MCPGUARD_SANDBOX__TIMEOUT_SECONDS": {
+          "description": "Timeout for sandbox execution in seconds. Default: 30",
+          "type": "string",
+          "default": "30"
+        },
+        "MCPGUARD_OBSERVABILITY__OTLP_ENDPOINT": {
+          "description": "Endpoint for OpenTelemetry export.",
+          "type": "string"
+        },
+        "MCPGUARD_OBSERVABILITY__METRICS_ENABLED": {
+          "description": "Whether to enable Prometheus metrics. Default: true",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "wx4uj0yx5i",
+    "name": "MCPGuard",
+    "namespace": "piyushptiwari1",
+    "repository": {
+      "url": "https://github.com/piyushptiwari1/mcpkernel"
+    },
+    "slug": "mcpkernel",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/wx4uj0yx5i"
+  }
+}

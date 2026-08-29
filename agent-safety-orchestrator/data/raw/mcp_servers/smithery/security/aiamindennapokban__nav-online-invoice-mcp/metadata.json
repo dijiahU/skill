@@ -1,0 +1,471 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "aiamindennapokban/nav-online-invoice-mcp",
+  "namespace": "aiamindennapokban",
+  "slug": "nav-online-invoice-mcp",
+  "displayName": "NAV Online Invoice - NAV online számla",
+  "description": "Manage and query Hungarian invoice data directly through the National Tax and Customs Administration (NAV) system. Retrieve taxpayer information, verify invoice validity, and track transaction statuses in real-time. Simplify compliance by submitting, modifying, or annulling invoice records with automated token handling. \n\n[HUN]\nKezelje és kérdezze le a magyar számlaadatokat közvetlenül a Nemzeti Adó- és Vámhivatal (NAV) rendszerén keresztül. Szerezzen be adófizetői információkat, ellenőrizze a számlák érvényességét, és kövesse nyomon a tranzakciók állapotát valós időben. Egyszerűsítse a szabályoknak való megfelelést az automatizált tokenkezeléssel történő számlák benyújtásával, módosításával vagy törlésével.",
+  "discoveryQueries": [
+    "compliance",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "2d22588b-52ca-4b7c-acb3-f4e964f534ba",
+    "qualifiedName": "aiamindennapokban/nav-online-invoice-mcp",
+    "namespace": "aiamindennapokban",
+    "slug": "nav-online-invoice-mcp",
+    "displayName": "NAV Online Invoice - NAV online számla",
+    "description": "Manage and query Hungarian invoice data directly through the National Tax and Customs Administration (NAV) system. Retrieve taxpayer information, verify invoice validity, and track transaction statuses in real-time. Simplify compliance by submitting, modifying, or annulling invoice records with automated token handling. \n\n[HUN]\nKezelje és kérdezze le a magyar számlaadatokat közvetlenül a Nemzeti Adó- és Vámhivatal (NAV) rendszerén keresztül. Szerezzen be adófizetői információkat, ellenőrizze a számlák érvényességét, és kövesse nyomon a tranzakciók állapotát valós időben. Egyszerűsítse a szabályoknak való megfelelést az automatizált tokenkezeléssel történő számlák benyújtásával, módosításával vagy törlésével.",
+    "iconUrl": "https://api.smithery.ai/servers/aiamindennapokban/nav-online-invoice-mcp/icon",
+    "verified": false,
+    "useCount": 64,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-05T16:26:45.622Z",
+    "homepage": "https://github.com/Szotasz/nav-online-invoice-mcp?tab=readme-ov-file",
+    "bySmithery": false,
+    "owner": "org_01KNB40PKGJQT8Y52W5W8P67EZ",
+    "score": 0.01818181818181818
+  },
+  "detail": {
+    "qualifiedName": "aiamindennapokban/nav-online-invoice-mcp",
+    "displayName": "NAV Online Invoice - NAV online számla",
+    "description": "Manage and query Hungarian invoice data directly through the National Tax and Customs Administration (NAV) system. Retrieve taxpayer information, verify invoice validity, and track transaction statuses in real-time. Simplify compliance by submitting, modifying, or annulling invoice records with automated token handling. \n\n[HUN]\nKezelje és kérdezze le a magyar számlaadatokat közvetlenül a Nemzeti Adó- és Vámhivatal (NAV) rendszerén keresztül. Szerezzen be adófizetői információkat, ellenőrizze a számlák érvényességét, és kövesse nyomon a tranzakciók állapotát valós időben. Egyszerűsítse a szabályoknak való megfelelést az automatizált tokenkezeléssel történő számlák benyújtásával, módosításával vagy törlésével.",
+    "iconUrl": "https://api.smithery.ai/servers/aiamindennapokban/nav-online-invoice-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://nav-online-invoice-mcp--aiamindennapokban.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://nav-online-invoice-mcp--aiamindennapokban.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "NAV_LOGIN",
+            "NAV_PASSWORD",
+            "NAV_TAX_NUMBER",
+            "NAV_SIGNATURE_KEY",
+            "NAV_EXCHANGE_KEY"
+          ],
+          "properties": {
+            "NAV_ENV": {
+              "enum": [
+                "test",
+                "production"
+              ],
+              "type": "string",
+              "default": "production",
+              "x-order": 5,
+              "description": "NAV environment (test or production)"
+            },
+            "NAV_LOGIN": {
+              "type": "string",
+              "x-order": 0,
+              "description": "NAV Online Invoice API login username"
+            },
+            "NAV_PASSWORD": {
+              "type": "string",
+              "x-order": 1,
+              "description": "NAV Online Invoice API password"
+            },
+            "NAV_TAX_NUMBER": {
+              "type": "string",
+              "x-order": 2,
+              "description": "8-digit Hungarian tax number (adoszam)"
+            },
+            "NAV_SOFTWARE_ID": {
+              "type": "string",
+              "default": "NAVONLINEINVMCP-01",
+              "x-order": 6,
+              "description": "Registered software ID at NAV"
+            },
+            "NAV_EXCHANGE_KEY": {
+              "type": "string",
+              "x-order": 4,
+              "description": "NAV API data exchange key"
+            },
+            "NAV_SIGNATURE_KEY": {
+              "type": "string",
+              "x-order": 3,
+              "description": "NAV API XML signature key"
+            },
+            "NAV_SOFTWARE_DEV_NAME": {
+              "type": "string",
+              "default": "MCP Developer",
+              "x-order": 7,
+              "description": "Software developer name"
+            },
+            "NAV_SOFTWARE_DEV_CONTACT": {
+              "type": "string",
+              "default": "dev@example.com",
+              "x-order": 8,
+              "description": "Software developer contact email"
+            },
+            "NAV_SOFTWARE_DEV_TAX_NUMBER": {
+              "type": "string",
+              "default": "00000000",
+              "x-order": 9,
+              "description": "Software developer tax number"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "query_taxpayer",
+        "description": "Query taxpayer information from NAV by tax number (adoszam). Returns company name, address, VAT status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "taxNumber": {
+              "type": "string",
+              "maxLength": 8,
+              "minLength": 8,
+              "description": "8-digit Hungarian tax number (adoszam)"
+            }
+          }
+        }
+      },
+      {
+        "name": "query_invoice_data",
+        "description": "Get full invoice data by invoice number from NAV. Returns complete invoice details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "batchIndex": {
+              "type": "number",
+              "description": "Batch index if part of a batch invoice"
+            },
+            "invoiceNumber": {
+              "type": "string",
+              "description": "Invoice number (szamlaszam)"
+            },
+            "invoiceDirection": {
+              "enum": [
+                "INBOUND",
+                "OUTBOUND"
+              ],
+              "type": "string",
+              "description": "INBOUND = received invoices, OUTBOUND = issued invoices"
+            },
+            "supplierTaxNumber": {
+              "type": "string",
+              "description": "Supplier tax number (only for INBOUND)"
+            }
+          }
+        }
+      },
+      {
+        "name": "query_invoice_digest",
+        "description": "Search invoices in NAV with filters. Returns a paginated list of invoice summaries. Must provide either date range (dateFrom/dateTo), insertion date range (insDateTimeFrom/insDateTimeTo), or originalInvoiceNumber.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Partner name filter"
+            },
+            "page": {
+              "type": "number",
+              "default": 1,
+              "minimum": 1,
+              "description": "Page number (1-based)"
+            },
+            "dateTo": {
+              "type": "string",
+              "description": "Invoice issue date to (YYYY-MM-DD)"
+            },
+            "currency": {
+              "type": "string",
+              "description": "Currency code (e.g. HUF, EUR)"
+            },
+            "dateFrom": {
+              "type": "string",
+              "description": "Invoice issue date from (YYYY-MM-DD)"
+            },
+            "taxNumber": {
+              "type": "string",
+              "description": "Partner tax number filter"
+            },
+            "insDateTimeTo": {
+              "type": "string",
+              "description": "Insertion datetime to (ISO 8601)"
+            },
+            "paymentMethod": {
+              "enum": [
+                "TRANSFER",
+                "CASH",
+                "CARD",
+                "VOUCHER",
+                "OTHER"
+              ],
+              "type": "string"
+            },
+            "insDateTimeFrom": {
+              "type": "string",
+              "description": "Insertion datetime from (ISO 8601)"
+            },
+            "invoiceCategory": {
+              "enum": [
+                "NORMAL",
+                "SIMPLIFIED",
+                "AGGREGATE"
+              ],
+              "type": "string"
+            },
+            "invoiceDirection": {
+              "enum": [
+                "INBOUND",
+                "OUTBOUND"
+              ],
+              "type": "string",
+              "description": "INBOUND = received, OUTBOUND = issued"
+            },
+            "originalInvoiceNumber": {
+              "type": "string",
+              "description": "Original invoice number for modifications"
+            }
+          }
+        }
+      },
+      {
+        "name": "query_invoice_check",
+        "description": "Check if an invoice exists in NAV system.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "batchIndex": {
+              "type": "number"
+            },
+            "invoiceNumber": {
+              "type": "string",
+              "description": "Invoice number"
+            },
+            "invoiceDirection": {
+              "enum": [
+                "INBOUND",
+                "OUTBOUND"
+              ],
+              "type": "string"
+            },
+            "supplierTaxNumber": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "query_invoice_chain_digest",
+        "description": "Query the modification chain of an invoice (original + all modifications/stornos).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "default": 1,
+              "minimum": 1
+            },
+            "taxNumber": {
+              "type": "string",
+              "description": "Partner tax number"
+            },
+            "invoiceNumber": {
+              "type": "string",
+              "description": "Original invoice number"
+            },
+            "invoiceDirection": {
+              "enum": [
+                "INBOUND",
+                "OUTBOUND"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "query_transaction_status",
+        "description": "Check the processing status of a previously submitted invoice transaction.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "transactionId": {
+              "type": "string",
+              "description": "Transaction ID from manageInvoice response"
+            },
+            "returnOriginalRequest": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include original request data"
+            }
+          }
+        }
+      },
+      {
+        "name": "query_transaction_list",
+        "description": "List transactions within a date range.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "default": 1,
+              "minimum": 1
+            },
+            "insDateTo": {
+              "type": "string",
+              "description": "To datetime (ISO 8601)"
+            },
+            "insDateFrom": {
+              "type": "string",
+              "description": "From datetime (ISO 8601)"
+            },
+            "requestStatus": {
+              "type": "string",
+              "description": "Filter by status"
+            }
+          }
+        }
+      },
+      {
+        "name": "manage_invoice",
+        "description": "Submit invoice data to NAV (create, modify, or storno). Handles token exchange automatically. The invoiceData must be BASE64-encoded invoice XML conforming to NAV invoiceData XSD.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "compressed": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether invoiceData is GZIP compressed"
+            },
+            "operations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "index",
+                  "operation",
+                  "invoiceData"
+                ],
+                "properties": {
+                  "index": {
+                    "type": "number",
+                    "maximum": 100,
+                    "minimum": 1
+                  },
+                  "operation": {
+                    "enum": [
+                      "CREATE",
+                      "MODIFY",
+                      "STORNO"
+                    ],
+                    "type": "string"
+                  },
+                  "invoiceData": {
+                    "type": "string",
+                    "description": "BASE64-encoded invoice XML"
+                  },
+                  "electronicInvoiceHash": {
+                    "type": "string",
+                    "description": "SHA3-512 hash for electronic invoices"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Array of invoice operations (max 100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "manage_annulment",
+        "description": "Submit technical annulment for invoices. Use this for correcting technical errors (wrong data, wrong invoice number, etc.).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "operations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "index",
+                  "annulmentData"
+                ],
+                "properties": {
+                  "index": {
+                    "type": "number",
+                    "maximum": 100,
+                    "minimum": 1
+                  },
+                  "annulmentData": {
+                    "type": "string",
+                    "description": "BASE64-encoded annulment XML"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 100,
+              "minItems": 1
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "search-invoices",
+        "description": "Search for invoices issued or received within a date range",
+        "arguments": [
+          {
+            "name": "direction",
+            "description": "INBOUND = received, OUTBOUND = issued",
+            "required": true
+          },
+          {
+            "name": "dateFrom",
+            "description": "Start date (YYYY-MM-DD)",
+            "required": true
+          },
+          {
+            "name": "dateTo",
+            "description": "End date (YYYY-MM-DD)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "check-taxpayer",
+        "description": "Look up a Hungarian taxpayer by their tax number",
+        "arguments": [
+          {
+            "name": "taxNumber",
+            "description": "8-digit Hungarian tax number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "invoice-details",
+        "description": "Get complete details of a specific invoice",
+        "arguments": [
+          {
+            "name": "invoiceNumber",
+            "description": "Invoice number to look up",
+            "required": true
+          },
+          {
+            "name": "direction",
+            "description": "INBOUND = received, OUTBOUND = issued",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

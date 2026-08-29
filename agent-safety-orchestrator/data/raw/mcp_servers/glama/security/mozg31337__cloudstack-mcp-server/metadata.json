@@ -1,0 +1,122 @@
+{
+  "registry": "glama",
+  "id": "b6twt1xb9a",
+  "namespace": "mozg31337",
+  "slug": "cloudstack-mcp-server",
+  "name": "CloudStack MCP Server",
+  "description": "Enables comprehensive management of CloudStack infrastructure through natural language, providing access to over 735 API methods for virtual machines, networking, and storage. It features enterprise-grade security with a safety confirmation system for destructive operations and extensive API coverage.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive management of CloudStack infrastructure through natural language, providing access to over 735 API methods for virtual machines, networking, and storage. It features enterprise-grade security with a safety confirmation system for destructive operations and extensive API coverage.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CLOUDSTACK_CONFIG": {
+          "description": "Path to the cloudstack.json configuration file containing environment definitions.",
+          "type": "string"
+        },
+        "CLOUDSTACK_RETRIES": {
+          "description": "Global network retry count.",
+          "type": "string",
+          "default": "3"
+        },
+        "CLOUDSTACK_TIMEOUT": {
+          "description": "Global network timeout setting in milliseconds.",
+          "type": "string",
+          "default": "30000"
+        },
+        "CLOUDSTACK_DEV_NAME": {
+          "description": "Display name for the development CloudStack environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_LOG_FILE": {
+          "description": "Path to the log file (e.g., logs/cloudstack-mcp.log).",
+          "type": "string"
+        },
+        "CLOUDSTACK_LOG_LEVEL": {
+          "description": "Logging level (e.g., info, debug, error).",
+          "type": "string",
+          "default": "info"
+        },
+        "CLOUDSTACK_PROD_NAME": {
+          "description": "Display name for the production CloudStack environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_DEV_API_KEY": {
+          "description": "API key for the development CloudStack environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_DEV_API_URL": {
+          "description": "API URL for the development CloudStack server.",
+          "type": "string"
+        },
+        "CLOUDSTACK_DEV_RETRIES": {
+          "description": "Number of retries for the development environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_DEV_TIMEOUT": {
+          "description": "Connection timeout for the development environment in milliseconds.",
+          "type": "string"
+        },
+        "CLOUDSTACK_PROD_API_KEY": {
+          "description": "API key for the production CloudStack environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_PROD_API_URL": {
+          "description": "API URL for the production CloudStack server (e.g., https://your-cloudstack.example.com/client/api).",
+          "type": "string"
+        },
+        "CLOUDSTACK_PROD_RETRIES": {
+          "description": "Number of retries for the production environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_PROD_TIMEOUT": {
+          "description": "Connection timeout for the production environment in milliseconds.",
+          "type": "string"
+        },
+        "CLOUDSTACK_DEV_SECRET_KEY": {
+          "description": "Secret key for the development CloudStack environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_PROD_SECRET_KEY": {
+          "description": "Secret key for the production CloudStack environment.",
+          "type": "string"
+        },
+        "CLOUDSTACK_DEFAULT_ENVIRONMENT": {
+          "description": "Default environment to use (e.g., 'default' or 'dev').",
+          "type": "string",
+          "default": "default"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "CLOUDSTACK_CONFIG"
+          ]
+        },
+        {
+          "required": [
+            "CLOUDSTACK_PROD_API_URL",
+            "CLOUDSTACK_PROD_API_KEY",
+            "CLOUDSTACK_PROD_SECRET_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "b6twt1xb9a",
+    "name": "CloudStack MCP Server",
+    "namespace": "mozg31337",
+    "repository": {
+      "url": "https://github.com/mozg31337/cloudstack-mcp-server"
+    },
+    "slug": "cloudstack-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b6twt1xb9a"
+  }
+}

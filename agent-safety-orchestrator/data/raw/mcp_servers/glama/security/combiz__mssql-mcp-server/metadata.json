@@ -1,0 +1,107 @@
+{
+  "registry": "glama",
+  "id": "g75uq489xn",
+  "namespace": "combiz",
+  "slug": "mssql-mcp-server",
+  "name": "MSSQL MCP Server",
+  "description": "Enables AI assistants to interact with Microsoft SQL Server databases through a standardized interface. Supports executing SQL queries, browsing database schemas, and viewing table data with flexible authentication options for both local and Azure SQL databases.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to interact with Microsoft SQL Server databases through a standardized interface. Supports executing SQL queries, browsing database schemas, and viewing table data with flexible authentication options for both local and Azure SQL databases.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MSSQL_HOST": {
+          "description": "Server hostname",
+          "type": "string",
+          "default": "localhost"
+        },
+        "MSSQL_PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "1433"
+        },
+        "MSSQL_USER": {
+          "description": "Username for SQL Authentication",
+          "type": "string"
+        },
+        "MSSQL_DRIVER": {
+          "description": "ODBC driver name",
+          "type": "string",
+          "default": "ODBC Driver 17 for SQL Server"
+        },
+        "MSSQL_SERVER": {
+          "description": "Server hostname (alternative to MSSQL_HOST)",
+          "type": "string",
+          "default": "localhost"
+        },
+        "MSSQL_ENCRYPT": {
+          "description": "Encrypt connection",
+          "type": "string",
+          "default": "yes"
+        },
+        "MSSQL_DATABASE": {
+          "description": "The database name to connect to",
+          "type": "string"
+        },
+        "MSSQL_PASSWORD": {
+          "description": "Password for SQL Authentication",
+          "type": "string"
+        },
+        "MSSQL_CONNECTION_TIMEOUT": {
+          "description": "Connection timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "MSSQL_TRUSTED_CONNECTION": {
+          "description": "Set to 'yes' for Windows Authentication, 'no' for SQL Authentication",
+          "type": "string",
+          "default": "no"
+        },
+        "MSSQL_MULTI_SUBNET_FAILOVER": {
+          "description": "Enable multi-subnet failover",
+          "type": "string",
+          "default": "no"
+        },
+        "MSSQL_TRUST_SERVER_CERTIFICATE": {
+          "description": "Trust server certificate",
+          "type": "string",
+          "default": "yes"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MSSQL_DATABASE",
+            "MSSQL_USER",
+            "MSSQL_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "MSSQL_DATABASE",
+            "MSSQL_TRUSTED_CONNECTION"
+          ]
+        }
+      ]
+    },
+    "id": "g75uq489xn",
+    "name": "MSSQL MCP Server",
+    "namespace": "combiz",
+    "repository": {
+      "url": "https://github.com/combiz/mssql-mcp-server"
+    },
+    "slug": "mssql-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/g75uq489xn"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "agentic-browsing/preclick",
+  "namespace": "agentic-browsing",
+  "slug": "preclick",
+  "displayName": "PreClick : URL Security scanner",
+  "description": "PreClick: An MCP-native URL preflight security scanning service for autonomous agents. It scans links for threats and confirms they match the intended task before execution. Built for agentic workflows, it provides high-accuracy, context-aware browsing governance with adaptive learning.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "aab9974b-ae5a-4648-a4b2-7361bb769d2f",
+    "qualifiedName": "agentic-browsing/preclick",
+    "namespace": "agentic-browsing",
+    "slug": "preclick",
+    "displayName": "PreClick : URL Security scanner",
+    "description": "PreClick: An MCP-native URL preflight security scanning service for autonomous agents. It scans links for threats and confirms they match the intended task before execution. Built for agentic workflows, it provides high-accuracy, context-aware browsing governance with adaptive learning.",
+    "iconUrl": "https://api.smithery.ai/servers/agentic-browsing/preclick/icon",
+    "verified": false,
+    "useCount": 1030,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-03T12:16:20.034Z",
+    "homepage": "https://preclick.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBV6SJJB8T0M31BG5QXMEDE",
+    "score": 0.03333333333333333
+  },
+  "detail": {
+    "qualifiedName": "agentic-browsing/preclick",
+    "displayName": "PreClick : URL Security scanner",
+    "description": "PreClick: An MCP-native URL preflight security scanning service for autonomous agents. It scans links for threats and confirms they match the intended task before execution. Built for agentic workflows, it provides high-accuracy, context-aware browsing governance with adaptive learning.",
+    "iconUrl": "https://api.smithery.ai/servers/agentic-browsing/preclick/icon",
+    "remote": true,
+    "deploymentUrl": "https://preclick--agentic-browsing.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://preclick--agentic-browsing.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "url_scanner_async_scan",
+        "description": "Submit a URL for asynchronous security analysis. Returns immediately with a task_id. Poll with url_scanner_async_task_status to check progress, then url_scanner_async_task_result to get the scan result. Async counterpart of url_scanner_scan for clients without native MCP Tasks support.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_async_scan_with_intent",
+        "description": "Submit a URL with optional user intent for asynchronous security analysis. Returns immediately with a task_id. Poll with url_scanner_async_task_status to check progress, then url_scanner_async_task_result to get the scan result. Async counterpart of url_scanner_scan_with_intent for clients without native MCP Tasks support.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            },
+            "intent": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional user intent for visiting the URL. Recommended for additional context."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_async_task_result",
+        "description": "Retrieve the result of an asynchronous scan task. If completed, returns the full scan result (risk_score, confidence, agent_access_directive, etc.). If still running, returns status with retry_after_ms — call again after that interval. Non-blocking.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "description": "The task ID to retrieve the result for."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_async_task_status",
+        "description": "Check the status of an asynchronous scan task. Returns the current task status using native MCP task semantics (working, completed, failed, cancelled) without blocking. Use url_scanner_async_task_result to retrieve the result once completed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "description": "The task ID to check status for."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_scan",
+        "description": "Analyze a URL for security threats (synchronous, blocks until complete or timeout). Returns risk score, confidence, agent access guidance, and intent_alignment (always not_provided for this tool; use url_scanner_scan_with_intent for intent context). For long-running scans, prefer url_scanner_async_scan which returns immediately with a task_id for polling via url_scanner_async_task_result.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            }
+          }
+        }
+      },
+      {
+        "name": "url_scanner_scan_with_intent",
+        "description": "Analyze a URL for security threats with optional user intent context (synchronous, blocks until complete or timeout). Returns risk score, confidence, agent access guidance, and intent_alignment. For long-running scans, prefer url_scanner_async_scan_with_intent which returns immediately with a task_id for polling via url_scanner_async_task_result.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to analyze. Must be HTTP or HTTPS. If no scheme provided, https:// is assumed."
+            },
+            "intent": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional user intent for visiting the URL. Recommended for additional context."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

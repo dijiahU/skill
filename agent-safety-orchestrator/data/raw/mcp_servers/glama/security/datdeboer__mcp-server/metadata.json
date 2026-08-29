@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "k8nandj9hm",
+  "namespace": "datdeboer",
+  "slug": "mcp-server",
+  "name": "PostgreSQL MCP Server",
+  "description": "A production-ready MCP server that enables safe, read-only SQL SELECT queries against PostgreSQL databases with built-in security validation. It features connection pooling, automatic row limits, and structured logging to ensure secure and reliable database interactions.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A production-ready MCP server that enables safe, read-only SQL SELECT queries against PostgreSQL databases with built-in security validation. It features connection pooling, automatic row limits, and structured logging to ensure secure and reliable database interactions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Environment mode (development, production, test)",
+          "type": "string",
+          "default": "development"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (trace, debug, info, warn, error, fatal)",
+          "type": "string",
+          "default": "info"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL connection string (e.g., postgresql://user:password@localhost:5432/dbname)",
+          "type": "string"
+        },
+        "MAX_QUERY_LIMIT": {
+          "description": "Maximum allowed row limit",
+          "type": "string",
+          "default": "10000"
+        },
+        "QUERY_TIMEOUT_MS": {
+          "description": "Query execution timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "DEFAULT_QUERY_LIMIT": {
+          "description": "Default row limit for queries",
+          "type": "string",
+          "default": "100"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABASE_URL"
+      ]
+    },
+    "id": "k8nandj9hm",
+    "name": "PostgreSQL MCP Server",
+    "namespace": "datdeboer",
+    "repository": {
+      "url": "https://github.com/datdeboer/mcp-server"
+    },
+    "slug": "mcp-server",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/k8nandj9hm"
+  }
+}

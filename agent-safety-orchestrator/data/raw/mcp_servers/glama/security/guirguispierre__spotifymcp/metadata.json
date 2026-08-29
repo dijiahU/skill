@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "akw7vo1ioi",
+  "namespace": "guirguispierre",
+  "slug": "spotifyMCP",
+  "name": "Spotify MCP",
+  "description": "Enables remote interaction with Spotify through the Model Context Protocol, allowing users to search tracks, control playback, and manage playlists with per-user OAuth authentication. It is hosted on Cloudflare Workers and supports remote MCP over HTTP for compatible clients.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables remote interaction with Spotify through the Model Context Protocol, allowing users to search tracks, control playback, and manage playlists with per-user OAuth authentication. It is hosted on Cloudflare Workers and supports remote MCP over HTTP for compatible clients.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SPOTIFY_CLIENT_ID": {
+          "description": "The Spotify Client ID obtained from the Spotify Developer Dashboard.",
+          "type": "string"
+        },
+        "APP_ENCRYPTION_SECRET": {
+          "description": "A secret key used for encrypting per-user Spotify tokens stored in Workers KV.",
+          "type": "string"
+        },
+        "SPOTIFY_CLIENT_SECRET": {
+          "description": "The Spotify Client Secret obtained from the Spotify Developer Dashboard.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SPOTIFY_CLIENT_ID",
+        "SPOTIFY_CLIENT_SECRET",
+        "APP_ENCRYPTION_SECRET"
+      ]
+    },
+    "id": "akw7vo1ioi",
+    "name": "Spotify MCP",
+    "namespace": "guirguispierre",
+    "repository": {
+      "url": "https://github.com/guirguispierre/spotifyMCP"
+    },
+    "slug": "spotifyMCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/akw7vo1ioi"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "registry": "glama",
+  "id": "a8m2ovs7fi",
+  "namespace": "jplwunder",
+  "slug": "postgres-mcp-server",
+  "name": "PostgreSQL MCP Server",
+  "description": "Provides read-only access to PostgreSQL databases with schema inspection, query execution in multiple formats (JSON, CSV, Markdown), and query history tracking with built-in security features.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides read-only access to PostgreSQL databases with schema inspection, query execution in multiple formats (JSON, CSV, Markdown), and query history tracking with built-in security features.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level (DEBUG, INFO, WARNING, ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "POSTGRES_HOST": {
+          "description": "PostgreSQL host address",
+          "type": "string",
+          "default": "localhost"
+        },
+        "POSTGRES_PORT": {
+          "description": "PostgreSQL port number",
+          "type": "string",
+          "default": "5432"
+        },
+        "POSTGRES_USER": {
+          "description": "PostgreSQL user for authentication",
+          "type": "string"
+        },
+        "POSTGRES_DATABASE": {
+          "description": "PostgreSQL database name",
+          "type": "string"
+        },
+        "POSTGRES_PASSWORD": {
+          "description": "PostgreSQL password for authentication",
+          "type": "string"
+        },
+        "QUERY_HISTORY_SIZE": {
+          "description": "Number of queries to keep in history",
+          "type": "string",
+          "default": "100"
+        },
+        "POSTGRES_POOL_MAX_SIZE": {
+          "description": "Maximum connection pool size",
+          "type": "string",
+          "default": "10"
+        },
+        "POSTGRES_POOL_MIN_SIZE": {
+          "description": "Minimum connection pool size",
+          "type": "string",
+          "default": "2"
+        },
+        "POSTGRES_COMMAND_TIMEOUT": {
+          "description": "Command timeout in seconds",
+          "type": "string",
+          "default": "60"
+        },
+        "POSTGRES_CONNECTION_TIMEOUT": {
+          "description": "Connection timeout in seconds",
+          "type": "string",
+          "default": "10"
+        }
+      },
+      "type": "object",
+      "required": [
+        "POSTGRES_HOST",
+        "POSTGRES_PORT",
+        "POSTGRES_DATABASE",
+        "POSTGRES_USER",
+        "POSTGRES_PASSWORD"
+      ]
+    },
+    "id": "a8m2ovs7fi",
+    "name": "PostgreSQL MCP Server",
+    "namespace": "jplwunder",
+    "repository": {
+      "url": "https://github.com/jplwunder/postgres-mcp-server"
+    },
+    "slug": "postgres-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a8m2ovs7fi"
+  }
+}

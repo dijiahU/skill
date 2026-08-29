@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "tyu847l55r",
+  "namespace": "unclaimed-sol",
+  "slug": "unclaimed-sol-mcp",
+  "name": "Unclaimed SOL Scanner",
+  "description": "Scan and claim reclaimable SOL from dormant Solana wallet accounts. The first Vibe Claiming MCP server.",
+  "discoveryQueries": [
+    "scanner"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Scan and claim reclaimable SOL from dormant Solana wallet accounts. The first Vibe Claiming MCP server.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SOLANA_RPC_URL": {
+          "description": "Solana RPC endpoint. Defaults to https://api.mainnet-beta.solana.com. A dedicated RPC is recommended for claiming.",
+          "type": "string",
+          "default": "https://api.mainnet-beta.solana.com"
+        },
+        "SOLANA_PRIVATE_KEY": {
+          "description": "Private key as base58 string or JSON byte array. Use SOLANA_KEYPAIR_PATH instead when possible.",
+          "type": "string"
+        },
+        "SOLANA_KEYPAIR_PATH": {
+          "description": "Path to Solana keypair JSON file. Enables Vibe Claiming.",
+          "type": "string"
+        },
+        "SOLANA_PRIORITY_FEE": {
+          "description": "Priority fee in microlamports per compute unit. Default: 1,000. Max: 200,000.",
+          "type": "string",
+          "default": "1000"
+        },
+        "UNCLAIMED_SOL_API_KEY": {
+          "description": "API key sent as Authorization: Bearer header.",
+          "type": "string"
+        },
+        "UNCLAIMED_SOL_API_URL": {
+          "description": "Backend API URL. Defaults to https://unclaimedsol.com.",
+          "type": "string",
+          "default": "https://unclaimedsol.com"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "tyu847l55r",
+    "name": "Unclaimed SOL Scanner",
+    "namespace": "unclaimed-sol",
+    "repository": {
+      "url": "https://github.com/unclaimed-sol/unclaimed-sol-mcp"
+    },
+    "slug": "unclaimed-sol-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tyu847l55r"
+  }
+}

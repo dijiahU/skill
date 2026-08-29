@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "gxx67adbk8",
+  "namespace": "Kashyab19",
+  "slug": "google-calendar-mcp-server",
+  "name": "Google Calendar MCP Server",
+  "description": "Enables AI assistants to interact with Google Calendar through OAuth 2.1 authentication, supporting full calendar and event management including creation, updates, deletion, and search across multiple calendars.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables AI assistants to interact with Google Calendar through OAuth 2.1 authentication, supporting full calendar and event management including creation, updates, deletion, and search across multiple calendars.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JWT_ISSUER": {
+          "description": "The JWT issuer URL",
+          "type": "string",
+          "default": "http://localhost:3080"
+        },
+        "JWT_SECRET": {
+          "description": "Your JWT secret key for signing tokens",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "Database URL for token storage (optional - uses in-memory by default)",
+          "type": "string",
+          "default": "sqlite://./auth.db"
+        },
+        "JWT_AUDIENCE": {
+          "description": "The JWT audience",
+          "type": "string",
+          "default": "https://smithery.ai"
+        },
+        "MCP_RESOURCE_ID": {
+          "description": "The MCP resource identifier",
+          "type": "string",
+          "default": "https://smithery.ai"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "AUTH_SERVER_ISSUER": {
+          "description": "The URL of the auth server issuer",
+          "type": "string",
+          "default": "http://localhost:3080"
+        },
+        "GOOGLE_REDIRECT_URI": {
+          "description": "The Google OAuth redirect URI",
+          "type": "string",
+          "default": "http://localhost:3080/oauth/google/callback"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth client secret from Google Cloud Console",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "JWT_SECRET"
+      ]
+    },
+    "id": "gxx67adbk8",
+    "name": "Google Calendar MCP Server",
+    "namespace": "Kashyab19",
+    "repository": {
+      "url": "https://github.com/Kashyab19/google-calendar-mcp-server"
+    },
+    "slug": "google-calendar-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gxx67adbk8"
+  }
+}

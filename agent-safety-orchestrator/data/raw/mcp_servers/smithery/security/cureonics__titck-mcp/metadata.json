@@ -1,0 +1,1834 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cureonics/titck-mcp",
+  "namespace": "cureonics",
+  "slug": "titck-mcp",
+  "displayName": "TITCK MCP",
+  "description": "Türkiye İlaç ve Tıbbi Cihaz Kurumu (TİTCK) açık ilaç verileri için read-only Streamable HTTP MCP sunucusu. Ruhsatlı ilaçlar, fiyat listeleri, ATC/SNOMED eşlemeleri, güvenlilik dokümanları, geri çekme/iptal kayıtları, firma portföyleri ve yardımcı regülasyon veri setlerinde 56 araç sunar. OAuth 2.1 ile korunur ve Google Cloud Run üzerinde çalışır.",
+  "discoveryQueries": [
+    "compliance",
+    "authorization",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "ea5de33b-9bb9-46d6-a1ee-f8ba7fb5fdac",
+    "qualifiedName": "cureonics/titck-mcp",
+    "namespace": "cureonics",
+    "slug": "titck-mcp",
+    "displayName": "TITCK MCP",
+    "description": "Türkiye İlaç ve Tıbbi Cihaz Kurumu (TİTCK) açık ilaç verileri için read-only Streamable HTTP MCP sunucusu. Ruhsatlı ilaçlar, fiyat listeleri, ATC/SNOMED eşlemeleri, güvenlilik dokümanları, geri çekme/iptal kayıtları, firma portföyleri ve yardımcı regülasyon veri setlerinde 56 araç sunar. OAuth 2.1 ile korunur ve Google Cloud Run üzerinde çalışır.",
+    "iconUrl": "https://api.smithery.ai/servers/cureonics/titck-mcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-25T17:46:32.014Z",
+    "homepage": "https://titck-mcp-to7lqjgdkq-ew.a.run.app",
+    "bySmithery": false,
+    "owner": "org_01KPXK05AHCQ7194HPBZENTMEC",
+    "score": 0.01691407365115615
+  },
+  "detail": {
+    "qualifiedName": "cureonics/titck-mcp",
+    "displayName": "TITCK MCP",
+    "description": "Türkiye İlaç ve Tıbbi Cihaz Kurumu (TİTCK) açık ilaç verileri için read-only Streamable HTTP MCP sunucusu. Ruhsatlı ilaçlar, fiyat listeleri, ATC/SNOMED eşlemeleri, güvenlilik dokümanları, geri çekme/iptal kayıtları, firma portföyleri ve yardımcı regülasyon veri setlerinde 56 araç sunar. OAuth 2.1 ile korunur ve Google Cloud Run üzerinde çalışır.",
+    "iconUrl": "https://api.smithery.ai/servers/cureonics/titck-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://titck-mcp--cureonics.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://titck-mcp--cureonics.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_datasets",
+        "description": "List all 20 registered TITCK dynamic modules with auth/filetype metadata and latest manifest counts when available.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_document_datasets",
+        "description": "List TITCK PDF/DOCX document datasets indexed for full-text search.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_documents",
+        "description": "Full-text search across indexed TITCK PDF/DOCX documents such as doctor information letters, risk materials, safety monitoring forms, and unsafe products.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Document search text."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "dataset_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Dataset Id",
+              "default": null,
+              "description": "Optional document source slug, e.g. 'doctor_information_letters'."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            },
+            "change_date_to": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Change Date To",
+              "default": null,
+              "description": "Inclusive upper bound on document change_date (YYYY-MM-DD)."
+            },
+            "change_date_from": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Change Date From",
+              "default": null,
+              "description": "Inclusive lower bound on document change_date (YYYY-MM-DD)."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_document",
+        "description": "Fetch one indexed TITCK PDF/DOCX document by document_id, including full text.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "document_id": {
+              "type": "string",
+              "title": "Document Id",
+              "description": "Document id from search_documents results."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_additional_monitoring",
+        "description": "Search TITCK's structured additional-monitoring list by drug name or active ingredient. These rows indicate products/substances subject to extra monitoring.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Drug name or active ingredient."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_additional_monitoring_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to TITCK additional-monitoring rows through product name, active ingredient, or SNOMED terms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_supply_tracked_ingredients",
+        "description": "Search TITCK's structured supply-tracked active ingredient list by active ingredient, ATC code, or pharmaceutical form.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Active ingredient, ATC code, or form."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_supply_tracked_ingredients_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to TITCK supply-tracked ingredient rows through active ingredient, ATC, or SNOMED terms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_authorization_cancellations",
+        "description": "Search TITCK's structured authorization cancellation list by barcode, authorization number, product name, active ingredient, or holder.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Barcode, authorization number, product name, or holder."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            },
+            "holder_contains": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Holder Contains",
+              "default": null,
+              "description": "Substring (case/diacritic-insensitive) match on holder name."
+            },
+            "cancellation_date_to": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cancellation Date To",
+              "default": null,
+              "description": "Inclusive upper bound on cancellation_date (YYYY-MM-DD)."
+            },
+            "cancellation_date_from": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cancellation Date From",
+              "default": null,
+              "description": "Inclusive lower bound on cancellation_date (YYYY-MM-DD)."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_authorization_cancellations_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to TITCK authorization cancellation rows through barcode, authorization number, or product name evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_documents_for_drug",
+        "description": "Given a TITCK barcode or master record id, find indexed PDF/DOCX documents that mention its barcode, product name, active ingredients, or SNOMED terms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked documents."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_documents_by_substance",
+        "description": "Find indexed TITCK PDF/DOCX documents through MasterDrugRecord products that share a SNOMED CT substance concept or lexical substance name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Name",
+              "default": null,
+              "description": "Substance name, e.g. paracetamol or parasetamol."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked documents."
+            },
+            "concept_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Concept Id",
+              "default": null,
+              "description": "SNOMED CT substance concept id, e.g. 387517004."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_drugs",
+        "description": "Full-text search across barcode-primary TITCK master drug records. Matches product name, active ingredient, barcode, ATC, firm, and SNOMED terms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Search text (Turkish or English)."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "in_market": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "In Market",
+              "default": null,
+              "description": "Optional market filter from detailed price list."
+            },
+            "atc_prefix": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Atc Prefix",
+              "default": null,
+              "description": "Optional ATC exact code or prefix filter, e.g. 'N02BE'."
+            },
+            "dataset_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Dataset Id",
+              "default": null,
+              "description": "Optional legacy source slug filter, e.g. 'detailed_price_list'."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            },
+            "holder_contains": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Holder Contains",
+              "default": null,
+              "description": "Substring (case/diacritic-insensitive) match on marketing authorization holder."
+            },
+            "lifecycle_status": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lifecycle Status",
+              "default": null,
+              "description": "Optional lifecycle filter: active, passive, suspended, unknown."
+            },
+            "prescription_code": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Prescription Code",
+              "default": null,
+              "description": "Exact prescription code: normal, green, purple, red, controlled, restricted_white, unknown."
+            },
+            "reimbursement_status": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Reimbursement Status",
+              "default": null,
+              "description": "Exact TR reimbursement status, e.g. 'GERİ ÖDEMELİ' or 'GERİ ÖDEMESİZ'."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_drug",
+        "description": "Fetch a single TITCK master drug record by barcode or stable record_id. Returns typed price/regulatory fields, SNOMED ingredients, and source_fields.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "record_id": {
+              "type": "string",
+              "title": "Record Id",
+              "description": "Barcode or record id from search results."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_by_substance",
+        "description": "Find all TITCK master drug records that contain a SNOMED CT substance. Use either concept_id for exact matching or name for lexical matching.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Name",
+              "default": null,
+              "description": "Substance name, e.g. paracetamol or parasetamol."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "concept_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Concept Id",
+              "default": null,
+              "description": "SNOMED CT substance concept id, e.g. 387517004."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_by_atc",
+        "description": "Find TITCK master drug records by ATC code. A 7-character ATC code is exact; shorter values are treated as prefixes/classes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "title": "Code",
+              "description": "ATC code or prefix, e.g. N02BE01 or J01CR."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_drug_snomed_profile",
+        "description": "Return the full TITCK master record plus SNOMED/ATC summary for one barcode.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Product barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_equivalent_products_by_substance",
+        "description": "Given a barcode, find other TITCK products sharing at least one SNOMED substance concept. Useful for active-ingredient equivalents; it does not imply exact therapeutic equivalence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results per substance."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_icd10_maps_for_substance",
+        "description": "Return SNOMED CT International ICD-10 map rows for a concept. NOTE: SNOMED CT's ICD-10 map module targets `finding`/`disorder` concepts almost exclusively; substance concepts (e.g. paracetamol 384977007) typically have no map rows. The response includes a `note` explaining when zero maps is the expected SNOMED behavior, so callers don't mistake an empty list for a bug.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "concept_id": {
+              "type": "string",
+              "title": "Concept Id",
+              "description": "SNOMED CT concept id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_active_ingredients",
+        "description": "Search TITCK's `Etkin Madde Listesi` — the **active-ingredient REGISTRATION PIPELINE** (ingredients in the open TR licensing process). Each row carries an `application_count` (also surfaced as `product_count` for backwards compatibility) which is the number of distinct authorization applications currently on file for that ingredient. NOTE: presence here is a pipeline signal — it does NOT mean the ingredient is approved or available on the TR market. For currently-authorized products use search_drugs / get_drug; for withdrawn ones use search_authorization_cancellations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Active ingredient name (TR or EN)."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_active_ingredients_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to entries in the `Etkin Madde Listesi` registration-pipeline list using its ingredient names. A non-empty link means the product's ingredient is currently in TR licensing pipeline (open dossier); an empty link is normal for fully settled / long-approved ingredients.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_foreign_active_ingredients",
+        "description": "Search TITCK's foreign / import active-ingredient list (Yurt Dışı Etkin Madde). Includes ATC code, ICD-10 indications, and usage conditions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Active ingredient, ATC code, or ICD-10 indication."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_foreign_active_ingredients_for_drug",
+        "description": "Given a TITCK barcode or master record id, find related foreign / import active-ingredient records via ingredient or ATC matches.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_reference_prices",
+        "description": "Search TITCK's reference-based drug price list (Referans Bazlı İlaç Fiyat Listesi). Returns product, holder, and reference source price in EUR (GKF).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Product name or holder name."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            },
+            "price_eur_max": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Price Eur Max",
+              "default": null,
+              "description": "Inclusive upper bound on GERCEK KAYNAK FIYAT (GKF) in EUR."
+            },
+            "price_eur_min": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Price Eur Min",
+              "default": null,
+              "description": "Inclusive lower bound on GERCEK KAYNAK FIYAT (GKF) in EUR."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_reference_prices_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to TITCK's reference price list via product-name evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_off_label_uses",
+        "description": "Search TITCK's oncology off-label use list (Endikasyon Dışı İlaç Kullanımı). Filterable by diagnosis, drug (active ingredient), or organ category sheet.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Diagnosis, drug name (etkin madde), or organ category."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            },
+            "sheet_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sheet Name",
+              "default": null,
+              "description": "Restrict to a specific organ/cancer category sheet, e.g. 'Akciğer'."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_off_label_uses_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to oncology off-label use rows via active-ingredient or SNOMED evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_regulation_article23",
+        "description": "Search TITCK's Regulation Article 23 applications log (Madde 23 Uygulamaları). Multi-year history of exemption applications.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Product, barcode, holder, ingredient, or auth number."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            },
+            "sheet_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sheet Name",
+              "default": null,
+              "description": "Restrict to a specific year sheet, e.g. '2017'."
+            },
+            "publication_date_to": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Publication Date To",
+              "default": null,
+              "description": "Inclusive upper bound on publication_date (YYYY-MM-DD)."
+            },
+            "publication_date_from": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Publication Date From",
+              "default": null,
+              "description": "Inclusive lower bound on publication_date (YYYY-MM-DD)."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_regulation_article23_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to Regulation Article 23 application records via barcode, auth number, or product name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_batch_release_certificates",
+        "description": "Search TITCK's national batch release certificate list (Seri Serbest Bırakma Sertifikaları) by certificate number, product name, or holder.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Certificate number, product, or holder."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_batch_release_certificates_for_drug",
+        "description": "Given a TITCK barcode or master record id, link the product to batch release certificate records via product name, auth number, or holder.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_scheduling_records",
+        "description": "Search TITCK's monthly scheduling list (Takvimlendirme Listesi). Snapshot of active ingredients with pending applications.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Active ingredient or snapshot date."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_scheduling_records_for_drug",
+        "description": "Given a TITCK barcode or master record id, find scheduling list rows that mention the product's active ingredients.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max linked rows."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_institutional_fees",
+        "description": "Search TITCK's institutional services fee schedule (Kurum Hizmetleri Fiyat Tarifesi). Regulatory application + lab analysis fees in TRY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Service description, department, or analysis parameter."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax (quotes, OR, NOT, parens) and otherwise tokenizes; `raw` passes the query verbatim to FTS5."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_ingredient_snomed_map",
+        "description": "Look up a TITCK active-ingredient name against the canonical SNOMED CT substance map produced by the nightly pipeline. Returns every concept the matcher confidently associated with that ingredient (with score + source).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ingredient_name": {
+              "type": "string",
+              "title": "Ingredient Name",
+              "description": "TITCK ingredient name in Turkish or English (case/diacritic insensitive)."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_unmapped_ingredients",
+        "description": "Return canonical TITCK ingredients with no confident SNOMED CT match. Useful for data-quality audits — paginated; includes sample raw input names and the best-available match score per ingredient.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_dataset_overlap",
+        "description": "Return Jaccard / coverage rows between TITCK datasets. With no args, returns the full matrix across every comparison field; pass `slug_a` / `slug_b` to narrow to a dataset or pair, and `field` (e.g. 'barcode', 'active_ingredient') to filter the comparison axis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Field",
+              "default": null,
+              "description": "Optional comparison field: barcode, active_ingredient, atc_code, authorization_number, marketing_authorization_holder."
+            },
+            "slug_a": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Slug A",
+              "default": null,
+              "description": "Optional dataset slug, e.g. 'licensed_drugs'."
+            },
+            "slug_b": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Slug B",
+              "default": null,
+              "description": "Optional second dataset slug; combine with slug_a for a specific pair."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_foreign_drugs_for_icd10",
+        "description": "Reverse lookup on the foreign / import active-ingredient list (Yurt Dışı Etkin Madde Listesi): given an ICD-10 code (e.g. 'G70.2'), return foreign ingredients officially approved for that indication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "icd10_code": {
+              "type": "string",
+              "title": "Icd10 Code",
+              "description": "ICD-10 code in canonical form, e.g. 'G70.2' or 'E72.2'."
+            }
+          }
+        }
+      },
+      {
+        "name": "summarize_substance",
+        "description": "Composite single-call summary of a SNOMED CT substance concept: SNOMED FSN + preferred term + ICD-10 maps + count of TITCK products containing the substance + top-5 ATC codes used + 3 sample products. Replaces 4 separate lookups (concept, ICD-10, ATC, products).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "concept_id": {
+              "type": "string",
+              "title": "Concept Id",
+              "description": "SNOMED CT substance concept id, e.g. '384977007' for Paracetamol."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_shared_substance_peers",
+        "description": "List other TITCK products that share at least one SNOMED CT substance concept with the source product. Use this to surface duplicate-therapy / polypharmacy candidates and substitution peers. NOT a clinical drug-drug interaction database — only a substance-overlap signal. Always verify true DDIs via a licensed pharmacology source (Lexicomp, UpToDate, DrugBank).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max peer products."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Source product barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_drug_drug_interactions",
+        "description": "DEPRECATED ALIAS — use `find_shared_substance_peers` instead. The former name was misleading: this tool is a substance-overlap precursor, NOT a clinical DDI database. Behaviour is identical to find_shared_substance_peers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max peer products."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Source product barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_atc_class_summary",
+        "description": "Aggregate snapshot of an ATC class (prefix or exact code, e.g. 'N02BE' or 'J01CR'). Returns product count, in-market vs passive split, price spread (min/avg/median/max TRY), top-5 holders, prescription-code breakdown, manufacture-origin split, and top-5 SNOMED substances.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "atc_prefix": {
+              "type": "string",
+              "title": "Atc Prefix",
+              "description": "ATC prefix or exact code, e.g. 'N02BE', 'J01', 'N02BE01'."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_withdrawal_trend",
+        "description": "Year-over-year aggregation of TITCK authorization cancellations. Returns total, by-year buckets, top holders by cancellation count, and manufacture-origin split. Use year_from / year_to to narrow the window.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year_to": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year To",
+              "default": null,
+              "description": "Inclusive upper bound year. Omit for full history."
+            },
+            "year_from": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year From",
+              "default": null,
+              "description": "Inclusive lower bound year (e.g. 2017). Omit for full history."
+            },
+            "limit_holders": {
+              "type": "integer",
+              "title": "Limit Holders",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max top-holder rows returned."
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_drug_to_alternatives",
+        "description": "Compare a TITCK product to its same-substance + same-ATC peers. Returns the source record plus a unified alternatives list with price delta, manufacture origin, holder, in-market, and reimbursement status. Useful for buyer / pharmacist substitution decisions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max alternatives in unified list."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Source product barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_holder_portfolio",
+        "description": "Marketing-authorization-holder roll-up: matched holder name variants, total + in-market product counts, top-10 ATC classes by product count, and a paginated top-products list. Substring match is case- and diacritic-insensitive.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max top_products returned."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset for top_products; pass `next_offset` from the previous response."
+            },
+            "holder_substring": {
+              "type": "string",
+              "title": "Holder Substring",
+              "description": "Substring of the holder name, e.g. 'pfizer' or 'abdi ibrahim'."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_holders",
+        "description": "Search the canonical marketing-authorization-holder (firma) store. Each hit is a deduplicated firm collapsed across all spelling variants (e.g. 'DEVA HOLDİNG A.Ş.', 'DEVA HOLDING' → one Holder). Filter by has_in_market or min_products to focus on active firms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "query": {
+              "type": "string",
+              "title": "Query",
+              "description": "Holder name (any spelling — Turkish or ASCII)."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "query_mode": {
+              "enum": [
+                "smart",
+                "raw"
+              ],
+              "type": "string",
+              "title": "Query Mode",
+              "default": "smart",
+              "description": "`smart` (default) auto-detects FTS5 syntax; `raw` passes verbatim."
+            },
+            "min_products": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Min Products",
+              "default": null,
+              "description": "Lower bound on product_count."
+            },
+            "has_in_market": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Has In Market",
+              "default": null,
+              "description": "True → only holders with at least one in-market product."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_holder",
+        "description": "Fetch a canonical Holder by holder_id (e.g. 'holder::abc123def456') or by exact alias text (case-sensitive — preserves Turkish typography). Returns full entity with GLN, VAT, alias list, product / in-market / ATC class counts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "identifier": {
+              "type": "string",
+              "title": "Identifier",
+              "description": "holder_id ('holder::...') or exact alias text."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_holder_by_alias",
+        "description": "Reverse lookup: any spelling variant → canonical Holder. Tries exact alias match first, then falls back to canonicalization. Use this to resolve 'deva holding' / 'DEVA HOLDING' / 'DEVA HOLDİNG A.Ş.' to the same Holder entity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "alias_text": {
+              "type": "string",
+              "title": "Alias Text",
+              "description": "Holder name in any spelling — Turkish or ASCII, with or without legal suffixes."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_holder_aliases",
+        "description": "Paginated list of every observed spelling variant for a canonical Holder, with per-alias product counts. Useful for 'how is Pfizer spelled across the registry?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max aliases per page."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset; pass `next_offset` from the previous response."
+            },
+            "holder_id": {
+              "type": "string",
+              "title": "Holder Id",
+              "description": "Canonical holder_id (e.g. 'holder::abc123def456')."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_atc_hierarchy",
+        "description": "Return the WHO-ATC parent / sibling / child set for an ATC code. Levels: 1 (anatomical), 3 (therapeutic), 4 (pharmacological subgroup), 5 (chemical subgroup), 7 (chemical substance). Useful for navigating competitive scope (e.g. 'L01FD' → all HER2 inhibitors).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "title": "Code",
+              "description": "ATC code at any level, e.g. 'L01FD01' or 'N02BE'."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_price_history",
+        "description": "Return the price chain (FSF / depot / pharmacy / retail) plus the raw İŞLEM GEÇMİŞİ change-log and any per-date FSF columns from the source detailed_price_list row. Snapshots are ordered chronologically. NOTE: TITCK publishes only the latest detailed price row, so historical depth depends on what TITCK keeps on file at refresh time.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Source product barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_new_authorizations_since",
+        "description": "Return master records whose `authorization_date` is on or after the given ISO date (YYYY-MM-DD). Optional `atc_prefix` narrows to one ATC class. Sorted newest-first. Use this for new-authorization surveillance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max results."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset."
+            },
+            "atc_prefix": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Atc Prefix",
+              "default": null,
+              "description": "Optional ATC prefix filter, e.g. 'L01' or 'L01FD'."
+            },
+            "since_date": {
+              "type": "string",
+              "title": "Since Date",
+              "description": "ISO date (YYYY-MM-DD) — inclusive lower bound."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_first_in_class",
+        "description": "Return the earliest authorization within an ATC class (prefix-matched) and the count of follow-on entries. Useful for first-in-class history and innovator-vs-follower differentiation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "atc_prefix": {
+              "type": "string",
+              "title": "Atc Prefix",
+              "description": "ATC prefix at any level, e.g. 'L01FD' or 'N02BE01'."
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_holders",
+        "description": "Side-by-side comparison of two marketing-authorization holders' TR portfolios: shared and unique ATC classes, top-5 ATC concentrations, median retail price, in-market split. Routes through canonical Holder store so spelling variants resolve to one entity per side.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "holder_a": {
+              "type": "string",
+              "title": "Holder A",
+              "description": "First holder name or alias (any spelling)."
+            },
+            "holder_b": {
+              "type": "string",
+              "title": "Holder B",
+              "description": "Second holder name or alias (any spelling)."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_biosimilar_group",
+        "description": "Return same-SNOMED-substance peers ordered oldest-first; flag the earliest-authorized member as `is_likely_originator=true`. PROXY for biosimilar / originator detection — TITCK does not publish an explicit marker, so this is a heuristic derived from substance overlap and authorization_date. Verify against EMA / FDA historical record for clinical-grade decisions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max group members."
+            },
+            "barcode": {
+              "type": "string",
+              "title": "Barcode",
+              "description": "Source product barcode or master::barcode record id."
+            }
+          }
+        }
+      },
+      {
+        "name": "server_info",
+        "description": "Return server version and configuration summary.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

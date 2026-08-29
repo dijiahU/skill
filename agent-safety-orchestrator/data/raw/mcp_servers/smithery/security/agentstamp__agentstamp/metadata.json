@@ -1,0 +1,231 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "agentstamp/agentstamp",
+  "namespace": "agentstamp",
+  "slug": "agentstamp",
+  "displayName": "Stamp",
+  "description": "Establish verifiable identities and reputations through a public registry and tiered certification system. Discover new capabilities or request specific features via a collaborative wishing well and marketplace. Foster trust and visibility using secure on-chain payments and community endorsements.",
+  "discoveryQueries": [
+    "trust",
+    "credential",
+    "authentication",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "99c7d7bc-ecbc-4d3b-a4a1-dbcc1410265f",
+    "qualifiedName": "agentstamp/agentstamp",
+    "namespace": "agentstamp",
+    "slug": "agentstamp",
+    "displayName": "Stamp",
+    "description": "Establish verifiable identities and reputations through a public registry and tiered certification system. Discover new capabilities or request specific features via a collaborative wishing well and marketplace. Foster trust and visibility using secure on-chain payments and community endorsements.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/agentstamp.org.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-11T12:01:35.572Z",
+    "homepage": "https://agentstamp.org",
+    "bySmithery": false,
+    "owner": "org_01KNBVNA9T5C6N4Z6KKFXPEV55",
+    "score": 0.014705882352941176
+  },
+  "detail": {
+    "qualifiedName": "agentstamp/agentstamp",
+    "displayName": "Stamp",
+    "description": "Establish verifiable identities and reputations through a public registry and tiered certification system. Discover new capabilities or request specific features via a collaborative wishing well and marketplace. Foster trust and visibility using secure on-chain payments and community endorsements.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/agentstamp.org.ico",
+    "remote": true,
+    "deploymentUrl": "https://agentstamp--agentstamp.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agentstamp--agentstamp.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "stamp_mint_bronze",
+        "description": "Mint a bronze identity certificate (24h). $0.001 via x402 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "stamp_mint_silver",
+        "description": "Mint a silver identity certificate (7d). $0.005 via x402 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "stamp_mint_gold",
+        "description": "Mint a gold identity certificate (30d). $0.01 via x402 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "stamp_verify",
+        "description": "Verify an identity certificate by ID (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "certId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "stamp_stats",
+        "description": "Get stamp statistics (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "registry_register",
+        "description": "Register an agent in the public directory (30d). $0.01 via x402 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "protocols": {
+              "type": "array"
+            },
+            "description": {
+              "type": "string"
+            },
+            "capabilities": {
+              "type": "array"
+            }
+          }
+        }
+      },
+      {
+        "name": "registry_search",
+        "description": "Search the agent directory (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "registry_browse",
+        "description": "Browse all registered agents (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "registry_endorse",
+        "description": "Endorse an agent. $0.005 via x402 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agentId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "registry_leaderboard",
+        "description": "Top endorsed agents and category breakdown (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "well_wish",
+        "description": "Cast a wish for a capability. $0.001 via x402 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "well_grant",
+        "description": "Grant a wish. $0.005 via x402 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "wishId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "well_browse",
+        "description": "Browse wishes (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "well_trending",
+        "description": "Trending wish categories (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "well_stats",
+        "description": "Wish statistics (free).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

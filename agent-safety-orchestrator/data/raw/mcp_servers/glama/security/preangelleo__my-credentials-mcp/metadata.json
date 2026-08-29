@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "a52ztnqeod",
+  "namespace": "preangelleo",
+  "slug": "my-credentials-mcp",
+  "name": "My Credentials MCP Server",
+  "description": "Enables secure chat-based interaction with PostgreSQL databases through Claude Desktop. Features GitHub OAuth authentication, role-based access control, and enterprise-grade security for database queries and operations.",
+  "discoveryQueries": [
+    "security",
+    "credential",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure chat-based interaction with PostgreSQL databases through Claude Desktop. Features GitHub OAuth authentication, role-based access control, and enterprise-grade security for database queries and operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Environment mode (development/production)",
+          "type": "string",
+          "default": "development"
+        },
+        "SENTRY_DSN": {
+          "description": "Optional Sentry DSN for error tracking and monitoring",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL connection string (e.g., postgresql://username:password@host:5432/database_name)",
+          "type": "string"
+        },
+        "API_WRAPPER_URL": {
+          "description": "Optional URL for the HTTP API wrapper (e.g., https://your-server.com:3001)",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "Your GitHub OAuth client ID",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Your GitHub OAuth client secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Random encryption key for cookies (generate with: openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY",
+        "DATABASE_URL"
+      ]
+    },
+    "id": "a52ztnqeod",
+    "name": "My Credentials MCP Server",
+    "namespace": "preangelleo",
+    "repository": {
+      "url": "https://github.com/preangelleo/my-credentials-mcp"
+    },
+    "slug": "my-credentials-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a52ztnqeod"
+  }
+}

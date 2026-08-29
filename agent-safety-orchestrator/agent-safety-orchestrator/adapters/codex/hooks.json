@@ -1,0 +1,65 @@
+{
+  "description": "Safety Orchestrator — Codex hook wiring. Install into $CODEX_HOME/hooks.json (or merge the 'hooks' block into an existing one). A single bridge (codex_hook.py) handles every event and dispatches internally by tool_name, so one PreToolUse matcher '.*' is enough (no per-tool duplication). __SAFETY_ADAPTER_ROOT__ is rendered to an absolute path by install.sh. Requires `[features] hooks = true` (default on).",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"__SAFETY_ADAPTER_ROOT__/codex_hook.py\"",
+            "statusMessage": "safety: scanning prompt",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"__SAFETY_ADAPTER_ROOT__/codex_hook.py\"",
+            "statusMessage": "safety: checking tool call",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"__SAFETY_ADAPTER_ROOT__/codex_hook.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"__SAFETY_ADAPTER_ROOT__/codex_hook.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"__SAFETY_ADAPTER_ROOT__/codex_hook.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

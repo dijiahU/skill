@@ -1,0 +1,292 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "erikgoldhar-0e1o/Unphurl",
+  "namespace": "erikgoldhar-0e1o",
+  "slug": "Unphurl",
+  "displayName": "Unphurl",
+  "description": "URL intelligence for AI agents. One URL in, structured security and data quality signals out. 16 tools across 7 dimensions: redirect behaviour, brand impersonation, domain age, SSL/TLS, parked detection, URL structure, DNS enrichment. Risk score 0-100 with 25 configurable scoring weights. Signals, not verdicts.\n",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "f1343c3c-d207-4eb7-a928-4e82b52f9a17",
+    "qualifiedName": "erikgoldhar-0e1o/Unphurl",
+    "namespace": "erikgoldhar-0e1o",
+    "slug": "Unphurl",
+    "displayName": "Unphurl",
+    "description": "URL intelligence for AI agents. One URL in, structured security and data quality signals out. 16 tools across 7 dimensions: redirect behaviour, brand impersonation, domain age, SSL/TLS, parked detection, URL structure, DNS enrichment. Risk score 0-100 with 25 configurable scoring weights. Signals, not verdicts.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/unphurl.com.ico",
+    "verified": false,
+    "useCount": 5,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T19:21:35.849Z",
+    "homepage": "https://unphurl.com/docs/#overview",
+    "bySmithery": false,
+    "owner": "org_01KP1HX4G05DG4744V2QYM7F98",
+    "score": 0.013333333333333334
+  },
+  "detail": {
+    "qualifiedName": "erikgoldhar-0e1o/Unphurl",
+    "displayName": "Unphurl",
+    "description": "URL intelligence for AI agents. One URL in, structured security and data quality signals out. 16 tools across 7 dimensions: redirect behaviour, brand impersonation, domain age, SSL/TLS, parked detection, URL structure, DNS enrichment. Risk score 0-100 with 25 configurable scoring weights. Signals, not verdicts.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/unphurl.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://unphurl.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://unphurl.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "signup",
+        "description": "Create a new Unphurl account. Returns an API key (shown once, store it securely).\n\nAfter signup, the user must check their email and click the verification link. The API key won't work for URL checks until the email is verified. Verification link expires after 24 hours. If the link expires, use the \"resend_verification\" tool to request a new one.\n\nThe account starts with 20 free pipeline check credits so the user can test with real URLs. Known domain lookups (google.com, github.com, etc.) and cached domain lookups are always free. To check more unknown domains through the full analysis pipeline, the user can purchase credits via the \"purchase\" tool.\n\nOnce the user has their API key, they need to add it to their MCP server configuration as UNPHURL_API_KEY.\n\nThis tool does not require an API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email address for the account"
+            },
+            "company": {
+              "type": "string",
+              "description": "Company name (optional)"
+            },
+            "first_name": {
+              "type": "string",
+              "description": "First name (used for personalized emails)"
+            }
+          }
+        }
+      },
+      {
+        "name": "resend_verification",
+        "description": "Resend the email verification link for an existing Unphurl account.\n\nUse this when a user signed up but their verification link expired (links are valid for 24 hours) and they need a new one. The user's API key won't work until their email is verified.\n\nFor security, the response is always the same regardless of whether the email exists, is already verified, or was rate limited. This prevents account enumeration.\n\nRate limited to 3 requests per email per hour.\n\nThis tool does not require an API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email address of the account that needs verification"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_url",
+        "description": "Check a single URL for security and data quality signals. Returns a risk score (0-100), detailed signal breakdown, and metadata.\n\nUnphurl analyses URLs across seven dimensions: redirect behaviour, brand impersonation, domain intelligence (age, registrar, expiration, status codes, nameservers via RDAP), SSL/TLS validity, parked domain detection, URL structural analysis (length, path depth, subdomain count, entropy), and DNS enrichment (MX records). The score is calculated from these signals using either default weights or a custom scoring profile.\n\nHigher scores mean more suspicious. The score is a signal, not a verdict. You decide the threshold based on the use case.\n\nBilling: Most lookups are free. Known domains (Tranco Top 100K like google.com, github.com) return instantly with score 0 at no cost. Previously analysed domains return cached signals at no cost. Only unknown domains that run through the full analysis pipeline cost 1 pipeline check credit. The response's meta.pipeline_check_charged field tells you whether this check consumed a credit.\n\nUse the \"profile\" parameter to score results with custom weights. For example, a \"cold-email\" profile might weight parked domains heavily while ignoring brand impersonation. Use list_profiles to see available profiles, or show_defaults to see all signal weights.\n\nIf the account has zero credits and the URL requires a full pipeline check, returns a 402 error with a link to purchase more credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 2048,
+              "description": "The URL to check (must be http:// or https://)"
+            },
+            "profile": {
+              "type": "string",
+              "description": "Name of a custom scoring profile to use (optional). If omitted, default weights are used."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_urls",
+        "description": "Check multiple URLs in a single batch. Returns results for all URLs, handling async processing automatically.\n\nEach URL is analysed across seven dimensions: redirect behaviour, brand impersonation, domain intelligence (age, registrar, expiration, status codes, nameservers via RDAP), SSL/TLS validity, parked domain detection, URL structural analysis, and DNS enrichment. Known and cached URLs return results immediately. Unknown URLs are queued for pipeline processing. This tool automatically polls for results until all URLs are complete or the 5-minute timeout is reached. You don't need to manage polling or job tracking.\n\nIf the timeout is reached before all results are complete, returns whatever is available with a clear message indicating which URLs are still processing. The user can check results later via check_history.\n\nMaximum 500 URLs per call. For larger datasets, call this tool multiple times with chunks of up to 500 URLs.\n\nBilling: Same as check_url. Known and cached domains are free. Only unknown domains running through the full pipeline cost 1 credit each. The summary shows pipeline_checks_charged (the actual number of credits consumed). If you don't have enough credits for the unknowns in the batch, the entire batch is rejected with a 402 error telling you exactly how many credits are needed.\n\nDuplicate URLs in the list are automatically deduplicated (processed once, charged once). Invalid URLs get individual error status without rejecting the batch.\n\nUse the \"profile\" parameter to score all results with custom weights.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri",
+                "maxLength": 2048
+              },
+              "maxItems": 500,
+              "minItems": 1,
+              "description": "List of URLs to check (maximum 500 per call)"
+            },
+            "profile": {
+              "type": "string",
+              "description": "Name of a custom scoring profile to use for all URLs (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_profiles",
+        "description": "List all custom scoring profiles on this account. Returns profile names and their custom weight overrides.\n\nProfiles are named weight sets that change how Unphurl scores URLs. Different use cases need different scoring. A cold email agent cares about dead domains. A security bot cares about phishing. Profiles let one account serve multiple use cases.\n\nProfiles only override specific weights. Any signal not specified in a profile uses the default weight. Use show_defaults to see all 23 signals and their default weights.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "create_profile",
+        "description": "Create or update a custom scoring profile. Profiles are sparse overrides: only specify the weights you want to change. Everything else keeps its default value.\n\nIf a profile with this name already exists, it is updated with the new weights (full replacement, not merge).\n\nWeights are points, not percentages. Each weight is the number of points that signal adds to the score when it fires. They don't need to total 100. A profile with weights totalling 90 is conservative (max possible score is 90). A profile with weights totalling 130 is aggressive (multiple signals quickly push to the cap of 100). The threshold the agent sets for action matters more than the weight totals.\n\nUse show_defaults to see all 23 signals with their default weights and descriptions before creating a profile. Use check_url or check_urls with the \"profile\" parameter to score results with this profile.\n\nMaximum 20 profiles per account. Profile name \"default\" is reserved.\n\nCommon profiles:\n- Cold email: weight parked (30), chain_incomplete (25), ssl_invalid (15) higher. Lower brand_impersonation (10).\n- Security bot: keep brand_impersonation high (40), increase domain_age_7 (30), redirects_5 (25).\n- Lead gen: weight parked (35), http_only (20), chain_incomplete (20) for dead business detection.\n- SEO audit: weight redirects_5 (30), chain_incomplete (30), parked (25) for link quality.\n\nSee the Unphurl API documentation for all 19 use case weight examples.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]{0,48}[a-z0-9]$|^[a-z0-9]$",
+              "description": "Profile name (lowercase alphanumeric and hyphens only, 1-50 chars, e.g. 'cold-email', 'security-bot')"
+            },
+            "weights": {
+              "type": "object",
+              "description": "Custom weights for scoring signals. Only include signals you want to override. Available signals: brand_impersonation (default 40), domain_age_3 (35), domain_age_7 (25), domain_age_30 (15), domain_age_90 (5), ssl_invalid (10), http_only (5), redirects_3 (10), redirects_5 (25), chain_incomplete (15), parked (10), compound (10), brand_impersonation_floor (80), url_long (3), path_deep (3), subdomain_excessive (5), domain_entropy_high (5), url_contains_ip (10), encoded_hostname (5), tld_redirect_change (5), expiring_soon (10), domain_status_bad (15), no_mx_record (5).",
+              "additionalProperties": {
+                "type": "integer",
+                "maximum": 1000,
+                "minimum": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_profile",
+        "description": "Delete a custom scoring profile. This is permanent. Any future check requests using this profile name will fall back to default weights.\n\nUse list_profiles to see your current profiles before deleting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]{0,48}[a-z0-9]$|^[a-z0-9]$",
+              "description": "Name of the profile to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "show_defaults",
+        "description": "Show all 23 scoring signals with their default weights and descriptions. This is the baseline scoring that applies when no custom profile is specified.\n\nUse this to understand what each signal means and how much it contributes to the score before creating custom profiles. Profiles are sparse overrides on top of these defaults.\n\nThis tool does not require an API key. The defaults are hardcoded and always available.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_balance",
+        "description": "Check your pipeline check credit balance. Shows credits remaining, total purchased, total used, and lifetime free lookups count.\n\nCredits are consumed only when unknown domains run through the full analysis pipeline. Known domains (Tranco Top 100K) and cached domains (previously analysed by any Unphurl customer) are always free.\n\nIf credits_remaining is 0, you can still check known and cached domains for free. To check unknown domains, purchase more credits using the \"purchase\" tool.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_pricing",
+        "description": "Show available pipeline check credit packages and pricing. Returns all packages with credit counts and prices.\n\nPackages (one-time purchase, no subscription):\n- Starter: 100 credits for $9 ($0.09 each)\n- Standard: 500 credits for $39 ($0.078 each)\n- Pro: 2,000 credits for $99 ($0.0495 each)\n- Scale: 10,000 credits for $399 ($0.0399 each)\n\nMost URL lookups are free (known domains and cached domains). Credits are only consumed when an unknown domain runs through the full analysis pipeline. In typical use, 95-99% of URLs resolve free.\n\nThis tool does not require an API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "purchase",
+        "description": "Purchase pipeline check credits. Returns a Stripe Checkout URL that the user must open in a browser to complete payment.\n\nThe AI cannot complete the payment. Tell the user to open the URL in their browser, complete the Stripe checkout, and then confirm they've paid. Credits are added to the account automatically once Stripe confirms payment.\n\nAfter purchase, use get_balance to verify credits have been added.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "package": {
+              "enum": [
+                "pkg_100",
+                "pkg_500",
+                "pkg_2000",
+                "pkg_10000"
+              ],
+              "type": "string",
+              "description": "Package to purchase: pkg_100 ($9, 100 credits), pkg_500 ($39, 500 credits), pkg_2000 ($99, 2000 credits), pkg_10000 ($399, 10000 credits)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_history",
+        "description": "View recent URL check history. Shows what URLs have been checked, their scores, phishing status, and whether each check was free or used a pipeline credit.\n\nResults are paginated. Use page and limit parameters to navigate. Default is 20 results per page, maximum 100.\n\nHistory is retained for 90 days. Account-level stats (total credits, balance) never expire.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number (default 1)"
+            },
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Results per page, max 100 (default 20)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_stats",
+        "description": "View your account usage statistics. Shows total URLs submitted, breakdown by gate (Tranco lookups, cache lookups, pipeline checks), free rate percentage, score threshold counts, and credit balance.\n\nUse this to understand your usage patterns: how many of your checks resolved free (known or cached domains) vs paid pipeline checks, and how many URLs scored above key thresholds.\n\nThis is useful for:\n- Checking if your scoring profile is flagging the right proportion of URLs\n- Understanding your cost efficiency (higher free rate = more value per credit)\n- Reporting usage metrics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_allowlist",
+        "description": "List all domains on this account's trusted allowlist.\n\nAllowlisted domains suppress the compound signal and brand impersonation floor in scoring. The full pipeline still runs — all signals remain visible for monitoring. Use this to see which domains are currently trusted.\n\nReturns the list of domains, current count, and the 1,000-domain limit.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "add_to_allowlist",
+        "description": "Add one or more domains to this account's trusted allowlist.\n\nAllowlisted domains suppress the compound signal and brand impersonation floor in scoring. The full pipeline still runs — all signals remain visible so you can monitor trusted domains for SSL expiry, parking, or other changes.\n\nSubmit the registrable domain only (e.g. partnerco.com). Subdomains and full URLs are rejected. Adding partnerco.com covers sub.partnerco.com and all other subdomains automatically.\n\nMaximum 1,000 domains per account. Maximum 100 domains per request. Duplicates are silently skipped.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domains": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Registrable domains to add (e.g. ['partnerco.com', 'trustedvendor.io']). Subdomains and full URLs are rejected."
+            }
+          }
+        }
+      },
+      {
+        "name": "remove_from_allowlist",
+        "description": "Remove one or more domains from this account's trusted allowlist.\n\nOnce removed, those domains resume normal scoring on the next check. Use list_allowlist to see what is currently on the list before removing.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domains": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Registrable domains to remove (e.g. ['partnerco.com'])"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

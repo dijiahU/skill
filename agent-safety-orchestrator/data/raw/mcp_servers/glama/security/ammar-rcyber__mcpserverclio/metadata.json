@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "r8ucdudre8",
+  "namespace": "ammar-rcyber",
+  "slug": "MCPserverClio",
+  "name": "Epic Healthcare MCP Server",
+  "description": "Enables AI assistants to securely access Epic Healthcare Systems patient data through FHIR R4 API integration. Provides tools for searching patients, retrieving clinical summaries, vital signs, medications, and generating healthcare reports with HIPAA-compliant OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to securely access Epic Healthcare Systems patient data through FHIR R4 API integration. Provides tools for searching patients, retrieving clinical summaries, vital signs, medications, and generating healthcare reports with HIPAA-compliant OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Node environment",
+          "type": "string",
+          "default": "production"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "info"
+        },
+        "JWT_KEY_ID": {
+          "description": "Your JWT key ID",
+          "type": "string"
+        },
+        "EPIC_CLIENT_ID": {
+          "description": "Your Epic client ID",
+          "type": "string"
+        },
+        "JWT_PRIVATE_KEY": {
+          "description": "Your JWT private key for Epic authentication",
+          "type": "string"
+        },
+        "MCP_SERVER_PORT": {
+          "description": "MCP server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "EPIC_CLIENT_SECRET": {
+          "description": "Your Epic client secret",
+          "type": "string"
+        },
+        "EPIC_FHIR_BASE_URL": {
+          "description": "Epic FHIR base URL",
+          "type": "string",
+          "default": "https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4"
+        }
+      },
+      "type": "object",
+      "required": [
+        "EPIC_CLIENT_ID",
+        "EPIC_CLIENT_SECRET",
+        "JWT_PRIVATE_KEY",
+        "JWT_KEY_ID"
+      ]
+    },
+    "id": "r8ucdudre8",
+    "name": "Epic Healthcare MCP Server",
+    "namespace": "ammar-rcyber",
+    "repository": {
+      "url": "https://github.com/ammar-rcyber/MCPserverClio"
+    },
+    "slug": "MCPserverClio",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/r8ucdudre8"
+  }
+}

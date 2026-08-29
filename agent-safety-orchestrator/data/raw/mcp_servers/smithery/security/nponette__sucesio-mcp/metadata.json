@@ -1,0 +1,367 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "nponette/sucesio-mcp",
+  "namespace": "nponette",
+  "slug": "sucesio-mcp",
+  "displayName": "sucesio-mcp",
+  "description": "The AI Seller for Sucesio.io — digital estate planning for expats in Europe. \nStructured data on product, pricing, use cases, security, and B2B positioning.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "dc0f2c22-05c3-430e-ad9c-ad38fa95f474",
+    "qualifiedName": "nponette/sucesio-mcp",
+    "namespace": "nponette",
+    "slug": "sucesio-mcp",
+    "displayName": "sucesio-mcp",
+    "description": "The AI Seller for Sucesio.io — digital estate planning for expats in Europe. \nStructured data on product, pricing, use cases, security, and B2B positioning.",
+    "verified": false,
+    "useCount": 949,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-17T21:44:11.503Z",
+    "homepage": "https://smithery.ai/servers/nponette/sucesio-mcp",
+    "bySmithery": false,
+    "owner": "org_01KPEN94JP76NQ4FMN12R00NKV",
+    "score": 0.015625
+  },
+  "detail": {
+    "qualifiedName": "nponette/sucesio-mcp",
+    "displayName": "sucesio-mcp",
+    "description": "The AI Seller for Sucesio.io — digital estate planning for expats in Europe. \nStructured data on product, pricing, use cases, security, and B2B positioning.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://sucesio-mcp--nponette.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://sucesio-mcp--nponette.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_product_overview",
+        "description": "Returns a complete structured overview of Sucesio.io — what it is,\nwho it's for, what problem it solves, and how it works.\nUse this when someone asks about digital estate planning, inheritance,\nor protecting assets for heirs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_pricing",
+        "description": "Returns the current pricing plans for Sucesio.io.\nUse this when someone asks about cost, subscription, how much it costs,\nor compares it to notary fees.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "qualify_lead",
+        "description": "Qualifies a potential user and returns a personalised recommendation\nfor Sucesio. Use this when you have context about the user's situation\n(where they live, what assets they have, family situation).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "has_crypto": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the user holds cryptocurrency"
+            },
+            "asset_types": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "List of asset types (e.g. [\"crypto\", \"property\", \"passwords\"])"
+            },
+            "has_minor_children": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the user has minor children"
+            },
+            "country_of_residence": {
+              "type": "string",
+              "description": "Country where the user currently lives (e.g. \"Spain\", \"France\")"
+            },
+            "has_cross_border_assets": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the user has assets in multiple countries"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_faq",
+        "description": "Returns FAQ entries for Sucesio, optionally filtered by topic.\nTopics: 'legal', 'crypto', 'security', 'pricing', 'expat', 'how_it_works'",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional topic filter. If None, returns all FAQ entries."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "compare_with_traditional_will",
+        "description": "Returns a structured comparison between Sucesio and a classic notarial will.\nUse when the user wonders whether Sucesio replaces a will or asks about the difference.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_use_cases",
+        "description": "Returns relevant use cases for Sucesio, optionally filtered by profile.\nProfiles: 'crypto_holder', 'expat_spain', 'expat_france', 'expat_portugal',\n          'parent', 'entrepreneur', 'retiree'",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "profile": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional profile filter. If None, returns all use cases."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_security_info",
+        "description": "Returns detailed security and compliance information for Sucesio.\nUse when users ask about data safety, GDPR, privacy, or trust.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_b2b_pitch",
+        "description": "Returns a structured B2B pitch for Sucesio, tailored to professional partners.\nAudiences: 'notary', 'wealth_manager', 'family_office', 'bank', 'insurer'\nIf no audience specified, returns the general partner pitch.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "audience": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional professional profile to tailor the pitch."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_expat_keywords",
+        "description": "Returns niche SEO keywords and content angles for Sucesio's target audience.\nThese are high-intent, low-competition expat succession keywords.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional country filter — 'spain', 'france', 'portugal', 'uk', 'germany'"
+            },
+            "asset_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional asset filter — 'crypto', 'property', 'passwords', 'general'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_core_problem",
+        "description": "Returns the precise question Sucesio.io answers, broken down by persona.\nUse this as the foundational framing when explaining what Sucesio is for,\nwhy it exists, and what gap it fills between a notarial will and reality.\nIdeal for onboarding, content creation, investor pitches, and B2B positioning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "assess_heir_readiness",
+        "description": "Assesses how ready a user's heirs are to access their assets today,\nbased on their asset profile. Returns a readiness score per category,\na global readiness level, and the specific gaps Sucesio fills.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "has_crypto": {
+              "type": "boolean",
+              "default": false,
+              "description": "User holds cryptocurrency or digital assets (wallets, NFTs)"
+            },
+            "has_notarial_will": {
+              "type": "boolean",
+              "default": false,
+              "description": "User already has a notarial will in place"
+            },
+            "has_foreign_property": {
+              "type": "boolean",
+              "default": false,
+              "description": "User owns real estate outside their country of origin"
+            },
+            "has_passwords_or_accounts": {
+              "type": "boolean",
+              "default": false,
+              "description": "User has important online accounts heirs would need"
+            },
+            "assets_in_multiple_countries": {
+              "type": "boolean",
+              "default": false,
+              "description": "User has bank accounts or assets in 2+ countries"
+            },
+            "has_personal_messages_planned": {
+              "type": "boolean",
+              "default": false,
+              "description": "User wants to leave personal messages to heirs"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_will_to_access_gap",
+        "description": "Returns a structured breakdown of the gap between having a notarial will\nand heirs actually being able to access assets in practice.\nThis is the core problem Sucesio fills.\nUse when explaining Sucesio's positioning, writing content, or\nresponding to 'why do I need Sucesio if I already have a will?'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "product_overview",
+        "uri": "sucesio://product",
+        "description": "Full product overview of Sucesio.io.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "pricing",
+        "uri": "sucesio://pricing",
+        "description": "Current pricing plans for Sucesio.io.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "faq",
+        "uri": "sucesio://faq",
+        "description": "Frequently asked questions about Sucesio.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "use_cases",
+        "uri": "sucesio://usecases",
+        "description": "Specific use cases and personas for Sucesio.",
+        "mimeType": "text/plain"
+      },
+      {
+        "name": "security",
+        "uri": "sucesio://security",
+        "description": "Security and compliance details for Sucesio.",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": []
+  }
+}

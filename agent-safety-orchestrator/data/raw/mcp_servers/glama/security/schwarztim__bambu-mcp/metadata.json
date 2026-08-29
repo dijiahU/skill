@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "rls45gujh0",
+  "namespace": "schwarztim",
+  "slug": "bambu-mcp",
+  "name": "Bambu Lab MCP Server",
+  "description": "Enables comprehensive control and monitoring of Bambu Lab 3D printers through Claude using local MQTT, FTPS, and X.509 authentication. Users can manage print jobs, monitor real-time status, handle filament through AMS, and adjust hardware settings like temperature and lighting.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables comprehensive control and monitoring of Bambu Lab 3D printers through Claude using local MQTT, FTPS, and X.509 authentication. Users can manage print jobs, monitor real-time status, handle filament through AMS, and adjust hardware settings like temperature and lighting.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BAMBU_LAB_COOKIES": {
+          "description": "Session cookies for cloud API (Required for cloud-based tools)",
+          "type": "string"
+        },
+        "BAMBU_LAB_BASE_URL": {
+          "description": "Cloud API base URL",
+          "type": "string"
+        },
+        "BAMBU_LAB_DEVICE_ID": {
+          "description": "Printer serial number (Required for local MQTT control)",
+          "type": "string"
+        },
+        "BAMBU_LAB_MQTT_HOST": {
+          "description": "Printer IP address (Required for local MQTT control)",
+          "type": "string"
+        },
+        "BAMBU_LAB_MQTT_PORT": {
+          "description": "MQTT port",
+          "type": "string",
+          "default": "8883"
+        },
+        "BAMBU_APP_CERTIFICATE": {
+          "description": "Override the built-in X.509 certificate",
+          "type": "string"
+        },
+        "BAMBU_APP_PRIVATE_KEY": {
+          "description": "Override the built-in X.509 private key",
+          "type": "string"
+        },
+        "BAMBU_LAB_MQTT_PASSWORD": {
+          "description": "LAN access code (Required for local MQTT control)",
+          "type": "string"
+        },
+        "BAMBU_LAB_MQTT_USERNAME": {
+          "description": "MQTT username",
+          "type": "string",
+          "default": "bblp"
+        }
+      },
+      "type": "object",
+      "required": [
+        "BAMBU_LAB_MQTT_HOST",
+        "BAMBU_LAB_MQTT_PASSWORD",
+        "BAMBU_LAB_DEVICE_ID"
+      ]
+    },
+    "id": "rls45gujh0",
+    "name": "Bambu Lab MCP Server",
+    "namespace": "schwarztim",
+    "repository": {
+      "url": "https://github.com/schwarztim/bambu-mcp"
+    },
+    "slug": "bambu-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rls45gujh0"
+  }
+}

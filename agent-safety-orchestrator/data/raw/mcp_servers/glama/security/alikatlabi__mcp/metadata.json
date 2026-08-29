@@ -1,0 +1,100 @@
+{
+  "registry": "glama",
+  "id": "sxgm37ipk8",
+  "namespace": "aliKatlabi",
+  "slug": "mcp",
+  "name": "FastMCP Production Server",
+  "description": "Provides secure filesystem operations, HTTP fetching with SSRF protection, JSON validation, artifact logging, and optional Redis key-value storage through both stdio and HTTP transports. Features production-ready security controls including sandbox enforcement, allowlist validation, and comprehensive input validation.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides secure filesystem operations, HTTP fetching with SSRF protection, JSON validation, artifact logging, and optional Redis key-value storage through both stdio and HTTP transports. Features production-ready security controls including sandbox enforcement, allowlist validation, and comprehensive input validation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "REDIS_URL": {
+          "description": "Redis connection URL for kv_* tools (optional)",
+          "type": "string"
+        },
+        "SANDBOX_ROOT": {
+          "description": "Filesystem sandbox root directory",
+          "type": "string",
+          "default": "./.sandbox"
+        },
+        "MCP_HTTP_HOST": {
+          "description": "HTTP server host",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "MCP_HTTP_PATH": {
+          "description": "HTTP endpoint path",
+          "type": "string",
+          "default": "/mcp"
+        },
+        "MCP_HTTP_PORT": {
+          "description": "HTTP server port",
+          "type": "string",
+          "default": "8080"
+        },
+        "HTTP_ALLOWLIST": {
+          "description": "Comma-separated list of allowed domains for HTTP fetch",
+          "type": "string",
+          "default": "example.com, api.github.com"
+        },
+        "HTTP_MAX_BYTES": {
+          "description": "Maximum HTTP response size in bytes",
+          "type": "string",
+          "default": "2000000"
+        },
+        "HTTP_TIMEOUT_SEC": {
+          "description": "HTTP request timeout in seconds",
+          "type": "string",
+          "default": "10.0"
+        },
+        "MCP_HTTP_ENABLED": {
+          "description": "Enable HTTP transport",
+          "type": "string",
+          "default": "true"
+        },
+        "MCP_HTTP_BEARER_TOKEN": {
+          "description": "Bearer token for HTTP authentication",
+          "type": "string",
+          "default": "change-me"
+        },
+        "MCP_HTTP_ALLOWED_ORIGINS": {
+          "description": "Comma-separated list of allowed origins for HTTP requests",
+          "type": "string",
+          "default": "http://localhost, http://127.0.0.1"
+        },
+        "MCP_HTTP_ALLOW_NO_ORIGIN": {
+          "description": "Allow requests with no Origin header",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "sxgm37ipk8",
+    "name": "FastMCP Production Server",
+    "namespace": "aliKatlabi",
+    "repository": {
+      "url": "https://github.com/aliKatlabi/mcp"
+    },
+    "slug": "mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sxgm37ipk8"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.tkllabs.bh.mcp-servers/ipfs-toolkit",
+  "slug": "mcp-servers__ipfs-toolkit",
+  "title": "",
+  "description": "Store, retrieve, and pin encrypted files on IPFS via MCP tools for AI agents and workflows",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.tkllabs.bh.mcp-servers/ipfs-toolkit",
+      "description": "Store, retrieve, and pin encrypted files on IPFS via MCP tools for AI agents and workflows",
+      "repository": {
+        "url": "https://github.com/teckel-mcp-servers/ipfs-toolkit",
+        "source": "github"
+      },
+      "version": "1.0.1",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://mcp-servers.bh.tkllabs.io:9780/ipfs-mcp",
+          "headers": [
+            {
+              "description": "API key for authentication as Bearer token",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "Authorization"
+            }
+          ]
+        },
+        {
+          "type": "sse",
+          "url": "https://mcp-servers.bh.tkllabs.io:9780/ipfs-sse",
+          "headers": [
+            {
+              "description": "API key for authentication as Bearer token",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "Authorization"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-05-06T11:17:25.317188Z",
+        "publishedAt": "2026-05-06T11:17:25.317188Z",
+        "updatedAt": "2026-05-06T11:17:25.317188Z",
+        "isLatest": true
+      }
+    }
+  }
+}

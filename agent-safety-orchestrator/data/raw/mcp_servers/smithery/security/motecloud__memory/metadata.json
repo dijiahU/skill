@@ -1,0 +1,170 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "motecloud/memory",
+  "namespace": "motecloud",
+  "slug": "memory",
+  "displayName": "MoteCloud Memory",
+  "description": "# Motecloud Memory MCP\n\nMotecloud is durable memory infrastructure for AI agents. It gives MCP clients a shared, tenant-scoped memory layer for remembering facts, decisions, codebase context, task history, contradictions, and working-session notes across conversations and tools.\n\nUse Motecloud when your agent needs more than chat history: long-lived graph memory, hybrid semantic search, task context priming, real-time session capture, and safe memory writes with OAuth-based access control.\n\n## What It Provides\n\n- Persistent graph memory for agents and teams\n- Ranked context preparation before a task\n- Hybrid lexical and semantic memory search\n- Working-memory sessions with append, flush, and close lifecycle\n- Durable fact ingestion with memory types and contradiction awareness\n- Skill-based tool loading so clients expose only the capabilities they need\n- OAuth 2.1 authentication with standard MCP Streamable HTTP transport\n\n## Best For\n\n- Coding agents that need repo and task memory acr",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "90e09195-f4b9-47c1-a8a6-cdf91240100d",
+    "qualifiedName": "motecloud/memory",
+    "namespace": "motecloud",
+    "slug": "memory",
+    "displayName": "MoteCloud Memory",
+    "description": "# Motecloud Memory MCP\n\nMotecloud is durable memory infrastructure for AI agents. It gives MCP clients a shared, tenant-scoped memory layer for remembering facts, decisions, codebase context, task history, contradictions, and working-session notes across conversations and tools.\n\nUse Motecloud when your agent needs more than chat history: long-lived graph memory, hybrid semantic search, task context priming, real-time session capture, and safe memory writes with OAuth-based access control.\n\n## What It Provides\n\n- Persistent graph memory for agents and teams\n- Ranked context preparation before a task\n- Hybrid lexical and semantic memory search\n- Working-memory sessions with append, flush, and close lifecycle\n- Durable fact ingestion with memory types and contradiction awareness\n- Skill-based tool loading so clients expose only the capabilities they need\n- OAuth 2.1 authentication with standard MCP Streamable HTTP transport\n\n## Best For\n\n- Coding agents that need repo and task memory acr",
+    "iconUrl": "https://api.smithery.ai/servers/motecloud/memory/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-25T18:37:02.765Z",
+    "homepage": "https://motecloud.io",
+    "bySmithery": false,
+    "owner": "org_01KQ2XYK8ZQBF7SAB97GSEHCJG",
+    "score": 0.008333333333333333
+  },
+  "detail": {
+    "qualifiedName": "motecloud/memory",
+    "displayName": "MoteCloud Memory",
+    "description": "# Motecloud Memory MCP\n\nMotecloud is durable memory infrastructure for AI agents. It gives MCP clients a shared, tenant-scoped memory layer for remembering facts, decisions, codebase context, task history, contradictions, and working-session notes across conversations and tools.\n\nUse Motecloud when your agent needs more than chat history: long-lived graph memory, hybrid semantic search, task context priming, real-time session capture, and safe memory writes with OAuth-based access control.\n\n## What It Provides\n\n- Persistent graph memory for agents and teams\n- Ranked context preparation before a task\n- Hybrid lexical and semantic memory search\n- Working-memory sessions with append, flush, and close lifecycle\n- Durable fact ingestion with memory types and contradiction awareness\n- Skill-based tool loading so clients expose only the capabilities they need\n- OAuth 2.1 authentication with standard MCP Streamable HTTP transport\n\n## Best For\n\n- Coding agents that need repo and task memory across sessions\n- Autonomous agents that need durable context instead of repeated re-discovery\n- Teams that want shared AI memory with tenant isolation\n- Workflows where decisions, findings, and reusable knowledge should survive beyond one chat\n\n## Endpoint\n\n`https://motecloud.io/mcp`\n",
+    "iconUrl": "https://api.smithery.ai/servers/motecloud/memory/icon",
+    "remote": true,
+    "deploymentUrl": "https://memory--motecloud.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://memory--motecloud.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "capability_search",
+        "description": "Search the public MoteCloud MCP catalog across tools, prompts, resources, and skills.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "top_k": {
+              "type": "integer",
+              "title": "Top K",
+              "default": 8
+            },
+            "query_text": {
+              "type": "string",
+              "title": "Query Text"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "skill_activate",
+        "description": "Activate one public skill bundle for the current MCP session and reveal its tools.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "skill_name": {
+              "type": "string",
+              "title": "Skill Name"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "skill_deactivate",
+        "description": "Deactivate one public skill bundle for the current MCP session and hide its tools.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "skill_name": {
+              "type": "string",
+              "title": "Skill Name"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "skill_status",
+        "description": "Show the skills that are active for the current MCP session.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "billing_balance",
+        "description": "Read the current tenant billing balance and subscription status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "motecloud://public/billing-descriptor",
+        "uri": "motecloud://public/billing-descriptor",
+        "description": "Public MoteCloud billing descriptor mirrored as an MCP resource.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "motecloud://public/capabilities",
+        "uri": "motecloud://public/capabilities",
+        "description": "Public MCP capability manifest including skills and visibility policy.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "motecloud://public/skills",
+        "uri": "motecloud://public/skills",
+        "description": "Definitions for the public skill bundles available on this MCP server.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "motecloud://public/quick-start-guide",
+        "uri": "motecloud://public/quick-start-guide",
+        "description": "Agent memory policy template and onboarding guide for using the MoteCloud MCP server. Read this on first connection to understand the required skill-activation and session workflow.",
+        "mimeType": "text/markdown"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "start-memory-research",
+        "description": "Create a research-oriented working style for tenant memory exploration.",
+        "arguments": []
+      },
+      {
+        "name": "start-memory-coding",
+        "description": "Create a coding-oriented working style for tenant memory exploration.",
+        "arguments": []
+      },
+      {
+        "name": "prepare-implementation-context",
+        "description": "Guide a client toward preparing a compact implementation context block.",
+        "arguments": []
+      },
+      {
+        "name": "summarize-tenant-memory",
+        "description": "Guide a client toward summarizing the active tenant memory graph.",
+        "arguments": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "umg-gpt/moltpe",
+  "namespace": "umg-gpt",
+  "slug": "moltpe",
+  "displayName": "MoltPe",
+  "description": "AI-native payment infrastructure that gives AI agents isolated wallets with programmable spending policies for autonomous USDC stablecoin transactions.\n\n**11 MCP tools** for Claude Desktop, Cursor, and Windsurf:\n- check_balance, send_payment, list_transactions, agent_info\n- create_invoice, pay_invoice, check_invoice_status, list_invoices\n- call_x402_endpoint, call_mpp_endpoint, plus more\n\n**Tri-rail support:** x402 (HTTP-native micropayments), MPP (session-based streaming), and traditional fiat. Multi-chain USDC on Polygon PoS, Base, and Tempo with sub-second settlement.\n\n**Non-custodial wallets** with Shamir key splitting — your keys, never ours.\n\n**Programmable spending policies** (daily caps, per-transaction caps, recipient allowlists, cooldowns) enforced at the infrastructure level. Your agent literally cannot overspend regardless of prompt injection or buggy retry loops.\n\n**Free tier** — no credit card, no KYC, no geographic gating.\n\n- Site: https://moltpe.com\n- Open source refere",
+  "discoveryQueries": [
+    "authorization",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "6b846382-c6ae-48ac-8e35-70c775baf298",
+    "qualifiedName": "umg-gpt/moltpe",
+    "namespace": "umg-gpt",
+    "slug": "moltpe",
+    "displayName": "MoltPe",
+    "description": "AI-native payment infrastructure that gives AI agents isolated wallets with programmable spending policies for autonomous USDC stablecoin transactions.\n\n**11 MCP tools** for Claude Desktop, Cursor, and Windsurf:\n- check_balance, send_payment, list_transactions, agent_info\n- create_invoice, pay_invoice, check_invoice_status, list_invoices\n- call_x402_endpoint, call_mpp_endpoint, plus more\n\n**Tri-rail support:** x402 (HTTP-native micropayments), MPP (session-based streaming), and traditional fiat. Multi-chain USDC on Polygon PoS, Base, and Tempo with sub-second settlement.\n\n**Non-custodial wallets** with Shamir key splitting — your keys, never ours.\n\n**Programmable spending policies** (daily caps, per-transaction caps, recipient allowlists, cooldowns) enforced at the infrastructure level. Your agent literally cannot overspend regardless of prompt injection or buggy retry loops.\n\n**Free tier** — no credit card, no KYC, no geographic gating.\n\n- Site: https://moltpe.com\n- Open source refere",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/moltpe.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-01T07:49:11.753Z",
+    "homepage": "https://moltpe.com",
+    "bySmithery": false,
+    "owner": "org_01KQH6N59JFTPBGDZ0QJZ1QX2J",
+    "score": 0.008620689655172414
+  },
+  "detail": {
+    "qualifiedName": "umg-gpt/moltpe",
+    "displayName": "MoltPe",
+    "description": "AI-native payment infrastructure that gives AI agents isolated wallets with programmable spending policies for autonomous USDC stablecoin transactions.\n\n**11 MCP tools** for Claude Desktop, Cursor, and Windsurf:\n- check_balance, send_payment, list_transactions, agent_info\n- create_invoice, pay_invoice, check_invoice_status, list_invoices\n- call_x402_endpoint, call_mpp_endpoint, plus more\n\n**Tri-rail support:** x402 (HTTP-native micropayments), MPP (session-based streaming), and traditional fiat. Multi-chain USDC on Polygon PoS, Base, and Tempo with sub-second settlement.\n\n**Non-custodial wallets** with Shamir key splitting — your keys, never ours.\n\n**Programmable spending policies** (daily caps, per-transaction caps, recipient allowlists, cooldowns) enforced at the infrastructure level. Your agent literally cannot overspend regardless of prompt injection or buggy retry loops.\n\n**Free tier** — no credit card, no KYC, no geographic gating.\n\n- Site: https://moltpe.com\n- Open source reference: https://github.com/umangbuilds/moltpe-agent-payments (Apache 2.0)\n- India guide: https://moltpe.com/india\n- Developer quickstart: https://moltpe.com/blog/integrate-moltpe-in-5-minutes-developer-quickstart",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/moltpe.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://moltpe--umg-gpt.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://moltpe--umg-gpt.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_balance",
+        "description": "Returns the agent wallet's current USDC balance, daily spending limit, amount spent today, and remaining daily allowance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_transactions",
+        "description": "Returns recent transaction history for the agent wallet. Filter by status and control how many records are returned.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Number of transactions to return (default 20, max 50)"
+            },
+            "status": {
+              "enum": [
+                "completed",
+                "pending",
+                "failed"
+              ],
+              "type": "string",
+              "description": "Filter by transaction status"
+            }
+          }
+        }
+      },
+      {
+        "name": "agent_info",
+        "description": "Returns metadata about the agent: name, ID, wallet address, status, USDC balance, and spending limits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "send_payment",
+        "description": "Sends a USDC payment from the agent wallet to a recipient address. Enforces per-transaction and daily spending limits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$",
+              "description": "Recipient wallet address (0x format)"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount in USDC to send (e.g. 2.50)",
+              "exclusiveMinimum": 0
+            },
+            "reason": {
+              "type": "string",
+              "description": "Optional memo / reason for the payment"
+            }
+          }
+        }
+      },
+      {
+        "name": "call_x402_endpoint",
+        "description": "Calls an x402-protected API endpoint. Automatically handles the HTTP 402 payment flow: probes the endpoint, pays if required, and returns the response data. If a matching Grantex spend grant exists, its JWT is auto-attached so servers can verify scope and budget.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "Full URL of the x402-protected endpoint"
+            },
+            "grant_id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Optional spend_grants.id to force a specific grant"
+            },
+            "max_price": {
+              "type": "number",
+              "description": "Maximum USDC willing to pay (optional safety cap)",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "list_active_grants",
+        "description": "Returns the agent's active spend grants — endpoint, remaining budget, and expiry. An agent uses this to discover what it is pre-authorized to pay for.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "create_invoice",
+        "description": "Creates a USDC invoice for the agent. Returns a payment URL that can be shared with the payer. The payment is detected automatically when USDC arrives at the agent's wallet.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "memo": {
+              "type": "string",
+              "description": "Description or reason for the invoice"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Invoice amount in USDC (e.g. 5.00)",
+              "exclusiveMinimum": 0
+            },
+            "due_date": {
+              "type": "string",
+              "description": "ISO 8601 expiry date (e.g. 2026-04-10T00:00:00Z)"
+            },
+            "chain_key": {
+              "type": "string",
+              "description": "Chain for payment (defaults to agent's chain)"
+            },
+            "reference": {
+              "type": "string",
+              "description": "External reference ID (e.g. order number)"
+            },
+            "payer_info": {
+              "type": "string",
+              "description": "Payer name or identifier"
+            },
+            "webhook_url": {
+              "type": "string",
+              "description": "HTTPS URL to receive payment notification"
+            },
+            "payer_address": {
+              "type": "string",
+              "description": "Expected payer wallet address (0x format)"
+            },
+            "external_reference_id": {
+              "type": "string",
+              "description": "Your internal order/reference ID (max 200 chars)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_invoice_status",
+        "description": "Checks the current status of an invoice. Returns amount, payment status, and payment URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "invoice_id": {
+              "type": "string",
+              "description": "The UUID of the invoice to check"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_invoices",
+        "description": "Lists invoices created by this agent. Optionally filter by status (pending, partial, paid, expired, cancelled).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Number of invoices to return (default 20)"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by invoice status"
+            }
+          }
+        }
+      },
+      {
+        "name": "pay_invoice",
+        "description": "Pay an invoice by invoice ID. The agent's wallet will be charged the invoice amount and the invoice will be marked as paid.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "invoice_id": {
+              "type": "string",
+              "description": "The UUID of the invoice to pay"
+            }
+          }
+        }
+      },
+      {
+        "name": "call_mpp_endpoint",
+        "description": "Calls an MPP-paywalled HTTP endpoint. The agent pays using stablecoins on Tempo via the Machine Payments Protocol (MPP). Supports 100+ MPP-compatible services. The agent must be on a Tempo chain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The HTTPS URL of the MPP-enabled service endpoint"
+            },
+            "body": {
+              "type": "string",
+              "description": "Request body for POST requests (JSON string)"
+            },
+            "method": {
+              "type": "string",
+              "default": "GET",
+              "description": "HTTP method (GET or POST)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

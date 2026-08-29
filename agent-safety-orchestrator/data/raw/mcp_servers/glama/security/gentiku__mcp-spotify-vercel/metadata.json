@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "brbd5catku",
+  "namespace": "gentiku",
+  "slug": "mcp-spotify-vercel",
+  "name": "Spotify MCP Server",
+  "description": "Enables control of Spotify playback, music search, and playlist management through natural language commands. Available in both Python and Vercel implementations with comprehensive OAuth2 authentication and device management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables control of Spotify playback, music search, and playlist management through natural language commands. Available in both Python and Vercel implementations with comprehensive OAuth2 authentication and device management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CACHE_TTL": {
+          "description": "Cache time-to-live in seconds",
+          "type": "string",
+          "default": "3600"
+        },
+        "MCP_SERVER_NAME": {
+          "description": "Name of the MCP server",
+          "type": "string",
+          "default": "spotify-mcp-server"
+        },
+        "SPOTIFY_CLIENT_ID": {
+          "description": "Your Spotify app client ID",
+          "type": "string"
+        },
+        "MCP_SERVER_VERSION": {
+          "description": "Version of the MCP server",
+          "type": "string",
+          "default": "1.0.0"
+        },
+        "SPOTIFY_REDIRECT_URI": {
+          "description": "Redirect URI for Spotify OAuth flow",
+          "type": "string",
+          "default": "http://localhost:8888/callback"
+        },
+        "SPOTIFY_CLIENT_SECRET": {
+          "description": "Your Spotify app client secret",
+          "type": "string"
+        },
+        "SPOTIFY_REFRESH_TOKEN": {
+          "description": "Optional refresh token for user-specific operations",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SPOTIFY_CLIENT_ID",
+        "SPOTIFY_CLIENT_SECRET"
+      ]
+    },
+    "id": "brbd5catku",
+    "name": "Spotify MCP Server",
+    "namespace": "gentiku",
+    "repository": {
+      "url": "https://github.com/gentiku/mcp-spotify-vercel"
+    },
+    "slug": "mcp-spotify-vercel",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/brbd5catku"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "abasensei/vlayer",
+  "namespace": "abasensei",
+  "slug": "vlayer",
+  "displayName": "VLayer",
+  "description": "HIPAA compliance scanner for healthcare software. Automatically detect PHI exposure, encryption gaps, audit logging issues, and access control violations in your codebase. Scan code, get compliance scores, and receive auto-fix suggestions.",
+  "discoveryQueries": [
+    "security",
+    "scanner",
+    "audit",
+    "vulnerability",
+    "compliance",
+    "encryption",
+    "authentication",
+    "phishing",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "26c584cf-20cb-4990-a231-4ed30035e168",
+    "qualifiedName": "abasensei/vlayer",
+    "namespace": "abasensei",
+    "slug": "vlayer",
+    "displayName": "VLayer",
+    "description": "HIPAA compliance scanner for healthcare software. Automatically detect PHI exposure, encryption gaps, audit logging issues, and access control violations in your codebase. Scan code, get compliance scores, and receive auto-fix suggestions.",
+    "iconUrl": "https://api.smithery.ai/servers/abasensei/vlayer/icon",
+    "verified": false,
+    "useCount": 300,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-27T17:03:15.573Z",
+    "homepage": "https://vlayer.app",
+    "bySmithery": false,
+    "owner": "org_01KNBVXY6CT0WFZYVP3FHFN76H",
+    "score": 0.010869565217391304
+  },
+  "detail": {
+    "qualifiedName": "abasensei/vlayer",
+    "displayName": "VLayer",
+    "description": "HIPAA compliance scanner for healthcare software. Automatically detect PHI exposure, encryption gaps, audit logging issues, and access control violations in your codebase. Scan code, get compliance scores, and receive auto-fix suggestions.",
+    "iconUrl": "https://api.smithery.ai/servers/abasensei/vlayer/icon",
+    "remote": true,
+    "deploymentUrl": "https://vlayer--abasensei.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://vlayer--abasensei.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_code",
+        "description": "Scan source code for HIPAA compliance violations. Analyzes code for PHI exposure, encryption issues, missing audit logging, and access control problems.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Source code to scan"
+            },
+            "language": {
+              "enum": [
+                "typescript",
+                "python",
+                "java"
+              ],
+              "type": "string",
+              "description": "Programming language"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_compliance_score",
+        "description": "Get a HIPAA compliance score (0-100) for a code snippet or repository. Higher scores indicate better compliance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "repo_url": {
+              "type": "string",
+              "description": "GitHub repository URL to scan"
+            },
+            "code_snippet": {
+              "type": "string",
+              "description": "Code to evaluate"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_rules",
+        "description": "List all available HIPAA scanning rules, optionally filtered by category.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "enum": [
+                "phi-exposure",
+                "encryption",
+                "audit-logging",
+                "access-control"
+              ],
+              "type": "string",
+              "description": "Filter rules by category"
+            }
+          }
+        }
+      },
+      {
+        "name": "suggest_fix",
+        "description": "Get auto-fix suggestions for a specific HIPAA violation, including corrected code.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code_context": {
+              "type": "string",
+              "description": "The code surrounding the violation"
+            },
+            "violation_id": {
+              "type": "string",
+              "description": "Rule ID of the violation (e.g. PHI-001, ENC-003)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

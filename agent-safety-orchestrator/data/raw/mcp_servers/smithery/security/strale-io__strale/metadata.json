@@ -1,0 +1,160 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "strale-io/strale",
+  "namespace": "strale-io",
+  "slug": "strale",
+  "displayName": "strale",
+  "description": "270+ quality-scored API capabilities for AI agents — compliance, company data, financial validation, web intelligence across 27 countries.",
+  "discoveryQueries": [
+    "trust",
+    "compliance",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "325bd2ec-635b-4d12-9962-475dd3973991",
+    "qualifiedName": "strale-io/strale",
+    "namespace": "strale-io",
+    "slug": "strale",
+    "displayName": "strale",
+    "description": "270+ quality-scored API capabilities for AI agents — compliance, company data, financial validation, web intelligence across 27 countries.",
+    "verified": false,
+    "useCount": 8851,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-30T13:22:06.856Z",
+    "homepage": "https://smithery.ai/servers/strale-io/strale",
+    "bySmithery": false,
+    "owner": "org_01KNBVETTZV4MWNBDA54X6H0Q2",
+    "score": 0.015151515151515152
+  },
+  "detail": {
+    "qualifiedName": "strale-io/strale",
+    "displayName": "strale",
+    "description": "270+ quality-scored API capabilities for AI agents — compliance, company data, financial validation, web intelligence across 27 countries.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://strale--strale-io.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://strale--strale-io.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "strale_ping",
+        "description": "Health check. Returns server status, tool count, capability count, and response time. Verifies the connection is working.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_getting_started",
+        "description": "Returns free capabilities you can use immediately without an API key: email-validate (verify email deliverability), dns-lookup (DNS records for any domain), json-repair (fix malformed JSON), url-to-markdown (convert any URL to clean markdown), iban-validate (validate international bank account numbers). Also returns setup steps for full access to 250+ paid capabilities.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_execute",
+        "description": "Run a Strale capability by slug — validate an IBAN, look up a company in 27 countries, screen against sanctions/PEP lists, extract data from a URL or PDF, check VAT numbers, verify email deliverability, assess wallet risk, check token contract safety, resolve ENS names, look up DeFi protocol TVL, and 270+ more. Returns structured JSON output with SQS quality score, latency, and data provenance. Free capabilities (email-validate, dns-lookup, json-repair, url-to-markdown, iban-validate) work without an API key. Use strale_search first to find the right slug and required inputs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Capability slug from strale_search results, e.g. 'swedish-company-data', 'vat-validate', 'iban-validate'"
+            },
+            "inputs": {
+              "type": "object",
+              "description": "Input parameters matching the capability's required fields. Check strale_search results for the expected input_fields.",
+              "additionalProperties": {}
+            },
+            "max_price_cents": {
+              "type": "number",
+              "description": "Maximum price in EUR cents. Default: 200 (€2.00). Execution fails if capability costs more."
+            }
+          }
+        }
+      },
+      {
+        "name": "strale_search",
+        "description": "Search Strale's 270+ API capabilities and bundled solutions. Covers: KYC & compliance (company verification, VAT validation, sanctions screening), data validation (IBAN, email, phone numbers), company registries (Nordic countries, US SEC EDGAR), domain & website intelligence (WHOIS, DNS, SSL certificates, trust scores, security headers, PageSpeed, tech stack detection), Web3 & DeFi (wallet risk scoring, token contract safety, honeypot detection, ENS resolution, DeFi protocol TVL/fees, gas prices, VASP/MiCA compliance, stablecoin flows, market sentiment, approval security, phishing detection), and more (translation, invoice extraction, lead enrichment, AI Act assessment). Most under €0.10. Free to search.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search keyword (matched against name, description, slug)"
+            },
+            "offset": {
+              "type": "number",
+              "description": "Number of results to skip (for pagination). Default: 0"
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by category: compliance, validation, data-extraction, developer-tools, web3, security, domain-intel, recruiting, sales, legal, text"
+            }
+          }
+        }
+      },
+      {
+        "name": "strale_balance",
+        "description": "Returns the current Strale wallet balance in EUR cents and EUR. Requires an API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_methodology",
+        "description": "Get Strale's quality and trust methodology. Explains the dual-profile scoring model: Quality Profile (code quality, 4 factors) and Reliability Profile (operational dependability, 4 factors weighted by capability type), combined via a published 5×5 matrix into the SQS confidence score. Covers execution guidance, test infrastructure (~1340 test suites with tiered scheduling), provenance tracking, audit trails, badge system, and honest disclosure of current limitations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_trust_profile",
+        "description": "Check if a capability is reliable before calling it. Returns SQS quality score (0-100), Quality grade (A-F for code correctness), Reliability grade (A-F for uptime and latency), and execution guidance: whether to call directly, retry with backoff, queue for later, or use a fallback. Also returns 30-day test pass rate, known limitations, and cost envelope. Use this to decide whether a capability is safe for production use right now.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Capability or solution slug, e.g. 'swedish-company-data' or 'eu-company-due-diligence'"
+            },
+            "type": {
+              "enum": [
+                "capability",
+                "solution"
+              ],
+              "type": "string",
+              "default": "capability",
+              "description": "Whether this is a capability or a bundled solution"
+            }
+          }
+        }
+      },
+      {
+        "name": "strale_transaction",
+        "description": "Retrieve a past execution record by transaction ID. Returns inputs, outputs, latency, price, data provenance, success/failure status, and failure categorization. Use this to inspect what a previous strale_execute call returned, debug failures, or provide an audit trail. Free-tier transactions are accessible by ID without an API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "transaction_id": {
+              "type": "string",
+              "description": "Transaction ID returned from a strale_execute call"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

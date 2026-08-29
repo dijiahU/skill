@@ -1,0 +1,105 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "found402/prompt-injection-detector",
+  "namespace": "found402",
+  "slug": "prompt-injection-detector",
+  "displayName": "prompt-injection-detector",
+  "description": "Prompt Injection Detector is a stateless security microservice built for the agent economy. Before your agent acts on any input — whether from a user, an email, a document, or another agent — run it through this scanner first.\nDetects: jailbreak attempts, instruction overrides, role-play manipulation, goal hijacking (OWASP ASI01), tool misuse patterns (OWASP ASI02), hidden instructions embedded in data, and indirect injection via external content.\nReturns a confidence score, severity rating, specific patterns detected, and a clear recommendation — block, warn, or pass.\nPay per scan via x402 protocol. USDC on Base. No API keys. No subscriptions. No human in the loop. Agents call it directly.\nMCP tool name: scan_for_injection",
+  "discoveryQueries": [
+    "phishing",
+    "ransomware",
+    "prompt injection",
+    "jailbreak"
+  ],
+  "rawRecord": {
+    "id": "611d46bf-45e5-4cb4-a10f-8a46ffa8bb5c",
+    "qualifiedName": "found402/prompt-injection-detector",
+    "namespace": "found402",
+    "slug": "prompt-injection-detector",
+    "displayName": "prompt-injection-detector",
+    "description": "Prompt Injection Detector is a stateless security microservice built for the agent economy. Before your agent acts on any input — whether from a user, an email, a document, or another agent — run it through this scanner first.\nDetects: jailbreak attempts, instruction overrides, role-play manipulation, goal hijacking (OWASP ASI01), tool misuse patterns (OWASP ASI02), hidden instructions embedded in data, and indirect injection via external content.\nReturns a confidence score, severity rating, specific patterns detected, and a clear recommendation — block, warn, or pass.\nPay per scan via x402 protocol. USDC on Base. No API keys. No subscriptions. No human in the loop. Agents call it directly.\nMCP tool name: scan_for_injection",
+    "iconUrl": "https://api.smithery.ai/servers/found402/prompt-injection-detector/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-16T22:41:53.876Z",
+    "homepage": "https://prompt-injection-detector.fly.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVQABVMKJ0B6XQRVEMJVFJ",
+    "score": 0.02040816326530612
+  },
+  "detail": {
+    "qualifiedName": "found402/prompt-injection-detector",
+    "displayName": "prompt-injection-detector",
+    "description": "Prompt Injection Detector is a stateless security microservice built for the agent economy. Before your agent acts on any input — whether from a user, an email, a document, or another agent — run it through this scanner first.\nDetects: jailbreak attempts, instruction overrides, role-play manipulation, goal hijacking (OWASP ASI01), tool misuse patterns (OWASP ASI02), hidden instructions embedded in data, and indirect injection via external content.\nReturns a confidence score, severity rating, specific patterns detected, and a clear recommendation — block, warn, or pass.\nPay per scan via x402 protocol. USDC on Base. No API keys. No subscriptions. No human in the loop. Agents call it directly.\nMCP tool name: scan_for_injection",
+    "iconUrl": "https://api.smithery.ai/servers/found402/prompt-injection-detector/icon",
+    "remote": true,
+    "deploymentUrl": "https://prompt-injection-detector--found402.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://prompt-injection-detector--found402.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_for_injection",
+        "description": "Scans text for prompt injection patterns including instruction overrides, jailbreak attempts, role-play manipulations, system prompt leakage attempts, hidden instructions, encoding obfuscation, context manipulation, and privilege escalation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "The agent input text to scan for prompt injection patterns"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "patterns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "matched": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "List of injection patterns detected"
+            },
+            "confidence": {
+              "type": "number",
+              "description": "Confidence score from 0 (no injection) to 1 (definite injection)"
+            },
+            "recommendation": {
+              "enum": [
+                "block",
+                "warn",
+                "pass"
+              ],
+              "type": "string",
+              "description": "Recommended action based on confidence level"
+            },
+            "injectionDetected": {
+              "type": "boolean",
+              "description": "Whether any injection patterns were found"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

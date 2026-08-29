@@ -1,0 +1,55 @@
+{
+  "registry": "glama",
+  "id": "mpdt7u1xyc",
+  "namespace": "romudille-bit",
+  "slug": "agentpay",
+  "name": "AgentPay x402 — Crypto Data Tools for AI Agents",
+  "description": "AgentPay — x402 crypto data gateway on Stellar. 10 live\npay-per-call tools: token prices, whale activity, gas tracker,\nDeFi TVL, Fear & Greed, Dune queries, token security.\nAgents pay USDC on Stellar. No API keys. Budget-aware sessions.",
+  "discoveryQueries": [
+    "security",
+    "scanner"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "AgentPay — x402 crypto data gateway on Stellar. 10 live\npay-per-call tools: token prices, whale activity, gas tracker,\nDeFi TVL, Fear & Greed, Dune queries, token security.\nAgents pay USDC on Stellar. No API keys. Budget-aware sessions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MAX_SPEND": {
+          "description": "The maximum USDC budget cap allowed for the session (e.g., '0.05').",
+          "type": "string",
+          "default": "0.05"
+        },
+        "STELLAR_NETWORK": {
+          "description": "The Stellar network to connect to ('testnet' or 'mainnet').",
+          "type": "string",
+          "default": "testnet"
+        },
+        "STELLAR_SECRET_KEY": {
+          "description": "Your Stellar secret key (starting with 'S') used to fund tool calls via USDC.",
+          "type": "string"
+        },
+        "AGENTPAY_GATEWAY_URL": {
+          "description": "The URL of the AgentPay gateway.",
+          "type": "string",
+          "default": "https://gateway-production-2cc2.up.railway.app"
+        }
+      },
+      "type": "object",
+      "required": [
+        "STELLAR_SECRET_KEY"
+      ]
+    },
+    "id": "mpdt7u1xyc",
+    "name": "AgentPay x402 — Crypto Data Tools for AI Agents",
+    "namespace": "romudille-bit",
+    "repository": {
+      "url": "https://github.com/romudille-bit/agentpay"
+    },
+    "slug": "agentpay",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mpdt7u1xyc"
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "re-rank/uiux-mcp",
+  "namespace": "re-rank",
+  "slug": "uiux-mcp",
+  "displayName": "KRDS Design System",
+  "description": "Build interfaces that follow the Korea Responsive Design System (KRDS) faster. Search and insert official components, retrieve ready-to-use HTML, and explore color, spacing, and typography tokens. Validate your code for KRDS compliance and accessibility and get actionable improvement suggestions.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "6b7d8487-05cf-471d-ab96-8ce23f661f12",
+    "qualifiedName": "re-rank/uiux-mcp",
+    "namespace": "re-rank",
+    "slug": "uiux-mcp",
+    "displayName": "KRDS Design System",
+    "description": "Build interfaces that follow the Korea Responsive Design System (KRDS) faster. Search and insert official components, retrieve ready-to-use HTML, and explore color, spacing, and typography tokens. Validate your code for KRDS compliance and accessibility and get actionable improvement suggestions.",
+    "iconUrl": "https://api.smithery.ai/servers/re-rank/uiux-mcp/icon",
+    "verified": false,
+    "useCount": 17351,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2025-10-28T10:06:33.398Z",
+    "homepage": "https://github.com/re-rank/UIUX-MCP",
+    "bySmithery": false,
+    "owner": "org_01KNBME4QZZR6SA3QEWT3YCGPC",
+    "score": 0.01020408163265306
+  },
+  "detail": {
+    "qualifiedName": "re-rank/uiux-mcp",
+    "displayName": "KRDS Design System",
+    "description": "Build interfaces that follow the Korea Responsive Design System (KRDS) faster. Search and insert official components, retrieve ready-to-use HTML, and explore color, spacing, and typography tokens. Validate your code for KRDS compliance and accessibility and get actionable improvement suggestions.",
+    "iconUrl": "https://api.smithery.ai/servers/re-rank/uiux-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://uiux-mcp--re-rank.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://uiux-mcp--re-rank.run.tools",
+        "configSchema": {
+          "type": "object",
+          "title": "MCP Session Configuration",
+          "properties": {
+            "enableSuggestions": {
+              "type": "boolean",
+              "default": true,
+              "description": "KRDS 컴포넌트 추천 사용 여부"
+            }
+          },
+          "description": "Schema for the /mcp endpoint configuration",
+          "x-query-style": "dot+bracket",
+          "additionalProperties": false
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_krds_components",
+        "description": "KRDS 컴포넌트를 검색합니다. 검색어나 카테고리로 필터링할 수 있습니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "검색할 키워드 (예: button, input, modal)"
+            },
+            "category": {
+              "type": "string",
+              "description": "컴포넌트 카테고리 (예: Form, Navigation, Layout)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_component_code",
+        "description": "특정 KRDS 컴포넌트의 전체 HTML 코드와 정보를 가져옵니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "componentName": {
+              "type": "string",
+              "description": "컴포넌트 이름 (예: button, text_input, modal)"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_component_categories",
+        "description": "모든 KRDS 컴포넌트 카테고리 목록을 가져옵니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_all_components",
+        "description": "모든 KRDS 컴포넌트 이름 목록을 가져옵니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_design_tokens",
+        "description": "KRDS 디자인 토큰을 검색합니다 (색상, 간격, 타이포그래피 등).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "토큰 타입 (예: color, spacing, typography)"
+            },
+            "query": {
+              "type": "string",
+              "description": "검색할 키워드 (예: primary, blue, font)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_color_palette",
+        "description": "KRDS 전체 색상 팔레트를 가져옵니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_token_stats",
+        "description": "디자인 토큰 통계 정보를 가져옵니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "validate_krds_compliance",
+        "description": "HTML/CSS 코드를 분석하여 KRDS 가이드라인 준수 여부를 확인하고 개선 제안을 제공합니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "검증할 HTML 또는 CSS 코드"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_krds_resources",
+        "description": "KRDS 리소스 파일 경로와 사용법을 가져옵니다.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "resourceType": {
+              "enum": [
+                "css",
+                "scss",
+                "fonts",
+                "images",
+                "js"
+              ],
+              "type": "string",
+              "description": "리소스 타입 (css, scss, fonts, images, js)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

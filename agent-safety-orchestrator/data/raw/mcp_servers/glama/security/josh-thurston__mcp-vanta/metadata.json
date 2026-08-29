@@ -1,0 +1,91 @@
+{
+  "registry": "glama",
+  "id": "ffs5ynx9rk",
+  "namespace": "josh-thurston",
+  "slug": "MCP-Vanta",
+  "name": "Vanta MCP Server",
+  "description": "Enables management of Vanta compliance platform resources including controls, vulnerabilities, vendors, and policies through natural language. Supports multi-tenant OAuth2 authentication for secure access to security and compliance data.",
+  "discoveryQueries": [
+    "security",
+    "compliance",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables management of Vanta compliance platform resources including controls, vulnerabilities, vendors, and policies through natural language. Supports multi-tenant OAuth2 authentication for secure access to security and compliance data.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Legacy HTTP port (use MCP_PORT instead).",
+          "type": "string"
+        },
+        "MCP_HOST": {
+          "description": "Bind address for the server.",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "HTTP port for the server (also accepts legacy PORT variable).",
+          "type": "string",
+          "default": "8010"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level: DEBUG, INFO, WARNING, ERROR.",
+          "type": "string",
+          "default": "INFO"
+        },
+        "AUTH_TOKEN": {
+          "description": "If set, clients must send Authorization: Bearer <AUTH_TOKEN> to access /mcp and /sse endpoints.",
+          "type": "string"
+        },
+        "API_BASE_URL": {
+          "description": "Vanta API base URL for the default tenant.",
+          "type": "string",
+          "default": "https://api.vanta.com"
+        },
+        "TRANSPORT_MODE": {
+          "description": "Informational — both /mcp and /sse are always active.",
+          "type": "string",
+          "default": "streamable-http"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "Default tenant: Vanta OAuth2 client ID (vci_...). Required for single-tenant mode if not using config/tenants.json.",
+          "type": "string"
+        },
+        "TIMEOUT_SECONDS": {
+          "description": "HTTP request timeout in seconds.",
+          "type": "string",
+          "default": "60"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "Default tenant: Vanta OAuth2 client secret (vcs_...). Required for single-tenant mode if not using config/tenants.json.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "OAUTH_CLIENT_ID",
+            "OAUTH_CLIENT_SECRET"
+          ]
+        },
+        {
+          "required": []
+        }
+      ]
+    },
+    "id": "ffs5ynx9rk",
+    "name": "Vanta MCP Server",
+    "namespace": "josh-thurston",
+    "repository": {
+      "url": "https://github.com/josh-thurston/MCP-Vanta"
+    },
+    "slug": "MCP-Vanta",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ffs5ynx9rk"
+  }
+}

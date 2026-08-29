@@ -1,0 +1,196 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "agentidx/zarq-risk",
+  "namespace": "agentidx",
+  "slug": "zarq-risk",
+  "displayName": "Zarq",
+  "description": "Evaluate crypto token safety with real-time trust scores and structural risk signals. Identify potential market distress and impending collapses to safeguard your digital investments. Compare assets head-to-head using multi-dimensional security and compliance metrics.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "guardrail",
+    "trust",
+    "vulnerability",
+    "compliance",
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "9b04af65-904e-46dd-b07a-1b1eb7b564c1",
+    "qualifiedName": "agentidx/zarq-risk",
+    "namespace": "agentidx",
+    "slug": "zarq-risk",
+    "displayName": "Zarq",
+    "description": "Evaluate crypto token safety with real-time trust scores and structural risk signals. Identify potential market distress and impending collapses to safeguard your digital investments. Compare assets head-to-head using multi-dimensional security and compliance metrics.",
+    "verified": false,
+    "useCount": 5398,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-08T11:31:23.659Z",
+    "homepage": "https://smithery.ai/servers/agentidx/zarq-risk",
+    "bySmithery": false,
+    "owner": "org_01KNBV6D6NVJ95NF0RC05QCF6C",
+    "score": 0.00909090909090909
+  },
+  "detail": {
+    "qualifiedName": "agentidx/zarq-risk",
+    "displayName": "Zarq",
+    "description": "Evaluate crypto token safety with real-time trust scores and structural risk signals. Identify potential market distress and impending collapses to safeguard your digital investments. Compare assets head-to-head using multi-dimensional security and compliance metrics.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://zarq-risk--agentidx.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://zarq-risk--agentidx.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "crypto_safety_check",
+        "description": "Quick pre-trade safety check for a crypto token. Returns risk level, trust grade, DtD score, alert status, crash probability, and any active flags. Optimized for <100ms response. Use before any crypto trade or investment decision. Example: crypto_safety_check(token_id='bitcoin')",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token_id": {
+              "type": "string",
+              "description": "Token identifier (e.g., 'bitcoin', 'ethereum', 'solana', 'cardano'). Use lowercase CoinGecko-style IDs."
+            }
+          }
+        }
+      },
+      {
+        "name": "crypto_rating",
+        "description": "Get the full ZARQ Trust Score for a crypto token. Returns overall score (0-100), letter grade (A+ to F), and breakdown across 5 pillars: Security (30%), Compliance (25%), Maintenance (20%), Popularity (15%), Ecosystem (10%). 198 tokens rated. Example: crypto_rating(token_id='ethereum')",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token_id": {
+              "type": "string",
+              "description": "Token identifier (e.g., 'bitcoin', 'ethereum'). Use lowercase CoinGecko-style IDs."
+            }
+          }
+        }
+      },
+      {
+        "name": "crypto_dtd",
+        "description": "Get the Distance-to-Default (DtD) score for a crypto token. DtD measures distance-to-default on a 0-5 scale (5=healthy, 0=imminent collapse). Returns 7 signal scores (Liquidity, Holders, Resilience, Fundamental, Contagion, Structural, Relative Weakness), trend classification (FREEFALL/FALLING/SLIDING/STABLE/IMPROVING), crash probability, and Structural Collapse status. Example: crypto_ndd(token_id='solana')",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token_id": {
+              "type": "string",
+              "description": "Token identifier (e.g., 'solana'). Use lowercase CoinGecko-style IDs."
+            }
+          }
+        }
+      },
+      {
+        "name": "crypto_signals",
+        "description": "Get all active crypto risk signals: Structural Collapse and Structural Stress alerts and recovery recovery signals. Each signal includes token, DtD score, trend, crash probability, streak duration, SHA-256 hash, and timestamp. Also returns a running scoreboard with precision metrics. Use to monitor the crypto market for emerging risks. Example: crypto_signals()",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "crypto_compare",
+        "description": "Compare two crypto tokens head-to-head. Returns Trust Score, NDD, risk level, and key differences for both tokens. Useful for relative value analysis or deciding between two investments. Example: crypto_compare(token_a='bitcoin', token_b='ethereum')",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token_a": {
+              "type": "string",
+              "description": "First token identifier"
+            },
+            "token_b": {
+              "type": "string",
+              "description": "Second token identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "crypto_distress_watch",
+        "description": "Get all tokens currently showing distress (DtD < 2.0). Returns a watchlist of tokens with elevated crash risk, sorted by DtD score ascending (most distressed first). Use to identify tokens to avoid or potentially short. Example: crypto_distress_watch()",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "crypto_alerts",
+        "description": "Get all active ZARQ structural warnings. Two levels: STRUCTURAL COLLAPSE (≥3 weakness signals, historically 98% lost >50% value) and STRUCTURAL STRESS (≥2 weakness signals, requires monitoring). Out-of-sample validated: 113/113 token deaths detected with 98% precision. Example: crypto_alerts(level='CRITICAL') or crypto_alerts()",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "enum": [
+                "CRITICAL",
+                "WARNING"
+              ],
+              "type": "string",
+              "description": "Filter by alert level: 'CRITICAL' (structural collapse) or 'WARNING' (structural stress). Omit for all."
+            }
+          }
+        }
+      },
+      {
+        "name": "crypto_ratings_bulk",
+        "description": "Get Trust Score ratings for all 205 rated tokens in bulk. Returns token_id, name, symbol, trust_score, trust_grade, and risk_level for each. Useful for screening, portfolio construction, or building filtered lists. Example: crypto_ratings_bulk()",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "check_token_risk",
+        "description": "Zero-friction risk check for any crypto token. Returns verdict (SAFE/WARNING/CRITICAL), trust score (0-100), Moody's-style rating (Aaa-D), distance-to-default, crash probability, structural weakness flag, current price, and risk level. No auth needed. Recommended starting point for any token risk query. 205 tokens covered. Example: check_token_risk(token='bitcoin')",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token identifier (e.g., 'bitcoin', 'ethereum', 'solana'). Use lowercase CoinGecko-style IDs."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_risk_signals",
+        "description": "Get all tokens with active ZARQ warnings. Returns the full list of 205 monitored tokens with their risk level (SAFE/WATCH/WARNING/CRITICAL), trust score, structural weakness count, and NDD score. Filter to see only tokens with active warnings or structural collapse alerts. Example: get_risk_signals() or get_risk_signals(level='CRITICAL')",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "enum": [
+                "CRITICAL",
+                "WARNING",
+                "WATCH",
+                "SAFE"
+              ],
+              "type": "string",
+              "description": "Filter by risk level: 'CRITICAL', 'WARNING', 'WATCH', or 'SAFE'. Omit for all."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_trust_score",
+        "description": "Get just the ZARQ Trust Score for a token. Returns the score (0-100), Moody's-style grade (Aaa through D), and risk level. Lightweight alternative to check_token_risk when you only need the score. Example: get_trust_score(token='ethereum')",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token identifier (e.g., 'bitcoin', 'ethereum'). Use lowercase CoinGecko-style IDs."
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "o4vc6jv0z8",
+  "namespace": "jaigouk",
+  "slug": "atlassian-mcp",
+  "name": "Atlassian MCP Server",
+  "description": "Enables AI assistants to search and retrieve data from Jira and Confluence directly within MCP-compatible IDEs. It provides tools for managing Jira tickets and Confluence pages using OAuth 2.0 authentication and Hexagonal Architecture.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables AI assistants to search and retrieve data from Jira and Confluence directly within MCP-compatible IDEs. It provides tools for managing Jira tickets and Confluence pages using OAuth 2.0 authentication and Hexagonal Architecture.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8084"
+        },
+        "CACHE_TTL": {
+          "description": "Cache TTL in seconds",
+          "type": "string",
+          "default": "3600"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (error | warn | info | debug)",
+          "type": "string",
+          "default": "info"
+        },
+        "ENABLE_CACHE": {
+          "description": "Whether to enable Redis caching",
+          "type": "string",
+          "default": "true"
+        },
+        "ATLASSIAN_SITE": {
+          "description": "Atlassian site URL (e.g., yourcompany.atlassian.net), without https://",
+          "type": "string"
+        },
+        "REDIS_PASSWORD": {
+          "description": "Password for Redis authentication",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "OAuth 2.0 Client ID from Atlassian developer console",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "OAuth 2.0 Client Secret from Atlassian developer console",
+          "type": "string"
+        },
+        "TOKEN_ENCRYPTION_KEY": {
+          "description": "64-char hex string used for encrypting tokens at rest",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ATLASSIAN_SITE",
+        "OAUTH_CLIENT_ID",
+        "OAUTH_CLIENT_SECRET",
+        "TOKEN_ENCRYPTION_KEY",
+        "REDIS_PASSWORD"
+      ]
+    },
+    "id": "o4vc6jv0z8",
+    "name": "Atlassian MCP Server",
+    "namespace": "jaigouk",
+    "repository": {
+      "url": "https://github.com/jaigouk/atlassian-mcp"
+    },
+    "slug": "atlassian-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/o4vc6jv0z8"
+  }
+}

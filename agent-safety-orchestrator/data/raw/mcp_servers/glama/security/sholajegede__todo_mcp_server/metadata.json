@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "gw0a9643ke",
+  "namespace": "sholajegede",
+  "slug": "todo_mcp_server",
+  "name": "Todo MCP Server",
+  "description": "A complete todo management system with authentication and billing that enables AI assistants to create, manage, and track todos with user accounts, free tier limits, and database persistence.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A complete todo management system with authentication and billing that enables AI assistants to create, manage, and track todos with user accounts, free tier limits, and database persistence.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Node.js environment (development or production)",
+          "type": "string",
+          "default": "development"
+        },
+        "JWT_SECRET": {
+          "description": "Secret key for JWT token signing",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL connection string for Neon database",
+          "type": "string"
+        },
+        "KINDE_CLIENT_ID": {
+          "description": "Kinde client ID for OAuth authentication",
+          "type": "string"
+        },
+        "KINDE_ISSUER_URL": {
+          "description": "Kinde authentication issuer URL (e.g., https://your-domain.kinde.com)",
+          "type": "string"
+        },
+        "KINDE_CLIENT_SECRET": {
+          "description": "Kinde client secret for OAuth authentication",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABASE_URL",
+        "KINDE_ISSUER_URL",
+        "KINDE_CLIENT_ID",
+        "KINDE_CLIENT_SECRET",
+        "JWT_SECRET"
+      ]
+    },
+    "id": "gw0a9643ke",
+    "name": "Todo MCP Server",
+    "namespace": "sholajegede",
+    "repository": {
+      "url": "https://github.com/sholajegede/todo_mcp_server"
+    },
+    "slug": "todo_mcp_server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gw0a9643ke"
+  }
+}

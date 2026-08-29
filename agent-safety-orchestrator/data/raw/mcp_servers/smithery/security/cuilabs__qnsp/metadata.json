@@ -1,0 +1,270 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cuilabs/qnsp",
+  "namespace": "cuilabs",
+  "slug": "qnsp",
+  "displayName": "QNSP (Quantum-Native Security Platform)",
+  "description": "End-to-end quantum-native security fabric for AI, data, and mission-critical systems. Built by CUI Labs Singapore, QNSP delivers NIST-finalized post-quantum standards (ML-KEM FIPS 203, ML-DSA FIPS 204, SLH-DSA FIPS 205) across a multi-service platform behind a zero-trust Edge Gateway. Supports 90 PQC algorithms across 14 families including FN-DSA (FIPS 206 draft), HQC, BIKE, Classic McEliece, FrodoKEM, NTRU, MAYO, CROSS, UOV, and SNOVA. HSM-integrated KMS with vendor-agnostic key management (PKCS#11; Luna, nShield, CloudHSM, Azure HSM), quantum-safe secrets vault, PQC-encrypted object storage with SSE-X searchable encryption, immutable hash-chained audit trails, and AI orchestration with confidential-compute enclave support. Designed for regulated enterprises in finance, defense, healthcare, and government operating under harvest-now-decrypt-later threat models. 15 MCP tools provide programmatic access to PQC key generation and rotation, vault operations, cryptographic inventory (CBOM)",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "policy",
+    "trust",
+    "vulnerability",
+    "secret",
+    "compliance",
+    "encryption",
+    "authentication",
+    "siem"
+  ],
+  "rawRecord": {
+    "id": "b478f01c-2e51-4e4f-958f-031905e16dba",
+    "qualifiedName": "cuilabs/qnsp",
+    "namespace": "cuilabs",
+    "slug": "qnsp",
+    "displayName": "QNSP (Quantum-Native Security Platform)",
+    "description": "End-to-end quantum-native security fabric for AI, data, and mission-critical systems. Built by CUI Labs Singapore, QNSP delivers NIST-finalized post-quantum standards (ML-KEM FIPS 203, ML-DSA FIPS 204, SLH-DSA FIPS 205) across a multi-service platform behind a zero-trust Edge Gateway. Supports 90 PQC algorithms across 14 families including FN-DSA (FIPS 206 draft), HQC, BIKE, Classic McEliece, FrodoKEM, NTRU, MAYO, CROSS, UOV, and SNOVA. HSM-integrated KMS with vendor-agnostic key management (PKCS#11; Luna, nShield, CloudHSM, Azure HSM), quantum-safe secrets vault, PQC-encrypted object storage with SSE-X searchable encryption, immutable hash-chained audit trails, and AI orchestration with confidential-compute enclave support. Designed for regulated enterprises in finance, defense, healthcare, and government operating under harvest-now-decrypt-later threat models. 15 MCP tools provide programmatic access to PQC key generation and rotation, vault operations, cryptographic inventory (CBOM)",
+    "iconUrl": "https://api.smithery.ai/servers/cuilabs/qnsp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T16:38:01.379Z",
+    "homepage": "https://qnsp.cuilabs.io/",
+    "bySmithery": false,
+    "owner": "org_01KNPFN10JWQSSSEEPJ26WSZ19",
+    "score": 0.04040816326530612
+  },
+  "detail": {
+    "qualifiedName": "cuilabs/qnsp",
+    "displayName": "QNSP (Quantum-Native Security Platform)",
+    "description": "End-to-end quantum-native security fabric for AI, data, and mission-critical systems. Built by CUI Labs Singapore, QNSP delivers NIST-finalized post-quantum standards (ML-KEM FIPS 203, ML-DSA FIPS 204, SLH-DSA FIPS 205) across a multi-service platform behind a zero-trust Edge Gateway. Supports 90 PQC algorithms across 14 families including FN-DSA (FIPS 206 draft), HQC, BIKE, Classic McEliece, FrodoKEM, NTRU, MAYO, CROSS, UOV, and SNOVA. HSM-integrated KMS with vendor-agnostic key management (PKCS#11; Luna, nShield, CloudHSM, Azure HSM), quantum-safe secrets vault, PQC-encrypted object storage with SSE-X searchable encryption, immutable hash-chained audit trails, and AI orchestration with confidential-compute enclave support. Designed for regulated enterprises in finance, defense, healthcare, and government operating under harvest-now-decrypt-later threat models. 15 MCP tools provide programmatic access to PQC key generation and rotation, vault operations, cryptographic inventory (CBOM), encrypted search, audit queries, tenant management, billing status, and platform health. \n\nFree tier available: 10 GB storage, 50K API calls/month, 20 KMS keys, 25 vault secrets. \n\nGet started at https://cloud.qnsp.cuilabs.io/signup. \nDocumentation: https://docs.qnsp.cuilabs.io. \nPlatform: https://qnsp.cuilabs.io.",
+    "iconUrl": "https://api.smithery.ai/servers/cuilabs/qnsp/icon",
+    "remote": true,
+    "deploymentUrl": "https://qnsp.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://qnsp.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "QNSP_API_KEY"
+          ],
+          "properties": {
+            "QNSP_API_KEY": {
+              "type": "string",
+              "title": "QNSP API Key",
+              "x-from": "header:authorization:bearer",
+              "x-order": 0,
+              "description": "Get your free API key at https://cloud.qnsp.cuilabs.io/api-keys"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "qnsp_kms_generate_key",
+        "description": "Generate a PQC key pair (ML-KEM, ML-DSA, Falcon, SPHINCS+, 86 algorithms). NIST FIPS 203/204/205.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "algorithm": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_kms_list_keys",
+        "description": "List PQC keys.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_kms_get_key",
+        "description": "Get PQC key details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "keyId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_kms_rotate_key",
+        "description": "Rotate a PQC key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "keyId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_vault_create_secret",
+        "description": "Store a secret in quantum-safe vault.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_vault_get_secret",
+        "description": "Retrieve a vault secret.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "secretId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_vault_list_secrets",
+        "description": "List vault secrets.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_crypto_scan",
+        "description": "Run crypto inventory scan (CBOM).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "enum": [
+                "full",
+                "keys",
+                "certificates",
+                "algorithms"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_crypto_inventory",
+        "description": "List crypto assets (CBOM).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_crypto_readiness",
+        "description": "Check PQC readiness.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "qnsp_audit_query",
+        "description": "Query audit trail.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer"
+            },
+            "topic": {
+              "type": "string"
+            },
+            "sourceService": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_search_query",
+        "description": "Search encrypted documents (SSE-X).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer"
+            },
+            "query": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "qnsp_tenant_info",
+        "description": "Get tenant info.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "qnsp_billing_status",
+        "description": "Check billing tier and limits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "qnsp_platform_health",
+        "description": "Check platform health.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

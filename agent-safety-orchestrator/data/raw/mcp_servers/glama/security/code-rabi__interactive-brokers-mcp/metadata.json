@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "h8zo03wuu3",
+  "namespace": "code-rabi",
+  "slug": "interactive-brokers-mcp",
+  "name": "Interactive Brokers MCP Server",
+  "description": "Enables AI assistants to interact with Interactive Brokers trading accounts to retrieve market data, check positions, and place trades. Includes pre-configured IB Gateway and handles OAuth authentication automatically.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables AI assistants to interact with Interactive Brokers trading accounts to retrieve market data, check positions, and place trades. Includes pre-configured IB Gateway and handles OAuth authentication automatically.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "IB_USERNAME": {
+          "description": "Your Interactive Brokers username (required when IB_HEADLESS_MODE is true)",
+          "type": "string"
+        },
+        "IB_HEADLESS_MODE": {
+          "description": "Enable headless mode for automated environments or when you prefer not to use a browser for authentication",
+          "type": "string",
+          "default": "false"
+        },
+        "IB_PASSWORD_AUTH": {
+          "description": "Your Interactive Brokers password (required when IB_HEADLESS_MODE is true)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": []
+        },
+        {
+          "required": [
+            "IB_HEADLESS_MODE",
+            "IB_USERNAME",
+            "IB_PASSWORD_AUTH"
+          ]
+        }
+      ]
+    },
+    "id": "h8zo03wuu3",
+    "name": "Interactive Brokers MCP Server",
+    "namespace": "code-rabi",
+    "repository": {
+      "url": "https://github.com/code-rabi/interactive-brokers-mcp"
+    },
+    "slug": "interactive-brokers-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/h8zo03wuu3"
+  }
+}

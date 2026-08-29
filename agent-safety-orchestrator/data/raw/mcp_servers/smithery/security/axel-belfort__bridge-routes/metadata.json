@@ -1,0 +1,78 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "axel-belfort/bridge-routes",
+  "namespace": "axel-belfort",
+  "slug": "bridge-routes",
+  "displayName": "Cross-Chain Bridge Routes — 60+ Chains via LI.FI",
+  "description": "Cross-chain bridge route finder API for AI agents. Compare best bridging routes across 60+ chains and 18+ bridges (Stargate, Across, Hop, Connext, etc.) via LI.FI aggregator. Fees, estimated time, and security rating for each route.\n\nTools: bridge_find_best_route.\n\nUse this BEFORE bridging tokens between chains. Essential for finding cheapest, fastest, or safest bridge. IMPORTANT: For gas price comparison across chains, use crypto_estimate_gas.\n\nReturns: {routes[], fees, estimatedTime, bridge}. No API key required — x402 micropayment $0.003/call on Base L2.",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "f0fc4a92-89ec-4970-aa2f-6aea57a2d497",
+    "qualifiedName": "axel-belfort/bridge-routes",
+    "namespace": "axel-belfort",
+    "slug": "bridge-routes",
+    "displayName": "Cross-Chain Bridge Routes — 60+ Chains via LI.FI",
+    "description": "Cross-chain bridge route finder API for AI agents. Compare best bridging routes across 60+ chains and 18+ bridges (Stargate, Across, Hop, Connext, etc.) via LI.FI aggregator. Fees, estimated time, and security rating for each route.\n\nTools: bridge_find_best_route.\n\nUse this BEFORE bridging tokens between chains. Essential for finding cheapest, fastest, or safest bridge. IMPORTANT: For gas price comparison across chains, use crypto_estimate_gas.\n\nReturns: {routes[], fees, estimatedTime, bridge}. No API key required — x402 micropayment $0.003/call on Base L2.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T13:16:22.509Z",
+    "homepage": "https://github.com/Br0ski777/bridge-routes-x402",
+    "bySmithery": false,
+    "owner": "org_01KP0X4NVGGHNS080BASX7BHHV",
+    "score": 0.02040816326530612
+  },
+  "detail": {
+    "qualifiedName": "axel-belfort/bridge-routes",
+    "displayName": "Cross-Chain Bridge Routes — 60+ Chains via LI.FI",
+    "description": "Cross-chain bridge route finder API for AI agents. Compare best bridging routes across 60+ chains and 18+ bridges (Stargate, Across, Hop, Connext, etc.) via LI.FI aggregator. Fees, estimated time, and security rating for each route.\n\nTools: bridge_find_best_route.\n\nUse this BEFORE bridging tokens between chains. Essential for finding cheapest, fastest, or safest bridge. IMPORTANT: For gas price comparison across chains, use crypto_estimate_gas.\n\nReturns: {routes[], fees, estimatedTime, bridge}. No API key required — x402 micropayment $0.003/call on Base L2.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://bridge-routes--axel-belfort.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://bridge-routes--axel-belfort.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "bridge_find_best_route",
+        "description": "Use this when you need to bridge tokens between different blockchains. Returns ranked bridge routes with fees and timing in JSON.\n\n1. routes: array of bridge options ranked by best value\n2. bridgeProv",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token symbol to bridge (e.g. USDC, USDT, ETH, WETH)"
+            },
+            "amount": {
+              "type": "string",
+              "description": "Amount in smallest unit (e.g. 1000000 for 1 USDC with 6 decimals, 1000000000000000000 for 1 ETH)"
+            },
+            "toChain": {
+              "type": "string",
+              "description": "Destination chain ID (1=Ethereum, 8453=Base, 42161=Arbitrum, 10=Optimism, 137=Polygon, 56=BSC, 43114=Avalanche)"
+            },
+            "toToken": {
+              "type": "string",
+              "description": "Destination token symbol if different from source (optional, defaults to same as token)"
+            },
+            "fromChain": {
+              "type": "string",
+              "description": "Source chain ID (1=Ethereum, 8453=Base, 42161=Arbitrum, 10=Optimism, 137=Polygon, 56=BSC, 43114=Avalanche)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

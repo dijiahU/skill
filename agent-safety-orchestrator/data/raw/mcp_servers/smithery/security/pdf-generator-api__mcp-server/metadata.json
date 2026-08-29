@@ -1,0 +1,2554 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "pdf-generator-api/mcp-server",
+  "namespace": "pdf-generator-api",
+  "slug": "mcp-server",
+  "displayName": "PDF Generator API",
+  "description": "MCP server for the PDF Generator API — generate PDFs from templates, manage templates and workspaces, watermark, encrypt, optimize, convert HTML/URL to PDF, fill PDF forms, create e-invoices, generate QR codes, and more.",
+  "discoveryQueries": [
+    "encryption"
+  ],
+  "rawRecord": {
+    "id": "381f1def-38ce-4447-982e-66f409bbb0ec",
+    "qualifiedName": "pdf-generator-api/mcp-server",
+    "namespace": "pdf-generator-api",
+    "slug": "mcp-server",
+    "displayName": "PDF Generator API",
+    "description": "MCP server for the PDF Generator API — generate PDFs from templates, manage templates and workspaces, watermark, encrypt, optimize, convert HTML/URL to PDF, fill PDF forms, create e-invoices, generate QR codes, and more.",
+    "iconUrl": "https://api.smithery.ai/servers/pdf-generator-api/mcp-server/icon",
+    "verified": false,
+    "useCount": 6,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-30T13:41:04.502Z",
+    "homepage": "https://pdfgeneratorapi.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBVX024PDQRPGJT3NPZ4HJC",
+    "score": 0.03768921841210998
+  },
+  "detail": {
+    "qualifiedName": "pdf-generator-api/mcp-server",
+    "displayName": "PDF Generator API",
+    "description": "MCP server for the PDF Generator API — generate PDFs from templates, manage templates and workspaces, watermark, encrypt, optimize, convert HTML/URL to PDF, fill PDF forms, create e-invoices, generate QR codes, and more.",
+    "iconUrl": "https://api.smithery.ai/servers/pdf-generator-api/mcp-server/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcp-server--pdf-generator-api.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-server--pdf-generator-api.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_status",
+        "description": "Returns service status / health",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "add_watermark",
+        "description": "Adds a text or an image watermark to PDF document from base64 string or a remote URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "File name of the returned document"
+                },
+                "output": {
+                  "enum": [
+                    "file",
+                    "base64",
+                    "url"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Returned document output"
+                },
+                "file_url": {
+                  "type": "string",
+                  "description": "PDF file from remote URL to add the watermark to"
+                },
+                "watermark": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "object",
+                      "properties": {
+                        "size": {
+                          "type": "integer",
+                          "default": 48,
+                          "maximum": 80,
+                          "minimum": 7,
+                          "description": "Watermark text font size in px"
+                        },
+                        "color": {
+                          "type": "string",
+                          "default": "#000000",
+                          "description": "Watermark text color in hexadecimal format"
+                        },
+                        "content": {
+                          "type": "string",
+                          "description": "Watermark text"
+                        },
+                        "opacity": {
+                          "type": "number",
+                          "default": 0.5,
+                          "maximum": 1,
+                          "minimum": 0.1,
+                          "description": "Watermark text opaxity"
+                        },
+                        "position": {
+                          "enum": [
+                            "top-left",
+                            "top-center",
+                            "top-right",
+                            "left",
+                            "center",
+                            "right",
+                            "bottom-left",
+                            "bottom-center",
+                            "bottom-right"
+                          ],
+                          "type": "string",
+                          "default": "center",
+                          "description": "Watermark position"
+                        },
+                        "rotation": {
+                          "type": "integer",
+                          "default": 0,
+                          "maximum": 180,
+                          "minimum": -180,
+                          "description": "Watermark rotation"
+                        }
+                      }
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "scale": {
+                          "type": "number",
+                          "default": 1,
+                          "maximum": 1,
+                          "minimum": 0.05,
+                          "description": "Watermark image scale"
+                        },
+                        "position": {
+                          "enum": [
+                            "top-left",
+                            "top-center",
+                            "top-right",
+                            "left",
+                            "center",
+                            "right",
+                            "bottom-left",
+                            "bottom-center",
+                            "bottom-right"
+                          ],
+                          "type": "string",
+                          "default": "center",
+                          "description": "Watermark position"
+                        },
+                        "rotation": {
+                          "type": "integer",
+                          "default": 0,
+                          "maximum": 180,
+                          "minimum": -180,
+                          "description": "Watermark rotation"
+                        },
+                        "content_url": {
+                          "type": "string",
+                          "description": "URL to an image"
+                        }
+                      }
+                    }
+                  },
+                  "description": "Watermark configuration with image and/or text options"
+                }
+              },
+              "description": "The JSON request body. (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "encrypt_document",
+        "description": "Encrypts a PDF document from base64 string or a remote URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name for the PDF file"
+                },
+                "output": {
+                  "enum": [
+                    "file",
+                    "base64",
+                    "url"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Returned document output format"
+                },
+                "file_url": {
+                  "type": "string",
+                  "description": "Public URL to a PDF document"
+                },
+                "user_password": {
+                  "type": "string",
+                  "description": "An user password to open the encrypted document"
+                },
+                "owner_password": {
+                  "type": "string",
+                  "description": "An owner password to open the encrypted document"
+                }
+              },
+              "description": "The JSON request body. (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "decrypt_document",
+        "description": "Decrypts an encrypted PDF document from base64 string or a remote URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name for the PDF file"
+                },
+                "output": {
+                  "enum": [
+                    "file",
+                    "base64",
+                    "url"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Returned document output format"
+                },
+                "file_url": {
+                  "type": "string",
+                  "description": "Public URL to a PDF document"
+                },
+                "user_password": {
+                  "type": "string",
+                  "description": "An user password to open the encrypted document"
+                },
+                "owner_password": {
+                  "type": "string",
+                  "description": "An owner password to open the encrypted document"
+                }
+              },
+              "description": "The JSON request body. (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "optimize_document",
+        "description": "Optimizes the size of a PDF document from base64 string or a remote URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name for the PDF file"
+                },
+                "output": {
+                  "enum": [
+                    "file",
+                    "base64",
+                    "url"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Returned document output format"
+                },
+                "file_url": {
+                  "type": "string",
+                  "description": "Public URL to a PDF document"
+                }
+              },
+              "description": "The JSON request body. (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "make_accessible",
+        "description": "Adds accessibility tags to a PDF document from base64 string or a remote URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name for the PDF file"
+                },
+                "output": {
+                  "enum": [
+                    "file",
+                    "base64"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Returned document output format"
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Processing options (e.g. clear_structure)"
+                },
+                "file_url": {
+                  "type": "string",
+                  "description": "Public URL to a PDF document"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "author": {
+                      "type": "string",
+                      "description": "Document author"
+                    },
+                    "language": {
+                      "type": "string",
+                      "default": "en",
+                      "description": "Document language code"
+                    }
+                  },
+                  "description": "Document metadata such as author and language"
+                }
+              },
+              "description": "The JSON request body. (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "extract_form_fields",
+        "description": "Extracts form fields and their metadata from a PDF document using base64 string or a remote URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "file_url": {
+                  "type": "string",
+                  "description": "Public URL to a PDF document"
+                },
+                "key_field": {
+                  "enum": [
+                    "name",
+                    "id"
+                  ],
+                  "type": "string",
+                  "default": "name",
+                  "example": "name",
+                  "description": "Specifies which field is used to map the extract fields. If your document contains fields with the same name, then we suggest using the id field. Defaults to name."
+                }
+              },
+              "description": "The JSON request body. (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fill_form_fields",
+        "description": "Fills form fields in a PDF document with provided data from base64 string or a remote URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {
+                    "email": "john.doe@example.com",
+                    "lastName": "Doe",
+                    "firstName": "John"
+                  },
+                  "description": "Form field data to fill in the PDF"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name for the PDF file"
+                },
+                "output": {
+                  "enum": [
+                    "file",
+                    "base64",
+                    "url"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Returned document output format"
+                },
+                "file_url": {
+                  "type": "string",
+                  "description": "Public URL to a PDF document"
+                }
+              },
+              "description": "The JSON request body. (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_templates",
+        "description": "Returns a list of templates available for the authenticated workspace",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Filter template by name"
+            },
+            "page": {
+              "type": "number",
+              "default": 1,
+              "description": "Pagination: page to return"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Filter template by tags"
+            },
+            "access": {
+              "enum": [
+                "private",
+                "organization",
+                ""
+              ],
+              "type": "string",
+              "default": "",
+              "description": "Filter template by access type. No values returns all templates. private - returns only private templates, organization - returns only organization templates."
+            },
+            "per_page": {
+              "type": "number",
+              "default": 15,
+              "description": "Pagination: How many records to return per page"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_template",
+        "description": "Creates a new template. If template configuration is not specified in the request body then an empty template is created. Template is placed to the workspace specified in authentication params. Template configuration must be sent in the request body.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Template name"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "A list of tags assigned to a template"
+                },
+                "pages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "width": {
+                        "type": "number",
+                        "description": "Page width in units"
+                      },
+                      "border": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "height": {
+                        "type": "number",
+                        "description": "Page height in units"
+                      },
+                      "layout": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "description": "Defines page specific layout which can differ from the main template layout (e.g page format, margins)."
+                      },
+                      "margins": {
+                        "type": "object",
+                        "properties": {
+                          "right": {
+                            "type": "number",
+                            "description": "Page or label margin from right"
+                          },
+                          "bottom": {
+                            "type": "number",
+                            "description": "Page or label margin from bottom"
+                          }
+                        }
+                      },
+                      "components": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "backgroundImage": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "Defines background image for the page."
+                      },
+                      "conditionalFormats": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  },
+                  "description": "Defines page or label size, margins and components on page or label"
+                },
+                "editor": {
+                  "type": "object",
+                  "properties": {
+                    "heightMultiplier": {
+                      "type": "number"
+                    }
+                  },
+                  "description": "Configuration preferences for the editor"
+                },
+                "layout": {
+                  "type": "object",
+                  "properties": {
+                    "unit": {
+                      "enum": [
+                        "cm",
+                        "in"
+                      ],
+                      "type": "string",
+                      "default": "cm",
+                      "description": "Measure unit"
+                    },
+                    "width": {
+                      "type": "number",
+                      "description": "Page width in units"
+                    },
+                    "format": {
+                      "enum": [
+                        "A4",
+                        "letter",
+                        "custom"
+                      ],
+                      "type": "string",
+                      "default": "A4",
+                      "description": "Defines template page size"
+                    },
+                    "height": {
+                      "type": "number",
+                      "description": "Page height in units"
+                    },
+                    "margins": {
+                      "type": "object",
+                      "properties": {
+                        "top": {
+                          "type": "number",
+                          "description": "Top margin in units"
+                        },
+                        "left": {
+                          "type": "number",
+                          "description": "Left margin in units"
+                        },
+                        "right": {
+                          "type": "number",
+                          "description": "Right margin in units"
+                        },
+                        "bottom": {
+                          "type": "number",
+                          "description": "Bottom margin in units"
+                        }
+                      },
+                      "description": "Page margins in units"
+                    },
+                    "rotation": {
+                      "enum": [
+                        0,
+                        90,
+                        180,
+                        270
+                      ],
+                      "type": "number",
+                      "description": "Page rotation in degrees"
+                    },
+                    "emptyLabels": {
+                      "type": "number",
+                      "default": 0,
+                      "description": "Specifies how many blank lables to add to sheet label."
+                    },
+                    "orientation": {
+                      "enum": [
+                        "portrait",
+                        "landscape"
+                      ],
+                      "type": "string",
+                      "description": "Page orientation"
+                    },
+                    "repeatLayout": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "width": {
+                          "type": "number",
+                          "example": 21,
+                          "description": "Page width in units"
+                        },
+                        "format": {
+                          "enum": [
+                            "A4",
+                            "letter",
+                            "custom"
+                          ],
+                          "type": "string",
+                          "example": "A4",
+                          "description": "Defines template page size"
+                        },
+                        "height": {
+                          "type": "number",
+                          "example": 29.7,
+                          "description": "Page height in units"
+                        }
+                      },
+                      "description": "Defines page size if layout is repeated on the page e.g sheet labels"
+                    }
+                  },
+                  "description": "Defines template layout (e.g page format, margins)."
+                },
+                "isDraft": {
+                  "type": "boolean",
+                  "description": "Indicates if the template is a draft or published."
+                },
+                "dataSettings": {
+                  "type": "object",
+                  "properties": {
+                    "sortBy": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "filterBy": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "transform": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "description": "Defines filter and sort option for root data set."
+                },
+                "barcodeAsImage": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Defines if barcodes are rendered as raster images instead of vector graphics."
+                },
+                "fontSubsetting": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If font-subsetting is applied to document when generated"
+                }
+              },
+              "description": "Template configuration"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_template_schema",
+        "description": "Returns Template JSON Schema which defines the structure of the Template Definition.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "import_template",
+        "description": "Creates a template from existing PDF",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "file_url": {
+                  "type": "string",
+                  "description": "PDF file from remote URL to import"
+                },
+                "template": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Invoice template",
+                      "description": "Template name"
+                    }
+                  },
+                  "description": "Template configuration with name"
+                }
+              },
+              "description": "Import a PDF via URL or base64 string as template (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_template",
+        "description": "Validates if the provided template configuration matches the template JSON schema.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Template name"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "A list of tags assigned to a template"
+                },
+                "pages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "width": {
+                        "type": "number",
+                        "description": "Page width in units"
+                      },
+                      "border": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "height": {
+                        "type": "number",
+                        "description": "Page height in units"
+                      },
+                      "layout": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "description": "Defines page specific layout which can differ from the main template layout (e.g page format, margins)."
+                      },
+                      "margins": {
+                        "type": "object",
+                        "properties": {
+                          "right": {
+                            "type": "number",
+                            "description": "Page or label margin from right"
+                          },
+                          "bottom": {
+                            "type": "number",
+                            "description": "Page or label margin from bottom"
+                          }
+                        }
+                      },
+                      "components": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "backgroundImage": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "Defines background image for the page."
+                      },
+                      "conditionalFormats": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  },
+                  "description": "Defines page or label size, margins and components on page or label"
+                },
+                "editor": {
+                  "type": "object",
+                  "properties": {
+                    "heightMultiplier": {
+                      "type": "number"
+                    }
+                  },
+                  "description": "Configuration preferences for the editor"
+                },
+                "layout": {
+                  "type": "object",
+                  "properties": {
+                    "unit": {
+                      "enum": [
+                        "cm",
+                        "in"
+                      ],
+                      "type": "string",
+                      "default": "cm",
+                      "description": "Measure unit"
+                    },
+                    "width": {
+                      "type": "number",
+                      "description": "Page width in units"
+                    },
+                    "format": {
+                      "enum": [
+                        "A4",
+                        "letter",
+                        "custom"
+                      ],
+                      "type": "string",
+                      "default": "A4",
+                      "description": "Defines template page size"
+                    },
+                    "height": {
+                      "type": "number",
+                      "description": "Page height in units"
+                    },
+                    "margins": {
+                      "type": "object",
+                      "properties": {
+                        "top": {
+                          "type": "number",
+                          "description": "Top margin in units"
+                        },
+                        "left": {
+                          "type": "number",
+                          "description": "Left margin in units"
+                        },
+                        "right": {
+                          "type": "number",
+                          "description": "Right margin in units"
+                        },
+                        "bottom": {
+                          "type": "number",
+                          "description": "Bottom margin in units"
+                        }
+                      },
+                      "description": "Page margins in units"
+                    },
+                    "rotation": {
+                      "enum": [
+                        0,
+                        90,
+                        180,
+                        270
+                      ],
+                      "type": "number",
+                      "description": "Page rotation in degrees"
+                    },
+                    "emptyLabels": {
+                      "type": "number",
+                      "default": 0,
+                      "description": "Specifies how many blank lables to add to sheet label."
+                    },
+                    "orientation": {
+                      "enum": [
+                        "portrait",
+                        "landscape"
+                      ],
+                      "type": "string",
+                      "description": "Page orientation"
+                    },
+                    "repeatLayout": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "width": {
+                          "type": "number",
+                          "example": 21,
+                          "description": "Page width in units"
+                        },
+                        "format": {
+                          "enum": [
+                            "A4",
+                            "letter",
+                            "custom"
+                          ],
+                          "type": "string",
+                          "example": "A4",
+                          "description": "Defines template page size"
+                        },
+                        "height": {
+                          "type": "number",
+                          "example": 29.7,
+                          "description": "Page height in units"
+                        }
+                      },
+                      "description": "Defines page size if layout is repeated on the page e.g sheet labels"
+                    }
+                  },
+                  "description": "Defines template layout (e.g page format, margins)."
+                },
+                "isDraft": {
+                  "type": "boolean",
+                  "description": "Indicates if the template is a draft or published."
+                },
+                "dataSettings": {
+                  "type": "object",
+                  "properties": {
+                    "sortBy": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "filterBy": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "transform": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "description": "Defines filter and sort option for root data set."
+                },
+                "barcodeAsImage": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Defines if barcodes are rendered as raster images instead of vector graphics."
+                },
+                "fontSubsetting": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If font-subsetting is applied to document when generated"
+                }
+              },
+              "description": "Template configuration"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_template",
+        "description": "Returns template configuration",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_template",
+        "description": "Updates template configuration. The template configuration for pages and layout must be complete as the entire configuration is replaced and not merged.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            },
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Template name"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "A list of tags assigned to a template"
+                },
+                "pages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "width": {
+                        "type": "number",
+                        "description": "Page width in units"
+                      },
+                      "border": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "height": {
+                        "type": "number",
+                        "description": "Page height in units"
+                      },
+                      "layout": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "description": "Defines page specific layout which can differ from the main template layout (e.g page format, margins)."
+                      },
+                      "margins": {
+                        "type": "object",
+                        "properties": {
+                          "right": {
+                            "type": "number",
+                            "description": "Page or label margin from right"
+                          },
+                          "bottom": {
+                            "type": "number",
+                            "description": "Page or label margin from bottom"
+                          }
+                        }
+                      },
+                      "components": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "backgroundImage": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "Defines background image for the page."
+                      },
+                      "conditionalFormats": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  },
+                  "description": "Defines page or label size, margins and components on page or label"
+                },
+                "editor": {
+                  "type": "object",
+                  "properties": {
+                    "heightMultiplier": {
+                      "type": "number"
+                    }
+                  },
+                  "description": "Configuration preferences for the editor"
+                },
+                "layout": {
+                  "type": "object",
+                  "properties": {
+                    "unit": {
+                      "enum": [
+                        "cm",
+                        "in"
+                      ],
+                      "type": "string",
+                      "default": "cm",
+                      "description": "Measure unit"
+                    },
+                    "width": {
+                      "type": "number",
+                      "description": "Page width in units"
+                    },
+                    "format": {
+                      "enum": [
+                        "A4",
+                        "letter",
+                        "custom"
+                      ],
+                      "type": "string",
+                      "default": "A4",
+                      "description": "Defines template page size"
+                    },
+                    "height": {
+                      "type": "number",
+                      "description": "Page height in units"
+                    },
+                    "margins": {
+                      "type": "object",
+                      "properties": {
+                        "top": {
+                          "type": "number",
+                          "description": "Top margin in units"
+                        },
+                        "left": {
+                          "type": "number",
+                          "description": "Left margin in units"
+                        },
+                        "right": {
+                          "type": "number",
+                          "description": "Right margin in units"
+                        },
+                        "bottom": {
+                          "type": "number",
+                          "description": "Bottom margin in units"
+                        }
+                      },
+                      "description": "Page margins in units"
+                    },
+                    "rotation": {
+                      "enum": [
+                        0,
+                        90,
+                        180,
+                        270
+                      ],
+                      "type": "number",
+                      "description": "Page rotation in degrees"
+                    },
+                    "emptyLabels": {
+                      "type": "number",
+                      "default": 0,
+                      "description": "Specifies how many blank lables to add to sheet label."
+                    },
+                    "orientation": {
+                      "enum": [
+                        "portrait",
+                        "landscape"
+                      ],
+                      "type": "string",
+                      "description": "Page orientation"
+                    },
+                    "repeatLayout": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "width": {
+                          "type": "number",
+                          "example": 21,
+                          "description": "Page width in units"
+                        },
+                        "format": {
+                          "enum": [
+                            "A4",
+                            "letter",
+                            "custom"
+                          ],
+                          "type": "string",
+                          "example": "A4",
+                          "description": "Defines template page size"
+                        },
+                        "height": {
+                          "type": "number",
+                          "example": 29.7,
+                          "description": "Page height in units"
+                        }
+                      },
+                      "description": "Defines page size if layout is repeated on the page e.g sheet labels"
+                    }
+                  },
+                  "description": "Defines template layout (e.g page format, margins)."
+                },
+                "isDraft": {
+                  "type": "boolean",
+                  "description": "Indicates if the template is a draft or published."
+                },
+                "dataSettings": {
+                  "type": "object",
+                  "properties": {
+                    "sortBy": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "filterBy": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "transform": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "description": "Defines filter and sort option for root data set."
+                },
+                "barcodeAsImage": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Defines if barcodes are rendered as raster images instead of vector graphics."
+                },
+                "fontSubsetting": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If font-subsetting is applied to document when generated"
+                }
+              },
+              "description": "Template configuration"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_template",
+        "description": "Deletes the template from workspace",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_template_data",
+        "description": "Returns all data fields used in the template. Returns structured JSON data that can be used to check which data fields are used in template or autogenerate sample data.\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "copy_template",
+        "description": "Creates a copy of a template to the workspace specified in authentication parameters.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            },
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name for the copied template. If name is not specified then the original name is used."
+                }
+              },
+              "description": "The JSON request body."
+            }
+          }
+        }
+      },
+      {
+        "name": "open_editor",
+        "description": "Returns an unique URL which you can use to redirect your user to the editor from your application or use the generated URL as iframe source to show the editor within your application.\nWhen using iframe, make sure that your browser allows third-party cookies.\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            },
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "example": {
+                    "id": 123,
+                    "name": "John Smith",
+                    "role": "Developer",
+                    "birthdate": "2000-01-01"
+                  },
+                  "description": "Data used to generate the document. This can be an object or array of objects. (Multiple input formats supported)"
+                },
+                "language": {
+                  "enum": [
+                    "en",
+                    "et",
+                    "cs",
+                    "sk",
+                    "ru",
+                    "de"
+                  ],
+                  "type": "string",
+                  "description": "Specify the editor UI language. Defaults to organization editor language."
+                }
+              },
+              "description": "The JSON request body."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_template_versions",
+        "description": "Returns a paginated list of template versions for the specified template.\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "description": "Page number to return."
+            },
+            "per_page": {
+              "type": "number",
+              "description": "Number of items per page."
+            },
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_template_version",
+        "description": "Returns the template definition of the specified version.\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            },
+            "templateVersion": {
+              "type": "number",
+              "description": "Unique ID of the template version."
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_template_version",
+        "description": "Deletes the specified template version.\nProduction versions cannot be deleted.\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            },
+            "templateVersion": {
+              "type": "number",
+              "description": "Unique ID of the template version."
+            }
+          }
+        }
+      },
+      {
+        "name": "promote_template_version",
+        "description": "Promotes the specified template version to production.\nOnly one version can be production at a time.\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "templateId": {
+              "type": "number",
+              "description": "Template unique identifier"
+            },
+            "templateVersion": {
+              "type": "number",
+              "description": "Unique ID of the template version."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_documents",
+        "description": "Returns a list of generated documents created by authorized workspace and stored in PDF Generator API. If master user is specified as workspace in JWT then all documents created in the organization are returned. NB! This endpoint returns only documents generated using the output=url option.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "default": 1,
+              "description": "Pagination: page to return"
+            },
+            "end_date": {
+              "type": "string",
+              "description": "End date. Format: Y-m-d H:i:s. Defaults to current timestamp"
+            },
+            "per_page": {
+              "type": "number",
+              "default": 15,
+              "description": "Pagination: How many records to return per page"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date. Format: Y-m-d H:i:s"
+            },
+            "template_id": {
+              "type": "number",
+              "description": "Template unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_document",
+        "description": "Returns document stored in the Document Storage",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "publicId": {
+              "type": "string",
+              "description": "Resource public id"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_document",
+        "description": "Delete document from the Document Storage",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "publicId": {
+              "type": "string",
+              "description": "Resource public id"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_document",
+        "description": "Merges template with data and returns base64 encoded document or a public URL to a document. NB! When the public URL option is used, the document is stored for 30 days and automatically deleted.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "",
+                  "description": "Generated document name (optional)"
+                },
+                "format": {
+                  "enum": [
+                    "pdf",
+                    "html",
+                    "zip",
+                    "xlsx"
+                  ],
+                  "type": "string",
+                  "default": "pdf",
+                  "description": "Document format. The zip option will return a ZIP file with PDF files."
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "url",
+                    "file",
+                    "viewer"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Response format. When the \"file\" option is used the API returns the file inline. With the \"url\" and \"viewer\" option, the document is stored for 30 days and automatically deleted."
+                },
+                "testing": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "When set to true the generation is not counted as merge (monthly usage), but a large PREVIEW stamp is added."
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "author": {
+                      "type": "string",
+                      "default": "Organization name",
+                      "description": "Document author"
+                    },
+                    "language": {
+                      "type": "string",
+                      "default": "en",
+                      "description": "Document language"
+                    }
+                  },
+                  "description": "Metadata object (optional)"
+                },
+                "template": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "description": "Template ID"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "id": 123,
+                        "name": "John Smith",
+                        "role": "Developer",
+                        "birthdate": "2000-01-01"
+                      }
+                    },
+                    "version_id": {
+                      "type": "number",
+                      "description": "Template version ID"
+                    }
+                  },
+                  "description": "Template id, version, version id and data"
+                }
+              },
+              "description": "Request parameters, including template id, data and formats."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_document_async",
+        "description": "Merges template with data as asynchronous job and makes POST request to callback URL defined in the request. Request uses the same format as response of synchronous generation endpoint.\nThe job id is also added to the callback request as header PDF-API-Job-Id\n\n*Example response from callback URL:*\n```\n{\n  \"response\": \"https://us1.pdfgeneratorapi.com/share/12821/VBERi0xLjcKJeLjz9MKNyAwIG9i\",\n  \"meta\": {\n    \"name\": \"a2bd25b8921f3dc7a440fd7f427f90a4.pdf\",\n    \"display_name\": \"a2bd25b8921f3dc7a440fd7f427f90a4\",\n    \"encoding\": \"binary\",\n    \"content-type\": \"application/pdf\"\n  }\n}\n```\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "",
+                  "description": "Generated document name (optional)"
+                },
+                "format": {
+                  "enum": [
+                    "pdf",
+                    "html",
+                    "zip",
+                    "xlsx"
+                  ],
+                  "type": "string",
+                  "default": "pdf",
+                  "description": "Document format. The zip option will return a ZIP file with PDF files."
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "url",
+                    "viewer"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "The generated document is returned as base64 string or URL which is stored for 30 days and automatically deleted."
+                },
+                "testing": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "When set to true the generation is not counted as merge (monthly usage), but a large PREVIEW stamp is added."
+                },
+                "callback": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "description": "Public callback URL that is used to make a POST request when the document is generated."
+                    },
+                    "headers": {
+                      "type": "object",
+                      "description": "A key-value pairs of header values sent with the POST request."
+                    }
+                  },
+                  "description": "Callback URL and optional headers"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "author": {
+                      "type": "string",
+                      "default": "Organization name",
+                      "description": "Document author"
+                    },
+                    "language": {
+                      "type": "string",
+                      "default": "en",
+                      "description": "Document language"
+                    }
+                  },
+                  "description": "Metadata object (optional)"
+                },
+                "template": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "description": "Template ID"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "id": 123,
+                        "name": "John Smith",
+                        "role": "Developer",
+                        "birthdate": "2000-01-01"
+                      }
+                    },
+                    "version_id": {
+                      "type": "number",
+                      "description": "Template version ID"
+                    }
+                  },
+                  "description": "Template id, version, version id and data"
+                }
+              },
+              "description": "Request parameters, including template id, data and formats."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_document_batch",
+        "description": "Allows to merge multiple templates with data and returns base64 encoded document or public URL to a document. NB! When the public URL option is used, the document is stored for 30 days and automatically deleted.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "",
+                  "description": "Generated document name (optional)"
+                },
+                "format": {
+                  "enum": [
+                    "pdf",
+                    "html",
+                    "zip",
+                    "xlsx"
+                  ],
+                  "type": "string",
+                  "default": "pdf",
+                  "description": "Document format. The zip option will return a ZIP file with PDF files."
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "url",
+                    "file",
+                    "viewer"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Response format. When the \"file\" option is used the API returns the file inline. With the \"url\" and \"viewer\" option, the document is stored for 30 days and automatically deleted."
+                },
+                "testing": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "When set to true the generation is not counted as merge (monthly usage), but a large PREVIEW stamp is added."
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "author": {
+                      "type": "string",
+                      "default": "Organization name",
+                      "description": "Document author"
+                    },
+                    "language": {
+                      "type": "string",
+                      "default": "en",
+                      "description": "Document language"
+                    }
+                  },
+                  "description": "Metadata object (optional)"
+                },
+                "template": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number",
+                        "description": "Template ID"
+                      },
+                      "data": {
+                        "type": "object",
+                        "example": {
+                          "id": 123,
+                          "name": "John Smith",
+                          "role": "Developer",
+                          "birthdate": "2000-01-01"
+                        }
+                      },
+                      "version_id": {
+                        "type": "number",
+                        "description": "Template version ID"
+                      }
+                    },
+                    "description": "Template id, version, version id and data"
+                  },
+                  "description": "Array of templates with data to generate documents from"
+                }
+              },
+              "description": "Request parameters, including template id, data and formats."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_document_batch_async",
+        "description": "Merges template with data as asynchronous job and makes POST request to callback URL defined in the request. Request uses the same format as response of synchronous generation endpoint.\nThe job id is also added to the callback request as header PDF-API-Job-Id\n\n*Example response from callback URL:*\n```\n{\n  \"response\": \"https://us1.pdfgeneratorapi.com/share/12821/VBERi0xLjcKJeLjz9MKNyAwIG9i\",\n  \"meta\": {\n    \"name\": \"a2bd25b8921f3dc7a440fd7f427f90a4.pdf\",\n    \"display_name\": \"a2bd25b8921f3dc7a440fd7f427f90a4\",\n    \"encoding\": \"binary\",\n    \"content-type\": \"application/pdf\"\n  }\n}\n```\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "",
+                  "description": "Generated document name (optional)"
+                },
+                "format": {
+                  "enum": [
+                    "pdf",
+                    "html",
+                    "zip",
+                    "xlsx"
+                  ],
+                  "type": "string",
+                  "default": "pdf",
+                  "description": "Document format. The zip option will return a ZIP file with PDF files."
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "url",
+                    "viewer"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "The generated document is returned as base64 string or URL which is stored for 30 days and automatically deleted."
+                },
+                "testing": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "When set to true the generation is not counted as merge (monthly usage), but a large PREVIEW stamp is added."
+                },
+                "callback": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "description": "Public callback URL that is used to make a POST request when the document is generated."
+                    },
+                    "headers": {
+                      "type": "object",
+                      "description": "A key-value pairs of header values sent with the POST request."
+                    }
+                  },
+                  "description": "Callback URL and optional headers"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "author": {
+                      "type": "string",
+                      "default": "Organization name",
+                      "description": "Document author"
+                    },
+                    "language": {
+                      "type": "string",
+                      "default": "en",
+                      "description": "Document language"
+                    }
+                  },
+                  "description": "Metadata object (optional)"
+                },
+                "template": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number",
+                        "description": "Template ID"
+                      },
+                      "data": {
+                        "type": "object",
+                        "example": {
+                          "id": 123,
+                          "name": "John Smith",
+                          "role": "Developer",
+                          "birthdate": "2000-01-01"
+                        }
+                      },
+                      "version_id": {
+                        "type": "number",
+                        "description": "Template version ID"
+                      }
+                    },
+                    "description": "Template id, version, version id and data"
+                  },
+                  "description": "Array of templates with data to generate documents from"
+                }
+              },
+              "description": "Request parameters, including template id, data and formats."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_async_job_status",
+        "description": "Returns status of an async job",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "jobId": {
+              "type": "string",
+              "description": "Job id"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_workspaces",
+        "description": "Returns all workspaces in the organization",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "default": 1,
+              "description": "Pagination: page to return"
+            },
+            "per_page": {
+              "type": "number",
+              "default": 15,
+              "description": "Pagination: How many records to return per page"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_workspace",
+        "description": "Creates a regular workspace with identifier specified in the request.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "description": "A unique identifier of the workspace. Make sure that you can generate the same identifier for your user."
+                }
+              },
+              "description": "The JSON request body."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_workspace",
+        "description": "Returns workspace information for the workspace identifier specified in the request.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "workspaceIdentifier": {
+              "type": "string",
+              "description": "Workspace identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_workspace",
+        "description": "Delete workspace. Only regular workspaces can be deleted.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "workspaceIdentifier": {
+              "type": "string",
+              "description": "Workspace identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "convert_html_to_pdf",
+        "description": "Converts HTML content to PDF",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "output": {
+                  "enum": [
+                    "base64",
+                    "file"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Output"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "HTML content"
+                },
+                "filename": {
+                  "type": "string",
+                  "description": "Document name"
+                },
+                "paper_size": {
+                  "enum": [
+                    "a0",
+                    "a1",
+                    "a2",
+                    "a3",
+                    "a4",
+                    "legal",
+                    "tabloid",
+                    "letter"
+                  ],
+                  "type": "string",
+                  "default": "a4",
+                  "description": "PDF page size"
+                },
+                "orientation": {
+                  "enum": [
+                    "portrait",
+                    "landscape"
+                  ],
+                  "type": "string",
+                  "default": "portrait",
+                  "description": "Page orientation"
+                }
+              },
+              "description": "The JSON request body."
+            }
+          }
+        }
+      },
+      {
+        "name": "convert_url_to_pdf",
+        "description": "Converts public URL to PDF",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "Public URL"
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "file"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Output"
+                },
+                "filename": {
+                  "type": "string",
+                  "description": "Document name"
+                },
+                "paper_size": {
+                  "enum": [
+                    "a0",
+                    "a1",
+                    "a2",
+                    "a3",
+                    "a4",
+                    "legal",
+                    "tabloid",
+                    "letter"
+                  ],
+                  "type": "string",
+                  "default": "a4",
+                  "description": "PDF page size"
+                },
+                "orientation": {
+                  "enum": [
+                    "portrait",
+                    "landscape"
+                  ],
+                  "type": "string",
+                  "default": "portrait",
+                  "description": "Page orientation"
+                }
+              },
+              "description": "The JSON request body."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_forms",
+        "description": "Returns a list of forms available for the organization",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "default": 1,
+              "description": "Pagination: page to return"
+            },
+            "per_page": {
+              "type": "number",
+              "default": 15,
+              "description": "Pagination: How many records to return per page"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_form",
+        "description": "Creates a new form based on the configuration sent in the request body.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Form name"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Data field name. For example \"name\" can be used as \"{name}\" in the document as placeholder."
+                      },
+                      "type": {
+                        "enum": [
+                          "text",
+                          "integer",
+                          "number",
+                          "date",
+                          "signature"
+                        ],
+                        "type": "string",
+                        "description": "Field type"
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "Field label displayed in the form"
+                      },
+                      "required": {
+                        "type": "boolean",
+                        "description": "Specifies if the field is required or not"
+                      }
+                    },
+                    "description": "Form field definition"
+                  },
+                  "description": "A list of form field objects"
+                },
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "store_document": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  },
+                  "description": "Array of action configurations"
+                },
+                "template_id": {
+                  "type": "number",
+                  "description": "Template ID which is connected to the form"
+                }
+              },
+              "description": "Form configuration"
+            }
+          }
+        }
+      },
+      {
+        "name": "import_form",
+        "description": "Creates a new form based on editable PDF",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "form": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Certificate creator",
+                      "description": "Form name"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "example": "name",
+                            "description": "Data field name. For example \"name\" can be used as \"{name}\" in the document as placeholder."
+                          },
+                          "type": {
+                            "enum": [
+                              "text",
+                              "integer",
+                              "number",
+                              "date",
+                              "signature"
+                            ],
+                            "type": "string",
+                            "example": "text",
+                            "description": "Field type"
+                          },
+                          "label": {
+                            "type": "string",
+                            "example": "Full name",
+                            "description": "Field label displayed in the form"
+                          },
+                          "required": {
+                            "type": "boolean",
+                            "example": false,
+                            "description": "Specifies if the field is required or not"
+                          }
+                        },
+                        "description": "Form field definition"
+                      },
+                      "description": "A list of form field objects"
+                    },
+                    "actions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "store_document": {
+                            "type": "boolean",
+                            "example": true
+                          }
+                        }
+                      },
+                      "description": "Array of action configurations"
+                    },
+                    "template_id": {
+                      "type": "integer",
+                      "example": 123123,
+                      "description": "Template ID which is connected to the form"
+                    }
+                  },
+                  "description": "Form configuration with template, name, actions, and fields"
+                },
+                "file_url": {
+                  "type": "string",
+                  "description": "PDF file from remote URL to import"
+                }
+              },
+              "description": "Import editable PDF via URL or base64 string as form (Multiple input formats supported)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_form",
+        "description": "Returns form configuration",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "formId": {
+              "type": "number",
+              "description": "Form unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_form",
+        "description": "Updates the form configuration. The form configuration must be complete as the entire configuration is replaced and not merged.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "formId": {
+              "type": "number",
+              "description": "Form unique identifier"
+            },
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Form name"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Data field name. For example \"name\" can be used as \"{name}\" in the document as placeholder."
+                      },
+                      "type": {
+                        "enum": [
+                          "text",
+                          "integer",
+                          "number",
+                          "date",
+                          "signature"
+                        ],
+                        "type": "string",
+                        "description": "Field type"
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "Field label displayed in the form"
+                      },
+                      "required": {
+                        "type": "boolean",
+                        "description": "Specifies if the field is required or not"
+                      }
+                    },
+                    "description": "Form field definition"
+                  },
+                  "description": "A list of form field objects"
+                },
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "store_document": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  },
+                  "description": "Array of action configurations"
+                },
+                "template_id": {
+                  "type": "number",
+                  "description": "Template ID which is connected to the form"
+                }
+              },
+              "description": "Form configuration"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_form",
+        "description": "Deletes the form with specified id",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "formId": {
+              "type": "number",
+              "description": "Form unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "share_form",
+        "description": "Creates an unique sharing URL to collect form data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "formId": {
+              "type": "number",
+              "description": "Form unique identifier"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_qr_code",
+        "description": "Creates a QR code based on the configuration",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "color": {
+                  "type": "string",
+                  "default": "#000000",
+                  "description": "QR code in hexadecimal format"
+                },
+                "output": {
+                  "enum": [
+                    "file",
+                    "base64"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Response format"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "The content which is used to generate QR code"
+                },
+                "logo_url": {
+                  "type": "string",
+                  "description": "A logo URL to an image to add on the QR code"
+                },
+                "logo_base64": {
+                  "type": "string",
+                  "description": "A logo as a base64 image string to add on the QR code"
+                }
+              },
+              "description": "QR Code configuration"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_einvoice",
+        "description": "This endpoint transforms a JSON payload into an XML-based e-invoice that is fully compliant with the European EN 16931 standard. The generated output can be formatted in either UBL (Universal Business Language) or CII (Cross-Industry Invoice) syntax, ensuring interoperability across B2B and B2G platforms. The JSON payload follows Peppol BIS Billing 3.0 UBL Invoice described here: https://docs.peppol.eu/poacc/billing/3.0/",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "description": "JSON payload that represents the Peppol BIS Billing 3.0 UBL Invoice (https://docs.peppol.eu/poacc/billing/3.0/) Use the Get schema endpoint to see the detailed payload structure."
+                },
+                "type": {
+                  "enum": [
+                    "UBL",
+                    "CII"
+                  ],
+                  "type": "string",
+                  "default": "UBL",
+                  "description": "Formatting type."
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "file"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Response format. When the \"file\" option is used the API returns the file inline."
+                }
+              },
+              "description": "eInvoice conversion"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_xrechnung_einvoice",
+        "description": "This endpoint transforms a JSON payload into an XML-based XRechnung e-invoice that is fully compliant with the European EN 16931 standard. The generated output follows the XRechnung format and can be formatted in either UBL (Universal Business Language) or CII (Cross-Industry Invoice) syntax, ensuring interoperability across B2B and B2G platforms. The JSON payload follows Peppol BIS Billing 3.0 UBL Invoice described here: https://docs.peppol.eu/poacc/billing/3.0/",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "description": "JSON payload that represents the Peppol BIS Billing 3.0 UBL Invoice (https://docs.peppol.eu/poacc/billing/3.0/) Use the Get schema endpoint to see the detailed payload structure."
+                },
+                "type": {
+                  "enum": [
+                    "UBL",
+                    "CII"
+                  ],
+                  "type": "string",
+                  "default": "UBL",
+                  "description": "Formatting type."
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "file"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Response format. When the \"file\" option is used the API returns the file inline."
+                }
+              },
+              "description": "eInvoice conversion"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_facturx_einvoice",
+        "description": "This endpoint transforms a JSON payload a Factur-X e-invoice that is fully compliant with the European EN 16931 standard. The generated output is always a PDF document, embedding a structured CII (Cross-Industry Invoice) XML according to the Factur-X format into a human-readable invoice, ensuring interoperability across B2B and B2G platforms. The JSON payload follows Peppol BIS Billing 3.0 UBL Invoice described here: https://docs.peppol.eu/poacc/billing/3.0/",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "requestBody": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "",
+                  "description": "Generated document name (optional)"
+                },
+                "output": {
+                  "enum": [
+                    "base64",
+                    "url",
+                    "file",
+                    "viewer"
+                  ],
+                  "type": "string",
+                  "default": "base64",
+                  "description": "Response format. When the \"file\" option is used the API returns the file inline. With the \"url\" and \"viewer\" option, the document is stored for 30 days and automatically deleted."
+                },
+                "profile": {
+                  "enum": [
+                    "basic",
+                    "basicwl",
+                    "en16931",
+                    "minimum",
+                    "extended",
+                    "xrechnung"
+                  ],
+                  "type": "string",
+                  "default": "basic",
+                  "description": "Factur-X conformance level."
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "author": {
+                      "type": "string",
+                      "default": "Organization name",
+                      "description": "Document author"
+                    },
+                    "language": {
+                      "type": "string",
+                      "default": "en",
+                      "description": "Document language"
+                    }
+                  },
+                  "description": "Metadata object (optional)"
+                },
+                "template": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "description": "Template ID"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "JSON payload that represents the Peppol BIS Billing 3.0 UBL Invoice (https://docs.peppol.eu/poacc/billing/3.0/) Use the Get schema endpoint to see the detailed payload structure."
+                    },
+                    "version_id": {
+                      "type": "number",
+                      "description": "Template version ID"
+                    }
+                  },
+                  "description": "Template id, version, version id and data"
+                }
+              },
+              "description": "eInvoice conversion"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_einvoice_schema",
+        "description": "Returns e-invoice JSON schema which defines the structure of the e-invoice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "generate-pdf",
+        "description": "Generate a PDF document by selecting a template and providing data to fill it with",
+        "arguments": [
+          {
+            "name": "templateId",
+            "description": "The ID of the template to use for PDF generation",
+            "required": true
+          },
+          {
+            "name": "outputFormat",
+            "description": "Output format: base64, url, or file (default: url)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "convert-to-pdf",
+        "description": "Convert HTML content or a public URL to a PDF document",
+        "arguments": [
+          {
+            "name": "source",
+            "description": "HTML content or public URL to convert to PDF",
+            "required": true
+          },
+          {
+            "name": "paperSize",
+            "description": "Paper size: a4, letter, a3, etc. (default: a4)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "create-einvoice",
+        "description": "Create an e-invoice compliant with EN 16931 standard in UBL, CII, XRechnung, or Factur-X format",
+        "arguments": [
+          {
+            "name": "format",
+            "description": "E-invoice format: UBL, CII, XRechnung, or Factur-X",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

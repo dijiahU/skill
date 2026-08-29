@@ -1,0 +1,222 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "jlazoff/atkn",
+  "namespace": "jlazoff",
+  "slug": "atkn",
+  "displayName": "ATKN (Agent Trust & Knowledge Network)",
+  "description": "Trust-and-knowledge MCP server for agent ecosystems: score trust, verify/certify agents, register identities, and query a Neo4j-backed knowledge graph.",
+  "discoveryQueries": [
+    "trust",
+    "credential",
+    "secret",
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "9a35254c-1385-456d-8a66-1604d691951a",
+    "qualifiedName": "jlazoff/atkn",
+    "namespace": "jlazoff",
+    "slug": "atkn",
+    "displayName": "ATKN (Agent Trust & Knowledge Network)",
+    "description": "Trust-and-knowledge MCP server for agent ecosystems: score trust, verify/certify agents, register identities, and query a Neo4j-backed knowledge graph.",
+    "iconUrl": "https://api.smithery.ai/servers/jlazoff/atkn/icon",
+    "verified": false,
+    "useCount": 129,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-24T07:25:05.801Z",
+    "homepage": "https://kosherninja.com",
+    "bySmithery": false,
+    "owner": "org_01KNBVD52MNH4AXB20WZTQ7P0V",
+    "score": 0.059714795008912656
+  },
+  "detail": {
+    "qualifiedName": "jlazoff/atkn",
+    "displayName": "ATKN (Agent Trust & Knowledge Network)",
+    "description": "Trust-and-knowledge MCP server for agent ecosystems: score trust, verify/certify agents, register identities, and query a Neo4j-backed knowledge graph.",
+    "iconUrl": "https://api.smithery.ai/servers/jlazoff/atkn/icon",
+    "remote": true,
+    "deploymentUrl": "https://atkn--jlazoff.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://atkn--jlazoff.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "atkn_trust_score",
+        "description": "Compute trust score for an agent using 6-dimensional reputation analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Unique identifier of the agent to score"
+            },
+            "include_history": {
+              "type": "boolean",
+              "description": "Include recent outcome history"
+            }
+          }
+        }
+      },
+      {
+        "name": "atkn_verify_agent",
+        "description": "Full Gabbay argumentation-based agent verification with circuit breaker check",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "depth": {
+              "enum": [
+                "basic",
+                "standard",
+                "deep"
+              ],
+              "type": "string",
+              "description": "Verification depth level"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Agent to verify"
+            }
+          }
+        }
+      },
+      {
+        "name": "atkn_certify_agent",
+        "description": "Complete Gabbay analysis + on-chain ERC-721 trust certification on Base",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Agent to certify"
+            },
+            "wallet_address": {
+              "type": "string",
+              "description": "Wallet address for certificate"
+            }
+          }
+        }
+      },
+      {
+        "name": "atkn_register_agent",
+        "description": "Register agent in ATKN with wallet-linked profile and initial trust score",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Human-readable name"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Unique identifier for the agent"
+            },
+            "category": {
+              "enum": [
+                "infrastructure_ops",
+                "ai_services",
+                "development",
+                "orchestration",
+                "research",
+                "monitoring"
+              ],
+              "type": "string",
+              "description": "Classification category for the agent"
+            },
+            "description": {
+              "type": "string",
+              "description": "Agent description"
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of capabilities"
+            },
+            "wallet_address": {
+              "type": "string",
+              "description": "Wallet address on Base"
+            }
+          }
+        }
+      },
+      {
+        "name": "atkn_query_knowledge",
+        "description": "Query the knowledge graph (3,012+ nodes, 1,391 academic papers)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of results"
+            },
+            "query": {
+              "type": "string",
+              "description": "Natural language or CYPHER query"
+            }
+          }
+        }
+      },
+      {
+        "name": "atkn_behavioral_score",
+        "description": "KosherNinja 10-category behavioral scoring analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string",
+              "description": "Optional scoring context"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Agent to score behaviorally"
+            }
+          }
+        }
+      },
+      {
+        "name": "atkn_network_stats",
+        "description": "Free — ATKN network statistics and growth metrics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "window_hours": {
+              "type": "number",
+              "description": "Optional rolling window in hours for usage counters"
+            },
+            "include_pricing": {
+              "type": "boolean",
+              "description": "Whether to include pricing metadata in the response"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "network_stats",
+        "uri": "atkn://network/stats",
+        "description": "Latest ATKN network metrics as JSON",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "atkn_quickstart",
+        "description": "How to use ATKN tools for trust, verification, and knowledge retrieval",
+        "arguments": [
+          {
+            "name": "goal",
+            "description": "Goal to focus the workflow (trust, verify, register, knowledge)",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "registry": "glama",
+  "id": "ijee910o55",
+  "namespace": "mayurnarang9099-maker",
+  "slug": "snow-azure-githubMCP",
+  "name": "ServiceNow MCP Server",
+  "description": "Enables Claude to interact with ServiceNow instances through the ServiceNow API, allowing data retrieval, record management, and workflow execution. Supports multiple authentication methods and tool packaging for role-based access control.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to interact with ServiceNow instances through the ServiceNow API, allowing data retrieval, record management, and workflow execution. Supports multiple authentication methods and tool packaging for role-based access control.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_TOOL_PACKAGE": {
+          "description": "The tool package to load (e.g., 'service_desk', 'catalog_builder', 'full', 'none'). If not set, defaults to 'full'.",
+          "type": "string",
+          "default": "full"
+        },
+        "SERVICENOW_API_KEY": {
+          "description": "Your ServiceNow API key (required if SERVICENOW_AUTH_TYPE=api_key)",
+          "type": "string"
+        },
+        "SERVICENOW_PASSWORD": {
+          "description": "Your ServiceNow password for basic authentication",
+          "type": "string"
+        },
+        "SERVICENOW_USERNAME": {
+          "description": "Your ServiceNow username for basic authentication",
+          "type": "string"
+        },
+        "SERVICENOW_AUTH_TYPE": {
+          "description": "The authentication type to use: 'basic', 'oauth', or 'api_key'",
+          "type": "string",
+          "default": "basic"
+        },
+        "SERVICENOW_CLIENT_ID": {
+          "description": "Your OAuth client ID (required if SERVICENOW_AUTH_TYPE=oauth)",
+          "type": "string"
+        },
+        "SERVICENOW_TOKEN_URL": {
+          "description": "The OAuth token URL (required if SERVICENOW_AUTH_TYPE=oauth, e.g., https://your-instance.service-now.com/oauth_token.do)",
+          "type": "string"
+        },
+        "SERVICENOW_INSTANCE_URL": {
+          "description": "The URL of your ServiceNow instance (e.g., https://your-instance.service-now.com)",
+          "type": "string"
+        },
+        "SERVICENOW_CLIENT_SECRET": {
+          "description": "Your OAuth client secret (required if SERVICENOW_AUTH_TYPE=oauth)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_USERNAME",
+            "SERVICENOW_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_CLIENT_ID",
+            "SERVICENOW_CLIENT_SECRET",
+            "SERVICENOW_TOKEN_URL"
+          ]
+        },
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "ijee910o55",
+    "name": "ServiceNow MCP Server",
+    "namespace": "mayurnarang9099-maker",
+    "repository": {
+      "url": "https://github.com/mayurnarang9099-maker/snow-azure-githubMCP"
+    },
+    "slug": "snow-azure-githubMCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ijee910o55"
+  }
+}

@@ -1,0 +1,598 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "lightpaper/lightpaper",
+  "namespace": "lightpaper",
+  "slug": "lightpaper",
+  "displayName": "Lightpaper",
+  "description": "Publish and manage high-quality markdown documents with automated quality feedback. Establish professional authority by verifying identity, domains, and academic credentials. Discover and research curated articles from a network of verified experts and authors.",
+  "discoveryQueries": [
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "2413c5c5-ada6-4a62-9c03-8b1cab986a7f",
+    "qualifiedName": "lightpaper/lightpaper",
+    "namespace": "lightpaper",
+    "slug": "lightpaper",
+    "displayName": "Lightpaper",
+    "description": "Publish and manage high-quality markdown documents with automated quality feedback. Establish professional authority by verifying identity, domains, and academic credentials. Discover and research curated articles from a network of verified experts and authors.",
+    "iconUrl": "https://api.smithery.ai/servers/lightpaper/lightpaper/icon",
+    "verified": false,
+    "useCount": 1855,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-04T12:53:23.206Z",
+    "homepage": "https://lightpaper.org",
+    "bySmithery": false,
+    "owner": "org_01KNBVHER5XHJ68H1Y51TXMVM7",
+    "score": 0.024390243902439025
+  },
+  "detail": {
+    "qualifiedName": "lightpaper/lightpaper",
+    "displayName": "Lightpaper",
+    "description": "Publish and manage high-quality markdown documents with automated quality feedback. Establish professional authority by verifying identity, domains, and academic credentials. Discover and research curated articles from a network of verified experts and authors.",
+    "iconUrl": "https://api.smithery.ai/servers/lightpaper/lightpaper/icon",
+    "remote": true,
+    "deploymentUrl": "https://lightpaper--lightpaper.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://lightpaper--lightpaper.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "API Key",
+              "x-order": 0,
+              "description": "Your lightpaper.org API key (starts with lp_free_ or lp_live_). Optional — tools authenticate interactively via email OTP."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "publish_lightpaper",
+        "description": "Publish a document to lightpaper.org. Returns a permanent URL, quality score (0-100), and quality suggestions. Content must be markdown with at least 300 words and one heading.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Custom URL slug (max 80 chars). Auto-generated from title if omitted."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Tags for search filtering (max 50)"
+            },
+            "title": {
+              "type": "string",
+              "description": "Document title (max 500 chars)"
+            },
+            "format": {
+              "enum": [
+                "paper",
+                "essay",
+                "post"
+              ],
+              "type": "string",
+              "default": "post",
+              "description": "Presentation format — choose based on the content's nature. 'paper': research papers, literature reviews, technical analyses — serif font, numbered sections, first blockquote as Abstract, academic tables. 'essay': sustained arguments, cultural commentary, longform narratives — elegant serif, drop cap, pull-quote blockquotes, ornamental dividers. 'post': practical articles, tutorials, technical writeups — clean sans-serif, callout-box blockquotes, prominent code blocks."
+            },
+            "listed": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, document appears in search results and sitemap."
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            },
+            "authors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Author display name"
+                  },
+                  "handle": {
+                    "type": "string",
+                    "description": "Author handle (links to /@handle profile)"
+                  }
+                }
+              },
+              "maxItems": 20,
+              "description": "Author attribution. If omitted, the publishing account is not credited by name."
+            },
+            "content": {
+              "type": "string",
+              "description": "Markdown content (min 300 words, must include at least one # heading)"
+            },
+            "subtitle": {
+              "type": "string",
+              "description": "Optional subtitle (max 1000 chars)"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_lightpapers",
+        "description": "Search published documents on lightpaper.org. Returns titles, URLs, authors, quality scores.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "enum": [
+                "relevance",
+                "recent",
+                "quality"
+              ],
+              "type": "string",
+              "default": "relevance",
+              "description": "Sort order"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Comma-separated tag filter (e.g. 'python,ml')"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "description": "Results per page (1-100)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Full-text search query. Omit to browse all articles (use with sort/author/tags filters)."
+            },
+            "author": {
+              "type": "string",
+              "description": "Filter by author handle (e.g. 'alice')"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "description": "Pagination offset"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            },
+            "min_quality": {
+              "type": "integer",
+              "default": 40,
+              "description": "Minimum quality score 0-100 (default 40)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_lightpaper",
+        "description": "Get a document by ID from lightpaper.org. Returns full content, metadata, quality score, and author info.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Document ID (doc_xxxx)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "update_lightpaper",
+        "description": "Update an existing document. Only the document owner can update. Content updates create a new version (max 100 versions). Quality score is recalculated on content change.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Document ID"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Replace tags"
+            },
+            "title": {
+              "type": "string",
+              "description": "New title"
+            },
+            "format": {
+              "enum": [
+                "paper",
+                "essay",
+                "post"
+              ],
+              "type": "string",
+              "description": "Change presentation format (paper/essay/post)"
+            },
+            "listed": {
+              "type": "boolean",
+              "description": "Set to false to remove from search results and sitemap"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            },
+            "authors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Author display name"
+                  },
+                  "handle": {
+                    "type": "string",
+                    "description": "Author handle on lightpaper.org"
+                  }
+                }
+              },
+              "description": "Replace author list"
+            },
+            "content": {
+              "type": "string",
+              "description": "New markdown content (creates a new version)"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Replace custom metadata"
+            },
+            "subtitle": {
+              "type": "string",
+              "description": "New subtitle"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_lightpaper",
+        "description": "Delete a document (soft-delete). Only the document owner can delete. Returns 204 on success.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Document ID to delete"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_my_lightpapers",
+        "description": "List all documents published by the authenticated account. Returns id, title, slug, quality_score, listed status, URLs, and timestamps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_account_info",
+        "description": "Get the authenticated account's info: handle, display name, email, gravity level, verification badges, and tier.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "update_account",
+        "description": "Update account profile fields: display_name, bio, and linkedin_url (shown as clickable badge on published documents).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "bio": {
+              "type": "string",
+              "description": "Short bio (max 2000 chars)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            },
+            "display_name": {
+              "type": "string",
+              "description": "New display name (max 200 chars)"
+            },
+            "linkedin_url": {
+              "type": "string",
+              "description": "LinkedIn profile URL (e.g. 'https://www.linkedin.com/in/username/'). Makes the LinkedIn badge clickable on all published documents."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_gravity_info",
+        "description": "Get the authenticated account's gravity level details: current level (0-5), search ranking multiplier, featured quality threshold, verification badges, and instructions for reaching the next level.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_author_profile",
+        "description": "Get a public author profile by handle. Returns display name, bio, gravity level, badges, and their published documents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "handle": {
+              "type": "string",
+              "description": "Author handle (without @)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_document_versions",
+        "description": "List version history for a document. Each version has a content hash, word count, reading time, and timestamp.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Document ID"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_credentials",
+        "description": "List all verified credentials submitted for the authenticated account.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "auth_email",
+        "description": "Send a 6-digit verification code to the user's email. Works for both signup and login. After calling this, ask the user for the code and call auth_verify.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email address"
+            },
+            "handle": {
+              "type": "string",
+              "description": "Unique handle (e.g. 'alice'). Used in author profiles at /@handle."
+            },
+            "display_name": {
+              "type": "string",
+              "description": "User's display name (for new accounts)"
+            }
+          }
+        }
+      },
+      {
+        "name": "auth_verify",
+        "description": "Verify a 6-digit code from the user's email. Returns account info and an API key. Use the returned api_key in all subsequent tool calls.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "6-digit code from the user's email"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Session ID returned by auth_email"
+            }
+          }
+        }
+      },
+      {
+        "name": "auth_linkedin",
+        "description": "Start LinkedIn OAuth for login/signup. Returns an authorization URL for the user to open in their browser, and a session_id for polling. After the user completes OAuth, call auth_linkedin_poll.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "auth_linkedin_poll",
+        "description": "Poll for LinkedIn OAuth completion. Returns the API key once the user completes the OAuth flow. The API key is only returned on the first poll — subsequent polls return null.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "description": "Session ID returned by auth_linkedin"
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_domain",
+        "description": "Start or check domain DNS verification. Call with domain to start (returns TXT record to add), call without to check status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to verify (omit to check existing verification)"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_linkedin",
+        "description": "Start or check LinkedIn verification. Call with action='start' to get OAuth URL (user must open in browser), action='check' to poll completion.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "start",
+                "check"
+              ],
+              "type": "string",
+              "description": "'start' to begin OAuth, 'check' to poll completion"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_orcid",
+        "description": "Verify an ORCID iD. Validates against the public ORCID API. Fully automatable — no browser needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            },
+            "orcid_id": {
+              "type": "string",
+              "description": "ORCID iD (e.g. 0000-0002-1825-0097)"
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_credentials",
+        "description": "Submit verified credentials (degrees, certifications, employment) for an account. Evidence tiers: 'confirmed' (3pts, institutional API match), 'supported' (2pts, corroborating evidence), 'claimed' (1pt, user's word). Credential points combine with identity verifications for gravity: e.g., LinkedIn + confirmed degree (3 pts) = Level 3. Tiers can only be upgraded, never downgraded on re-submit.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "description": "API key to authenticate as a specific account. Overrides the default LIGHTPAPER_API_KEY. Use the key returned by onboard_pilot to act on behalf of that account."
+            },
+            "credentials": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "credential_type",
+                  "institution",
+                  "title",
+                  "evidence_tier"
+                ],
+                "properties": {
+                  "year": {
+                    "type": "integer",
+                    "description": "Year awarded/completed"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Credential title (e.g. 'Bachelor of Science in Computer Science')"
+                  },
+                  "agent_notes": {
+                    "type": "string",
+                    "description": "How you verified this credential"
+                  },
+                  "institution": {
+                    "type": "string",
+                    "description": "Institution name (e.g. 'Curtin University')"
+                  },
+                  "evidence_data": {
+                    "type": "object",
+                    "description": "API responses, URLs, or other verification data"
+                  },
+                  "evidence_tier": {
+                    "enum": [
+                      "confirmed",
+                      "supported",
+                      "claimed"
+                    ],
+                    "type": "string",
+                    "description": "Evidence strength (confirmed=3pts, supported=2pts, claimed=1pt)"
+                  },
+                  "credential_type": {
+                    "enum": [
+                      "degree",
+                      "certification",
+                      "employment"
+                    ],
+                    "type": "string",
+                    "description": "Type of credential (degree, certification, or employment)"
+                  }
+                }
+              },
+              "maxItems": 20
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "write-article",
+        "description": "Write and publish an article on lightpaper.org. Guides you through the full flow.",
+        "arguments": [
+          {
+            "name": "topic",
+            "description": "What to write about",
+            "required": true
+          },
+          {
+            "name": "format",
+            "description": "paper, essay, or post",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "setup-account",
+        "description": "Create a lightpaper.org account and optionally verify identity for higher gravity.",
+        "arguments": []
+      }
+    ]
+  }
+}

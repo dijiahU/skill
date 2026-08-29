@@ -1,0 +1,43 @@
+# Test Architecture (BDD + Playwright)
+
+## Goal
+
+Make tests:
+
+- readable as specification (Gherkin)
+- resistant to flakes (condition-first waits)
+- cheap to maintain (thin steps)
+- convenient for AI agents (explicit selectors/waits/context)
+
+## Layering
+
+| Layer | Responsibility | Must NOT contain |
+|------|----------------|------------------|
+| `.feature` | WHAT: business intent + explicit expectations | hidden branching, implementation details |
+| Step Definitions | HOW (wiring): call the right API/fixture | loops, retries, complex if/else |
+| Fixtures/Utils | HOW (mechanics): Playwright interactions, waits | business rules, scenario asserts |
+| Page Objects / Components | UI surface: locators + small actions | end-to-end flows, environment setup |
+
+## Suggested structure
+
+```
+features/
+  smoke/
+  regression/
+support/
+  step_definitions/
+  fixtures/
+  pages/
+  utils/
+```
+
+## Conventions
+
+- One step = one action (click/fill/assert).
+- All asserts — only in `Then`.
+- No `sleep` without condition.
+- Locators: `data-testid` → role/name → label/placeholder → text (last resort).
+
+---
+
+Template used by `auditing-bdd-tests`.

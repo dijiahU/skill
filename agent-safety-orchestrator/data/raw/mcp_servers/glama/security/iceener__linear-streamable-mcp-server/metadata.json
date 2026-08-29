@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "alf9yyw8x6",
+  "namespace": "iceener",
+  "slug": "linear-streamable-mcp-server",
+  "name": "Linear Streamable MCP Server",
+  "description": "Enables AI agents to manage Linear issues, projects, teams, users, comments, and cycles through an optimized interface designed specifically for language models. Supports both local and remote deployment with OAuth authentication and batch operations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to manage Linear issues, projects, teams, users, comments, and cycles through an optimized interface designed specifically for language models. Supports both local and remote deployment with OAuth authentication and batch operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Port for the local server",
+          "type": "string"
+        },
+        "NODE_ENV": {
+          "description": "Environment mode (allows localhost callback in dev)",
+          "type": "string",
+          "default": "development"
+        },
+        "LINEAR_API_KEY": {
+          "description": "Your Linear Personal Access Token (Settings → Security)",
+          "type": "string"
+        },
+        "AUTH_REQUIRE_RS": {
+          "description": "Challenge when Authorization missing or not one of our RS tokens",
+          "type": "string",
+          "default": "true"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "OAuth Client ID for Linear OAuth application",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "OAuth Client Secret for Linear OAuth application",
+          "type": "string"
+        },
+        "AUTH_ALLOW_LINEAR_BEARER": {
+          "description": "If you still want to allow Linear PATs as Bearer in RS-only mode",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "LINEAR_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "OAUTH_CLIENT_ID",
+            "OAUTH_CLIENT_SECRET"
+          ]
+        }
+      ]
+    },
+    "id": "alf9yyw8x6",
+    "name": "Linear Streamable MCP Server",
+    "namespace": "iceener",
+    "repository": {
+      "url": "https://github.com/iceener/linear-streamable-mcp-server"
+    },
+    "slug": "linear-streamable-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/alf9yyw8x6"
+  }
+}

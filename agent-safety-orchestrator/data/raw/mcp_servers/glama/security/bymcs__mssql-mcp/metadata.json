@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "mwgd4d3c6v",
+  "namespace": "bymcs",
+  "slug": "mssql-mcp",
+  "name": "MS SQL Server MCP Server",
+  "description": "Enables interaction with Microsoft SQL Server and Azure SQL databases through natural language, supporting queries, schema exploration, stored procedures, and complete database operations with connection pooling and security features.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Microsoft SQL Server and Azure SQL databases through natural language, supporting queries, schema exploration, stored procedures, and complete database operations with connection pooling and security features.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DB_PORT": {
+          "description": "SQL Server port",
+          "type": "string",
+          "default": "1433"
+        },
+        "DB_USER": {
+          "description": "Username",
+          "type": "string"
+        },
+        "DB_SERVER": {
+          "description": "SQL Server hostname",
+          "type": "string"
+        },
+        "DB_ENCRYPT": {
+          "description": "Enable TLS encryption (required for Azure SQL)",
+          "type": "string",
+          "default": "true"
+        },
+        "DB_DATABASE": {
+          "description": "Database name",
+          "type": "string"
+        },
+        "DB_PASSWORD": {
+          "description": "Password",
+          "type": "string"
+        },
+        "DB_REQUEST_TIMEOUT": {
+          "description": "Request timeout (ms)",
+          "type": "string",
+          "default": "30000"
+        },
+        "DB_CONNECTION_TIMEOUT": {
+          "description": "Connection timeout (ms)",
+          "type": "string",
+          "default": "30000"
+        },
+        "DB_TRUST_SERVER_CERTIFICATE": {
+          "description": "Trust self-signed certificates",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DB_SERVER"
+      ]
+    },
+    "id": "mwgd4d3c6v",
+    "name": "MS SQL Server MCP Server",
+    "namespace": "bymcs",
+    "repository": {
+      "url": "https://github.com/bymcs/mssql-mcp"
+    },
+    "slug": "mssql-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mwgd4d3c6v"
+  }
+}

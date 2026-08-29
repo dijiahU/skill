@@ -1,0 +1,235 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "voidly/mcp-server",
+  "namespace": "voidly",
+  "slug": "mcp-server",
+  "displayName": "Voidly",
+  "description": "Global censorship intelligence for AI agents. Real-time monitoring across 126 countries with 2.2B+ measurements. 11 tools: censorship index, domain blocking checks, incident tracking, risk forecasting, platform risk scores, and service accessibility. E2E encrypted agent messaging relay included.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "id": "c36e288c-c17d-4a51-addb-6d5f6163ece4",
+    "qualifiedName": "voidly/mcp-server",
+    "namespace": "voidly",
+    "slug": "mcp-server",
+    "displayName": "Voidly",
+    "description": "Global censorship intelligence for AI agents. Real-time monitoring across 126 countries with 2.2B+ measurements. 11 tools: censorship index, domain blocking checks, incident tracking, risk forecasting, platform risk scores, and service accessibility. E2E encrypted agent messaging relay included.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/voidly.ai.ico",
+    "verified": false,
+    "useCount": 2809,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-25T00:52:33.834Z",
+    "homepage": "https://voidly.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBVRZ63YMV6PTW4TRSX7Q3N",
+    "score": 0.013333333333333334
+  },
+  "detail": {
+    "qualifiedName": "voidly/mcp-server",
+    "displayName": "Voidly",
+    "description": "Global censorship intelligence for AI agents. Real-time monitoring across 126 countries with 2.2B+ measurements. 11 tools: censorship index, domain blocking checks, incident tracking, risk forecasting, platform risk scores, and service accessibility. E2E encrypted agent messaging relay included.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/voidly.ai.ico",
+    "remote": true,
+    "deploymentUrl": "https://mcp-server--voidly.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-server--voidly.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_censorship_index",
+        "description": "Get the global censorship index with rankings for all monitored countries. Returns country scores, risk tiers, and measurement counts for 126+ countries based on 2.2B+ network measurements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_country_status",
+        "description": "Get detailed censorship status for a specific country including blocked domains, anomaly rates, risk tier, and recent incidents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "ISO 3166-1 alpha-2 country code (e.g., IR for Iran, CN for China, RU for Russia)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_domain_blocked",
+        "description": "Check if a specific domain is blocked in a country. Returns blocking status, evidence sources, confidence level, and blocking method (DNS, TCP, TLS, HTTP).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to check for blocking (e.g., twitter.com, whatsapp.com, telegram.org)"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "ISO 3166-1 alpha-2 country code (e.g., IR, CN, TR)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_active_incidents",
+        "description": "Get active censorship incidents with evidence links, severity ratings, and affected services. Each incident is citable with a human-readable ID (e.g., IR-2026-0142).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of incidents to return (default: 20, max: 200)"
+            },
+            "country": {
+              "type": "string",
+              "description": "Filter by ISO country code (e.g., IR, CN). Omit for all countries."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_incident_detail",
+        "description": "Get detailed information about a specific censorship incident including evidence links, affected domains, blocking methods, and timeline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "incident_id": {
+              "type": "string",
+              "description": "Incident ID — either human-readable (e.g., IR-2026-0142) or hash ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_claim",
+        "description": "Verify a censorship claim against real measurement data from OONI, CensoredPlanet, and IODA. Returns verdict with supporting evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "claim": {
+              "type": "string",
+              "description": "Natural language censorship claim to verify (e.g., \"Twitter is blocked in Iran\", \"WhatsApp is censored in China\")"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_risk_forecast",
+        "description": "Get 7-day internet shutdown and censorship risk forecast for a country using XGBoost ML model trained on historical OONI data and political event calendar.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "ISO 3166-1 alpha-2 country code (e.g., IR, MM, TR)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_platform_risk",
+        "description": "Get censorship risk score for a specific platform across all monitored countries. Shows which countries block it and the overall global risk level.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "platform": {
+              "type": "string",
+              "description": "Platform name (e.g., whatsapp, twitter, telegram, signal, facebook, youtube, tiktok, instagram)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_service_accessibility",
+        "description": "Real-time check: is a domain/service accessible in a specific country right now? Returns blocking status, block rate across ISPs, and evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain or service URL to check (e.g., twitter.com, binance.com)"
+            },
+            "country": {
+              "type": "string",
+              "description": "ISO 3166-1 alpha-2 country code (e.g., IR, CN, EG)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_most_censored",
+        "description": "Get the most censored countries ranked by censorship severity score. Returns country name, score, risk tier, and top blocked categories.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Number of countries to return (default: 10, max: 50)"
+            }
+          }
+        }
+      },
+      {
+        "name": "agent_relay_stats",
+        "description": "Get Voidly Agent Relay network statistics including total registered agents, 24-hour active agents, channel count, message volume, and capability registry.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Global Censorship Index",
+        "uri": "voidly://censorship-index",
+        "description": "Live censorship rankings for 126+ countries based on 2.2B+ measurements",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Methodology",
+        "uri": "voidly://methodology",
+        "description": "How Voidly measures and scores internet censorship",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "censorship_briefing",
+        "description": "Generate a censorship briefing for a specific country with current status, incidents, and risk forecast.",
+        "arguments": [
+          {
+            "name": "country_code",
+            "description": "ISO country code (e.g., IR, CN, RU)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "platform_safety_check",
+        "description": "Check if a platform is safe to use in a given country — returns blocking status, alternatives, and risk level.",
+        "arguments": [
+          {
+            "name": "platform",
+            "description": "Platform name (e.g., whatsapp, telegram)",
+            "required": true
+          },
+          {
+            "name": "country_code",
+            "description": "ISO country code",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

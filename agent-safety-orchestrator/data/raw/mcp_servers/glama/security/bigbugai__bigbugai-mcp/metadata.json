@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "covjyoou0d",
+  "namespace": "bigbugAi",
+  "slug": "bigbugai-mcp",
+  "name": "BigBugAI MCP Server",
+  "description": "Enables access to BigBugAI cryptocurrency tools for getting trending tokens and performing token analysis by contract address. Provides production-ready API access with rate limiting and authentication for crypto market intelligence.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables access to BigBugAI cryptocurrency tools for getting trending tokens and performing token analysis by contract address. Provides production-ready API access with rate limiting and authentication for crypto market intelligence.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BTUNIFIED_API": {
+          "description": "The BigBugAI unified API base URL",
+          "type": "string",
+          "default": "https://api.bigbug.ai"
+        },
+        "MCP_RATE_LIMIT": {
+          "description": "Rate limit configuration per limits library format",
+          "type": "string",
+          "default": "60/hour"
+        },
+        "BIGBUGAI_API_KEY": {
+          "description": "Optional API key used for upstream HTTP calls. If not set, HTTP calls will fall back to BIGBUGAI_MCP_API_KEY",
+          "type": "string"
+        },
+        "BIGBUGAI_API_TOKEN": {
+          "description": "Optional API token used for upstream HTTP calls. If not set, HTTP calls will fall back to BIGBUGAI_MCP_API_KEY",
+          "type": "string"
+        },
+        "BIGBUGAI_MCP_API_KEY": {
+          "description": "Required API key for the BigBugAI MCP server",
+          "type": "string"
+        },
+        "BTUNIFIED_TRENDING_PATH": {
+          "description": "Override primary path for trending tokens endpoint",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "BIGBUGAI_MCP_API_KEY"
+      ]
+    },
+    "id": "covjyoou0d",
+    "name": "BigBugAI MCP Server",
+    "namespace": "bigbugAi",
+    "repository": {
+      "url": "https://github.com/bigbugAi/bigbugai-mcp"
+    },
+    "slug": "bigbugai-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/covjyoou0d"
+  }
+}

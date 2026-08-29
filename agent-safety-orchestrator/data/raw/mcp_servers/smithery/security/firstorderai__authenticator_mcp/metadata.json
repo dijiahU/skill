@@ -1,0 +1,112 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "firstorderai/authenticator_mcp",
+  "namespace": "firstorderai",
+  "slug": "authenticator_mcp",
+  "displayName": "Authenticator App Server",
+  "description": "Enable AI agents to securely access your 2FA codes and passwords for automated login processes. Simplify credential management across platforms by bridging AI assistants with secure authentication. Enhance your AI agent's capabilities with seamless and secure credential retrieval.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "credential",
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "91fbe120-d9d6-4f83-9d74-071b2e25304a",
+    "qualifiedName": "firstorderai/authenticator_mcp",
+    "namespace": "firstorderai",
+    "slug": "authenticator_mcp",
+    "displayName": "Authenticator App Server",
+    "description": "Enable AI agents to securely access your 2FA codes and passwords for automated login processes. Simplify credential management across platforms by bridging AI assistants with secure authentication. Enhance your AI agent's capabilities with seamless and secure credential retrieval.",
+    "iconUrl": "https://api.smithery.ai/servers/firstorderai/authenticator_mcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": false,
+    "isDeployed": true,
+    "createdAt": "2025-05-04T13:12:35.742Z",
+    "homepage": "https://authenticator.firstorder.ai",
+    "bySmithery": false,
+    "owner": "org_01KNB7RMH68ZPZPJ1BT9W9N4BY",
+    "score": 0.008064516129032258
+  },
+  "detail": {
+    "qualifiedName": "firstorderai/authenticator_mcp",
+    "displayName": "Authenticator App Server",
+    "description": "Enable AI agents to securely access your 2FA codes and passwords for automated login processes. Simplify credential management across platforms by bridging AI assistants with secure authentication. Enhance your AI agent's capabilities with seamless and secure credential retrieval.",
+    "iconUrl": "https://api.smithery.ai/servers/firstorderai/authenticator_mcp/icon",
+    "remote": false,
+    "deploymentUrl": null,
+    "connections": [
+      {
+        "type": "stdio",
+        "bundleUrl": "https://backend.smithery.ai/storage/v1/object/public/bundles/@firstorderai/authenticator_mcp/server.mcpb",
+        "runtime": "node",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "accessToken"
+          ],
+          "properties": {
+            "accessToken": {
+              "type": "string",
+              "description": "Access token for Authenticator App MCP server"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_2fa_code",
+        "description": "Retrieve the current 2FA code for a username when logging into a website.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "website": {
+              "type": "string",
+              "description": "The domain name of the website you need to login, e.g. \"github.com\""
+            },
+            "username": {
+              "type": "string",
+              "description": "The username or email of the account you need to login, e.g. \"john.doe@example.com\""
+            }
+          }
+        }
+      },
+      {
+        "name": "get_password",
+        "description": "Retrieve the password for a username when logging into a website.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "website": {
+              "type": "string",
+              "description": "The domain name of the website you need to login, e.g. \"github.com\""
+            },
+            "username": {
+              "type": "string",
+              "description": "The username or email of the account you need to login, e.g. \"john.doe@example.com\""
+            }
+          }
+        }
+      },
+      {
+        "name": "get_account_list",
+        "description": "Retrieve the accounts can be used when logging into a website.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "website": {
+              "type": "string",
+              "description": "The domain name of the website you need to login, e.g. \"github.com\""
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

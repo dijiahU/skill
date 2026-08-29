@@ -1,0 +1,57 @@
+{
+  "registry": "glama",
+  "id": "wwmnnia3bu",
+  "namespace": "smatiolids",
+  "slug": "agentic-astra",
+  "name": "Astra MCP Server",
+  "description": "Enables interaction with DataStax Astra DB through the Model Context Protocol. Provides database connectivity and operations for Astra DB instances via secure token-based authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with DataStax Astra DB through the Model Context Protocol. Provides database connectivity and operations for Astra DB instances via secure token-based authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_FILE": {
+          "description": "Path to the log file",
+          "type": "string",
+          "default": "logs/astra_mcp_server.log"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "ASTRA_DB_API_ENDPOINT": {
+          "description": "Your Astra DB endpoint",
+          "type": "string"
+        },
+        "ASTRA_DB_APPLICATION_TOKEN": {
+          "description": "Your Astra DB token",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ASTRA_DB_APPLICATION_TOKEN",
+        "ASTRA_DB_API_ENDPOINT"
+      ]
+    },
+    "id": "wwmnnia3bu",
+    "name": "Astra MCP Server",
+    "namespace": "smatiolids",
+    "repository": {
+      "url": "https://github.com/smatiolids/agentic-astra"
+    },
+    "slug": "agentic-astra",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/wwmnnia3bu"
+  }
+}

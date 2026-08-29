@@ -1,0 +1,103 @@
+{
+  "registry": "glama",
+  "id": "m2y7pquz90",
+  "namespace": "NickyHeC",
+  "slug": "granola-mcp",
+  "name": "granola-mcp",
+  "description": "A starter template for building MCP servers with support for No Auth, API Key, and OAuth authentication using the Dedalus Labs DAuth framework.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A starter template for building MCP servers with support for No Auth, API Key, and OAuth authentication using the Dedalus Labs DAuth framework.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_TOKEN": {
+          "description": "The platform credential (rename to match your platform, e.g. GITHUB_TOKEN)",
+          "type": "string"
+        },
+        "OAUTH_ENABLED": {
+          "description": "Set to true to enable OAuth flow",
+          "type": "string"
+        },
+        "DEDALUS_AS_URL": {
+          "description": "Dedalus authorization server URL (default: https://as.dedaluslabs.ai)",
+          "type": "string",
+          "default": "https://as.dedaluslabs.ai"
+        },
+        "OAUTH_BASE_URL": {
+          "description": "Platform's API base URL for OAuth requests",
+          "type": "string"
+        },
+        "DEDALUS_API_KEY": {
+          "description": "Your Dedalus platform API key",
+          "type": "string"
+        },
+        "DEDALUS_API_URL": {
+          "description": "Dedalus API URL (default: https://api.dedaluslabs.ai)",
+          "type": "string",
+          "default": "https://api.dedaluslabs.ai"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "Your OAuth app's client ID",
+          "type": "string"
+        },
+        "OAUTH_TOKEN_URL": {
+          "description": "Platform's OAuth token exchange endpoint",
+          "type": "string"
+        },
+        "OAUTH_AUTHORIZE_URL": {
+          "description": "Platform's OAuth authorization endpoint",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "Your OAuth app's client secret",
+          "type": "string"
+        },
+        "OAUTH_SCOPES_AVAILABLE": {
+          "description": "Comma-separated list of OAuth scopes",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": []
+        },
+        {
+          "required": [
+            "DEDALUS_AS_URL",
+            "DEDALUS_API_KEY",
+            "API_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "DEDALUS_AS_URL",
+            "DEDALUS_API_KEY",
+            "OAUTH_ENABLED",
+            "OAUTH_AUTHORIZE_URL",
+            "OAUTH_TOKEN_URL",
+            "OAUTH_CLIENT_ID",
+            "OAUTH_CLIENT_SECRET",
+            "OAUTH_SCOPES_AVAILABLE",
+            "OAUTH_BASE_URL"
+          ]
+        }
+      ]
+    },
+    "id": "m2y7pquz90",
+    "name": "granola-mcp",
+    "namespace": "NickyHeC",
+    "repository": {
+      "url": "https://github.com/NickyHeC/granola-mcp"
+    },
+    "slug": "granola-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/m2y7pquz90"
+  }
+}

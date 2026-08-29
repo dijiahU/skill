@@ -1,0 +1,5925 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cryptorugmuncher/rugmunch-solana",
+  "namespace": "cryptorugmuncher",
+  "slug": "rugmunch-solana",
+  "displayName": "Rug Munch Intelligence (Solana)",
+  "description": "36+ crypto security & intelligence tools via x402 micropayments. Free trials on every tool (1-5 free calls per tool, resets weekly). Deep contract audits ($0.05, 1 free), honeypot detection ($0.02, 3 free), whale decoding ($0.15, 1 free), rug pull prediction ($0.10, 1 free), copy trade finding ($0.08, 1 free), DeFi yield scanning ($0.08, 2 free), NFT wash trading ($0.05, 1 free), bridge security ($0.10, 1 free), gas forecasting ($0.02, 3 free), Fear & Greed Index ($0.01, 5 free), cross-exchange arbitrage ($0.01, 5 free), BTC mempool ($0.01, 5 free), multi-asset prices ($0.01, 5 free), CoinGecko trending ($0.01, 5 free), DeFi hack tracker ($0.01, 5 free), Twitter tools ($0.01, 5 free each), + 20 more. Auto-refund guarantee. $0.01-$0.15/call.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "audit",
+    "vulnerability",
+    "ransomware",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "a7442a3e-a8bd-45cc-ab4b-00654cbf43b7",
+    "qualifiedName": "cryptorugmuncher/rugmunch-solana",
+    "namespace": "cryptorugmuncher",
+    "slug": "rugmunch-solana",
+    "displayName": "Rug Munch Intelligence (Solana)",
+    "description": "36+ crypto security & intelligence tools via x402 micropayments. Free trials on every tool (1-5 free calls per tool, resets weekly). Deep contract audits ($0.05, 1 free), honeypot detection ($0.02, 3 free), whale decoding ($0.15, 1 free), rug pull prediction ($0.10, 1 free), copy trade finding ($0.08, 1 free), DeFi yield scanning ($0.08, 2 free), NFT wash trading ($0.05, 1 free), bridge security ($0.10, 1 free), gas forecasting ($0.02, 3 free), Fear & Greed Index ($0.01, 5 free), cross-exchange arbitrage ($0.01, 5 free), BTC mempool ($0.01, 5 free), multi-asset prices ($0.01, 5 free), CoinGecko trending ($0.01, 5 free), DeFi hack tracker ($0.01, 5 free), Twitter tools ($0.01, 5 free each), + 20 more. Auto-refund guarantee. $0.01-$0.15/call.",
+    "iconUrl": "https://api.smithery.ai/servers/cryptorugmuncher/rugmunch-solana/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-04T07:17:04.748Z",
+    "homepage": "https://rugmunch.io",
+    "bySmithery": false,
+    "owner": "org_01KQQ6J8K1C7K483TPFFW5T6SC",
+    "score": 0.011363636363636364
+  },
+  "detail": {
+    "qualifiedName": "cryptorugmuncher/rugmunch-solana",
+    "displayName": "Rug Munch Intelligence (Solana)",
+    "description": "36+ crypto security & intelligence tools via x402 micropayments. Free trials on every tool (1-5 free calls per tool, resets weekly). Deep contract audits ($0.05, 1 free), honeypot detection ($0.02, 3 free), whale decoding ($0.15, 1 free), rug pull prediction ($0.10, 1 free), copy trade finding ($0.08, 1 free), DeFi yield scanning ($0.08, 2 free), NFT wash trading ($0.05, 1 free), bridge security ($0.10, 1 free), gas forecasting ($0.02, 3 free), Fear & Greed Index ($0.01, 5 free), cross-exchange arbitrage ($0.01, 5 free), BTC mempool ($0.01, 5 free), multi-asset prices ($0.01, 5 free), CoinGecko trending ($0.01, 5 free), DeFi hack tracker ($0.01, 5 free), Twitter tools ($0.01, 5 free each), + 20 more. Auto-refund guarantee. $0.01-$0.15/call.",
+    "iconUrl": "https://api.smithery.ai/servers/cryptorugmuncher/rugmunch-solana/icon",
+    "remote": true,
+    "deploymentUrl": "https://rugmunch-solana--cryptorugmuncher.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://rugmunch-solana--cryptorugmuncher.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "urlcheck",
+        "description": "Structured JSON analysis of URL safety for crypto. Checks domain age, similarity to legit projects, and known scam patterns. Returns risk_score (0-100) and verdict.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "pulse",
+        "description": "Market pulse dashboard - real-time token momentum, volume spikes, whale alerts, and trending tokens across all major chains.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "rugshield",
+        "description": "Quick pre-buy rug check. Returns binary safe/unsafe verdict with detailed factor breakdown: liquidity_ratio, top_holder_pct, and social_sentiment. Low latency.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "audit",
+        "description": "Deep contract audit for EVM/Solana. Returns mint_authority, freeze_authority, liquidity_lock_status, holder_concentration, and hidden_functions. Returns risk_score 0-100.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "sentiment",
+        "description": "Real-time social sentiment score (0-100) across Twitter/Telegram/RSS. Detects bot-driven hype vs organic community growth. Returns sentiment_trend and key_topics.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "launch",
+        "description": "Token launch analysis - bonding curve status, liquidity locks, initial holder distribution, and fair launch verification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "wallet",
+        "description": "Comprehensive wallet analysis - balance, token holdings, transaction history, risk score, and behavioral patterns.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "smartmoney",
+        "description": "Real-time whale tracking. Monitors top 100 wallets for large buys/sells, exchange inflows/outflows, and accumulation patterns. Returns smart_money_alerts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cluster",
+        "description": "Wallet cluster analysis - identify linked wallets, sybil networks, and coordinated manipulation across addresses.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "insider",
+        "description": "Insider trading detection - track wallet funding patterns, pre-launch accumulation, and coordinated buying before major events.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "tw_profile",
+        "description": "Get Twitter/X user profile data - followers, bio, tweet count, verification status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "tw_timeline",
+        "description": "Get a user's recent tweets - text, engagement, timestamps, media flags. Up to 100 tweets.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "tw_search",
+        "description": "Search Twitter/X for tweets matching a query. Returns text, engagement, timestamps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "forensics",
+        "description": "Deep token forensics report combining DexScreener, GeckoTerminal, CoinGecko, DefiLlama, CryptoPanic. Returns risk score, liquidity analysis, pair age, verification status, and buy/sell recommendation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "whale",
+        "description": "Advanced whale wallet decoder - Solana/EVM balance, TX pattern analysis, DexScreener pair association, Blockchair multi-chain stats. Identifies whale persona, activity level, trust score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "launch_intel",
+        "description": "Token launch intelligence - PumpFun new tokens, DexScreener trending pairs, bonding curve tracking, market summary, risk alerts for coordinated launches.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "anomaly",
+        "description": "Market anomaly detector - volume spike detection, price manipulation alerts, liquidity anomalies, sentiment extremes. Returns market health assessment.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "social_signal",
+        "description": "Social signal analyzer - Twitter profile analysis, timeline engagement, CryptoPanic news sentiment, on-chain token correlation. Returns sentiment score and recommendation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "market_overview",
+        "description": "Comprehensive crypto market overview - BTC/ETH prices, chain TVL, trending coins, top markets, BTC fees, news sentiment. Aggregates 10+ public sources.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "token_deep_dive",
+        "description": "Deep token analysis across chains - CoinGecko data, DexScreener pairs, trending status, market cap rank, exchange listings, TVL in DeFi protocols.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "chain_health",
+        "description": "Chain health metrics - TVL, active protocols, gas fees, block times, network stats for Ethereum, Solana, Base, BSC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "honeypot_check",
+        "description": "Honeypot detection - simulates buy/sell transactions to verify you can actually sell a token. Tests transfer taxes, sell locks, blacklists, and trap mechanisms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "portfolio_tracker",
+        "description": "Multi-wallet portfolio tracker - aggregate PnL, asset allocation, top holdings, unrealized gains/losses across chains. Track your entire crypto net worth.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "copy_trade_finder",
+        "description": "Copy trade intelligence - find profitable wallets, their win rates, best performing trades, and current positions. Auto-identifies smart money worth following.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "token_comparison",
+        "description": "Side-by-side token comparison - metrics, risk scores, holder distribution, liquidity depth, social sentiment. Compare 2-5 tokens instantly to find the winner.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "risk_monitor",
+        "description": "Real-time risk monitoring - set alerts for wallets, tokens, or chains. Gets notified of rug pulls, liquidity removals, whale dumps, or contract changes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "defi_yield_scanner",
+        "description": "DeFi yield scanner - finds best APYs across chains, detects unsustainable yields, checks protocol TVL trends, impermanent loss risk, and smart contract age.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "nft_wash_detector",
+        "description": "NFT wash trading detector - identifies fake volume in NFT collections, tracks floor price manipulation, finds collections with real organic demand vs artificial hype.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "bridge_security",
+        "description": "Bridge security monitor - tracks cross-chain bridge TVL, recent exploits, audit status, withdrawal limits, and security scores for major bridges.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "gas_forecast",
+        "description": "Gas price forecaster - predicts optimal transaction times across chains, tracks gas trends, suggests cheapest windows for swaps, mints, and transfers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "sniper_alert",
+        "description": "Real-time new pair alerts - detects liquidity additions on Uniswap, Raydium, PancakeSwap within seconds. Returns pair address, initial liquidity, creator wallet, and risk score. Essential for early entry.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "liquidity_flow",
+        "description": "Real-time liquidity flow tracker - monitors large LP adds/removes across major DEXs. Detects liquidity pulls before they happen. Returns flow direction, amount, and wallet history.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "rug_pull_predictor",
+        "description": "Pre-rug detection system - analyzes contract patterns, holder behavior, and liquidity metrics to predict rug probability. ML-based scoring using historical rug data. Returns rug probability percentage and warning signals.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "airdrop_finder",
+        "description": "Airdrop eligibility checker - analyzes wallet activity against known airdrop criteria. Tracks protocol interactions, volume thresholds, and snapshot timing. Returns eligible airdrops and qualification status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mev_protection",
+        "description": "MEV protection checker - analyzes pending mempool for sandwich attack risk, calculates optimal slippage, suggests safe transaction routing. Protects against front-running and back-running.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "comprehensive_audit",
+        "description": "One-call deep audit combining rug check, forensics, social, and whale analysis. Returns risk score 0-100, verdict (BUY/AVOID), and detailed factor breakdown.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "default": "solana",
+              "description": "Blockchain network"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token or wallet address"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexscreener_tokenPrices",
+        "description": "Get prices for token pair",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexscreener_searchPairs",
+        "description": "Search pairs by symbol/name",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexscreener_pairInfo",
+        "description": "Get pair details",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "jupiter_getSolanaPrice",
+        "description": "Get Solana token prices",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "jupiter_getQuote",
+        "description": "Get swap quote",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "jupiter_getTokenList",
+        "description": "Get verified token list",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "pumpfun_getNewTokens",
+        "description": "Latest pump.fun tokens",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "pumpfun_getBondingCurve",
+        "description": "Get bonding curve data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "pumpfun_getKingOfHill",
+        "description": "Current king of the hill",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "raydium_getPoolInfo",
+        "description": "Get pool info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "raydium_getLiquidity",
+        "description": "All pool liquidity",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "defillama_getProtocolTVL",
+        "description": "Get protocol TVL",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "defillama_getYields",
+        "description": "Get yield pool data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getNetworks",
+        "description": "List all 33 supported networks",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getCapabilities",
+        "description": "Server capabilities & workflows",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getNetworkDexes",
+        "description": "Get DEXes on network",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getNetworkPools",
+        "description": "Get top pools on network",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getDexPools",
+        "description": "Get pools from specific DEX",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getNetworkPoolsFilter",
+        "description": "Filter pools by volume/liquidity",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_filterNetworkTokens",
+        "description": "Filter tokens by volume/FDV",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getTopTokens",
+        "description": "Top tokens by volume/price/liquidity",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getPoolDetails",
+        "description": "Detailed pool info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getPoolOHLCV",
+        "description": "OHLCV for pool",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getPoolTransactions",
+        "description": "Pool tx history",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getPoolTrades",
+        "description": "Individual pool trades",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getTokenDetails",
+        "description": "Token info across pools",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dexpaprika_getTokenOHLCV",
+        "description": "Token OHLCV",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_getCryptoPrice",
+        "description": "Current price and 24h stats",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_getMarketAnalysis",
+        "description": "Market analysis with top exchanges",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_getHistoricalAnalysis",
+        "description": "Historical price analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_getTopAssets",
+        "description": "Top crypto by market cap",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_getTechnicalAnalysis",
+        "description": "Technical indicators (RSI, MACD, etc)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_getRates",
+        "description": "USD conversion rates",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_getExchanges",
+        "description": "Top exchanges by volume",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coincap_analyzeCrypto",
+        "description": "Comprehensive crypto analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coinmarketcap_getCoin",
+        "description": "CMC coin details by slug",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coinmarketcap_getListings",
+        "description": "CMC listings by market cap",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coinmarketcap_getTrending",
+        "description": "CMC trending coins",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coinmarketcap_getExchanges",
+        "description": "CMC exchange rankings",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptopanic_getNews",
+        "description": "Latest crypto news",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptopanic_searchNews",
+        "description": "Search news by keyword",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptopanic_getTrending",
+        "description": "Trending news articles",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getPrice",
+        "description": "Real-time crypto prices (BTC, ETH, SOL, etc)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getPriceFull",
+        "description": "Full price data with 24h stats",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getTopPairs",
+        "description": "Top trading pairs by volume",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getHistorical",
+        "description": "Historical daily prices",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getSocialStats",
+        "description": "Social media stats for coin",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getExchangeInfo",
+        "description": "Exchange volume and pair data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getNews",
+        "description": "Crypto news articles",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptocompare_getMiningContracts",
+        "description": "Mining pool contracts",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_getBitcoinStats",
+        "description": "Bitcoin network statistics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_getEthereumStats",
+        "description": "Ethereum network statistics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_getSolanaStats",
+        "description": "Solana network statistics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_getTransaction",
+        "description": "Get transaction details by hash",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_getAddress",
+        "description": "Get address details and transactions",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_getBlock",
+        "description": "Get block details",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_getDashboard",
+        "description": "Full blockchain dashboard",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchair_searchTransactions",
+        "description": "Search transactions",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchain_getTicker",
+        "description": "BTC ticker in all currencies",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchain_getLatestBlock",
+        "description": "Latest Bitcoin block",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchain_getUnconfirmedTxs",
+        "description": "Unconfirmed Bitcoin transactions",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchain_getSingleAddress",
+        "description": "Bitcoin address details",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchain_getRawTxBatch",
+        "description": "Multiple transactions by hash",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockchain_getQrCode",
+        "description": "Generate BTC QR code",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mempool_getFees",
+        "description": "Recommended Bitcoin fees",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mempool_getBlocks",
+        "description": "Recent Bitcoin blocks",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mempool_getMempool",
+        "description": "Current mempool size and vsize",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mempool_getTransaction",
+        "description": "Bitcoin transaction details",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mempool_getAddressTxs",
+        "description": "Bitcoin address transactions",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mempool_getLightningStats",
+        "description": "Lightning network statistics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "mempool_getLiquidStats",
+        "description": "Liquid network statistics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getSlot",
+        "description": "Current Solana slot",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getSupply",
+        "description": "Total SOL supply",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getRecentPerformance",
+        "description": "Recent slot performance",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getVersion",
+        "description": "Solana node version",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getHealth",
+        "description": "Solana node health",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getEpochInfo",
+        "description": "Current epoch information",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getClusterNodes",
+        "description": "Cluster nodes info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solana_getVoteAccounts",
+        "description": "Vote accounts summary",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "helius_getBalance",
+        "description": "Get SOL balance",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "helius_getTransactions",
+        "description": "Enhanced transaction history",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "helius_getNFTs",
+        "description": "Get NFTs by owner (DAS)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "helius_getTokenAccounts",
+        "description": "Get token accounts by owner",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "helius_getPriorityFee",
+        "description": "Get recommended priority fee",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "quicknode_rpcProxy",
+        "description": "Proxy RPC call to QuickNode",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solscan_getTokenInfo",
+        "description": "Get Solana token info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solscan_getHolders",
+        "description": "Get token holders list",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solscan_getTransactions",
+        "description": "Get address transactions",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "solscan_getNFTData",
+        "description": "Get NFT metadata",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "birdeye_getPrice",
+        "description": "Get token price",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "birdeye_getTrades",
+        "description": "Get recent trades",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "birdeye_getWalletTrades",
+        "description": "Get wallet trade history",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "birdeye_getTrending",
+        "description": "Get trending tokens",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "gmgn_getWalletProfile",
+        "description": "GMGN wallet analytics",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "gmgn_getTrades",
+        "description": "Get wallet trades",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "gmgn_getHolding",
+        "description": "Get wallet current holdings",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "gmgn_getSmartMoney",
+        "description": "Smart money flow for token",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "moralis_getWalletBalances",
+        "description": "Multi-chain wallet balances",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "moralis_getTokenTransfers",
+        "description": "Token transfer history",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "moralis_getNFTs",
+        "description": "Get wallet NFTs",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coingecko_getPrice",
+        "description": "Get coin price (multi-currency)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coingecko_getMarketData",
+        "description": "Top market data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "coingecko_getCoinInfo",
+        "description": "Detailed coin data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dune_getQueryResult",
+        "description": "Execute Dune query, get results",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "dune_getLatestResult",
+        "description": "Get latest query results",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "arkham_getEntity",
+        "description": "Arkham entity info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "arkham_getTransactions",
+        "description": "Entity transactions",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "arkham_getBalance",
+        "description": "Entity balance",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "nansen_getSmartMoney",
+        "description": "Nansen smart money flows",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "nansen_getFlows",
+        "description": "Token flow data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "nansen_getLabels",
+        "description": "Address labels",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_getWalletInfo",
+        "description": "Get Safe wallet address and token balances",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_getTokenPrice",
+        "description": "Get token price via CoinGecko",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_simulateSwap",
+        "description": "Simulate Uniswap V3 swap (Tenderly)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_executeSwap",
+        "description": "Execute Uniswap V3 swap on chain",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_swapCurve",
+        "description": "Swap on Curve stableswap pool",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_transferToken",
+        "description": "Transfer ETH or ERC-20 tokens",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_depositAave",
+        "description": "Supply asset to Aave V3 for yield",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_withdrawAave",
+        "description": "Withdraw asset from Aave V3",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_getDeFiRates",
+        "description": "Get Aave V3 supply/borrow APYs",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_supplyCompound",
+        "description": "Supply to Compound V3 USDC market",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_withdrawCompound",
+        "description": "Withdraw from Compound V3",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_depositERC4626",
+        "description": "Deposit into ERC-4626 vault (Yearn, Morpho)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_withdrawERC4626",
+        "description": "Withdraw from ERC-4626 vault",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_getTransactionStatus",
+        "description": "Poll tx status (pending/confirmed/failed)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_getPolicy",
+        "description": "View agent operational limits",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_createProposal",
+        "description": "Create Agent-to-Agent collaboration proposal",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_acceptProposal",
+        "description": "Accept an A2A proposal",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_rejectProposal",
+        "description": "Reject an A2A proposal",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_getProposals",
+        "description": "List A2A proposals by status",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "agentfi_executeProposal",
+        "description": "Execute accepted A2A proposal",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getWhaleAlpha",
+        "description": "Whale alpha signals for tokens",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getWhaleDivergence",
+        "description": "Whale divergence alerts",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getWhaleAccumulation",
+        "description": "Detect whale accumulation windows",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getWhaleNeutral",
+        "description": "Neutral whale activity scan",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getWhaleDistribution",
+        "description": "Whale token distribution map",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getBTCRegime",
+        "description": "BTC regime detection (bull/bear/chop)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getBTCFuturesSignal",
+        "description": "BTC futures divergence signal",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getTokenCA",
+        "description": "Get token contract address by symbol",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "cryptoiz_getStatus",
+        "description": "Server status and version info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunPrice",
+        "description": "Realtime crypto/FX/commodity/stock quotes (Pyth)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunDEX",
+        "description": "DEX pair data and prices",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunMarkets",
+        "description": "Polymarket prediction markets data",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunTwitter",
+        "description": "Search X/Twitter for crypto sentiment",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunSearch",
+        "description": "Web search for information",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunExa",
+        "description": "Deep research via Exa AI search",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunChat",
+        "description": "General AI chat completion",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunImage",
+        "description": "Generate AI image",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunMusic",
+        "description": "Generate AI music",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunVideo",
+        "description": "Generate AI video",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunModels",
+        "description": "List available AI models",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunModal",
+        "description": "Run specific AI model",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "blockrun_blockrunWallet",
+        "description": "Get wallet balance info",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      },
+      {
+        "name": "freeusdc_transferUSDC",
+        "description": "Transfer USDC on Base network",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Tool response data"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Response status"
+            }
+          },
+          "required": [
+            "tool",
+            "data"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

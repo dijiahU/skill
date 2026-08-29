@@ -1,0 +1,266 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "admin-k56l/x402-crypto-market-structure",
+  "namespace": "admin-k56l",
+  "slug": "x402-crypto-market-structure",
+  "displayName": "x402 Crypto Market Structure",
+  "description": "Know what the market is actually doing — not just price. Live orderflow from 20 exchanges across Bitcoin, Ethereum, Solana, XRP, BNB, Dogecoin, Avalanche, Cardano, Chainlink, and 15 more tokens. Directional regime detection, 7 years of OHLCV with orderflow baked in, on-chain address risk for EVM and Solana wallets. Free here on Smithery. Deploy 24/7 agents via the REST API at x402.tunedfor.ai — no API key, no subscription, pay USDC per call.\n\n\nClaude users — paste this URL into \"Add custom connector\" instead of the one below:\nhttps://x402.tunedfor.ai/mcp\n\nSame server, no proxy, no OAuth. (Smithery's proxy URL requires OAuth that Claude's dialog doesn't currently negotiate\n\n",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "8e7e9946-fb98-47d1-8ab4-89b89a8530f9",
+    "qualifiedName": "admin-k56l/x402-crypto-market-structure",
+    "namespace": "admin-k56l",
+    "slug": "x402-crypto-market-structure",
+    "displayName": "x402 Crypto Market Structure",
+    "description": "Know what the market is actually doing — not just price. Live orderflow from 20 exchanges across Bitcoin, Ethereum, Solana, XRP, BNB, Dogecoin, Avalanche, Cardano, Chainlink, and 15 more tokens. Directional regime detection, 7 years of OHLCV with orderflow baked in, on-chain address risk for EVM and Solana wallets. Free here on Smithery. Deploy 24/7 agents via the REST API at x402.tunedfor.ai — no API key, no subscription, pay USDC per call.\n\n\nClaude users — paste this URL into \"Add custom connector\" instead of the one below:\nhttps://x402.tunedfor.ai/mcp\n\nSame server, no proxy, no OAuth. (Smithery's proxy URL requires OAuth that Claude's dialog doesn't currently negotiate\n\n",
+    "iconUrl": "https://api.smithery.ai/servers/admin-k56l/x402-crypto-market-structure/icon",
+    "verified": false,
+    "useCount": 1186,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-11T16:42:40.396Z",
+    "homepage": "https://x402.tunedfor.ai",
+    "bySmithery": false,
+    "owner": "org_01KNNFF4V1FDTKQ5MD1AK92DD2",
+    "score": 0.02303732303732304
+  },
+  "detail": {
+    "qualifiedName": "admin-k56l/x402-crypto-market-structure",
+    "displayName": "x402 Crypto Market Structure",
+    "description": "Know what the market is actually doing — not just price. Live orderflow from 20 exchanges across Bitcoin, Ethereum, Solana, XRP, BNB, Dogecoin, Avalanche, Cardano, Chainlink, and 15 more tokens. Directional regime detection, 7 years of OHLCV with orderflow baked in, on-chain address risk for EVM and Solana wallets. Free here on Smithery. Deploy 24/7 agents via the REST API at x402.tunedfor.ai — no API key, no subscription, pay USDC per call.\n\n\nClaude users — paste this URL into \"Add custom connector\" instead of the one below:\nhttps://x402.tunedfor.ai/mcp\n\nSame server, no proxy, no OAuth. (Smithery's proxy URL requires OAuth that Claude's dialog doesn't currently negotiate\n\n",
+    "iconUrl": "https://api.smithery.ai/servers/admin-k56l/x402-crypto-market-structure/icon",
+    "remote": true,
+    "deploymentUrl": "https://x402-crypto-market-structure--admin-k56l.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://x402-crypto-market-structure--admin-k56l.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "max_age_seconds": {
+              "type": "integer",
+              "title": "Data Freshness Limit (seconds)",
+              "default": 3600,
+              "x-order": 0,
+              "description": "Default maximum data age. Default: 3600."
+            },
+            "include_debug_info": {
+              "type": "boolean",
+              "title": "Include Debug Info",
+              "default": false,
+              "x-order": 1,
+              "description": "Include diagnostic metadata."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "market.snapshot",
+        "description": "Live market snapshot — 16 reliably populated fields, no LLM, no interpretation. Returns price_usd, change_pct_24h, volume_24h_usd, market_cap_usd, funding_rate, open_interest_usd, cvd_1h, buy_ratio, whale_bar_count_1h, liquidation_buy_1h, liquidation_sell_1h, cvd_divergence, spot_perp_delta, volume_herfindahl, fear_greed, fear_greed_label. Cost: 0.20 USDC. 15 tokens: BTC ETH SOL XRP ADA DOGE AVAX LINK BNB ATOM DOT ARB SUI OP LTC",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "maxLength": 10,
+              "description": "Token symbol (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, LINK, BNB, ATOM, DOT, ARB, SUI, OP, LTC)"
+            },
+            "max_age_seconds": {
+              "type": "integer",
+              "description": "Freshness contract — reject cached data older than N seconds. Default: 3600."
+            }
+          }
+        }
+      },
+      {
+        "name": "market.analyze",
+        "description": "Pre-trade macro check. Data-only, no LLM. Returns price, pulse direction with confidence, macro regime (bull/bear/risk_on/risk_off/choppy), macro context (DXY, VIX, fear/greed). Add context='7d' for percentile rankings. Cost: 0.25 USDC. 15 tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "maxLength": 10,
+              "description": "Token symbol (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, LINK, BNB, ATOM, DOT, ARB, SUI, OP, LTC)"
+            },
+            "context": {
+              "type": "string",
+              "description": "Historical context window: '7d' or '30d'. Adds percentile rankings vs recent history."
+            },
+            "max_age_seconds": {
+              "type": "integer",
+              "description": "Freshness contract — reject cached data older than N seconds. Default: 3600."
+            }
+          }
+        }
+      },
+      {
+        "name": "market.orderflow",
+        "description": "Cross-exchange orderflow from 20 live venues. Returns CVD direction/value, whale bar count (1h), liquidation pressure, buy_ratio, spot/perp delta, volume concentration (HHI). volume_herfindahl >0.6 = manipulation risk. Cost: 0.50 USDC. 24 tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "maxLength": 10,
+              "description": "Token symbol (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, LINK, BNB, ATOM, DOT, ARB, SUI, OP, LTC, NEAR, TRX, BCH, SHIB, HBAR, TON, XLM, UNI, AAVE)"
+            },
+            "context": {
+              "type": "string",
+              "description": "Historical context window: '7d' or '30d'. Adds percentile rankings vs recent history."
+            },
+            "max_age_seconds": {
+              "type": "integer",
+              "description": "Freshness contract — reject cached data older than N seconds. Default: 3600."
+            }
+          }
+        }
+      },
+      {
+        "name": "market.full",
+        "description": "Complete pre-trade analysis. All market + orderflow data plus a grounded LLM call. Returns stance (BULLISH/BEARISH/NEUTRAL), orderflow_signal (ACCUMULATION/DISTRIBUTION/NEUTRAL), risk_level (LOW/MODERATE/HIGH/CRITICAL), warnings[], and a verdict citing specific data values. Cost: 0.75 USDC. 15 tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "maxLength": 10,
+              "description": "Token symbol (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, LINK, BNB, ATOM, DOT, ARB, SUI, OP, LTC)"
+            },
+            "context": {
+              "type": "string",
+              "description": "Historical context window: '7d' or '30d'. Adds percentile rankings vs recent history."
+            },
+            "max_age_seconds": {
+              "type": "integer",
+              "description": "Freshness contract — reject cached data older than N seconds. Default: 3600."
+            }
+          }
+        }
+      },
+      {
+        "name": "address.risk",
+        "description": "On-chain address risk profile. Auto-detects EVM (0x...) or Solana (base58). Returns address_type, entity_label, account_age_days, tx_count, native_balance, top 5 tokens, risk_level (low/medium/high/unknown), flags (new_account, low_activity, unverified_contract, dormant, high_throughput). Cost: 0.25 USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "EVM (0x...) or Solana (base58) address to analyze"
+            }
+          }
+        }
+      },
+      {
+        "name": "history.1h",
+        "description": "Hourly OHLC + orderflow bars. Up to 5,000 bars, up to 7 years history. Returns timestamp, open, high, low, close, vbuy, vsell, cvd, buy_ratio, lbuy, lsell. Cost: 5.00 USDC. 24 tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "type": "string",
+              "description": "End date ISO 8601 (e.g. '2021-12-31'). Defaults to now."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max bars to return (1-5000, default 500)"
+            },
+            "start": {
+              "type": "string",
+              "description": "Start date ISO 8601 (e.g. '2021-01-01'). Returns oldest-first when set."
+            },
+            "token": {
+              "type": "string",
+              "maxLength": 10,
+              "description": "Token symbol (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, LINK, BNB, ATOM, DOT, ARB, SUI, OP, LTC, NEAR, TRX, BCH, SHIB, HBAR, TON, XLM, UNI, AAVE)"
+            }
+          }
+        }
+      },
+      {
+        "name": "history.1d",
+        "description": "Daily OHLC + orderflow bars. Up to 7 years history. Returns timestamp, open, high, low, close, vbuy, vsell, cvd, buy_ratio, lbuy, lsell. Cost: 5.00 USDC. 24 tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "type": "string",
+              "description": "End date ISO 8601 (e.g. '2024-12-31')"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max bars to return (1-5000, default 500)"
+            },
+            "start": {
+              "type": "string",
+              "description": "Start date ISO 8601 (e.g. '2020-01-01')"
+            },
+            "token": {
+              "type": "string",
+              "maxLength": 10,
+              "description": "Token symbol (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, LINK, BNB, ATOM, DOT, ARB, SUI, OP, LTC, NEAR, TRX, BCH, SHIB, HBAR, TON, XLM, UNI, AAVE)"
+            }
+          }
+        }
+      },
+      {
+        "name": "history.5m",
+        "description": "5-minute OHLC + orderflow bars. 17-day rolling window. Returns timestamp, open, high, low, close, vbuy, vsell, cvd, buy_ratio, lbuy, lsell. 5-minute data delay. Cost: 1.00 USDC. 24 tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "type": "string",
+              "description": "End date ISO 8601 (optional)"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max bars to return (1-5000, default 500)"
+            },
+            "start": {
+              "type": "string",
+              "description": "Start date ISO 8601 (optional, within 17-day window)"
+            },
+            "token": {
+              "type": "string",
+              "maxLength": 10,
+              "description": "Token symbol (BTC, ETH, SOL, XRP, ADA, DOGE, AVAX, LINK, BNB, ATOM, DOT, ARB, SUI, OP, LTC, NEAR, TRX, BCH, SHIB, HBAR, TON, XLM, UNI, AAVE)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": [
+      {
+        "name": "pre_trade_check",
+        "description": "Complete pre-trade due diligence. Calls market.full, evaluates risk_level, orderflow_signal, macro_regime, delivers enter/wait/avoid recommendation.",
+        "arguments": [
+          {
+            "name": "token",
+            "description": "Token symbol (BTC, ETH, SOL, etc.)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "orderflow_scan",
+        "description": "Quick orderflow health check. Calls market.orderflow, reports CVD, whale activity, liquidation pressure, flags manipulation risk.",
+        "arguments": [
+          {
+            "name": "token",
+            "description": "Token symbol (BTC, ETH, SOL, etc.)",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

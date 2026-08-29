@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "kjbcq4uvkj",
+  "namespace": "QaziAbsaar",
+  "slug": "LMS_MCP",
+  "name": "LMS MCP Server",
+  "description": "Automates interactions with the PAF-IAST University LMS to provide AI assistants with access to academic data like attendance, marks, and schedules. It features smart authentication with CAPTCHA solving and secure session management for seamless integration with tools like Claude and Cursor.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Automates interactions with the PAF-IAST University LMS to provide AI assistants with access to academic data like attendance, marks, and schedules. It features smart authentication with CAPTCHA solving and secure session management for seamless integration with tools like Claude and Cursor.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG_MODE": {
+          "description": "Enable debug mode for troubleshooting.",
+          "type": "string"
+        },
+        "PYTHONPATH": {
+          "description": "The filesystem path to the LMS-MCP directory, required for the python runner to locate modules.",
+          "type": "string"
+        },
+        "LMS_PASSWORD": {
+          "description": "Your PAF-IAST student password.",
+          "type": "string"
+        },
+        "LMS_USERNAME": {
+          "description": "Your PAF-IAST student ID/username.",
+          "type": "string"
+        },
+        "GEMINI_API_KEY": {
+          "description": "Optional: Google Gemini API key for enhanced CAPTCHA solving accuracy via Vision AI.",
+          "type": "string"
+        },
+        "BROWSER_HEADLESS": {
+          "description": "Whether to run the browser in headless mode. Set to false for debugging.",
+          "type": "string",
+          "default": "true"
+        },
+        "ENCRYPT_SESSIONS": {
+          "description": "Whether to use encryption for stored sessions.",
+          "type": "string",
+          "default": "true"
+        },
+        "SAVE_SCREENSHOTS": {
+          "description": "Whether to save screenshots during operation for debugging purposes.",
+          "type": "string"
+        },
+        "SESSION_EXPIRY_HOURS": {
+          "description": "Number of hours before the session expires.",
+          "type": "string",
+          "default": "24"
+        }
+      },
+      "type": "object",
+      "required": [
+        "LMS_USERNAME",
+        "LMS_PASSWORD"
+      ]
+    },
+    "id": "kjbcq4uvkj",
+    "name": "LMS MCP Server",
+    "namespace": "QaziAbsaar",
+    "repository": {
+      "url": "https://github.com/QaziAbsaar/LMS_MCP"
+    },
+    "slug": "LMS_MCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kjbcq4uvkj"
+  }
+}

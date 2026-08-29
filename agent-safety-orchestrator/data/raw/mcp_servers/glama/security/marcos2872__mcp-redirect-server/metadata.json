@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "vkmmftg7lu",
+  "namespace": "marcos2872",
+  "slug": "mcp-redirect-server",
+  "name": "MCP Redirect Server",
+  "description": "A Model Context Protocol server built with NestJS that provides OAuth 2.1 authentication with GitHub and exposes MCP tools through Server-Sent Events transport. Enables secure, real-time communication with JWT-based protection and dependency injection.",
+  "discoveryQueries": [
+    "authentication",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server built with NestJS that provides OAuth 2.1 authentication with GitHub and exposes MCP tools through Server-Sent Events transport. Enables secure, real-time communication with JWT-based protection and dependency injection.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "The port number for the server",
+          "type": "string",
+          "default": "3000"
+        },
+        "JWT_SECRET": {
+          "description": "JWT secret key (minimum 32 characters)",
+          "type": "string"
+        },
+        "SERVER_URL": {
+          "description": "The server URL",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "RESOURCE_URL": {
+          "description": "The resource URL for SSE endpoint",
+          "type": "string",
+          "default": "http://localhost:3000/sse"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "Your GitHub OAuth application Client ID",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Your GitHub OAuth application Client Secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "JWT_SECRET"
+      ]
+    },
+    "id": "vkmmftg7lu",
+    "name": "MCP Redirect Server",
+    "namespace": "marcos2872",
+    "repository": {
+      "url": "https://github.com/marcos2872/mcp-redirect-server"
+    },
+    "slug": "mcp-redirect-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vkmmftg7lu"
+  }
+}

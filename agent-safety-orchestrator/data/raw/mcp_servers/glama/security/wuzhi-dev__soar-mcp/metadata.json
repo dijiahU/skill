@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "jhrjapk88p",
+  "namespace": "wuzhi-dev",
+  "slug": "soar-mcp",
+  "name": "SOAR MCP Server",
+  "description": "Integrates SOAR (Security Orchestration, Automation and Response) capabilities into AI clients, enabling security playbook execution, event management, and threat intelligence queries. Provides a complete security incident response platform through natural language interactions.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Integrates SOAR (Security Orchestration, Automation and Response) capabilities into AI clients, enabling security playbook execution, event management, and threat intelligence queries. Provides a complete security incident response platform through natural language interactions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Debug mode",
+          "type": "string",
+          "default": "0"
+        },
+        "API_URL": {
+          "description": "SOAR platform API address",
+          "type": "string"
+        },
+        "MCP_PORT": {
+          "description": "MCP server port",
+          "type": "string",
+          "default": "12345"
+        },
+        "API_TOKEN": {
+          "description": "API access token",
+          "type": "string"
+        },
+        "ADMIN_PORT": {
+          "description": "Web management interface port",
+          "type": "string",
+          "default": "12346"
+        },
+        "SSL_VERIFY": {
+          "description": "SSL certificate verification",
+          "type": "string",
+          "default": "1"
+        },
+        "DATABASE_URL": {
+          "description": "Database connection string",
+          "type": "string",
+          "default": "sqlite:///soar_mcp.db"
+        },
+        "SOAR_TIMEOUT": {
+          "description": "API timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "SYNC_INTERVAL": {
+          "description": "Sync period in seconds",
+          "type": "string",
+          "default": "14400"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_URL",
+        "API_TOKEN"
+      ]
+    },
+    "id": "jhrjapk88p",
+    "name": "SOAR MCP Server",
+    "namespace": "wuzhi-dev",
+    "repository": {
+      "url": "https://github.com/wuzhi-dev/soar-mcp"
+    },
+    "slug": "soar-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jhrjapk88p"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "dyahh87u64",
+  "namespace": "ghively",
+  "slug": "API2MCP-creator",
+  "name": "Any-API MCP Server",
+  "description": "A configurable MCP server that adapts any HTTP API into an MCP toolset with generic HTTP tools (GET, POST, PUT, DELETE) and pluggable authentication. Includes API discovery scripts and supports dynamic tool generation from OpenAPI specs or wordlist scans.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A configurable MCP server that adapts any HTTP API into an MCP toolset with generic HTTP tools (GET, POST, PUT, DELETE) and pluggable authentication. Includes API discovery scripts and supports dynamic tool generation from OpenAPI specs or wordlist scans.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_BASE": {
+          "description": "The base URL of the API",
+          "type": "string"
+        },
+        "AUTH_MODE": {
+          "description": "Authentication mode: none, bearer, header, basic, or query",
+          "type": "string",
+          "default": "none"
+        },
+        "AUTH_TOKEN": {
+          "description": "Bearer token or header value depending on auth mode",
+          "type": "string"
+        },
+        "AUTH_HEADER": {
+          "description": "Header name used if AUTH_MODE=header",
+          "type": "string",
+          "default": "Authorization"
+        },
+        "AUTH_QUERY_KEY": {
+          "description": "Query parameter key used if AUTH_MODE=query",
+          "type": "string",
+          "default": "api_key"
+        },
+        "ALLOW_DESTRUCTIVE": {
+          "description": "Guard writes - set to true to allow POST/PUT/DELETE operations",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_BASE"
+      ]
+    },
+    "id": "dyahh87u64",
+    "name": "Any-API MCP Server",
+    "namespace": "ghively",
+    "repository": {
+      "url": "https://github.com/ghively/API2MCP-creator"
+    },
+    "slug": "API2MCP-creator",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dyahh87u64"
+  }
+}

@@ -1,0 +1,2003 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "bouch/uk-due-diligence",
+  "namespace": "bouch",
+  "slug": "uk-due-diligence",
+  "displayName": "uk-due-diligence",
+  "description": "Tools across five UK public registers. All official APIs.\n\nGive an agent a company name and it pulls corporate status, filing compliance, director networks, beneficial ownership chains, disqualification checks, insolvency notices, VAT validation, and property transactions.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "746b4445-153b-44fd-831d-9d8714569960",
+    "qualifiedName": "bouch/uk-due-diligence",
+    "namespace": "bouch",
+    "slug": "uk-due-diligence",
+    "displayName": "uk-due-diligence",
+    "description": "Tools across five UK public registers. All official APIs.\n\nGive an agent a company name and it pulls corporate status, filing compliance, director networks, beneficial ownership chains, disqualification checks, insolvency notices, VAT validation, and property transactions.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-29T12:37:02.016Z",
+    "homepage": "https://bouch.dev/products/uk-due-diligence-mcp/",
+    "bySmithery": false,
+    "owner": "org_01KNBW17SX1CGGX70J2F7358T7",
+    "score": 0.0220856102003643
+  },
+  "detail": {
+    "qualifiedName": "bouch/uk-due-diligence",
+    "displayName": "uk-due-diligence",
+    "description": "Tools across five UK public registers. All official APIs.\n\nGive an agent a company name and it pulls corporate status, filing compliance, director networks, beneficial ownership chains, disqualification checks, insolvency notices, VAT validation, and property transactions.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://uk-due-diligence--bouch.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://uk-due-diligence--bouch.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "company_search",
+        "description": "Search the Companies House register by company name or keyword.\n\nReturns a paginated list of matching companies with name, number,\nstatus, SIC codes, incorporation date, and registered address.\nUse company_profile for the full record once you have the company\nnumber. Re-call with start_index=start_index+items_per_page to\nfetch the next page.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 2,
+              "description": "Company name or keyword to search for"
+            },
+            "start_index": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 10000,
+              "minimum": 0,
+              "description": "Pagination offset. Default 0."
+            },
+            "company_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Filter by company type (e.g. 'ltd', 'llp'). Omit to search all."
+            },
+            "company_status": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Filter by company status (e.g. 'active', 'dissolved'). Omit to search all."
+            },
+            "items_per_page": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Number of results to return (max 100). Default 20."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Registered company name."
+                  },
+                  "address": {
+                    "type": "object",
+                    "description": "Registered office address as returned by the Companies House API.",
+                    "additionalProperties": true
+                  },
+                  "sic_codes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Standard Industrial Classification codes associated with the company."
+                  },
+                  "description": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Short upstream description (usually number + status + creation date)."
+                  },
+                  "company_type": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Companies House company type code (e.g. 'ltd', 'plc', 'llp')."
+                  },
+                  "company_number": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Companies House company number (e.g. '12345678')."
+                  },
+                  "company_status": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Company status (e.g. 'active', 'dissolved', 'liquidation')."
+                  },
+                  "date_of_creation": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Incorporation date in ISO format (YYYY-MM-DD)."
+                  }
+                },
+                "description": "A single entry in a Companies House search result."
+              },
+              "description": "Matching companies. Use the `company_number` field to call company_profile, company_officers, or company_psc for full detail."
+            },
+            "query": {
+              "type": "string",
+              "description": "The query string that was searched."
+            },
+            "has_more": {
+              "type": "boolean",
+              "description": "True if more results exist beyond this page. Re-call with start_index=start_index+items_per_page to fetch the next page."
+            },
+            "returned": {
+              "type": "integer",
+              "description": "Number of items actually returned on this page."
+            },
+            "start_index": {
+              "type": "integer",
+              "description": "Number of results skipped before this page (upstream start_index)."
+            },
+            "total_results": {
+              "type": "integer",
+              "description": "Total matching companies in Companies House (server-side)."
+            },
+            "items_per_page": {
+              "type": "integer",
+              "description": "Page size requested from the API for this call."
+            }
+          },
+          "required": [
+            "query",
+            "total_results",
+            "start_index",
+            "items_per_page",
+            "returned",
+            "has_more"
+          ]
+        }
+      },
+      {
+        "name": "company_profile",
+        "description": "Fetch the full Companies House profile for a company number.\n\nReturns status, registered address, SIC codes, filing compliance\n(overdue accounts and confirmation statement flags), and whether\nthe company has outstanding charges. Use company_search first to\nfind the company number.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "company_number": {
+              "type": "string",
+              "maxLength": 10,
+              "minLength": 1,
+              "description": "Companies House company number (8 digits, e.g. '03782379'). Returned by company_search."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "accounts": {
+              "type": "object",
+              "properties": {
+                "overdue": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "True if accounts are past their due date at Companies House."
+                },
+                "next_due": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "ISO date the next set of accounts is due."
+                },
+                "last_accounts_made_up_to": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "ISO date the most recent filed accounts were made up to."
+                }
+              },
+              "description": "Accounts filing status and due dates."
+            },
+            "sic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Standard Industrial Classification codes."
+            },
+            "has_charges": {
+              "type": "boolean",
+              "default": false,
+              "description": "True if the company has outstanding registered charges (secured debt), derived from the /charges endpoint. A due diligence signal."
+            },
+            "company_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Registered company name."
+            },
+            "company_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Companies House company type code."
+            },
+            "company_number": {
+              "type": "string",
+              "description": "Companies House company number."
+            },
+            "company_status": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Current status (active, dissolved, in liquidation, etc.)."
+            },
+            "date_of_creation": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Incorporation date (ISO YYYY-MM-DD)."
+            },
+            "confirmation_statement": {
+              "type": "object",
+              "properties": {
+                "overdue": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "True if the confirmation statement is past its due date."
+                },
+                "next_due": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "ISO date the next confirmation statement is due."
+                }
+              },
+              "description": "Confirmation statement filing status and next due date."
+            },
+            "registered_office_address": {
+              "type": "object",
+              "description": "Registered office address as returned by Companies House.",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "company_number"
+          ]
+        }
+      },
+      {
+        "name": "company_officers",
+        "description": "Fetch active officers for a Companies House company number.\n\nReturns directors, secretaries, and other active officers with\nappointment dates, nationality, and country of residence.\nResigned officers are excluded. Pagination is handled internally —\ndo NOT pass items_per_page or start_index; this tool takes only\ncompany_number.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "start_index": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Ignored — all officers are returned in one call."
+            },
+            "company_number": {
+              "type": "string",
+              "maxLength": 10,
+              "minLength": 1,
+              "description": "Companies House company number (8 digits, e.g. '03782379'). Returned by company_search."
+            },
+            "items_per_page": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Ignored — pagination is handled internally. Only accepted to avoid call failures."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "integer",
+              "description": "Total officers returned (filtered by include_resigned)."
+            },
+            "officers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Officer name as recorded at CH."
+                  },
+                  "links": {
+                    "type": "object",
+                    "description": "Upstream relational links (e.g. officer profile URL).",
+                    "additionalProperties": true
+                  },
+                  "address": {
+                    "type": "object",
+                    "description": "Officer correspondence address.",
+                    "additionalProperties": true
+                  },
+                  "occupation": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Declared occupation."
+                  },
+                  "nationality": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Declared nationality."
+                  },
+                  "resigned_on": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date of resignation if resigned, otherwise null."
+                  },
+                  "appointed_on": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date of appointment (ISO YYYY-MM-DD)."
+                  },
+                  "officer_role": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Officer role (e.g. 'director', 'secretary', 'llp-member')."
+                  },
+                  "date_of_birth": {
+                    "type": "object",
+                    "description": "Partial date of birth (month/year) as returned by CH.",
+                    "additionalProperties": true
+                  },
+                  "appointment_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Total number of other active appointments held by this officer, or null if unavailable. The Companies House officer list endpoint does not include this count; a separate per-officer call is required to populate it."
+                  },
+                  "country_of_residence": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Declared country of residence."
+                  }
+                },
+                "description": "A single officer (director, secretary, etc.) of a company."
+              },
+              "description": "Officer records."
+            },
+            "company_number": {
+              "type": "string",
+              "description": "Companies House company number."
+            },
+            "include_resigned": {
+              "type": "boolean",
+              "description": "Whether resigned officers were included in this result."
+            },
+            "high_appointment_count_flag": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Number of active officers with 10+ total appointments, or null if appointment counts were not fetched. Non-zero values are a nominee/phoenix director risk signal."
+            }
+          },
+          "required": [
+            "company_number",
+            "include_resigned",
+            "total"
+          ]
+        }
+      },
+      {
+        "name": "company_psc",
+        "description": "Fetch Persons with Significant Control (beneficial ownership) for a company.\n\nReturns PSC entries with natures of control, nationality, and\ncountry of residence. Flags overseas corporate PSC entries as a\nbeneficial ownership risk signal. Returns an explanatory note for\nwidely-held PLCs with no registrable PSC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "company_number": {
+              "type": "string",
+              "maxLength": 10,
+              "minLength": 1,
+              "description": "Companies House company number (8 digits, e.g. '03782379'). Returned by company_search."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "psc": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Upstream 'kind' (e.g. 'individual-person-with-significant-control', 'corporate-entity-person-with-significant-control')."
+                  },
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "PSC name (individual or entity)."
+                  },
+                  "address": {
+                    "type": "object",
+                    "description": "PSC correspondence address.",
+                    "additionalProperties": true
+                  },
+                  "ceased_on": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date PSC status ceased, if applicable."
+                  },
+                  "nationality": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Declared nationality for individual PSCs."
+                  },
+                  "notified_on": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date notified as a PSC (ISO YYYY-MM-DD)."
+                  },
+                  "identification": {
+                    "type": "object",
+                    "description": "Identification block for corporate PSCs: place_registered, registration_number, country_registered, legal_authority, etc.",
+                    "additionalProperties": true
+                  },
+                  "natures_of_control": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of 'nature of control' descriptors (e.g. 'ownership-of-shares-75-to-100-percent'). Individual entries may be truncated to 300 characters each."
+                  },
+                  "country_of_residence": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Declared country of residence for individual PSCs."
+                  }
+                },
+                "description": "A single Person with Significant Control record."
+              },
+              "description": "Persons with Significant Control records."
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Explanatory note when total=0. Typical for widely-held listed PLCs where no single person or entity holds 25%+ of shares or voting rights."
+            },
+            "total": {
+              "type": "integer",
+              "description": "Total PSC entries returned for this company."
+            },
+            "company_number": {
+              "type": "string",
+              "description": "Companies House company number."
+            },
+            "overseas_corporate_psc_flag": {
+              "type": "integer",
+              "default": 0,
+              "description": "Number of corporate PSCs registered outside the UK. Non-zero values indicate an offshore beneficial ownership chain."
+            }
+          },
+          "required": [
+            "company_number",
+            "total"
+          ]
+        }
+      },
+      {
+        "name": "charity_search",
+        "description": "Search the Charity Commission register of England and Wales by name or keyword.\n\nReturns matching charities with registration number, status, and\nregistration date. Use charity_profile for full details once you\nhave the charity number. The upstream `searchCharityName` endpoint\nreturns the full list in one shot — pagination is applied\nclient-side via offset/limit.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max items to return in this page. Default 20; raise to 100 for bulk views."
+            },
+            "query": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 2,
+              "description": "Charity name or keyword to search for"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 10000,
+              "minimum": 0,
+              "description": "Number of items to skip before this page. Default 0."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Max items requested for this page."
+            },
+            "query": {
+              "type": "string",
+              "description": "Search term applied."
+            },
+            "total": {
+              "type": "integer",
+              "description": "Total matches returned by upstream."
+            },
+            "offset": {
+              "type": "integer",
+              "description": "Number of items skipped before this page (client-side)."
+            },
+            "has_more": {
+              "type": "boolean",
+              "description": "True if more items may exist beyond this page. Re-call with offset=offset+returned to continue."
+            },
+            "returned": {
+              "type": "integer",
+              "description": "Items actually returned on this page."
+            },
+            "charities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "reg_status": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Registration status code as returned upstream: 'R' registered, 'RM' removed."
+                  },
+                  "charity_name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Registered charity name."
+                  },
+                  "charity_number": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Charity Commission registration number. Pass to charity_profile for the full record."
+                  },
+                  "reg_status_label": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Human-readable registration status ('Registered', 'Removed')."
+                  },
+                  "date_of_registration": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date of first registration (ISO YYYY-MM-DD)."
+                  }
+                },
+                "description": "A single hit in a Charity Commission name search."
+              },
+              "description": "Matching charity records."
+            }
+          },
+          "required": [
+            "query",
+            "total",
+            "offset",
+            "limit",
+            "returned",
+            "has_more"
+          ]
+        }
+      },
+      {
+        "name": "charity_profile",
+        "description": "Fetch the full Charity Commission profile for a charity number.\n\nReturns trustees, latest income/expenditure, insolvency flags,\ngoverning document type, classifications, and countries of operation.\nUse charity_search first to find the charity number.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "charity_number": {
+              "type": "string",
+              "maxLength": 20,
+              "minLength": 1,
+              "description": "Charity Commission registration number (e.g. '1234567'). Returned by charity_search."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Registered address of the charity (joined address lines)."
+            },
+            "insolvent": {
+              "type": "boolean",
+              "default": false,
+              "description": "True if the charity is flagged as insolvent."
+            },
+            "reg_status": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Registration status code ('R', 'RM')."
+            },
+            "charity_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Registered charity name."
+            },
+            "charity_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Charity type."
+            },
+            "latest_income": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Latest filed annual income in GBP."
+            },
+            "trustee_names": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "trustee_name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Trustee name."
+                  }
+                },
+                "description": "A single charity trustee record."
+              },
+              "description": "Trustees on record. Truncated to 30 entries."
+            },
+            "charity_number": {
+              "type": "string",
+              "description": "Charity registration number."
+            },
+            "who_what_where": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "classification_desc": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Classification description text."
+                  },
+                  "classification_type": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Classification axis: 'What', 'Who', or 'Where'."
+                  }
+                },
+                "description": "Who/What/Where classification descriptor."
+              },
+              "description": "Who/What/Where classification entries. The list may be truncated truncated to 50 entries."
+            },
+            "reg_status_label": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Human-readable registration status."
+            },
+            "in_administration": {
+              "type": "boolean",
+              "default": false,
+              "description": "True if the charity is in administration."
+            },
+            "latest_expenditure": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Latest filed annual expenditure in GBP."
+            },
+            "trustee_names_total": {
+              "type": "integer",
+              "default": 0,
+              "description": "Total trustees upstream before truncation."
+            },
+            "date_of_registration": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Date of first registration."
+            },
+            "who_what_where_total": {
+              "type": "integer",
+              "default": 0,
+              "description": "Total classification entries upstream before truncation."
+            },
+            "charity_co_reg_number": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Companies House number for charities also registered as companies (Charitable Incorporated Organisations, etc.)."
+            },
+            "countries_of_operation": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Countries the charity operates in (capped at 10 upstream)."
+            },
+            "trustee_names_truncated": {
+              "type": "boolean",
+              "default": false,
+              "description": "True if the trustee list was truncated."
+            },
+            "who_what_where_truncated": {
+              "type": "boolean",
+              "default": false,
+              "description": "True if the classification list was truncated."
+            }
+          },
+          "required": [
+            "charity_number"
+          ]
+        }
+      },
+      {
+        "name": "disqualified_search",
+        "description": "Check whether a named individual is banned from acting as a UK company director.\n\nUse this tool when asked to check disqualified, banned, or barred directors.\nQuery must be an individual's name (e.g. \"Richard Howson\") — NOT a company\nname, which always returns zero results.\n\nReturns names, dates of birth, disqualification period snippets, and\nofficer IDs that can be used with disqualified_profile for full details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 2,
+              "description": "Name of the person to search for"
+            },
+            "start_index": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 10000,
+              "minimum": 0,
+              "description": "Pagination offset (0-based). Default 0."
+            },
+            "items_per_page": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Results per page (max 100). Default 20."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "links": {
+                    "type": "object",
+                    "description": "Upstream relational links (self, etc.).",
+                    "additionalProperties": true
+                  },
+                  "title": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Display title (typically the officer's name)."
+                  },
+                  "address": {
+                    "type": "object",
+                    "description": "Last known address of the disqualified officer.",
+                    "additionalProperties": true
+                  },
+                  "snippet": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Upstream match snippet highlighting query terms."
+                  },
+                  "officer_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Companies House officer ID extracted from the self link. Pass to disqualified_profile for the full disqualification record."
+                  },
+                  "date_of_birth": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date of birth as returned by the search API."
+                  }
+                },
+                "description": "A single hit in a disqualified officers search."
+              },
+              "description": "Matching disqualified officer records."
+            },
+            "query": {
+              "type": "string",
+              "description": "Search query applied."
+            },
+            "has_more": {
+              "type": "boolean",
+              "description": "True if more items may exist beyond this page. Re-call with start_index=start_index+items_per_page to continue."
+            },
+            "returned": {
+              "type": "integer",
+              "description": "Items actually returned on this page."
+            },
+            "start_index": {
+              "type": "integer",
+              "description": "Pagination offset for this page."
+            },
+            "total_results": {
+              "type": "integer",
+              "description": "Total matching records upstream at Companies House."
+            },
+            "items_per_page": {
+              "type": "integer",
+              "description": "Page size requested."
+            }
+          },
+          "required": [
+            "query",
+            "total_results",
+            "start_index",
+            "items_per_page",
+            "returned",
+            "has_more"
+          ]
+        }
+      },
+      {
+        "name": "disqualified_profile",
+        "description": "Fetch the full disqualification record for a director by officer ID.\n\nReturns all disqualification orders: reason, Act/section cited,\ndisqualification period, and associated company names. Use\ndisqualified_search first to find the officer ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "officer_id": {
+              "type": "string",
+              "maxLength": 100,
+              "minLength": 1,
+              "description": "Companies House officer ID. Returned by disqualified_search."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Officer name."
+            },
+            "surname": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Family name, if split upstream."
+            },
+            "forename": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Given name, if split upstream."
+            },
+            "officer_id": {
+              "type": "string",
+              "description": "Companies House officer ID looked up."
+            },
+            "nationality": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Declared nationality."
+            },
+            "officer_kind": {
+              "type": "string",
+              "description": "Which CH endpoint returned the record: 'natural' (individual) or 'corporate' (legal entity)."
+            },
+            "date_of_birth": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Date of birth on record."
+            },
+            "disqualifications": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "object",
+                    "description": "Reason block as returned upstream: act, section, description_identifier, article, etc.",
+                    "additionalProperties": true
+                  },
+                  "address": {
+                    "type": "object",
+                    "description": "Address on record at the time of the order.",
+                    "additionalProperties": true
+                  },
+                  "heard_on": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date the order was heard, when provided."
+                  },
+                  "company_names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Companies associated with this disqualification. The list may be truncated to 20 entries."
+                  },
+                  "undertaken_on": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Date the undertaking was given, when provided."
+                  },
+                  "last_variation": {
+                    "type": "object",
+                    "description": "Details of the last variation of this order, if any.",
+                    "additionalProperties": true
+                  },
+                  "case_identifier": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Upstream case_identifier, when provided."
+                  },
+                  "disqualified_from": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Start date of the disqualification period."
+                  },
+                  "disqualified_until": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "End date of the disqualification period."
+                  },
+                  "company_names_total": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Total number of companies originally attached to this order before truncation (may equal `len(company_names)`)."
+                  },
+                  "company_names_truncated": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "True if the company_names list was truncated to max_companies."
+                  }
+                },
+                "description": "A single disqualification order attached to a disqualified director."
+              },
+              "description": "All disqualification orders attached to this officer."
+            }
+          },
+          "required": [
+            "officer_id",
+            "officer_kind"
+          ]
+        }
+      },
+      {
+        "name": "land_title_search",
+        "description": "Search HM Land Registry Price Paid Index by postcode or address.\n\nReturns up to 10 recent sale transactions for the postcode: price,\ndate, address, property type, and tenure (Freehold/Leasehold).\nCovers England and Wales only. Postcode gives the most reliable\nresults — a full address is also accepted and the postcode is\nextracted automatically.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "address_or_postcode": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 4,
+              "description": "UK property address or postcode. Postcode is most reliable: e.g. 'NG1 1AB'. Full address also accepted."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "integer",
+              "description": "Number of Price Paid transactions returned. Capped at 10 by the upstream SPARQL query."
+            },
+            "postcode": {
+              "type": "string",
+              "description": "Normalised UK postcode extracted from the input."
+            },
+            "transactions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "paon": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Primary addressable object name (house number or name)."
+                  },
+                  "saon": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Secondary addressable object name (flat/unit identifier)."
+                  },
+                  "town": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Town/city."
+                  },
+                  "county": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "County."
+                  },
+                  "street": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Street name."
+                  },
+                  "postcode": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Property postcode."
+                  },
+                  "price_paid": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Sale price in GBP (integer pounds)."
+                  },
+                  "estate_type": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Tenure / estate type label (e.g. 'Freehold', 'Leasehold')."
+                  },
+                  "property_type": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Property type label extracted from the HMLR URI (e.g. 'Terraced', 'Semi Detached', 'Flat')."
+                  },
+                  "transaction_date": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Transaction date (ISO YYYY-MM-DD)."
+                  }
+                },
+                "description": "A single Price Paid transaction for a property."
+              },
+              "description": "Recent Price Paid transactions for the postcode, sorted newest first."
+            }
+          },
+          "required": [
+            "postcode",
+            "total"
+          ]
+        }
+      },
+      {
+        "name": "gazette_notice",
+        "description": "Fetch the full legal wording of a Gazette notice by numeric notice ID.\n\nReturns the complete JSON-LD linked-data record for the notice: parties,\nlegal basis, court, and full text. Use gazette_insolvency first to find\nnotice_numeric_id values.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "notice_id": {
+              "type": "string",
+              "maxLength": 20,
+              "minLength": 1,
+              "description": "Numeric Gazette notice ID. Returned as notice_numeric_id by gazette_insolvency."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "gazette_insolvency",
+        "description": "Search The Gazette's insolvency notice index by entity name.\n\nSearches the Gazette's insolvency endpoint which covers corporate\nnotice codes: winding-up orders (2443), administration orders (2448),\nliquidator appointments (2452), striking-off notices (2460), and more.\nResults are sorted by severity — winding-up orders and administration\norders appear first.\n\nEach result includes a notice_numeric_id. Read the full legal wording\nvia the notice://{notice_numeric_id} resource.\n\nThe Gazette is the official UK public record. A notice here means\nthe event has been formally published and is legally effective.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Filter notices up to this date (YYYY-MM-DD)"
+            },
+            "start_date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Filter notices from this date (YYYY-MM-DD)"
+            },
+            "entity_name": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 2,
+              "description": "Company or individual name to search for in Gazette insolvency notices"
+            },
+            "max_notices": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Cap on notices returned, applied after severity/date sort. Default 20. The Gazette insolvency feed returns up to 100 results per search — raise to 100 to see the full set."
+            },
+            "notice_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Filter by notice code (e.g. '2441' winding-up petition, '2443' winding-up order, '2448' administration order, '2460' striking-off). Omit to search all."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "notices": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Publication date (ISO YYYY-MM-DD)."
+                  },
+                  "title": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Notice title."
+                  },
+                  "content": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Brief notice excerpt from the search feed (HTML stripped). For full legal wording read notice://{notice_numeric_id}."
+                  },
+                  "severity": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Internal severity score 0-10. Higher = more serious (10 = Winding-Up Order, 9 = Administration Order / Receiver, 0 = unclassified)."
+                  },
+                  "notice_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Gazette notice URI (e.g. 'https://www.thegazette.co.uk/id/notice/5122793')."
+                  },
+                  "notice_code": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Gazette notice code (e.g. '2443' winding-up order, '2448' administration order)."
+                  },
+                  "notice_type": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Human-readable notice type label (e.g. 'Winding-Up Order')."
+                  },
+                  "notice_numeric_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Numeric notice ID. Read full notice content via the notice://{notice_numeric_id} resource."
+                  }
+                },
+                "description": "A single corporate insolvency notice from The Gazette."
+              },
+              "description": "Matching notices, sorted by severity (desc) then date (desc)."
+            },
+            "end_date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Upper bound of the date range filter, if any."
+            },
+            "start_date": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Lower bound of the date range filter, if any."
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "Entity name that was searched."
+            },
+            "total_notices": {
+              "type": "integer",
+              "description": "Total notices returned after deduplication, sorting, and cap."
+            },
+            "max_notices_cap": {
+              "type": "integer",
+              "description": "The max_notices cap applied. Upstream may have more matching notices."
+            },
+            "notice_type_filter": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Notice code filter applied, or null if all codes searched."
+            }
+          },
+          "required": [
+            "entity_name",
+            "total_notices",
+            "max_notices_cap"
+          ]
+        }
+      },
+      {
+        "name": "vat_validate",
+        "description": "Validate a UK VAT number against the HMRC register.\n\nReturns the trading name and address as registered with HMRC for VAT\npurposes. The VAT-registered trading address often differs from the\nCompanies House registered address — that discrepancy is a due\ndiligence signal worth noting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "vat_number": {
+              "type": "string",
+              "maxLength": 15,
+              "minLength": 9,
+              "description": "UK VAT registration number. Accepts: 'GB123456789', '123456789', 'GB 123 456 789'. GB prefix and spaces normalised automatically."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean",
+              "description": "True if HMRC confirmed the VAT number is currently registered. False means HMRC returned 404 (not registered / deregistered)."
+            },
+            "vat_number": {
+              "type": "string",
+              "description": "Canonical VAT number in 'GB<9 digits>' format."
+            },
+            "trading_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Trading name registered with HMRC for VAT. Compare with the Companies House name — discrepancies are a due diligence signal."
+            },
+            "registered_address": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "VAT-registered trading address. May differ from the Companies House registered office address."
+            },
+            "consultation_number": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "HMRC consultation reference number for this lookup."
+            }
+          },
+          "required": [
+            "valid",
+            "vat_number"
+          ]
+        }
+      },
+      {
+        "name": "search",
+        "description": "Search across all UK due diligence registers simultaneously.\n\nSearches Companies House, Charity Commission, disqualified directors,\nand Gazette insolvency notices in parallel. Returns a list of result\nIDs — use fetch with each ID to retrieve the full record.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 2,
+              "description": "Company name, charity name, director name, or keyword to search for across all UK due diligence registers"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "fetch",
+        "description": "Fetch the full record for an ID returned by search.\n\nRoutes by prefix to the appropriate register:\n- company:{number} → Companies House full profile\n- charity:{number} → Charity Commission full profile\n- disqualification:{officer_id} → Disqualified director full record\n- notice:{notice_id} → Gazette notice full legal text",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "maxLength": 100,
+              "minLength": 3,
+              "description": "Prefixed record ID returned by search. Format: company:{number}, charity:{number}, disqualification:{officer_id}, or notice:{notice_id}"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "list_prompts",
+        "description": "List all available prompts.\n\nReturns JSON with prompt metadata including name, description,\nand optional arguments.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_prompt",
+        "description": "Get a prompt by name with optional arguments.\n\nReturns the rendered prompt as JSON with a messages array.\nArguments should be provided as a dict mapping argument names\nto values.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the prompt to get"
+            },
+            "arguments": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional arguments for the prompt"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "due_diligence",
+        "description": "Full due diligence check on a UK company across all registers.",
+        "arguments": [
+          {
+            "name": "entity_name",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "charity_due_diligence",
+        "description": "Due diligence check on a UK registered charity.",
+        "arguments": [
+          {
+            "name": "charity_name",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "director_check",
+        "description": "Check whether a named individual is disqualified as a UK company director.",
+        "arguments": [
+          {
+            "name": "director_name",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

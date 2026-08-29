@@ -1,0 +1,267 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "creator35lwb-web/verifimind-genesis",
+  "namespace": "creator35lwb-web",
+  "slug": "verifimind-genesis",
+  "displayName": "verifimind-genesis",
+  "description": "Validate concepts end-to-end across innovation, ethics, and security. Identify market opportunities, competitive positioning, privacy and fairness risks, and security vulnerabilities. Get a unified verdict with actionable recommendations and a history you can track over time.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "vulnerability",
+    "compliance",
+    "owasp",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "5de10323-66df-4d6b-ba5d-3e56c4629983",
+    "qualifiedName": "creator35lwb-web/verifimind-genesis",
+    "namespace": "creator35lwb-web",
+    "slug": "verifimind-genesis",
+    "displayName": "verifimind-genesis",
+    "description": "Validate concepts end-to-end across innovation, ethics, and security. Identify market opportunities, competitive positioning, privacy and fairness risks, and security vulnerabilities. Get a unified verdict with actionable recommendations and a history you can track over time.",
+    "iconUrl": "https://api.smithery.ai/servers/creator35lwb-web/verifimind-genesis/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2025-12-25T11:24:45.418Z",
+    "homepage": "https://smithery.ai/servers/creator35lwb-web/verifimind-genesis",
+    "bySmithery": false,
+    "owner": "org_01KNBTPMACNKAPDC3T6FXGT023",
+    "score": 0.016129032258064516
+  },
+  "detail": {
+    "qualifiedName": "creator35lwb-web/verifimind-genesis",
+    "displayName": "verifimind-genesis",
+    "description": "Validate concepts end-to-end across innovation, ethics, and security. Identify market opportunities, competitive positioning, privacy and fairness risks, and security vulnerabilities. Get a unified verdict with actionable recommendations and a history you can track over time.",
+    "iconUrl": "https://api.smithery.ai/servers/creator35lwb-web/verifimind-genesis/icon",
+    "remote": true,
+    "deploymentUrl": "https://verifimind-genesis--creator35lwb-web.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://verifimind-genesis--creator35lwb-web.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "run_full_trinity",
+        "description": "Complete X → Z → CS Trinity validation. X (Innovation/Strategy) → Z (Ethics/Compliance, VETO power) → CS (Security/Feasibility) → Synthesis with overall score and PROCEED/REFINE/HALT verdict.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string"
+            },
+            "concept_name": {
+              "type": "string"
+            },
+            "save_to_history": {
+              "type": "boolean",
+              "default": true
+            },
+            "concept_description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "consult_agent_x",
+        "description": "X Agent — Innovation & Strategy analysis. Market opportunity, competitive positioning (vs LangChain/CrewAI/AutoGen), innovation score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string"
+            },
+            "concept_name": {
+              "type": "string"
+            },
+            "concept_description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "consult_agent_z",
+        "description": "Z Agent — Ethics & Compliance review with VETO POWER. Z-Protocol v1.1: 21 frameworks across 4 jurisdictional tiers (International, EU/EEA, US, ASEAN). Triggers veto on ethical red lines.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string"
+            },
+            "concept_name": {
+              "type": "string"
+            },
+            "prior_reasoning": {
+              "type": "string"
+            },
+            "concept_description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "consult_agent_cs",
+        "description": "CS Agent — Security & Feasibility validation. CS Security v1.1: 6-stage, 12-dimension, OWASP Agentic AI (ASI01-ASI10), Socratic interrogation framework.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string"
+            },
+            "concept_name": {
+              "type": "string"
+            },
+            "prior_reasoning": {
+              "type": "string"
+            },
+            "concept_description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_prompt_templates",
+        "description": "List available Genesis prompt templates with optional filtering by agent, category, or tags.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "agent_id": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_prompt_template",
+        "description": "Get a specific Genesis prompt template by ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "template_id": {
+              "type": "string"
+            },
+            "include_content": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      },
+      {
+        "name": "export_prompt_template",
+        "description": "Export a Genesis prompt template to Markdown or JSON format.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "markdown",
+                "json"
+              ],
+              "type": "string"
+            },
+            "template_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "register_custom_template",
+        "description": "Register a new custom Genesis prompt template.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "content": {
+              "type": "string"
+            },
+            "agent_id": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "import_template_from_url",
+        "description": "Import a Genesis prompt template from a URL (GitHub Gist, raw file).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "validate": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      },
+      {
+        "name": "get_template_statistics",
+        "description": "Get Genesis prompt template registry statistics.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Genesis Master Prompt v4.2",
+        "uri": "genesis://config/master_prompt",
+        "description": "Complete Genesis Master Prompt defining X/Z/CS agent roles and citation architecture."
+      },
+      {
+        "name": "Latest Validation",
+        "uri": "genesis://history/latest",
+        "description": "Most recent Trinity validation result."
+      },
+      {
+        "name": "Validation History",
+        "uri": "genesis://history/all",
+        "description": "Complete validation history with statistics."
+      },
+      {
+        "name": "Project Info",
+        "uri": "genesis://state/project_info",
+        "description": "Project metadata, agent info, and version details."
+      }
+    ],
+    "prompts": null
+  }
+}

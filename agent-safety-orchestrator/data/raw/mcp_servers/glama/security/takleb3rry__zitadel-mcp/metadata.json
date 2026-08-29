@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "b3wfzrqjqh",
+  "namespace": "takleb3rry",
+  "slug": "zitadel-mcp",
+  "name": "Zitadel MCP",
+  "description": "Enables faster, cleaner integration with Zitadel for user authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables faster, cleaner integration with Zitadel for user authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "DEBUG, INFO, WARN, ERROR (default: INFO)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "ZITADEL_ISSUER": {
+          "description": "Zitadel instance URL",
+          "type": "string"
+        },
+        "ZITADEL_ORG_ID": {
+          "description": "Organization ID",
+          "type": "string"
+        },
+        "ZITADEL_PROJECT_ID": {
+          "description": "Default project ID for role operations",
+          "type": "string"
+        },
+        "PORTAL_DATABASE_URL": {
+          "description": "Postgres connection string (enables portal tools)",
+          "type": "string"
+        },
+        "ZITADEL_SERVICE_ACCOUNT_KEY_ID": {
+          "description": "Key ID from the JSON key file",
+          "type": "string"
+        },
+        "ZITADEL_SERVICE_ACCOUNT_USER_ID": {
+          "description": "Service account user ID",
+          "type": "string"
+        },
+        "ZITADEL_SERVICE_ACCOUNT_PRIVATE_KEY": {
+          "description": "Base64-encoded RSA private key (the key field from the downloaded JSON)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ZITADEL_ISSUER",
+        "ZITADEL_SERVICE_ACCOUNT_USER_ID",
+        "ZITADEL_SERVICE_ACCOUNT_KEY_ID",
+        "ZITADEL_SERVICE_ACCOUNT_PRIVATE_KEY",
+        "ZITADEL_ORG_ID"
+      ]
+    },
+    "id": "b3wfzrqjqh",
+    "name": "Zitadel MCP",
+    "namespace": "takleb3rry",
+    "repository": {
+      "url": "https://github.com/takleb3rry/zitadel-mcp"
+    },
+    "slug": "zitadel-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b3wfzrqjqh"
+  }
+}

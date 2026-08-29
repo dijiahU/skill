@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "uy3p4y72qx",
+  "namespace": "aliiqbal208",
+  "slug": "medium-mcp",
+  "name": "Medium MCP Server",
+  "description": "Enables AI assistants to interact with Medium's platform for publishing, updating, and managing articles and drafts through OAuth 2.0 authentication with automatic retry logic and rate limit handling.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Medium's platform for publishing, updating, and managing articles and drafts through OAuth 2.0 authentication with automatic retry logic and rate limit handling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MEDIUM_AUTH_CODE": {
+          "description": "Your Medium OAuth authorization code",
+          "type": "string"
+        },
+        "MEDIUM_CLIENT_ID": {
+          "description": "Your Medium OAuth Client ID from https://medium.com/developers",
+          "type": "string"
+        },
+        "MEDIUM_ACCESS_TOKEN": {
+          "description": "Your Medium integration token obtained from https://medium.com/me/settings/security",
+          "type": "string"
+        },
+        "MEDIUM_CLIENT_SECRET": {
+          "description": "Your Medium OAuth Client Secret from https://medium.com/developers",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MEDIUM_ACCESS_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "MEDIUM_CLIENT_ID",
+            "MEDIUM_CLIENT_SECRET",
+            "MEDIUM_AUTH_CODE"
+          ]
+        }
+      ]
+    },
+    "id": "uy3p4y72qx",
+    "name": "Medium MCP Server",
+    "namespace": "aliiqbal208",
+    "repository": {
+      "url": "https://github.com/aliiqbal208/medium-mcp"
+    },
+    "slug": "medium-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/uy3p4y72qx"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "xgrqovr1kj",
+  "namespace": "atikant-sql",
+  "slug": "mcp-strava",
+  "name": "MCP Strava Server",
+  "description": "Enables Claude to access and analyze your Strava activities through OAuth authentication. Supports retrieving activity lists and detailed workout data for fitness tracking and analysis.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables Claude to access and analyze your Strava activities through OAuth authentication. Supports retrieving activity lists and detailed workout data for fitness tracking and analysis.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "STRAVA_SCOPES": {
+          "description": "Strava API scopes to request during OAuth",
+          "type": "string"
+        },
+        "STRAVA_CLIENT_ID": {
+          "description": "Your Strava application client ID",
+          "type": "string"
+        },
+        "STRAVA_TOKEN_PATH": {
+          "description": "Path where access tokens will be stored",
+          "type": "string"
+        },
+        "STRAVA_REDIRECT_URI": {
+          "description": "The redirect URI for OAuth callback (should be http://localhost:8723/callback)",
+          "type": "string"
+        },
+        "STRAVA_CLIENT_SECRET": {
+          "description": "Your Strava application client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "STRAVA_CLIENT_ID",
+        "STRAVA_CLIENT_SECRET",
+        "STRAVA_REDIRECT_URI",
+        "STRAVA_TOKEN_PATH",
+        "STRAVA_SCOPES"
+      ]
+    },
+    "id": "xgrqovr1kj",
+    "name": "MCP Strava Server",
+    "namespace": "atikant-sql",
+    "repository": {
+      "url": "https://github.com/atikant-sql/mcp-strava"
+    },
+    "slug": "mcp-strava",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xgrqovr1kj"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "registry": "glama",
+  "id": "sml0b79oz1",
+  "namespace": "guercheLE",
+  "slug": "jira-dc-mcp",
+  "name": "Jira Data Center MCP Server",
+  "description": "Enables LLMs to interact with Atlassian Jira Data Center through natural language queries for semantic search and automated workflow execution. It provides secure tools to discover, inspect, and execute Jira API operations using production-ready authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables LLMs to interact with Atlassian Jira Data Center through natural language queries for semantic search and automated workflow execution. It provides secure tools to discover, inspect, and execute Jira API operations using production-ready authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JIRA_URL": {
+          "description": "Jira Data Center URL (e.g., https://jira.example.com)",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level: DEBUG, INFO, WARN, ERROR",
+          "type": "string",
+          "default": "INFO"
+        },
+        "JIRA_TOKEN": {
+          "description": "Authentication token (required for PAT or Basic auth)",
+          "type": "string"
+        },
+        "LOG_OUTPUT": {
+          "description": "Logging output destination: stdout, file, both",
+          "type": "string",
+          "default": "stdout"
+        },
+        "LOG_MAX_SIZE": {
+          "description": "Max log file size in MB before rotation",
+          "type": "string",
+          "default": "100"
+        },
+        "LOG_ROTATION": {
+          "description": "Log rotation frequency: daily, hourly, or size-based",
+          "type": "string",
+          "default": "daily"
+        },
+        "LOG_FILE_PATH": {
+          "description": "Path to the log file location",
+          "type": "string",
+          "default": "./logs/jira-dc-mcp.log"
+        },
+        "LOG_MAX_FILES": {
+          "description": "Number of rotated log files to keep",
+          "type": "string",
+          "default": "7"
+        },
+        "JIRA_API_VERSION": {
+          "description": "Jira REST API version: 2 (for Jira 8.x) or 3 (for Jira 9.x+). Auto-detected if not specified.",
+          "type": "string"
+        },
+        "JIRA_AUTH_METHOD": {
+          "description": "Authentication method: oauth2, pat, oauth1, basic",
+          "type": "string"
+        },
+        "REQUEST_TIMEOUT_MS": {
+          "description": "Request timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "CIRCUIT_BREAKER_TIMEOUT": {
+          "description": "Circuit breaker reset timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "RATE_LIMIT_MAX_REQUESTS": {
+          "description": "Maximum requests per minute",
+          "type": "string",
+          "default": "100"
+        },
+        "CIRCUIT_BREAKER_WINDOW_SIZE": {
+          "description": "Time window in milliseconds for failure detection",
+          "type": "string",
+          "default": "10000"
+        },
+        "CIRCUIT_BREAKER_FAILURE_RATE": {
+          "description": "Failure rate threshold (0-1) before opening the circuit breaker",
+          "type": "string",
+          "default": "0.5"
+        },
+        "CIRCUIT_BREAKER_FAILURE_THRESHOLD": {
+          "description": "Number of consecutive failures before the circuit breaker opens",
+          "type": "string",
+          "default": "5"
+        }
+      },
+      "type": "object",
+      "required": [
+        "JIRA_URL",
+        "JIRA_AUTH_METHOD",
+        "JIRA_TOKEN"
+      ]
+    },
+    "id": "sml0b79oz1",
+    "name": "Jira Data Center MCP Server",
+    "namespace": "guercheLE",
+    "repository": {
+      "url": "https://github.com/guercheLE/jira-dc-mcp"
+    },
+    "slug": "jira-dc-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sml0b79oz1"
+  }
+}

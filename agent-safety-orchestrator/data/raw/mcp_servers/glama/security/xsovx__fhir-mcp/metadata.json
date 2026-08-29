@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "ivj90sjqae",
+  "namespace": "xSoVx",
+  "slug": "fhir-mcp",
+  "name": "FhirMCP",
+  "description": "Enables LLMs to securely interact with FHIR healthcare servers and HL7 terminology services. Provides comprehensive healthcare data operations with built-in PHI protection, audit logging, and SMART on FHIR authentication.",
+  "discoveryQueries": [
+    "audit",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables LLMs to securely interact with FHIR healthcare servers and HL7 terminology services. Provides comprehensive healthcare data operations with built-in PHI protection, audit logging, and SMART on FHIR authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PHI_MODE": {
+          "description": "PHI protection mode (safe or trusted)",
+          "type": "string",
+          "default": "safe"
+        },
+        "FHIR_TOKEN": {
+          "description": "Bearer token for FHIR server",
+          "type": "string"
+        },
+        "ENABLE_AUDIT": {
+          "description": "Enable audit logging",
+          "type": "string",
+          "default": "true"
+        },
+        "FHIR_BASE_URL": {
+          "description": "FHIR server base URL",
+          "type": "string",
+          "default": "https://hapi.fhir.org/baseR4"
+        },
+        "TERMINOLOGY_TOKEN": {
+          "description": "Bearer token for terminology service",
+          "type": "string"
+        },
+        "TERMINOLOGY_BASE_URL": {
+          "description": "HL7 terminology service URL",
+          "type": "string",
+          "default": "https://tx.fhir.org/r4"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ivj90sjqae",
+    "name": "FhirMCP",
+    "namespace": "xSoVx",
+    "repository": {
+      "url": "https://github.com/xSoVx/fhir-mcp"
+    },
+    "slug": "fhir-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ivj90sjqae"
+  }
+}

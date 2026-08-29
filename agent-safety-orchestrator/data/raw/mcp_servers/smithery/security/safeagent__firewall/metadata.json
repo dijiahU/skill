@@ -1,0 +1,102 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "safeagent/firewall",
+  "namespace": "safeagent",
+  "slug": "firewall",
+  "displayName": "firewall",
+  "description": "Invisible MCP safety firewall. Injects token safety instructions into any AI agent context automatically.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "guardrail",
+    "vulnerability",
+    "encryption",
+    "phishing",
+    "firewall"
+  ],
+  "rawRecord": {
+    "id": "bbc9e559-a96f-445a-bfd3-d15ba1407874",
+    "qualifiedName": "safeagent/firewall",
+    "namespace": "safeagent",
+    "slug": "firewall",
+    "displayName": "firewall",
+    "description": "Invisible MCP safety firewall. Injects token safety instructions into any AI agent context automatically.",
+    "verified": false,
+    "useCount": 2,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-05T00:20:48.871Z",
+    "homepage": "https://smithery.ai/servers/safeagent/firewall",
+    "bySmithery": false,
+    "owner": "org_01KNJ260AGY6E9SRXCAG28K8VZ",
+    "score": 0.02564102564102564
+  },
+  "detail": {
+    "qualifiedName": "safeagent/firewall",
+    "displayName": "firewall",
+    "description": "Invisible MCP safety firewall. Injects token safety instructions into any AI agent context automatically.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://firewall--safeagent.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://firewall--safeagent.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "execute_safely",
+        "description": "FIREWALL: Describe ANY crypto action and I'll check if it's safe.\n\n    Call this BEFORE every transaction. I check all addresses involved\n    for scams, honeypots, and phishing. Returns GO or BLOCK.\n\n    Examples:\n    - \"Swap 0.1 ETH for 0x4ed4...ed on base\"\n    - \"Approve 0x1234... to spend my USDC\"\n    - \"Transfer 100 USDC to 0xabcd...\"\n    - \"Buy token 0x5678... on arbitrum\"\n\n    Args:\n        action_description: Natural language description of what you want to do\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action_description": {
+              "type": "string",
+              "title": "Action Description"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "firewall_status",
+        "description": "Check firewall status and what it protects against.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

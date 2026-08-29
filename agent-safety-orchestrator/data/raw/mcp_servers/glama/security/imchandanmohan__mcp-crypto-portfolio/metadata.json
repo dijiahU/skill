@@ -1,0 +1,101 @@
+{
+  "registry": "glama",
+  "id": "s3z51ti3ex",
+  "namespace": "imchandanmohan",
+  "slug": "mcp-crypto-portfolio",
+  "name": "MCP Crypto Portfolio",
+  "description": "Connects Claude AI to KuCoin portfolio and Notion workspace for real-time crypto portfolio management, automated reporting, and AI-powered risk analysis with enterprise-grade security and observability.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Connects Claude AI to KuCoin portfolio and Notion workspace for real-time crypto portfolio management, automated reporting, and AI-powered risk analysis with enterprise-grade security and observability.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Server host address",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "Server port number",
+          "type": "string",
+          "default": "3333"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "PYTHONPATH": {
+          "description": "Python path for module resolution",
+          "type": "string",
+          "default": "/app"
+        },
+        "NOTION_TOKEN": {
+          "description": "Your Notion integration token",
+          "type": "string"
+        },
+        "AUDIT_ENABLED": {
+          "description": "Enable audit logging",
+          "type": "string",
+          "default": "true"
+        },
+        "KUCOIN_API_KEY": {
+          "description": "Your KuCoin API key (read-only permissions)",
+          "type": "string"
+        },
+        "KUCOIN_BASE_URL": {
+          "description": "KuCoin API base URL",
+          "type": "string",
+          "default": "https://api.kucoin.com"
+        },
+        "KUCOIN_API_SECRET": {
+          "description": "Your KuCoin API secret",
+          "type": "string"
+        },
+        "KUCOIN_KEY_VERSION": {
+          "description": "Optional: force specific KuCoin API version",
+          "type": "string"
+        },
+        "NOTION_DATABASE_ID": {
+          "description": "Your Notion database ID for portfolio data",
+          "type": "string"
+        },
+        "HEALTH_CHECK_TIMEOUT": {
+          "description": "Health check timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "KUCOIN_API_PASSPHRASE": {
+          "description": "Your KuCoin API passphrase",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "KUCOIN_API_KEY",
+        "KUCOIN_API_SECRET",
+        "KUCOIN_API_PASSPHRASE",
+        "NOTION_TOKEN",
+        "NOTION_DATABASE_ID"
+      ]
+    },
+    "id": "s3z51ti3ex",
+    "name": "MCP Crypto Portfolio",
+    "namespace": "imchandanmohan",
+    "repository": {
+      "url": "https://github.com/imchandanmohan/mcp-crypto-portfolio"
+    },
+    "slug": "mcp-crypto-portfolio",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/s3z51ti3ex"
+  }
+}

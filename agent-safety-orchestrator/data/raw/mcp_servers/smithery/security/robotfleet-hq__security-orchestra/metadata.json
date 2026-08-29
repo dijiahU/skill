@@ -1,0 +1,1404 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "robotfleet-hq/security-orchestra",
+  "namespace": "robotfleet-hq",
+  "slug": "security-orchestra",
+  "displayName": "security-orchestra",
+  "description": "Server Settings\nEdit how your server appears to other users in the marketplace and community.\n\nDisplay Name\nsecurity-orchestra\nDescription\nEnter a description for your server. You can use markdown formatting...\nHomepage\nhttps://smithery.ai\nThe URL where users can find more information about this server.\n\nServer Icon\nS\nEdit\nUpload a custom icon for your server. If no icon is uploaded, we will use the favicon from your homepage URL.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "vulnerability",
+    "compliance",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "d09ef568-6e0f-45a4-8e07-1141fb28949d",
+    "qualifiedName": "robotfleet-hq/security-orchestra",
+    "namespace": "robotfleet-hq",
+    "slug": "security-orchestra",
+    "displayName": "security-orchestra",
+    "description": "Server Settings\nEdit how your server appears to other users in the marketplace and community.\n\nDisplay Name\nsecurity-orchestra\nDescription\nEnter a description for your server. You can use markdown formatting...\nHomepage\nhttps://smithery.ai\nThe URL where users can find more information about this server.\n\nServer Icon\nS\nEdit\nUpload a custom icon for your server. If no icon is uploaded, we will use the favicon from your homepage URL.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/robotfleet-hq.github.io.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-17T22:07:58.215Z",
+    "homepage": "https://robotfleet-hq.github.io/security-orchestra-landing",
+    "bySmithery": false,
+    "owner": "org_01KNBVGZ1XCA6YJ5PWR61BQPKG",
+    "score": 0.023809523809523808
+  },
+  "detail": {
+    "qualifiedName": "robotfleet-hq/security-orchestra",
+    "displayName": "security-orchestra",
+    "description": "Server Settings\nEdit how your server appears to other users in the marketplace and community.\n\nDisplay Name\nsecurity-orchestra\nDescription\nEnter a description for your server. You can use markdown formatting...\nHomepage\nhttps://smithery.ai\nThe URL where users can find more information about this server.\n\nServer Icon\nS\nEdit\nUpload a custom icon for your server. If no icon is uploaded, we will use the favicon from your homepage URL.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/robotfleet-hq.github.io.ico",
+    "remote": true,
+    "deploymentUrl": "https://security-orchestra--robotfleet-hq.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://security-orchestra--robotfleet-hq.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "Security Orchestra API Key",
+              "x-order": 0,
+              "description": "Your API key from https://security-orchestra-billing.onrender.com/signup.html"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_capabilities",
+        "description": "List all available workflows, chains, credit costs, and required parameters.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "subdomain_discovery",
+        "description": "Discover subdomains for a target domain using DNS brute-force, certificate transparency, and passive sources",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "domain"
+            }
+          }
+        }
+      },
+      {
+        "name": "asset_discovery",
+        "description": "Map IP addresses, open ports, technologies, and cloud assets for a target domain",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "domain"
+            }
+          }
+        }
+      },
+      {
+        "name": "vulnerability_assessment",
+        "description": "Run vulnerability scans against a target and return prioritized findings with remediation guidance",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "target"
+            }
+          }
+        }
+      },
+      {
+        "name": "generator_sizing",
+        "description": "Size generators for data center loads with industry-standard compliance. Returns genset kVA, fuel consumption, tank size, runtime, ATS sizing, and cost estimates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "description": "tier"
+            },
+            "load_kw": {
+              "type": "string",
+              "description": "load kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "utility_interconnect",
+        "description": "Analyze utility interconnect requirements for major US power providers. Returns per-load-size timelines, deposit $/kW ranges, first-year cost, competitive intel, and constraint warnings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "load_mw": {
+              "type": "string",
+              "description": "load mw"
+            },
+            "utility": {
+              "type": "string",
+              "description": "utility"
+            }
+          }
+        }
+      },
+      {
+        "name": "pue_calculator",
+        "description": "Calculate Power Usage Effectiveness (PUE) and efficiency metrics for data center facilities. Analyzes IT load, cooling systems, power distribution, and provides optimization recommendations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "construction_cost",
+        "description": "Estimate construction costs for data center development. Analyzes $/MW costs, regional pricing factors, tier requirements, and provides detailed cost breakdowns for shell, electrical, mechanical, and IT infrastructure.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "capacity_mw": {
+              "type": "string",
+              "description": "capacity mw"
+            }
+          }
+        }
+      },
+      {
+        "name": "nfpa_110_checker",
+        "description": "Check emergency generator compliance per NFPA 110 Level 1 and Level 2 requirements. Validates fuel capacity, ATS transfer time, runtime hours, and returns compliance status with violation details and remediation steps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "string",
+              "description": "level"
+            },
+            "generator_kw": {
+              "type": "string",
+              "description": "generator kw"
+            },
+            "runtime_hours": {
+              "type": "string",
+              "description": "runtime hours"
+            },
+            "fuel_capacity_gallons": {
+              "type": "string",
+              "description": "fuel capacity gallons"
+            },
+            "ats_transfer_time_seconds": {
+              "type": "string",
+              "description": "ats transfer time seconds"
+            }
+          }
+        }
+      },
+      {
+        "name": "ats_sizing",
+        "description": "Size automatic transfer switches per NEC Articles 700, 701, and 702. Calculates load current, applies 125% continuous load factor, selects standard ATS ratings, and returns enclosure options and installation requirements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "phases": {
+              "type": "string",
+              "description": "phases"
+            },
+            "load_kw": {
+              "type": "string",
+              "description": "load kw"
+            },
+            "voltage": {
+              "type": "string",
+              "description": "voltage"
+            }
+          }
+        }
+      },
+      {
+        "name": "ups_sizing",
+        "description": "Size uninterruptible power supplies per IEEE 485 and 1184. Calculates kVA, selects battery strings (VRLA or Li-ion), determines runtime across N/N+1/2N configurations, and provides cost estimates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "load_kw": {
+              "type": "string",
+              "description": "load kw"
+            },
+            "runtime_minutes": {
+              "type": "string",
+              "description": "runtime minutes"
+            }
+          }
+        }
+      },
+      {
+        "name": "fuel_storage",
+        "description": "Design diesel fuel storage systems for emergency generators. Calculates tank size, runtime, secondary containment, SPCC thresholds, NFPA 30 compliance, and day tank recommendations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "generator_kw": {
+              "type": "string",
+              "description": "generator kw"
+            },
+            "target_runtime_hours": {
+              "type": "string",
+              "description": "target runtime hours"
+            }
+          }
+        }
+      },
+      {
+        "name": "cooling_load",
+        "description": "Calculate data center cooling load per ASHRAE TC 9.9. Computes IT heat, UPS losses, envelope gains, converts to tons, sizes CRAC/CRAH units with N+1 redundancy, and checks ASHRAE thermal envelopes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "room_sqft": {
+              "type": "string",
+              "description": "room sqft"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "ups_capacity_kw": {
+              "type": "string",
+              "description": "ups capacity kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "power_density",
+        "description": "Analyze rack power density for data centers. Classifies kW/rack density, sizes PDUs and branch circuits per NEC 645, calculates airflow requirements, and provides expansion capacity analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rack_count": {
+              "type": "string",
+              "description": "rack count"
+            },
+            "total_it_load_kw": {
+              "type": "string",
+              "description": "total it load kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "redundancy_validator",
+        "description": "Validate data center redundancy design against Uptime Institute Tier I–IV standards. Identifies single points of failure, assesses concurrent maintainability, and maps achieved tier with gaps to next level.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ups_count": {
+              "type": "string",
+              "description": "ups count"
+            },
+            "design_type": {
+              "type": "string",
+              "description": "design type"
+            },
+            "cooling_units": {
+              "type": "string",
+              "description": "cooling units"
+            },
+            "total_load_kw": {
+              "type": "string",
+              "description": "total load kw"
+            },
+            "generator_count": {
+              "type": "string",
+              "description": "generator count"
+            },
+            "ups_capacity_kw": {
+              "type": "string",
+              "description": "ups capacity kw"
+            },
+            "generator_capacity_kw": {
+              "type": "string",
+              "description": "generator capacity kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "demand_response",
+        "description": "Model utility demand response program participation for backup generator fleets. Calculates curtailment capacity, annual revenue, response time requirements, and program eligibility by utility.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "critical_load_kw": {
+              "type": "string",
+              "description": "critical load kw"
+            },
+            "utility_provider": {
+              "type": "string",
+              "description": "utility provider"
+            },
+            "generator_capacity_kw": {
+              "type": "string",
+              "description": "generator capacity kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "environmental_impact",
+        "description": "Assess environmental impact of data center generator operations. Calculates NOx/PM2.5/CO2 emissions per USEPA AP-42, air permit thresholds, CEQA/NEPA triggers, and mitigation requirements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "site_acres": {
+              "type": "string",
+              "description": "site acres"
+            },
+            "generator_kw": {
+              "type": "string",
+              "description": "generator kw"
+            },
+            "generator_count": {
+              "type": "string",
+              "description": "generator count"
+            }
+          }
+        }
+      },
+      {
+        "name": "fire_suppression",
+        "description": "Design clean agent fire suppression systems per NFPA 2001 and NFPA 75. Calculates agent quantity (FM-200, Novec 1230, Inergen, CO2), cylinder count, nozzle layout, and discharge time.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "room_width_ft": {
+              "type": "string",
+              "description": "room width ft"
+            },
+            "room_length_ft": {
+              "type": "string",
+              "description": "room length ft"
+            },
+            "ceiling_height_ft": {
+              "type": "string",
+              "description": "ceiling height ft"
+            }
+          }
+        }
+      },
+      {
+        "name": "incentive_finder",
+        "description": "Identify federal and state financial incentives for data center projects. Analyzes IRA tax credits, state grants, utility rebates, enterprise zone benefits, and job creation incentives by state.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "capex": {
+              "type": "string",
+              "description": "capex"
+            },
+            "state": {
+              "type": "string",
+              "description": "state"
+            },
+            "it_load_mw": {
+              "type": "string",
+              "description": "it load mw"
+            }
+          }
+        }
+      },
+      {
+        "name": "noise_compliance",
+        "description": "Analyze generator noise compliance with local ordinances. Calculates sound pressure levels at property line using inverse-square law, assesses zoning compliance, and recommends mitigation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "local_limit_db": {
+              "type": "string",
+              "description": "local limit db"
+            },
+            "generator_db_at_23ft": {
+              "type": "string",
+              "description": "generator db at 23ft"
+            },
+            "distance_to_property_line_ft": {
+              "type": "string",
+              "description": "distance to property line ft"
+            }
+          }
+        }
+      },
+      {
+        "name": "permit_timeline",
+        "description": "Estimate permitting timeline and critical path for data center construction. Analyzes building, electrical, mechanical, fire, and environmental permits by jurisdiction type and project scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "jurisdiction": {
+              "type": "string",
+              "description": "jurisdiction"
+            },
+            "project_sqft": {
+              "type": "string",
+              "description": "project sqft"
+            },
+            "generator_count": {
+              "type": "string",
+              "description": "generator count"
+            }
+          }
+        }
+      },
+      {
+        "name": "roi_calculator",
+        "description": "Calculate return on investment for data center capital projects. Computes NPV, IRR, simple payback, discounted payback, and cumulative cash flow using DCF analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "capex": {
+              "type": "string",
+              "description": "capex"
+            },
+            "annual_opex": {
+              "type": "string",
+              "description": "annual opex"
+            },
+            "revenue_per_year": {
+              "type": "string",
+              "description": "revenue per year"
+            },
+            "project_lifetime_years": {
+              "type": "string",
+              "description": "project lifetime years"
+            }
+          }
+        }
+      },
+      {
+        "name": "tco_analyzer",
+        "description": "Analyze total cost of ownership for data center operations. Breaks down power, cooling, labor, hardware refresh, maintenance, and facility costs over a multi-year horizon.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pue": {
+              "type": "string",
+              "description": "pue"
+            },
+            "years": {
+              "type": "string",
+              "description": "years"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "power_rate_kwh": {
+              "type": "string",
+              "description": "power rate kwh"
+            }
+          }
+        }
+      },
+      {
+        "name": "fiber_connectivity",
+        "description": "Analyze fiber connectivity options and costs for a data center location. Evaluates carrier diversity, dark fiber vs lit services, latency to key markets, and redundancy paths.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "location"
+            },
+            "target_markets": {
+              "type": "string",
+              "description": "target markets"
+            }
+          }
+        }
+      },
+      {
+        "name": "harmonic_analysis",
+        "description": "Perform harmonic analysis per IEEE 519 for data center power systems. Calculates total harmonic distortion (THD), voltage THD, and recommends filters and transformer derating.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "total_load_kva": {
+              "type": "string",
+              "description": "total load kva"
+            },
+            "ups_percentage": {
+              "type": "string",
+              "description": "ups percentage"
+            },
+            "vfd_percentage": {
+              "type": "string",
+              "description": "vfd percentage"
+            },
+            "transformer_kva": {
+              "type": "string",
+              "description": "transformer kva"
+            }
+          }
+        }
+      },
+      {
+        "name": "site_scoring",
+        "description": "Score and rank candidate data center sites across power, connectivity, risk, regulatory, and cost dimensions. Accepts a JSON array of site objects with attributes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sites_json": {
+              "type": "string",
+              "description": "sites json"
+            }
+          }
+        }
+      },
+      {
+        "name": "voltage_drop",
+        "description": "Calculate voltage drop for data center power distribution circuits per NEC 210.19. Computes percent drop, conductor sizing recommendations, and NEC 647 compliance for sensitive loads.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "voltage": {
+              "type": "string",
+              "description": "voltage"
+            },
+            "load_amps": {
+              "type": "string",
+              "description": "load amps"
+            },
+            "circuit_type": {
+              "type": "string",
+              "description": "circuit type"
+            },
+            "distance_feet": {
+              "type": "string",
+              "description": "distance feet"
+            }
+          }
+        }
+      },
+      {
+        "name": "water_availability",
+        "description": "Assess water availability and consumption for data center cooling systems. Estimates daily/annual consumption, water stress risk, permit requirements, and recycled water options.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "location"
+            },
+            "cooling_tons": {
+              "type": "string",
+              "description": "cooling tons"
+            }
+          }
+        }
+      },
+      {
+        "name": "network_topology",
+        "description": "Design spine-leaf network topology for data center switching fabric. Calculates spine/leaf switch counts, uplink ratios, oversubscription, port requirements, and cabling inventory.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rack_count": {
+              "type": "string",
+              "description": "rack count"
+            },
+            "redundancy_type": {
+              "type": "string",
+              "description": "redundancy type"
+            },
+            "target_bandwidth_gbps": {
+              "type": "string",
+              "description": "target bandwidth gbps"
+            }
+          }
+        }
+      },
+      {
+        "name": "bandwidth_sizing",
+        "description": "Size north-south and east-west bandwidth for data center network fabric. Estimates aggregate throughput, uplink capacity, peering requirements, and recommends fabric speed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rack_count": {
+              "type": "string",
+              "description": "rack count"
+            },
+            "servers_per_rack": {
+              "type": "string",
+              "description": "servers per rack"
+            },
+            "bandwidth_per_server_gbps": {
+              "type": "string",
+              "description": "bandwidth per server gbps"
+            }
+          }
+        }
+      },
+      {
+        "name": "latency_calculator",
+        "description": "Calculate propagation latency for data center interconnects. Computes one-way and round-trip delay by medium (fiber, copper, wireless, microwave) and hop count.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "medium": {
+              "type": "string",
+              "description": "medium"
+            },
+            "distance_km": {
+              "type": "string",
+              "description": "distance km"
+            }
+          }
+        }
+      },
+      {
+        "name": "ip_addressing",
+        "description": "Design IP addressing and VLAN architecture for data center networks. Calculates subnet sizes with growth buffer, prefix lengths, VLAN counts, and management IP allocations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rack_count": {
+              "type": "string",
+              "description": "rack count"
+            },
+            "hosts_per_rack": {
+              "type": "string",
+              "description": "hosts per rack"
+            }
+          }
+        }
+      },
+      {
+        "name": "dns_architecture",
+        "description": "Design DNS architecture for data center environments. Recommends authoritative and recursive server counts, anycast deployment, DNSSEC requirements, and QPS capacity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rack_count": {
+              "type": "string",
+              "description": "rack count"
+            }
+          }
+        }
+      },
+      {
+        "name": "bgp_peering",
+        "description": "Design BGP peering architecture for data center edge routing. Calculates route reflector requirements, memory for full tables, session counts, and convergence estimates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asn": {
+              "type": "string",
+              "description": "asn"
+            },
+            "peer_count": {
+              "type": "string",
+              "description": "peer count"
+            },
+            "transit_providers": {
+              "type": "string",
+              "description": "transit providers"
+            }
+          }
+        }
+      },
+      {
+        "name": "physical_security",
+        "description": "Design physical security systems for data centers per Uptime Institute tier standards. Calculates security zones, guard staffing, camera counts, access control points, and annual cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "description": "tier"
+            },
+            "facility_sqft": {
+              "type": "string",
+              "description": "facility sqft"
+            }
+          }
+        }
+      },
+      {
+        "name": "biometric_design",
+        "description": "Design biometric access control systems for data center security zones. Calculates reader counts, FAR/FRR performance, throughput capacity, and enrollment database sizing.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "staff_count": {
+              "type": "string",
+              "description": "staff count"
+            },
+            "biometric_type": {
+              "type": "string",
+              "description": "biometric type"
+            },
+            "security_zones": {
+              "type": "string",
+              "description": "security zones"
+            }
+          }
+        }
+      },
+      {
+        "name": "surveillance_coverage",
+        "description": "Design CCTV surveillance coverage for data center facilities. Calculates camera counts, field of view, storage requirements, and retention compliance for each resolution.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "facility_sqft": {
+              "type": "string",
+              "description": "facility sqft"
+            },
+            "retention_days": {
+              "type": "string",
+              "description": "retention days"
+            },
+            "camera_resolution": {
+              "type": "string",
+              "description": "camera resolution"
+            }
+          }
+        }
+      },
+      {
+        "name": "cybersecurity_controls",
+        "description": "Map cybersecurity controls for data center compliance frameworks. Analyzes SOC 2, ISO 27001, NIST CSF, PCI DSS, and FedRAMP control requirements, SIEM sizing, and implementation effort.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "facility_type": {
+              "type": "string",
+              "description": "facility type"
+            },
+            "network_zones": {
+              "type": "string",
+              "description": "network zones"
+            },
+            "compliance_framework": {
+              "type": "string",
+              "description": "compliance framework"
+            }
+          }
+        }
+      },
+      {
+        "name": "compliance_checker",
+        "description": "Check multi-framework compliance posture for data center operations. Identifies control overlaps, gaps, and prioritized remediation across simultaneous compliance programs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "frameworks": {
+              "type": "string",
+              "description": "frameworks"
+            },
+            "current_tier": {
+              "type": "string",
+              "description": "current tier"
+            },
+            "facility_type": {
+              "type": "string",
+              "description": "facility type"
+            }
+          }
+        }
+      },
+      {
+        "name": "chiller_sizing",
+        "description": "Size water-cooled and air-cooled chillers for data center cooling plants. Calculates cooling tons, chiller plant configuration, N+1/2N sizing, and annual energy consumption.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pue": {
+              "type": "string",
+              "description": "pue"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "redundancy": {
+              "type": "string",
+              "description": "redundancy"
+            },
+            "cooling_type": {
+              "type": "string",
+              "description": "cooling type"
+            }
+          }
+        }
+      },
+      {
+        "name": "crac_vs_crah",
+        "description": "Compare CRAC vs CRAH unit selection for data center cooling. Analyzes EER/COP differences, annual energy cost, water availability constraints, and recommends optimal configuration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "room_sqft": {
+              "type": "string",
+              "description": "room sqft"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "water_available": {
+              "type": "string",
+              "description": "water available"
+            }
+          }
+        }
+      },
+      {
+        "name": "airflow_modeling",
+        "description": "Model airflow patterns for data center hot/cold aisle containment. Estimates CFM requirements, delta-T across racks, bypass airflow percentage, and hotspot risk by containment type.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "room_sqft": {
+              "type": "string",
+              "description": "room sqft"
+            },
+            "rack_count": {
+              "type": "string",
+              "description": "rack count"
+            },
+            "avg_kw_per_rack": {
+              "type": "string",
+              "description": "avg kw per rack"
+            },
+            "containment_type": {
+              "type": "string",
+              "description": "containment type"
+            }
+          }
+        }
+      },
+      {
+        "name": "humidification",
+        "description": "Design humidification and dehumidification systems per ASHRAE A1 envelope. Calculates moisture load, equipment capacity, energy consumption, and seasonal control strategy.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "room_sqft": {
+              "type": "string",
+              "description": "room sqft"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "climate_zone": {
+              "type": "string",
+              "description": "climate zone"
+            }
+          }
+        }
+      },
+      {
+        "name": "economizer_analysis",
+        "description": "Analyze economizer free-cooling potential for data center locations. Estimates annual free-cooling hours by climate, blended PUE improvement, energy savings, and simple payback.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "location"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "pue_mechanical": {
+              "type": "string",
+              "description": "pue mechanical"
+            },
+            "economizer_type": {
+              "type": "string",
+              "description": "economizer type"
+            }
+          }
+        }
+      },
+      {
+        "name": "construction_timeline",
+        "description": "Estimate construction timeline for data center development projects. Provides phase-by-phase schedule (design, permits, civil, MEP, commissioning) with state-specific regulatory modifiers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string",
+              "description": "state"
+            },
+            "capacity_mw": {
+              "type": "string",
+              "description": "capacity mw"
+            },
+            "building_type": {
+              "type": "string",
+              "description": "building type"
+            }
+          }
+        }
+      },
+      {
+        "name": "commissioning_plan",
+        "description": "Generate commissioning plan per ASHRAE Guideline 1.2 for data center infrastructure. Calculates Level 1–4 test hours, witness testing requirements, and integrated systems testing scope.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "description": "tier"
+            },
+            "capacity_mw": {
+              "type": "string",
+              "description": "capacity mw"
+            }
+          }
+        }
+      },
+      {
+        "name": "maintenance_schedule",
+        "description": "Build annual preventive maintenance schedule for data center infrastructure. Calculates PM labor hours, intervals, and annual cost for generators, UPS, cooling, and electrical systems.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "description": "tier"
+            },
+            "ups_count": {
+              "type": "string",
+              "description": "ups count"
+            },
+            "cooling_units": {
+              "type": "string",
+              "description": "cooling units"
+            },
+            "generator_count": {
+              "type": "string",
+              "description": "generator count"
+            }
+          }
+        }
+      },
+      {
+        "name": "capacity_planning",
+        "description": "Project data center capacity runway and expansion trigger points. Uses logarithmic growth modeling to forecast years to 80% utilization, critical threshold, and end-of-design-life load.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "current_load_kw": {
+              "type": "string",
+              "description": "current load kw"
+            },
+            "current_capacity_kw": {
+              "type": "string",
+              "description": "current capacity kw"
+            },
+            "growth_rate_pct_per_year": {
+              "type": "string",
+              "description": "growth rate pct per year"
+            }
+          }
+        }
+      },
+      {
+        "name": "sla_calculator",
+        "description": "Calculate SLA availability metrics against Uptime Institute tier benchmarks. Computes allowed downtime minutes/year, MTTR budget, and compliance status for target availability percentage.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "description": "tier"
+            },
+            "target_availability_pct": {
+              "type": "string",
+              "description": "target availability pct"
+            }
+          }
+        }
+      },
+      {
+        "name": "change_management",
+        "description": "Design change management process for data center operations. Defines CAB frequency, change windows, rollback SLA, and staffing model based on tier classification and change volume.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "description": "tier"
+            },
+            "staff_count": {
+              "type": "string",
+              "description": "staff count"
+            },
+            "change_volume_per_month": {
+              "type": "string",
+              "description": "change volume per month"
+            }
+          }
+        }
+      },
+      {
+        "name": "carbon_footprint",
+        "description": "Calculate data center carbon footprint per GHG Protocol Scope 2. Computes location-based and market-based emissions using eGRID factors, renewable energy certificates, and carbon intensity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pue": {
+              "type": "string",
+              "description": "pue"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "grid_region": {
+              "type": "string",
+              "description": "grid region"
+            }
+          }
+        }
+      },
+      {
+        "name": "solar_feasibility",
+        "description": "Assess rooftop solar PV feasibility for data center facilities. Calculates system capacity, annual generation, energy offset percentage, IRA tax credit (30%), and simple payback.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string",
+              "description": "state"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "facility_sqft": {
+              "type": "string",
+              "description": "facility sqft"
+            }
+          }
+        }
+      },
+      {
+        "name": "battery_storage",
+        "description": "Size battery energy storage systems for data center applications. Supports Li-ion, LFP, VRLA, and flow chemistries for UPS backup, peak shaving, demand response, and islanding use cases.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemistry": {
+              "type": "string",
+              "description": "chemistry"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "target_runtime_minutes": {
+              "type": "string",
+              "description": "target runtime minutes"
+            }
+          }
+        }
+      },
+      {
+        "name": "energy_procurement",
+        "description": "Analyze energy procurement strategies for large data center loads. Compares utility tariffs, PPAs, green tariffs, and direct access contracts with estimated annual cost and renewable content.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string",
+              "description": "state"
+            },
+            "contract_term_years": {
+              "type": "string",
+              "description": "contract term years"
+            },
+            "annual_consumption_mwh": {
+              "type": "string",
+              "description": "annual consumption mwh"
+            }
+          }
+        }
+      },
+      {
+        "name": "tier_certification_checker",
+        "description": "Evaluate data center readiness for Uptime Institute Tier I–IV certification. Produces a gap analysis with remediation costs, readiness score, and priority steps. This is a readiness assessment, not official certification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "power_paths": {
+              "type": "string",
+              "description": "power paths"
+            },
+            "target_tier": {
+              "type": "string",
+              "description": "target tier"
+            },
+            "ups_topology": {
+              "type": "string",
+              "description": "ups topology"
+            },
+            "generator_config": {
+              "type": "string",
+              "description": "generator config"
+            },
+            "cooling_redundancy": {
+              "type": "string",
+              "description": "cooling redundancy"
+            },
+            "fuel_runtime_hours": {
+              "type": "string",
+              "description": "fuel runtime hours"
+            },
+            "has_fault_tolerance": {
+              "type": "string",
+              "description": "has fault tolerance"
+            },
+            "transfer_switch_type": {
+              "type": "string",
+              "description": "transfer switch type"
+            },
+            "has_concurrent_maintainability": {
+              "type": "string",
+              "description": "has concurrent maintainability"
+            }
+          }
+        }
+      },
+      {
+        "name": "nc_utility_interconnect",
+        "description": "Model the interconnect application process for Duke Energy Progress, Duke Energy Carolinas, or Dominion Energy NC. Returns utility-specific steps, timeline, fees, NCUC filing requirements, and data center considerations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "county": {
+              "type": "string",
+              "description": "county"
+            },
+            "utility": {
+              "type": "string",
+              "description": "utility"
+            },
+            "capacity_kw": {
+              "type": "string",
+              "description": "capacity kw"
+            },
+            "project_type": {
+              "type": "string",
+              "description": "project type"
+            },
+            "voltage_level": {
+              "type": "string",
+              "description": "voltage level"
+            },
+            "interconnect_type": {
+              "type": "string",
+              "description": "interconnect type"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_grid_telemetry",
+        "description": "Fetch real-time grid telemetry (demand, net generation, reserve margin) for a US balancing authority using the free EIA v2 API. Supports ERCO (ERCOT/Texas) and PJM (Mid-Atlantic/Midwest). EIA normalizes both regions into identical JSON so your agent never has to parse different schemas.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "region_code": {
+              "type": "string",
+              "description": "region code"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_active_weather_alerts",
+        "description": "Fetch active severe weather alerts for any US state from the National Weather Service API (no API key required). Returns alert count, severity, urgency, event types, and pre-computed threat flags (has_thunderstorm, has_tornado, has_hurricane, has_winter_storm, has_extreme_heat) for automated threat scoring.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "state_code": {
+              "type": "string",
+              "description": "state code"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_full_power_analysis",
+        "description": "Generator sizing → NFPA 110 compliance → UPS sizing → ROI calculator. Complete power infrastructure analysis in one request.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "description": "tier"
+            },
+            "load_kw": {
+              "type": "string",
+              "description": "load kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_site_readiness",
+        "description": "Site scoring → Tier certification → Utility interconnect → Compliance check. Full site evaluation pipeline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sites_json": {
+              "type": "string",
+              "description": "sites json"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_tco_deep_dive",
+        "description": "PUE calculator → Cooling load → TCO analyzer. Full cost of ownership analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_nc_power_package",
+        "description": "NC utility interconnect → Generator sizing → NFPA 110 → UPS sizing. North Carolina specific full power analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "county": {
+              "type": "string",
+              "description": "county"
+            },
+            "utility": {
+              "type": "string",
+              "description": "utility"
+            },
+            "capacity_kw": {
+              "type": "string",
+              "description": "capacity kw"
+            },
+            "project_type": {
+              "type": "string",
+              "description": "project type"
+            },
+            "voltage_level": {
+              "type": "string",
+              "description": "voltage level"
+            },
+            "interconnect_type": {
+              "type": "string",
+              "description": "interconnect type"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_emergency_power_package",
+        "description": "UPS sizing → ATS sizing → Generator sizing → Fuel storage → NFPA 110. Complete emergency power system design.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "load_kw": {
+              "type": "string",
+              "description": "load kw"
+            },
+            "runtime_minutes": {
+              "type": "string",
+              "description": "runtime minutes"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_cooling_optimization",
+        "description": "Cooling load → Chiller sizing → CRAC vs CRAH → Airflow modeling → Economizer analysis. Full cooling system design.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "room_sqft": {
+              "type": "string",
+              "description": "room sqft"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "ups_capacity_kw": {
+              "type": "string",
+              "description": "ups capacity kw"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_full_site_analysis",
+        "description": "Site scoring → Tier certification → Utility interconnect → Permit timeline → Construction cost → Construction timeline. Complete site feasibility study.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sites_json": {
+              "type": "string",
+              "description": "sites json"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_sustainability_package",
+        "description": "Carbon footprint → Solar feasibility → Battery storage → Energy procurement → Environmental impact. Full green energy analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pue": {
+              "type": "string",
+              "description": "pue"
+            },
+            "it_load_kw": {
+              "type": "string",
+              "description": "it load kw"
+            },
+            "grid_region": {
+              "type": "string",
+              "description": "grid region"
+            }
+          }
+        }
+      },
+      {
+        "name": "chain_grid_threat_forecast",
+        "description": "Grid telemetry → Weather alerts. Fetches real-time EIA grid data and NWS severe weather alerts for a US balancing authority region. Provides the raw inputs needed to calculate a Grid Threat Score (Low / Elevated / Critical) and trigger a data center mitigation playbook.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "region_code": {
+              "type": "string",
+              "description": "region code"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

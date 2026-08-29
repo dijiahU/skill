@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "vnt7k5cr2l",
+  "namespace": "ITSpecialist111",
+  "slug": "MicrosoftGraph_Transcript_MCP",
+  "name": "Transcripts MCP Server",
+  "description": "A remote Model Context Protocol server that retrieves and cleans Microsoft Teams meeting transcripts via the Microsoft Graph API using delegated OAuth 2.0 authentication. It enables AI agents to discover meetings, extract speaker-attributed text, and save transcripts to SharePoint for analysis and automation.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A remote Model Context Protocol server that retrieves and cleans Microsoft Teams meeting transcripts via the Microsoft Graph API using delegated OAuth 2.0 authentication. It enables AI agents to discover meetings, extract speaker-attributed text, and save transcripts to SharePoint for analysis and automation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "HTTP server port",
+          "type": "string",
+          "default": "8080"
+        },
+        "AZURE_CLIENT_ID": {
+          "description": "Application (client) ID from App Registration",
+          "type": "string"
+        },
+        "AZURE_TENANT_ID": {
+          "description": "Directory (tenant) ID",
+          "type": "string"
+        },
+        "SHAREPOINT_FOLDER": {
+          "description": "Default folder path in the document library",
+          "type": "string",
+          "default": "Meeting Transcripts"
+        },
+        "AZURE_CLIENT_SECRET": {
+          "description": "Client secret value from App Registration",
+          "type": "string"
+        },
+        "SHAREPOINT_SITE_URL": {
+          "description": "Default SharePoint site for save_transcript (e.g. contoso.sharepoint.com/sites/Meetings)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AZURE_CLIENT_ID",
+        "AZURE_CLIENT_SECRET",
+        "AZURE_TENANT_ID"
+      ]
+    },
+    "id": "vnt7k5cr2l",
+    "name": "Transcripts MCP Server",
+    "namespace": "ITSpecialist111",
+    "repository": {
+      "url": "https://github.com/ITSpecialist111/MicrosoftGraph_Transcript_MCP"
+    },
+    "slug": "MicrosoftGraph_Transcript_MCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vnt7k5cr2l"
+  }
+}

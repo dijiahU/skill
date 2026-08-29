@@ -1,0 +1,382 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "signerlabs/shipswift",
+  "namespace": "signerlabs",
+  "slug": "shipswift",
+  "displayName": "ShipSwift",
+  "description": "Provides access to a library of iOS development recipes, including SwiftUI code, animations, and infrastructure components. Simplifies the implementation of complex features like authentication, paywalls, and onboarding flows. Enables developers to build high-quality mobile applications faster using proven best practices and ready-to-use templates.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "ee55bdad-74dd-4134-b4d6-2d6d6fd31a99",
+    "qualifiedName": "signerlabs/shipswift",
+    "namespace": "signerlabs",
+    "slug": "shipswift",
+    "displayName": "ShipSwift",
+    "description": "Provides access to a library of iOS development recipes, including SwiftUI code, animations, and infrastructure components. Simplifies the implementation of complex features like authentication, paywalls, and onboarding flows. Enables developers to build high-quality mobile applications faster using proven best practices and ready-to-use templates.",
+    "iconUrl": "https://api.smithery.ai/servers/signerlabs/shipswift/icon",
+    "verified": false,
+    "useCount": 729,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-15T15:29:04.127Z",
+    "homepage": "https://shipswift.app/",
+    "bySmithery": false,
+    "owner": "org_01KNBV9AXN7G32WDJX671QV16P",
+    "score": 0.019230769230769232
+  },
+  "detail": {
+    "qualifiedName": "signerlabs/shipswift",
+    "displayName": "ShipSwift",
+    "description": "Provides access to a library of iOS development recipes, including SwiftUI code, animations, and infrastructure components. Simplifies the implementation of complex features like authentication, paywalls, and onboarding flows. Enables developers to build high-quality mobile applications faster using proven best practices and ready-to-use templates.",
+    "iconUrl": "https://api.smithery.ai/servers/signerlabs/shipswift/icon",
+    "remote": true,
+    "deploymentUrl": "https://shipswift--signerlabs.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://shipswift--signerlabs.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "enum": [
+                "free",
+                "pro",
+                "all"
+              ],
+              "type": "string",
+              "title": "Recipe Tier",
+              "default": "all",
+              "description": "Recipe access tier: free, pro, or all."
+            },
+            "maxResults": {
+              "type": "integer",
+              "title": "Max Search Results",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max recipes per search query (1-100)."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "listRecipes",
+        "description": "List production-ready SwiftUI code recipes. Each recipe is a complete, copy-paste-ready implementation — not a tutorial. Covers native iOS features (SwiftUI, Swift Charts, SpriteKit, Vision, AVFoundation, StoreKit 2, NavigationStack) and backend infrastructure (AWS CDK, Hono, Node.js, Cognito, DynamoDB). Categories: animations, charts, UI components, and full-stack modules including auth, camera, subscriptions, chat, and settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "enum": [
+                "animation",
+                "chart",
+                "component",
+                "module",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Filter recipes by category. Defaults to 'all'."
+            }
+          }
+        }
+      },
+      {
+        "name": "getRecipe",
+        "description": "Get a recipe by ID. Returns complete, copy-paste-ready Swift source code with architecture explanation and implementation steps. Module recipes may also include backend code (Hono/Node.js + AWS CDK).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Recipe ID, e.g. 'animation-shimmer' or 'auth-cognito'"
+            }
+          }
+        }
+      },
+      {
+        "name": "searchRecipes",
+        "description": "Search recipes by keyword across titles, descriptions, tags, and full source code. Use for any iOS, SwiftUI, or backend topic — e.g. subscription, authentication, camera, animation, chart, onboarding, paywall, infrastructure.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search keyword, e.g. 'shimmer', 'authentication', 'chart'"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "recipe-catalog",
+        "uri": "shipswift://recipes/catalog",
+        "description": "Complete list of all available ShipSwift iOS development recipes with their metadata (id, title, description, tier, tags).",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Animated Mesh Gradient",
+        "uri": "shipswift://recipes/animation-animated-mesh-gradient",
+        "description": "Animated 3x3 mesh gradient background that smoothly transitions between two color palettes with a repeating animation",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Before/After Image Slider",
+        "uri": "shipswift://recipes/animation-before-after-slider",
+        "description": "Before/after image comparison view with an auto-oscillating slider divider and drag gesture support",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Glow Sweep Effect",
+        "uri": "shipswift://recipes/animation-glow-sweep",
+        "description": "View wrapper that sweeps a glowing highlight band across content, using the original shape as a mask",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Light Sweep Effect",
+        "uri": "shipswift://recipes/animation-light-sweep",
+        "description": "Animated scan-line overlay that sweeps a gradient light band across any content with rounded clipping",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Orbiting Logos Animation",
+        "uri": "shipswift://recipes/animation-orbiting-logos",
+        "description": "SpriteKit-powered animated orbit component with concentric rings of dots and pop-out icon animations",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Scanning Overlay Effect",
+        "uri": "shipswift://recipes/animation-scanning-overlay",
+        "description": "Animated scan-line overlay with flowing grid, sweeping scan band, and noise layer for an analyzing/processing visual effect",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Shaking Icon Animation",
+        "uri": "shipswift://recipes/animation-shaking-icon",
+        "description": "Animated icon that periodically zooms in and shakes side-to-side, mimicking the iOS home-screen jiggle effect",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Shimmer Effect",
+        "uri": "shipswift://recipes/animation-shimmer",
+        "description": "Shimmer highlight wrapper that sweeps a translucent light band across content in a continuous loop",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Typewriter Text Animation",
+        "uri": "shipswift://recipes/animation-typewriter-text",
+        "description": "Typewriter text that cycles through strings with character-by-character typing and deleting, supporting multiple animation styles",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Activity Heatmap",
+        "uri": "shipswift://recipes/chart-activity-heatmap",
+        "description": "GitHub-style activity heatmap with streak tracking, gradient streak card, flow-layout heatmap grid, and color legend",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Area Chart",
+        "uri": "shipswift://recipes/chart-area-chart",
+        "description": "Horizontally scrollable area chart with standard and stacked modes, optional line overlay, and configurable gradient opacity built on Swift Charts",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Bar Chart",
+        "uri": "shipswift://recipes/chart-bar-chart",
+        "description": "Horizontally scrollable bar chart with grouped and stacked modes, value labels, and animated bar growth built on Swift Charts",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Donut Chart",
+        "uri": "shipswift://recipes/chart-donut-chart",
+        "description": "Interactive donut chart with tap-to-select interaction, category grouping, and center overlay showing count and category name built on Swift Charts",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Line Chart",
+        "uri": "shipswift://recipes/chart-line-chart",
+        "description": "Horizontally scrollable multi-series line chart with reference lines, configurable interpolation, and point markers built on Swift Charts",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Radar Chart",
+        "uri": "shipswift://recipes/chart-radar-chart",
+        "description": "Animated radar (spider) chart with axis labels, background grid rings, radial lines, and polygon animation from center to full size",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Ring Chart",
+        "uri": "shipswift://recipes/chart-ring-chart",
+        "description": "Apple Watch Activity Rings style concentric progress chart with animated ring growth, legend, and optional center content via ViewBuilder",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Scatter Chart",
+        "uri": "shipswift://recipes/chart-scatter-chart",
+        "description": "Horizontally scrollable scatter chart with multi-category color mapping and configurable axes built on Swift Charts",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Add Sheet",
+        "uri": "shipswift://recipes/component-add-sheet",
+        "description": "Bottom sheet with text input field, Cancel and Continue buttons, presented as a medium detent sheet",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Alert Toast Notification",
+        "uri": "shipswift://recipes/component-alert",
+        "description": "Global toast-style alert overlay with preset styles (info, success, warning, error) and auto-dismiss",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Bullet Point Text",
+        "uri": "shipswift://recipes/component-bullet-point-text",
+        "description": "Text label with a colored capsule bullet point indicator that accepts any View content via @ViewBuilder",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Floating Labels",
+        "uri": "shipswift://recipes/component-floating-labels",
+        "description": "Animated floating capsule labels that fade in and out at specified positions around an image",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Gradient Divider",
+        "uri": "shipswift://recipes/component-gradient-divider",
+        "description": "Horizontal divider with a center-fade gradient effect (clear to color to clear)",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Label with Icon and Image",
+        "uri": "shipswift://recipes/component-label",
+        "description": "Reusable label components pairing a leading visual (SF Symbol or image resource) with localized text",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Page Loading Overlay",
+        "uri": "shipswift://recipes/component-loading",
+        "description": "Fullscreen loading overlay with blur background, customizable message, optional icon with pulse animation, and progress indicator",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Onboarding View",
+        "uri": "shipswift://recipes/component-onboarding-view",
+        "description": "Multi-page onboarding view with swipe navigation, Continue/Get Started button, and Skip option",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Order Customization View",
+        "uri": "shipswift://recipes/component-order-view",
+        "description": "Animated drink customization demo with flavor selection, cup sizing, matchedGeometryEffect, and quantity control",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Root Tab View",
+        "uri": "shipswift://recipes/component-root-tab-view",
+        "description": "Root TabView template using iOS 18+ Tab API with selected/unselected icon switching and haptic feedback",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Rotating Quote",
+        "uri": "shipswift://recipes/component-rotating-quote",
+        "description": "Auto-rotating quote display that cycles through quotes with animated transitions and stable layout height",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Scrolling FAQ Carousel",
+        "uri": "shipswift://recipes/component-scrolling-faq",
+        "description": "Auto-scrolling horizontal FAQ carousel with infinite looping rows scrolling in alternating directions",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Compact Stepper",
+        "uri": "shipswift://recipes/component-stepper",
+        "description": "Compact numeric stepper with chevron buttons, animated numeric text transitions, and haptic feedback",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Tab Button",
+        "uri": "shipswift://recipes/component-tab-button",
+        "description": "Capsule-shaped tab button toggling between selected and unselected states for segmented controls",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Thinking Indicator",
+        "uri": "shipswift://recipes/component-thinking-indicator",
+        "description": "Animated three-dot bouncing indicator for chat typing/thinking states",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Authentication with AWS Cognito",
+        "uri": "shipswift://recipes/auth-cognito",
+        "description": "Complete iOS authentication system with AWS Cognito — email/password sign-up, Apple Sign In, Google Sign In, phone OTP, automatic token refresh, guest mode with data migration, and CDK infrastructure setup",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Camera & Face Detection",
+        "uri": "shipswift://recipes/camera",
+        "description": "Complete camera module with photo capture, live preview, face detection using Vision framework, and face landmark overlay",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "AI Chat Interface with Voice Input",
+        "uri": "shipswift://recipes/chat",
+        "description": "Complete chat module with message list, streaming-ready input bar, voice-to-text via VolcEngine ASR, and AI conversation UI patterns",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "AWS Infrastructure with CDK",
+        "uri": "shipswift://recipes/infra-cdk",
+        "description": "Production-ready AWS infrastructure using CDK — App Runner for HTTP services, Aurora Serverless for database, Cognito for auth, Lambda for serverless functions, and S3 for storage",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Settings View",
+        "uri": "shipswift://recipes/setting",
+        "description": "Pre-built settings page with app info section, account management, notification toggles, feedback/rating links, and legal links",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "In-App Subscription with StoreKit 2",
+        "uri": "shipswift://recipes/subscription-storekit",
+        "description": "Complete subscription system with StoreKit 2 — product loading, purchase flow, receipt validation, paywall UI, and server-side verification",
+        "mimeType": "text/markdown"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "build-feature",
+        "description": "Guide the user to build an iOS feature using ShipSwift recipes. Provides a structured workflow: describe the feature, find matching recipes, and generate implementation steps.",
+        "arguments": [
+          {
+            "name": "feature",
+            "description": "The iOS feature to build, e.g. 'user authentication with Apple Sign In'",
+            "required": true
+          },
+          {
+            "name": "platform",
+            "description": "Target UI framework. Defaults to SwiftUI.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "explore-recipes",
+        "description": "Browse all available ShipSwift recipes and get personalized recommendations based on project needs.",
+        "arguments": [
+          {
+            "name": "projectType",
+            "description": "Brief description of the user's project, e.g. 'fitness tracking app' or 'social media app'",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

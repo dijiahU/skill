@@ -1,0 +1,57 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.lozit/mcp-standardnotes",
+  "slug": "lozit__mcp-standardnotes",
+  "title": "",
+  "description": "End-to-end encrypted access to a Standard Notes vault (protocol 004, local stdio only).",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+      "name": "io.github.lozit/mcp-standardnotes",
+      "description": "End-to-end encrypted access to a Standard Notes vault (protocol 004, local stdio only).",
+      "repository": {
+        "url": "https://github.com/lozit/mcp-standardnotes",
+        "source": "github"
+      },
+      "version": "0.3.1",
+      "websiteUrl": "https://github.com/lozit/mcp-standardnotes#readme",
+      "packages": [
+        {
+          "registryType": "npm",
+          "registryBaseUrl": "https://registry.npmjs.org",
+          "identifier": "mcp-standardnotes",
+          "version": "0.3.1",
+          "runtimeHint": "npx",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Standard Notes account email. The password is prompted once via `npx mcp-standardnotes-login` and the session is persisted in the OS keychain.",
+              "isRequired": true,
+              "name": "SN_EMAIL"
+            },
+            {
+              "description": "Standard Notes sync server URL. Defaults to the official cloud if unset.",
+              "default": "https://api.standardnotes.com",
+              "name": "SN_SERVER_URL"
+            },
+            {
+              "description": "Optional SHA-256 TLS certificate fingerprint for pinning a self-hosted server.",
+              "name": "SN_CERT_FINGERPRINT"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-17T16:32:25.407502Z",
+        "publishedAt": "2026-04-17T16:32:25.407502Z",
+        "updatedAt": "2026-04-17T16:32:25.407502Z",
+        "isLatest": true
+      }
+    }
+  }
+}

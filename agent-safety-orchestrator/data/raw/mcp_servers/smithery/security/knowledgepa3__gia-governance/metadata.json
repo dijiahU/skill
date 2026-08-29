@@ -1,0 +1,1075 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "knowledgepa3/gia-governance",
+  "namespace": "knowledgepa3",
+  "slug": "gia-governance",
+  "displayName": "GIA Governance",
+  "description": "AI workforce governance control plane. 29 governed MCP tools for decision classification (MAI framework), compliance scoring, audit chain verification, risk assessment, and multi-vendor AI governance. Built for enterprise AI compliance including NIST 800-53, CMMC 2.0, EU AI Act, and SOC 2. Every AI action is classified, audited, and governed through one contract.",
+  "discoveryQueries": [
+    "audit",
+    "policy",
+    "trust",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "b3283bd4-11e9-4466-838b-95049aba2b34",
+    "qualifiedName": "knowledgepa3/gia-governance",
+    "namespace": "knowledgepa3",
+    "slug": "gia-governance",
+    "displayName": "GIA Governance",
+    "description": "AI workforce governance control plane. 29 governed MCP tools for decision classification (MAI framework), compliance scoring, audit chain verification, risk assessment, and multi-vendor AI governance. Built for enterprise AI compliance including NIST 800-53, CMMC 2.0, EU AI Act, and SOC 2. Every AI action is classified, audited, and governed through one contract.",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-20T17:09:45.582Z",
+    "homepage": "https://smithery.ai/servers/knowledgepa3/gia-governance",
+    "bySmithery": false,
+    "owner": "org_01KNBVP0M3K1NH659W6GGDN9GR",
+    "score": 0.016666666666666666
+  },
+  "detail": {
+    "qualifiedName": "knowledgepa3/gia-governance",
+    "displayName": "GIA Governance",
+    "description": "AI workforce governance control plane. 29 governed MCP tools for decision classification (MAI framework), compliance scoring, audit chain verification, risk assessment, and multi-vendor AI governance. Built for enterprise AI compliance including NIST 800-53, CMMC 2.0, EU AI Act, and SOC 2. Every AI action is classified, audited, and governed through one contract.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://gia-governance--knowledgepa3.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://gia-governance--knowledgepa3.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "classify_decision",
+        "description": "Classify an AI agent decision using the MAI Framework (Mandatory/Advisory/Informational). Returns classification level, confidence score, gate requirements, and rationale.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "enum": [
+                "va-claims",
+                "legal",
+                "healthcare",
+                "finance",
+                "federal",
+                "general"
+              ],
+              "type": "string",
+              "description": "Domain context"
+            },
+            "decision": {
+              "type": "string",
+              "maxLength": 50000,
+              "description": "Description of the decision to classify"
+            },
+            "agent_name": {
+              "type": "string",
+              "description": "Name of the agent making the decision"
+            },
+            "has_legal_impact": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether action involves legal assertions"
+            },
+            "is_client_facing": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether output is client-facing"
+            },
+            "has_financial_impact": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether action has financial impact"
+            }
+          }
+        }
+      },
+      {
+        "name": "evaluate_threshold",
+        "description": "Compute the Storey Threshold — escalation rate (gates required / total operations). Returns current rate, status, and recommendations. Healthy band 10-18% is a design heuristic, not empirically validated.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "score_governance",
+        "description": "Compute weighted governance score from caller-provided Integrity, Accuracy, and Compliance values (0-1). Returns weighted composite and pass/fail against configured thresholds. Scores are caller-assessed — this tool applies weights and thresholds, not independent evaluation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "accuracy": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Factual accuracy score (0.0-1.0)"
+            },
+            "integrity": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Data integrity score (0.0-1.0)"
+            },
+            "operation": {
+              "type": "string",
+              "description": "Name of the operation being scored"
+            },
+            "compliance": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Regulatory compliance score (0.0-1.0)"
+            }
+          }
+        }
+      },
+      {
+        "name": "audit_pipeline",
+        "description": "Query the audit ledger for governance entries. Search by operation name or retrieve recent entries. Returns hash-chained audit trail with MAI classification context.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum entries to return"
+            },
+            "operation": {
+              "type": "string",
+              "description": "Filter by operation name"
+            }
+          }
+        }
+      },
+      {
+        "name": "monitor_agents",
+        "description": "Monitor the status and health of all governed AI agents. Returns supervisor state, repair history, and failure counts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "map_compliance",
+        "description": "Map GIA governance components to regulatory compliance frameworks (NIST AI RMF, EU AI Act, ISO 42001, NIST 800-53, LINDDUN, MITRE ATLAS). Shows which controls are implemented.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "framework": {
+              "enum": [
+                "NIST_AI_RMF",
+                "EU_AI_ACT",
+                "ISO_42001",
+                "NIST_800_53",
+                "LINDDUN",
+                "MITRE_ATLAS",
+                "ALL"
+              ],
+              "type": "string",
+              "description": "Compliance framework to map"
+            }
+          }
+        }
+      },
+      {
+        "name": "assess_risk_tier",
+        "description": "Assess the risk tier of an AI system using rule-based mapping to EU AI Act categories (Unacceptable, High, Limited, Minimal). Returns tier and MAI governance recommendations. Classification is heuristic, not a legal determination.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Industry domain"
+            },
+            "system_description": {
+              "type": "string",
+              "maxLength": 50000,
+              "description": "Description of the AI system or operation"
+            },
+            "affects_individuals": {
+              "type": "boolean",
+              "description": "Whether the system makes decisions affecting individuals"
+            },
+            "autonomous_decisions": {
+              "type": "boolean",
+              "description": "Whether the system makes autonomous decisions"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_report",
+        "description": "Generate a governance status report. Includes system health, threshold status, compliance coverage, and operational metrics.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "summary",
+                "detailed",
+                "executive"
+              ],
+              "type": "string",
+              "default": "summary",
+              "description": "Report format"
+            }
+          }
+        }
+      },
+      {
+        "name": "system_status",
+        "description": "Get full GIA system status including engine health, uptime, governance metrics, and configuration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "approve_gate",
+        "description": "Approve or reject a pending MANDATORY gate decision. Lists pending gates if no gate_id provided. This is the human-in-the-loop mechanism for MANDATORY classifications.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "list",
+                "approve",
+                "reject",
+                "break_glass"
+              ],
+              "type": "string",
+              "description": "Action to perform"
+            },
+            "gate_id": {
+              "type": "string",
+              "description": "Gate ID to approve/reject (required for approve/reject)"
+            },
+            "rationale": {
+              "type": "string",
+              "description": "Reason for approval/rejection"
+            },
+            "approved_by": {
+              "type": "string",
+              "default": "HUMAN",
+              "description": "Identity of the approver"
+            },
+            "webauthn_proof": {
+              "type": "object",
+              "required": [
+                "credentialId",
+                "userId",
+                "verifiedAt",
+                "signatureVerified"
+              ],
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "verifiedAt": {
+                  "type": "string"
+                },
+                "credentialId": {
+                  "type": "string"
+                },
+                "signatureVerified": {
+                  "type": "boolean"
+                }
+              },
+              "description": "Optional WebAuthn passkey proof for cryptographic identity verification",
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      {
+        "name": "seal_memory_pack",
+        "description": "Create and hash-seal a new Governed Memory Pack (GMP). The pack becomes an immutable, TTL-bound institutional knowledge artifact with trust level enforcement.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sop": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Standard operating procedures"
+            },
+            "type": {
+              "enum": [
+                "DOMAIN_SOP",
+                "PLAYBOOK",
+                "REGULATORY",
+                "RISK_GUARDRAILS",
+                "HEURISTIC",
+                "KNOWLEDGE"
+              ],
+              "type": "string",
+              "description": "Pack type"
+            },
+            "scope": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Scope tags"
+            },
+            "domain": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Domain (e.g., va-claims, finance, cyber-ir)"
+            },
+            "pack_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Unique identifier for the memory pack"
+            },
+            "version": {
+              "type": "string",
+              "default": "1.0.0",
+              "description": "Semantic version"
+            },
+            "ttl_hours": {
+              "type": "number",
+              "maximum": 8760,
+              "minimum": 1,
+              "description": "TTL in hours (capped by trust level)"
+            },
+            "created_by": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Creator identity"
+            },
+            "heuristics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Decision heuristics"
+            },
+            "principles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Core principles"
+            },
+            "risk_level": {
+              "enum": [
+                "MANDATORY",
+                "ADVISORY",
+                "INFORMATIONAL"
+              ],
+              "type": "string",
+              "default": "ADVISORY",
+              "description": "MAI classification"
+            },
+            "sealer_role": {
+              "type": "string",
+              "description": "Role of the sealer (for trust level enforcement)"
+            },
+            "trust_level": {
+              "enum": [
+                "SYSTEM",
+                "ORG",
+                "CASE",
+                "EPHEMERAL"
+              ],
+              "type": "string",
+              "description": "Trust level (SYSTEM > ORG > CASE > EPHEMERAL)"
+            },
+            "allowed_roles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "description": "RBAC roles allowed to load this pack"
+            },
+            "anti_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Prohibited patterns"
+            }
+          }
+        }
+      },
+      {
+        "name": "load_memory_pack",
+        "description": "Load a Governed Memory Pack into agent context. Validates TTL, trust level, role access, context class, and hash integrity before loading.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "run_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Current run/pipeline ID"
+            },
+            "pack_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Memory pack ID to load"
+            },
+            "agent_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Agent requesting the load"
+            },
+            "context_class": {
+              "enum": [
+                "PROD",
+                "STAGING",
+                "DEMO",
+                "EVAL_ONLY",
+                "TRAINING"
+              ],
+              "type": "string",
+              "description": "Execution context class"
+            },
+            "operator_role": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Role of the operator"
+            }
+          }
+        }
+      },
+      {
+        "name": "transfer_memory_pack",
+        "description": "Transfer a memory pack between agents via a governed knowledge corridor. Creates a derived pack with transfer provenance. ALWAYS requires MANDATORY gate — no silent transfers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "approved_by": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Human who approved the transfer (MANDATORY)"
+            },
+            "target_role": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Role of the target agent"
+            },
+            "scope_filter": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional: only transfer specific scope items"
+            },
+            "source_pack_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Source pack to transfer"
+            },
+            "source_agent_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Agent transferring the pack"
+            },
+            "target_agent_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Agent receiving the pack"
+            }
+          }
+        }
+      },
+      {
+        "name": "compose_memory_packs",
+        "description": "Compose multiple memory packs into a unified execution context. Highest risk level wins, shortest TTL wins, roles intersect, trust level contaminates downward.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Agent performing composition"
+            },
+            "pack_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "description": "IDs of packs to compose (minimum 2)"
+            },
+            "composed_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "ID for the composed pack"
+            },
+            "operator_role": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Operator role"
+            }
+          }
+        }
+      },
+      {
+        "name": "distill_memory_pack",
+        "description": "Distill governance patterns from usage history into a draft heuristic pack. Returns EPHEMERAL draft that requires MANDATORY gate to approve for production use.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Domain to distill patterns from"
+            },
+            "min_usage_count": {
+              "type": "number",
+              "default": 5,
+              "minimum": 1,
+              "description": "Minimum usage events required"
+            }
+          }
+        }
+      },
+      {
+        "name": "promote_memory_pack",
+        "description": "Promote a memory pack to a higher trust level after human review. This is how distilled EPHEMERAL packs become CASE or ORG packs. Requires MANDATORY gate.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pack_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Pack ID to promote"
+            },
+            "approved_by": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Human approver"
+            },
+            "target_trust": {
+              "enum": [
+                "SYSTEM",
+                "ORG",
+                "CASE"
+              ],
+              "type": "string",
+              "description": "Target trust level (must be higher)"
+            },
+            "approver_role": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Role of the approver"
+            }
+          }
+        }
+      },
+      {
+        "name": "record_value_metric",
+        "description": "Record a workflow value metric — tracks time saved, risk blocked, success rate, autonomy level, and task complexity for ROI reporting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Whether the workflow completed successfully"
+            },
+            "agent_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Agent that performed the workflow"
+            },
+            "workflow_id": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Unique workflow identifier"
+            },
+            "workflow_type": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Type of workflow (e.g., claim-analysis, evidence-review, compliance-check)"
+            },
+            "autonomy_level": {
+              "enum": [
+                "assist",
+                "delegate",
+                "automate"
+              ],
+              "type": "string",
+              "description": "Level of agent autonomy"
+            },
+            "task_complexity": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string",
+              "default": "medium",
+              "description": "Task complexity level"
+            },
+            "measurement_source": {
+              "enum": [
+                "measured",
+                "estimated",
+                "derived"
+              ],
+              "type": "string",
+              "default": "estimated",
+              "description": "How values were obtained"
+            },
+            "risk_blocked_count": {
+              "type": "number",
+              "default": 0,
+              "minimum": 0,
+              "description": "Number of risks/violations blocked"
+            },
+            "time_saved_minutes": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Minutes of human time saved"
+            }
+          }
+        }
+      },
+      {
+        "name": "record_governance_event",
+        "description": "Record a governance event — tracks gates triggered, drift prevented, violations blocked, red team findings, and human interventions for impact reporting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "details": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "Description of the governance event"
+            },
+            "event_type": {
+              "enum": [
+                "gate_triggered",
+                "drift_prevented",
+                "violation_blocked",
+                "redteam_resolved",
+                "human_intervention"
+              ],
+              "type": "string",
+              "description": "Type of governance event"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_impact_report",
+        "description": "Generate a full economic + governance impact report. Returns pilot ROI data: time saved, cost avoided, risks blocked, success rate, autonomy trend, and confidence levels.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "period_days": {
+              "type": "number",
+              "default": 14,
+              "maximum": 365,
+              "minimum": 1,
+              "description": "Report period in days"
+            },
+            "set_baselines": {
+              "type": "object",
+              "properties": {
+                "human_hourly_rate": {
+                  "type": "number"
+                },
+                "avg_manual_minutes": {
+                  "type": "number"
+                },
+                "model_cost_per_run": {
+                  "type": "number"
+                },
+                "estimated_incident_cost": {
+                  "type": "number"
+                }
+              },
+              "description": "Optional: override default baselines for this report",
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      {
+        "name": "srt_run_watchdog",
+        "description": "Run real health check probes from the MCP container (API health, frontend, disk, memory, TLS cert, DB, DNS). Returns actual measured values — never uses AI-provided data. Classification: INFORMATIONAL — read-only, no side effects.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "check_results": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "check_id",
+                  "name",
+                  "status",
+                  "value",
+                  "unit",
+                  "threshold",
+                  "message"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Human-readable check name"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Unit (%, ms, days, count, bool)"
+                  },
+                  "value": {
+                    "type": "number",
+                    "description": "Measured value"
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "WARNING",
+                      "CRITICAL",
+                      "ERROR",
+                      "TIMEOUT"
+                    ],
+                    "type": "string",
+                    "description": "Check result status"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Status message"
+                  },
+                  "check_id": {
+                    "type": "string",
+                    "description": "Check identifier (e.g. disk-usage, api-healthz)"
+                  },
+                  "threshold": {
+                    "type": "number",
+                    "description": "Threshold that was compared against"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "IGNORED — real probes are always used. This parameter exists for backward compatibility only."
+            }
+          }
+        }
+      },
+      {
+        "name": "srt_diagnose",
+        "description": "Run the SRT Diagnostician on an incident. Matches finding to known playbooks, identifies root cause, and proposes a staged repair plan. Classification: ADVISORY — read-only analysis, no mutations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "incident_id": {
+              "type": "string",
+              "description": "Incident ID from watchdog finding"
+            },
+            "additional_observations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Additional diagnostic observations (e.g. from manual log reading)"
+            }
+          }
+        }
+      },
+      {
+        "name": "srt_approve_repair",
+        "description": "Approve or reject a pending SRT repair plan. Classification: MANDATORY — this is the human-in-the-loop gate. Repair plans CANNOT execute without explicit human approval. Pass action=\"approve\" to approve or action=\"reject\" to reject.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "approve",
+                "reject"
+              ],
+              "type": "string",
+              "description": "Approve or reject the repair plan"
+            },
+            "reason": {
+              "type": "string",
+              "description": "Reason for rejection (required if rejecting)"
+            },
+            "approved_by": {
+              "type": "string",
+              "description": "Human operator approving/rejecting"
+            },
+            "incident_id": {
+              "type": "string",
+              "description": "Incident ID with pending repair"
+            }
+          }
+        }
+      },
+      {
+        "name": "srt_generate_postmortem",
+        "description": "Generate a structured postmortem report for a completed SRT incident. Includes timeline, root cause, what worked/failed, prevention actions, metrics (TTD/TTDiag/TTR), and optional playbook delta. Classification: ADVISORY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "incident_id": {
+              "type": "string",
+              "description": "Incident ID to generate postmortem for"
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_ledger",
+        "description": "Verify the integrity of the hash-chained forensic audit ledger. Recomputes every SHA-256 hash from genesis and reports whether the chain is intact. Classification: INFORMATIONAL — read-only, no side effects.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "gia_scan_environment",
+        "description": "Run scout swarm to detect target environment — OS, containers, services, network, storage. Returns EnvironmentProfile for compatibility checking. Classification: INFORMATIONAL — read-only, no mutations. Scout outputs are redacted for sensitive content.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scout_data": {
+              "type": "object",
+              "description": "Pre-collected scout data as key-value pairs. If not provided, returns scout command definitions for server-side execution.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "gia_list_packs",
+        "description": "List available governed operations packs. Filter by intent (remediation/patrol/hardening/audit), category, risk level, or trust level. Classification: INFORMATIONAL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "risk": {
+              "enum": [
+                "LOW",
+                "MEDIUM",
+                "HIGH"
+              ],
+              "type": "string",
+              "description": "Filter by risk level"
+            },
+            "intent": {
+              "enum": [
+                "remediation",
+                "patrol",
+                "hardening",
+                "audit"
+              ],
+              "type": "string",
+              "description": "Filter by pack intent"
+            },
+            "category": {
+              "enum": [
+                "network",
+                "container",
+                "database",
+                "storage",
+                "configuration",
+                "monitoring",
+                "security",
+                "custom"
+              ],
+              "type": "string",
+              "description": "Filter by remediation category"
+            },
+            "trust_level": {
+              "enum": [
+                "SYSTEM",
+                "ORG",
+                "CASE",
+                "EPHEMERAL"
+              ],
+              "type": "string",
+              "description": "Filter by trust level"
+            }
+          }
+        }
+      },
+      {
+        "name": "gia_dry_run_pack",
+        "description": "Preview remediation pack execution — shows hydrated commands, compatibility check, validation, blast radius. Returns inputsHash for approval binding (what-you-approved-is-what-ran). Classification: ADVISORY — read-only preview, no execution.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pack_id": {
+              "type": "string",
+              "description": "Remediation pack ID to preview (e.g. rpack-nginx-502-v1)"
+            },
+            "variable_overrides": {
+              "type": "object",
+              "description": "Override scout-detected variable values",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "gia_apply_pack",
+        "description": "Execute a remediation or hardening pack with MANDATORY gate approval. Requires inputsHash from gia_dry_run_pack (what-you-approved-is-what-ran binding). REJECTS patrol/audit packs (use gia_run_patrol for those). Hardening packs run preflight checks before execution. Classification: MANDATORY — human approval required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pack_id": {
+              "type": "string",
+              "description": "Remediation or hardening pack ID to execute"
+            },
+            "tenant_id": {
+              "type": "string",
+              "default": "ace-platform",
+              "description": "Tenant ID for token binding"
+            },
+            "approved_by": {
+              "type": "string",
+              "description": "Human approver identity (from authenticated session). BLOCKED: system, auto, agent, bot, ai"
+            },
+            "incident_id": {
+              "type": "string",
+              "description": "Link to existing SRT incident"
+            },
+            "inputs_hash": {
+              "type": "string",
+              "description": "inputsHash from gia_dry_run_pack — ensures what-you-approved-is-what-ran"
+            },
+            "approver_role": {
+              "type": "string",
+              "default": "isso",
+              "description": "Role of the approver (isso, platform-owner)"
+            },
+            "variable_overrides": {
+              "type": "object",
+              "description": "Same variable overrides used in dry-run",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "gia_run_patrol",
+        "description": "Execute a patrol or audit pack — read-only posture checks that produce findings or compliance evidence. Classification: ADVISORY for low/moderate sensitivity, MANDATORY for high sensitivity. REJECTS remediation/hardening packs (use gia_apply_pack for those). Audit packs produce deterministic pass/fail per NIST control — no AI interpretation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pack_id": {
+              "type": "string",
+              "description": "Patrol or audit pack ID (e.g. patrol-open-ports-v1, audit-nist-ac-basics-v1)"
+            },
+            "scout_data": {
+              "type": "object",
+              "description": "Pre-collected command outputs keyed by step number (e.g. {\"step_1\": \"output...\"}). If not provided, returns command definitions for caller to execute.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "approved_by": {
+              "type": "string",
+              "description": "Required ONLY for high-sensitivity packs. Human approver identity."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "mai-specification",
+        "uri": "gia://spec/mai-framework",
+        "description": "MAI Framework (Mandatory/Advisory/Informational) specification and classification rules."
+      },
+      {
+        "name": "threshold-specification",
+        "uri": "gia://spec/storey-threshold",
+        "description": "Storey Threshold quantitative governance health metric specification."
+      },
+      {
+        "name": "scoring-specification",
+        "uri": "gia://spec/governance-scoring",
+        "description": "Three-dimensional governance scoring specification (Integrity, Accuracy, Compliance)."
+      },
+      {
+        "name": "system-status",
+        "uri": "gia://status/live",
+        "description": "Live GIA system status including engine health, threshold, and telemetry."
+      },
+      {
+        "name": "architecture-guide",
+        "uri": "gia://spec/architecture",
+        "description": "GIA system architecture and governance inheritance chain."
+      }
+    ],
+    "prompts": [
+      {
+        "name": "gia-assess",
+        "description": "Perform a governance assessment on an AI system or operation. Walks through risk tier, MAI classification, scoring criteria, and compliance mapping.",
+        "arguments": [
+          {
+            "name": "system_description",
+            "description": "Description of the AI system or operation to assess",
+            "required": true
+          },
+          {
+            "name": "domain",
+            "description": "Industry domain (va-claims, legal, healthcare, finance, federal, general)",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "gia-design-gate",
+        "description": "Design a MAI gate strategy for an AI agent pipeline. Recommends classification levels and gate enforcement for each stage.",
+        "arguments": [
+          {
+            "name": "pipeline_description",
+            "description": "Description of the agent pipeline stages",
+            "required": true
+          },
+          {
+            "name": "is_client_facing",
+            "description": "Whether pipeline produces client-facing output",
+            "required": false
+          },
+          {
+            "name": "has_pii",
+            "description": "Whether pipeline handles PII",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "gia-compliance-report",
+        "description": "Generate a comprehensive compliance report mapping GIA governance to regulatory frameworks.",
+        "arguments": [
+          {
+            "name": "framework",
+            "description": "Target compliance framework",
+            "required": false
+          },
+          {
+            "name": "format",
+            "description": "Report format",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "gia-health-check",
+        "description": "Run a full GIA system health check covering threshold, agents, and audit integrity.",
+        "arguments": []
+      }
+    ]
+  }
+}

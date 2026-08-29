@@ -1,0 +1,83 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  merge_group:
+
+# Cancel superseded runs on a PR branch (cheap, fast-feedback unit lane), but
+# never cancel push/merge_group runs on a protected ref — those gate merges and
+# must complete. The two new pure-python test files
+# (tests/test_opencode_proxy_tracking.py and tests/integration/rubric_checks.py
+# self-tests) run automatically in this lane via the existing `pytest tests/`.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Least-privilege defaults — elevate per-job only when a step needs more.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3.2.4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --extra dev --extra sandbox-daytona --extra sandbox-modal --locked
+
+      - name: Lint
+        run: uv run ruff check src tests tools
+
+      - name: Format check
+        run: uv run ruff format --check src tests tools
+
+      - name: Type check
+        run: uv run ty check
+
+      - name: Test
+        run: uv run python -m pytest tests/
+
+  pip-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39  # v3.2.4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --extra dev --locked
+
+      - name: Audit locked dependencies for known advisories
+        run: |
+          uv export --locked --extra dev --extra sandbox-daytona --extra sandbox-modal --format requirements-txt --no-hashes --output-file /tmp/req-audit
+          # Every ignore below is a cryptography advisory we cannot reach the
+          # fix for: litellm[proxy] (pinned 1.91.0) hard-pins
+          # cryptography>=48.0.1,<49 , so 48.0.1 is the newest resolvable
+          # version. Drop these once litellm relaxes that pin.
+          #   GHSA-537c-gmf6-5ccf  fixed in 48.0.1 (pin previously held <47)
+          #   CVE-2026-69248       fixed in 49.0.0
+          #   CVE-2026-69249       fixed in 49.0.0
+          #   CVE-2026-69247       fixed in 50.0.0
+          uv run --with pip-audit pip-audit -r /tmp/req-audit --no-deps --disable-pip \
+            --ignore-vuln GHSA-537c-gmf6-5ccf \
+            --ignore-vuln CVE-2026-69248 \
+            --ignore-vuln CVE-2026-69249 \
+            --ignore-vuln CVE-2026-69247

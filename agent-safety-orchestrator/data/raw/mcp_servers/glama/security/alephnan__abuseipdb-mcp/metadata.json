@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "jj4uk2ixu8",
+  "namespace": "alephnan",
+  "slug": "AbuseIPDB-MCP",
+  "name": "MCP AbuseIPDB Server",
+  "description": "Provides threat intelligence lookups against the AbuseIPDB database, enabling IP reputation checks, CIDR block analysis, and log enrichment. It features intelligent caching and rate limiting to efficiently manage API usage for security analysis and automated workflows.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides threat intelligence lookups against the AbuseIPDB database, enabling IP reputation checks, CIDR block analysis, and log enrichment. It features intelligent caching and rate limiting to efficiently manage API usage for security analysis and automated workflows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "DAILY_QUOTA": {
+          "description": "API request quota",
+          "type": "string",
+          "default": "1000"
+        },
+        "MAX_AGE_DAYS": {
+          "description": "Default report age limit",
+          "type": "string",
+          "default": "30"
+        },
+        "CACHE_DB_PATH": {
+          "description": "SQLite cache file location",
+          "type": "string",
+          "default": "./cache.db"
+        },
+        "ABUSEIPDB_API_KEY": {
+          "description": "Your AbuseIPDB API key",
+          "type": "string"
+        },
+        "ALLOW_PRIVATE_IPS": {
+          "description": "Allow checking private IPs",
+          "type": "string",
+          "default": "false"
+        },
+        "CONFIDENCE_THRESHOLD": {
+          "description": "Default confidence threshold",
+          "type": "string",
+          "default": "75"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ABUSEIPDB_API_KEY"
+      ]
+    },
+    "id": "jj4uk2ixu8",
+    "name": "MCP AbuseIPDB Server",
+    "namespace": "alephnan",
+    "repository": {
+      "url": "https://github.com/alephnan/AbuseIPDB-MCP"
+    },
+    "slug": "AbuseIPDB-MCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jj4uk2ixu8"
+  }
+}

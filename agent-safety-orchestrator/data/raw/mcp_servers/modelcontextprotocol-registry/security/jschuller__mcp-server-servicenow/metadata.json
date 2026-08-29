@@ -1,0 +1,75 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.jschuller/mcp-server-servicenow",
+  "slug": "jschuller__mcp-server-servicenow",
+  "title": "ServiceNow MCP Server",
+  "description": "18 MCP tools for ServiceNow: incidents, CMDB, update sets. OAuth 2.1, Tokyo+.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.jschuller/mcp-server-servicenow",
+      "description": "18 MCP tools for ServiceNow: incidents, CMDB, update sets. OAuth 2.1, Tokyo+.",
+      "title": "ServiceNow MCP Server",
+      "repository": {
+        "url": "https://github.com/jschuller/mcp-server-servicenow",
+        "source": "github"
+      },
+      "version": "0.3.1",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "mcp-server-servicenow",
+          "version": "0.3.1",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "ServiceNow instance URL",
+              "isRequired": true,
+              "format": "string",
+              "name": "SERVICENOW_INSTANCE_URL"
+            },
+            {
+              "description": "Auth type: basic, oauth, or api_key",
+              "isRequired": true,
+              "format": "string",
+              "name": "SERVICENOW_AUTH_TYPE"
+            },
+            {
+              "description": "Username for basic or OAuth auth",
+              "format": "string",
+              "name": "SERVICENOW_USERNAME"
+            },
+            {
+              "description": "Password for basic or OAuth auth",
+              "format": "string",
+              "isSecret": true,
+              "name": "SERVICENOW_PASSWORD"
+            },
+            {
+              "description": "OAuth client ID",
+              "format": "string",
+              "name": "SERVICENOW_CLIENT_ID"
+            },
+            {
+              "description": "OAuth client secret",
+              "format": "string",
+              "isSecret": true,
+              "name": "SERVICENOW_CLIENT_SECRET"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-02-26T17:43:00.997503Z",
+        "publishedAt": "2026-02-26T17:43:00.997503Z",
+        "updatedAt": "2026-02-26T17:43:00.997503Z",
+        "isLatest": false
+      }
+    }
+  }
+}

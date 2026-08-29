@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "c5us0tewy3",
+  "namespace": "wwqdrh",
+  "slug": "MCPcmd",
+  "name": "cmd-line-mcp",
+  "description": "A secure Model Context Protocol server that allows AI assistants to execute terminal commands with controlled directory access and command permissions. It features a robust security architecture including whitelisting, session IDs, and categorized command levels to ensure safe system interaction.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A secure Model Context Protocol server that allows AI assistants to execute terminal commands with controlled directory access and command permissions. It features a robust security architecture including whitelisting, session IDs, and categorized command levels to ensure safe system interaction.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CMD_LINE_MCP_CONFIG": {
+          "description": "Path to a custom configuration JSON file.",
+          "type": "string"
+        },
+        "CMD_LINE_MCP_COMMANDS_READ": {
+          "description": "Comma-separated list of allowed read commands (e.g., awk,jq,wc).",
+          "type": "string"
+        },
+        "CMD_LINE_MCP_COMMANDS_WRITE": {
+          "description": "Comma-separated list of allowed write commands.",
+          "type": "string"
+        },
+        "CMD_LINE_MCP_COMMANDS_SYSTEM": {
+          "description": "Comma-separated list of allowed system commands.",
+          "type": "string"
+        },
+        "CMD_LINE_MCP_SECURITY_REQUIRE_SESSION_ID": {
+          "description": "Whether to require a session ID for operations (true/false). Defaults to false.",
+          "type": "string"
+        },
+        "CMD_LINE_MCP_SECURITY_WHITELISTED_DIRECTORIES": {
+          "description": "Comma-separated list of whitelisted directories (e.g., /home,/tmp).",
+          "type": "string"
+        },
+        "CMD_LINE_MCP_SECURITY_ALLOW_COMMAND_SEPARATORS": {
+          "description": "Whether to allow command separators like ; or && (true/false).",
+          "type": "string"
+        },
+        "CMD_LINE_MCP_SECURITY_AUTO_APPROVE_DIRECTORIES_IN_DESKTOP_MODE": {
+          "description": "Whether to auto-approve directories when running in desktop mode (true/false).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "c5us0tewy3",
+    "name": "cmd-line-mcp",
+    "namespace": "wwqdrh",
+    "repository": {
+      "url": "https://github.com/wwqdrh/MCPcmd"
+    },
+    "slug": "MCPcmd",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/c5us0tewy3"
+  }
+}

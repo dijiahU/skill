@@ -1,0 +1,185 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "post-pulse/mcp-server",
+  "namespace": "post-pulse",
+  "slug": "mcp-server",
+  "displayName": "PostPulse",
+  "description": "PostPulse is a unified API and integration suite that handles the complexity of social media publishing. Instead of managing individual platform audits and breaking tokens, developers use PostPulse as their outsourced social-connectivity team.\n\n## Integration Paths\n\n### 1. White-Label (For App Developers)\n- **Best for:** SaaS founders and mobile app developers who want a \"Native\" experience.\n- **Experience:** Your users never leave your UI and require zero PostPulse registration.\n- **Branding:** 100% your brand. Includes a native OAuth bridge for account connections.\n\n### 2. Private-Label (For Individual Developers & Automation)\n- **Best for:** Engineers building custom internal tools or automating personal workflows.\n- **Experience:** Users connect their own social accounts via the PostPulse interface.\n- **Tools Included:** \n    - **Official n8n Node:** Drag-and-drop posting workflows.\n    - **Official Make.com App:** Seamless automation with 1000+ other apps.\n    - **MCP Server (Mode",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "c5c32df9-657a-48c3-b05d-7ac02c5ac56c",
+    "qualifiedName": "post-pulse/mcp-server",
+    "namespace": "post-pulse",
+    "slug": "mcp-server",
+    "displayName": "PostPulse",
+    "description": "PostPulse is a unified API and integration suite that handles the complexity of social media publishing. Instead of managing individual platform audits and breaking tokens, developers use PostPulse as their outsourced social-connectivity team.\n\n## Integration Paths\n\n### 1. White-Label (For App Developers)\n- **Best for:** SaaS founders and mobile app developers who want a \"Native\" experience.\n- **Experience:** Your users never leave your UI and require zero PostPulse registration.\n- **Branding:** 100% your brand. Includes a native OAuth bridge for account connections.\n\n### 2. Private-Label (For Individual Developers & Automation)\n- **Best for:** Engineers building custom internal tools or automating personal workflows.\n- **Experience:** Users connect their own social accounts via the PostPulse interface.\n- **Tools Included:** \n    - **Official n8n Node:** Drag-and-drop posting workflows.\n    - **Official Make.com App:** Seamless automation with 1000+ other apps.\n    - **MCP Server (Mode",
+    "iconUrl": "https://api.smithery.ai/servers/post-pulse/mcp-server/icon",
+    "verified": true,
+    "useCount": 2,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-01T04:31:42.274Z",
+    "homepage": "https://developers.post-pulse.com",
+    "bySmithery": false,
+    "owner": "org_01KNBW0A3JCJ0ZPE03YJ83YM88",
+    "score": 0.009615384615384616
+  },
+  "detail": {
+    "qualifiedName": "post-pulse/mcp-server",
+    "displayName": "PostPulse",
+    "description": "PostPulse is a unified API and integration suite that handles the complexity of social media publishing. Instead of managing individual platform audits and breaking tokens, developers use PostPulse as their outsourced social-connectivity team.\n\n## Integration Paths\n\n### 1. White-Label (For App Developers)\n- **Best for:** SaaS founders and mobile app developers who want a \"Native\" experience.\n- **Experience:** Your users never leave your UI and require zero PostPulse registration.\n- **Branding:** 100% your brand. Includes a native OAuth bridge for account connections.\n\n### 2. Private-Label (For Individual Developers & Automation)\n- **Best for:** Engineers building custom internal tools or automating personal workflows.\n- **Experience:** Users connect their own social accounts via the PostPulse interface.\n- **Tools Included:** \n    - **Official n8n Node:** Drag-and-drop posting workflows.\n    - **Official Make.com App:** Seamless automation with 1000+ other apps.\n    - **MCP Server (Model Context Protocol):** Allow LLMs and AI Agents to post to social media directly from their context.\n    - **REST API:** Standardized endpoints for all 9+ supported platforms.\n\n## The Cost of \"Manual Integration\" (The Alternative)\nBuilding social integrations manually is a major resource drain:\n- **Complexity:** Reading 9+ sets of disparate, often conflicting API documentation.\n- **Audit Hurdles:** Passing \"Developer App\" reviews for Meta, TikTok, and Google (can take months).\n- **Maintenance:** Managing token refreshes, rate limits, and constant API version changes.\n- **PostPulse Solution:** We handle all of the above. You integrate once; we maintain it forever.",
+    "iconUrl": "https://api.smithery.ai/servers/post-pulse/mcp-server/icon",
+    "remote": true,
+    "deploymentUrl": "https://post-pulse-mcp.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://post-pulse-mcp.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_accounts",
+        "description": "List all connected social media accounts (Instagram, Facebook, YouTube, TikTok, Threads, LinkedIn, X/Twitter, Telegram) with their IDs, platforms, usernames, and display names. Call this first to discover available accounts before using schedule_post or list_chats.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_chats",
+        "description": "List publishing destinations (Telegram channels/chats or Facebook Pages) available for a specific account. Required before scheduling posts to Telegram or Facebook — use the returned id as the chatId parameter in schedule_post. Only supports TELEGRAM and FACEBOOK platforms; other platforms do not have sub-destinations and should be posted to directly via schedule_post.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "platform": {
+              "type": "string",
+              "description": "Platform name: FACEBOOK or TELEGRAM (only these two platforms have sub-destinations)"
+            },
+            "accountId": {
+              "type": "number",
+              "description": "The account ID from list_accounts"
+            }
+          }
+        }
+      },
+      {
+        "name": "upload_media",
+        "description": "Upload media files (images, videos) for use in scheduled posts. Supports two modes: (1) provide a public mediaUrl to import from the web (the server handles download and processing automatically), or (2) provide base64-encoded mediaData with a mediaType MIME type for direct binary upload. Returns a media key string that you pass to the mediaPaths parameter of schedule_post.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mediaUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Public URL of the media file to import (e.g. https://example.com/photo.jpg). The server downloads and processes the file automatically. Use this OR mediaData, not both."
+            },
+            "mediaData": {
+              "type": "string",
+              "description": "Base64-encoded binary content of the media file. Must be used together with mediaType. Use this OR mediaUrl, not both."
+            },
+            "mediaName": {
+              "type": "string",
+              "description": "Filename for the uploaded media (e.g. photo.jpg). Optional, defaults to \"file\" if not provided."
+            },
+            "mediaType": {
+              "type": "string",
+              "description": "MIME type of the media file (e.g. image/jpeg, image/png, video/mp4). Required when using mediaData."
+            }
+          }
+        }
+      },
+      {
+        "name": "schedule_post",
+        "description": "Schedule a social media post to a connected account. Supports Instagram (feed, reel, story), Facebook (feed, reel, story), YouTube, TikTok, Threads, LinkedIn, X/Twitter, Bluesky, and Telegram. Requires an accountId from list_accounts, a platform identifier, and a scheduledTime in ISO-8601 format. For Facebook and Telegram, you MUST first call list_chats to get the publishing destination (Page ID or Channel ID) and pass it as facebookPageId or telegramChannelId respectively. Optionally attach media from upload_media via mediaPaths, set publication type, video title, or topic tag depending on the platform.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title for YouTube or TikTok videos"
+            },
+            "content": {
+              "type": "string",
+              "description": "Post content text"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Platform name (e.g. INSTAGRAM, FACEBOOK, TELEGRAM, YOUTUBE, TIKTOK, THREADS, LINKEDIN, X_TWITTER)"
+            },
+            "topicTag": {
+              "type": "string",
+              "description": "Topic tag for Threads"
+            },
+            "accountId": {
+              "type": "number",
+              "description": "The account ID from list_accounts"
+            },
+            "mediaPaths": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "Media key returned by upload_media"
+              },
+              "description": "Optional array of media keys from upload_media"
+            },
+            "scheduledTime": {
+              "type": "string",
+              "description": "ISO-8601 timestamp for scheduling (e.g., 2023-10-27T10:00:00Z)."
+            },
+            "facebookPageId": {
+              "type": "string",
+              "description": "Facebook Page ID (required for Facebook). Get it from list_chats with platform=FACEBOOK"
+            },
+            "publicationType": {
+              "enum": [
+                "FEED",
+                "REEL",
+                "STORY"
+              ],
+              "type": "string",
+              "description": "Publication type for Instagram/Facebook (default: FEED)"
+            },
+            "telegramChannelId": {
+              "type": "string",
+              "description": "Telegram Channel/Chat ID (required for Telegram). Get it from list_chats with platform=TELEGRAM"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "Social Media Accounts",
+        "uri": "postpulse://accounts",
+        "description": "A list of all connected social media accounts (Instagram, Facebook, Telegram, etc.)"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "schedule-post",
+        "description": "Guide through scheduling a post to a connected social media account. Walks through account selection, optional media upload, and post scheduling.",
+        "arguments": [
+          {
+            "name": "platform",
+            "description": "Target platform (e.g. INSTAGRAM, FACEBOOK, TELEGRAM, YOUTUBE, TIKTOK, THREADS, LINKEDIN, X_TWITTER, BLUESKY)",
+            "required": false
+          },
+          {
+            "name": "content",
+            "description": "Post text or caption",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

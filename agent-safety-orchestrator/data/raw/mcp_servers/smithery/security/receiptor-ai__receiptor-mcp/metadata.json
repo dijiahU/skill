@@ -1,0 +1,1827 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "receiptor-ai/receiptor-mcp",
+  "namespace": "receiptor-ai",
+  "slug": "receiptor-mcp",
+  "displayName": "Receiptor MCP",
+  "description": "Receiptor connects AI agents to your bookkeeping workspace so they can find, review, and organize financial documents such as receipts, bills, and invoices. Use it to inspect workspace context, monitor intake sources, review extracted document data, check integrations, and prepare accountant-ready workflows through secure OAuth access to Receiptor AI.",
+  "discoveryQueries": [
+    "scanner",
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "6c60a529-1ab6-4014-be89-e9d9ea7bb506",
+    "qualifiedName": "receiptor-ai/receiptor-mcp",
+    "namespace": "receiptor-ai",
+    "slug": "receiptor-mcp",
+    "displayName": "Receiptor MCP",
+    "description": "Receiptor connects AI agents to your bookkeeping workspace so they can find, review, and organize financial documents such as receipts, bills, and invoices. Use it to inspect workspace context, monitor intake sources, review extracted document data, check integrations, and prepare accountant-ready workflows through secure OAuth access to Receiptor AI.",
+    "iconUrl": "https://api.smithery.ai/servers/receiptor-ai/receiptor-mcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-28T01:24:11.815Z",
+    "homepage": "https://receiptor.ai",
+    "bySmithery": false,
+    "owner": "org_01KQ8TVTW0XAENYR1TPX8QS4E6",
+    "score": 0.01694915254237288
+  },
+  "detail": {
+    "qualifiedName": "receiptor-ai/receiptor-mcp",
+    "displayName": "Receiptor MCP",
+    "description": "Receiptor connects AI agents to your bookkeeping workspace so they can find, review, and organize financial documents such as receipts, bills, and invoices. Use it to inspect workspace context, monitor intake sources, review extracted document data, check integrations, and prepare accountant-ready workflows through secure OAuth access to Receiptor AI.",
+    "iconUrl": "https://api.smithery.ai/servers/receiptor-ai/receiptor-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://receiptor-mcp.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://receiptor-mcp.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_server_info",
+        "description": "Get information about the Receiptor MCP server",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "workspace_get_context",
+        "description": "Get the current workspace context (user, org, role, and effective ownership scope).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "workspace_switch",
+        "description": "Validate a target workspace and switch the active workspace for this MCP OAuth session.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "orgId": {
+              "type": "string",
+              "description": "Target organization/workspace ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "activity_search",
+        "description": "Search past source activity logs across email, WhatsApp, and uploads. For email sources, this first searches connected providers, then cross-checks matching message IDs against stored activity logs and returns any saved processing reasoning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "description": "Page number for paginated results."
+            },
+            "limit": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Maximum number of activity items to return."
+            },
+            "query": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Natural-language or exact search query such as merchant, sender, or invoice keyword."
+            },
+            "statuses": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "queued",
+                  "processed",
+                  "skipped",
+                  "failed",
+                  "processing",
+                  "warning"
+                ],
+                "type": "string"
+              },
+              "description": "Optional activity statuses to include."
+            },
+            "sourceTypes": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "email",
+                  "whatsapp",
+                  "upload"
+                ],
+                "type": "string"
+              },
+              "default": [
+                "email",
+                "whatsapp",
+                "upload"
+              ],
+              "description": "Which source activity types to search."
+            },
+            "providerResultLimit": {
+              "type": "integer",
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of provider search matches to cross-check before filtering activity logs."
+            },
+            "includeSourceDetails": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to reload matching provider messages for richer email details like subject, sender, and snippet."
+            }
+          }
+        }
+      },
+      {
+        "name": "approvals_get",
+        "description": "Get the details of a pending or resolved approval request by ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "approvalRequestId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The approval request ID."
+            }
+          }
+        }
+      },
+      {
+        "name": "approvals_approve",
+        "description": "Approve a pending approval request and execute the stored capability input.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "approvalRequestId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The approval request ID."
+            }
+          }
+        }
+      },
+      {
+        "name": "approvals_reject",
+        "description": "Reject a pending approval request without executing the stored capability input.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "maxLength": 500,
+              "minLength": 1
+            },
+            "approvalRequestId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The approval request ID."
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_search",
+        "description": "Search, filter, and retrieve user's documents. Supports text search, filtering by document type, export status, date ranges, sorting, and semantic similarity. Use documents.count for totals or grouped summaries across all matching documents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 5,
+              "description": "Max documents to return"
+            },
+            "query": {
+              "type": "string",
+              "description": "Text query (used only when useSearch=true). Omit in filter-only mode."
+            },
+            "where": {
+              "type": "object",
+              "required": [
+                "conditions"
+              ],
+              "properties": {
+                "logic": {
+                  "enum": [
+                    "and",
+                    "or"
+                  ],
+                  "type": "string",
+                  "default": "and"
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "field",
+                      "op"
+                    ],
+                    "properties": {
+                      "op": {
+                        "enum": [
+                          "eq",
+                          "ne",
+                          "gt",
+                          "gte",
+                          "lt",
+                          "lte",
+                          "in",
+                          "nin",
+                          "regex",
+                          "exists"
+                        ],
+                        "type": "string"
+                      },
+                      "field": {
+                        "enum": [
+                          "amount",
+                          "docDate",
+                          "merchant",
+                          "category",
+                          "docType",
+                          "invoiceId",
+                          "receiptId",
+                          "preferredCurrency",
+                          "currency",
+                          "paymentMethod",
+                          "paymentMethodEnding",
+                          "fromEmail",
+                          "toEmail",
+                          "summary",
+                          "taxAmount",
+                          "subtotal",
+                          "isRecurring",
+                          "recurringType",
+                          "entityId"
+                        ],
+                        "type": "string"
+                      },
+                      "value": {}
+                    },
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
+                }
+              },
+              "description": "Typed filter clause. Allowed fields: amount, docDate, merchant, category, docType, invoiceId, receiptId, preferredCurrency, currency, paymentMethod, paymentMethodEnding, fromEmail, toEmail, summary, taxAmount, subtotal, isRecurring, recurringType, entityId. Allowed ops: eq, ne, gt, gte, lt, lte, in, nin, regex, exists. Regex filters are already case-insensitive, so pass plain values like \"grab\" instead of inline flags like \"(?i)grab\".",
+              "additionalProperties": false
+            },
+            "sortBy": {
+              "type": "string",
+              "default": "docDate",
+              "description": "Sort field (docDate, amount, merchant, ...)"
+            },
+            "archived": {
+              "enum": [
+                "exclude",
+                "only",
+                "include"
+              ],
+              "type": "string",
+              "default": "exclude",
+              "description": "Archive filter: exclude (default, active docs), only (archived docs), include (both)."
+            },
+            "sortOrder": {
+              "type": "number",
+              "default": -1,
+              "description": "Sort order: 1 asc, -1 desc"
+            },
+            "useSearch": {
+              "type": "boolean",
+              "default": true,
+              "description": "Enable semantic/text search"
+            },
+            "outputMode": {
+              "enum": [
+                "compact",
+                "complete"
+              ],
+              "type": "string",
+              "default": "compact",
+              "description": "Response shape: compact (default) or complete"
+            },
+            "searchType": {
+              "enum": [
+                "similarity",
+                "mmr"
+              ],
+              "type": "string",
+              "default": "mmr",
+              "description": "Search mode when useSearch=true: similarity (exact-ish) or mmr (broader)"
+            },
+            "exportStatus": {
+              "enum": [
+                "all",
+                "exported",
+                "not-exported"
+              ],
+              "type": "string",
+              "description": "Export status filter"
+            },
+            "requiredFields": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "id",
+                  "merchant",
+                  "amount",
+                  "currency",
+                  "preferredCurrency",
+                  "conversionRate",
+                  "date",
+                  "category",
+                  "docType",
+                  "summary",
+                  "invoiceId",
+                  "receiptId",
+                  "exportStatus",
+                  "link"
+                ],
+                "type": "string"
+              },
+              "default": [],
+              "description": "Always include these extra fields (in addition to outputMode defaults). Allowed fields: id, merchant, amount, currency, preferredCurrency, conversionRate, date, category, docType, summary, invoiceId, receiptId, exportStatus, link."
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_get",
+        "description": "Retrieve a single document by ID with full details. Returns all extracted fields including merchant info, line items, amounts, file URL, and source.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The document ID to fetch"
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_update",
+        "description": "Update a single document by ID. Use this for precise corrections to extracted document fields that should not be applied through bulk edit.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "changes": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "description": "Document amount in major currency units (for example 12.34)"
+                },
+                "labels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
+                  },
+                  "maxItems": 50
+                },
+                "docDate": {
+                  "type": "string"
+                },
+                "docType": {
+                  "enum": [
+                    "invoice",
+                    "receipt",
+                    "credit_note",
+                    "quote",
+                    "purchase_order",
+                    "order_confirmation"
+                  ],
+                  "type": "string"
+                },
+                "summary": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 2000,
+                      "minLength": 1
+                    },
+                    {
+                      "enum": [
+                        "null"
+                      ],
+                      "nullable": true
+                    }
+                  ]
+                },
+                "taxRate": {
+                  "type": "number"
+                },
+                "category": {
+                  "$ref": "#/properties/changes/properties/merchant"
+                },
+                "currency": {
+                  "type": "string",
+                  "pattern": "^[a-z]{3}$"
+                },
+                "entityId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 64,
+                      "minLength": 1
+                    },
+                    {
+                      "enum": [
+                        "null"
+                      ],
+                      "nullable": true
+                    }
+                  ]
+                },
+                "merchant": {
+                  "type": "string",
+                  "maxLength": 255,
+                  "minLength": 1
+                },
+                "subtotal": {
+                  "$ref": "#/properties/changes/properties/amount",
+                  "description": "Subtotal in major currency units (for example 11.11)"
+                },
+                "invoiceId": {
+                  "allOf": [
+                    {
+                      "$ref": "#/properties/changes/properties/merchant"
+                    }
+                  ],
+                  "nullable": true
+                },
+                "receiptId": {
+                  "$ref": "#/properties/changes/properties/invoiceId"
+                },
+                "taxAmount": {
+                  "$ref": "#/properties/changes/properties/amount",
+                  "description": "Tax amount in major currency units (for example 1.23)"
+                },
+                "isRecurring": {
+                  "type": "boolean"
+                },
+                "paymentMethod": {
+                  "anyOf": [
+                    {
+                      "allOf": [
+                        {
+                          "type": "string",
+                          "maxLength": 64,
+                          "minLength": 1
+                        },
+                        {
+                          "enum": [
+                            "cash",
+                            "check",
+                            "credit_card",
+                            "debit_card",
+                            "paypal",
+                            "bank_transfer",
+                            "other",
+                            "unknown"
+                          ],
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    {
+                      "enum": [
+                        "null"
+                      ],
+                      "nullable": true
+                    }
+                  ]
+                },
+                "recurringType": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "subscription",
+                        "retainer",
+                        "membership",
+                        "license",
+                        "lease",
+                        "installment"
+                      ],
+                      "type": "string"
+                    },
+                    {
+                      "enum": [
+                        "null"
+                      ],
+                      "nullable": true
+                    }
+                  ]
+                },
+                "preferredCurrency": {
+                  "$ref": "#/properties/changes/properties/currency"
+                },
+                "paymentMethodEnding": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 16,
+                      "minLength": 1
+                    },
+                    {
+                      "enum": [
+                        "null"
+                      ],
+                      "nullable": true
+                    }
+                  ]
+                }
+              },
+              "description": "Single-document edits. Does not support fromEmail or toEmail.",
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_list-duplicates",
+        "description": "List existing duplicate document groups for the current workspace.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Maximum duplicate groups to return"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "description": "Number of duplicate groups to skip"
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_scan-duplicates",
+        "description": "Scan active unresolved documents in the current workspace for likely duplicate groups. Read-only: returns candidate groups and recommended canonical documents without mutating data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Maximum candidate duplicate groups to return"
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_inspect",
+        "description": "Inspect the original document file (image/PDF) with a vision model and compare visible values against currently stored extracted fields.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Document ID to inspect"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "merchant",
+                  "amount",
+                  "currency",
+                  "docDate",
+                  "invoiceId",
+                  "receiptId",
+                  "taxAmount",
+                  "subtotal",
+                  "paymentMethod",
+                  "category",
+                  "summary",
+                  "docType"
+                ],
+                "type": "string"
+              },
+              "description": "Specific fields to inspect from file. Defaults to core financial fields."
+            },
+            "maxPages": {
+              "type": "integer",
+              "default": 3,
+              "maximum": 5,
+              "minimum": 1,
+              "description": "For PDFs, maximum pages to inspect (1-5). Defaults to 3."
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_count",
+        "description": "Count documents and aggregate data. Use for spending totals and financial analysis. Supports grouping by merchant, category, date, export status, etc. Gets ALL matching documents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "where": {
+              "type": "object",
+              "required": [
+                "conditions"
+              ],
+              "properties": {
+                "logic": {
+                  "enum": [
+                    "and",
+                    "or"
+                  ],
+                  "type": "string",
+                  "default": "and"
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "field",
+                      "op"
+                    ],
+                    "properties": {
+                      "op": {
+                        "enum": [
+                          "eq",
+                          "ne",
+                          "gt",
+                          "gte",
+                          "lt",
+                          "lte",
+                          "in",
+                          "nin",
+                          "regex",
+                          "exists"
+                        ],
+                        "type": "string"
+                      },
+                      "field": {
+                        "enum": [
+                          "amount",
+                          "docDate",
+                          "merchant",
+                          "category",
+                          "docType",
+                          "invoiceId",
+                          "receiptId",
+                          "preferredCurrency",
+                          "currency",
+                          "paymentMethod",
+                          "paymentMethodEnding",
+                          "fromEmail",
+                          "toEmail",
+                          "summary",
+                          "taxAmount",
+                          "subtotal",
+                          "isRecurring",
+                          "recurringType",
+                          "entityId"
+                        ],
+                        "type": "string"
+                      },
+                      "value": {}
+                    },
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
+                }
+              },
+              "description": "Typed filter clause. Allowed fields: amount, docDate, merchant, category, docType, invoiceId, receiptId, preferredCurrency, currency, paymentMethod, paymentMethodEnding, fromEmail, toEmail, summary, taxAmount, subtotal, isRecurring, recurringType, entityId. Allowed ops: eq, ne, gt, gte, lt, lte, in, nin, regex, exists. Regex filters are already case-insensitive, so pass plain values like \"grab\" instead of inline flags like \"(?i)grab\".",
+              "additionalProperties": false
+            },
+            "groupBy": {
+              "enum": [
+                "merchant",
+                "category",
+                "docType",
+                "currency",
+                "preferredCurrency",
+                "paymentMethod",
+                "paymentMethodEnding",
+                "entityId",
+                "docDate",
+                "exportStatus"
+              ],
+              "type": "string",
+              "description": "Aggregation key. Allowed values: merchant, category, docType, currency, preferredCurrency, paymentMethod, paymentMethodEnding, entityId, docDate, exportStatus. Use exportStatus to summarize exported vs not-exported documents."
+            },
+            "archived": {
+              "enum": [
+                "exclude",
+                "only",
+                "include"
+              ],
+              "type": "string",
+              "default": "exclude",
+              "description": "Archive filter: exclude (default, active docs), only (archived docs), include (both)."
+            },
+            "exportStatus": {
+              "enum": [
+                "all",
+                "exported",
+                "not-exported"
+              ],
+              "type": "string",
+              "description": "Optional export status filter before aggregation"
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_bulk-edit",
+        "description": "Bulk edit documents. Supports dry-run preview (default) and execute modes. Preview returns matching documents with proposed changes and available merchants/categories for context.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query to find documents (optional)"
+            },
+            "where": {
+              "type": "object",
+              "required": [
+                "conditions"
+              ],
+              "properties": {
+                "logic": {
+                  "enum": [
+                    "and",
+                    "or"
+                  ],
+                  "type": "string",
+                  "default": "and"
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "field",
+                      "op"
+                    ],
+                    "properties": {
+                      "op": {
+                        "enum": [
+                          "eq",
+                          "ne",
+                          "gt",
+                          "gte",
+                          "lt",
+                          "lte",
+                          "in",
+                          "nin",
+                          "regex",
+                          "exists"
+                        ],
+                        "type": "string"
+                      },
+                      "field": {
+                        "enum": [
+                          "amount",
+                          "docDate",
+                          "merchant",
+                          "category",
+                          "docType",
+                          "invoiceId",
+                          "receiptId",
+                          "preferredCurrency",
+                          "currency",
+                          "paymentMethod",
+                          "paymentMethodEnding",
+                          "fromEmail",
+                          "toEmail",
+                          "summary",
+                          "taxAmount",
+                          "subtotal",
+                          "isRecurring",
+                          "recurringType",
+                          "entityId"
+                        ],
+                        "type": "string"
+                      },
+                      "value": {}
+                    },
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
+                }
+              },
+              "description": "Typed filter clause for targeted bulk edits. Allowed fields: amount, docDate, merchant, category, docType, invoiceId, receiptId, preferredCurrency, currency, paymentMethod, paymentMethodEnding, fromEmail, toEmail, summary, taxAmount, subtotal, isRecurring, recurringType, entityId. Allowed ops: eq, ne, gt, gte, lt, lte, in, nin, regex, exists.",
+              "additionalProperties": false
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, shows preview without making changes. If false, executes the bulk edit."
+            },
+            "changes": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
+                  },
+                  "maxItems": 50,
+                  "description": "Replace labels with this exact set"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "New category to apply"
+                },
+                "entityId": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "description": "Business entity ID to assign"
+                },
+                "merchant": {
+                  "type": "string",
+                  "description": "New merchant name to apply"
+                },
+                "shouldClearLabels": {
+                  "type": "boolean",
+                  "description": "If true, remove all labels from matching documents"
+                }
+              },
+              "description": "Changes to apply to matching documents",
+              "additionalProperties": false
+            },
+            "category": {
+              "type": "string",
+              "description": "Specific category to filter for editing"
+            },
+            "merchant": {
+              "type": "string",
+              "description": "Specific merchant to filter for editing"
+            },
+            "documentIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Exact document IDs to edit. Use this for deterministic single-document or hand-picked multi-document edits."
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_resolve-duplicates",
+        "description": "Analyze a selected set of documents as possible duplicates. Use dryRun=true (default) to preview the recommended canonical/master document first. Use dryRun=false with masterId to apply the duplicate grouping and archive the non-master duplicates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, preview duplicate resolution. If false, apply the chosen master/duplicate grouping."
+            },
+            "masterId": {
+              "type": "string",
+              "description": "Canonical document to keep. Required only when dryRun=false and must be one of documentIds."
+            },
+            "documentIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 20,
+              "minItems": 2,
+              "description": "Document IDs to analyze as a possible duplicate set"
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_delete",
+        "description": "Soft-delete a document (receipt, invoice, etc.). The document is archived and can be recovered. Also archives any duplicate documents and cleans up cross-references.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The document ID to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "documents_unarchive",
+        "description": "Restore a previously archived document so it is active again.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The archived document ID to restore"
+            }
+          }
+        }
+      },
+      {
+        "name": "currency_convert",
+        "description": "Convert amounts between different currencies. Uses current rates by default, or historical rates for a specific date.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "Optional date for historical rates (YYYY-MM-DD format). Defaults to current rates if not provided."
+            },
+            "amount": {
+              "type": "number",
+              "description": "The amount to convert"
+            },
+            "toCurrency": {
+              "type": "string",
+              "description": "The target currency code (e.g., 'USD', 'EUR', 'IDR')"
+            },
+            "fromCurrency": {
+              "type": "string",
+              "description": "The source currency code (e.g., 'USD', 'EUR', 'IDR')"
+            }
+          }
+        }
+      },
+      {
+        "name": "integrations_list",
+        "description": "List available integrations for the user. Can filter by category (email, accounting, storage, social, banking) and status. Returns integration IDs needed for sendToIntegration, reconcileWithIntegration, and other operations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "active",
+                "disconnected"
+              ],
+              "type": "string",
+              "description": "Filter by integration status"
+            },
+            "category": {
+              "enum": [
+                "email",
+                "accounting",
+                "storage",
+                "social",
+                "banking"
+              ],
+              "type": "string",
+              "description": "Filter by integration category"
+            }
+          }
+        }
+      },
+      {
+        "name": "integrations_send",
+        "description": "Send a document (receipt/invoice) to a supported accounting integration (Xero or QuickBooks). Requires integrationId. targetId is required for Xero/QuickBooks. Set dryRun=true (default) to preview, dryRun=false to queue for sending.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, shows preview without sending. If false, queues the document for sending."
+            },
+            "targetId": {
+              "type": "string",
+              "description": "Optional target ID from listIntegrations. Use for accounting tenants or companies."
+            },
+            "documentId": {
+              "type": "string",
+              "description": "The receipt/invoice document ID to send"
+            },
+            "integrationId": {
+              "type": "string",
+              "description": "The integration ID to send to (use listIntegrations to find)"
+            }
+          }
+        }
+      },
+      {
+        "name": "integrations_reconcile",
+        "description": "Reconcile a document (receipt/invoice) with a supported banking integration such as Mercury. Requires integrationId. targetId is optional for Mercury. Set dryRun=true (default) to preview, dryRun=false to queue for reconciliation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, shows preview without reconciling. If false, queues the document for reconciliation."
+            },
+            "targetId": {
+              "type": "string",
+              "description": "Optional target ID from listIntegrations. Use for Mercury account IDs when narrowing reconciliation."
+            },
+            "documentId": {
+              "type": "string",
+              "description": "The receipt/invoice document ID to reconcile"
+            },
+            "integrationId": {
+              "type": "string",
+              "description": "The banking integration ID to reconcile with (use listIntegrations to find)"
+            }
+          }
+        }
+      },
+      {
+        "name": "integrations_unlink",
+        "description": "Unlink a document from an integration (supports Xero and QuickBooks). Set dryRun=true (default) to preview, including invoice details and orphaned attachments. Set dryRun=false to execute. This action is IRREVERSIBLE.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, shows preview without making changes. If false, executes the unlinking."
+            },
+            "documentId": {
+              "type": "string",
+              "description": "The receipt history document ID"
+            },
+            "exportRecordId": {
+              "type": "string",
+              "description": "The export record ID linking the document to the integration"
+            }
+          }
+        }
+      },
+      {
+        "name": "rules_list",
+        "description": "List automation rules for the user. In Receiptor, rules, automations, and workflows refer to the same concept. Shows rule information including name, status, trigger type, and execution stats.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "default": 20,
+              "description": "Number of rules to return (max 50)"
+            },
+            "includeDisabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include disabled rules in results"
+            }
+          }
+        }
+      },
+      {
+        "name": "rules_execute",
+        "description": "Create an automation rule from a natural language description. In Receiptor, rules, automations, and workflows refer to the same concept. Approval includes the generated rule details before creation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "naturalLanguageRule": {
+              "type": "string",
+              "maxLength": 1000,
+              "description": "Natural language description of the rule to create"
+            }
+          }
+        }
+      },
+      {
+        "name": "rules_delete",
+        "description": "Delete an automation rule permanently. Use this when a rule, automation, or workflow should be removed entirely.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The ID of the automation rule to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "rules_disable",
+        "description": "Disable an automation rule without deleting it. Use this when a rule should stop running but remain available for later re-enabling.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The ID of the automation rule to disable"
+            }
+          }
+        }
+      },
+      {
+        "name": "views_list",
+        "description": "List saved document views for the current workspace. These saved views can be reused by rules, automations, and workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum views to return"
+            }
+          }
+        }
+      },
+      {
+        "name": "views_create",
+        "description": "Create a saved document view from document filters. Saved views are reusable inputs for rules, automations, and workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "description": "Saved view name"
+            },
+            "sort": {
+              "type": "object",
+              "required": [
+                "field",
+                "direction"
+              ],
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Sort field"
+                },
+                "direction": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        1
+                      ],
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        -1
+                      ],
+                      "type": "number"
+                    }
+                  ],
+                  "description": "Sort direction: 1 asc, -1 desc"
+                }
+              },
+              "description": "Optional sort configuration for the saved view",
+              "additionalProperties": false
+            },
+            "query": {
+              "type": "object",
+              "properties": {
+                "last4": {
+                  "type": "string",
+                  "description": "Card last-4 filter (comma-separated)"
+                },
+                "labels": {
+                  "type": "string",
+                  "description": "Label filter (comma-separated)"
+                },
+                "search": {
+                  "type": "string",
+                  "description": "Text search"
+                },
+                "source": {
+                  "type": "string",
+                  "description": "Source filter (comma-separated: upload,email,whatsapp)"
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Absolute to date in YYYY-MM-DD format"
+                },
+                "docType": {
+                  "type": "string",
+                  "description": "Document type filter (comma-separated)"
+                },
+                "amountEq": {
+                  "type": "string",
+                  "description": "Exact amount filter in major units"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Category filter (comma-separated)"
+                },
+                "entityId": {
+                  "type": "string",
+                  "description": "Entity ID filter (comma-separated)"
+                },
+                "fromDate": {
+                  "type": "string",
+                  "description": "Absolute from date in YYYY-MM-DD format"
+                },
+                "amountMax": {
+                  "type": "string",
+                  "description": "Maximum amount filter in major units"
+                },
+                "amountMin": {
+                  "type": "string",
+                  "description": "Minimum amount filter in major units"
+                },
+                "merchants": {
+                  "type": "string",
+                  "description": "Merchant filter (comma-separated)"
+                },
+                "integrationId": {
+                  "type": "string",
+                  "description": "Integration ID filter (comma-separated)"
+                },
+                "paymentStatus": {
+                  "type": "string",
+                  "description": "Payment status filter (comma-separated)"
+                },
+                "amountDirection": {
+                  "enum": [
+                    "any",
+                    "in",
+                    "out"
+                  ],
+                  "type": "string",
+                  "description": "Amount direction filter"
+                },
+                "relativeDateRange": {
+                  "enum": [
+                    "today",
+                    "yesterday",
+                    "last_7_days",
+                    "last_14_days",
+                    "last_30_days",
+                    "last_90_days",
+                    "this_week",
+                    "last_week",
+                    "this_month",
+                    "last_month",
+                    "this_quarter",
+                    "last_quarter",
+                    "this_year",
+                    "last_year",
+                    "year_to_date"
+                  ],
+                  "type": "string",
+                  "description": "Relative date range"
+                },
+                "workspaceMemberId": {
+                  "type": "string",
+                  "description": "Workspace member filter (comma-separated user IDs)"
+                }
+              },
+              "description": "Saved document filter query",
+              "additionalProperties": false
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional saved view description"
+            }
+          }
+        }
+      },
+      {
+        "name": "views_delete",
+        "description": "Delete a saved document view. Use this when a saved filter preset is no longer needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Saved view ID to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "workspaces_list",
+        "description": "List available workspaces (organizations) for the authenticated user.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "chartOfAccounts_listAccounts",
+        "description": "List or search accounts from the active chart of accounts for the current workspace so the agent can ground categorization decisions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 100,
+              "maximum": 100,
+              "minimum": 1
+            },
+            "query": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "includeIds": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "exports_list",
+        "description": "List export records with filters (document, integration, date range) for the current workspace.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max records to return (1-100)"
+            },
+            "dateTo": {
+              "type": "string",
+              "description": "End date filter (ISO format)"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "description": "Pagination offset"
+            },
+            "dateFrom": {
+              "type": "string",
+              "description": "Start date filter (ISO format)"
+            },
+            "documentId": {
+              "type": "string",
+              "description": "Filter export records by document ID"
+            },
+            "integrationSlug": {
+              "enum": [
+                "xero",
+                "quickbooks",
+                "mercury",
+                "google-drive",
+                "dropbox",
+                "pdf-export",
+                "csv-export",
+                "zip-export",
+                "email-forward"
+              ],
+              "type": "string",
+              "description": "Filter export records by integration (xero, quickbooks, google-drive, etc.)"
+            }
+          }
+        }
+      },
+      {
+        "name": "exports_get",
+        "description": "Get one export record by ID for the current workspace.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The export record ID to fetch"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_email_enable-monitoring",
+        "description": "Enable monitoring for an email source to resume automatic document ingestion.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "integrationId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The email integration ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_email_delete",
+        "description": "Delete an email source from the account and stop monitoring it permanently.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "integrationId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The email integration ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_email_disable-monitoring",
+        "description": "Disable monitoring for an email source without removing the connection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "integrationId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The email integration ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_mobile-scanners_activate",
+        "description": "Activate a mobile scanner so documents from that number are processed again.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scannerId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The mobile scanner ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_mobile-scanners_enable-ai",
+        "description": "Enable AI extraction for a mobile scanner without changing the source registration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scannerId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The mobile scanner ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_mobile-scanners_delete",
+        "description": "Delete a mobile scanner from the account permanently.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scannerId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The mobile scanner ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_mobile-scanners_deactivate",
+        "description": "Deactivate a mobile scanner without deleting it.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scannerId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The mobile scanner ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "sources_mobile-scanners_disable-ai",
+        "description": "Disable AI extraction for a mobile scanner without removing the source.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scannerId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The mobile scanner ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "entities_cleanup",
+        "description": "Analyze and clean up the user's own business entities: enrich with Google Places data, find duplicates via place_id and embedding similarity, and merge them. This is for companies/legal entities/subsidiaries, not merchant or document duplicates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview changes without executing. Set to false after user confirms."
+            },
+            "maxEntities": {
+              "type": "number",
+              "default": 200,
+              "description": "Maximum number of entities to process in one invocation"
+            }
+          }
+        }
+      },
+      {
+        "name": "entities_list",
+        "description": "List and search business entities with pagination.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number",
+              "default": 1,
+              "description": "Page number"
+            },
+            "limit": {
+              "type": "number",
+              "default": 25,
+              "description": "Results per page (max 50)"
+            },
+            "search": {
+              "type": "string",
+              "description": "Search term to filter entities by name, address, or aliases"
+            }
+          }
+        }
+      },
+      {
+        "name": "entities_upsert",
+        "description": "Create a new business entity or update an existing one.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City"
+            },
+            "name": {
+              "type": "string",
+              "description": "Business entity name"
+            },
+            "email": {
+              "type": "string",
+              "description": "Email address"
+            },
+            "taxId": {
+              "type": "string",
+              "description": "Tax ID / VAT number"
+            },
+            "aliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Alternative names for this entity"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country name"
+            },
+            "entityId": {
+              "type": "string",
+              "description": "Entity ID to update. Omit to create a new entity."
+            },
+            "postalCode": {
+              "type": "string",
+              "description": "Postal/zip code"
+            },
+            "addressLine2": {
+              "type": "string",
+              "description": "Address line 2"
+            },
+            "contactNumber": {
+              "type": "string",
+              "description": "Phone number"
+            },
+            "streetAddress": {
+              "type": "string",
+              "description": "Street address"
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "State or province"
+            }
+          }
+        }
+      },
+      {
+        "name": "entities_delete",
+        "description": "Delete a business entity and unlink associated documents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entityId": {
+              "type": "string",
+              "description": "ID of the entity to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "entities_merge",
+        "description": "Merge multiple business entities into one. Reassigns all linked documents to the kept entity, adds merged entity names as aliases, and deletes the duplicates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "keepEntityId": {
+              "type": "string",
+              "description": "ID of the business entity to keep as the canonical record"
+            },
+            "mergeEntityIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "description": "IDs of business entities to merge into the kept entity. Their names become aliases and linked documents are reassigned."
+            }
+          }
+        }
+      },
+      {
+        "name": "memories_save",
+        "description": "Save an explicit long-term memory or preference for the current user, workspace, or document.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "from": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "kind": {
+              "enum": [
+                "preference",
+                "canonical_mapping",
+                "workflow_hint"
+              ],
+              "type": "string",
+              "default": "preference"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4000,
+              "minLength": 1
+            },
+            "scope": {
+              "enum": [
+                "user",
+                "org",
+                "document"
+              ],
+              "type": "string",
+              "default": "org"
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "labels": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              },
+              "maxItems": 20
+            },
+            "summary": {
+              "type": "string",
+              "maxLength": 1000,
+              "minLength": 1
+            },
+            "merchant": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "documentId": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "mappingType": {
+              "enum": [
+                "merchant_canonicalization",
+                "category_preference",
+                "label_preference"
+              ],
+              "type": "string"
+            },
+            "chartAccountId": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            },
+            "chartOfAccountsId": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "memories_archive",
+        "description": "Archive a stored long-term memory so it is no longer used at runtime.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "memoryId": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "memories_list",
+        "description": "List current long-term memories stored for the current user/workspace.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "kinds": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "preference",
+                  "canonical_mapping",
+                  "workflow_hint"
+                ],
+                "type": "string"
+              },
+              "maxItems": 4
+            },
+            "statuses": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "active",
+                  "candidate",
+                  "rejected",
+                  "archived"
+                ],
+                "type": "string"
+              },
+              "maxItems": 4
+            },
+            "documentIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              },
+              "maxItems": 20
+            },
+            "includeDocumentMemories": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      },
+      {
+        "name": "onboarding_status",
+        "description": "Get the user's onboarding/setup progress including which steps are completed and what's pending.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

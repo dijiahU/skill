@@ -1,0 +1,935 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "kopern/mcp-server",
+  "namespace": "kopern",
+  "slug": "mcp-server",
+  "displayName": "Agents @Kopern.ai",
+  "description": "Full AI agent lifecycle platform — create, grade, optimize, deploy and orchestrate AI agents from your IDE or terminal.\n\n## What you can do\n\n- **Build** — Create agents from 37 templates or custom system prompts, with skills, tools and extensions\n- **Grade** — Evaluate agent quality with 6 criteria (output match, schema validation, tool usage, safety, custom scripts, LLM judge)\n- **Optimize** — AutoResearch lab with 6 modes: AutoTune, AutoFix, Stress Lab, Tournament, Distillation, Evolution\n- **Deploy** — Widget, Slack, Telegram, WhatsApp, webhooks (n8n/Zapier/Make compatible)\n- **Orchestrate** — Multi-agent teams with parallel, sequential and conditional execution modes\n- **Monitor** — Usage tracking, session history, compliance reports (EU AI Act)\n\n## 32 tools in 6 categories\n\n| Category | Tools |\n|----------|-------|\n| Agent CRUD | create, get, update, delete, list, import, export |\n| Templates | list templates, deploy template |\n| Grading | grade prompt, create suite, run grading, ",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "e57cd257-58ea-4087-8abf-4d35233f6eb9",
+    "qualifiedName": "kopern/mcp-server",
+    "namespace": "kopern",
+    "slug": "mcp-server",
+    "displayName": "Agents @Kopern.ai",
+    "description": "Full AI agent lifecycle platform — create, grade, optimize, deploy and orchestrate AI agents from your IDE or terminal.\n\n## What you can do\n\n- **Build** — Create agents from 37 templates or custom system prompts, with skills, tools and extensions\n- **Grade** — Evaluate agent quality with 6 criteria (output match, schema validation, tool usage, safety, custom scripts, LLM judge)\n- **Optimize** — AutoResearch lab with 6 modes: AutoTune, AutoFix, Stress Lab, Tournament, Distillation, Evolution\n- **Deploy** — Widget, Slack, Telegram, WhatsApp, webhooks (n8n/Zapier/Make compatible)\n- **Orchestrate** — Multi-agent teams with parallel, sequential and conditional execution modes\n- **Monitor** — Usage tracking, session history, compliance reports (EU AI Act)\n\n## 32 tools in 6 categories\n\n| Category | Tools |\n|----------|-------|\n| Agent CRUD | create, get, update, delete, list, import, export |\n| Templates | list templates, deploy template |\n| Grading | grade prompt, create suite, run grading, ",
+    "iconUrl": "https://api.smithery.ai/servers/kopern/mcp-server/icon",
+    "verified": false,
+    "useCount": 6,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-02T20:28:22.872Z",
+    "homepage": "https://kopern.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBW0JKHF2CRGR2M973BTWCF",
+    "score": 0.010416666666666666
+  },
+  "detail": {
+    "qualifiedName": "kopern/mcp-server",
+    "displayName": "Agents @Kopern.ai",
+    "description": "Full AI agent lifecycle platform — create, grade, optimize, deploy and orchestrate AI agents from your IDE or terminal.\n\n## What you can do\n\n- **Build** — Create agents from 37 templates or custom system prompts, with skills, tools and extensions\n- **Grade** — Evaluate agent quality with 6 criteria (output match, schema validation, tool usage, safety, custom scripts, LLM judge)\n- **Optimize** — AutoResearch lab with 6 modes: AutoTune, AutoFix, Stress Lab, Tournament, Distillation, Evolution\n- **Deploy** — Widget, Slack, Telegram, WhatsApp, webhooks (n8n/Zapier/Make compatible)\n- **Orchestrate** — Multi-agent teams with parallel, sequential and conditional execution modes\n- **Monitor** — Usage tracking, session history, compliance reports (EU AI Act)\n\n## 32 tools in 6 categories\n\n| Category | Tools |\n|----------|-------|\n| Agent CRUD | create, get, update, delete, list, import, export |\n| Templates | list templates, deploy template |\n| Grading | grade prompt, create suite, run grading, list runs, get results |\n| Optimization | run AutoResearch |\n| Deployment | connect widget, Slack, Telegram, WhatsApp, webhooks, email, calendar |\n| Orchestration | create team, run team, create pipeline, run pipeline |\n\n## 3 guided workflows (prompts)\n\n- **create-agent** — Step-by-step agent creation from use case to deployment\n- **grade-and-improve** — Evaluate and auto-optimize an existing agent\n- **deploy-everywhere** — Multi-channel deployment assistant\n\n## Getting started\n\n1. Sign up free at [kopern.ai](https://kopern.ai)\n2. Go to Settings → Personal API Key\n3. Connect this MCP server with your `kpn_` key",
+    "iconUrl": "https://api.smithery.ai/servers/kopern/mcp-server/icon",
+    "remote": true,
+    "deploymentUrl": "https://kopern.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://kopern.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "key"
+          ],
+          "properties": {
+            "key": {
+              "type": "string",
+              "x-from": {
+                "query": "key"
+              },
+              "x-order": 0,
+              "description": "Kopern API key (starts with kpn_). Get yours at https://kopern.ai → Settings → Personal API Key"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "kopern_list_templates",
+        "description": "List all 37 AI agent templates (28 general + 9 vertical/business). Returns slug, title, domain, tagline. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "enum": [
+                "all",
+                "general",
+                "vertical"
+              ],
+              "type": "string",
+              "description": "Filter by category. Default: all"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_list_agents",
+        "description": "List all your Kopern agents (name, description, model, domain, grading score). No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "kopern_grade_prompt",
+        "description": "Grade a system prompt against inline test cases. Uses 6 criteria types (output_match, schema_validation, tool_usage, safety_check, custom_script, llm_judge). Returns score 0-1. Uses YOUR API keys.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Model ID. Default: provider default"
+            },
+            "provider": {
+              "enum": [
+                "anthropic",
+                "openai",
+                "google",
+                "mistral"
+              ],
+              "type": "string",
+              "description": "LLM provider. Default: anthropic"
+            },
+            "test_cases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "input",
+                  "expected"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "input": {
+                    "type": "string",
+                    "description": "User message to send"
+                  },
+                  "expected": {
+                    "type": "string",
+                    "description": "Expected behavior (for llm_judge)"
+                  }
+                }
+              },
+              "description": "Test cases: { name, input, expected }"
+            },
+            "system_prompt": {
+              "type": "string",
+              "description": "The system prompt to evaluate"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_create_agent",
+        "description": "Create a new AI agent with a system prompt, model, and optional skills. Returns the agentId.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Agent name"
+            },
+            "model": {
+              "type": "string",
+              "description": "Model ID. Default: claude-sonnet-4-6"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Domain (e.g. 'customer_support', 'coding', 'other'). Default: other"
+            },
+            "skills": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "content"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Skill content (instructions, knowledge)"
+                  }
+                }
+              },
+              "description": "Optional skills (domain knowledge blocks)"
+            },
+            "provider": {
+              "enum": [
+                "anthropic",
+                "openai",
+                "google",
+                "mistral",
+                "ollama"
+              ],
+              "type": "string",
+              "description": "LLM provider. Default: anthropic"
+            },
+            "description": {
+              "type": "string",
+              "description": "Short description"
+            },
+            "builtin_tools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Built-in tools to enable: web_fetch, memory, github_read, github_write, bug_management, datagouv, piste, service_email, service_calendar"
+            },
+            "system_prompt": {
+              "type": "string",
+              "description": "The agent's system prompt"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_get_agent",
+        "description": "Get full details of an agent: system prompt, model, skills count, tools count, grading suites count.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_update_agent",
+        "description": "Update an agent's configuration (name, system prompt, model, builtin tools, etc.).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "New agent name"
+            },
+            "model": {
+              "type": "string",
+              "description": "Model ID override"
+            },
+            "domain": {
+              "type": "string",
+              "description": "New agent domain/category"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "provider": {
+              "type": "string",
+              "description": "LLM provider (anthropic, openai, google, mistral, ollama)"
+            },
+            "description": {
+              "type": "string",
+              "description": "New agent description"
+            },
+            "builtin_tools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Built-in tools to enable: web_fetch, memory, github_read, github_write, bug_management, datagouv, piste, service_email, service_calendar"
+            },
+            "system_prompt": {
+              "type": "string",
+              "description": "New system prompt"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_delete_agent",
+        "description": "Permanently delete an agent and all its data (skills, tools, grading suites, sessions, connectors).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID to delete"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_deploy_template",
+        "description": "Deploy an agent from a template (28 general + 9 vertical). Creates agent + skills + tools + grading suite in one shot. Use kopern_list_templates to see available slugs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Template slug (from kopern_list_templates)"
+            },
+            "answers": {
+              "type": "object",
+              "description": "Onboarding answers to personalize the template (e.g. { businessName: 'Plomberie Dupont', zone: 'Paris 12-15' })",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_create_grading_suite",
+        "description": "Create a grading suite with test cases on an agent. Each case has an input prompt and expected behavior for evaluation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Suite name (optional)"
+            },
+            "cases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "input",
+                  "expected"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Case name"
+                  },
+                  "input": {
+                    "type": "string",
+                    "description": "User message to test"
+                  },
+                  "expected": {
+                    "type": "string",
+                    "description": "Expected behavior"
+                  },
+                  "criterion_type": {
+                    "enum": [
+                      "output_match",
+                      "schema_validation",
+                      "tool_usage",
+                      "safety_check",
+                      "custom_script",
+                      "llm_judge"
+                    ],
+                    "type": "string",
+                    "description": "Evaluation method. Default: llm_judge"
+                  }
+                }
+              },
+              "description": "Test cases"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "description": {
+              "type": "string",
+              "description": "Suite description (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_run_grading",
+        "description": "Run a grading suite on an agent. Executes all test cases, evaluates with configured criteria, returns detailed scores. Uses YOUR API keys.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "suite_id": {
+              "type": "string",
+              "description": "The grading suite ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_run_autoresearch",
+        "description": "Run AutoTune optimization on an agent. Iteratively mutates the system prompt, re-grades, and keeps improvements. Returns the optimized score. Uses YOUR API keys. Can take several minutes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "suite_id": {
+              "type": "string",
+              "description": "The grading suite ID to optimize against"
+            },
+            "target_score": {
+              "type": "number",
+              "description": "Stop when this score is reached (0-1). Optional"
+            },
+            "max_iterations": {
+              "type": "number",
+              "description": "Max optimization iterations (1-20). Default: 5"
+            },
+            "max_token_budget": {
+              "type": "number",
+              "description": "Max total tokens to spend. Optional"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_create_team",
+        "description": "Create a multi-agent team. Agents work together in parallel, sequential (chain), or conditional (router) mode.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Team name"
+            },
+            "agents": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "agent_id",
+                  "role"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "description": "Role: coordinator, specialist, reviewer, etc."
+                  },
+                  "order": {
+                    "type": "number",
+                    "description": "Execution order (for sequential/conditional)"
+                  },
+                  "agent_id": {
+                    "type": "string",
+                    "description": "Agent ID"
+                  }
+                }
+              },
+              "description": "Team members"
+            },
+            "description": {
+              "type": "string",
+              "description": "Team description"
+            },
+            "execution_mode": {
+              "enum": [
+                "parallel",
+                "sequential",
+                "conditional"
+              ],
+              "type": "string",
+              "description": "How agents collaborate. Default: sequential"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_run_team",
+        "description": "Execute a multi-agent team on a prompt. Returns each agent's output and the final combined result. Uses YOUR API keys.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "The task/prompt to send to the team"
+            },
+            "team_id": {
+              "type": "string",
+              "description": "The team ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_connect_widget",
+        "description": "Enable the embeddable chat widget for an agent. Returns the <script> embed code for your website.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "position": {
+              "enum": [
+                "bottom-right",
+                "bottom-left"
+              ],
+              "type": "string",
+              "description": "Widget position. Default: bottom-right"
+            },
+            "allowed_origins": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Allowed website domains (CORS). Empty = all origins."
+            },
+            "welcome_message": {
+              "type": "string",
+              "description": "Greeting message shown in widget"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_connect_telegram",
+        "description": "Connect an agent to Telegram via a bot. Requires a bot token from @BotFather.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "bot_token": {
+              "type": "string",
+              "description": "Telegram bot token from @BotFather"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_connect_whatsapp",
+        "description": "Connect an agent to WhatsApp Business. Requires Meta Cloud API credentials.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "access_token": {
+              "type": "string",
+              "description": "WhatsApp Cloud API access token"
+            },
+            "phone_number": {
+              "type": "string",
+              "description": "Display phone number (optional)"
+            },
+            "verify_token": {
+              "type": "string",
+              "description": "Webhook verify token (optional)"
+            },
+            "phone_number_id": {
+              "type": "string",
+              "description": "WhatsApp phone number ID (from Meta dashboard)"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_connect_slack",
+        "description": "Connect an agent to Slack. Returns an OAuth install URL to authorize in your browser (Slack requires interactive OAuth).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_connect_webhook",
+        "description": "Create an inbound or outbound webhook for an agent. Inbound: receive messages via HTTP POST. Outbound: send events to your URL (n8n, Zapier, Make compatible).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Webhook name"
+            },
+            "type": {
+              "enum": [
+                "inbound",
+                "outbound"
+              ],
+              "type": "string",
+              "description": "Webhook direction. Default: inbound"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Events to subscribe to (outbound only): message_sent, tool_call_completed, session_ended, error"
+            },
+            "secret": {
+              "type": "string",
+              "description": "HMAC secret for signature verification (optional)"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "target_url": {
+              "type": "string",
+              "description": "Target URL (required for outbound)"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_create_pipeline",
+        "description": "Create a multi-step pipeline on an agent. Steps chain agents sequentially with configurable input mapping.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Pipeline name"
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "agent_id"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "description": "Step role (e.g. processor, reviewer)"
+                  },
+                  "order": {
+                    "type": "number",
+                    "description": "Execution order"
+                  },
+                  "agent_id": {
+                    "type": "string",
+                    "description": "Agent ID for this step"
+                  },
+                  "input_mapping": {
+                    "enum": [
+                      "previous_output",
+                      "original_input",
+                      "custom"
+                    ],
+                    "type": "string",
+                    "description": "Input source. Default: previous_output"
+                  },
+                  "continue_on_error": {
+                    "type": "boolean",
+                    "description": "Continue pipeline if this step fails. Default: false"
+                  },
+                  "custom_input_template": {
+                    "type": "string",
+                    "description": "Template with {{original_input}} and {{previous_output}} placeholders"
+                  }
+                }
+              },
+              "description": "Pipeline steps"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The parent agent ID"
+            },
+            "description": {
+              "type": "string",
+              "description": "Pipeline description"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_run_pipeline",
+        "description": "Execute a pipeline on a prompt. Steps run sequentially, each feeding its output to the next. Uses YOUR API keys.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "The input prompt"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The parent agent ID"
+            },
+            "pipeline_id": {
+              "type": "string",
+              "description": "The pipeline ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_list_sessions",
+        "description": "List conversation sessions for an agent. Shows purpose, source, token usage, cost, timestamps. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max sessions to return (1-50). Default: 20"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_get_session",
+        "description": "Get full details of a session including message events, tool calls, and metrics. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "The session ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_manage_memory",
+        "description": "Manage an agent's persistent memory. Actions: remember (save key-value), recall (search by query), forget (delete by key), list (all memories). No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "Memory key (for remember/forget)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search query (for recall)"
+            },
+            "value": {
+              "type": "string",
+              "description": "Memory value (for remember)"
+            },
+            "action": {
+              "enum": [
+                "remember",
+                "recall",
+                "forget",
+                "list"
+              ],
+              "type": "string",
+              "description": "Memory action"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "category": {
+              "enum": [
+                "fact",
+                "preference",
+                "context",
+                "custom"
+              ],
+              "type": "string",
+              "description": "Memory category (for remember). Default: custom"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_compliance_report",
+        "description": "Generate an EU AI Act compliance report for an agent. Checks Art. 6 (risk), Art. 12 (audit trail), Art. 14 (human oversight), Art. 52 (transparency). No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_get_grading_results",
+        "description": "Get detailed results of a grading run: per-case scores, agent outputs, criteria evaluations, improvement notes. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "run_id": {
+              "type": "string",
+              "description": "The grading run ID"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "suite_id": {
+              "type": "string",
+              "description": "The grading suite ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_list_grading_runs",
+        "description": "List grading runs for a suite. Shows score history, pass rates, and versions over time. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "suite_id": {
+              "type": "string",
+              "description": "The grading suite ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_connect_email",
+        "description": "Connect an agent to Gmail or Outlook for email tools (read_emails, send_email, reply_email). Requires OAuth in browser. Enables the service_email builtin tool.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "provider": {
+              "enum": [
+                "google",
+                "microsoft"
+              ],
+              "type": "string",
+              "description": "Email provider"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_connect_calendar",
+        "description": "Connect an agent to Google Calendar or Microsoft Calendar for scheduling tools (list_events, create_event, etc.). Requires OAuth in browser. Enables the service_calendar builtin tool.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID"
+            },
+            "provider": {
+              "enum": [
+                "google",
+                "microsoft"
+              ],
+              "type": "string",
+              "description": "Calendar provider"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_get_usage",
+        "description": "Get token usage and cost metrics. Shows input/output tokens, cost, grading runs, and per-agent breakdown. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year_month": {
+              "type": "string",
+              "description": "Period in YYYY-MM format. Default: current month"
+            },
+            "include_history": {
+              "type": "boolean",
+              "description": "Include last 6 months history. Default: false"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_export_agent",
+        "description": "Export an agent as a portable JSON object (agent config, skills, tools, extensions, grading suites with cases). Use kopern_import_agent to re-import. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "The agent ID to export"
+            }
+          }
+        }
+      },
+      {
+        "name": "kopern_import_agent",
+        "description": "Import an agent from a Kopern export JSON. Creates a new agent with all skills, tools, extensions, and grading suites. No LLM cost.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "The full Kopern agent export JSON (from kopern_export_agent)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "create-agent",
+        "description": "Step-by-step guide to create, configure and deploy a new AI agent on Kopern",
+        "arguments": [
+          {
+            "name": "use_case",
+            "description": "What the agent should do (e.g. 'customer support chatbot for a restaurant')",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "grade-and-improve",
+        "description": "Create a grading suite, run evaluation, and optimize an existing agent with AutoResearch",
+        "arguments": [
+          {
+            "name": "agent_id",
+            "description": "The agent to evaluate and improve",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "deploy-everywhere",
+        "description": "Deploy an agent to all available channels: widget, Slack, Telegram, WhatsApp, webhooks",
+        "arguments": [
+          {
+            "name": "agent_id",
+            "description": "The agent to deploy",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

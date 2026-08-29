@@ -1,0 +1,118 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "rafsilva85/skillflow",
+  "namespace": "rafsilva85",
+  "slug": "skillflow",
+  "displayName": "SkillFlow - AI Skills Marketplace",
+  "description": "The curated marketplace for AI agent skills. Search, discover, and install verified skills for Claude, GPT, Cursor, and other AI platforms via MCP. Features 50+ skills across 12 categories with trust scores, compatibility info, and one-click install instructions.\n\n## Key Features\n- **Search Skills**: Find skills by keyword, category, or tag\n- **Trust Scores**: Every skill rated 0-100 for reliability\n- **Multi-Platform**: Works with Claude Desktop, Cursor, Windsurf, n8n, and more\n- **12 Categories**: Development, Productivity, DevOps, Data, Marketing, and more\n\n## Tools Available\n- `search_skills` - Search the marketplace\n- `get_skill_details` - Get full skill info with install instructions\n- `list_categories` - Browse all categories\n- `get_trending_skills` - See what's popular\n- `get_publisher_info` - Verify publishers",
+  "discoveryQueries": [
+    "trust",
+    "credential"
+  ],
+  "rawRecord": {
+    "id": "7292ea48-3aa3-4384-84eb-3444a535de50",
+    "qualifiedName": "rafsilva85/skillflow",
+    "namespace": "rafsilva85",
+    "slug": "skillflow",
+    "displayName": "SkillFlow - AI Skills Marketplace",
+    "description": "The curated marketplace for AI agent skills. Search, discover, and install verified skills for Claude, GPT, Cursor, and other AI platforms via MCP. Features 50+ skills across 12 categories with trust scores, compatibility info, and one-click install instructions.\n\n## Key Features\n- **Search Skills**: Find skills by keyword, category, or tag\n- **Trust Scores**: Every skill rated 0-100 for reliability\n- **Multi-Platform**: Works with Claude Desktop, Cursor, Windsurf, n8n, and more\n- **12 Categories**: Development, Productivity, DevOps, Data, Marketing, and more\n\n## Tools Available\n- `search_skills` - Search the marketplace\n- `get_skill_details` - Get full skill info with install instructions\n- `list_categories` - Browse all categories\n- `get_trending_skills` - See what's popular\n- `get_publisher_info` - Verify publishers",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/skillflow.builders.ico",
+    "verified": false,
+    "useCount": 1377,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-26T15:45:22.530Z",
+    "homepage": "https://skillflow.builders",
+    "bySmithery": false,
+    "owner": "org_01KNBVNHS37XXFS087KGPZYXFX",
+    "score": 0.012345679012345678
+  },
+  "detail": {
+    "qualifiedName": "rafsilva85/skillflow",
+    "displayName": "SkillFlow - AI Skills Marketplace",
+    "description": "The curated marketplace for AI agent skills. Search, discover, and install verified skills for Claude, GPT, Cursor, and other AI platforms via MCP. Features 50+ skills across 12 categories with trust scores, compatibility info, and one-click install instructions.\n\n## Key Features\n- **Search Skills**: Find skills by keyword, category, or tag\n- **Trust Scores**: Every skill rated 0-100 for reliability\n- **Multi-Platform**: Works with Claude Desktop, Cursor, Windsurf, n8n, and more\n- **12 Categories**: Development, Productivity, DevOps, Data, Marketing, and more\n\n## Tools Available\n- `search_skills` - Search the marketplace\n- `get_skill_details` - Get full skill info with install instructions\n- `list_categories` - Browse all categories\n- `get_trending_skills` - See what's popular\n- `get_publisher_info` - Verify publishers",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/skillflow.builders.ico",
+    "remote": true,
+    "deploymentUrl": "https://skillflow--rafsilva85.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://skillflow--rafsilva85.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_skills",
+        "description": "Search for AI agent skills on SkillFlow marketplace by keyword, category, or tag",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query"
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by category"
+            },
+            "min_trust_score": {
+              "type": "number",
+              "description": "Minimum trust score (0-100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_skill_details",
+        "description": "Get detailed information about a specific skill",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "skill_id": {
+              "type": "string",
+              "description": "The skill ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_categories",
+        "description": "List all available skill categories on SkillFlow",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_trending_skills",
+        "description": "Get currently trending skills on SkillFlow marketplace",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Maximum results (default: 5)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_publisher_info",
+        "description": "Get information about a skill publisher",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "publisher_id": {
+              "type": "string",
+              "description": "Publisher username"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

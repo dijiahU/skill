@@ -1,0 +1,229 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "chainflip-broker/baas",
+  "namespace": "chainflip-broker",
+  "slug": "baas",
+  "displayName": "Chainflip Broker as a Service",
+  "description": "A remote MCP server that enables AI agents to perform cross-chain cryptocurrency swaps through the [Chainflip](https://chainflip.io) decentralized exchange. No API key required to get started.\n\n### Supported Assets\n\nAssets are identified as `ticker.network`, for example `btc.btc`, `eth.eth`, `usdc.eth`, `sol.sol`, or `dot.hub`. Call `list_assets` to see the full list of supported assets and their current prices.\n\n### Configuration\n\nConnect to the remote MCP server at:\n\n```\nhttps://chainflip-broker.io/mcp\n```\n\nTransport: Streamable HTTP\n\nNo authentication is required. An optional API key can be provided for partner attribution.\n\n### Usage Example\n\n1. Call `list_assets` to see available assets\n2. Call `get_quotes` with source asset, destination asset, and amount to preview the swap\n3. Call `start_swap` with the destination and refund addresses to get a deposit address\n4. Send funds to the deposit address\n5. Call `check_status` with the returned swap ID to monitor progress\n",
+  "discoveryQueries": [
+    "authentication",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "e36f2726-8a63-4507-be2f-15b9147c6654",
+    "qualifiedName": "chainflip-broker/baas",
+    "namespace": "chainflip-broker",
+    "slug": "baas",
+    "displayName": "Chainflip Broker as a Service",
+    "description": "A remote MCP server that enables AI agents to perform cross-chain cryptocurrency swaps through the [Chainflip](https://chainflip.io) decentralized exchange. No API key required to get started.\n\n### Supported Assets\n\nAssets are identified as `ticker.network`, for example `btc.btc`, `eth.eth`, `usdc.eth`, `sol.sol`, or `dot.hub`. Call `list_assets` to see the full list of supported assets and their current prices.\n\n### Configuration\n\nConnect to the remote MCP server at:\n\n```\nhttps://chainflip-broker.io/mcp\n```\n\nTransport: Streamable HTTP\n\nNo authentication is required. An optional API key can be provided for partner attribution.\n\n### Usage Example\n\n1. Call `list_assets` to see available assets\n2. Call `get_quotes` with source asset, destination asset, and amount to preview the swap\n3. Call `start_swap` with the destination and refund addresses to get a deposit address\n4. Send funds to the deposit address\n5. Call `check_status` with the returned swap ID to monitor progress\n",
+    "iconUrl": "https://api.smithery.ai/servers/chainflip-broker/baas/icon",
+    "verified": false,
+    "useCount": 24,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-21T22:09:25.058Z",
+    "homepage": "https://docs.chainflip-broker.io/resources/ai-documentation/",
+    "bySmithery": false,
+    "owner": "org_01KNBVTQSTKSB3CT44CC8S77X5",
+    "score": 0.010526315789473684
+  },
+  "detail": {
+    "qualifiedName": "chainflip-broker/baas",
+    "displayName": "Chainflip Broker as a Service",
+    "description": "A remote MCP server that enables AI agents to perform cross-chain cryptocurrency swaps through the [Chainflip](https://chainflip.io) decentralized exchange. No API key required to get started.\n\n### Supported Assets\n\nAssets are identified as `ticker.network`, for example `btc.btc`, `eth.eth`, `usdc.eth`, `sol.sol`, or `dot.hub`. Call `list_assets` to see the full list of supported assets and their current prices.\n\n### Configuration\n\nConnect to the remote MCP server at:\n\n```\nhttps://chainflip-broker.io/mcp\n```\n\nTransport: Streamable HTTP\n\nNo authentication is required. An optional API key can be provided for partner attribution.\n\n### Usage Example\n\n1. Call `list_assets` to see available assets\n2. Call `get_quotes` with source asset, destination asset, and amount to preview the swap\n3. Call `start_swap` with the destination and refund addresses to get a deposit address\n4. Send funds to the deposit address\n5. Call `check_status` with the returned swap ID to monitor progress\n",
+    "iconUrl": "https://api.smithery.ai/servers/chainflip-broker/baas/icon",
+    "remote": true,
+    "deploymentUrl": "https://baas--chainflip-broker.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://baas--chainflip-broker.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_quotes",
+        "description": "Get swap quotes for exchanging one crypto asset to another. Returns available quotes with exchange rates, fees, and estimated output amounts. API key is optional.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "description": "Amount to swap in human-readable format (e.g., 1.5 for 1.5 BTC)"
+            },
+            "apiKey": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null,
+              "description": "Optional partner API key."
+            },
+            "sourceAsset": {
+              "type": "string",
+              "description": "Source asset identifier (e.g., 'btc.btc', 'eth.eth', 'usdc.eth')"
+            },
+            "destinationAsset": {
+              "type": "string",
+              "description": "Destination asset identifier (e.g., 'eth.eth', 'btc.btc', 'sol.sol')"
+            }
+          }
+        }
+      },
+      {
+        "name": "start_dca_swap",
+        "description": "Start a DCA (Dollar Cost Averaging) cross-chain swap that splits into multiple sub-swaps over time. Returns the deposit address. API key is optional.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null,
+              "description": "Optional partner API key."
+            },
+            "sourceAsset": {
+              "type": "string",
+              "description": "Source asset identifier (e.g., 'btc.btc', 'eth.eth', 'usdc.eth')"
+            },
+            "minimumPrice": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "default": null,
+              "description": "Optional minimum accepted price as a destination-per-source ratio (e.g., for a btc.btc to eth.eth swap, 28.5 means 1 BTC gets at least 28.5 ETH). When omitted, automatically calculated from current pool prices with 2% slippage tolerance. Set to 0 to accept any price."
+            },
+            "refundAddress": {
+              "type": "string",
+              "description": "Refund address on the source chain, used if minimum price cannot be met"
+            },
+            "numberOfChunks": {
+              "type": "integer",
+              "description": "Number of sub-swaps for DCA (Dollar Cost Averaging). Must be >= 1."
+            },
+            "destinationAsset": {
+              "type": "string",
+              "description": "Destination asset identifier (e.g., 'eth.eth', 'btc.btc', 'sol.sol')"
+            },
+            "destinationAddress": {
+              "type": "string",
+              "description": "Destination address on the target chain"
+            },
+            "chunkIntervalBlocks": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "default": null,
+              "description": "Optional delay between DCA sub-swaps in state-chain blocks (1 block = 6 seconds). Defaults to 2 blocks (12 seconds)."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_status",
+        "description": "Check the status of a swap by its ID. Returns the current swap state including deposit detection, swap progress, and egress information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "swapId": {
+              "type": "integer",
+              "description": "The swap ID returned by start_swap or start_dca_swap"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_assets",
+        "description": "List all available swap assets and their details including ticker, network, direction, decimals, minimum amounts, and current USD prices.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "start_swap",
+        "description": "Start a cross-chain swap. Returns the deposit address where you should send your source asset. API key is optional.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null,
+              "description": "Optional partner API key."
+            },
+            "sourceAsset": {
+              "type": "string",
+              "description": "Source asset identifier (e.g., 'btc.btc', 'eth.eth', 'usdc.eth')"
+            },
+            "minimumPrice": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "default": null,
+              "description": "Optional minimum accepted price as a destination-per-source ratio (e.g., for a btc.btc to eth.eth swap, 28.5 means 1 BTC gets at least 28.5 ETH). When omitted, automatically calculated from current pool prices with 2% slippage tolerance. Set to 0 to accept any price."
+            },
+            "refundAddress": {
+              "type": "string",
+              "description": "Refund address on the source chain, used if minimum price cannot be met"
+            },
+            "destinationAsset": {
+              "type": "string",
+              "description": "Destination asset identifier (e.g., 'eth.eth', 'btc.btc', 'sol.sol')"
+            },
+            "destinationAddress": {
+              "type": "string",
+              "description": "Destination address on the target chain"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_native_quotes",
+        "description": "Get swap quotes for exchanging one crypto asset to another using native (smallest unit) amounts. Returns available quotes with exchange rates, fees, and estimated output amounts. Use this when you have amounts in native units (e.g., satoshis for BTC, wei for ETH). API key is optional.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "string",
+              "description": "Amount to swap in native units (e.g., '100000000' for 1 BTC in satoshis)"
+            },
+            "apiKey": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null,
+              "description": "Optional partner API key."
+            },
+            "sourceAsset": {
+              "type": "string",
+              "description": "Source asset identifier (e.g., 'btc.btc', 'eth.eth', 'usdc.eth')"
+            },
+            "destinationAsset": {
+              "type": "string",
+              "description": "Destination asset identifier (e.g., 'eth.eth', 'btc.btc', 'sol.sol')"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "swap-assistant",
+        "description": "Guides you through a cross-chain cryptocurrency swap on Chainflip. Covers asset discovery, quoting, swap execution, and status monitoring.",
+        "arguments": []
+      }
+    ]
+  }
+}

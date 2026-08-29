@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "pvusso8i9g",
+  "namespace": "AminForou",
+  "slug": "google-search-console-mcp-v2",
+  "name": "GSC MCP Server v2 - Remote Edition",
+  "description": "Connects Claude AI to Google Search Console with OAuth 2.0 authentication, enabling users to analyze search performance, inspect URLs, manage sitemaps, and export analytics data through natural language conversations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Connects Claude AI to Google Search Console with OAuth 2.0 authentication, enabling users to analyze search performance, inspect URLs, manage sitemaps, and export analytics data through natural language conversations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "Public server URL",
+          "type": "string"
+        },
+        "SECRET_KEY": {
+          "description": "Session encryption key",
+          "type": "string"
+        },
+        "DATABASE_PATH": {
+          "description": "SQLite database path",
+          "type": "string",
+          "default": "gsc_tokens.db"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "OAuth client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_REDIRECT_URI": {
+          "description": "OAuth callback URL (your server URL + /oauth/callback)",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "OAuth client secret from Google Cloud Console",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "GOOGLE_REDIRECT_URI"
+      ]
+    },
+    "id": "pvusso8i9g",
+    "name": "GSC MCP Server v2 - Remote Edition",
+    "namespace": "AminForou",
+    "repository": {
+      "url": "https://github.com/AminForou/google-search-console-mcp-v2"
+    },
+    "slug": "google-search-console-mcp-v2",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pvusso8i9g"
+  }
+}

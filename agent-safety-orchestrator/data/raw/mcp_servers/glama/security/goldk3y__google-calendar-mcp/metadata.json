@@ -1,0 +1,53 @@
+{
+  "registry": "glama",
+  "id": "shvhzd15a3",
+  "namespace": "goldk3y",
+  "slug": "google-calendar-mcp",
+  "name": "Google Calendar MCP Server",
+  "description": "Enables interaction with Google Calendar through OAuth2 authentication, supporting calendar and event management including creating, updating, deleting events with attendees, reminders, and search functionality.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Google Calendar through OAuth2 authentication, supporting calendar and event management including creating, updating, deleting events with attendees, reminders, and search functionality.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "clientId": {
+          "description": "Google OAuth2 Client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "redirectUri": {
+          "description": "OAuth2 redirect URI",
+          "type": "string",
+          "default": "http://localhost:3000/oauth2callback"
+        },
+        "clientSecret": {
+          "description": "Google OAuth2 Client Secret from Google Cloud Console",
+          "type": "string"
+        },
+        "refreshToken": {
+          "description": "Pre-existing refresh token for permanent access",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "clientId",
+        "clientSecret"
+      ]
+    },
+    "id": "shvhzd15a3",
+    "name": "Google Calendar MCP Server",
+    "namespace": "goldk3y",
+    "repository": {
+      "url": "https://github.com/goldk3y/google-calendar-mcp"
+    },
+    "slug": "google-calendar-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/shvhzd15a3"
+  }
+}

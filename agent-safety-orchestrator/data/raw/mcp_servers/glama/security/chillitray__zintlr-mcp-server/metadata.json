@@ -1,0 +1,84 @@
+{
+  "registry": "glama",
+  "id": "n1l7p2r0g9",
+  "namespace": "chillitray",
+  "slug": "zintlr-mcp-server",
+  "name": "Zintlr MCP Server",
+  "description": "Integrates LLMs with the Zintlr sales intelligence platform to search for prospects, companies, and contact information. It provides tools for profile retrieval, lead generation, and technology stack analysis via a remote MCP interface with secure OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Integrates LLMs with the Zintlr sales intelligence platform to search for prospects, companies, and contact information. It provides tools for profile retrieval, lead generation, and technology stack analysis via a remote MCP interface with secure OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Server host",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8000"
+        },
+        "DEBUG": {
+          "description": "Debug mode",
+          "type": "string",
+          "default": "false"
+        },
+        "REDIS_URL": {
+          "description": "Redis for sessions",
+          "type": "string",
+          "default": "redis://localhost:6379"
+        },
+        "CAPTCHA_TOKEN": {
+          "description": "API authentication token. Same as CAPTCHA_TOKEN in Next.js proxy",
+          "type": "string"
+        },
+        "CIPHER_SECRET": {
+          "description": "JWT decryption secret. Same as process.env.CIPHER in Next.js proxy",
+          "type": "string"
+        },
+        "MCP_SERVER_URL": {
+          "description": "Public URL of this server",
+          "type": "string",
+          "default": "https://mcp.zintlr.com"
+        },
+        "ZINTLR_API_BASE_URL": {
+          "description": "Direct API URL",
+          "type": "string",
+          "default": "https://api.zintlr.com"
+        },
+        "ZINTLR_FRONTEND_URL": {
+          "description": "Frontend for OAuth",
+          "type": "string",
+          "default": "https://auth.zintlr.com"
+        },
+        "SESSION_EXPIRE_SECONDS": {
+          "description": "Session TTL (1 hour)",
+          "type": "string",
+          "default": "3600"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CIPHER_SECRET",
+        "CAPTCHA_TOKEN"
+      ]
+    },
+    "id": "n1l7p2r0g9",
+    "name": "Zintlr MCP Server",
+    "namespace": "chillitray",
+    "repository": {
+      "url": "https://github.com/chillitray/zintlr-mcp-server"
+    },
+    "slug": "zintlr-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n1l7p2r0g9"
+  }
+}

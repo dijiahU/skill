@@ -1,0 +1,77 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "seolint/seo-scanner",
+  "namespace": "seolint",
+  "slug": "seo-scanner",
+  "displayName": "seo-scanner",
+  "description": "Scan any website for SEO issues directly from Claude, Cursor, or any MCP client.\n\n**What it does:** Audits any URL for SEO, performance, accessibility, and AI search visibility. Returns structured\nissues with fix prompts you can apply immediately.\n\n**Tools:**\n- `scan_website` — scan any URL, get issues with fix instructions\n- `get_scan` — retrieve previous scan results\n\n**40+ checks:** title, meta, H1, canonical, Open Graph, Core Web Vitals, alt text, structured data, llms.txt, E-E-A-T\nsignals, and more.\n\nFrom $19/month for 50 page scans.",
+  "discoveryQueries": [
+    "scanner",
+    "audit",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "817c78b6-01d9-44a3-b90d-796d217c45c8",
+    "qualifiedName": "seolint/seo-scanner",
+    "namespace": "seolint",
+    "slug": "seo-scanner",
+    "displayName": "seo-scanner",
+    "description": "Scan any website for SEO issues directly from Claude, Cursor, or any MCP client.\n\n**What it does:** Audits any URL for SEO, performance, accessibility, and AI search visibility. Returns structured\nissues with fix prompts you can apply immediately.\n\n**Tools:**\n- `scan_website` — scan any URL, get issues with fix instructions\n- `get_scan` — retrieve previous scan results\n\n**40+ checks:** title, meta, H1, canonical, Open Graph, Core Web Vitals, alt text, structured data, llms.txt, E-E-A-T\nsignals, and more.\n\nFrom $19/month for 50 page scans.",
+    "iconUrl": "https://api.smithery.ai/servers/seolint/seo-scanner/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-03T12:36:12.386Z",
+    "homepage": "https://www.seolint.dev/",
+    "bySmithery": false,
+    "owner": "org_01KNBW1GHVCDAZPKBJFHZM8AJZ",
+    "score": 0.03655083655083655
+  },
+  "detail": {
+    "qualifiedName": "seolint/seo-scanner",
+    "displayName": "seo-scanner",
+    "description": "Scan any website for SEO issues directly from Claude, Cursor, or any MCP client.\n\n**What it does:** Audits any URL for SEO, performance, accessibility, and AI search visibility. Returns structured\nissues with fix prompts you can apply immediately.\n\n**Tools:**\n- `scan_website` — scan any URL, get issues with fix instructions\n- `get_scan` — retrieve previous scan results\n\n**40+ checks:** title, meta, H1, canonical, Open Graph, Core Web Vitals, alt text, structured data, llms.txt, E-E-A-T\nsignals, and more.\n\nFrom $19/month for 50 page scans.",
+    "iconUrl": "https://api.smithery.ai/servers/seolint/seo-scanner/icon",
+    "remote": true,
+    "deploymentUrl": "https://seo-scanner--seolint.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://seo-scanner--seolint.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_website",
+        "description": "Scan a website for SEO, performance, accessibility, and AI search issues. Returns structured issues with LLM-ready fix instructions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The full URL to scan, e.g. https://example.com"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_scan",
+        "description": "Get the results of a previous SEOLint scan by its ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scanId": {
+              "type": "string",
+              "description": "The scan ID (UUID)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

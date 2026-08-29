@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "mn8zsns0a9",
+  "namespace": "vrllrv",
+  "slug": "junto-mcp",
+  "name": "junto-mcp",
+  "description": "Create Pix charges (Woovi/OpenPix) · List payments & check status · Refund transactions · Multi-provider routing · Daily/per-tx spending limits · Human-in-the-loop confirmation · JSONL audit trail",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Create Pix charges (Woovi/OpenPix) · List payments & check status · Refund transactions · Multi-provider routing · Daily/per-tx spending limits · Human-in-the-loop confirmation · JSONL audit trail",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WOOVI_APP_ID": {
+          "description": "API key for the Woovi/OpenPix provider",
+          "type": "string"
+        },
+        "JUNTO_PER_TX_MAX": {
+          "description": "Max single transaction in cents",
+          "type": "string",
+          "default": "20000"
+        },
+        "JUNTO_DAILY_LIMIT": {
+          "description": "Max total spend per day in cents",
+          "type": "string",
+          "default": "50000"
+        },
+        "JUNTO_CONFIRM_ABOVE": {
+          "description": "Ask human before sending if the amount in cents exceeds this threshold",
+          "type": "string",
+          "default": "5000"
+        },
+        "JUNTO_ALLOWED_PROVIDERS": {
+          "description": "Comma-separated allowlist of providers",
+          "type": "string"
+        },
+        "JUNTO_ALLOWED_DESTINATIONS": {
+          "description": "Comma-separated type allowlist of destinations",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WOOVI_APP_ID"
+      ]
+    },
+    "id": "mn8zsns0a9",
+    "name": "junto-mcp",
+    "namespace": "vrllrv",
+    "repository": {
+      "url": "https://github.com/vrllrv/junto-mcp"
+    },
+    "slug": "junto-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mn8zsns0a9"
+  }
+}

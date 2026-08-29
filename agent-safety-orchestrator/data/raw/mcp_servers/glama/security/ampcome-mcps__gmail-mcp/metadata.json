@@ -1,0 +1,81 @@
+{
+  "registry": "glama",
+  "id": "dz7myv4kie",
+  "namespace": "ampcome-mcps",
+  "slug": "gmail-mcp",
+  "name": "Gmail MCP Server",
+  "description": "Enables AI assistants to interact with Gmail accounts for searching, reading, sending, and managing emails through secure OAuth2 authentication. It provides comprehensive tools for message operations, conversation threads, and account statistics using the FastMCP framework.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Gmail accounts for searching, reading, sending, and managing emails through secure OAuth2 authentication. It provides comprehensive tools for message operations, conversation threads, and account statistics using the FastMCP framework.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NANGO_BASE_URL": {
+          "description": "The base URL for the Nango API.",
+          "type": "string",
+          "default": "https://api.nango.dev"
+        },
+        "GMAIL_MCP_DEBUG": {
+          "description": "Enable debug logging by setting this environment variable to true.",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth client ID (Alternative to Nango).",
+          "type": "string"
+        },
+        "NANGO_SECRET_KEY": {
+          "description": "Your Nango secret key.",
+          "type": "string"
+        },
+        "NANGO_CONNECTION_ID": {
+          "description": "Your Nango connection ID.",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth client secret (Alternative to Nango).",
+          "type": "string"
+        },
+        "GOOGLE_REFRESH_TOKEN": {
+          "description": "Your Google OAuth refresh token (Alternative to Nango).",
+          "type": "string"
+        },
+        "NANGO_INTEGRATION_ID": {
+          "description": "Your Nango integration ID (e.g., google or google-mail).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "NANGO_SECRET_KEY",
+            "NANGO_CONNECTION_ID",
+            "NANGO_INTEGRATION_ID"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_CLIENT_ID",
+            "GOOGLE_CLIENT_SECRET",
+            "GOOGLE_REFRESH_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "dz7myv4kie",
+    "name": "Gmail MCP Server",
+    "namespace": "ampcome-mcps",
+    "repository": {
+      "url": "https://github.com/ampcome-mcps/gmail-mcp"
+    },
+    "slug": "gmail-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dz7myv4kie"
+  }
+}

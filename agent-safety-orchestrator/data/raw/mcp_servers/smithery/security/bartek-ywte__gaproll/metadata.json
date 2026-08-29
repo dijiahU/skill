@@ -1,0 +1,123 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "bartek-ywte/gaproll",
+  "namespace": "bartek-ywte",
+  "slug": "gaproll",
+  "displayName": "gaproll",
+  "description": "EU Directive 2023/970 (Pay Transparency) compliance tools for Polish employers. \nCheck deadlines by headcount, get penalty information, and calculate your \ncompliance risk score. Free, no auth required.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "3b1100f7-3a66-41ff-a895-982d7f5e45bb",
+    "qualifiedName": "bartek-ywte/gaproll",
+    "namespace": "bartek-ywte",
+    "slug": "gaproll",
+    "displayName": "gaproll",
+    "description": "EU Directive 2023/970 (Pay Transparency) compliance tools for Polish employers. \nCheck deadlines by headcount, get penalty information, and calculate your \ncompliance risk score. Free, no auth required.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/gaproll.eu.ico",
+    "verified": false,
+    "useCount": 7582,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T12:02:00.616Z",
+    "homepage": "https://gaproll.eu",
+    "bySmithery": false,
+    "owner": "org_01KNMJKSBAEFJ1F6F64M8TB6Z8",
+    "score": 0.04210992907801418
+  },
+  "detail": {
+    "qualifiedName": "bartek-ywte/gaproll",
+    "displayName": "gaproll",
+    "description": "EU Directive 2023/970 (Pay Transparency) compliance tools for Polish employers. \nCheck deadlines by headcount, get penalty information, and calculate your \ncompliance risk score. Free, no auth required.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/gaproll.eu.ico",
+    "remote": true,
+    "deploymentUrl": "https://gaproll--bartek-ywte.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://gaproll--bartek-ywte.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_deadline",
+        "description": "Check EU Directive 2023/970 deadlines by headcount (Art. 4, 7, 16).\n    Sprawdza terminy Dyrektywy UE 2023/970 według liczby pracowników.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "title": "Country",
+              "default": "PL"
+            },
+            "employee_count": {
+              "type": "integer",
+              "title": "Employee Count"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_penalties",
+        "description": "Return penalty info for Directive 2023/970 violations (Art. 18, 23).\n    Accepts: evg_missing | art7_no_response | art16_no_report.\n    Zwraca informacje o karach za naruszenia Dyrektywy UE 2023/970.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "title": "Country",
+              "default": "PL"
+            },
+            "violation_type": {
+              "type": "string",
+              "title": "Violation Type"
+            }
+          }
+        }
+      },
+      {
+        "name": "calculate_risk_score",
+        "description": "Calculate compliance risk score 0-100 for Polish employer.\n    Oblicza ryzyko zgodności z Dyrektywą UE 2023/970.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "title": "Country",
+              "default": "PL"
+            },
+            "has_evg": {
+              "type": "boolean",
+              "title": "Has Evg",
+              "default": false
+            },
+            "pkd_code": {
+              "type": "string",
+              "title": "Pkd Code",
+              "default": ""
+            },
+            "employee_count": {
+              "type": "integer",
+              "title": "Employee Count"
+            },
+            "has_pay_gap_data": {
+              "type": "boolean",
+              "title": "Has Pay Gap Data",
+              "default": false
+            },
+            "has_salary_ranges_in_ads": {
+              "type": "boolean",
+              "title": "Has Salary Ranges In Ads",
+              "default": false
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

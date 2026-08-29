@@ -1,0 +1,70 @@
+{
+  "registry": "glama",
+  "id": "iy07f0dzeg",
+  "namespace": "aliyun",
+  "slug": "alibabacloud-supabase-mcp-server",
+  "name": "Alibaba Cloud Supabase MCP Server",
+  "description": "Enables AI assistants to manage Supabase projects deployed on Alibaba Cloud through natural language commands. Supports project creation/deletion, database querying, security configuration, and table management operations.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to manage Supabase projects deployed on Alibaba Cloud through natural language commands. Supports project creation/deletion, database querying, security configuration, and table management operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ALIYUN_ACCESS_TOKEN": {
+          "description": "Your Aliyun access key and secret key in the format <YOUR_AK>|<YOUR_SK>",
+          "type": "string"
+        },
+        "ALIBABA_CLOUD_ACCESS_KEY_ID": {
+          "description": "Your Alibaba Cloud access key ID",
+          "type": "string"
+        },
+        "ALIBABA_CLOUD_SECURITY_TOKEN": {
+          "description": "Your Alibaba Cloud security token for temporary credentials",
+          "type": "string"
+        },
+        "ALIBABA_CLOUD_ACCESS_KEY_SECRET": {
+          "description": "Your Alibaba Cloud access key secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ALIYUN_ACCESS_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "ALIBABA_CLOUD_ACCESS_KEY_ID",
+            "ALIBABA_CLOUD_ACCESS_KEY_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "ALIBABA_CLOUD_SECURITY_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "iy07f0dzeg",
+    "name": "Alibaba Cloud Supabase MCP Server",
+    "namespace": "aliyun",
+    "repository": {
+      "url": "https://github.com/aliyun/alibabacloud-supabase-mcp-server"
+    },
+    "slug": "alibabacloud-supabase-mcp-server",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/iy07f0dzeg"
+  }
+}

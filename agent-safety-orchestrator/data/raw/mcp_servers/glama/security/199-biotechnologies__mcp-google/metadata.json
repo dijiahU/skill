@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "bx0eq2z9mx",
+  "namespace": "199-biotechnologies",
+  "slug": "mcp-google",
+  "name": "MCP Google Workspace",
+  "description": "Enables comprehensive management of Google Calendar, Contacts, and Gmail with full create, read, update, and delete capabilities across all three services through OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive management of Google Calendar, Contacts, and Gmail with full create, read, update, and delete capabilities across all three services through OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Set to 'production' for production use",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth client ID (e.g., YOUR_CLIENT_ID.apps.googleusercontent.com)",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth client secret",
+          "type": "string"
+        },
+        "GOOGLE_OAUTH_CREDENTIALS": {
+          "description": "Path to OAuth credentials JSON file downloaded from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_CALENDAR_MCP_TOKEN_PATH": {
+          "description": "Custom path for token storage (optional)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_CLIENT_ID",
+            "GOOGLE_CLIENT_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_OAUTH_CREDENTIALS"
+          ]
+        }
+      ]
+    },
+    "id": "bx0eq2z9mx",
+    "name": "MCP Google Workspace",
+    "namespace": "199-biotechnologies",
+    "repository": {
+      "url": "https://github.com/199-mcp/mcp-google"
+    },
+    "slug": "mcp-google",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bx0eq2z9mx"
+  }
+}

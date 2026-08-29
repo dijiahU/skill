@@ -1,0 +1,1358 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "MadaBurns/bv-mcp",
+  "namespace": "MadaBurns",
+  "slug": "bv-mcp",
+  "displayName": "blackveil-dns",
+  "description": "BLACKVEIL DNS\n\nKnow where you stand.\n\nOpen-source DNS & email security scanner for Claude, Cursor, VS Code, and MCP clients across Streamable HTTP, stdio, and legacy HTTP+SSE.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "audit",
+    "policy",
+    "trust",
+    "vulnerability",
+    "credential",
+    "compliance",
+    "encryption",
+    "authentication",
+    "authorization",
+    "phishing",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "98277b51-4fdb-4968-90b5-01a18b8aac86",
+    "qualifiedName": "MadaBurns/bv-mcp",
+    "namespace": "madaburns",
+    "slug": "bv-mcp",
+    "displayName": "blackveil-dns",
+    "description": "BLACKVEIL DNS\n\nKnow where you stand.\n\nOpen-source DNS & email security scanner for Claude, Cursor, VS Code, and MCP clients across Streamable HTTP, stdio, and legacy HTTP+SSE.",
+    "iconUrl": "https://api.smithery.ai/servers/MadaBurns/bv-mcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-19T00:07:28.411Z",
+    "homepage": "https://blackveilsecurity.com/dns",
+    "bySmithery": false,
+    "owner": "org_01KNBKHZPKKRVZJCX1MA34A9JW",
+    "score": 0.043055555555555555
+  },
+  "detail": {
+    "qualifiedName": "MadaBurns/bv-mcp",
+    "displayName": "blackveil-dns",
+    "description": "BLACKVEIL DNS\n\nKnow where you stand.\n\nOpen-source DNS & email security scanner for Claude, Cursor, VS Code, and MCP clients across Streamable HTTP, stdio, and legacy HTTP+SSE.",
+    "iconUrl": "https://api.smithery.ai/servers/MadaBurns/bv-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://bv-mcp--madaburns.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://bv-mcp--madaburns.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Optional API key for higher rate limits. Leave blank for free tier (50 req/min)."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_mx",
+        "description": "Validate MX records and email provider detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_spf",
+        "description": "Validate SPF syntax, policy, and trust surface.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_dmarc",
+        "description": "Validate DMARC policy, alignment, and reporting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_dkim",
+        "description": "Probe DKIM selectors and validate key strength.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "selector": {
+              "type": "string",
+              "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+              "maxLength": 63,
+              "description": "DKIM selector. Omit to probe common ones."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_dnssec",
+        "description": "Verify DNSSEC validation and DNSKEY/DS records.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_ssl",
+        "description": "Verify SSL/TLS certificate and HTTPS config.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_mta_sts",
+        "description": "Validate MTA-STS SMTP encryption policy.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_ns",
+        "description": "Analyze NS delegation and provider diversity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_caa",
+        "description": "Check authorized Certificate Authorities via CAA.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_bimi",
+        "description": "Validate BIMI record and VMC evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_tlsrpt",
+        "description": "Validate TLS-RPT SMTP failure reporting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_http_security",
+        "description": "Audit HTTP security headers (CSP, COOP, etc.).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_dane",
+        "description": "Verify DANE/TLSA certificate pinning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_dane_https",
+        "description": "Verify DANE certificate pinning for HTTPS via TLSA records at _443._tcp.{domain}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_svcb_https",
+        "description": "Validate HTTPS/SVCB records (RFC 9460) for modern transport capability advertisement.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_lookalikes",
+        "description": "Detect active typosquat/lookalike domains. Standalone.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "scan_domain",
+        "description": "Full DNS and email security audit. Score, grade, maturity, findings. Start here.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "profile": {
+              "enum": [
+                "auto",
+                "mail_enabled",
+                "enterprise_mail",
+                "non_mail",
+                "web_only",
+                "minimal"
+              ],
+              "type": "string",
+              "description": "Scoring profile. Default \"auto\" detects."
+            },
+            "force_refresh": {
+              "type": "boolean",
+              "description": "Bypass cache and run a fresh scan. Useful after DNS changes."
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_baseline",
+        "description": "Compare domain security against a policy baseline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to scan and compare."
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "baseline": {
+              "type": "object",
+              "properties": {
+                "grade": {
+                  "enum": [
+                    "A+",
+                    "A",
+                    "B+",
+                    "B",
+                    "C+",
+                    "C",
+                    "D+",
+                    "D",
+                    "F"
+                  ],
+                  "type": "string",
+                  "description": "Min grade (e.g., \"B+\")."
+                },
+                "score": {
+                  "type": "number",
+                  "maximum": 100,
+                  "minimum": 0,
+                  "description": "Min score (0-100)."
+                },
+                "require_caa": {
+                  "type": "boolean",
+                  "description": "Require CAA."
+                },
+                "require_spf": {
+                  "type": "boolean",
+                  "description": "Require SPF."
+                },
+                "require_dkim": {
+                  "type": "boolean",
+                  "description": "Require DKIM."
+                },
+                "require_dnssec": {
+                  "type": "boolean",
+                  "description": "Require DNSSEC."
+                },
+                "require_mta_sts": {
+                  "type": "boolean",
+                  "description": "Require MTA-STS."
+                },
+                "max_high_findings": {
+                  "type": "integer",
+                  "maximum": 9007199254740991,
+                  "minimum": 0,
+                  "description": "Max high findings allowed."
+                },
+                "max_critical_findings": {
+                  "type": "integer",
+                  "maximum": 9007199254740991,
+                  "minimum": 0,
+                  "description": "Max critical findings (default 0)."
+                },
+                "require_dmarc_enforce": {
+                  "type": "boolean",
+                  "description": "Require DMARC enforce."
+                }
+              },
+              "description": "Policy baseline requirements.",
+              "additionalProperties": {}
+            }
+          }
+        }
+      },
+      {
+        "name": "check_shadow_domains",
+        "description": "Find TLD variants with email auth gaps. Standalone.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_txt_hygiene",
+        "description": "Audit TXT records for stale entries and SaaS exposure.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_mx_reputation",
+        "description": "Check MX blocklist status and reverse DNS.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_srv",
+        "description": "Probe SRV records for service footprint.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_zone_hygiene",
+        "description": "Audit SOA propagation and sensitive subdomains.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_fix_plan",
+        "description": "Generate prioritized remediation plan with effort estimates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_spf_record",
+        "description": "Generate corrected SPF record from detected providers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "include_providers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9._-]+$",
+                "maxLength": 253,
+                "minLength": 1
+              },
+              "maxItems": 15,
+              "description": "Providers to include (e.g., [\"google\"])."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_dmarc_record",
+        "description": "Generate DMARC record with configurable policy.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "policy": {
+              "enum": [
+                "none",
+                "quarantine",
+                "reject"
+              ],
+              "type": "string",
+              "description": "Policy (default \"reject\")."
+            },
+            "rua_email": {
+              "type": "string",
+              "maxLength": 254,
+              "description": "Report email. Default: dmarc-reports@{domain}."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_dkim_config",
+        "description": "Generate DKIM setup instructions and DNS record.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "provider": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Provider (e.g., \"google\"). Omit for generic."
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_mta_sts_policy",
+        "description": "Generate MTA-STS record and policy file.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "mx_hosts": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]*$",
+                "maxLength": 253,
+                "minLength": 1
+              },
+              "maxItems": 20,
+              "description": "MX hosts. Omit to detect from DNS."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_benchmark",
+        "description": "Get score benchmarks: percentiles, mean, top failures.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "profile": {
+              "enum": [
+                "mail_enabled",
+                "enterprise_mail",
+                "non_mail",
+                "web_only",
+                "minimal"
+              ],
+              "type": "string",
+              "description": "Profile to benchmark (default \"mail_enabled\")."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_provider_insights",
+        "description": "Get provider cohort benchmarks and common issues.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "profile": {
+              "enum": [
+                "mail_enabled",
+                "enterprise_mail",
+                "non_mail",
+                "web_only",
+                "minimal"
+              ],
+              "type": "string",
+              "description": "Profile (default \"mail_enabled\")."
+            },
+            "provider": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Provider (e.g., \"google workspace\")."
+            }
+          }
+        }
+      },
+      {
+        "name": "assess_spoofability",
+        "description": "Composite email spoofability score (0-100).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_resolver_consistency",
+        "description": "Check DNS consistency across 4 public resolvers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "record_type": {
+              "enum": [
+                "A",
+                "AAAA",
+                "MX",
+                "TXT",
+                "NS",
+                "CNAME",
+                "SOA",
+                "CAA"
+              ],
+              "type": "string",
+              "description": "Record type. Omit for A/AAAA/MX/TXT/NS."
+            }
+          }
+        }
+      },
+      {
+        "name": "explain_finding",
+        "description": "Explain a finding with impact and remediation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "status": {
+              "enum": [
+                "pass",
+                "fail",
+                "warning",
+                "critical",
+                "high",
+                "medium",
+                "low",
+                "info"
+              ],
+              "type": "string",
+              "description": "Finding severity or status."
+            },
+            "details": {
+              "type": "string",
+              "maxLength": 2000,
+              "description": "Additional detail from check result."
+            },
+            "checkType": {
+              "type": "string",
+              "maxLength": 100,
+              "minLength": 1,
+              "description": "Check type (e.g., 'SPF', 'DMARC')."
+            }
+          }
+        }
+      },
+      {
+        "name": "map_supply_chain",
+        "description": "Map third-party service dependencies from DNS records. Correlates SPF, NS, TXT verifications, SRV services, and CAA to show who can send as you, control your DNS, and what services are integrated.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_drift",
+        "description": "Compare current security posture against a previous baseline. Shows what improved, regressed, or changed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to analyze drift for"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "baseline": {
+              "type": "string",
+              "maxLength": 50000,
+              "minLength": 1,
+              "description": "Previous ScanScore JSON or \"cached\" to use last cached scan"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_fix",
+        "description": "Re-check a specific control after applying a fix. Confirms whether the finding is resolved.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "check": {
+              "enum": [
+                "spf",
+                "dmarc",
+                "dkim",
+                "dnssec",
+                "ssl",
+                "mta_sts",
+                "ns",
+                "caa",
+                "bimi",
+                "tlsrpt",
+                "http_security",
+                "dane"
+              ],
+              "type": "string",
+              "description": "Check name to re-run (e.g., \"dmarc\", \"spf\")"
+            },
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to validate the fix for"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "expected": {
+              "type": "string",
+              "maxLength": 1000,
+              "description": "Expected DNS record value to verify against"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_rollout_plan",
+        "description": "Generate a phased DMARC enforcement timeline with exact DNS records per phase.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to generate rollout plan for"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            },
+            "timeline": {
+              "enum": [
+                "aggressive",
+                "standard",
+                "conservative"
+              ],
+              "type": "string",
+              "description": "Rollout speed: aggressive, standard, conservative (default: standard)"
+            },
+            "target_policy": {
+              "enum": [
+                "quarantine",
+                "reject"
+              ],
+              "type": "string",
+              "description": "Target DMARC policy (default: reject)"
+            }
+          }
+        }
+      },
+      {
+        "name": "resolve_spf_chain",
+        "description": "Recursively resolve the full SPF include chain. Shows lookup count, tree depth, and flags issues like circular includes or exceeding the 10-lookup limit.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "discover_subdomains",
+        "description": "Discover subdomains via Certificate Transparency logs. Reveals shadow IT, forgotten services, and unauthorized certificate issuance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "map_compliance",
+        "description": "Map scan findings to compliance frameworks: NIST 800-177, PCI DSS 4.0, SOC 2, CIS Controls. Shows pass/fail/partial status per control.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "simulate_attack_paths",
+        "description": "Analyze current DNS posture and enumerate specific attack paths an adversary could exploit, with severity, feasibility, steps, and mitigations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "description": "Domain to check (e.g., example.com)"
+            },
+            "format": {
+              "enum": [
+                "full",
+                "compact"
+              ],
+              "type": "string",
+              "description": "Output verbosity. Auto-detected if omitted."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "DNS Security Checks Guide",
+        "uri": "dns-security://guides/security-checks",
+        "description": "Overview of all DNS/email security checks performed by Blackveil DNS, including SPF, DMARC, DKIM, DNSSEC, SSL/TLS, MTA-STS, NS, CAA, MX, and Subdomain Takeover.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Scoring Methodology",
+        "uri": "dns-security://guides/scoring",
+        "description": "How DNS/email security scores and grades are calculated, including category weights and severity penalties.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Supported DNS Record Types",
+        "uri": "dns-security://guides/record-types",
+        "description": "List of DNS record types queried by this server and their purpose in security analysis.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Agent Workflow Guide",
+        "uri": "dns-security://guides/agent-workflows",
+        "description": "Recommended tool usage patterns and decision trees for common DNS security tasks.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "Intelligence Layer Guide",
+        "uri": "dns-security://guides/intelligence",
+        "description": "How benchmark and provider cohort features work, privacy guarantees, and data freshness.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "name": "DNS Remediation Guide",
+        "uri": "dns-security://guides/remediation",
+        "description": "Step-by-step DNS record fix patterns for each check category, using generate_* tools.",
+        "mimeType": "text/markdown"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "full-security-audit",
+        "description": "DNS & email security audit with remediation",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to audit (e.g. example.com)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "email-auth-check",
+        "description": "Email auth posture: SPF, DMARC, DKIM, MTA-STS",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to check (e.g. example.com)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "policy-compliance-check",
+        "description": "Check domain against security policy baseline",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to check (e.g. example.com)",
+            "required": true
+          },
+          {
+            "name": "minimum_grade",
+            "description": "Min letter grade (default: \"B\")",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "remediation-workflow",
+        "description": "Scan, plan fixes, generate DNS records",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to remediate (e.g. example.com)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "email-hardening-guide",
+        "description": "Email hardening plan with DNS record generation",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to harden (e.g. example.com)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "provider-benchmark",
+        "description": "Benchmark domain against email provider cohort",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to benchmark (e.g. example.com)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "attack-surface-assessment",
+        "description": "Spoofability, lookalikes, shadow domain analysis",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to assess (e.g. example.com)",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

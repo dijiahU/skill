@@ -1,0 +1,123 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "vdineshk/ai-compliance-monitor",
+  "namespace": "vdineshk",
+  "slug": "ai-compliance-monitor",
+  "displayName": "ai-compliance-monitor",
+  "description": "",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "a268f5b4-799e-4038-a140-f702d831d522",
+    "qualifiedName": "vdineshk/ai-compliance-monitor",
+    "namespace": "vdineshk",
+    "slug": "ai-compliance-monitor",
+    "displayName": "ai-compliance-monitor",
+    "description": "",
+    "verified": false,
+    "useCount": 13681,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-11T04:33:32.528Z",
+    "homepage": "https://smithery.ai/servers/vdineshk/ai-compliance-monitor",
+    "bySmithery": false,
+    "owner": "org_01KNBW19DS6M1507D6J88EC0J3",
+    "score": 0.055944055944055944
+  },
+  "detail": {
+    "qualifiedName": "vdineshk/ai-compliance-monitor",
+    "displayName": "ai-compliance-monitor",
+    "description": "",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://ai-compliance-monitor--vdineshk.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://ai-compliance-monitor--vdineshk.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_obligations",
+        "description": "Given an AI agent use case and optional jurisdiction, returns all applicable regulatory obligations with evidence requirements, enforcement dates, and penalty information. Use this to understand what compliance requirements apply to a specific type of AI agent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "use_case": {
+              "type": "string",
+              "description": "The AI agent use case to check. Examples: hiring_screening, credit_scoring, customer_service, content_moderation, medical_triage, autonomous_coding, financial_trading"
+            },
+            "jurisdiction_code": {
+              "type": "string",
+              "description": "Optional jurisdiction code to filter by. Examples: EU, SG, US-CO. Omit to get all jurisdictions."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_regulation_articles",
+        "description": "Returns structured, machine-readable regulation details including specific articles, obligation classifications, risk levels, and evidence requirements. Use this to understand the detailed requirements of a specific regulation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Optional filter by obligation category. Options: transparency, record_keeping, human_oversight, risk_assessment, incident_reporting, data_governance, monitoring, audit"
+            },
+            "regulation_id": {
+              "type": "string",
+              "description": "The regulation identifier. Options: eu-ai-act, sg-imda-agentic, co-ai-act"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_deadline",
+        "description": "Returns upcoming and recent compliance deadlines with enforcement dates, penalty information, and related obligations. Use this to understand time-sensitive compliance requirements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "months_ahead": {
+              "type": "number",
+              "description": "Number of months ahead to look for upcoming deadlines. Default: 12"
+            },
+            "include_passed": {
+              "type": "boolean",
+              "description": "Whether to include deadlines that have already passed. Default: false"
+            },
+            "jurisdiction_code": {
+              "type": "string",
+              "description": "Optional jurisdiction code to filter by. Examples: EU, SG, US-CO"
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_jurisdictions",
+        "description": "Side-by-side comparison of regulatory obligations across jurisdictions for a given compliance category. Shows equivalent, overlapping, stricter, and weaker mappings between regulations. Use this to understand how requirements differ across borders.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "The obligation category to compare. Options: transparency, record_keeping, human_oversight, risk_assessment, incident_reporting, data_governance, monitoring, audit"
+            },
+            "jurisdictions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional list of jurisdiction codes to compare. Default: all available. Examples: [\"EU\", \"SG\", \"US-CO\"]"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "fundfluent-admin/funding-assistant",
+  "namespace": "fundfluent-admin",
+  "slug": "funding-assistant",
+  "displayName": "FluentLab Funding Assistant",
+  "description": "Access a comprehensive suite of tools and resources to help startups and small businesses secure funding. Find matching opportunities, manage required documents, and streamline your application process with our easy-to-use API.",
+  "discoveryQueries": [
+    "security",
+    "secure"
+  ],
+  "rawRecord": {
+    "id": "79b2d8bc-57e4-46ce-9bf8-124490488e39",
+    "qualifiedName": "fundfluent-admin/funding-assistant",
+    "namespace": "fundfluent-admin",
+    "slug": "funding-assistant",
+    "displayName": "FluentLab Funding Assistant",
+    "description": "Access a comprehensive suite of tools and resources to help startups and small businesses secure funding. Find matching opportunities, manage required documents, and streamline your application process with our easy-to-use API.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/fundfluent.io.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": false,
+    "isDeployed": true,
+    "createdAt": "2025-03-27T08:29:07.071Z",
+    "homepage": "https://fundfluent.io",
+    "bySmithery": false,
+    "owner": "org_01KNB550NF32P587G49GWWB4G3",
+    "score": 0.008771929824561403
+  },
+  "detail": {
+    "qualifiedName": "fundfluent-admin/funding-assistant",
+    "displayName": "FluentLab Funding Assistant",
+    "description": "Access a comprehensive suite of tools and resources to help startups and small businesses secure funding. Find matching opportunities, manage required documents, and streamline your application process with our easy-to-use API.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/fundfluent.io.ico",
+    "remote": false,
+    "deploymentUrl": null,
+    "connections": [
+      {
+        "type": "stdio",
+        "bundleUrl": "https://backend.smithery.ai/storage/v1/object/public/bundles/@fundfluent-admin/funding-assistant/server.mcpb",
+        "runtime": "node",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "FLUENTLAB_MCP_API_URL": {
+              "type": "string",
+              "description": "Optional URL for the FluentLab MCP API"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get-funding-options",
+        "description": "Retrieve available funding opportunities with detailed information including name and description. Use this tool when users need to explore available grants, funds, or financing opportunities. The results include program names, descriptions, eligibility criteria, and application details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "integer",
+              "minimum": 1,
+              "exclusiveMinimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "funding-options",
+        "uri": "funding-options://list",
+        "description": "Comprehensive directory of available funding opportunities including grants, loans, and investment programs. Provides essential information like programme names, descriptions, funding amounts, and eligibility requirements. Use this as the starting point to explore funding options."
+      }
+    ],
+    "prompts": [
+      {
+        "name": "check-funding-documents",
+        "description": "Interactive workflow to check if you have sufficient documents for applying to a specific funding programme. This prompt guides you through identifying the funding program and verifying document requirements. Use this when users need assistance validating their application readiness.",
+        "arguments": [
+          {
+            "name": "fundingProgrammeName",
+            "description": "The name or partial name of the funding programme to check documents for",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "organize-funding-documents",
+        "description": "Interactive workflow to help organize and structure documents for a funding programme application. This prompt provides guidance on document organization, naming conventions, and preparation strategies. Use this when users need help systematically preparing their application materials.",
+        "arguments": [
+          {
+            "name": "fundingProgrammeName",
+            "description": "The name or partial name of the funding programme to organize documents for",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

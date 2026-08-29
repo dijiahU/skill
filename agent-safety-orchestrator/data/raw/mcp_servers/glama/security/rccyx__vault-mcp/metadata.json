@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "dur07fmhsc",
+  "namespace": "rccyx",
+  "slug": "vault-mcp",
+  "name": "HashiCorp Vault MCP Server",
+  "description": "Enables language models to securely manage HashiCorp Vault secrets and ACL policies through the Model Context Protocol. It supports automated secret rotation, discovery, and HCL policy authoring using a suite of dedicated tools and resources.",
+  "discoveryQueries": [
+    "policy",
+    "secret"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables language models to securely manage HashiCorp Vault secrets and ACL policies through the Model Context Protocol. It supports automated secret rotation, discovery, and HCL policy authoring using a suite of dedicated tools and resources.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "VAULT_ADDR": {
+          "description": "URL of the Vault cluster, for example https://vault.internal:8200 or http://127.0.0.1:8200.",
+          "type": "string"
+        },
+        "VAULT_TOKEN": {
+          "description": "Short-lived or renewable Vault token starting with hvs.. Scope it tightly using Vault policies.",
+          "type": "string"
+        },
+        "VAULT_CACERT": {
+          "description": "Path to a CA bundle used for verifying self-signed certificates.",
+          "type": "string"
+        },
+        "VAULT_NAMESPACE": {
+          "description": "Optional Vault namespace if your deployment requires it; the server forwards the process environment to the Vault client library.",
+          "type": "string"
+        },
+        "NODE_TLS_REJECT_UNAUTHORIZED": {
+          "description": "Set to 0 only for testing with self-signed certificates. Prefer adding proper CA bundles instead.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "VAULT_ADDR",
+        "VAULT_TOKEN"
+      ]
+    },
+    "id": "dur07fmhsc",
+    "name": "HashiCorp Vault MCP Server",
+    "namespace": "rccyx",
+    "repository": {
+      "url": "https://github.com/rccyx/vault-mcp"
+    },
+    "slug": "vault-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dur07fmhsc"
+  }
+}

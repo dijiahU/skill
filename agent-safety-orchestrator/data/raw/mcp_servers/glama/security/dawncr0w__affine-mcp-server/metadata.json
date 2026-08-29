@@ -1,0 +1,99 @@
+{
+  "registry": "glama",
+  "id": "jox4vt2xbo",
+  "namespace": "DAWNCR0W",
+  "slug": "affine-mcp-server",
+  "name": "AFFiNE MCP Server",
+  "description": "Enables interaction with AFFiNE workspaces through GraphQL API to manage documents, search content, handle comments, and access version history. Supports comprehensive workspace operations including document publishing, comment management, and user authentication via session cookies or personal access tokens.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with AFFiNE workspaces through GraphQL API to manage documents, search content, handle comments, and access version history. Supports comprehensive workspace operations including document publishing, comment management, and user authentication via session cookies or personal access tokens.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_WS_PORT": {
+          "description": "Host port to expose for WebSocket transport",
+          "type": "string",
+          "default": "7821"
+        },
+        "AFFINE_EMAIL": {
+          "description": "Email for authentication (self-hosted)",
+          "type": "string"
+        },
+        "AFFINE_COOKIE": {
+          "description": "Session cookie string (e.g., affine_session=<...>; affine_user_id=<...>)",
+          "type": "string"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport mode: 'stdio' for stdio mode, or 'ws' for WebSocket",
+          "type": "string",
+          "default": "ws"
+        },
+        "AFFINE_BASE_URL": {
+          "description": "Base URL of your AFFiNE server, e.g. http://affine.local:3010",
+          "type": "string"
+        },
+        "AFFINE_PASSWORD": {
+          "description": "Password for authentication (self-hosted)",
+          "type": "string"
+        },
+        "AFFINE_API_TOKEN": {
+          "description": "Personal access token for Bearer auth",
+          "type": "string"
+        },
+        "AFFINE_GRAPHQL_PATH": {
+          "description": "GraphQL endpoint path",
+          "type": "string",
+          "default": "/graphql"
+        },
+        "AFFINE_HEADERS_JSON": {
+          "description": "Optional JSON of extra headers to send",
+          "type": "string"
+        },
+        "AFFINE_WORKSPACE_ID": {
+          "description": "Default workspace id (optional). Tools also accept explicit workspaceId",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "AFFINE_BASE_URL",
+            "AFFINE_COOKIE"
+          ]
+        },
+        {
+          "required": [
+            "AFFINE_BASE_URL",
+            "AFFINE_API_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "AFFINE_BASE_URL",
+            "AFFINE_EMAIL",
+            "AFFINE_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "jox4vt2xbo",
+    "name": "AFFiNE MCP Server",
+    "namespace": "DAWNCR0W",
+    "repository": {
+      "url": "https://github.com/DAWNCR0W/affine-mcp-server"
+    },
+    "slug": "affine-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jox4vt2xbo"
+  }
+}

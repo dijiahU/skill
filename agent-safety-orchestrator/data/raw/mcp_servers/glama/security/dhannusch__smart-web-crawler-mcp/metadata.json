@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "fd80goyf9k",
+  "namespace": "dhannusch",
+  "slug": "smart-web-crawler-mcp",
+  "name": "Web Crawler MCP Server",
+  "description": "An intelligent web crawling server that uses Cloudflare's headless browser to render dynamic pages and Workers AI to extract relevant links based on natural language queries. It enables AI assistants to search and filter website content while providing secure access through GitHub OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An intelligent web crawling server that uses Cloudflare's headless browser to render dynamic pages and Workers AI to extract relevant links based on natural language queries. It enables AI assistants to search and filter website content while providing secure access through GitHub OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GITHUB_CLIENT_ID": {
+          "description": "Your GitHub OAuth App Client ID.",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Your GitHub OAuth App Client Secret.",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random 32-byte hex string used for cookie encryption. Can be generated with: openssl rand -hex 32",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "fd80goyf9k",
+    "name": "Web Crawler MCP Server",
+    "namespace": "dhannusch",
+    "repository": {
+      "url": "https://github.com/dhannusch/smart-web-crawler-mcp"
+    },
+    "slug": "smart-web-crawler-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fd80goyf9k"
+  }
+}

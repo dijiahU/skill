@@ -1,0 +1,192 @@
+{
+  "_comment": "Safety Orchestrator hook config (Claude Code plugin format). Auto-discovered at hooks/hooks.json when the plugin is installed. Each matcher routes one or more atoms to a single script for fan-in efficiency. ${CLAUDE_PLUGIN_ROOT} resolves to the plugin install dir; for non-plugin/manual install, install.sh substitutes it with an absolute path. See hooks/scripts/<matcher_*.py> for atom coverage.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_user_prompt.py",
+            "_atoms": [
+              "detect-pii-in-input",
+              "detect-payment-card-data",
+              "detect-credential-in-input",
+              "detect-private-key-input",
+              "detect-destructive-action-keyword",
+              "detect-jailbreak-template",
+              "redact-input-pii",
+              "record-prompt-and-context-snapshot"
+            ]
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_bash.py",
+            "_atoms": [
+              "detect-shell-command-injection",
+              "detect-destructive-flag",
+              "detect-secret-in-args",
+              "detect-overbroad-resource-selector",
+              "validate-tool-argument-schema",
+              "enforce-filesystem-sandbox",
+              "enforce-process-sandbox",
+              "detect-sandbox-escape-attempt"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_write_edit.py",
+            "_atoms": [
+              "detect-path-traversal",
+              "run-sast-scan",
+              "detect-hardcoded-secret-in-code",
+              "detect-insecure-cryptography",
+              "detect-unsafe-deserialization",
+              "detect-injection-flaw",
+              "audit-ci-workflow-security",
+              "audit-install-hook",
+              "detect-malicious-postinstall-script"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch|WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_webfetch.py",
+            "_atoms": [
+              "detect-unsafe-url",
+              "enforce-network-egress-allowlist"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_task.py",
+            "_atoms": [
+              "enforce-subagent-scope-isolation",
+              "enforce-swarm-race-condition-safety"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_pretool_generic.py",
+            "_atoms": [
+              "verify-allowed-tool-list",
+              "verify-resource-namespace-scope",
+              "verify-capability-token",
+              "check-rbac-role",
+              "evaluate-opa-rego-rule",
+              "evaluate-content-moderation-rule",
+              "detect-sql-injection",
+              "detect-covert-channel-in-tool-call",
+              "enforce-tool-call-rate-limit",
+              "enforce-token-budget-cap",
+              "enforce-cost-cap-per-task",
+              "detect-runaway-loop",
+              "detect-autonomy-budget-exceeded",
+              "check-tool-typosquat-name",
+              "verify-skill-signature",
+              "verify-tool-publisher-identity",
+              "detect-hidden-instruction-in-tool-description",
+              "detect-tool-loader-exploit",
+              "detect-skill-permission-overrequest",
+              "detect-mcp-confused-deputy",
+              "detect-mcp-token-passthrough",
+              "detect-mcp-session-hijacking",
+              "detect-mcp-ssrf",
+              "request-human-confirmation",
+              "await-human-decision-or-timeout",
+              "halt-in-flight-action",
+              "isolate-affected-resource",
+              "check-package-typosquat",
+              "check-package-cve",
+              "check-dependency-confusion",
+              "check-package-recency-anomaly",
+              "detect-hallucinated-package",
+              "record-tool-invocation-trace"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_posttool.py",
+            "_atoms": [
+              "match-yara-rule",
+              "check-malware-hash-ioc",
+              "detect-archive-bomb",
+              "detect-suspicious-mime-type",
+              "strip-active-html-script",
+              "redact-output-pii",
+              "redact-output-secret",
+              "redact-output-system-prompt",
+              "redact-output-internal-infra",
+              "detect-markdown-image-beacon",
+              "detect-base64-payload-in-output",
+              "detect-dns-exfiltration-pattern"
+            ]
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/matcher_stop.py",
+            "_atoms": [
+              "record-decision-trace",
+              "snapshot-agent-state",
+              "log-human-decision-outcome",
+              "redact-output-pii",
+              "redact-output-secret",
+              "redact-output-system-prompt",
+              "redact-output-internal-infra",
+              "detect-markdown-image-beacon",
+              "detect-base64-payload-in-output",
+              "detect-dns-exfiltration-pattern",
+              "enforce-disallowed-content-rule",
+              "review-generated-code-output",
+              "notify-oncall-and-open-ticket",
+              "execute-recovery-playbook"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "_coverage": {
+    "_comment": "Atoms covered by hook config (60 hook + 21 hybrid fast-path = 81). All 81 hook/hybrid atoms have a matcher code path and are wired here. The remaining 14 atoms are pure-skill and are intentionally absent from hook config."
+  }
+}

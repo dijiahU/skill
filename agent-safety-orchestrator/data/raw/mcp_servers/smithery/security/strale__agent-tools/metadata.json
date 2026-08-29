@@ -1,0 +1,161 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "strale/agent-tools",
+  "namespace": "strale",
+  "slug": "agent-tools",
+  "displayName": "Strale",
+  "description": "Strale provides verified data capabilities for AI agents — company registries across 25+ countries, compliance screening, payment validation, document processing, and more. Every capability is independently tested with dual-profile quality scoring: Code Quality (how well-built) and Reliability (how dependable right now), combined into a single SQS confidence score. Machine-readable execution guidance tells agents exactly how to call each capability, including retry strategies, fallback options, and recovery timelines. Failed calls due to upstream issues are never billed.",
+  "discoveryQueries": [
+    "trust",
+    "credential",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "c1852046-a72c-4547-b83d-b1b6cf1ffc93",
+    "qualifiedName": "strale/agent-tools",
+    "namespace": "strale",
+    "slug": "agent-tools",
+    "displayName": "Strale",
+    "description": "Strale provides verified data capabilities for AI agents — company registries across 25+ countries, compliance screening, payment validation, document processing, and more. Every capability is independently tested with dual-profile quality scoring: Code Quality (how well-built) and Reliability (how dependable right now), combined into a single SQS confidence score. Machine-readable execution guidance tells agents exactly how to call each capability, including retry strategies, fallback options, and recovery timelines. Failed calls due to upstream issues are never billed.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/strale.dev.ico",
+    "verified": false,
+    "useCount": 6966,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-27T20:11:58.537Z",
+    "homepage": "https://strale.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVETTZV4MWNBDA54X6H0Q2",
+    "score": 0.015384615384615385
+  },
+  "detail": {
+    "qualifiedName": "strale/agent-tools",
+    "displayName": "Strale",
+    "description": "Strale provides verified data capabilities for AI agents — company registries across 25+ countries, compliance screening, payment validation, document processing, and more. Every capability is independently tested with dual-profile quality scoring: Code Quality (how well-built) and Reliability (how dependable right now), combined into a single SQS confidence score. Machine-readable execution guidance tells agents exactly how to call each capability, including retry strategies, fallback options, and recovery timelines. Failed calls due to upstream issues are never billed.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/strale.dev.ico",
+    "remote": true,
+    "deploymentUrl": "https://agent-tools--strale.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agent-tools--strale.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "strale_ping",
+        "description": "Health check. Returns server status, tool count, and response time. Use this to verify the connection is working before making other calls.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_getting_started",
+        "description": "Get started with Strale. Returns onboarding steps, free capabilities you can try immediately without an API key, and how to get full access.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_execute",
+        "description": "Execute any Strale capability by slug. Returns the full result including output data, execution cost, latency, data provenance, and dual-profile quality assessment (SQS score, Quality grade, Reliability grade, execution guidance with retry strategy). Free capabilities (email-validate, dns-lookup, json-repair, url-to-markdown, iban-validate) work without an API key. For paid capabilities, provide an API key via Authorization header. Use strale_search to find capabilities and their required inputs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Capability slug from strale_search results, e.g. 'swedish-company-data', 'vat-validate', 'iban-validate'"
+            },
+            "inputs": {
+              "type": "object",
+              "description": "Input parameters matching the capability's required fields. Check strale_search results for the expected input_fields.",
+              "additionalProperties": {}
+            },
+            "max_price_cents": {
+              "type": "number",
+              "description": "Maximum price in EUR cents. Default: 200 (€2.00). Execution fails if capability costs more."
+            }
+          }
+        }
+      },
+      {
+        "name": "strale_search",
+        "description": "Search Strale's catalog of 233+ capabilities and 20+ solutions. Returns matches with dual-profile quality scores: SQS (combined confidence score 0-100), Quality grade (code quality A-F), Reliability grade (operational dependability A-F), and execution guidance (usable flag, recommended strategy). Use strale_trust_profile for full quality breakdown and execution guidance details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search keyword (matched against name, description, slug)"
+            },
+            "offset": {
+              "type": "number",
+              "description": "Number of results to skip (for pagination). Default: 0"
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by category (e.g., data-extraction, validation, finance, legal, logistics, recruiting, e-commerce, marketing)"
+            }
+          }
+        }
+      },
+      {
+        "name": "strale_balance",
+        "description": "Check your Strale wallet balance. Shows current balance in EUR cents and EUR. Requires API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_methodology",
+        "description": "Get Strale's quality and trust methodology. Explains the dual-profile scoring system: Quality Profile (code quality), Reliability Profile (operational dependability), SQS matrix combination, execution guidance (retry strategies, fallback capabilities, recovery timelines), and test infrastructure. Call this to understand how Strale measures and reports quality.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "strale_trust_profile",
+        "description": "Get the full trust and quality profile for any capability or solution. Returns the dual-profile assessment: Quality Profile (code quality factors), Reliability Profile (operational dependability factors), combined SQS score, and execution guidance (retry strategy, fallback capability, recovery timeline, error handling). The Quality Profile measures how well Strale's code works. The Reliability Profile measures how dependable the service is right now. The SQS combines both via a published matrix.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Capability or solution slug, e.g. 'swedish-company-data' or 'eu-company-due-diligence'"
+            },
+            "type": {
+              "enum": [
+                "capability",
+                "solution"
+              ],
+              "type": "string",
+              "default": "capability",
+              "description": "Whether this is a capability or a bundled solution"
+            }
+          }
+        }
+      },
+      {
+        "name": "strale_transaction",
+        "description": "Retrieve a past execution record by transaction ID. Returns the full audit trail: inputs, outputs, latency, price, provenance, success/failure status, and failure categorization. Use this to verify Strale's audit trail claims with concrete evidence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "transaction_id": {
+              "type": "string",
+              "description": "Transaction ID returned from a strale_execute call"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

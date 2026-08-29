@@ -1,0 +1,249 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "rankiteo/rankiteo-mcp",
+  "namespace": "rankiteo",
+  "slug": "rankiteo-mcp",
+  "displayName": "Rankiteo",
+  "description": "Access real-time cybersecurity intelligence for any company. Rankiteo's MCP lets AI agents retrieve cyber risk scores, incident history, TPRM assessments, and vendor risk data for millions of organizations worldwide powering smarter underwriting, compliance, and due diligence decisions, instantly.",
+  "discoveryQueries": [
+    "security",
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "a3ef4bce-a2ad-4be5-96f3-8d3acf0285f4",
+    "qualifiedName": "rankiteo/rankiteo-mcp",
+    "namespace": "rankiteo",
+    "slug": "rankiteo-mcp",
+    "displayName": "Rankiteo",
+    "description": "Access real-time cybersecurity intelligence for any company. Rankiteo's MCP lets AI agents retrieve cyber risk scores, incident history, TPRM assessments, and vendor risk data for millions of organizations worldwide powering smarter underwriting, compliance, and due diligence decisions, instantly.",
+    "iconUrl": "https://api.smithery.ai/servers/rankiteo/rankiteo-mcp/icon",
+    "verified": false,
+    "useCount": 192,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-20T05:08:33.075Z",
+    "homepage": "https://www.rankiteo.com",
+    "bySmithery": false,
+    "owner": "org_01KNBV5GP4RKGJD53MZ3VRX6HX",
+    "score": 0.011111111111111112
+  },
+  "detail": {
+    "qualifiedName": "rankiteo/rankiteo-mcp",
+    "displayName": "Rankiteo",
+    "description": "Access real-time cybersecurity intelligence for any company. Rankiteo's MCP lets AI agents retrieve cyber risk scores, incident history, TPRM assessments, and vendor risk data for millions of organizations worldwide powering smarter underwriting, compliance, and due diligence decisions, instantly.",
+    "iconUrl": "https://api.smithery.ai/servers/rankiteo/rankiteo-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://rankiteo-mcp--rankiteo.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://rankiteo-mcp--rankiteo.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "X-API-KEY"
+          ],
+          "properties": {
+            "X-API-KEY": {
+              "type": "string",
+              "x-from": {
+                "header": "X-API-KEY"
+              },
+              "x-order": 0,
+              "description": "Your Rankiteo API key"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_company",
+        "description": "Search for companies by name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/SearchCompanyResult"
+              }
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_company_rating_by_id",
+        "description": "Get company rating by Company ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "company_id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Error message if rating not found."
+            },
+            "score": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Detailed rating scores."
+            },
+            "linkedin_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "LinkedIn ID."
+            },
+            "number_of_incidents": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Number of incidents."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_company_rating_by_domain",
+        "description": "Get company rating by Domain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CompanyRatingResponse"
+              }
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_company_rating_by_linkedin_id",
+        "description": "Get company rating by LinkedIn ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "linkedin_id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Error message if rating not found."
+            },
+            "score": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Detailed rating scores."
+            },
+            "linkedin_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "LinkedIn ID."
+            },
+            "number_of_incidents": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Number of incidents."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

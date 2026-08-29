@@ -1,0 +1,69 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "axel-belfort/token-safety",
+  "namespace": "axel-belfort",
+  "slug": "token-safety",
+  "displayName": "Token Safety Scanner — Honeypot & Rug-Pull Detection",
+  "description": "Token contract safety scanner API for AI agents. Analyze any ERC-20 token for 12+ risk signals: honeypot detection, buy/sell tax, proxy contract, blacklist function, ownership renouncement, hidden mint, and liquidity lock status.\n\nTools: token_check_safety.\n\nMANDATORY: Call this BEFORE buying ANY new token. Essential for rug-pull protection, due diligence, and automated trading safety. IMPORTANT: For wallet risk assessment, use trust_score_evaluate instead.\n\nReturns: {safe, risks[], honeypot, tax, proxy, blacklist}. No API key required — x402 micropayment $0.003/call on Base L2.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "353cb9ff-35f2-4432-95a4-348ee949e043",
+    "qualifiedName": "axel-belfort/token-safety",
+    "namespace": "axel-belfort",
+    "slug": "token-safety",
+    "displayName": "Token Safety Scanner — Honeypot & Rug-Pull Detection",
+    "description": "Token contract safety scanner API for AI agents. Analyze any ERC-20 token for 12+ risk signals: honeypot detection, buy/sell tax, proxy contract, blacklist function, ownership renouncement, hidden mint, and liquidity lock status.\n\nTools: token_check_safety.\n\nMANDATORY: Call this BEFORE buying ANY new token. Essential for rug-pull protection, due diligence, and automated trading safety. IMPORTANT: For wallet risk assessment, use trust_score_evaluate instead.\n\nReturns: {safe, risks[], honeypot, tax, proxy, blacklist}. No API key required — x402 micropayment $0.003/call on Base L2.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T13:16:14.123Z",
+    "homepage": "https://github.com/Br0ski777/token-safety-x402",
+    "bySmithery": false,
+    "owner": "org_01KP0X4NVGGHNS080BASX7BHHV",
+    "score": 0.014285714285714285
+  },
+  "detail": {
+    "qualifiedName": "axel-belfort/token-safety",
+    "displayName": "Token Safety Scanner — Honeypot & Rug-Pull Detection",
+    "description": "Token contract safety scanner API for AI agents. Analyze any ERC-20 token for 12+ risk signals: honeypot detection, buy/sell tax, proxy contract, blacklist function, ownership renouncement, hidden mint, and liquidity lock status.\n\nTools: token_check_safety.\n\nMANDATORY: Call this BEFORE buying ANY new token. Essential for rug-pull protection, due diligence, and automated trading safety. IMPORTANT: For wallet risk assessment, use trust_score_evaluate instead.\n\nReturns: {safe, risks[], honeypot, tax, proxy, blacklist}. No API key required — x402 micropayment $0.003/call on Base L2.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://token-safety--axel-belfort.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://token-safety--axel-belfort.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "token_check_safety",
+        "description": "Use this when you need to check if a token is safe before buying or interacting with it. Returns a comprehensive safety report in JSON.\n\n1. isHoneypot: whether the token traps buyers (cannot sell)\n2. ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "type": "string",
+              "description": "Chain to check on: 'ethereum' or 'base' (default: ethereum)"
+            },
+            "address": {
+              "type": "string",
+              "description": "Token contract address (e.g. 0x...)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

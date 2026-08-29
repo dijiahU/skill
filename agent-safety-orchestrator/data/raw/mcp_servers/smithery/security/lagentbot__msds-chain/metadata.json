@@ -1,0 +1,585 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "lagentbot/msds-chain",
+  "namespace": "lagentbot",
+  "slug": "msds-chain",
+  "displayName": "msds-chain",
+  "description": "Chemical safety intelligence for AI-assisted experiment design. 18 MCP tools for compatibility checks, hazard analysis, PPE, storage, waste disposal, mixing order, exposure limits, transport classification, regulatory compliance (8 jurisdictions), and signed audit reports. Supports 4,200+ chemicals in 5 languages.",
+  "discoveryQueries": [
+    "audit",
+    "compliance",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "bd3a4b6c-c6fc-408d-9b1b-07bd3f50afa7",
+    "qualifiedName": "lagentbot/msds-chain",
+    "namespace": "lagentbot",
+    "slug": "msds-chain",
+    "displayName": "msds-chain",
+    "description": "Chemical safety intelligence for AI-assisted experiment design. 18 MCP tools for compatibility checks, hazard analysis, PPE, storage, waste disposal, mixing order, exposure limits, transport classification, regulatory compliance (8 jurisdictions), and signed audit reports. Supports 4,200+ chemicals in 5 languages.",
+    "iconUrl": "https://api.smithery.ai/servers/lagentbot/msds-chain/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-20T16:45:37.952Z",
+    "homepage": "https://smithery.ai/servers/lagentbot/msds-chain",
+    "bySmithery": false,
+    "owner": "org_01KPNW085JQBE5CF75YXKKM3ND",
+    "score": 0.008620689655172414
+  },
+  "detail": {
+    "qualifiedName": "lagentbot/msds-chain",
+    "displayName": "msds-chain",
+    "description": "Chemical safety intelligence for AI-assisted experiment design. 18 MCP tools for compatibility checks, hazard analysis, PPE, storage, waste disposal, mixing order, exposure limits, transport classification, regulatory compliance (8 jurisdictions), and signed audit reports. Supports 4,200+ chemicals in 5 languages.",
+    "iconUrl": "https://api.smithery.ai/servers/lagentbot/msds-chain/icon",
+    "remote": true,
+    "deploymentUrl": "https://msds-chain--lagentbot.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://msds-chain--lagentbot.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_chemical_compatibility",
+        "description": "\n    Check pairwise compatibility between a list of chemicals.\n\n    Returns compatibility status (compatible / caution / incompatible) for each\n    pair, along with specific hazard reasons and storage recommendations.\n\n    Use this before an experiment to verify it is safe to use the listed\n    chemicals together in the same lab setting.\n\n    Args:\n        chemicals: List of chemical names or CAS numbers, e.g.\n                   [\"acetone\", \"methanol\", \"ethanol\"] or [\"67-64-1\", \"67-56-1\"]\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_chemical_risk_warnings",
+        "description": "\n    Get hazard and risk warnings for one or more chemicals.\n\n    Returns GHS hazard classification, signal words (Danger/Warning), H-codes,\n    flash point, toxicity, and recommended PPE.\n\n    Use this to understand the specific dangers of each chemical before handling\n    or storing them.\n\n    Args:\n        chemicals: List of chemical names or CAS numbers, e.g.\n                   [\"acetone\", \"67-56-1\"]\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check_regulatory_compliance",
+        "description": "\n    Check multi-region regulatory compliance status for chemicals.\n\n    Checks against: EU (SVHC/REACH/CLP/CMR), US (OSHA PEL/TSCA),\n    CN, JP, KR, CA, AU, TW regulations.\n\n    Use this when preparing export documentation, compliance audits,\n    or when working with chemicals that may be restricted in certain jurisdictions.\n\n    Args:\n        chemicals: List of chemical names or CAS numbers\n        regions:   Optional list of region codes to check, e.g. [\"EU\", \"US\", \"CN\"]\n                   Defaults to EU + US if not specified.\n                   Valid codes: EU, US, CN, JP, KR, CA, AU, TW\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "regions": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Regions",
+              "default": null
+            },
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "ask_chemical_safety",
+        "description": "\n    Ask any chemical safety question in natural language.\n\n    Handles: storage conditions, spill/exposure emergency procedures,\n    first-aid measures, PPE requirements, disposal guidance, MSDS lookups,\n    GHS label interpretation, and general lab safety questions.\n\n    Use this as the catch-all when the question doesn't fit neatly into\n    compatibility, risk warnings, or compliance checks.\n\n    Args:\n        question: Any chemical safety question, e.g.\n                  \"How should I store acetone and methanol in the same cabinet?\"\n                  \"What PPE is needed when handling concentrated HCl?\"\n                  \"Is it safe to dispose of acetone down the drain?\"\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "title": "Question"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_ppe_recommendation",
+        "description": "\n    Get PPE (Personal Protective Equipment) recommendations for chemicals.\n\n    Returns specific glove types, eye protection, respiratory protection, and\n    body protection requirements based on MSDS Section 8 data and GHS hazard codes.\n\n    Args:\n        chemicals: List of chemical names or CAS numbers, e.g.\n                   [\"acetone\", \"hydrochloric acid\"] or [\"67-64-1\"]\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_storage_guidance",
+        "description": "\n    Get storage and isolation guidance for chemicals.\n\n    Returns storage class (flammable/oxidizer/corrosive/toxic/general),\n    recommended cabinet type and color code, temperature requirements,\n    incompatible materials for isolation, and specific storage instructions\n    derived from SDS Section 7.\n\n    Args:\n        chemicals: List of chemical names or CAS numbers, e.g.\n                   [\"acetone\", \"sulfuric acid\"] or [\"67-64-1\"]\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_emergency_response",
+        "description": "\n    Get emergency response guidance for a chemical incident.\n\n    Returns immediate actions, SDS-specific instructions from Section 4/5/6,\n    and H-code-based guidance for three scenario types.\n\n    Args:\n        chemical: Chemical name or CAS number, e.g. \"hydrochloric acid\"\n        scenario: Type of emergency — \"spill\" (leak/release), \"fire\", or\n                  \"exposure\" (skin/eye/inhalation first aid). Defaults to \"spill\".\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemical": {
+              "type": "string",
+              "title": "Chemical"
+            },
+            "scenario": {
+              "type": "string",
+              "title": "Scenario",
+              "default": "spill"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_exposure_limits",
+        "description": "Get occupational exposure limits (OEL/TLV/PEL/MAC) for chemicals.\n\n    Returns TWA, STEL, and Ceiling values from multiple standards:\n    - OSHA PEL (US)\n    - ACGIH TLV (International)\n    - EU SCOEL IOELV\n    - Japan 産衛研\n    - China GBZ\n\n    Args:\n        chemicals: List of chemical names or CAS numbers\n        region: Optional filter — \"US\", \"EU\", \"JP\", \"CN\", or \"INT\"\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "region": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region",
+              "default": null
+            },
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_transport_classification",
+        "description": "Get UN transport classification for chemicals (dangerous goods shipping).\n    Returns UN number, proper shipping name, hazard class, packing group,\n    and transport mode details (ADR road, IATA air, IMDG sea).\n    Args:\n        chemicals: List of chemical names or CAS numbers\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "create_audit_session",
+        "description": "\n    Run a full MSDS safety audit for a list of chemicals and return a session id.\n\n    Creates a persistent audit session on MSDS Chain, runs pairwise compatibility\n    and risk analysis across all chemicals, and returns a session_id that can later\n    be passed to `get_audit_report` to fetch the signed PDF report URL.\n\n    Use this when the user wants an archivable, signed record of a safety review\n    (e.g. for SOPs, compliance audits, or to share with a PI / safety officer),\n    rather than a one-off Q&A.\n\n    Args:\n        experiment_name: Short human-readable label for the audit, e.g.\n                         \"Grignard prep — 2026-04-16\" or \"Solvent screening #3\".\n        chemicals:       List of chemical names or CAS numbers to include in the\n                         audit, e.g. [\"acetone\", \"methanol\", \"67-64-1\"].\n\n    Returns:\n        Session id + compatibility summary (compatible/caution/incompatible pair\n        counts + top warnings). An API key must be configured (MSDS_API_KEY) so\n        the session is bound to your account and the report is retrievable.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            },
+            "experiment_name": {
+              "type": "string",
+              "title": "Experiment Name"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_audit_report",
+        "description": "\n    Get a short-lived signed URL to download the audit report PDF.\n\n    Use after `create_audit_session` to retrieve an archivable PDF report\n    containing the chemicals, compatibility matrix, risk warnings, and\n    session metadata.\n\n    Args:\n        session_id: The session id returned by `create_audit_session`,\n                    e.g. \"DEMO-A1B2C3D4\".\n\n    Returns:\n        A signed URL valid for ~5 minutes. The session must be owned by the\n        API key's user (MSDS_API_KEY).\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "search_chemical_database",
+        "description": "\n    Search the MSDS Chain database for a specific chemical.\n\n    Returns structured information: CAS number, chemical name, NFPA ratings\n    (flammability, health, reactivity), GHS classification, and whether full\n    MSDS data is available.\n\n    Use this to verify a chemical is in the database before running compatibility\n    or risk checks, or to get the canonical CAS number for a chemical name.\n\n    Args:\n        query: Chemical name, synonym, or CAS number, e.g.\n               \"methanol\", \"wood alcohol\", \"67-56-1\"\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "title": "Query"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_sds_section",
+        "description": "\n    Retrieve a specific SDS (Safety Data Sheet) section for a chemical.\n\n    The 16 standard GHS-SDS sections are:\n      1. Identification\n      2. Hazard(s) identification\n      3. Composition / ingredients\n      4. First-aid measures\n      5. Fire-fighting measures\n      6. Accidental release measures\n      7. Handling and storage\n      8. Exposure controls / PPE\n      9. Physical and chemical properties\n      10. Stability and reactivity\n      11. Toxicological information\n      12. Ecological information\n      13. Disposal considerations\n      14. Transport information\n      15. Regulatory information\n      16. Other information\n\n    Use this when you need detailed data from a specific section rather than\n    a general safety overview.\n\n    Args:\n        chemical: Chemical name or CAS number\n        section:  SDS section number (1-16)\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "section": {
+              "type": "integer",
+              "title": "Section"
+            },
+            "chemical": {
+              "type": "string",
+              "title": "Chemical"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_chemical_alternatives",
+        "description": "\n    Suggest safer alternatives for a chemical, considering its intended use.\n\n    Returns 2-4 alternative chemicals with: name, CAS number, why it's safer\n    (lower toxicity, higher flash point, non-CMR, etc.), any trade-offs\n    (cost, availability, performance), and relevant regulatory context\n    (e.g., REACH SVHC substitution requirement).\n\n    Use this when a chemical is flagged as high-risk, restricted, or when the\n    user is exploring greener chemistry options.\n\n    Args:\n        chemical: Chemical name or CAS number to find alternatives for\n        use_case: Optional context about how the chemical is being used, e.g.\n                  \"degreasing solvent\", \"extraction solvent for organic synthesis\",\n                  \"cleaning agent for labware\"\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemical": {
+              "type": "string",
+              "title": "Chemical"
+            },
+            "use_case": {
+              "type": "string",
+              "title": "Use Case",
+              "default": ""
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "validate_protocol_chemicals",
+        "description": "\n    Extract and validate chemical names from a protocol or experiment description.\n\n    Parses free-text or code (e.g., Opentrons Python protocol, lab notebook entry,\n    SOP paragraph) to identify all mentioned chemicals, then checks each against\n    the MSDS Chain database.\n\n    Returns a structured list with: chemical name as mentioned, canonical name,\n    CAS number (if found), and whether full safety data is available.\n\n    Use this as the FIRST step before calling batch_safety_check or\n    check_chemical_compatibility — it saves the user from manually listing chemicals.\n\n    Args:\n        protocol_text: Any text containing chemical names — can be a Python script,\n                       a natural language protocol description, or a reagent list.\n                       Maximum ~4000 characters.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "protocol_text": {
+              "type": "string",
+              "title": "Protocol Text"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check_mixing_order",
+        "description": "\n    Determine the safe order for mixing/adding two chemicals.\n\n    Returns the recommended addition sequence, the dangerous sequence to avoid,\n    reasoning (exothermic potential, gas evolution, splashing risk), and any\n    required precautions (cooling, dilution rate, inert atmosphere).\n\n    Classic examples: \"acid into water, never water into acid\";\n    \"add oxidizer to substrate slowly, not the reverse\".\n\n    Use this when reviewing liquid transfer steps in an Opentrons protocol or\n    any manual procedure involving sequential addition of reagents.\n\n    Args:\n        chemical_a: First chemical name or CAS number\n        chemical_b: Second chemical name or CAS number\n        context:    Optional context about the procedure, e.g.\n                    \"diluting for titration\" or \"quenching a reaction\"\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "string",
+              "title": "Context",
+              "default": ""
+            },
+            "chemical_a": {
+              "type": "string",
+              "title": "Chemical A"
+            },
+            "chemical_b": {
+              "type": "string",
+              "title": "Chemical B"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_waste_disposal",
+        "description": "\n    Get waste classification and disposal guidance for chemicals.\n\n    Returns waste category (halogenated/non-halogenated/acidic/alkaline/\n    heavy metal/oxidizing/reactive), disposal method, container requirements,\n    and incompatible waste streams that must NOT be mixed.\n\n    Based on SDS Section 13 (Disposal Considerations) data.\n\n    Use this after an experiment to determine proper waste segregation and\n    disposal procedures for the chemicals used.\n\n    Args:\n        chemicals: List of chemical names or CAS numbers, e.g.\n                   [\"dichloromethane\", \"acetone\", \"sulfuric acid\"]\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "batch_safety_check",
+        "description": "\n    Run a comprehensive safety check on a list of chemicals in one call.\n\n    Returns a combined report with:\n    - Pairwise compatibility matrix (compatible/caution/incompatible)\n    - PPE requirements (merged across all chemicals)\n    - Storage grouping recommendations (which chemicals can share a cabinet)\n    - Key risk warnings\n\n    This is the recommended first call when reviewing an experiment protocol\n    or Opentrons deck layout — it gives a complete safety picture without\n    needing to call multiple tools separately.\n\n    Args:\n        chemicals: List of chemical names or CAS numbers (2-20 items), e.g.\n                   [\"acetone\", \"sulfuric acid\", \"sodium hydroxide\", \"methanol\"]\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chemicals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Chemicals"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

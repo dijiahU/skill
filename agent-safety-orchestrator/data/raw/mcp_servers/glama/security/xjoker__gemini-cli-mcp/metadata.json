@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "pavlmmkf18",
+  "namespace": "xjoker",
+  "slug": "gemini-cli-mcp",
+  "name": "gemini-cli-mcp",
+  "description": "A secure MCP server that wraps the Google Gemini CLI, allowing clients to query Gemini models using local OAuth sessions without requiring an API key. It provides tools for model interaction and diagnostics with built-in protection against command injection.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A secure MCP server that wraps the Google Gemini CLI, allowing clients to query Gemini models using local OAuth sessions without requiring an API key. It provides tools for model interaction and diagnostics with built-in protection against command injection.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GEMINI_BIN": {
+          "description": "Path to Gemini CLI binary",
+          "type": "string",
+          "default": "gemini"
+        },
+        "GEMINI_MODEL": {
+          "description": "Default model",
+          "type": "string",
+          "default": "gemini-2.5-flash"
+        },
+        "GEMINI_TIMEOUT": {
+          "description": "Idle timeout in ms (resets on each output chunk)",
+          "type": "string",
+          "default": "120000"
+        },
+        "GEMINI_SYSTEM_MD": {
+          "description": "Path to custom system prompt, or \"default\" for Gemini built-in",
+          "type": "string"
+        },
+        "GEMINI_MAX_RESPONSE": {
+          "description": "Max response chars before truncation",
+          "type": "string",
+          "default": "100000"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "pavlmmkf18",
+    "name": "gemini-cli-mcp",
+    "namespace": "xjoker",
+    "repository": {
+      "url": "https://github.com/xjoker/gemini-cli-mcp"
+    },
+    "slug": "gemini-cli-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pavlmmkf18"
+  }
+}

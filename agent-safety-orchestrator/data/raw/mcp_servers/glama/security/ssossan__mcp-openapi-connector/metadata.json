@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "wecbux2pqh",
+  "namespace": "ssossan",
+  "slug": "mcp-openapi-connector",
+  "name": "MCP OpenAPI Connector",
+  "description": "Enables Claude Desktop and other MCP clients to interact with any OAuth2-authenticated OpenAPI-based API through automatic tool generation from OpenAPI specifications, with built-in token management and authentication handling.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude Desktop and other MCP clients to interact with any OAuth2-authenticated OpenAPI-based API through automatic tool generation from OpenAPI specifications, with built-in token management and authentication handling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Set to 'development' for verbose logging",
+          "type": "string"
+        },
+        "AUTH_PATH": {
+          "description": "The OAuth2 token endpoint path (e.g., /oauth/token)",
+          "type": "string"
+        },
+        "CLIENT_ID": {
+          "description": "Your OAuth2 client ID",
+          "type": "string"
+        },
+        "API_BASE_URL": {
+          "description": "The base URL of the API (e.g., https://api.example.com)",
+          "type": "string"
+        },
+        "CLIENT_SECRET": {
+          "description": "Your OAuth2 client secret",
+          "type": "string"
+        },
+        "OPENAPI_EXCLUDE": {
+          "description": "Optional comma-separated list of operations to exclude (e.g., deleteItem)",
+          "type": "string"
+        },
+        "CUSTOM_TOOLS_PATH": {
+          "description": "Optional path to a custom tools JavaScript file",
+          "type": "string"
+        },
+        "OPENAPI_SPEC_PATH": {
+          "description": "Path to the OpenAPI specification file (JSON format). Required for the server to function.",
+          "type": "string"
+        },
+        "OPENAPI_TOOL_PREFIX": {
+          "description": "Optional prefix for generated tool names (e.g., api_)",
+          "type": "string"
+        },
+        "OPENAPI_INCLUDE_ONLY": {
+          "description": "Optional comma-separated list of operations to include (e.g., listItems,createItem)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CLIENT_ID",
+        "CLIENT_SECRET",
+        "API_BASE_URL",
+        "AUTH_PATH",
+        "OPENAPI_SPEC_PATH"
+      ]
+    },
+    "id": "wecbux2pqh",
+    "name": "MCP OpenAPI Connector",
+    "namespace": "ssossan",
+    "repository": {
+      "url": "https://github.com/ssossan/mcp-openapi-connector"
+    },
+    "slug": "mcp-openapi-connector",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/wecbux2pqh"
+  }
+}

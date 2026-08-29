@@ -1,0 +1,528 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "joeroy2027/tqp-site",
+  "namespace": "joeroy2027",
+  "slug": "tqp-site",
+  "displayName": "Quiet Protocol Growth Offense",
+  "description": "AI visibility, front-door, review, and trust audits for service businesses.",
+  "discoveryQueries": [
+    "scanner",
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "3db4c9d8-94d0-4fde-8969-7ae21976223b",
+    "qualifiedName": "joeroy2027/tqp-site",
+    "namespace": "joeroy2027",
+    "slug": "tqp-site",
+    "displayName": "Quiet Protocol Growth Offense",
+    "description": "AI visibility, front-door, review, and trust audits for service businesses.",
+    "iconUrl": "https://api.smithery.ai/servers/joeroy2027/tqp-site/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-21T18:54:19.531Z",
+    "homepage": "https://thequietprotocol.com/",
+    "bySmithery": false,
+    "owner": "org_01KPRNDH6900S1XJ87DRF84GEA",
+    "score": 0.017241379310344827
+  },
+  "detail": {
+    "qualifiedName": "joeroy2027/tqp-site",
+    "displayName": "Quiet Protocol Growth Offense",
+    "description": "AI visibility, front-door, review, and trust audits for service businesses.",
+    "iconUrl": "https://api.smithery.ai/servers/joeroy2027/tqp-site/icon",
+    "remote": true,
+    "deploymentUrl": "https://tqp-site--joeroy2027.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://tqp-site--joeroy2027.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_ai_visibility",
+        "description": "Scan a public website and score entity clarity, answer coverage, proof, local authority, conversion readiness, and machine readability.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "Primary city or market."
+            },
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "websiteUrl": {
+              "type": "string",
+              "description": "Homepage URL to scan."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_front_door_benchmark",
+        "description": "Benchmark the business front door using lead volume, customer value, and current intake profile to estimate monthly and annual revenue at risk.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "averageValue": {
+              "type": "number",
+              "description": "Average booked job, case, or customer value in USD."
+            },
+            "monthlyLeads": {
+              "type": "number",
+              "description": "Approximate qualified inbound leads per month."
+            },
+            "frontDoorProfile": {
+              "enum": [
+                "mostly_live",
+                "manual_callbacks",
+                "after_hours_leaks",
+                "form_only",
+                "mixed_manual"
+              ],
+              "type": "string",
+              "description": "Current front-door operating posture."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_trust_stack_audit",
+        "description": "Scan a public website and score review signals, proof depth, expert identity, differentiation, and local trust.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "Primary city or market."
+            },
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "websiteUrl": {
+              "type": "string",
+              "description": "Homepage URL to scan."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_review_velocity_benchmark",
+        "description": "Benchmark whether a business is creating enough fresh review proof based on total reviews, recent review pace, and monthly completed jobs or appointments.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "totalReviews": {
+              "type": "number",
+              "description": "Total public review count today."
+            },
+            "reviewsLast90Days": {
+              "type": "number",
+              "description": "Reviews added in the last 90 days."
+            },
+            "monthlyCompletedJobs": {
+              "type": "number",
+              "description": "Approximate completed jobs, visits, or appointments per month."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_competitor_intake_scanner",
+        "description": "Compare the visible intake posture of your site against a competitor and score where the competitive intake gap is opening.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "Primary city or market."
+            },
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "businessUrl": {
+              "type": "string",
+              "description": "The business website URL."
+            },
+            "competitorUrl": {
+              "type": "string",
+              "description": "A competitor website URL."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_response_time_loss_estimator",
+        "description": "Estimate lost bookings and revenue at risk caused by slow first response using lead volume, average value, and average response time.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "averageValue": {
+              "type": "number",
+              "description": "Average booked job, case, or customer value in USD."
+            },
+            "monthlyLeads": {
+              "type": "number",
+              "description": "Approximate inbound leads per month."
+            },
+            "averageFirstResponseMinutes": {
+              "type": "number",
+              "description": "Current average minutes until first human or automated response."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_resources",
+        "description": "List free resources published by The Quiet Protocol, optionally filtered by category or limited in count.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Optional result limit."
+            },
+            "category": {
+              "type": "string",
+              "description": "Optional resource category slug."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_resource",
+        "description": "Fetch one free resource by slug, including download metadata when available.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Free resource slug."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_engines",
+        "description": "List flagship public engines exposed by The Quiet Protocol.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_kits",
+        "description": "List starter kits published by The Quiet Protocol, optionally filtered and limited.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Optional result limit."
+            },
+            "query": {
+              "type": "string",
+              "description": "Optional keyword filter across title, audience, and keywords."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_kit",
+        "description": "Fetch one starter kit by slug, including bundled resource links and download metadata.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Starter kit slug."
+            }
+          }
+        }
+      },
+      {
+        "name": "find_best_resource",
+        "description": "Recommend the most relevant public resources or kits for a niche and problem statement.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Optional number of matches to return."
+            },
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "problem": {
+              "type": "string",
+              "description": "What the operator is trying to fix."
+            }
+          }
+        }
+      },
+      {
+        "name": "pricing_lookup",
+        "description": "Return The Quiet Protocol offer and pricing summary for agents or buyers that need packaging context.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_submission_profile",
+        "description": "Return the canonical machine-readable business and submission profile for The Quiet Protocol.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_proof_cases",
+        "description": "List representative proof cases and aggregate metrics, optionally filtered by niche.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Optional result limit."
+            },
+            "niche": {
+              "type": "string",
+              "description": "Optional niche or keyword filter."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_benchmarks",
+        "description": "List public benchmark profiles by niche, including the related engines and recommended assets.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_benchmark",
+        "description": "Fetch one public benchmark profile by slug.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Benchmark profile slug."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_submission_package",
+        "description": "Return the MCP, directory, and app-submission package with portal requirements and free-account guidance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "select_best_engine",
+        "description": "Recommend the best flagship engine to start with based on business type and the kind of problem being diagnosed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "goal": {
+              "enum": [
+                "visibility",
+                "front-door-revenue",
+                "trust-proof",
+                "local-authority",
+                "competitor-intake",
+                "response-time-loss",
+                "not-sure"
+              ],
+              "type": "string",
+              "description": "What the user is trying to diagnose first."
+            },
+            "niche": {
+              "type": "string",
+              "description": "Business niche or vertical."
+            },
+            "websiteUrl": {
+              "type": "string",
+              "description": "Optional website URL if a public site exists."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "AI Catalog",
+        "uri": "tqp://catalog/ai",
+        "description": "Machine-readable business catalog for AI systems, resources, kits, and engines.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Resource Catalog",
+        "uri": "tqp://catalog/resources",
+        "description": "Machine-readable listing of free resources, kits, and engines.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Engines Catalog",
+        "uri": "tqp://catalog/engines",
+        "description": "Machine-readable listing of flagship public engines.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Proof Catalog",
+        "uri": "tqp://catalog/proof",
+        "description": "Machine-readable proof catalog with representative cases, aggregate metrics, and methodology notes.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Benchmarks Catalog",
+        "uri": "tqp://catalog/benchmarks",
+        "description": "Machine-readable benchmark profiles by niche, including authority and response targets.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Entity Profile",
+        "uri": "tqp://entity/profile",
+        "description": "Canonical organization and submission-readiness profile for The Quiet Protocol.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Submission Package",
+        "uri": "tqp://submission/package",
+        "description": "Canonical MCP, app-directory, and registry submission package for The Quiet Protocol.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "AI Visibility Score",
+        "uri": "tqp://engines/ai-visibility-score",
+        "description": "AI Visibility Score machine-readable engine profile.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Front Door Benchmark",
+        "uri": "tqp://engines/front-door-benchmark",
+        "description": "Front Door Benchmark machine-readable engine profile.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Trust Stack Audit",
+        "uri": "tqp://engines/trust-stack-audit",
+        "description": "Trust Stack Audit machine-readable engine profile.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Review Velocity Benchmark",
+        "uri": "tqp://engines/review-velocity-benchmark",
+        "description": "Review Velocity Benchmark machine-readable engine profile.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Competitor Intake Scanner",
+        "uri": "tqp://engines/competitor-intake-scanner",
+        "description": "Competitor Intake Scanner machine-readable engine profile.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Response-Time Loss Estimator",
+        "uri": "tqp://engines/response-time-loss-estimator",
+        "description": "Response-Time Loss Estimator machine-readable engine profile.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "triage_website_visibility",
+        "description": "Guide an operator through the AI Visibility Score flow and frame the website in terms of entity clarity, answer coverage, proof, local trust, and machine readability.",
+        "arguments": [
+          {
+            "name": "websiteUrl",
+            "description": "Public website URL to analyze.",
+            "required": true
+          },
+          {
+            "name": "niche",
+            "description": "Business niche or vertical.",
+            "required": true
+          },
+          {
+            "name": "city",
+            "description": "Primary city or market.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "benchmark_front_door_revenue",
+        "description": "Structure a front-door benchmark conversation around lead volume, job value, intake posture, and the revenue leak created by missed or delayed response.",
+        "arguments": [
+          {
+            "name": "niche",
+            "description": "Business niche or vertical.",
+            "required": true
+          },
+          {
+            "name": "monthlyLeads",
+            "description": "Approximate inbound leads per month.",
+            "required": true
+          },
+          {
+            "name": "averageValue",
+            "description": "Average booked job, case, or customer value in USD.",
+            "required": true
+          },
+          {
+            "name": "frontDoorProfile",
+            "description": "Current front-door operating posture.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "audit_trust_stack",
+        "description": "Frame a trust-stack audit around reviews, proof architecture, authority signals, expert identity, and local credibility for a public website.",
+        "arguments": [
+          {
+            "name": "websiteUrl",
+            "description": "Public website URL to analyze.",
+            "required": true
+          },
+          {
+            "name": "niche",
+            "description": "Business niche or vertical.",
+            "required": true
+          },
+          {
+            "name": "city",
+            "description": "Primary city or market.",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

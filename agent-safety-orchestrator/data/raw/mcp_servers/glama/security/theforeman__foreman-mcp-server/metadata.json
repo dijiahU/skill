@@ -1,0 +1,97 @@
+{
+  "registry": "glama",
+  "id": "ezvfcbugso",
+  "namespace": "theforeman",
+  "slug": "foreman-mcp-server",
+  "name": "Foreman MCP Server",
+  "description": "Enables interaction with Foreman instances to manage systems through the Model Context Protocol. It provides access to Foreman resources and tools, such as security update reports, directly within AI-powered environments like VSCode and Claude Desktop.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Foreman instances to manage systems through the Model Context Protocol. It provides access to Foreman resources and tools, such as security update reports, directly within AI-powered environments like VSCode and Claude Desktop.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "The host address to bind the server to.",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "PORT": {
+          "description": "The port number to bind the server to.",
+          "type": "string",
+          "default": "8080"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level. Options include debug, info, warning, error, critical.",
+          "type": "string",
+          "default": "INFO"
+        },
+        "TRANSPORT": {
+          "description": "The transport protocol to use (stdio or streamable-http).",
+          "type": "string",
+          "default": "streamable-http"
+        },
+        "FOREMAN_URL": {
+          "description": "URL of the Foreman instance. Defaults to https://$hostname if not provided.",
+          "type": "string",
+          "default": "https://$hostname"
+        },
+        "FOREMAN_TOKEN": {
+          "description": "Foreman authentication token.",
+          "type": "string"
+        },
+        "NO_VERIFY_SSL": {
+          "description": "Set to 'true' to disable SSL certificate verification.",
+          "type": "string"
+        },
+        "FOREMAN_PASSWORD": {
+          "description": "Foreman password for authentication.",
+          "type": "string"
+        },
+        "FOREMAN_USERNAME": {
+          "description": "Foreman username for authentication.",
+          "type": "string"
+        },
+        "FOREMAN_CA_BUNDLE": {
+          "description": "Path to a custom CA certificate bundle (e.g., /path/to/ca-bundle.pem).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "FOREMAN_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "FOREMAN_TOKEN"
+          ]
+        }
+      ],
+      "required": [
+        "FOREMAN_URL",
+        "FOREMAN_USERNAME"
+      ]
+    },
+    "id": "ezvfcbugso",
+    "name": "Foreman MCP Server",
+    "namespace": "theforeman",
+    "repository": {
+      "url": "https://github.com/theforeman/foreman-mcp-server"
+    },
+    "slug": "foreman-mcp-server",
+    "spdxLicense": {
+      "name": "GPL 3.0",
+      "url": "https://spdx.org/licenses/GPL-3.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ezvfcbugso"
+  }
+}

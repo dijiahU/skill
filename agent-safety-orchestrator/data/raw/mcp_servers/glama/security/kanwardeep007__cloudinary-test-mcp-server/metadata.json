@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "dah8v7imgy",
+  "namespace": "kanwardeep007",
+  "slug": "cloudinary-test-mcp-server",
+  "name": "Cloudinary MCP Server",
+  "description": "An MCP server that provides an interface for interacting with the Cloudinary API to manage media assets and cloud configurations. It enables secure resource management through API keys and OAuth2 authentication within MCP-compliant environments.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that provides an interface for interacting with the Cloudinary API to manage media assets and cloud configurations. It enables secure resource management through API keys and OAuth2 authentication within MCP-compliant environments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OAUTH2": {
+          "description": "OAuth2 token for authentication",
+          "type": "string"
+        },
+        "API_KEY": {
+          "description": "Cloudinary API Key",
+          "type": "string"
+        },
+        "API_SECRET": {
+          "description": "Cloudinary API Secret",
+          "type": "string"
+        },
+        "CLOUD_NAME": {
+          "description": "The cloud name for your Cloudinary account",
+          "type": "string"
+        },
+        "MCP_OAUTH2": {
+          "description": "OAuth2 header for the Cloudinary MCP server (used in remote/SSE mode)",
+          "type": "string"
+        },
+        "MCP_CLOUDINARY_AUTH": {
+          "description": "Authentication header for the Cloudinary MCP server (used in remote/SSE mode)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "API_KEY",
+            "API_SECRET",
+            "OAUTH2",
+            "CLOUD_NAME"
+          ]
+        },
+        {
+          "required": [
+            "MCP_CLOUDINARY_AUTH",
+            "MCP_OAUTH2"
+          ]
+        }
+      ]
+    },
+    "id": "dah8v7imgy",
+    "name": "Cloudinary MCP Server",
+    "namespace": "kanwardeep007",
+    "repository": {
+      "url": "https://github.com/kanwardeep007/cloudinary-test-mcp-server"
+    },
+    "slug": "cloudinary-test-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dah8v7imgy"
+  }
+}

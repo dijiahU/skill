@@ -1,0 +1,99 @@
+{
+  "registry": "glama",
+  "id": "l7m32ko51x",
+  "namespace": "fctr-identity",
+  "slug": "fctr-okta-mcp-server",
+  "name": "TAKO MCP Server for Okta",
+  "description": "Enables AI assistants to securely query and manage Okta resources for IAM and security administration. It supports dual-mode operation for standard tool interaction or autonomous agent workflows with sandboxed code execution.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to securely query and manage Okta resources for IAM and security administration. It supports dual-mode operation for standard tool interaction or autonomous agent workflows with sandboxed code execution.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_BASE_URL": {
+          "description": "Base URL for HTTP transport (supports https for reverse proxy)",
+          "type": "string",
+          "default": "http://127.0.0.1:8000"
+        },
+        "TOKEN_METHOD": {
+          "description": "Auth method: API_TOKEN or OAUTH2",
+          "type": "string",
+          "default": "API_TOKEN"
+        },
+        "OKTA_API_TOKEN": {
+          "description": "API token (required if TOKEN_METHOD=API_TOKEN)",
+          "type": "string"
+        },
+        "ENABLE_AGENT_MODE": {
+          "description": "Enable Agent Mode",
+          "type": "string",
+          "default": "false"
+        },
+        "OKTA_CLIENT_ORGURL": {
+          "description": "Okta org URL (e.g., https://example.okta.com)",
+          "type": "string"
+        },
+        "OKTA_MCP_LOG_LEVEL": {
+          "description": "Log level: DEBUG, INFO, WARNING, ERROR",
+          "type": "string",
+          "default": "INFO"
+        },
+        "OKTA_OAUTH2_SCOPES": {
+          "description": "OAuth2 scopes",
+          "type": "string",
+          "default": "okta.users.read okta.groups.read okta.apps.read"
+        },
+        "OKTA_CONCURRENT_LIMIT": {
+          "description": "Max concurrent API requests",
+          "type": "string",
+          "default": "10"
+        },
+        "OKTA_OAUTH2_CLIENT_ID": {
+          "description": "OAuth2 client ID (required if TOKEN_METHOD=OAUTH2)",
+          "type": "string"
+        },
+        "OKTA_OAUTH2_PRIVATE_KEY_PEM": {
+          "description": "Private key in PEM format (required if TOKEN_METHOD=OAUTH2)",
+          "type": "string"
+        },
+        "OKTA_MCP_EXECUTION_TIMEOUT_SECONDS": {
+          "description": "Code execution timeout",
+          "type": "string",
+          "default": "300"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "OKTA_API_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "OKTA_OAUTH2_CLIENT_ID",
+            "OKTA_OAUTH2_PRIVATE_KEY_PEM"
+          ]
+        }
+      ],
+      "required": [
+        "OKTA_CLIENT_ORGURL"
+      ]
+    },
+    "id": "l7m32ko51x",
+    "name": "TAKO MCP Server for Okta",
+    "namespace": "fctr-identity",
+    "repository": {
+      "url": "https://github.com/fctr-identity/fctr-okta-mcp-server"
+    },
+    "slug": "fctr-okta-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/l7m32ko51x"
+  }
+}

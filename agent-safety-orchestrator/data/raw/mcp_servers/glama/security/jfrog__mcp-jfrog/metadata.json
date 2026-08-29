@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "cio8woslh9",
+  "namespace": "jfrog",
+  "slug": "mcp-jfrog",
+  "name": "JFrog MCP Server",
+  "description": "Experimental Model Context Protocol server that enables access to JFrog Platform API capabilities including repository management, build tracking, artifact searching, and package security analysis.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "Experimental Model Context Protocol server that enables access to JFrog Platform API capabilities including repository management, build tracking, artifact searching, and package security analysis.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Port number to use for SSE transport.",
+          "type": "string",
+          "default": "8080"
+        },
+        "JFROG_URL": {
+          "description": "Base URL for your JFrog platform instance (e.g., https://acme.jfrog.io).",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level: DEBUG, INFO, WARN, ERROR.",
+          "type": "string",
+          "default": "INFO"
+        },
+        "TRANSPORT": {
+          "description": "Transport mode to use, set to 'sse' to enable SSE transport.",
+          "type": "string",
+          "default": "stdio"
+        },
+        "CORS_ORIGIN": {
+          "description": "CORS origin allowed for SSE connections.",
+          "type": "string",
+          "default": "*"
+        },
+        "JFROG_ACCESS_TOKEN": {
+          "description": "Your JFrog access token. Can be an Identity Token or an Access Token with appropriate permissions.",
+          "type": "string"
+        },
+        "RECONNECT_DELAY_MS": {
+          "description": "Base delay in milliseconds between reconnection attempts.",
+          "type": "string",
+          "default": "2000"
+        },
+        "MAX_RECONNECT_ATTEMPTS": {
+          "description": "Maximum number of reconnection attempts for SSE server.",
+          "type": "string",
+          "default": "5"
+        }
+      },
+      "type": "object",
+      "required": [
+        "JFROG_ACCESS_TOKEN",
+        "JFROG_URL"
+      ]
+    },
+    "id": "cio8woslh9",
+    "name": "JFrog MCP Server",
+    "namespace": "jfrog",
+    "repository": {
+      "url": "https://github.com/jfrog/mcp-jfrog"
+    },
+    "slug": "mcp-jfrog",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/cio8woslh9"
+  }
+}

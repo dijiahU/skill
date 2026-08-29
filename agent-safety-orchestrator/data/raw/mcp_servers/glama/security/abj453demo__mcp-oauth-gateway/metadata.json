@@ -1,0 +1,77 @@
+{
+  "registry": "glama",
+  "id": "trkvjqrc09",
+  "namespace": "abj453demo",
+  "slug": "mcp-oauth-gateway",
+  "name": "MCP OAuth Gateway",
+  "description": "A transparent proxy server that simplifies authentication by chaining its own OAuth layer with an upstream MCP server's credentials. It manages dual token sets behind a single interface, enabling secure and streamlined access to protected MCP resources.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A transparent proxy server that simplifies authentication by chaining its own OAuth layer with an upstream MCP server's credentials. It manages dual token sets behind a single interface, enabling secure and streamlined access to protected MCP resources.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "The port the gateway will be available at",
+          "type": "string",
+          "default": "8002"
+        },
+        "UPSTREAM_AS": {
+          "description": "Upstream AS URL (auto-discovered from RS if omitted)",
+          "type": "string"
+        },
+        "UPSTREAM_RS": {
+          "description": "Upstream MCP Resource Server URL (required)",
+          "type": "string"
+        },
+        "MCP_GATEWAY_PASSWORD": {
+          "description": "Gateway login password",
+          "type": "string",
+          "default": "gateway_pass"
+        },
+        "MCP_GATEWAY_USERNAME": {
+          "description": "Gateway login username",
+          "type": "string",
+          "default": "gateway_user"
+        },
+        "MCP_GATEWAY_UPSTREAM_CLIENT_ID": {
+          "description": "Pre-configured upstream client ID (skips dynamic registration)",
+          "type": "string"
+        },
+        "MCP_GATEWAY_UPSTREAM_CLIENT_SECRET": {
+          "description": "Pre-configured upstream client secret",
+          "type": "string"
+        },
+        "MCP_GATEWAY_UPSTREAM_TOKEN_ENDPOINT": {
+          "description": "Direct upstream token URL (skips .well-known discovery)",
+          "type": "string"
+        },
+        "MCP_GATEWAY_UPSTREAM_AUTHORIZE_ENDPOINT": {
+          "description": "Direct upstream authorize URL (skips .well-known discovery)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "UPSTREAM_RS"
+      ]
+    },
+    "id": "trkvjqrc09",
+    "name": "MCP OAuth Gateway",
+    "namespace": "abj453demo",
+    "repository": {
+      "url": "https://github.com/abj453demo/mcp-oauth-gateway"
+    },
+    "slug": "mcp-oauth-gateway",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/trkvjqrc09"
+  }
+}

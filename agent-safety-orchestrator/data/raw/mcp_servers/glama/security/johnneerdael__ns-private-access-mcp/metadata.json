@@ -1,0 +1,48 @@
+{
+  "registry": "glama",
+  "id": "ep6fi8oi92",
+  "namespace": "johnneerdael",
+  "slug": "ns-private-access-mcp",
+  "name": "Netskope NPA MCP Server",
+  "description": "Enables management of Netskope Network Private Access (NPA) infrastructure through natural language commands. Supports Zero Trust Network Access operations including publisher management, private application configuration, policy controls, and system monitoring.",
+  "discoveryQueries": [
+    "policy",
+    "trust"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables management of Netskope Network Private Access (NPA) infrastructure through natural language commands. Supports Zero Trust Network Access operations including publisher management, private application configuration, policy controls, and system monitoring.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NETSKOPE_API_KEY": {
+          "description": "API token for authentication with Netskope services. Format: String token from Netskope admin console. Example: 030f31f7d57fd94834af57a3edc4bbda. Usage: Required for authenticating all API requests. Security Note: Keep this token secure and never commit it to version control.",
+          "type": "string"
+        },
+        "NETSKOPE_BASE_URL": {
+          "description": "The base URL of your Netskope tenant. Format: Full URL including protocol. Example: https://your-tenant.goskope.com. Usage: Used for all API communications with your Netskope tenant. Note: Must be the complete tenant URL without any path components.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NETSKOPE_BASE_URL",
+        "NETSKOPE_API_KEY"
+      ]
+    },
+    "id": "ep6fi8oi92",
+    "name": "Netskope NPA MCP Server",
+    "namespace": "johnneerdael",
+    "repository": {
+      "url": "https://github.com/johnneerdael/ns-private-access-mcp"
+    },
+    "slug": "ns-private-access-mcp",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ep6fi8oi92"
+  }
+}

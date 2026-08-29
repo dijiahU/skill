@@ -1,0 +1,66 @@
+{
+  "registry": "glama",
+  "id": "uzgqe1xtyj",
+  "namespace": "doogie-bigmack",
+  "slug": "agentshield-mcp",
+  "name": "AgentShield MCP Server",
+  "description": "Exposes AgentShield security scanning tools to protect AI clients by detecting threats like prompt injections, PII leakage, and SSRF. It enables real-time monitoring of inputs, outputs, and tool definitions to ensure secure interactions with AI models.",
+  "discoveryQueries": [
+    "security",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Exposes AgentShield security scanning tools to protect AI clients by detecting threats like prompt injections, PII leakage, and SSRF. It enables real-time monitoring of inputs, outputs, and tool definitions to ensure secure interactions with AI models.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AGENTSHIELD_URL": {
+          "description": "API base URL (default: https://agentshield-api.bigmac-attack.com)",
+          "type": "string",
+          "default": "https://agentshield-api.bigmac-attack.com"
+        },
+        "AGENTSHIELD_EMAIL": {
+          "description": "Email for login-based auth",
+          "type": "string"
+        },
+        "AGENTSHIELD_API_KEY": {
+          "description": "API key from AgentShield dashboard",
+          "type": "string"
+        },
+        "AGENTSHIELD_PASSWORD": {
+          "description": "Password for login-based auth",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "AGENTSHIELD_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "AGENTSHIELD_EMAIL",
+            "AGENTSHIELD_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "uzgqe1xtyj",
+    "name": "AgentShield MCP Server",
+    "namespace": "doogie-bigmack",
+    "repository": {
+      "url": "https://github.com/doogie-bigmack/agentshield-mcp"
+    },
+    "slug": "agentshield-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/uzgqe1xtyj"
+  }
+}

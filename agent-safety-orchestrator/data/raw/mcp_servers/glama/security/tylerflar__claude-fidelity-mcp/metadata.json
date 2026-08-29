@@ -1,0 +1,71 @@
+{
+  "registry": "glama",
+  "id": "l7nmkp5lox",
+  "namespace": "TylerFlar",
+  "slug": "claude-fidelity-mcp",
+  "name": "claude-fidelity-mcp",
+  "description": "Enables interaction with Fidelity Investments brokerage accounts using Playwright browser automation to manage balances, positions, and trades. It supports secure 2FA authentication and session persistence for seamless account management via Claude.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables interaction with Fidelity Investments brokerage accounts using Playwright browser automation to manage balances, positions, and trades. It supports secure 2FA authentication and session persistence for seamless account management via Claude.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FIDELITY_TIMEOUT": {
+          "description": "Default timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "FIDELITY_HEADLESS": {
+          "description": "Set to false to see the browser",
+          "type": "string",
+          "default": "true"
+        },
+        "FIDELITY_PASSWORD": {
+          "description": "Fidelity login password",
+          "type": "string"
+        },
+        "FIDELITY_USERNAME": {
+          "description": "Fidelity login username",
+          "type": "string"
+        },
+        "FIDELITY_SESSION_DIR": {
+          "description": "Where to save session files",
+          "type": "string",
+          "default": "~/.fidelity-mcp"
+        },
+        "FIDELITY_TOTP_SECRET": {
+          "description": "TOTP secret for automatic 2FA",
+          "type": "string"
+        },
+        "FIDELITY_SESSION_TITLE": {
+          "description": "Session file identifier (for multiple accounts)",
+          "type": "string",
+          "default": "default"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FIDELITY_USERNAME",
+        "FIDELITY_PASSWORD"
+      ]
+    },
+    "id": "l7nmkp5lox",
+    "name": "claude-fidelity-mcp",
+    "namespace": "TylerFlar",
+    "repository": {
+      "url": "https://github.com/TylerFlar/claude-fidelity-mcp"
+    },
+    "slug": "claude-fidelity-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/l7nmkp5lox"
+  }
+}

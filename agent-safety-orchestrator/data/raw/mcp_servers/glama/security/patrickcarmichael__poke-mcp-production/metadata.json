@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "gzs75hxup4",
+  "namespace": "patrickcarmichael",
+  "slug": "poke-mcp-production",
+  "name": "Poke MCP Production Server",
+  "description": "A production-ready Pokémon MCP server that enables users to get comprehensive Pokémon information and simulate realistic turn-based battles. Features enterprise-grade authentication, monitoring, rate limiting, and serverless deployment capabilities.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A production-ready Pokémon MCP server that enables users to get comprehensive Pokémon information and simulate realistic turn-based battles. Features enterprise-grade authentication, monitoring, rate limiting, and serverless deployment capabilities.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_KEY": {
+          "description": "Authentication key (required)",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "ENABLE_METRICS": {
+          "description": "Enable Prometheus metrics",
+          "type": "string",
+          "default": "true"
+        },
+        "ALLOWED_ORIGINS": {
+          "description": "CORS allowed origins",
+          "type": "string",
+          "default": "http://localhost:*"
+        },
+        "RATE_LIMIT_WINDOW": {
+          "description": "Time window in seconds",
+          "type": "string",
+          "default": "60"
+        },
+        "RATE_LIMIT_REQUESTS": {
+          "description": "Max requests per window",
+          "type": "string",
+          "default": "100"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_KEY"
+      ]
+    },
+    "id": "gzs75hxup4",
+    "name": "Poke MCP Production Server",
+    "namespace": "patrickcarmichael",
+    "repository": {
+      "url": "https://github.com/patrickcarmichael/poke-mcp-production"
+    },
+    "slug": "poke-mcp-production",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gzs75hxup4"
+  }
+}

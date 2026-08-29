@@ -1,0 +1,70 @@
+{
+  "registry": "glama",
+  "id": "vln4fmf56o",
+  "namespace": "Utakata",
+  "slug": "google-apps-script-mcp",
+  "name": "Google Apps Script MCP Server",
+  "description": "Enables comprehensive management of Google Apps Script projects, including project creation, file operations, and web app deployments. It features a security-first design with encrypted property management and automated security auditing for GAS environments.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive management of Google Apps Script projects, including project creation, file operations, and web app deployments. It features a security-first design with encrypted property management and automated security auditing for GAS environments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level for the server.",
+          "type": "string",
+          "default": "info"
+        },
+        "ENCRYPTION_KEY": {
+          "description": "Hex encryption key (32 bytes / 64 characters hex string recommended) for securing script properties. If not provided, one may be automatically generated.",
+          "type": "string"
+        },
+        "MCP_SERVER_NAME": {
+          "description": "The name identifier for the MCP server.",
+          "type": "string",
+          "default": "google-apps-script-mcp"
+        },
+        "GOOGLE_AUTH_CODE": {
+          "description": "OAuth2 authorization code for initial authentication.",
+          "type": "string"
+        },
+        "GOOGLE_CREDENTIALS_PATH": {
+          "description": "Path to the OAuth2 credentials.json file.",
+          "type": "string"
+        },
+        "GOOGLE_SERVICE_ACCOUNT_KEY": {
+          "description": "Service Account key as a JSON string or a file path to the service-account-key.json.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_SERVICE_ACCOUNT_KEY"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_CREDENTIALS_PATH"
+          ]
+        }
+      ]
+    },
+    "id": "vln4fmf56o",
+    "name": "Google Apps Script MCP Server",
+    "namespace": "Utakata",
+    "repository": {
+      "url": "https://github.com/Utakata/google-apps-script-mcp"
+    },
+    "slug": "google-apps-script-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vln4fmf56o"
+  }
+}

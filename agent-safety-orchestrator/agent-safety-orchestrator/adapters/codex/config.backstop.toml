@@ -1,0 +1,24 @@
+# Safety Orchestrator — Codex backstop config.
+# Review and MERGE these keys into your $CODEX_HOME/config.toml (do not blindly
+# overwrite your existing config).
+#
+# The hook layer (hooks.json + codex_hook.py) is the PRIMARY, deterministic
+# enforcement. But hosted tools such as WebSearch do not use the local
+# function-tool hook path, and specialized tool paths may opt out. These
+# OS-level / approval settings BACKSTOP the atoms the hook can't deterministically
+# catch (network egress, SSRF, broad filesystem writes) and provide the
+# human-in-the-loop path for the escalate-to-human-sentinel archetype.
+
+# OS-enforced sandbox: even a shell/web call the hook misses cannot exfiltrate
+# data or wreck the filesystem.
+sandbox_mode = "workspace-write"   # read-only | workspace-write | danger-full-access
+
+# Pause for human approval on risky operations (maps to escalate-to-human-sentinel).
+approval_policy = "on-request"     # untrusted | on-request | never
+
+[features]
+hooks = true                       # enable the hook layer (default on)
+
+[sandbox_workspace_write]
+network_access = false             # backstops detect-unsafe-url / SSRF / egress atoms
+# writable_roots = ["/abs/path/to/project"]   # optional: pin writable dirs

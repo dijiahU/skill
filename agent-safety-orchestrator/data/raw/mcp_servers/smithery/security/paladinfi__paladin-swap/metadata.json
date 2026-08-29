@@ -1,0 +1,105 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "paladinfi/paladin-swap",
+  "namespace": "paladinfi",
+  "slug": "paladin-swap",
+  "displayName": "PaladinFi Swap",
+  "description": "**PaladinFi Swap** is a competitive multi-aggregator swap router for AI agents on Base (chainId 8453). Returns ready-to-execute calldata your agent's wallet signs and submits. Currently routes through 0x Settler; 1inch and Odos planned. Flat 10 bps fee on the buy token, included in the calldata — no separate accounting on your side.\n\n## Tools\n\n- `swap_quote(sellToken, buyToken, sellAmount, taker, chainId?, slippageBps?)` — competitive route quote with ready-to-execute calldata for any ERC20→ERC20 swap on Base\n- `swap_health()` — service health, fee config, supported chains\n\n## Non-custodial\n\nPaladinFi never holds user funds — your agent's wallet signs every transaction. PaladinFi does not represent any returned route as the best available across the broader DeFi market.\n\n## Compliance\n\nOFAC SDN sanctions screening on the `taker` address is enforced server-side; sanctioned addresses receive HTTP 451 instead of a quote.\n\n## Links\n\n- Landing: [paladinfi.com/swap/](https://paladinfi.com/sw",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "5743705a-70c1-4c75-ba4e-bd0cc78c69d2",
+    "qualifiedName": "paladinfi/paladin-swap",
+    "namespace": "paladinfi",
+    "slug": "paladin-swap",
+    "displayName": "PaladinFi Swap",
+    "description": "**PaladinFi Swap** is a competitive multi-aggregator swap router for AI agents on Base (chainId 8453). Returns ready-to-execute calldata your agent's wallet signs and submits. Currently routes through 0x Settler; 1inch and Odos planned. Flat 10 bps fee on the buy token, included in the calldata — no separate accounting on your side.\n\n## Tools\n\n- `swap_quote(sellToken, buyToken, sellAmount, taker, chainId?, slippageBps?)` — competitive route quote with ready-to-execute calldata for any ERC20→ERC20 swap on Base\n- `swap_health()` — service health, fee config, supported chains\n\n## Non-custodial\n\nPaladinFi never holds user funds — your agent's wallet signs every transaction. PaladinFi does not represent any returned route as the best available across the broader DeFi market.\n\n## Compliance\n\nOFAC SDN sanctions screening on the `taker` address is enforced server-side; sanctioned addresses receive HTTP 451 instead of a quote.\n\n## Links\n\n- Landing: [paladinfi.com/swap/](https://paladinfi.com/sw",
+    "iconUrl": "https://api.smithery.ai/servers/paladinfi/paladin-swap/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-25T22:13:25.484Z",
+    "homepage": "https://paladinfi.com/swap/",
+    "bySmithery": false,
+    "owner": "org_01KQ3B6HN6009KVM8AGWKPMYVM",
+    "score": 0.024321266968325792
+  },
+  "detail": {
+    "qualifiedName": "paladinfi/paladin-swap",
+    "displayName": "PaladinFi Swap",
+    "description": "**PaladinFi Swap** is a competitive multi-aggregator swap router for AI agents on Base (chainId 8453). Returns ready-to-execute calldata your agent's wallet signs and submits. Currently routes through 0x Settler; 1inch and Odos planned. Flat 10 bps fee on the buy token, included in the calldata — no separate accounting on your side.\n\n## Tools\n\n- `swap_quote(sellToken, buyToken, sellAmount, taker, chainId?, slippageBps?)` — competitive route quote with ready-to-execute calldata for any ERC20→ERC20 swap on Base\n- `swap_health()` — service health, fee config, supported chains\n\n## Non-custodial\n\nPaladinFi never holds user funds — your agent's wallet signs every transaction. PaladinFi does not represent any returned route as the best available across the broader DeFi market.\n\n## Compliance\n\nOFAC SDN sanctions screening on the `taker` address is enforced server-side; sanctioned addresses receive HTTP 451 instead of a quote.\n\n## Links\n\n- Landing: [paladinfi.com/swap/](https://paladinfi.com/swap/)\n- API health: [swap.paladinfi.com/health](https://swap.paladinfi.com/health)\n- GitHub: [paladinfi/paladin-swap-mcp](https://github.com/paladinfi/paladin-swap-mcp)\n- Terms: [paladinfi.com/terms/](https://paladinfi.com/terms/)\n- Privacy: [paladinfi.com/privacy/](https://paladinfi.com/privacy/)\n\nOperated by Malcontent Games LLC, dba PaladinFi (Ohio, USA).",
+    "iconUrl": "https://api.smithery.ai/servers/paladinfi/paladin-swap/icon",
+    "remote": true,
+    "deploymentUrl": "https://paladin-swap--paladinfi.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://paladin-swap--paladinfi.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "swap_quote",
+        "description": "Get a competitive multi-aggregator swap quote with ready-to-execute calldata. PaladinFi does not represent any returned route as the best available across the broader DeFi market.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "taker": {
+              "type": "string",
+              "description": "Wallet address that will execute the swap (the agent's wallet)"
+            },
+            "chainId": {
+              "type": "integer",
+              "default": 8453,
+              "description": "EVM chain ID (default 8453 = Base). Currently only Base is supported."
+            },
+            "buyToken": {
+              "type": "string",
+              "description": "ERC20 contract address to buy (e.g. WETH on Base = 0x4200000000000000000000000000000000000006)"
+            },
+            "sellToken": {
+              "type": "string",
+              "description": "ERC20 contract address to sell (e.g. USDC on Base = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913)"
+            },
+            "sellAmount": {
+              "type": "string",
+              "description": "Amount to sell in smallest unit (decimal string; e.g. \"1000000000\" = 1000 USDC)"
+            },
+            "slippageBps": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional slippage tolerance in basis points (default from provider)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "swap_health",
+        "description": "Return the swap router's health + configuration (fee recipient, bps, supported chains).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "registry": "glama",
+  "id": "qpmllio44y",
+  "namespace": "liang04",
+  "slug": "ssh-mcp",
+  "name": "SSH MCP Server",
+  "description": "Enables secure SSH connections to multiple remote servers with support for command execution, file transfers (SFTP), directory listing, and both password and key-based authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure SSH connections to multiple remote servers with support for command execution, file transfers (SFTP), directory listing, and both password and key-based authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SSH_HOST": {
+          "description": "目标服务器的IP地址或主机名（传统单连接配置，向后兼容）",
+          "type": "string"
+        },
+        "SSH_PORT": {
+          "description": "SSH端口号（传统单连接配置，向后兼容）",
+          "type": "string",
+          "default": "22"
+        },
+        "SSH_DEV_HOST": {
+          "description": "开发环境服务器的IP地址或主机名",
+          "type": "string"
+        },
+        "SSH_DEV_PORT": {
+          "description": "开发环境SSH端口号",
+          "type": "string",
+          "default": "22"
+        },
+        "SSH_KEY_PATH": {
+          "description": "SSH私钥文件路径（传统单连接配置，向后兼容，与 SSH_PASSWORD 二选一）",
+          "type": "string"
+        },
+        "SSH_PASSWORD": {
+          "description": "SSH登录密码（传统单连接配置，向后兼容，与 SSH_KEY_PATH 二选一）",
+          "type": "string"
+        },
+        "SSH_USERNAME": {
+          "description": "SSH登录用户名（传统单连接配置，向后兼容）",
+          "type": "string"
+        },
+        "EXEC_LOG_FILE": {
+          "description": "执行日志文件路径",
+          "type": "string",
+          "default": "exec_log.json"
+        },
+        "SAVE_EXEC_LOG": {
+          "description": "是否保存执行日志",
+          "type": "string",
+          "default": "false"
+        },
+        "SSH_PROD_HOST": {
+          "description": "生产环境服务器的IP地址或主机名",
+          "type": "string"
+        },
+        "SSH_PROD_PORT": {
+          "description": "生产环境SSH端口号",
+          "type": "string",
+          "default": "22"
+        },
+        "SSH_TEST_HOST": {
+          "description": "测试环境服务器的IP地址或主机名",
+          "type": "string"
+        },
+        "SSH_TEST_PORT": {
+          "description": "测试环境SSH端口号",
+          "type": "string",
+          "default": "22"
+        },
+        "SSH_DEV_KEY_PATH": {
+          "description": "开发环境SSH私钥文件路径",
+          "type": "string"
+        },
+        "SSH_DEV_PASSWORD": {
+          "description": "开发环境SSH登录密码",
+          "type": "string"
+        },
+        "SSH_DEV_USERNAME": {
+          "description": "开发环境SSH登录用户名",
+          "type": "string"
+        },
+        "SSH_PROD_KEY_PATH": {
+          "description": "生产环境SSH私钥文件路径",
+          "type": "string"
+        },
+        "SSH_PROD_PASSWORD": {
+          "description": "生产环境SSH登录密码",
+          "type": "string"
+        },
+        "SSH_PROD_USERNAME": {
+          "description": "生产环境SSH登录用户名",
+          "type": "string"
+        },
+        "SSH_TEST_KEY_PATH": {
+          "description": "测试环境SSH私钥文件路径",
+          "type": "string"
+        },
+        "SSH_TEST_PASSWORD": {
+          "description": "测试环境SSH登录密码",
+          "type": "string"
+        },
+        "SSH_TEST_USERNAME": {
+          "description": "测试环境SSH登录用户名",
+          "type": "string"
+        },
+        "SSH_DEFAULT_CONNECTION": {
+          "description": "设置默认连接名称（可选）",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "qpmllio44y",
+    "name": "SSH MCP Server",
+    "namespace": "liang04",
+    "repository": {
+      "url": "https://github.com/liang04/ssh-mcp"
+    },
+    "slug": "ssh-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/qpmllio44y"
+  }
+}

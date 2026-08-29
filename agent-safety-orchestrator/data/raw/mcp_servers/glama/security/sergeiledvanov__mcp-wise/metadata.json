@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "uakpppyfal",
+  "namespace": "sergeiledvanov",
+  "slug": "mcp-wise",
+  "name": "Wise MCP Server",
+  "description": "Enables access to Wise API functionality for managing recipients and sending money transfers. Supports listing recipients, creating new recipients, validating account details, and executing money transfers with authentication handling.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables access to Wise API functionality for managing recipients and sending money transfers. Supports listing recipients, creating new recipients, validating account details, and executing money transfers with authentication handling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MODE": {
+          "description": "MCP Server transport mode, either \"http\" or \"stdio\"",
+          "type": "string",
+          "default": "stdio"
+        },
+        "WISE_API_TOKEN": {
+          "description": "Your Wise API token (required)",
+          "type": "string"
+        },
+        "WISE_IS_SANDBOX": {
+          "description": "Set to true to use the Wise Sandbox API",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WISE_API_TOKEN"
+      ]
+    },
+    "id": "uakpppyfal",
+    "name": "Wise MCP Server",
+    "namespace": "sergeiledvanov",
+    "repository": {
+      "url": "https://github.com/sergeiledvanov/mcp-wise"
+    },
+    "slug": "mcp-wise",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/uakpppyfal"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "tivzh2xg9i",
+  "namespace": "annyzhou",
+  "slug": "gmail-mcp",
+  "name": "Gmail MCP",
+  "description": "A read-only MCP server that enables users to interact with the Gmail API to search messages, retrieve threads, and download attachments. It supports standard Gmail query operators and requires OAuth authentication for secure read-only access to mailbox data.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A read-only MCP server that enables users to interact with the Gmail API to search messages, retrieve threads, and download attachments. It supports standard Gmail query operators and requires OAuth authentication for secure read-only access to mailbox data.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GMAIL_SCOPES": {
+          "description": "Comma-separated OAuth scopes (default is https://www.googleapis.com/auth/gmail.readonly).",
+          "type": "string",
+          "default": "https://www.googleapis.com/auth/gmail.readonly"
+        },
+        "GMAIL_TOKEN_PATH": {
+          "description": "Token file location (default ~/.config/gmail-mcp/tokens.json).",
+          "type": "string",
+          "default": "~/.config/gmail-mcp/tokens.json"
+        },
+        "GMAIL_ACCESS_TOKEN": {
+          "description": "Manual override for authentication. If set, this token overrides all other OAuth logic.",
+          "type": "string"
+        },
+        "GOOGLE_OAUTH_CREDENTIALS": {
+          "description": "Absolute path to the downloaded Google OAuth client JSON file (Desktop app type).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_OAUTH_CREDENTIALS"
+          ]
+        },
+        {
+          "required": [
+            "GMAIL_ACCESS_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "tivzh2xg9i",
+    "name": "Gmail MCP",
+    "namespace": "annyzhou",
+    "repository": {
+      "url": "https://github.com/annyzhou/gmail-mcp"
+    },
+    "slug": "gmail-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tivzh2xg9i"
+  }
+}

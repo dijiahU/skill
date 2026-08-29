@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "g02w0sz8yn",
+  "namespace": "DavidHolguin",
+  "slug": "mcpEAM",
+  "name": "FastAPI MCP Server",
+  "description": "Enables interaction with Supabase databases and n8n workflows through a JSON-RPC 2.0 MCP server. Provides database operations, vector search capabilities, and webhook-based workflow automation with secure API token authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables interaction with Supabase databases and n8n workflows through a JSON-RPC 2.0 MCP server. Provides database operations, vector search capabilities, and webhook-based workflow automation with secure API token authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SUPABASE_URL": {
+          "description": "URL del proyecto Supabase",
+          "type": "string"
+        },
+        "ALLOW_ORIGINS": {
+          "description": "Lista CORS, ej: https://mi-host-agente.com",
+          "type": "string"
+        },
+        "MCP_API_TOKENS": {
+          "description": "CSV de tokens válidos, ej: token1,token2",
+          "type": "string"
+        },
+        "N8N_WEBHOOK_BASE": {
+          "description": "Base de webhooks públicos de n8n, ej: https://n8n.tu-dominio.com/webhook",
+          "type": "string"
+        },
+        "SUPABASE_ANON_KEY": {
+          "description": "Clave anónima de Supabase (opcional)",
+          "type": "string"
+        },
+        "SUPABASE_SERVICE_ROLE_KEY": {
+          "description": "Clave service role (solo backend)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SUPABASE_URL",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "N8N_WEBHOOK_BASE",
+        "MCP_API_TOKENS"
+      ]
+    },
+    "id": "g02w0sz8yn",
+    "name": "FastAPI MCP Server",
+    "namespace": "DavidHolguin",
+    "repository": {
+      "url": "https://github.com/DavidHolguin/mcpEAM"
+    },
+    "slug": "mcpEAM",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/g02w0sz8yn"
+  }
+}

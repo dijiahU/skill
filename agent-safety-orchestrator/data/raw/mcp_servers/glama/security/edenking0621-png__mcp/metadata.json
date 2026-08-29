@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "l856g0kqo5",
+  "namespace": "edenking0621-png",
+  "slug": "MCP",
+  "name": "Notion Remote MCP Server",
+  "description": "Enables secure interaction with Notion through a suite of tools for searching, reading, and modifying pages and databases. It features OAuth 2.1 authentication with PKCE and encrypted token storage to provide an enterprise-ready interface for MCP clients.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure interaction with Notion through a suite of tools for searching, reading, and modifying pages and databases. It features OAuth 2.1 authentication with PKCE and encrypted token storage to provide an enterprise-ready interface for MCP clients.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "The base URL of the server, used for constructing OAuth redirect URIs and metadata (defaults to localhost if not set).",
+          "type": "string"
+        },
+        "TOKEN_ENC_KEY": {
+          "description": "A base64 encoded 32-byte key used for AES-256-GCM encryption of stored tokens. If not set, it may be auto-generated and stored locally.",
+          "type": "string"
+        },
+        "NOTION_VERSION": {
+          "description": "The Notion API version to use for requests.",
+          "type": "string",
+          "default": "2025-09-03"
+        },
+        "NOTION_CLIENT_ID": {
+          "description": "The Client ID of your Notion public integration.",
+          "type": "string"
+        },
+        "STATE_SIGNING_KEY": {
+          "description": "A random secret used for HMAC signing of OAuth state parameters. If not set, it may be auto-generated and stored locally.",
+          "type": "string"
+        },
+        "TOKEN_ENC_KEY_FILE": {
+          "description": "Optional path to a file containing the TOKEN_ENC_KEY.",
+          "type": "string"
+        },
+        "NOTION_CLIENT_SECRET": {
+          "description": "The Client Secret of your Notion public integration.",
+          "type": "string"
+        },
+        "ALLOWED_REDIRECT_URIS": {
+          "description": "A comma-separated list of allowed redirect URIs for your MCP client.",
+          "type": "string"
+        },
+        "STATE_SIGNING_KEY_FILE": {
+          "description": "Optional path to a file containing the STATE_SIGNING_KEY.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NOTION_CLIENT_ID",
+        "NOTION_CLIENT_SECRET",
+        "ALLOWED_REDIRECT_URIS"
+      ]
+    },
+    "id": "l856g0kqo5",
+    "name": "Notion Remote MCP Server",
+    "namespace": "edenking0621-png",
+    "repository": {
+      "url": "https://github.com/edenking0621-png/MCP"
+    },
+    "slug": "MCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/l856g0kqo5"
+  }
+}

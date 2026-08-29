@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "pcycut7eq3",
+  "namespace": "rad-security",
+  "slug": "mcp-server",
+  "name": "RAD Security",
+  "description": "CP server for RAD Security, providing AI-powered security insights for Kubernetes and cloud environments. This server provides tools for querying the Rad Security API and retrieving security findings, reports, runtime data and many more.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "CP server for RAD Security, providing AI-powered security insights for Kubernetes and cloud environments. This server provides tools for querying the Rad Security API and retrieving security findings, reports, runtime data and many more.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TRANSPORT_TYPE": {
+          "description": "Transport type for Docker container deployment (streamable or sse)",
+          "type": "string",
+          "default": "streamable"
+        },
+        "EXCLUDE_TOOLKITS": {
+          "description": "Comma-separated list of toolkits to exclude (all except these will be enabled). Note: If INCLUDE_TOOLKITS is set, EXCLUDE_TOOLKITS is ignored",
+          "type": "string"
+        },
+        "INCLUDE_TOOLKITS": {
+          "description": "Comma-separated list of toolkits to include (only these will be enabled). Available toolkits: containers, clusters, identities, audit, cloud_inventory, images, kubeobject, misconfigs, runtime, runtime_network, threats, findings, cves, inbox, workflows",
+          "type": "string"
+        },
+        "RAD_SECURITY_ACCOUNT_ID": {
+          "description": "Your RAD Security account ID",
+          "type": "string"
+        },
+        "RAD_SECURITY_SECRET_KEY": {
+          "description": "Your RAD Security secret key",
+          "type": "string"
+        },
+        "RAD_SECURITY_ACCESS_KEY_ID": {
+          "description": "Your RAD Security access key ID",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "pcycut7eq3",
+    "name": "RAD Security",
+    "namespace": "rad-security",
+    "repository": {
+      "url": "https://github.com/rad-security/mcp-server"
+    },
+    "slug": "mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pcycut7eq3"
+  }
+}

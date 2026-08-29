@@ -1,0 +1,95 @@
+{
+  "registry": "glama",
+  "id": "hdl1zff468",
+  "namespace": "Warezloder",
+  "slug": "vSphere-MCP-Pro",
+  "name": "vSphere-MCP-Pro",
+  "description": "Enables secure management of VMware vCenter 8.0+ environments through controlled operations including VM lifecycle management, snapshots, and resource discovery with built-in RBAC authorization, audit logging, and rate limiting.",
+  "discoveryQueries": [
+    "audit",
+    "authorization"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure management of VMware vCenter 8.0+ environments through controlled operations including VM lifecycle management, snapshots, and resource discovery with built-in RBAC authorization, audit logging, and rate limiting.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "INSECURE": {
+          "description": "Disable SSL verification (set to 'true' only if absolutely necessary)",
+          "type": "string"
+        },
+        "RATE_LIMIT": {
+          "description": "Enable or disable rate limiting (set to 'false' to disable)",
+          "type": "string"
+        },
+        "VCENTER_HOST": {
+          "description": "vCenter hostname/IP",
+          "type": "string"
+        },
+        "VCENTER_USER": {
+          "description": "vCenter username",
+          "type": "string"
+        },
+        "AUDIT_LOG_PATH": {
+          "description": "Path to write audit logs",
+          "type": "string"
+        },
+        "RATE_LIMIT_RPS": {
+          "description": "Rate limit requests per second",
+          "type": "string"
+        },
+        "ROLES_TO_TOOLS": {
+          "description": "JSON map of role → allowed tools (e.g., {\"read\":[\"list_vms\",\"get_vm_details\"],\"ops\":[\"power_on_vm\"]})",
+          "type": "string"
+        },
+        "TOKENS_TO_ROLES": {
+          "description": "JSON map of token → role (e.g., {\"token1\": \"read\", \"token2\": \"ops\"})",
+          "type": "string"
+        },
+        "RATE_LIMIT_BURST": {
+          "description": "Rate limit burst capacity",
+          "type": "string"
+        },
+        "VCENTER_PASSWORD": {
+          "description": "vCenter password",
+          "type": "string"
+        },
+        "VSPHERE_API_MODE": {
+          "description": "API mode for vCenter (api or rest)",
+          "type": "string"
+        },
+        "VCENTER_CA_BUNDLE": {
+          "description": "Optional CA bundle path for SSL verification",
+          "type": "string"
+        },
+        "ALLOWED_VCENTER_HOSTS": {
+          "description": "Optional allowlist for multi-host deployments",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "VCENTER_HOST",
+        "VCENTER_USER",
+        "VCENTER_PASSWORD",
+        "ROLES_TO_TOOLS",
+        "TOKENS_TO_ROLES"
+      ]
+    },
+    "id": "hdl1zff468",
+    "name": "vSphere-MCP-Pro",
+    "namespace": "Warezloder",
+    "repository": {
+      "url": "https://github.com/Warezloder/vSphere-MCP-Pro"
+    },
+    "slug": "vSphere-MCP-Pro",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hdl1zff468"
+  }
+}

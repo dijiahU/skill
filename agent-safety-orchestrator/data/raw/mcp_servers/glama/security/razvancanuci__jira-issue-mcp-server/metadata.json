@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "zitx0zjsmg",
+  "namespace": "razvancanuci",
+  "slug": "jira-issue-mcp-server",
+  "name": "Jira Issue MCP Server",
+  "description": "Enables interaction with Jira through OAuth 2.0 to create and manage issues directly from MCP-compatible clients. It supports secure authentication and local token caching to facilitate automated task management within Jira projects.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables interaction with Jira through OAuth 2.0 to create and manage issues directly from MCP-compatible clients. It supports secure authentication and local token caching to facilitate automated task management within Jira projects.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "REDIS_HOST": {
+          "description": "Redis connection string or host:port used for caching tokens. Default: \"localhost:6379\".",
+          "type": "string",
+          "default": "localhost:6379"
+        },
+        "ELASTIC_URL": {
+          "description": "Elastic endpoint URL. Default: not set.",
+          "type": "string"
+        },
+        "SERVER_DOMAIN": {
+          "description": "Base URL where this server is reachable (used to build OAuth redirect/callback URLs). Default: \"http://localhost:3000\".",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "ELASTIC_API_KEY": {
+          "description": "API key for Elastic (used for telemetry/logging if configured). Default: not set.",
+          "type": "string"
+        },
+        "ATLASSIAN_CLIENT_ID": {
+          "description": "the OAuth client ID from your Atlassian developer app. This and ATLASSIAN_CLIENT_SECRET are mandatory for the OAuth flow to work.",
+          "type": "string"
+        },
+        "ATLASSIAN_CLIENT_SECRET": {
+          "description": "the OAuth client secret from your Atlassian developer app.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ATLASSIAN_CLIENT_ID",
+        "ATLASSIAN_CLIENT_SECRET"
+      ]
+    },
+    "id": "zitx0zjsmg",
+    "name": "Jira Issue MCP Server",
+    "namespace": "razvancanuci",
+    "repository": {
+      "url": "https://github.com/razvancanuci/jira-issue-mcp-server"
+    },
+    "slug": "jira-issue-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/zitx0zjsmg"
+  }
+}

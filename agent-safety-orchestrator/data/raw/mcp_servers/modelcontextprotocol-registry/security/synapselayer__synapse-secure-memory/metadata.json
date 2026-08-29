@@ -1,0 +1,63 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.SynapseLayer/synapse-secure-memory",
+  "slug": "SynapseLayer__synapse-secure-memory",
+  "title": "Synapse Layer — Zero-Knowledge Memory",
+  "description": "Zero-Knowledge Context™ & Neural Handover™ for AI Agents. The Trust Layer for AI Memory.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.SynapseLayer/synapse-secure-memory",
+      "description": "Zero-Knowledge Context™ & Neural Handover™ for AI Agents. The Trust Layer for AI Memory.",
+      "title": "Synapse Layer — Zero-Knowledge Memory",
+      "repository": {
+        "url": "https://github.com/SynapseLayer/synapse-layer",
+        "source": "github"
+      },
+      "version": "1.0.7",
+      "websiteUrl": "https://synapselayer.org",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "synapse-layer",
+          "version": "1.0.7",
+          "runtimeHint": "uvx",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Identifier for the agent using the memory layer (e.g., claude-desktop, my-agent).",
+              "default": "default-agent",
+              "name": "SYNAPSE_AGENT_ID"
+            },
+            {
+              "description": "Differential privacy epsilon parameter. Lower values = stronger privacy. Range: 0.1–2.0.",
+              "default": "0.5",
+              "name": "SYNAPSE_PRIVACY_EPSILON"
+            },
+            {
+              "description": "AES-256-GCM encryption key for at-rest memory encryption. Auto-generated if not provided.",
+              "isSecret": true,
+              "name": "SYNAPSE_ENCRYPTION_KEY"
+            },
+            {
+              "description": "Logging verbosity: DEBUG, INFO, WARNING, ERROR. Default: INFO.",
+              "default": "INFO",
+              "name": "LOG_LEVEL"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-08T18:42:52.289669Z",
+        "publishedAt": "2026-04-08T18:42:52.289669Z",
+        "updatedAt": "2026-04-08T18:42:52.289669Z",
+        "isLatest": true
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "registry": "glama",
+  "id": "vmlzdk4yqs",
+  "namespace": "jcamier",
+  "slug": "mcp-oauth",
+  "name": "FastMCP OAuth Server",
+  "description": "A modular server implementation that integrates Auth0 OAuth 2.0 authentication with FastMCP to securely serve AI tools through the Model Context Protocol.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [],
+    "description": "A modular server implementation that integrates Auth0 OAuth 2.0 authentication with FastMCP to securely serve AI tools through the Model Context Protocol.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Host for the MCP server",
+          "type": "string",
+          "default": "localhost"
+        },
+        "MCP_PORT": {
+          "description": "Port for the MCP server",
+          "type": "string",
+          "default": "8000"
+        },
+        "MCP_DEBUG": {
+          "description": "Enable debug mode for detailed logging",
+          "type": "string",
+          "default": "false"
+        },
+        "AUTH0_DOMAIN": {
+          "description": "Your Auth0 tenant domain (without https://)",
+          "type": "string"
+        },
+        "AUTH0_AUDIENCE": {
+          "description": "Your Auth0 API identifier",
+          "type": "string"
+        },
+        "DEFAULT_SCOPES": {
+          "description": "OAuth default scopes",
+          "type": "string",
+          "default": "openid profile email"
+        },
+        "MCP_ISSUER_URL": {
+          "description": "Issuer URL for the MCP server",
+          "type": "string",
+          "default": "http://localhost:8000"
+        },
+        "AUTH0_CLIENT_ID": {
+          "description": "Your Auth0 client ID",
+          "type": "string"
+        },
+        "REQUIRED_SCOPES": {
+          "description": "OAuth required scopes",
+          "type": "string",
+          "default": "read:mcp write:mcp"
+        },
+        "AUTH0_CLIENT_SECRET": {
+          "description": "Your Auth0 client secret",
+          "type": "string"
+        },
+        "TOKEN_EXPIRY_SECONDS": {
+          "description": "Token expiry time in seconds",
+          "type": "string",
+          "default": "3600"
+        },
+        "ENABLE_CLIENT_REGISTRATION": {
+          "description": "Enable client registration",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AUTH0_DOMAIN",
+        "AUTH0_CLIENT_ID",
+        "AUTH0_CLIENT_SECRET",
+        "AUTH0_AUDIENCE"
+      ]
+    },
+    "id": "vmlzdk4yqs",
+    "name": "FastMCP OAuth Server",
+    "namespace": "jcamier",
+    "repository": {
+      "url": "https://github.com/jcamier/mcp-oauth"
+    },
+    "slug": "mcp-oauth",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vmlzdk4yqs"
+  }
+}

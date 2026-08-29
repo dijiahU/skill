@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "ps3ckyz40i",
+  "namespace": "gweber",
+  "slug": "mcp-decoy",
+  "name": "MCP Decoy Server",
+  "description": "A deception-based threat detection server that impersonates enterprise MCP integrations to log and forward attacker interactions to SIEM systems. It provides convincing fake responses across 38 tools while capturing forensic details of all MCP tool calls.",
+  "discoveryQueries": [
+    "siem"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A deception-based threat detection server that impersonates enterprise MCP integrations to log and forward attacker interactions to SIEM systems. It provides convincing fake responses across 38 tools while capturing forensic details of all MCP tool calls.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "TCP port the Express server binds to",
+          "type": "string",
+          "default": "3000"
+        },
+        "SERVER_NAME": {
+          "description": "MCP serverInfo.name sent to clients during handshake",
+          "type": "string",
+          "default": "enterprise-integrations"
+        },
+        "SYSLOG_HOST": {
+          "description": "Syslog destination hostname or IP. Syslog forwarding is disabled when unset",
+          "type": "string"
+        },
+        "SYSLOG_PORT": {
+          "description": "Syslog destination port",
+          "type": "string",
+          "default": "514"
+        },
+        "SYSLOG_APP_NAME": {
+          "description": "APP-NAME field in syslog messages",
+          "type": "string",
+          "default": "mcp-decoy"
+        },
+        "SYSLOG_FACILITY": {
+          "description": "RFC 5424 facility code (16 = local0)",
+          "type": "string",
+          "default": "16"
+        },
+        "SYSLOG_PROTOCOL": {
+          "description": "Transport: udp or tcp",
+          "type": "string",
+          "default": "udp"
+        },
+        "SYSLOG_SEVERITY": {
+          "description": "RFC 5424 severity code (5 = notice)",
+          "type": "string",
+          "default": "5"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ps3ckyz40i",
+    "name": "MCP Decoy Server",
+    "namespace": "gweber",
+    "repository": {
+      "url": "https://github.com/gweber/mcp-decoy"
+    },
+    "slug": "mcp-decoy",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ps3ckyz40i"
+  }
+}

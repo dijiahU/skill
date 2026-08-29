@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "nlxqmco238",
+  "namespace": "mackenzienolan",
+  "slug": "google-mcp-server",
+  "name": "Google Docs MCP Server",
+  "description": "Enables Claude to read, create, and update Google Docs through OAuth authentication. Deployed as a remote Next.js server on Vercel with support for multiple users and secure API key management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to read, create, and update Google Docs through OAuth authentication. Deployed as a remote Next.js server on Vercel with support for multiple users and secure API key management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "REDIS_URL": {
+          "description": "Your Redis instance connection URL (required for Vercel MCP adapter)",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "Your PostgreSQL database connection URL",
+          "type": "string"
+        },
+        "NEXTAUTH_URL": {
+          "description": "The URL of your deployed app (e.g., https://your-app.vercel.app)",
+          "type": "string"
+        },
+        "NEXTAUTH_SECRET": {
+          "description": "Your random secret for NextAuth",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth Client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth Client Secret from Google Cloud Console",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "DATABASE_URL",
+        "REDIS_URL"
+      ]
+    },
+    "id": "nlxqmco238",
+    "name": "Google Docs MCP Server",
+    "namespace": "mackenzienolan",
+    "repository": {
+      "url": "https://github.com/mackenzienolan/google-mcp-server"
+    },
+    "slug": "google-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nlxqmco238"
+  }
+}

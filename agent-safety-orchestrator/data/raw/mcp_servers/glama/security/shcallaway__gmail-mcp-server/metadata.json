@@ -1,0 +1,81 @@
+{
+  "registry": "glama",
+  "id": "fgyuoq9vpc",
+  "namespace": "shcallaway",
+  "slug": "gmail-mcp-server",
+  "name": "Gmail MCP Server",
+  "description": "Enables AI assistants to read, search, organize, and draft emails in Gmail inboxes with support for multiple accounts, OAuth authentication, and 26 comprehensive tools for email management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to read, search, organize, and draft emails in Gmail inboxes with support for multiple accounts, OAuth authentication, and 26 comprehensive tools for email management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "DB_URL": {
+          "description": "SQLite database path",
+          "type": "string",
+          "default": "./data/gmail-mcp.db"
+        },
+        "BASE_URL": {
+          "description": "Public URL of the server",
+          "type": "string"
+        },
+        "JWT_SECRET": {
+          "description": "Secret for signing MCP-level JWTs",
+          "type": "string"
+        },
+        "ALLOWED_ORIGINS": {
+          "description": "Comma-separated CORS origins",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Google OAuth client ID",
+          "type": "string"
+        },
+        "OAUTH_REDIRECT_URI": {
+          "description": "OAuth callback URL (e.g., http://localhost:3000/oauth/callback)",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Google OAuth client secret",
+          "type": "string"
+        },
+        "TOKEN_ENCRYPTION_KEY": {
+          "description": "32-byte key for encrypting stored tokens",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "BASE_URL",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "OAUTH_REDIRECT_URI",
+        "TOKEN_ENCRYPTION_KEY",
+        "JWT_SECRET"
+      ]
+    },
+    "id": "fgyuoq9vpc",
+    "name": "Gmail MCP Server",
+    "namespace": "shcallaway",
+    "repository": {
+      "url": "https://github.com/shcallaway/gmail-mcp-server"
+    },
+    "slug": "gmail-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fgyuoq9vpc"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "registry": "glama",
+  "id": "fudlrstvwx",
+  "namespace": "liuyang1520",
+  "slug": "reddit-mcp",
+  "name": "Reddit MCP Server",
+  "description": "Provides access to Reddit's API for retrieving posts, comments, user information, and search functionality. Supports multiple authentication methods and comprehensive Reddit data operations including subreddit browsing, post retrieval, and user profile access.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides access to Reddit's API for retrieving posts, comments, user information, and search functionality. Supports multiple authentication methods and comprehensive Reddit data operations including subreddit browsing, post retrieval, and user profile access.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "REDDIT_PASSWORD": {
+          "description": "Your Reddit password (for username/password authentication)",
+          "type": "string"
+        },
+        "REDDIT_USERNAME": {
+          "description": "Your Reddit username (for username/password authentication)",
+          "type": "string"
+        },
+        "REDDIT_CLIENT_ID": {
+          "description": "Your Reddit API client ID (found under the app name in Reddit app preferences)",
+          "type": "string"
+        },
+        "REDDIT_USER_AGENT": {
+          "description": "User agent string for Reddit API requests (must be unique and descriptive)",
+          "type": "string"
+        },
+        "REDDIT_ACCESS_TOKEN": {
+          "description": "Your Reddit access token (for testing only - expires in 1 hour)",
+          "type": "string"
+        },
+        "REDDIT_CLIENT_SECRET": {
+          "description": "Your Reddit API client secret",
+          "type": "string"
+        },
+        "REDDIT_REFRESH_TOKEN": {
+          "description": "Your Reddit refresh token (for refresh token authentication)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "REDDIT_CLIENT_ID",
+            "REDDIT_CLIENT_SECRET",
+            "REDDIT_USER_AGENT",
+            "REDDIT_USERNAME",
+            "REDDIT_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "REDDIT_CLIENT_ID",
+            "REDDIT_CLIENT_SECRET",
+            "REDDIT_USER_AGENT",
+            "REDDIT_REFRESH_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "REDDIT_CLIENT_ID",
+            "REDDIT_CLIENT_SECRET",
+            "REDDIT_USER_AGENT",
+            "REDDIT_ACCESS_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "REDDIT_CLIENT_ID",
+            "REDDIT_CLIENT_SECRET",
+            "REDDIT_USER_AGENT"
+          ]
+        }
+      ]
+    },
+    "id": "fudlrstvwx",
+    "name": "Reddit MCP Server",
+    "namespace": "liuyang1520",
+    "repository": {
+      "url": "https://github.com/liuyang1520/reddit-mcp"
+    },
+    "slug": "reddit-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fudlrstvwx"
+  }
+}

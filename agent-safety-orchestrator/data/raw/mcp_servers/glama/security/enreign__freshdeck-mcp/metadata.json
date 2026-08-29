@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "p7m62pku2x",
+  "namespace": "Enreign",
+  "slug": "freshdeck-mcp",
+  "name": "Freshdesk MCP Server",
+  "description": "Enables interaction with Freshdesk API v2 to manage support tickets, contacts, agents, companies, and conversations with built-in authentication, rate limiting, and error handling.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Freshdesk API v2 to manage support tickets, contacts, agents, companies, and conversations with built-in authentication, rate limiting, and error handling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Log level: debug, info, warn, error",
+          "type": "string",
+          "default": "info"
+        },
+        "FRESHDESK_DOMAIN": {
+          "description": "Your Freshdesk domain (e.g., yourcompany.freshdesk.com or just 'yourcompany')",
+          "type": "string"
+        },
+        "FRESHDESK_API_KEY": {
+          "description": "Your Freshdesk API key for authentication",
+          "type": "string"
+        },
+        "FRESHDESK_TIMEOUT": {
+          "description": "Request timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "FRESHDESK_RATE_LIMIT": {
+          "description": "Rate limit per minute for API requests",
+          "type": "string",
+          "default": "50"
+        },
+        "FRESHDESK_MAX_RETRIES": {
+          "description": "Maximum retry attempts for failed requests",
+          "type": "string",
+          "default": "3"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FRESHDESK_DOMAIN",
+        "FRESHDESK_API_KEY"
+      ]
+    },
+    "id": "p7m62pku2x",
+    "name": "Freshdesk MCP Server",
+    "namespace": "Enreign",
+    "repository": {
+      "url": "https://github.com/Enreign/freshdeck-mcp"
+    },
+    "slug": "freshdeck-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/p7m62pku2x"
+  }
+}

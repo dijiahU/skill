@@ -1,0 +1,1381 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "josemvelez/mcp-europe-business",
+  "namespace": "josemvelez",
+  "slug": "mcp-europe-business",
+  "displayName": "MCP Europe Business Suite",
+  "description": "European business compliance suite for AI agents — 28 tools covering tax ID validation (PT, ES, FR, DE, IT, UK, NL), IBAN verification, EU VAT rates, invoice requirements, e-invoicing rules, payment terms, labor calendar helpers, VAT breakdown calculations and invoice schema validation for 18+ European countries. No auth required, read-only, offline.",
+  "discoveryQueries": [
+    "vetter",
+    "compliance",
+    "authorization",
+    "dast"
+  ],
+  "rawRecord": {
+    "id": "46d75dca-a274-4d40-8a17-5b60c5ff49ee",
+    "qualifiedName": "josemvelez/mcp-europe-business",
+    "namespace": "josemvelez",
+    "slug": "mcp-europe-business",
+    "displayName": "MCP Europe Business Suite",
+    "description": "European business compliance suite for AI agents — 28 tools covering tax ID validation (PT, ES, FR, DE, IT, UK, NL), IBAN verification, EU VAT rates, invoice requirements, e-invoicing rules, payment terms, labor calendar helpers, VAT breakdown calculations and invoice schema validation for 18+ European countries. No auth required, read-only, offline.",
+    "iconUrl": "https://api.smithery.ai/servers/josemvelez/mcp-europe-business/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-02T18:59:03.284Z",
+    "homepage": "https://mcpize.com/mcp/mcp-europe-business-suite",
+    "bySmithery": false,
+    "owner": "org_01KPP9KKJMQAJEXHHWY185P02F",
+    "score": 0.008403361344537815
+  },
+  "detail": {
+    "qualifiedName": "josemvelez/mcp-europe-business",
+    "displayName": "MCP Europe Business Suite",
+    "description": "European business compliance suite for AI agents — 28 tools covering tax ID validation (PT, ES, FR, DE, IT, UK, NL), IBAN verification, EU VAT rates, invoice requirements, e-invoicing rules, payment terms, labor calendar helpers, VAT breakdown calculations and invoice schema validation for 18+ European countries. No auth required, read-only, offline.",
+    "iconUrl": "https://api.smithery.ai/servers/josemvelez/mcp-europe-business/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcp-europe-business--josemvelez.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-europe-business--josemvelez.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "validate_nif",
+        "description": "Validates a Portuguese NIF (Número de Identificação Fiscal) — the 9-digit tax identification number issued by the Portuguese Tax Authority (AT) to individuals and companies. Applies the official modulo-11 checksum algorithm to verify the check digit. Returns { valid: true, nif: string } for valid NIFs, or { valid: false, reason: string } for invalid format or failed checksum. First-digit rules are enforced: 1–3 for individuals, 5 for corporations, 6 for public entities, 7–8 for other entities, 9 for occasional taxpayers. Use when processing Portuguese invoices (faturas), onboarding suppliers, validating user registrations, or any fiscal compliance workflow. Does not query the AT database — offline format and checksum validation only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "nif": {
+              "type": "string",
+              "description": "9-digit Portuguese NIF, with or without spaces. Example: '123456789'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "nif": {
+              "type": "string",
+              "description": "Normalized NIF without spaces"
+            },
+            "valid": {
+              "type": "boolean",
+              "description": "Whether the NIF is valid"
+            },
+            "reason": {
+              "type": "string",
+              "description": "Reason for invalidity if valid is false"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_iban",
+        "description": "Validates an IBAN (International Bank Account Number) using the ISO 13616 MOD-97 algorithm. Supports 18 European countries: PT, ES, FR, DE, IT, NL, BE, PL, SE, DK, FI, AT, IE, GR, HU, RO, CZ, HR. Returns { valid: boolean, country: string, iban: string } — country is extracted from the 2-letter prefix. Returns { valid: false, reason: string } for malformed input. Spaces are automatically stripped before validation. Use when validating supplier bank details for SEPA transfers, processing direct debit mandates, verifying payment data in e-commerce checkouts, or any workflow requiring a verified EU bank account number. Validates structure and checksum only — does not confirm account existence.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "iban": {
+              "type": "string",
+              "description": "European IBAN with or without spaces. Example: 'PT50 0002 0123 1234 5678 9015 4'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "iban": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_vat_rate",
+        "description": "Returns all VAT (Value Added Tax) rates for a given EU country — standard, reduced, intermediate, and super-reduced rates where applicable, as numeric percentages. Returns { country, standard, reduced?, intermediate?, superreduced? } for supported countries, or { error, available } listing all valid codes if the country is not found. Supports 18 EU member states: PT, ES, FR, DE, IT, NL, BE, PL, SE, DK, FI, AT, IE, GR, HU, RO, CZ, HR. Use when calculating EU cross-border invoice tax, determining correct rate for e-commerce checkout by customer country, generating compliant VAT breakdowns, or any workflow requiring accurate and current EU VAT rates per jurisdiction.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO 3166-1 alpha-2 country code. Example: 'PT', 'FR', 'DE'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "reduced": {
+              "type": "number"
+            },
+            "standard": {
+              "type": "number"
+            },
+            "intermediate": {
+              "type": "number"
+            },
+            "superreduced": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_portugal_holidays",
+        "description": "Returns all Portuguese national public holidays for a given year as a structured list. Each holiday includes { date: 'YYYY-MM-DD', name: string, name_en: string }. Returns 10 mandatory national holidays defined by Portuguese law. Use when calculating business deadlines, delivery dates, payment due dates, SLA periods, or scheduling tasks that must avoid non-working days in Portugal.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "get_spain_holidays",
+        "description": "Returns all Spanish national public holidays for a given year as a structured list. Each holiday includes { date: 'YYYY-MM-DD', name: string, name_en: string }. Returns 9 mandatory national holidays defined by Spanish law. Does not include regional holidays that vary by autonomous community.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "get_france_holidays",
+        "description": "Returns all French national public holidays for a given year. Easter-dependent holidays (Easter Monday, Ascension, Whit Monday) are dynamically calculated using the Anonymous Gregorian algorithm. Returns 11 mandatory holidays defined by French law.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "validate_nif_es",
+        "description": "Validates Spanish tax identification numbers — NIF (DNI, 8 digits + check letter, for Spanish citizens), NIE (Número de Identidad de Extranjero, starts with X/Y/Z, for foreign residents), and CIF (Código de Identificación Fiscal, letter + 7 digits + control, for companies). Automatically detects the document type. Returns { valid: boolean, type: 'NIF'|'NIE'|'CIF', id: string }.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Spanish NIF, NIE or CIF. Examples: '12345678Z' (NIF), 'X1234567L' (NIE), 'B12345678' (CIF)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "NIF",
+                "NIE",
+                "CIF"
+              ],
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_siret",
+        "description": "Validates a French SIRET (14-digit company establishment number) using the official Luhn algorithm. The first 9 digits are the SIREN (company identifier) and the last 5 identify the specific establishment. Returns { valid: boolean, siren: string, establishment: string, siret: string }. Handles the La Poste special case automatically.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "siret": {
+              "type": "string",
+              "description": "14-digit French SIRET, with or without spaces/dashes. Example: '732 829 320 00074'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "siren": {
+              "type": "string"
+            },
+            "siret": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "establishment": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_tva_fr",
+        "description": "Validates a French TVA intracom (VAT) number — format 'FR' + 2 alphanumeric key characters + 9-digit SIREN. Returns { valid: boolean, key: string, siren: string, tva: string }. When the key is numeric, validates using the official formula: key = (12 + 3 × (SIREN mod 97)) mod 97.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tva": {
+              "type": "string",
+              "description": "French TVA intracom number. Example: 'FR40303265045'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "tva": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "siren": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "calculate_working_days",
+        "description": "Counts the number of working days between two dates (inclusive), excluding Saturdays, Sundays, and all 10 Portuguese national public holidays. Returns { start_date, end_date, working_days: number }. Use when calculating Portuguese invoice payment deadlines, legal notice periods, or SLA response times.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "type": "string",
+              "description": "End date in YYYY-MM-DD format. Example: '2026-01-31'"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in YYYY-MM-DD format. Example: '2026-01-01'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "end_date": {
+              "type": "string"
+            },
+            "start_date": {
+              "type": "string"
+            },
+            "working_days": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "format_number_european",
+        "description": "Formats a number using the locale conventions of a specific European country — correct decimal and thousands separators. Returns { original, formatted, locale, country_code }. Supports PT, ES, FR, DE, IT, NL, BE, PL, SE, DK, FI, AT, IE, GR, HU, RO, UK.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "number",
+              "description": "The numeric value to format. Example: 1234.56"
+            },
+            "decimals": {
+              "type": "number",
+              "description": "Number of decimal places. Defaults to 2."
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter country code. Example: 'PT', 'FR', 'DE'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "locale": {
+              "type": "string"
+            },
+            "original": {
+              "type": "number"
+            },
+            "formatted": {
+              "type": "string"
+            },
+            "country_code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "original",
+            "formatted",
+            "locale",
+            "country_code"
+          ]
+        }
+      },
+      {
+        "name": "validate_codice_fiscale",
+        "description": "Validates an Italian Codice Fiscale (fiscal code) for individuals — a 16-character alphanumeric code issued by the Italian Revenue Agency (Agenzia delle Entrate). Applies the official odd/even position checksum algorithm. Returns { valid: boolean, codice_fiscale: string } or { valid: false, reason: string }. Use when processing Italian invoices, onboarding Italian individuals, or any Italian compliance workflow requiring a verified personal fiscal code.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "codice_fiscale": {
+              "type": "string",
+              "description": "16-character Italian Codice Fiscale. Example: 'RSSMRA85T10A562S'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "codice_fiscale": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_partita_iva",
+        "description": "Validates an Italian Partita IVA (VAT number for companies and self-employed) — an 11-digit number issued by the Italian Revenue Agency. Applies the official Luhn-variant checksum algorithm used by Italian tax authorities. Returns { valid: boolean, partita_iva: string } or { valid: false, reason: string }. Use when processing Italian B2B invoices, validating Italian suppliers, or any Italian business compliance workflow.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "partita_iva": {
+              "type": "string",
+              "description": "11-digit Italian Partita IVA, with or without spaces. Example: '12345670017'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "partita_iva": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_vat_de",
+        "description": "Validates a German VAT identification number (Umsatzsteuer-Identifikationsnummer, USt-IdNr) — format 'DE' followed by 9 digits. Verifies the format and applies the official ISO 7064 MOD-11-10 checksum algorithm. Returns { valid: boolean, vat_number: string, country: 'DE' } or { valid: false, reason: string }. Use when processing German invoices, validating German suppliers for intra-EU transactions, or any B2B workflow involving German companies.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "vat_number": {
+              "type": "string",
+              "description": "German VAT number with or without spaces. Example: 'DE123456789'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "vat_number": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_vat_uk",
+        "description": "Validates a UK VAT registration number — format 'GB' followed by 9 digits (standard), 12 digits (branch traders), or 'GD'/'HA' followed by 3 digits (government/health authorities). Applies the official HMRC modulo-97 algorithm for 9-digit numbers. Returns { valid: boolean, vat_number: string, type: string, country: 'GB' }. Use when processing UK invoices, validating UK suppliers post-Brexit, or any B2B workflow involving UK VAT numbers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "vat_number": {
+              "type": "string",
+              "description": "UK VAT number with or without spaces. Example: 'GB123456789' or '123456789'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "vat_number": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_kvk_nl",
+        "description": "Validates a Dutch KVK (Kamer van Koophandel) chamber of commerce number — an 8-digit registration number assigned to all businesses registered in the Netherlands. Verifies the format and applies the official weighted checksum algorithm. Returns { valid: boolean, kvk: string, country: 'NL' } or { valid: false, reason: string }. Use when processing Dutch invoices, validating Dutch suppliers, or onboarding Dutch business partners.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "kvk": {
+              "type": "string",
+              "description": "8-digit Dutch KVK number, with or without spaces. Example: '12345678'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "kvk": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_postal_code",
+        "description": "Validates a postal code format for a given European country using the official pattern for that country. Returns { valid: boolean, postal_code: string, country: string, format: string }. Supports PT (4+3 digit), ES (5 digit), FR (5 digit), DE (5 digit), IT (5 digit), NL (4 digits + 2 letters), BE (4 digit), PL (5+2 digit), SE (5 digit), AT (4 digit), IE (Eircode 3+4), GR (5 digit), HU (4 digit), RO (6 digit), UK (complex alphanumeric). Use in e-commerce checkout validation, address verification, or logistics workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "postal_code": {
+              "type": "string",
+              "description": "Postal code to validate. Example: '1000-001' for PT, '28001' for ES, 'SW1A 1AA' for UK"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'PT', 'DE', 'UK'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "format": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_payment_terms",
+        "description": "Returns the legal B2B payment terms for a given European country — the default payment period, maximum allowed period, and late payment rules as defined by EU Directive 2011/7/EU and local implementations. Returns { country, default_days, max_days, late_payment_interest, notes }. Use when generating invoices, setting payment due dates, or automating accounts receivable workflows. Information provided as reference only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'PT', 'DE', 'FR'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "max_days": {
+              "type": "number"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "default_days": {
+              "type": "number"
+            },
+            "late_payment_interest": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_invoice_requirements",
+        "description": "Returns the mandatory fields required on a valid VAT invoice for a given European country, as defined by EU VAT Directive 2006/112/EC and local implementations. Returns { country, mandatory_fields: [], optional_fields: [], notes }. Use when generating invoices for EU customers, validating invoice templates, or building invoice compliance checks in agent workflows. Information provided as reference only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'PT', 'DE', 'FR'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "optional_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "mandatory_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "get_vat_exemption_threshold",
+        "description": "Returns the annual turnover threshold below which a business may be exempt from VAT registration in a given European country — the small business VAT exemption scheme. Returns { country, threshold_local_currency, currency, threshold_eur_approx, notes }. Use when determining if a small business needs to register for VAT, or when building onboarding flows for European freelancers and micro-enterprises. Information provided as reference only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'PT', 'DE', 'FR'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "regime": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "threshold_eur_approx": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "threshold_local_currency": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "get_einvoicing_rules",
+        "description": "Returns the current e-invoicing (electronic invoicing) obligations for a given European country — whether it is mandatory for B2G (business-to-government), B2B (business-to-business), or B2C transactions, the required formats, and implementation timeline. Returns { country, b2g_mandatory, b2b_mandatory, b2c_mandatory, formats, timeline, platform, notes }. Use when building invoice generation systems, determining compliance requirements for EU customers, or automating invoice submission workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'IT', 'DE', 'FR'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "formats": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "platform": {
+              "type": "string"
+            },
+            "timeline": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "b2b_mandatory": {
+              "type": "boolean"
+            },
+            "b2c_mandatory": {
+              "type": "boolean"
+            },
+            "b2g_mandatory": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_public_holidays_range",
+        "description": "Returns all public holidays that fall within a given date range for a specified European country. Returns { country, start_date, end_date, total_holidays, holidays: [{date, name, name_en}] }. Supports PT, ES, FR, DE, IT, NL, BE, UK. Use when calculating SLA periods, project timelines, delivery windows, or any workflow that must skip non-working days across multiple European countries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "type": "string",
+              "description": "End date in YYYY-MM-DD format. Example: '2026-12-31'"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in YYYY-MM-DD format. Example: '2026-01-01'"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'PT', 'DE', 'FR'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "end_date": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "start_date": {
+              "type": "string"
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "calculate_working_days_eu",
+        "description": "Counts the number of working days between two dates (inclusive) for a given European country, excluding weekends and that country's national public holidays. Returns { country, start_date, end_date, working_days, holidays_excluded }. Supports PT, ES, FR, DE, IT, NL, BE, UK. Use when calculating cross-border SLA periods, invoice payment deadlines, or project timelines that must account for different national holiday calendars.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "type": "string",
+              "description": "End date in YYYY-MM-DD format, inclusive. Example: '2026-01-31'"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in YYYY-MM-DD format, inclusive. Example: '2026-01-01'"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'DE', 'IT', 'UK'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "end_date": {
+              "type": "string"
+            },
+            "start_date": {
+              "type": "string"
+            },
+            "working_days": {
+              "type": "number"
+            },
+            "holidays_excluded": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_next_payment_date",
+        "description": "Calculates the next valid payment date based on a reference date and a payment rule for a given European country, skipping weekends and national public holidays. Supports rules: 'last_working_day_of_month' (salary payment), 'first_working_day_of_month', 'nth_working_day' (e.g. 5th working day), 'next_working_day' (next business day after reference). Returns { country, reference_date, rule, result_date, notes }. Use when scheduling salary payments, invoice due dates, or any automated payment workflow that must avoid non-working days.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "number",
+              "description": "For nth_working_day rule: which working day of the month. Example: 5 for 5th working day."
+            },
+            "rule": {
+              "enum": [
+                "last_working_day_of_month",
+                "first_working_day_of_month",
+                "next_working_day",
+                "nth_working_day"
+              ],
+              "type": "string",
+              "description": "Payment rule to apply."
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'PT', 'DE', 'FR'"
+            },
+            "reference_date": {
+              "type": "string",
+              "description": "Reference date in YYYY-MM-DD format. Example: '2026-01-31'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "rule": {
+              "type": "string"
+            },
+            "error": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "result_date": {
+              "type": "string"
+            },
+            "reference_date": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_invoice_schema",
+        "description": "Validates whether an invoice JSON object contains all mandatory fields required for a valid VAT invoice in a given European country, based on EU VAT Directive 2006/112/EC and local implementations. Returns { valid: boolean, country, missing_fields: [], present_fields: [], warnings: [] }. Use when building invoice generation pipelines, pre-submission validation, or compliance checks in agent workflows. Information is reference only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "invoice": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "type": "string"
+                },
+                "vat_rate": {
+                  "type": "number"
+                },
+                "line_items": {
+                  "type": "array"
+                },
+                "vat_amount": {
+                  "type": "number"
+                },
+                "invoice_date": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "supplier_name": {
+                  "type": "string"
+                },
+                "invoice_number": {
+                  "type": "string"
+                },
+                "total_excl_vat": {
+                  "type": "number"
+                },
+                "total_incl_vat": {
+                  "type": "number"
+                },
+                "customer_tax_id": {
+                  "type": "string"
+                },
+                "supplier_tax_id": {
+                  "type": "string"
+                }
+              },
+              "description": "Invoice object to validate",
+              "additionalProperties": false
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'PT', 'DE', 'IT'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "country": {
+              "type": "string"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "missing_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "present_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "calculate_vat_breakdown",
+        "description": "Calculates a complete VAT breakdown for a list of invoice line items, grouping amounts by VAT rate and computing totals. Returns { lines_summary, vat_breakdown: [{rate, base_amount, vat_amount}], total_excl_vat, total_vat, total_incl_vat, currency }. Each line item requires { description, quantity, unit_price, vat_rate }. Use when generating invoices, building checkout summaries, or verifying VAT calculations in agent workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unit_price",
+                  "vat_rate"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number",
+                    "description": "Quantity"
+                  },
+                  "vat_rate": {
+                    "type": "number",
+                    "description": "VAT rate as percentage. Example: 23 for 23%"
+                  },
+                  "unit_price": {
+                    "type": "number",
+                    "description": "Unit price excluding VAT"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Item description"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Array of invoice line items"
+            },
+            "currency": {
+              "type": "string",
+              "description": "Currency code. Example: 'EUR', 'GBP'. Defaults to 'EUR'"
+            },
+            "round_decimals": {
+              "type": "number",
+              "description": "Decimal places for rounding. Defaults to 2"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "currency": {
+              "type": "string"
+            },
+            "total_vat": {
+              "type": "number"
+            },
+            "lines_summary": {
+              "type": "array"
+            },
+            "vat_breakdown": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "rate",
+                  "base_amount",
+                  "vat_amount"
+                ],
+                "properties": {
+                  "rate": {
+                    "type": "number"
+                  },
+                  "vat_amount": {
+                    "type": "number"
+                  },
+                  "base_amount": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_excl_vat": {
+              "type": "number"
+            },
+            "total_incl_vat": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "lines_summary",
+            "vat_breakdown",
+            "total_excl_vat",
+            "total_vat",
+            "total_incl_vat",
+            "currency"
+          ]
+        }
+      },
+      {
+        "name": "suggest_vat_treatment",
+        "description": "Suggests the likely VAT treatment for a transaction based on seller country, buyer country, buyer VAT registration status, and goods/services type — covering standard VAT, reverse charge, OSS/IOSS, and zero-rating scenarios under EU VAT rules. Returns { treatment, description, seller_charges_vat, applicable_rate, notes, disclaimer }. Use when building checkout VAT logic, invoice generation, or cross-border EU compliance workflows. For digital services sold to EU consumers, OSS is indicated automatically. Always verify with a tax advisor for real transactions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "goods_type": {
+              "enum": [
+                "goods",
+                "digital_services",
+                "services"
+              ],
+              "type": "string",
+              "description": "Type of supply"
+            },
+            "buyer_country": {
+              "type": "string",
+              "description": "Buyer's country ISO code. Example: 'DE'"
+            },
+            "seller_country": {
+              "type": "string",
+              "description": "Seller's country ISO code. Example: 'PT'"
+            },
+            "buyer_is_vat_registered": {
+              "type": "boolean",
+              "description": "Whether the buyer is VAT registered (B2B) or not (B2C)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "notes": {
+              "type": "string"
+            },
+            "treatment": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "goods_type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "buyer_country": {
+              "type": "string"
+            },
+            "seller_country": {
+              "type": "string"
+            },
+            "applicable_rate": {
+              "type": "string"
+            },
+            "seller_charges_vat": {
+              "type": "boolean"
+            },
+            "buyer_is_vat_registered": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "treatment",
+            "description",
+            "seller_charges_vat",
+            "applicable_rate",
+            "seller_country",
+            "buyer_country",
+            "buyer_is_vat_registered",
+            "goods_type",
+            "notes",
+            "disclaimer"
+          ]
+        }
+      },
+      {
+        "name": "calculate_vat_amount",
+        "description": "Calculates VAT amounts from either a net (excluding VAT) or gross (including VAT) amount for a given VAT rate. Returns { net_amount, vat_amount, gross_amount, vat_rate, currency }. Use when building pricing tools, invoice calculators, or checkout flows that need to split gross prices into net + VAT components.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "description": "The amount to calculate VAT for"
+            },
+            "currency": {
+              "type": "string",
+              "description": "Currency code. Example: 'EUR', 'GBP'. Defaults to 'EUR'"
+            },
+            "vat_rate": {
+              "type": "number",
+              "description": "VAT rate as a percentage. Example: 23 for 23%"
+            },
+            "amount_type": {
+              "enum": [
+                "net",
+                "gross"
+              ],
+              "type": "string",
+              "description": "Whether the input amount is net (excluding VAT) or gross (including VAT)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "currency": {
+              "type": "string"
+            },
+            "vat_rate": {
+              "type": "number"
+            },
+            "net_amount": {
+              "type": "number"
+            },
+            "vat_amount": {
+              "type": "number"
+            },
+            "gross_amount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "net_amount",
+            "vat_amount",
+            "gross_amount",
+            "vat_rate",
+            "currency"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

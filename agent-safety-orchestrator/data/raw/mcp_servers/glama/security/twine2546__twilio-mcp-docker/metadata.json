@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "kz29tsx5zq",
+  "namespace": "Twine2546",
+  "slug": "twilio-mcp-docker",
+  "name": "Twilio MCP Server (Docker Edition with Auth Token Support)",
+  "description": "Enables interaction with Twilio API services including messaging, voice, and Studio flows through Docker deployment. Supports both API Key and Auth Token authentication for managing calls, messages, phone numbers, and automation workflows.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables interaction with Twilio API services including messaging, voice, and Studio flows through Docker deployment. Supports both API Key and Auth Token authentication for managing calls, messages, phone numbers, and automation workflows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TWILIO_API_KEY": {
+          "description": "Your Twilio API Key (starts with SK)",
+          "type": "string"
+        },
+        "TWILIO_API_SECRET": {
+          "description": "Your Twilio API Secret",
+          "type": "string"
+        },
+        "TWILIO_AUTH_TOKEN": {
+          "description": "Your Twilio Auth Token",
+          "type": "string"
+        },
+        "TWILIO_ACCOUNT_SID": {
+          "description": "Your Twilio Account SID (starts with AC)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "TWILIO_ACCOUNT_SID",
+            "TWILIO_AUTH_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "TWILIO_ACCOUNT_SID",
+            "TWILIO_API_KEY",
+            "TWILIO_API_SECRET"
+          ]
+        }
+      ]
+    },
+    "id": "kz29tsx5zq",
+    "name": "Twilio MCP Server (Docker Edition with Auth Token Support)",
+    "namespace": "Twine2546",
+    "repository": {
+      "url": "https://github.com/Twine2546/twilio-mcp-docker"
+    },
+    "slug": "twilio-mcp-docker",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kz29tsx5zq"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "registry": "glama",
+  "id": "gumupmfn7r",
+  "namespace": "tachote",
+  "slug": "mcp-interactsh",
+  "name": "MCP Interactsh Bridge",
+  "description": "Enables out-of-band interaction testing by integrating ProjectDiscovery's interactsh service as an MCP server. Allows AI agents to create callback domains, send probes, and capture DNS/HTTP interactions for security testing and verification workflows.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables out-of-band interaction testing by integrating ProjectDiscovery's interactsh service as an MCP server. Allows AI agents to create callback domains, send probes, and capture DNS/HTTP interactions for security testing and verification workflows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "INTERACTSH_TOKEN": {
+          "description": "Authorization token if your interactsh server enforces auth.",
+          "type": "string"
+        },
+        "INTERACTSH_BASE_URL": {
+          "description": "Base URL of the interactsh server to target.",
+          "type": "string",
+          "default": "https://oast.pro"
+        },
+        "INTERACTSH_DOMAIN_SUFFIX": {
+          "description": "Domain suffix used to build callback hosts. Override when using a custom interactsh deployment.",
+          "type": "string",
+          "default": "host derived from INTERACTSH_BASE_URL"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "gumupmfn7r",
+    "name": "MCP Interactsh Bridge",
+    "namespace": "tachote",
+    "repository": {
+      "url": "https://github.com/tachote/mcp-interactsh"
+    },
+    "slug": "mcp-interactsh",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gumupmfn7r"
+  }
+}

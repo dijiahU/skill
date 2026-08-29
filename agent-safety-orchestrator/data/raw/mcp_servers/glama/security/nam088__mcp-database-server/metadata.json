@@ -1,0 +1,163 @@
+{
+  "registry": "glama",
+  "id": "nyvtybpa5f",
+  "namespace": "Nam088",
+  "slug": "mcp-database-server",
+  "name": "mcp-database-server",
+  "description": "A modular MCP server that enables interaction with multiple database types including PostgreSQL, MySQL, SQLite, Redis, MongoDB, and LDAP. It provides tools for executing queries, managing SQL commands, and exploring database schemas with configurable read-only security.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A modular MCP server that enables interaction with multiple database types including PostgreSQL, MySQL, SQLite, Redis, MongoDB, and LDAP. It provides tools for executing queries, managing SQL commands, and exploring database schemas with configurable read-only security.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DB_TYPE": {
+          "description": "Database type (default: postgres). Options: postgres, postgresql, mysql, mysql2, sqlite, redis, mongodb, mongo, ldap.",
+          "type": "string",
+          "default": "postgres"
+        },
+        "LDAP_URL": {
+          "description": "Connection string for LDAP (alternative to LDAP_CONNECTION_STRING)",
+          "type": "string"
+        },
+        "MYSQL_URL": {
+          "description": "Connection string for MySQL (alternative to MYSQL_CONNECTION_STRING)",
+          "type": "string"
+        },
+        "REDIS_URL": {
+          "description": "Connection string for Redis (alternative to REDIS_CONNECTION_STRING)",
+          "type": "string"
+        },
+        "SQLITE_URL": {
+          "description": "Connection string for SQLite (file path)",
+          "type": "string"
+        },
+        "MONGODB_URL": {
+          "description": "Connection string for MongoDB (alternative to MONGODB_CONNECTION_STRING)",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "Generic connection string fallback for PostgreSQL, MySQL, or SQLite",
+          "type": "string"
+        },
+        "LDAP_BIND_DN": {
+          "description": "Bind DN for LDAP authentication",
+          "type": "string"
+        },
+        "READ_ONLY_MODE": {
+          "description": "Read-only mode (default: true). Blocks write operations when true. Set to 'false' or '0' to enable writes.",
+          "type": "string",
+          "default": "true"
+        },
+        "LDAP_BIND_PASSWORD": {
+          "description": "Bind password for LDAP authentication",
+          "type": "string"
+        },
+        "LDAP_CONNECTION_STRING": {
+          "description": "Connection string for LDAP (e.g., ldap://localhost:389)",
+          "type": "string"
+        },
+        "MYSQL_CONNECTION_STRING": {
+          "description": "Connection string for MySQL",
+          "type": "string"
+        },
+        "REDIS_CONNECTION_STRING": {
+          "description": "Connection string for Redis (e.g., redis://localhost:6379)",
+          "type": "string"
+        },
+        "SQLITE_CONNECTION_STRING": {
+          "description": "Connection string for SQLite (file path, e.g., sqlite://./database.sqlite)",
+          "type": "string"
+        },
+        "MONGODB_CONNECTION_STRING": {
+          "description": "Connection string for MongoDB (e.g., mongodb://localhost:27017/mydb)",
+          "type": "string"
+        },
+        "POSTGRES_CONNECTION_STRING": {
+          "description": "Connection string for PostgreSQL (e.g., postgresql://user:password@localhost:5432/mydb)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "POSTGRES_CONNECTION_STRING"
+          ]
+        },
+        {
+          "required": [
+            "MYSQL_CONNECTION_STRING"
+          ]
+        },
+        {
+          "required": [
+            "MYSQL_URL"
+          ]
+        },
+        {
+          "required": [
+            "SQLITE_CONNECTION_STRING"
+          ]
+        },
+        {
+          "required": [
+            "SQLITE_URL"
+          ]
+        },
+        {
+          "required": [
+            "REDIS_CONNECTION_STRING"
+          ]
+        },
+        {
+          "required": [
+            "REDIS_URL"
+          ]
+        },
+        {
+          "required": [
+            "MONGODB_CONNECTION_STRING"
+          ]
+        },
+        {
+          "required": [
+            "MONGODB_URL"
+          ]
+        },
+        {
+          "required": [
+            "LDAP_CONNECTION_STRING"
+          ]
+        },
+        {
+          "required": [
+            "LDAP_URL"
+          ]
+        },
+        {
+          "required": [
+            "DATABASE_URL"
+          ]
+        }
+      ]
+    },
+    "id": "nyvtybpa5f",
+    "name": "mcp-database-server",
+    "namespace": "Nam088",
+    "repository": {
+      "url": "https://github.com/Nam088/mcp-database-server"
+    },
+    "slug": "mcp-database-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nyvtybpa5f"
+  }
+}

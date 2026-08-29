@@ -1,0 +1,169 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "synapselayer/synapse-protocol",
+  "namespace": "synapselayer",
+  "slug": "synapse-protocol",
+  "displayName": "Synapse Layer",
+  "description": "Persistent memory infrastructure for AI agents — encrypted, governed, and cross-agent. The OAuth for AI Memory.",
+  "discoveryQueries": [
+    "policy",
+    "trust",
+    "credential",
+    "secret",
+    "encryption",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "4192246e-e2d5-45d5-a3f5-ce0a28aa214c",
+    "qualifiedName": "synapselayer/synapse-protocol",
+    "namespace": "synapselayer",
+    "slug": "synapse-protocol",
+    "displayName": "Synapse Layer",
+    "description": "Persistent memory infrastructure for AI agents — encrypted, governed, and cross-agent. The OAuth for AI Memory.",
+    "iconUrl": "https://api.smithery.ai/servers/synapselayer/synapse-protocol/icon",
+    "verified": false,
+    "useCount": 2131,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T22:36:22.506Z",
+    "homepage": "https://synapselayer.org",
+    "bySmithery": false,
+    "owner": "org_01KNBVYGVXEEAGJBJ1TPKPK5HY",
+    "score": 0.011235955056179775
+  },
+  "detail": {
+    "qualifiedName": "synapselayer/synapse-protocol",
+    "displayName": "Synapse Layer (Synapse Protocol)",
+    "description": "Persistent memory infrastructure for AI agents — encrypted, governed, and cross-agent. The OAuth for AI Memory. Security Score: 10/10 (MCP)",
+    "iconUrl": "https://api.smithery.ai/servers/synapselayer/synapse-protocol/icon",
+    "remote": true,
+    "deploymentUrl": "https://synapse-protocol--synapselayer.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://synapse-protocol--synapselayer.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "connect_token"
+          ],
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "title": "Agent ID",
+              "default": "default",
+              "x-order": 1,
+              "description": "Identifier for the agent using the memory layer. Defaults to 'default'."
+            },
+            "connect_token": {
+              "type": "string",
+              "title": "Synapse Connect Token",
+              "x-order": 0,
+              "description": "Your Synapse Connect Token. Get it at synapselayer.org → Dashboard → Connect."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "recall",
+        "description": "Deterministically retrieves past context and decisions. Supports routing modes (auto/temporal/semantic/priority/hybrid).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "auto",
+                "temporal",
+                "semantic",
+                "priority",
+                "hybrid"
+              ],
+              "type": "string",
+              "description": "Recall routing mode. Unknown values fall back to semantic (fail-closed)."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum memories to return (1-50, default: 10)."
+            },
+            "query": {
+              "type": "string",
+              "description": "What to recall"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Agent identifier to scope recall. Defaults to 'default'."
+            }
+          }
+        }
+      },
+      {
+        "name": "save_to_synapse",
+        "description": "Persists content with AES-256-GCM encryption at rest, PII redaction, and Trust Quotient scoring.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to persist"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Agent identifier. Defaults to 'default'."
+            }
+          }
+        }
+      },
+      {
+        "name": "process_text",
+        "description": "Self-extracting memory engine. Scans free-form text for milestones, decisions, alerts. Never stores secrets, credentials, or financial data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to process"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Agent identifier. Defaults to 'default'."
+            }
+          }
+        }
+      },
+      {
+        "name": "search",
+        "description": "Cross-agent memory search with full-text matching.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Maximum results to return (1-50, default: 20)."
+            },
+            "query": {
+              "type": "string",
+              "description": "Search query"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Optional: restrict search to a specific agent."
+            }
+          }
+        }
+      },
+      {
+        "name": "health_check",
+        "description": "Verify system availability. Public method — no auth required at the tool level.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

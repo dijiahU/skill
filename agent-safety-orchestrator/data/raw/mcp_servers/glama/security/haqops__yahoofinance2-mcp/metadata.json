@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "edxz2s6xm5",
+  "namespace": "haqops",
+  "slug": "yahoofinance2-mcp",
+  "name": "Secure MCP Server Template",
+  "description": "A template for creating secure, remotely accessible MCP servers with OAuth authentication and Cloudflare ZeroTrust Access protection. Enables deployment of containerized MCP servers that can be safely accessed by Claude Desktop and other MCP clients through authenticated connections.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A template for creating secure, remotely accessible MCP servers with OAuth authentication and Cloudflare ZeroTrust Access protection. Enables deployment of containerized MCP servers that can be safely accessed by Claude Desktop and other MCP clients through authenticated connections.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ACCESS_JWKS_URL": {
+          "description": "Your Access for SaaS JWKS URL",
+          "type": "string"
+        },
+        "ACCESS_CLIENT_ID": {
+          "description": "Your Access for SaaS OIDC App Client ID",
+          "type": "string"
+        },
+        "ACCESS_TOKEN_URL": {
+          "description": "Your Access for SaaS token URL",
+          "type": "string"
+        },
+        "ACCESS_CLIENT_SECRET": {
+          "description": "Your Access for SaaS OIDC App Client secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Random string for cookie encryption (e.g. openssl rand -hex 32)",
+          "type": "string"
+        },
+        "ACCESS_AUTHORIZATION_URL": {
+          "description": "Your Access for SaaS authorization URL",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ACCESS_CLIENT_ID",
+        "ACCESS_CLIENT_SECRET",
+        "ACCESS_TOKEN_URL",
+        "ACCESS_AUTHORIZATION_URL",
+        "ACCESS_JWKS_URL",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "edxz2s6xm5",
+    "name": "Secure MCP Server Template",
+    "namespace": "haqops",
+    "repository": {
+      "url": "https://github.com/haqops/yahoofinance2-mcp"
+    },
+    "slug": "yahoofinance2-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/edxz2s6xm5"
+  }
+}

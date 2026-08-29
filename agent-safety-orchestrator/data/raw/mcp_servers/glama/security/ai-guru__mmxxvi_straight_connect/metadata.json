@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "w3u4klavq1",
+  "namespace": "AI-Guru",
+  "slug": "mmxxvi_straight_connect",
+  "name": "Straight Connect",
+  "description": "An MCP server for communication service connectors that currently provides multi-account Telegram integration with granular tool access and security controls. It allows AI models to manage messages, chats, and media across various accounts through a flexible, extensible routing architecture.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server for communication service connectors that currently provides multi-account Telegram integration with granular tool access and security controls. It allows AI models to manage messages, chats, and media across various accounts through a flexible, extensible routing architecture.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_PORT": {
+          "description": "Port on which the MCP server will listen.",
+          "type": "string",
+          "default": "9831"
+        },
+        "CHAT_MODEL": {
+          "description": "The model name to use for the Gradio chat interface (e.g., openai:gpt-4o).",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "API key for the OpenAI-compatible API, used by the chat interface.",
+          "type": "string"
+        },
+        "TELEGRAM_LEVEL": {
+          "description": "Global default tool level (basic, standard, advanced, full). Controls which Telegram tools are available by default.",
+          "type": "string",
+          "default": "basic"
+        },
+        "OPENAI_API_BASE": {
+          "description": "Base URL for the OpenAI-compatible API, used by the chat interface.",
+          "type": "string"
+        },
+        "TELEGRAM_ACCOUNTS": {
+          "description": "Comma-separated account labels (e.g., nietzsche,aurelia). For each label, a corresponding TELEGRAM_<LABEL>_BOT_TOKEN must be provided.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "TELEGRAM_ACCOUNTS"
+      ]
+    },
+    "id": "w3u4klavq1",
+    "name": "Straight Connect",
+    "namespace": "AI-Guru",
+    "repository": {
+      "url": "https://github.com/AI-Guru/mmxxvi_straight_connect"
+    },
+    "slug": "mmxxvi_straight_connect",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/w3u4klavq1"
+  }
+}

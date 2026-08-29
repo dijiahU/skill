@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "sxfqqu6rqv",
+  "namespace": "naotaka3",
+  "slug": "google-calendar-mcp",
+  "name": "Google Calendar MCP Server",
+  "description": "Enables Claude to interact with Google Calendar through natural language, providing the ability to view, create, update, and delete calendar events with persistent OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables Claude to interact with Google Calendar through natural language, providing the ability to view, create, update, and delete calendar events with persistent OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "MCP server host (default: localhost)",
+          "type": "string",
+          "default": "localhost"
+        },
+        "PORT": {
+          "description": "MCP server port (default: 3000)",
+          "type": "string",
+          "default": "3000"
+        },
+        "AUTH_HOST": {
+          "description": "Auth server host (default: localhost)",
+          "type": "string",
+          "default": "localhost"
+        },
+        "AUTH_PORT": {
+          "description": "Auth server port (default: 4153)",
+          "type": "string",
+          "default": "4153"
+        },
+        "USE_MANUAL_AUTH": {
+          "description": "Enable manual authentication (useful when localhost is not accessible)",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth client ID",
+          "type": "string"
+        },
+        "GOOGLE_REDIRECT_URI": {
+          "description": "OAuth2 redirect URI",
+          "type": "string",
+          "default": "http://localhost:4153/oauth2callback"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth client secret",
+          "type": "string"
+        },
+        "TOKEN_ENCRYPTION_KEY": {
+          "description": "Token encryption key (auto-generated if not set) - must be a 64 character hex string",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    "id": "sxfqqu6rqv",
+    "name": "Google Calendar MCP Server",
+    "namespace": "naotaka3",
+    "repository": {
+      "url": "https://github.com/naotaka3/google-calendar-mcp"
+    },
+    "slug": "google-calendar-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sxfqqu6rqv"
+  }
+}

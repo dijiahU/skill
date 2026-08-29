@@ -1,0 +1,48 @@
+{
+  "registry": "glama",
+  "id": "aci99jsco5",
+  "namespace": "bch1212",
+  "slug": "queryshield",
+  "name": "QueryShield",
+  "description": "Secure SQL proxy for AI agents. Translates natural language to safe SQL via Claude, validates at the AST level (SELECT-only, no DDL/DML), enforces per-agent row-level security, and audit-logs every query.",
+  "discoveryQueries": [
+    "security",
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Secure SQL proxy for AI agents. Translates natural language to safe SQL via Claude, validates at the AST level (SELECT-only, no DDL/DML), enforces per-agent row-level security, and audit-logs every query.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "QUERYSHIELD_API_KEY": {
+          "description": "Your Queryshield API key (starts with qs_)",
+          "type": "string"
+        },
+        "QUERYSHIELD_BASE_URL": {
+          "description": "Base URL of the Queryshield API (optional, defaults to https://api.queryshield.io)",
+          "type": "string",
+          "default": "https://api.queryshield.io"
+        }
+      },
+      "type": "object",
+      "required": [
+        "QUERYSHIELD_API_KEY"
+      ]
+    },
+    "id": "aci99jsco5",
+    "name": "QueryShield",
+    "namespace": "bch1212",
+    "repository": {
+      "url": "https://github.com/bch1212/queryshield"
+    },
+    "slug": "queryshield",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/aci99jsco5"
+  }
+}

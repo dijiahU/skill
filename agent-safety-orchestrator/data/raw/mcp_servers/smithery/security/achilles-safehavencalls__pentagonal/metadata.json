@@ -1,0 +1,226 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "achilles-safehavencalls/pentagonal",
+  "namespace": "achilles-safehavencalls",
+  "slug": "pentagonal",
+  "displayName": "pentagonal",
+  "description": "**AI-powered smart contract forge** with an 8-agent adversarial security audit system.\n\n### Tools\n| Tool | Cost |\n|---|---|\n| `pentagonal_audit` — 8-agent security pen test | $5 |\n| `pentagonal_generate` — contracts from natural language | $5 |\n| `pentagonal_fix` — fix vulnerabilities | Free |\n| `pentagonal_compile` — Solidity → ABI + bytecode | Free |\n| `pentagonal_lookup` — token intelligence + honeypot detection | Free |\n| `pentagonal_rules` — self-learning security rules | Free |\n| `pentagonal_chains` — supported blockchains | Free |\n\n### Chains\nEthereum · Polygon · Base · Arbitrum · Optimism · BSC · Avalanche · Solana\n\n### Payment\nAgents pay per-use via **x402 USDC on Base** — no account needed. Human users pay with crypto credits.\n",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "vulnerability",
+    "phishing",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "33f5c681-fbd8-4d7e-9b81-8b301fbb78a4",
+    "qualifiedName": "achilles-safehavencalls/pentagonal",
+    "namespace": "achilles-safehavencalls",
+    "slug": "pentagonal",
+    "displayName": "pentagonal",
+    "description": "**AI-powered smart contract forge** with an 8-agent adversarial security audit system.\n\n### Tools\n| Tool | Cost |\n|---|---|\n| `pentagonal_audit` — 8-agent security pen test | $5 |\n| `pentagonal_generate` — contracts from natural language | $5 |\n| `pentagonal_fix` — fix vulnerabilities | Free |\n| `pentagonal_compile` — Solidity → ABI + bytecode | Free |\n| `pentagonal_lookup` — token intelligence + honeypot detection | Free |\n| `pentagonal_rules` — self-learning security rules | Free |\n| `pentagonal_chains` — supported blockchains | Free |\n\n### Chains\nEthereum · Polygon · Base · Arbitrum · Optimism · BSC · Avalanche · Solana\n\n### Payment\nAgents pay per-use via **x402 USDC on Base** — no account needed. Human users pay with crypto credits.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/pentagonal.ai.ico",
+    "verified": false,
+    "useCount": 449,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T17:17:44.329Z",
+    "homepage": "https://pentagonal.ai",
+    "bySmithery": false,
+    "owner": "org_01KP1AH2WK0YMYFPZ4WMWXA8W9",
+    "score": 0.017543859649122806
+  },
+  "detail": {
+    "qualifiedName": "achilles-safehavencalls/pentagonal",
+    "displayName": "pentagonal",
+    "description": "**AI-powered smart contract forge** with an 8-agent adversarial security audit system.\n\n### Tools\n| Tool | Cost |\n|---|---|\n| `pentagonal_audit` — 8-agent security pen test | $5 |\n| `pentagonal_generate` — contracts from natural language | $5 |\n| `pentagonal_fix` — fix vulnerabilities | Free |\n| `pentagonal_compile` — Solidity → ABI + bytecode | Free |\n| `pentagonal_lookup` — token intelligence + honeypot detection | Free |\n| `pentagonal_rules` — self-learning security rules | Free |\n| `pentagonal_chains` — supported blockchains | Free |\n\n### Chains\nEthereum · Polygon · Base · Arbitrum · Optimism · BSC · Avalanche · Solana\n\n### Payment\nAgents pay per-use via **x402 USDC on Base** — no account needed. Human users pay with crypto credits.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/pentagonal.ai.ico",
+    "remote": true,
+    "deploymentUrl": "https://pentagonal--achilles-safehavencalls.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://pentagonal--achilles-safehavencalls.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "pentagonal_lookup",
+        "description": "One-stop token intelligence. Returns price, market cap, ATH, 24h volume, transactions, holders, liquidity, LP lock status, security flags (honeypot, mintable, pausable, taxes), socials, and verified source code for any token by contract address. Supports Ethereum, Solana, Polygon, Base, Arbitrum, Optimism, and BSC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "enum": [
+                "ethereum",
+                "polygon",
+                "arbitrum",
+                "base",
+                "optimism",
+                "bsc",
+                "avalanche",
+                "solana"
+              ],
+              "type": "string",
+              "default": "ethereum"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "price",
+                  "market",
+                  "liquidity",
+                  "holders",
+                  "security",
+                  "socials",
+                  "code",
+                  "all"
+                ],
+                "type": "string"
+              },
+              "default": [
+                "all"
+              ],
+              "description": "Which sections to return. Use specific fields for faster queries."
+            },
+            "address": {
+              "type": "string",
+              "description": "Contract address (EVM 0x... or Solana base58)"
+            }
+          }
+        }
+      },
+      {
+        "name": "pentagonal_audit",
+        "description": "Run a full 8-agent security pen test on a smart contract. Agents specialize in reentrancy, flash loans, access control, gas griefing, oracle manipulation, MEV/front-running, integer overflow, and economic exploits. Returns findings grouped by severity (Critical → High → Medium → Low) with PoC exploits, line numbers, and remediation steps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Solidity or Anchor/Rust smart contract source code"
+            },
+            "chain": {
+              "enum": [
+                "ethereum",
+                "polygon",
+                "arbitrum",
+                "base",
+                "optimism",
+                "bsc",
+                "avalanche",
+                "solana"
+              ],
+              "type": "string",
+              "default": "ethereum"
+            },
+            "use_learned_rules": {
+              "type": "boolean",
+              "default": true,
+              "description": "Apply accumulated security rules from past audits"
+            }
+          }
+        }
+      },
+      {
+        "name": "pentagonal_generate",
+        "description": "Generate a production-quality smart contract from a natural language description. Supports EVM (Solidity/OpenZeppelin) and Solana (Anchor/Rust programs or SPL token configs). Uses self-learning security rules from past audits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "enum": [
+                "ethereum",
+                "polygon",
+                "arbitrum",
+                "base",
+                "optimism",
+                "bsc",
+                "avalanche",
+                "solana"
+              ],
+              "type": "string",
+              "default": "ethereum"
+            },
+            "prompt": {
+              "type": "string",
+              "description": "Natural language description of the contract"
+            },
+            "solana_type": {
+              "enum": [
+                "program",
+                "token"
+              ],
+              "type": "string",
+              "description": "Solana only: program (Anchor/Rust) or token (SPL config)"
+            },
+            "use_learned_rules": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      },
+      {
+        "name": "pentagonal_fix",
+        "description": "Fix a specific vulnerability in a smart contract while preserving all existing functionality. Call once per finding, starting with critical severity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Smart contract source code containing the vulnerability"
+            },
+            "finding_title": {
+              "type": "string",
+              "description": "Title of the finding from the audit report"
+            },
+            "finding_description": {
+              "type": "string",
+              "description": "Description of the vulnerability and its impact"
+            }
+          }
+        }
+      },
+      {
+        "name": "pentagonal_compile",
+        "description": "Compile Solidity source code to ABI, bytecode, constructor arguments, and gas estimates. Returns everything needed for deployment with Foundry, Hardhat, or cast.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Solidity source code to compile"
+            },
+            "contract_name": {
+              "type": "string",
+              "description": "Specific contract name to extract (defaults to first found)"
+            }
+          }
+        }
+      },
+      {
+        "name": "pentagonal_rules",
+        "description": "View the accumulated security rules knowledge base. Pentagonal learns from every audit and extracts generalizable rules. Check this to see the current state of the self-learning system.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "pentagonal_chains",
+        "description": "List all supported blockchains with chain IDs, explorer URLs, and deployment details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

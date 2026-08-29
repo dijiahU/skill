@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "tf591kdh23",
+  "namespace": "Julian-Figueroa",
+  "slug": "mcp-cloudflare-oauth",
+  "name": "Cloudflare GitHub OAuth MCP Server",
+  "description": "A reference MCP server for Cloudflare Workers that provides remote connection support with integrated GitHub OAuth authentication. It enables developers to build and deploy authenticated remote tools with user-specific access controls and persistent state management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A reference MCP server for Cloudflare Workers that provides remote connection support with integrated GitHub OAuth authentication. It enables developers to build and deploy authenticated remote tools with user-specific access controls and persistent state management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GITHUB_CLIENT_ID": {
+          "description": "The Client ID from your GitHub OAuth App.",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "The Client Secret generated for your GitHub OAuth App.",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random string used for cookie encryption (e.g. generated via 'openssl rand -hex 32').",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "tf591kdh23",
+    "name": "Cloudflare GitHub OAuth MCP Server",
+    "namespace": "Julian-Figueroa",
+    "repository": {
+      "url": "https://github.com/Julian-Figueroa/mcp-cloudflare-oauth"
+    },
+    "slug": "mcp-cloudflare-oauth",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tf591kdh23"
+  }
+}

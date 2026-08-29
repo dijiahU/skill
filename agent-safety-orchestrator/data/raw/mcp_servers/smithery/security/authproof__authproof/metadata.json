@@ -1,0 +1,291 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "authproof/authproof",
+  "namespace": "authproof",
+  "slug": "authproof",
+  "displayName": "Authproof",
+  "description": "MCP server for agent authentication, signed API requests, API key replacement, and ERC-8128 request signing. AuthProof lets AI agents self-register, use wallet-based auth, and send cryptographically signed, non-replayable HTTP requests.",
+  "discoveryQueries": [
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "9e96f9fb-1272-481d-ae07-086da5211b75",
+    "qualifiedName": "authproof/authproof",
+    "namespace": "authproof",
+    "slug": "authproof",
+    "displayName": "Authproof",
+    "description": "MCP server for agent authentication, signed API requests, API key replacement, and ERC-8128 request signing. AuthProof lets AI agents self-register, use wallet-based auth, and send cryptographically signed, non-replayable HTTP requests.",
+    "iconUrl": "https://api.smithery.ai/servers/authproof/authproof/icon",
+    "verified": false,
+    "useCount": 4,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-19T04:13:44.529Z",
+    "homepage": " https://agent-auth-mu.vercel.app",
+    "bySmithery": false,
+    "owner": "org_01KNBVQZ9GVWSGZF2GZNNGJDB8",
+    "score": 0.049754299754299756
+  },
+  "detail": {
+    "qualifiedName": "authproof/authproof",
+    "displayName": "Authproof",
+    "description": "MCP server for agent authentication, signed API requests, API key replacement, and ERC-8128 request signing. AuthProof lets AI agents self-register, use wallet-based auth, and send cryptographically signed, non-replayable HTTP requests.",
+    "iconUrl": "https://api.smithery.ai/servers/authproof/authproof/icon",
+    "remote": true,
+    "deploymentUrl": "https://authproof--authproof.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://authproof--authproof.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "rpcUrl": {
+              "type": "string",
+              "x-from": {
+                "header": "rpcUrl"
+              },
+              "x-order": 3,
+              "description": "JSON-RPC URL used for auto-pay in paid_fetch."
+            },
+            "chainId": {
+              "type": "number",
+              "x-from": {
+                "query": "chainId"
+              },
+              "default": 84532,
+              "x-order": 1,
+              "description": "Chain ID used for signing requests."
+            },
+            "agentPrivateKey": {
+              "type": "string",
+              "x-from": {
+                "header": "agentPrivateKey"
+              },
+              "x-order": 2,
+              "description": "Agent wallet private key. Optional because register_self can generate one."
+            },
+            "authproofServer": {
+              "type": "string",
+              "x-from": {
+                "query": "authproofServer"
+              },
+              "default": "https://authproof.io",
+              "x-order": 0,
+              "description": "AuthProof server URL."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "discover_authproof_projects",
+        "description": "Discover projects on AuthProof that accept agent registrations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "title": "Result Limit",
+              "default": 10,
+              "description": "Maximum number of projects to return. Defaults to 10."
+            }
+          }
+        }
+      },
+      {
+        "name": "register_authproof_agent",
+        "description": "Generate a wallet locally and register this agent with an AuthProof project.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Agent Name",
+              "description": "Human-readable display name for this agent."
+            },
+            "projectId": {
+              "type": "string",
+              "title": "Project ID",
+              "description": "The project ID to register with."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_authproof_registration_status",
+        "description": "Check whether this agent's registration has been approved for a project.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "projectId": {
+              "type": "string",
+              "title": "Project ID",
+              "description": "The project ID to check approval status for."
+            }
+          }
+        }
+      },
+      {
+        "name": "send_signed_authproof_request",
+        "description": "Make an authenticated HTTP request signed with your AuthProof agent wallet.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "title": "Request URL",
+              "description": "The full URL to send the request to."
+            },
+            "body": {
+              "type": "string",
+              "title": "Request Body",
+              "description": "Request body as a string for POST, PUT, or PATCH requests."
+            },
+            "method": {
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD"
+              ],
+              "type": "string",
+              "title": "HTTP Method",
+              "default": "GET",
+              "description": "HTTP method to use."
+            },
+            "headers": {
+              "type": "object",
+              "title": "Headers",
+              "description": "Additional HTTP headers to include.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "send_paid_authproof_request",
+        "description": "Make a signed request and automatically handle 402 payment flows with USDC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "title": "Request URL",
+              "description": "The full URL to send the request to."
+            },
+            "body": {
+              "type": "string",
+              "title": "Request Body",
+              "description": "Request body as a string for POST, PUT, or PATCH requests."
+            },
+            "method": {
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD"
+              ],
+              "type": "string",
+              "title": "HTTP Method",
+              "default": "GET",
+              "description": "HTTP method to use."
+            },
+            "headers": {
+              "type": "object",
+              "title": "Headers",
+              "description": "Additional HTTP headers to include.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "get_authproof_wallet_info",
+        "description": "Get the current agent wallet address and chain ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "includeConfigSummary": {
+              "type": "boolean",
+              "title": "Include Config Summary",
+              "default": false,
+              "description": "When true, include non-secret runtime configuration such as the configured AuthProof server URL and whether auto-pay is enabled."
+            }
+          }
+        }
+      },
+      {
+        "name": "report_authproof_issue",
+        "description": "Report an issue or observation to an AuthProof project owner.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "auth_failure",
+                "api_error",
+                "rate_limit",
+                "task_failure",
+                "policy_issue",
+                "performance",
+                "custom"
+              ],
+              "type": "string",
+              "title": "Report Type",
+              "description": "Type of report."
+            },
+            "title": {
+              "type": "string",
+              "title": "Issue Title",
+              "description": "Short summary of the issue."
+            },
+            "message": {
+              "type": "string",
+              "title": "Details",
+              "description": "Detailed description of what happened."
+            },
+            "metadata": {
+              "type": "object",
+              "title": "Structured Metadata",
+              "description": "Additional structured context as key-value pairs."
+            },
+            "severity": {
+              "enum": [
+                "critical",
+                "warning",
+                "info"
+              ],
+              "type": "string",
+              "title": "Severity",
+              "description": "Severity level."
+            },
+            "projectId": {
+              "type": "string",
+              "title": "Project ID",
+              "description": "The project ID to report to."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "onboard",
+        "description": "Step-by-step guide to discover, register, and start making signed API requests with AuthProof."
+      }
+    ]
+  }
+}

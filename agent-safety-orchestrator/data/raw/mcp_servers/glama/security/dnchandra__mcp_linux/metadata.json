@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "pqe7ivu5qv",
+  "namespace": "dnchandra",
+  "slug": "mcp_linux",
+  "name": "MCP Linux Deployment",
+  "description": "Enables management of Windows servers from Linux through an MCP server with per-user installation. Provides tools to control Windows systems via API with secure credential management.",
+  "discoveryQueries": [
+    "credential"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables management of Windows servers from Linux through an MCP server with per-user installation. Provides tools to control Windows systems via API with secure credential management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "The host address for the MCP server to bind to",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "The port for the MCP server to listen on",
+          "type": "string",
+          "default": "3000"
+        },
+        "MCP_API_TOKEN": {
+          "description": "The API token for MCP authentication",
+          "type": "string"
+        },
+        "WIN_DEFAULT_PASS": {
+          "description": "The default Windows password",
+          "type": "string"
+        },
+        "WIN_DEFAULT_USER": {
+          "description": "The default Windows username",
+          "type": "string"
+        },
+        "WIN_DASH_API_BASE": {
+          "description": "The base URL for the Windows Dashboard API",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WIN_DASH_API_BASE",
+        "MCP_API_TOKEN",
+        "WIN_DEFAULT_USER",
+        "WIN_DEFAULT_PASS"
+      ]
+    },
+    "id": "pqe7ivu5qv",
+    "name": "MCP Linux Deployment",
+    "namespace": "dnchandra",
+    "repository": {
+      "url": "https://github.com/dnchandra/mcp_linux"
+    },
+    "slug": "mcp_linux",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pqe7ivu5qv"
+  }
+}

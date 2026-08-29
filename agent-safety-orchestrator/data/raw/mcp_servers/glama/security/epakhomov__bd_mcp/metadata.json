@@ -1,0 +1,66 @@
+{
+  "registry": "glama",
+  "id": "xq6o03hzdl",
+  "namespace": "epakhomov",
+  "slug": "BD_MCP",
+  "name": "bd-skill",
+  "description": "An MCP server that provides Claude Code with access to Black Duck SCA for managing vulnerabilities, licenses, and policy violations through natural language. It enables users to query component risks and execute Black Duck Detect scans directly within their workspace.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that provides Claude Code with access to Black Duck SCA for managing vulnerabilities, licenses, and policy violations through natural language. It enables users to query component risks and execute Black Duck Detect scans directly within their workspace.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CACHE_TTL_SECONDS": {
+          "description": "Name/response cache TTL",
+          "type": "string",
+          "default": "300"
+        },
+        "BD_TIMEOUT_SECONDS": {
+          "description": "Request timeout",
+          "type": "string",
+          "default": "30"
+        },
+        "BLACKDUCK_BDSCA_URL": {
+          "description": "Black Duck server URL",
+          "type": "string"
+        },
+        "BLACKDUCK_TLS_VERIFY": {
+          "description": "Verify TLS certificates",
+          "type": "string",
+          "default": "true"
+        },
+        "BLACKDUCK_BDSCA_TOKEN": {
+          "description": "API bearer token",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "BLACKDUCK_BDSCA_URL",
+            "BLACKDUCK_BDSCA_TOKEN"
+          ]
+        },
+        {
+          "required": []
+        }
+      ]
+    },
+    "id": "xq6o03hzdl",
+    "name": "bd-skill",
+    "namespace": "epakhomov",
+    "repository": {
+      "url": "https://github.com/epakhomov/BD_MCP"
+    },
+    "slug": "BD_MCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xq6o03hzdl"
+  }
+}

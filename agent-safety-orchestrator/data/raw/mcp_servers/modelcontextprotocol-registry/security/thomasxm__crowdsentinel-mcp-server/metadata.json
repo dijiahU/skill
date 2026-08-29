@@ -1,0 +1,74 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.thomasxm/crowdsentinel-mcp-server",
+  "slug": "thomasxm__crowdsentinel-mcp-server",
+  "title": "",
+  "description": "AI-powered threat hunting and incident response MCP server for Elasticsearch/OpenSearch",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+      "name": "io.github.thomasxm/crowdsentinel-mcp-server",
+      "description": "AI-powered threat hunting and incident response MCP server for Elasticsearch/OpenSearch",
+      "repository": {
+        "url": "https://github.com/thomasxm/CrowdSentinels-AI-MCP",
+        "source": "github"
+      },
+      "version": "0.2.5",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "crowdsentinel-mcp-server",
+          "version": "0.2.5",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Comma-separated list of Elasticsearch hosts (e.g., https://localhost:9200)",
+              "format": "string",
+              "default": "https://localhost:9200",
+              "name": "ELASTICSEARCH_HOSTS"
+            },
+            {
+              "description": "API key for Elasticsearch or Elastic Cloud authentication (recommended)",
+              "format": "string",
+              "isSecret": true,
+              "name": "ELASTICSEARCH_API_KEY"
+            },
+            {
+              "description": "Username for basic authentication (alternative to API key)",
+              "format": "string",
+              "name": "ELASTICSEARCH_USERNAME"
+            },
+            {
+              "description": "Password for basic authentication (used with ELASTICSEARCH_USERNAME)",
+              "format": "string",
+              "isSecret": true,
+              "name": "ELASTICSEARCH_PASSWORD"
+            },
+            {
+              "description": "Whether to verify SSL certificates (true/false)",
+              "format": "boolean",
+              "default": "false",
+              "name": "VERIFY_CERTS"
+            },
+            {
+              "description": "Request timeout in seconds (e.g., 60 or 10.5)",
+              "format": "string",
+              "name": "REQUEST_TIMEOUT"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-03-14T18:54:14.941051Z",
+        "publishedAt": "2026-03-14T18:54:14.941051Z",
+        "updatedAt": "2026-03-14T18:54:14.941051Z",
+        "isLatest": false
+      }
+    }
+  }
+}

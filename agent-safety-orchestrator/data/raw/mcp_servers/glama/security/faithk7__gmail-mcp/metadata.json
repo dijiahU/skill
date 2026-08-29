@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "mxn8pc97sz",
+  "namespace": "faithk7",
+  "slug": "gmail-mcp",
+  "name": "Gmail MCP Server",
+  "description": "Enables comprehensive Gmail management including sending, reading, and organizing emails, managing labels, drafts, threads, and configuring account settings through the Gmail API with secure OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables comprehensive Gmail management including sending, reading, and organizing emails, managing labels, drafts, threads, and configuring account settings through the Gmail API with secure OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Port for Streamable HTTP transport method",
+          "type": "string",
+          "default": "3000"
+        },
+        "CLIENT_ID": {
+          "description": "Google API client ID (found in GMAIL_OAUTH_PATH). Required for remote server connection",
+          "type": "string"
+        },
+        "CLIENT_SECRET": {
+          "description": "Google API client secret (found in GMAIL_OAUTH_PATH). Required for remote server connection",
+          "type": "string"
+        },
+        "REFRESH_TOKEN": {
+          "description": "OAuth refresh token (found in GMAIL_CREDENTIALS_PATH). Required for remote server connection",
+          "type": "string"
+        },
+        "MCP_CONFIG_DIR": {
+          "description": "Directory for storing configuration files",
+          "type": "string",
+          "default": "~/.gmail-mcp"
+        },
+        "AUTH_SERVER_PORT": {
+          "description": "Port for the temporary OAuth authentication server",
+          "type": "string",
+          "default": "3000"
+        },
+        "GMAIL_OAUTH_PATH": {
+          "description": "Path to the Google API Client file",
+          "type": "string",
+          "default": "MCP_CONFIG_DIR/gcp-oauth.keys.json"
+        },
+        "TELEMETRY_ENABLED": {
+          "description": "Enable telemetry",
+          "type": "string",
+          "default": "true"
+        },
+        "GMAIL_CREDENTIALS_PATH": {
+          "description": "Path to the user credentials file",
+          "type": "string",
+          "default": "MCP_CONFIG_DIR/credentials.json"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "mxn8pc97sz",
+    "name": "Gmail MCP Server",
+    "namespace": "faithk7",
+    "repository": {
+      "url": "https://github.com/faithk7/gmail-mcp"
+    },
+    "slug": "gmail-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mxn8pc97sz"
+  }
+}

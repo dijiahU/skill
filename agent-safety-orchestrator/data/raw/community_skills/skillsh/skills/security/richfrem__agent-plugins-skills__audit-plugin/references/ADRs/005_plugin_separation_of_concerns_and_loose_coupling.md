@@ -1,0 +1,1 @@
+../../../../../../ADRs/005_plugin_separation_of_concerns_and_loose_coupling.md

@@ -1,0 +1,1040 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "kustodia/escrow",
+  "namespace": "kustodia",
+  "slug": "escrow",
+  "displayName": "Kustodia Escrow",
+  "description": "Agentic escrow payments for AI agents. Create, fund, and release escrow payments across fiat (MXN/USD via SPEI/wire) and crypto (USDC/USDT/MXNB on Arbitrum, Base, Polygon, Solana).\n\n**36 tools** covering:\n- 🏦 **Fiat escrows** — SPEI/wire deposits, KYC-gated release, dispute resolution\n- ⛓️ **Web3 escrows** — on-chain ERC-20 escrows with relayer, 7 supported chains\n- 🔐 **Confidential escrows** — FHE-encrypted amounts (Fhenix CoFHE)\n- 🔁 **Recurring payments** — subscription billing with auto-cycles\n- 🤖 **Agent trading** — wallet registration, P2P escrow between agents\n- 📦 **Delivery oracle** — auto-release on carrier delivery confirmation\n- 🔗 **Solana Blinks** — shareable payment links via Phantom\n\nGet your API key at [kustodia.app/register](https://kustodia.app/register)\n",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "39088580-35d4-4477-a1b2-15b381a9ca24",
+    "qualifiedName": "kustodia/escrow",
+    "namespace": "kustodia",
+    "slug": "escrow",
+    "displayName": "Kustodia Escrow",
+    "description": "Agentic escrow payments for AI agents. Create, fund, and release escrow payments across fiat (MXN/USD via SPEI/wire) and crypto (USDC/USDT/MXNB on Arbitrum, Base, Polygon, Solana).\n\n**36 tools** covering:\n- 🏦 **Fiat escrows** — SPEI/wire deposits, KYC-gated release, dispute resolution\n- ⛓️ **Web3 escrows** — on-chain ERC-20 escrows with relayer, 7 supported chains\n- 🔐 **Confidential escrows** — FHE-encrypted amounts (Fhenix CoFHE)\n- 🔁 **Recurring payments** — subscription billing with auto-cycles\n- 🤖 **Agent trading** — wallet registration, P2P escrow between agents\n- 📦 **Delivery oracle** — auto-release on carrier delivery confirmation\n- 🔗 **Solana Blinks** — shareable payment links via Phantom\n\nGet your API key at [kustodia.app/register](https://kustodia.app/register)\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/kustodia.app.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-24T22:09:21.348Z",
+    "homepage": "https://kustodia.app",
+    "bySmithery": false,
+    "owner": "org_01KNBVWFAST0FATHPA6VJD79XP",
+    "score": 0.008695652173913044
+  },
+  "detail": {
+    "qualifiedName": "kustodia/escrow",
+    "displayName": "Kustodia Escrow",
+    "description": "Agentic escrow payments for AI agents. Create, fund, and release escrow payments across fiat (MXN/USD via SPEI/wire) and crypto (USDC/USDT/MXNB on Arbitrum, Base, Polygon, Solana).\n\n**36 tools** covering:\n- 🏦 **Fiat escrows** — SPEI/wire deposits, KYC-gated release, dispute resolution\n- ⛓️ **Web3 escrows** — on-chain ERC-20 escrows with relayer, 7 supported chains\n- 🔐 **Confidential escrows** — FHE-encrypted amounts (Fhenix CoFHE)\n- 🔁 **Recurring payments** — subscription billing with auto-cycles\n- 🤖 **Agent trading** — wallet registration, P2P escrow between agents\n- 📦 **Delivery oracle** — auto-release on carrier delivery confirmation\n- 🔗 **Solana Blinks** — shareable payment links via Phantom\n\nGet your API key at [kustodia.app/register](https://kustodia.app/register)\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/kustodia.app.ico",
+    "remote": true,
+    "deploymentUrl": "https://escrow--kustodia.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://escrow--kustodia.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Kustodia API key (get one at https://kustodia.app/register)"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "create_escrow",
+        "description": "[FIAT ESCROW] Create a fiat escrow payment. Returns deposit instructions (CLABE for MXN, wire for USD).\n\nHOW FUNDING WORKS (IMPORTANT):\nThe MCP does NOT fund fiat escrows. After creation, this tool returns deposit instructions (CLABE or wire details).\nThe BUYER must deposit funds themselves via SPEI or bank wire. The platform detects the deposit automatically.\nYour job as the agent: present the CLABE/wire instructions to the user and tell them to make the deposit.\nTo check if the deposit arrived, use check_status.\nFor web3 wallet-to-wallet escrows where the AGENT can fund, use create_web3_escrow + fund_web3_escrow instead.\n\nPAYMENT TYPES:\n- 'standard' (default): General marketplace escrow. Only requires amount, currency, payer/recipient emails.\n- 'vehicle_verification': Car purchase escrow. REQUIRES: vehicle_vin, vehicle_make, vehicle_model. Also accepts: vehicle_year, vehicle_plate, vehicle_color, vehicle_mileage.\n- 'mechanical_inspection': Similar to vehicle but focused on inspection.\n\nCURRENCY FLOWS:\n- MXN → MXN: Buyer deposits via SPEI, seller receives SPEI payout (Route A1)\n- USD → MXN: Buyer wires USD, seller receives MXN SPEI payout (Route A2)\n- USD → USD: Buyer wires USD, seller receives USD wire payout (Route A3)\n- MXN → USD: Buyer deposits MXN SPEI, seller receives USD wire (Route A4)\n\nIMPORTANT CONSTRAINTS:\n- For MXN payouts: seller MUST have a beneficiary_clabe (18-digit CLABE) registered BEFORE release. The seller registers it via their dashboard — do NOT ask the buyer for it.\n- For USD payouts: seller MUST register a US bank account (external_account_id) via Bitso before release.\n- Seller MUST complete KYC verification before funds can be released.\n- NOT for crypto/wallet-to-wallet payments — use create_web3_escrow instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "description": "Amount to escrow (min $10 for USD)",
+              "exclusiveMinimum": 0
+            },
+            "currency": {
+              "enum": [
+                "MXN",
+                "USD"
+              ],
+              "type": "string",
+              "description": "Currency: MXN (SPEI deposit) or USD (wire deposit)"
+            },
+            "description": {
+              "type": "string",
+              "description": "What is being bought/sold. Be specific (e.g., \"2022 BMW X3 purchase\", \"Freelance design work\")"
+            },
+            "payer_email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email of the buyer/payer"
+            },
+            "vehicle_vin": {
+              "type": "string",
+              "maxLength": 17,
+              "minLength": 11,
+              "description": "Vehicle VIN number (REQUIRED for vehicle_verification payments)"
+            },
+            "custody_days": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 1,
+              "description": "Days to hold in escrow before auto-release (default: 30)"
+            },
+            "payment_type": {
+              "enum": [
+                "standard",
+                "vehicle_verification",
+                "mechanical_inspection"
+              ],
+              "type": "string",
+              "description": "Payment vertical. IMPORTANT: vehicle_verification REQUIRES vehicle_vin, vehicle_make, vehicle_model. Default: standard"
+            },
+            "seller_email": {
+              "type": "string",
+              "format": "email",
+              "description": "Seller email if different from recipient_email"
+            },
+            "vehicle_make": {
+              "type": "string",
+              "description": "Vehicle brand/make (REQUIRED for vehicle_verification, e.g., BMW, Toyota)"
+            },
+            "vehicle_year": {
+              "type": "integer",
+              "maximum": 2030,
+              "minimum": 1900,
+              "description": "Vehicle model year"
+            },
+            "vehicle_color": {
+              "type": "string",
+              "description": "Vehicle exterior color"
+            },
+            "vehicle_model": {
+              "type": "string",
+              "description": "Vehicle model name (REQUIRED for vehicle_verification, e.g., X3, Corolla)"
+            },
+            "vehicle_plate": {
+              "type": "string",
+              "description": "Vehicle license plate number"
+            },
+            "payout_currency": {
+              "enum": [
+                "MXN",
+                "USD"
+              ],
+              "type": "string",
+              "description": "Currency the seller will receive (defaults to MXN)"
+            },
+            "recipient_email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email of the seller/recipient"
+            },
+            "vehicle_mileage": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Vehicle mileage in km"
+            },
+            "deposit_currency": {
+              "enum": [
+                "MXN",
+                "USD"
+              ],
+              "type": "string",
+              "description": "Currency the buyer will deposit (defaults to same as currency)"
+            },
+            "beneficiary_clabe": {
+              "type": "string",
+              "maxLength": 18,
+              "minLength": 18,
+              "description": "Seller's 18-digit CLABE for MXN payout. DO NOT ask the buyer for this — the seller registers it themselves via their Kustodia dashboard or setup page. Only pass it if the seller has explicitly shared it."
+            },
+            "vehicle_plate_state": {
+              "type": "string",
+              "description": "State where vehicle is registered (e.g., CDMX, Jalisco)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_status",
+        "description": "[FIAT ESCROW] Check full status of a fiat payment including deposit details, escrow state, and payout readiness. Use this to verify pre-conditions before calling release_funds. Returns: status, deposit CLABE/wire info, escrow blockchain IDs, payout status, and timeline. For web3 on-chain escrows, use check_web3_status instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "payment_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the payment to check"
+            }
+          }
+        }
+      },
+      {
+        "name": "release_funds",
+        "description": "[FIAT ESCROW] Release escrowed funds to seller. Triggers on-chain escrow release + SPEI/wire payout.\n\nPRE-CONDITIONS (ALL must be met for live payments):\n1. Payment status must be 'in_custody' or 'ready_for_release'\n2. Seller KYC must be 'approved' (seller must complete identity verification)\n3. For MXN payouts: seller must have a beneficiary_clabe (18-digit CLABE) - check via check_status\n4. For USD payouts: seller must have an external_account_id (US bank via Bitso)\n5. For standard payments: buyer payer_approval must be true (unless vehicle_verification or ready_for_release)\n\nIf any pre-condition fails, use check_status to see what's missing, then guide the user to complete the requirement before retrying.\n\nFLOW AFTER RELEASE:\n1. On-chain escrow released (tokens return to bridge wallet)\n2. Tokens transferred to Juno (MXNB) or Bitso (USDC)\n3. Fiat payout initiated (SPEI to seller CLABE or USD wire)\n4. Payment status → 'released' → 'completed'",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "Reason for releasing (audit trail). E.g., \"Buyer confirmed delivery\", \"Vehicle inspection passed\""
+            },
+            "payment_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the payment to release"
+            }
+          }
+        }
+      },
+      {
+        "name": "upload_evidence",
+        "description": "Upload evidence or documentation for a payment or escrow (works for both fiat and web3 escrows).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "payment_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the payment"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the evidence being submitted"
+            },
+            "evidence_type": {
+              "enum": [
+                "delivery_confirmation",
+                "inspection_report",
+                "photo",
+                "document",
+                "other"
+              ],
+              "type": "string",
+              "description": "Type of evidence"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_fx_rate",
+        "description": "Get current FX rate between currencies (USD, MXN, USDC, MXNB). Useful for cross-border escrows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "enum": [
+                "USD",
+                "MXN",
+                "USDC",
+                "MXNB"
+              ],
+              "type": "string",
+              "description": "Target currency"
+            },
+            "from": {
+              "enum": [
+                "USD",
+                "MXN",
+                "USDC",
+                "MXNB"
+              ],
+              "type": "string",
+              "description": "Source currency"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Optional amount to convert",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "list_payments",
+        "description": "[FIAT ESCROW] List fiat payments. For on-chain escrows, use list_web3_escrows instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Number of results (default: 10, max: 50)"
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Pagination offset (default: 0)"
+            },
+            "status": {
+              "enum": [
+                "pending_deposit",
+                "in_custody",
+                "ready_for_release",
+                "released",
+                "cancelled",
+                "disputed"
+              ],
+              "type": "string",
+              "description": "Filter by payment status"
+            }
+          }
+        }
+      },
+      {
+        "name": "cancel_payment",
+        "description": "[FIAT ESCROW] Cancel a pending fiat payment before deposit. Cannot cancel web3 escrows this way.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "Reason for cancellation"
+            },
+            "payment_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the payment to cancel"
+            }
+          }
+        }
+      },
+      {
+        "name": "raise_dispute",
+        "description": "[FIAT ESCROW] Raise dispute on a fiat payment. For web3 escrows, use dispute_web3_escrow instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "Reason for the dispute"
+            },
+            "payment_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the payment to dispute"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed description of the issue"
+            }
+          }
+        }
+      },
+      {
+        "name": "request_refund",
+        "description": "[FIAT ESCROW] Request refund for a fiat payment. Triggers SPEI/wire return to buyer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "Reason for refund"
+            },
+            "payment_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the payment to refund"
+            },
+            "buyer_clabe": {
+              "type": "string",
+              "description": "CLABE of the buyer to receive refund (required for live refunds)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_web3_escrow",
+        "description": "[WEB3 ESCROW] Create an on-chain escrow via platform relayer. The RELAYER pays gas and calls createEscrow.\n\nWALLET MODEL (3-step process):\n1. CREATE (this tool): Relayer wallet registers the escrow on-chain with payer/payee addresses. Gas paid by platform.\n2. FUND: The PAYER wallet must call approve() + fundEscrow().\n   - For GASLESS via ZeroDev: Set use_zerodev=true so payer=smart account, then use fund_with_session_key\n   - For AGENTIC wallets (Coinbase AgentKit): Agent can sign approve+fund programmatically\n   - For HUMAN wallets (MetaMask, etc): MUST use the Kustodia web3 dashboard UI to approve+fund\n3. RELEASE/DISPUTE (separate tools): Relayer wallet can release or dispute funded escrows\n\nIMPORTANT: If you plan to fund via fund_with_session_key, you MUST set use_zerodev=true so the smart account is the payer.\n\nSUPPORTED CHAINS: Arbitrum (42161), Base (8453), Polygon (137), Injective (1776)\nSUPPORTED TOKENS: USDC, MXNB, USDT (varies by chain)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token symbol: USDC, MXNB, or USDT"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount in token units (e.g., 100 for 100 USDC)",
+              "exclusiveMinimum": 0
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID: 42161 (Arbitrum), 8453 (Base), 137 (Polygon), 421614 (Arb Sepolia), 84532 (Base Sepolia)"
+            },
+            "vertical": {
+              "type": "string",
+              "description": "Use case: marketplace, real_estate, automotive, etc."
+            },
+            "conditions": {
+              "type": "string",
+              "description": "Free-text conditions for the escrow"
+            },
+            "use_zerodev": {
+              "type": "boolean",
+              "description": "Set to true to create escrow via ZeroDev smart account — payer_address is auto-derived, no need to provide it. Required for gasless funding via fund_with_session_key."
+            },
+            "custody_days": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 1,
+              "description": "Days to hold before deadline (default: 30)"
+            },
+            "payee_address": {
+              "type": "string",
+              "description": "EVM address of the seller/payee wallet (receives tokens on release)"
+            },
+            "payer_address": {
+              "type": "string",
+              "description": "EVM address of the buyer/payer wallet. OPTIONAL when use_zerodev=true (smart account address is auto-derived). REQUIRED for EOA/AgentKit flows."
+            }
+          }
+        }
+      },
+      {
+        "name": "fund_web3_escrow",
+        "description": "[WEB3 ESCROW] Fund an existing on-chain escrow by batching approve + fundEscrow.\n\nFOR AGENTIC WALLETS (Coinbase AgentKit, server-side EOA).\nHuman users with browser wallets (MetaMask) should fund via the Kustodia web3 dashboard.\n\nPRE-CONDITIONS:\n1. Escrow must be in 'Created' status\n2. The signing wallet must be the PAYER registered in the escrow\n3. Wallet must have sufficient token balance\n\nKEY SELECTION:\n- If you pass agent_private_key, that key signs the tx (Coinbase AgentKit flow)\n- If omitted, the platform relayer key signs (only works if relayer is the payer)\n- For ZeroDev gasless funding, use fund_with_session_key instead\n\nThis tool automatically checks allowance, approves if needed, and calls fundEscrow.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID: 42161 (Arbitrum), 8453 (Base), 137 (Polygon), 421614 (Arb Sepolia), 84532 (Base Sepolia)"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "On-chain escrow ID to fund"
+            },
+            "agent_private_key": {
+              "type": "string",
+              "description": "Private key of the agent wallet (hex, 0x-prefixed). If provided, signs from agent wallet. If omitted, uses platform relayer key."
+            }
+          }
+        }
+      },
+      {
+        "name": "release_web3_escrow",
+        "description": "[WEB3 ESCROW] Release a FUNDED on-chain escrow — tokens go to the payee wallet.\n\nPRE-CONDITIONS:\n1. Escrow must be in 'Funded' status (payer has already called approve + fundEscrow from their wallet)\n2. Only works for escrows created via Kustodia contracts\n\nThe platform relayer signs this transaction — no user wallet needed for release.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID where the escrow lives"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "On-chain escrow ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "dispute_web3_escrow",
+        "description": "[WEB3 ESCROW] Dispute a FUNDED on-chain escrow. Freezes the escrow for Kustodia mediation.\n\nPRE-CONDITIONS:\n1. Escrow must be in 'Funded' status\n2. Reason must be at least 10 characters\n\nAfter disputing, use upload_evidence to submit supporting documentation. Kustodia will mediate.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "minLength": 10,
+              "description": "Detailed reason for dispute (min 10 chars)"
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID where the escrow lives"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "On-chain escrow ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_web3_status",
+        "description": "[WEB3 ESCROW] Check on-chain escrow status from DB index. Fast lookup by escrow ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID (optional, helps disambiguate)"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "On-chain escrow ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_web3_escrows",
+        "description": "[WEB3 ESCROW] List on-chain escrows. Filter by chain, status, wallet address. Returns indexed blockchain data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Results per page (default: 10)"
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Pagination offset"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by status: Created, Funded, Released, Refunded, Disputed"
+            },
+            "address": {
+              "type": "string",
+              "description": "Filter by payer or payee wallet address"
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Filter by chain ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_web3_escrow",
+        "description": "[WEB3 ESCROW] Read escrow data directly from the smart contract (real-time, on-chain). Use for verification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "On-chain escrow ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_session_key",
+        "description": "[ZERODEV / ERC-4337] Create a scoped session key for gasless escrow funding.\n\nThe platform creates a ZeroDev smart account session key that ONLY allows:\n1. approve(token, escrowContract, amount)\n2. fundEscrow(escrowId)\n\nSECURITY: No private keys are required or exposed. The platform's server-side key creates the session.\nThe session key expires in 24 hours. Gas is sponsored by Kustodia.\nAfter creating, use fund_with_session_key with the returned session_id to fund escrows.\n\nSupported chains: Arbitrum Sepolia (421614), Base Sepolia (84532).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID: 421614 (Arb Sepolia), 84532 (Base Sepolia)"
+            },
+            "token_address": {
+              "type": "string",
+              "description": "Token contract address to approve for escrow funding (e.g., USDC address on the chain)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fund_with_session_key",
+        "description": "[ZERODEV / ERC-4337] Fund an on-chain escrow using a server-side session key.\n\nPRE-CONDITIONS:\n1. A session key must be created first via create_session_key (returns a session_id)\n2. The smart account must hold sufficient tokens\n3. The escrow must be in 'Created' status\n\nSECURITY: No private keys required. The session_id references a server-stored session key.\nExecutes a BATCHED UserOperation: approve + fundEscrow in ONE transaction.\nGas is SPONSORED by Kustodia — no ETH needed in the smart account.\n\nFor direct wallet funding (Coinbase AgentKit), use fund_web3_escrow instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "description": "Amount in token units (e.g., 100 for 100 USDC)",
+              "exclusiveMinimum": 0
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID (optional, uses chain from session if not provided)"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "On-chain escrow ID to fund"
+            },
+            "session_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Session ID from create_session_key (UUID). The session key is stored server-side."
+            },
+            "token_decimals": {
+              "type": "integer",
+              "description": "Token decimals (default: 6 for stablecoins)"
+            }
+          }
+        }
+      },
+      {
+        "name": "register_agent_wallet",
+        "description": "[AGENT TRADING] Register your AI agent's wallet for discovery and trading.\n\nRegistered agents can be found by other agents via list_trade_offers.\nThis enables agent-to-agent escrow trading — each agent uses its own wallet.\n\nHOW AGENTS TRADE:\n1. register_agent_wallet — register your wallet for discovery\n2. list_trade_offers — find open escrows or registered agents\n3. create_web3_escrow — create an escrow with another agent as payee\n4. fund_web3_escrow or fund_with_session_key — fund the escrow\n5. accept_trade — verify your role in an escrow\n6. release_web3_escrow — release funds after delivery",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Primary chain ID for trading"
+            },
+            "metadata": {
+              "type": "string",
+              "description": "Optional metadata (JSON string)"
+            },
+            "agent_name": {
+              "type": "string",
+              "description": "Display name for your agent (e.g., \"TradingBot Alpha\")"
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "What you do: [\"buy\", \"sell\", \"escrow\"]"
+            },
+            "wallet_address": {
+              "type": "string",
+              "description": "Your EVM wallet address (0x...)"
+            },
+            "supported_tokens": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Tokens you accept (default: [\"USDC\"])"
+            }
+          }
+        }
+      },
+      {
+        "name": "fund_agent_wallet",
+        "description": "[AGENT FUNDING] Fund an agent wallet with USDC or MXNB via fiat on-ramp.\n\nTHREE PATHS TO FUND:\n1. SPEI (MXN): deposit_method=\"spei\" → Juno MXNB mint → [optional MXNB→USDC swap] → Agent Wallet\n2. Wire (USD): deposit_method=\"wire\" → Bitso USD→USDC → Agent Wallet\n3. Direct crypto transfer (no tool needed — just send tokens to the wallet address)\n\nReturns deposit instructions (CLABE for SPEI, or bank details for Wire).\nFunds are automatically converted and transferred after deposit confirmation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Target on-chain token: \"USDC\" (default) or \"MXNB\""
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount to deposit in the deposit currency (MXN for SPEI, USD for Wire)"
+            },
+            "reference": {
+              "type": "string",
+              "description": "Optional reference note for the funding"
+            },
+            "deposit_method": {
+              "type": "string",
+              "description": "How to deposit: \"spei\" (MXN, default) or \"wire\" (USD)"
+            },
+            "wallet_address": {
+              "type": "string",
+              "description": "Destination EVM wallet address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_trade_offers",
+        "description": "[AGENT TRADING] List open escrows and trade offers on-chain.\n\nReads directly from the KustodiaEscrowWeb3 smart contract to find:\n- Created (unfunded) escrows — waiting for funding\n- Funded escrows — active trades\n\nUse this to discover trading opportunities before creating or accepting trades.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max results (default: 20, max: 50)"
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter: \"created\", \"funded\", or \"all\" (default: \"created\")"
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID to query: 421614 (Arb Sepolia), 42161 (Arbitrum), 8453 (Base)"
+            }
+          }
+        }
+      },
+      {
+        "name": "accept_trade",
+        "description": "[AGENT TRADING] Check if you're the counterparty in a trade and get next steps.\n\nVerifies:\n- Whether your wallet is the payee in the escrow\n- Current escrow status (Created, Funded, etc.)\n- What actions you need to take next\n\nUse this after creating or discovering an escrow to understand your role.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID where the escrow exists"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "On-chain escrow ID"
+            },
+            "agent_wallet": {
+              "type": "string",
+              "description": "Your wallet address (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_balance",
+        "description": "[READ-ONLY] Check native (ETH) and ERC20 token balances for any wallet on supported chains.\n\nReturns:\n- Native balance (ETH/MATIC)\n- ERC20 token balances (USDC, MXNB, USDT, etc.)\n\nSupports all Kustodia chains: Arbitrum (42161), Base (8453), Polygon (137), Arbitrum Sepolia (421614), Base Sepolia (84532).\nIf no tokens specified, checks all configured tokens for the chain.\nUseful to verify wallet has sufficient funds before escrow operations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tokens": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional list of token symbols to check (e.g., [\"USDC\", \"MXNB\"]). If omitted, checks all configured tokens."
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID: 42161 (Arbitrum), 8453 (Base), 137 (Polygon), 421614 (Arb Sepolia), 84532 (Base Sepolia)"
+            },
+            "wallet_address": {
+              "type": "string",
+              "description": "EVM wallet address to check (0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_trust_score",
+        "description": "[READ-ONLY] Get trust score and badge for any wallet address.\n\nAggregates data from all escrow activity — completion rate, dispute rate, volume, resolution time.\nBadge levels: new (< 3 escrows), verified (≥ 3, 70%+ completion), trusted (≥ 10, 90%+ completion, < 10% disputes), elite (≥ 50, 95%+ completion, $10K+ volume).\n\nUse before transacting to assess counterparty risk. Scores are cached for 1 hour.\nPublic profile: kustodia.app/trust/<wallet>",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "wallet_address": {
+              "type": "string",
+              "description": "Wallet address to check (EVM 0x... or Solana base58)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_confidential_escrow",
+        "description": "[CONFIDENTIAL ESCROW] Create a fully encrypted on-chain escrow using Fhenix FHE.\n\nThe escrow amount is encrypted BEFORE hitting the blockchain — no one can see it on Arbiscan.\nOnly the payer, payee, and platform can decrypt the amount.\n\nCurrently available on: Arbitrum Sepolia (421614) only.\nUses the ConfidentialEscrowV2 contract with CoFHE threshold encryption.\n\nAFTER CREATION: Fund via fund_confidential_escrow, release via release_confidential_escrow.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token symbol: USDC"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount in token units (e.g., 10 for 10 USDC)",
+              "exclusiveMinimum": 0
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID: 421614 (Arbitrum Sepolia) — only supported chain"
+            },
+            "vertical": {
+              "type": "string",
+              "description": "Use case: marketplace, real_estate, etc."
+            },
+            "conditions": {
+              "type": "string",
+              "description": "Free-text conditions"
+            },
+            "custody_days": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 1,
+              "description": "Days before deadline (default: 30)"
+            },
+            "payee_address": {
+              "type": "string",
+              "description": "EVM address of the payee (seller)"
+            }
+          }
+        }
+      },
+      {
+        "name": "fund_confidential_escrow",
+        "description": "[CONFIDENTIAL ESCROW] Fund a confidential escrow using FHERC20 encrypted tokens.\n\nAutomates the 4-step FHERC20 flow:\n1. Approve USDC for wrapper\n2. Wrap USDC → cUSDC (encrypted token)\n3. Approve cUSDC for escrow contract\n4. Fund escrow with encrypted transfer — NO amounts in Transfer events\n\nPRE-CONDITIONS:\n- Escrow must be in 'Created' status\n- Relayer wallet must have sufficient USDC balance\n- Only Arbitrum Sepolia (421614)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID: 421614 (Arbitrum Sepolia)"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "Confidential escrow ID to fund"
+            }
+          }
+        }
+      },
+      {
+        "name": "release_confidential_escrow",
+        "description": "[CONFIDENTIAL ESCROW] Release a funded confidential escrow with CoFHE decryption.\n\nDecrypts the encrypted amount + fee server-side using the CoFHE threshold network,\nthen calls releaseEscrow with the decrypted values + cryptographic signatures.\n\nThe payee receives tokens via encrypted FHERC20 transfer — no amounts visible.\n\nPRE-CONDITIONS:\n- Escrow must be in 'Funded' status\n- Only the payer, owner, or relayer can release",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID: 421614 (Arbitrum Sepolia)"
+            },
+            "escrow_id": {
+              "type": "integer",
+              "description": "Confidential escrow ID to release"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_solana_blink",
+        "description": "[SOLANA BLINKS] Create a Solana Blink escrow — shareable payment link for P2P transactions.\n\nCreates an escrow on Solana and returns shareable URLs:\n- Direct link (kustodia.app/blinks/...)\n- Phantom deep link\n- WhatsApp share link\n- dial.to blink card URL\n\nBuyer opens link → pays via Phantom wallet → funds locked in smart contract → seller releases after delivery.\nFees: 3% on release. Token: USDC on Solana.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "description": "Amount in USDC",
+              "exclusiveMinimum": 0
+            },
+            "category": {
+              "type": "string",
+              "description": "Category: general, vehicle, real_estate, electronics, services"
+            },
+            "description": {
+              "type": "string",
+              "description": "What is being sold (shown on payment page)"
+            },
+            "seller_wallet": {
+              "type": "string",
+              "description": "Solana wallet address of the seller (base58)"
+            },
+            "deadline_hours": {
+              "type": "integer",
+              "description": "Hours before escrow deadline (default: 72)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_escrow_evidence",
+        "description": "[READ-ONLY] List all evidence files attached to an escrow.\n\nReturns IPFS + GCS URLs, descriptions, types, and timestamps for each evidence item.\nWorks for both web3 and fiat escrows. IPFS URLs are preferred (always publicly accessible).\n\nUseful for agents reviewing disputes or verifying delivery before releasing funds.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "escrow_id": {
+              "type": "string",
+              "description": "UUID of the escrow (web3 or fiat)"
+            },
+            "escrow_type": {
+              "enum": [
+                "web3",
+                "fiat"
+              ],
+              "type": "string",
+              "description": "Type: web3 (default) or fiat"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_recurring_escrow",
+        "description": "[RECURRING] Create a recurring escrow subscription — automated billing on interval.\n\nSets up a subscription that auto-creates escrow cycles at the specified interval.\nSupports fiat (MXN SPEI, USD wire) and web3 (USDC, USDT, MXNB on-chain) payment methods.\n\nMODES:\n- delegated=true: Platform charges automatically (requires spending cap)\n- delegated=false: Each cycle needs payer approval within 48h\n\nMONETIZATION:\n- Setup fee: 1% of first cycle\n- Per-cycle fee: 0.5% of each payment\n- Platform commission: 2% on release",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token for web3: USDC, USDT, MXNB"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount per cycle",
+              "exclusiveMinimum": 0
+            },
+            "category": {
+              "type": "string",
+              "description": "Use case category: saas, infrastructure, rent, services"
+            },
+            "chain_id": {
+              "type": "integer",
+              "description": "Chain ID for web3 payments (42161, 8453, 137)"
+            },
+            "currency": {
+              "type": "string",
+              "description": "Currency: MXN, USD, USDC, USDT, MXNB"
+            },
+            "interval": {
+              "enum": [
+                "daily",
+                "weekly",
+                "biweekly",
+                "monthly",
+                "quarterly",
+                "yearly"
+              ],
+              "type": "string",
+              "description": "Billing interval"
+            },
+            "payee_id": {
+              "type": "string",
+              "description": "UUID of the payee/merchant"
+            },
+            "payer_id": {
+              "type": "string",
+              "description": "UUID of the payer user"
+            },
+            "delegated": {
+              "type": "boolean",
+              "description": "true = auto-charge, false = manual approval each cycle (default: false)"
+            },
+            "max_cycles": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum number of billing cycles"
+            },
+            "service_name": {
+              "type": "string",
+              "description": "Name of the service (e.g., \"Cloud GPU Compute\", \"Monthly Rent\")"
+            },
+            "payment_method": {
+              "enum": [
+                "fiat",
+                "web3",
+                "gasless"
+              ],
+              "type": "string",
+              "description": "Payment rail"
+            },
+            "max_amount_per_cycle": {
+              "type": "number",
+              "description": "Spending cap per cycle (for delegated mode)",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "pause_recurring",
+        "description": "[RECURRING] Pause an active recurring subscription. Can be resumed later.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "subscription_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the subscription to pause"
+            }
+          }
+        }
+      },
+      {
+        "name": "resume_recurring",
+        "description": "[RECURRING] Resume a paused recurring subscription.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "subscription_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the subscription to resume"
+            }
+          }
+        }
+      },
+      {
+        "name": "cancel_recurring",
+        "description": "[RECURRING] Cancel a recurring subscription. In-progress cycles will complete, no new cycles created.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "subscription_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the subscription to cancel"
+            }
+          }
+        }
+      },
+      {
+        "name": "approve_cycle",
+        "description": "[RECURRING] Approve a pending billing cycle (for non-delegated subscriptions). Must approve within 48h.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cycle_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the cycle to approve"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_recurring",
+        "description": "[RECURRING] List recurring subscriptions. Filter by status, user, or payee.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "active",
+                "paused",
+                "cancelled",
+                "completed"
+              ],
+              "type": "string",
+              "description": "Filter by status"
+            },
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Filter by payer user ID"
+            },
+            "payee_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Filter by payee/merchant ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_recurring_status",
+        "description": "[RECURRING] Get full status of a recurring subscription including all cycle history, fees, and next billing date.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "subscription_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the subscription"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

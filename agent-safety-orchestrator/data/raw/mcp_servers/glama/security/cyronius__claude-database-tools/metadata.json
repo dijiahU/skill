@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "ezjysj98sh",
+  "namespace": "Cyronius",
+  "slug": "claude-database-tools",
+  "name": "claude-database-tools",
+  "description": "A SQL Server CLI and MCP server for Claude Code that supports standard SQL Server authentication for database interaction and management. It enables users to perform schema exploration, execute queries, and manage data records with built-in SQL injection prevention.",
+  "discoveryQueries": [
+    "authentication",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A SQL Server CLI and MCP server for Claude Code that supports standard SQL Server authentication for database interaction and management. It enables users to perform schema exploration, execute queries, and manage data records with built-in SQL injection prevention.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "READONLY": {
+          "description": "If set to true, disables write operations (insert, update, delete, etc.).",
+          "type": "string",
+          "default": "true"
+        },
+        "SQL_PORT": {
+          "description": "The port number for the SQL Server (default is 1433).",
+          "type": "string",
+          "default": "1433"
+        },
+        "SQL_USER": {
+          "description": "The username for SQL Server authentication.",
+          "type": "string"
+        },
+        "SQL_SERVER": {
+          "description": "The SQL Server hostname or IP address.",
+          "type": "string"
+        },
+        "SQL_ENCRYPT": {
+          "description": "Whether to use encryption for the connection (true/false).",
+          "type": "string",
+          "default": "false"
+        },
+        "SQL_DATABASE": {
+          "description": "The name of the database to connect to.",
+          "type": "string"
+        },
+        "SQL_PASSWORD": {
+          "description": "The password for SQL Server authentication.",
+          "type": "string"
+        },
+        "SQL_TRUST_SERVER_CERTIFICATE": {
+          "description": "Whether to trust the server certificate (true/false).",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SQL_SERVER",
+        "SQL_DATABASE",
+        "SQL_USER",
+        "SQL_PASSWORD"
+      ]
+    },
+    "id": "ezjysj98sh",
+    "name": "claude-database-tools",
+    "namespace": "Cyronius",
+    "repository": {
+      "url": "https://github.com/Cyronius/claude-database-tools"
+    },
+    "slug": "claude-database-tools",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ezjysj98sh"
+  }
+}

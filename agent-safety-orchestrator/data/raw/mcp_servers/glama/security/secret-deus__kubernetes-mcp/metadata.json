@@ -1,0 +1,96 @@
+{
+  "registry": "glama",
+  "id": "gvtu5h86lo",
+  "namespace": "secret-deus",
+  "slug": "kubernetes-mcp",
+  "name": "Kubernetes MCP Server",
+  "description": "Enables comprehensive Kubernetes cluster management through kubectl operations and Helm chart management. Supports resource operations, logging, scaling, rollouts, and diagnostics with multiple transport modes and security features.",
+  "discoveryQueries": [
+    "security",
+    "secret"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive Kubernetes cluster management through kubectl operations and Helm chart management. Supports resource operations, logging, scaling, rollouts, and diagnostics with multiple transport modes and security features.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "K8S_TOKEN": {
+          "description": "Service account token for Kubernetes authentication",
+          "type": "string"
+        },
+        "K8S_SERVER": {
+          "description": "Kubernetes API server URL",
+          "type": "string"
+        },
+        "KUBECONFIG": {
+          "description": "Path to kubeconfig file",
+          "type": "string"
+        },
+        "K8S_CONTEXT": {
+          "description": "Default Kubernetes context name",
+          "type": "string"
+        },
+        "MASK_SECRETS": {
+          "description": "Control Secret data masking (default enabled)",
+          "type": "string",
+          "default": "true"
+        },
+        "K8S_NAMESPACE": {
+          "description": "Default Kubernetes namespace",
+          "type": "string"
+        },
+        "KUBECONFIG_JSON": {
+          "description": "Kubernetes configuration as JSON string",
+          "type": "string"
+        },
+        "KUBECONFIG_YAML": {
+          "description": "Kubernetes configuration as YAML string",
+          "type": "string"
+        },
+        "K8S_SKIP_TLS_VERIFY": {
+          "description": "Skip TLS verification (optional)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "KUBECONFIG_YAML"
+          ]
+        },
+        {
+          "required": [
+            "KUBECONFIG_JSON"
+          ]
+        },
+        {
+          "required": [
+            "K8S_SERVER",
+            "K8S_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "KUBECONFIG"
+          ]
+        },
+        {
+          "required": []
+        }
+      ]
+    },
+    "id": "gvtu5h86lo",
+    "name": "Kubernetes MCP Server",
+    "namespace": "secret-deus",
+    "repository": {
+      "url": "https://github.com/secret-deus/kubernetes-mcp"
+    },
+    "slug": "kubernetes-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gvtu5h86lo"
+  }
+}

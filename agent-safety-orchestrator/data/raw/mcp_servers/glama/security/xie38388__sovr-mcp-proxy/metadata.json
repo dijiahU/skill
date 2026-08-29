@@ -1,0 +1,77 @@
+{
+  "registry": "glama",
+  "id": "ododrhtryh",
+  "namespace": "xie38388",
+  "slug": "SOVR-MCP-PROXY",
+  "name": "sovr-mcp-proxy",
+  "description": "A transparent proxy and execution firewall that intercepts and audits AI agent tool calls against configurable security policies before forwarding them to downstream MCP servers. It provides safe execution environments with features like data redaction, anti-loop protection, and unified alert dispatching.",
+  "discoveryQueries": [
+    "security",
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A transparent proxy and execution firewall that intercepts and audits AI agent tool calls against configurable security policies before forwarding them to downstream MCP servers. It provides safe execution environments with features like data redaction, anti-loop protection, and unified alert dispatching.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SOVR_API_KEY": {
+          "description": "Connect to SOVR Cloud for expanded tools and persistent audit",
+          "type": "string"
+        },
+        "SOVR_ACTOR_ID": {
+          "description": "Actor identifier for audit trail",
+          "type": "string"
+        },
+        "SOVR_ENDPOINT": {
+          "description": "Custom Cloud endpoint (advanced)",
+          "type": "string"
+        },
+        "SOVR_MAX_HOPS": {
+          "description": "Max proxy hop count before loop detection (default: 3)",
+          "type": "string",
+          "default": "3"
+        },
+        "SOVR_FAIL_MODE": {
+          "description": "fail-close / fail-local (default: fail-close)",
+          "type": "string",
+          "default": "fail-close"
+        },
+        "SOVR_TENANT_ID": {
+          "description": "Tenant identifier for multi-tenant deployments",
+          "type": "string"
+        },
+        "SOVR_PROXY_MODE": {
+          "description": "strict / record-only / propose-only (default: strict)",
+          "type": "string",
+          "default": "strict"
+        },
+        "SOVR_RULES_FILE": {
+          "description": "Path to custom rules JSON file",
+          "type": "string"
+        },
+        "SOVR_SESSION_ID": {
+          "description": "Session identifier for trace correlation",
+          "type": "string"
+        },
+        "SOVR_PROXY_CONFIG": {
+          "description": "Path to proxy configuration JSON",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ododrhtryh",
+    "name": "sovr-mcp-proxy",
+    "namespace": "xie38388",
+    "repository": {
+      "url": "https://github.com/xie38388/SOVR-MCP-PROXY"
+    },
+    "slug": "SOVR-MCP-PROXY",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ododrhtryh"
+  }
+}

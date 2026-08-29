@@ -1,0 +1,195 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "glane0303/woogoro-hvac",
+  "namespace": "glane0303",
+  "slug": "woogoro-hvac",
+  "displayName": "Woogoro HVAC Quote Analyzer",
+  "description": "Paste any HVAC quote into Claude/Cursor/ChatGPT and Woogoro HVAC MCP audits it:\n\n- Detects oversizing (proposed tonnage vs Manual J load calculation)\n- Flags R-410A compliance for 2026+ installs (EPA AIM Act phasedown to A2L refrigerants like R-454B / R-32)\n- Checks SEER2 / HSPF2 efficiency vs federal minimums (North vs South split AC standards)\n- Identifies scope gaps (Manual D, line-set replacement, refrigerant recovery, permit pull)\n- Catches common upsells (UV lights, IAQ packages, overpriced extended warranties)\n- Drafts dispute letters across 9 issue types\n- Generates phone negotiation scripts\n\n**Tools (5):** `parse_quote`, `check_errors`, `lookup_average_price`, `draft_dispute`, `negotiation_script`\n\nBacked by Woogoro's `/api/hvac-estimate` endpoint (Claude Haiku-powered) and bundled installed-price ranges. Free hosted endpoint, no API key required.\n",
+  "discoveryQueries": [
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "f7af3f06-5492-46dd-851d-5143f2746dfc",
+    "qualifiedName": "glane0303/woogoro-hvac",
+    "namespace": "glane0303",
+    "slug": "woogoro-hvac",
+    "displayName": "Woogoro HVAC Quote Analyzer",
+    "description": "Paste any HVAC quote into Claude/Cursor/ChatGPT and Woogoro HVAC MCP audits it:\n\n- Detects oversizing (proposed tonnage vs Manual J load calculation)\n- Flags R-410A compliance for 2026+ installs (EPA AIM Act phasedown to A2L refrigerants like R-454B / R-32)\n- Checks SEER2 / HSPF2 efficiency vs federal minimums (North vs South split AC standards)\n- Identifies scope gaps (Manual D, line-set replacement, refrigerant recovery, permit pull)\n- Catches common upsells (UV lights, IAQ packages, overpriced extended warranties)\n- Drafts dispute letters across 9 issue types\n- Generates phone negotiation scripts\n\n**Tools (5):** `parse_quote`, `check_errors`, `lookup_average_price`, `draft_dispute`, `negotiation_script`\n\nBacked by Woogoro's `/api/hvac-estimate` endpoint (Claude Haiku-powered) and bundled installed-price ranges. Free hosted endpoint, no API key required.\n",
+    "iconUrl": "https://api.smithery.ai/servers/glane0303/woogoro-hvac/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-02T13:30:26.647Z",
+    "homepage": "https://woogoro.com/hvac-quote-analyzer.html",
+    "bySmithery": false,
+    "owner": "org_01KQJESDQVE4PFXPHF2GAN7WVS",
+    "score": 0.032266325224071704
+  },
+  "detail": {
+    "qualifiedName": "glane0303/woogoro-hvac",
+    "displayName": "Woogoro HVAC Quote Analyzer",
+    "description": "Paste any HVAC quote into Claude/Cursor/ChatGPT and Woogoro HVAC MCP audits it:\n\n- Detects oversizing (proposed tonnage vs Manual J load calculation)\n- Flags R-410A compliance for 2026+ installs (EPA AIM Act phasedown to A2L refrigerants like R-454B / R-32)\n- Checks SEER2 / HSPF2 efficiency vs federal minimums (North vs South split AC standards)\n- Identifies scope gaps (Manual D, line-set replacement, refrigerant recovery, permit pull)\n- Catches common upsells (UV lights, IAQ packages, overpriced extended warranties)\n- Drafts dispute letters across 9 issue types\n- Generates phone negotiation scripts\n\n**Tools (5):** `parse_quote`, `check_errors`, `lookup_average_price`, `draft_dispute`, `negotiation_script`\n\nBacked by Woogoro's `/api/hvac-estimate` endpoint (Claude Haiku-powered) and bundled installed-price ranges. Free hosted endpoint, no API key required.\n",
+    "iconUrl": "https://api.smithery.ai/servers/glane0303/woogoro-hvac/icon",
+    "remote": true,
+    "deploymentUrl": "https://woogoro-hvac--glane0303.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://woogoro-hvac--glane0303.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "parse_quote",
+        "description": "Analyze an HVAC contractor quote (full system install, replacement, repair, or service). Extracts contractor, total price, labor/equipment breakdown, system type (central AC, heat pump, gas furnace, mini split, full system, geothermal), brand, model, SEER/AFUE efficiency, tonnage, refrigerant type, scope items, and warranty terms. Detects oversizing (tonnage vs home sqft), R-410A compliance issues for 2026+ installs (EPA AIM Act), low-efficiency equipment below federal minimum, and common upsells. Accepts text or one or more base64-encoded image data URLs (format: 'data:image/png;base64,...').",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "quote_text": {
+              "type": "string",
+              "description": "The full text of the HVAC quote, pasted by the user. Optional if quote_images is provided."
+            },
+            "quote_images": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Up to 3 base64-encoded image data URLs of the quote."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_errors",
+        "description": "Audit an HVAC quote and return a ranked list of red flags, scope gaps, and dispute opportunities. Includes oversizing detection, R-410A compliance check (illegal in new 2026+ installs per EPA AIM Act), low-efficiency flags (SEER<15 below federal minimum), missing scope items (line set, electrical, pad, drain, permit, load calc), warranty inadequacy, and possible upsells. Accepts a previously-parsed quote OR raw text/images.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "quote_text": {
+              "type": "string"
+            },
+            "parsed_quote": {
+              "type": "object",
+              "description": "Previously-parsed HVAC quote object from parse_quote. If provided, skips re-parsing."
+            },
+            "quote_images": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "lookup_average_price",
+        "description": "Look up typical installed price ranges for HVAC systems by system type, efficiency tier, and state. Useful for benchmarking specific contractor quotes. Covers central AC, heat pumps, gas furnaces, mini splits, full systems (AC+furnace), and geothermal at common SEER/AFUE tiers. Includes labor + equipment breakdown where available.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "home_sqft": {
+              "type": "number",
+              "description": "Home square footage. Optional context for sizing checks."
+            },
+            "state_code": {
+              "type": "string",
+              "description": "Two-letter US state code (e.g., 'CA', 'TX'). Used for state cost-of-living adjustment."
+            },
+            "system_type": {
+              "enum": [
+                "central_ac",
+                "heat_pump",
+                "gas_furnace",
+                "mini_split",
+                "full_system",
+                "geothermal"
+              ],
+              "type": "string",
+              "description": "Type of HVAC system"
+            },
+            "efficiency_tier": {
+              "type": "string",
+              "description": "Efficiency tier (e.g., '14_seer', '16_seer', '18_seer', '20_seer', '25_seer' for AC; varies by system_type). Omit to see available tiers."
+            }
+          }
+        }
+      },
+      {
+        "name": "draft_dispute",
+        "description": "Draft a written dispute or scope-clarification letter to an HVAC contractor. Tailored to common HVAC issues: oversizing/load-calc, R-410A/refrigerant compliance (EPA AIM Act 2026+), efficiency below code minimum, missing scope items, warranty inadequacy, oversold capacity, permit responsibility, brand/model verification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "issue_type": {
+              "enum": [
+                "no_load_calc",
+                "refrigerant_compliance",
+                "efficiency_below_code",
+                "missing_scope_item",
+                "warranty_inadequate",
+                "oversized_system",
+                "permit_responsibility",
+                "brand_model_unspecified",
+                "general"
+              ],
+              "type": "string"
+            },
+            "issue_detail": {
+              "type": "string",
+              "description": "Brief description of the specific issue"
+            },
+            "quote_amount": {
+              "type": "number"
+            },
+            "customer_name": {
+              "type": "string"
+            },
+            "contractor_name": {
+              "type": "string"
+            },
+            "project_address": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "negotiation_script",
+        "description": "Generate a phone or in-person negotiation script for an HVAC contractor conversation. Tailored to common HVAC scenarios: leveraging multiple quotes, negotiating tonnage downsize after Manual J, requesting equipment upgrade for the same price, extending labor warranty, and negotiating service-call/repair pricing. Includes opening framing, specific asks, common pushback responses, and closing.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scenario": {
+              "enum": [
+                "multi_quote_leverage",
+                "downsize_after_load_calc",
+                "efficiency_upgrade_same_price",
+                "extended_labor_warranty",
+                "service_call_negotiation"
+              ],
+              "type": "string"
+            },
+            "quote_amount": {
+              "type": "number"
+            },
+            "target_price": {
+              "type": "number"
+            },
+            "contractor_name": {
+              "type": "string"
+            },
+            "competing_quote_amount": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

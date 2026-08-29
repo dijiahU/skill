@@ -1,0 +1,162 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cbeggroup/getpracticehelp",
+  "namespace": "cbeggroup",
+  "slug": "getpracticehelp",
+  "displayName": "GPH Intelligence — Healthcare Service Provider Finder",
+  "description": "Find the right healthcare service vendor for your medical practice. Search 100,000+ verified providers across medical billing, credentialing, IT, legal, compliance, and more — matched to your specialty, EHR, and location.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "995c7d5a-afae-483a-84d7-ac187957ea5b",
+    "qualifiedName": "cbeggroup/getpracticehelp",
+    "namespace": "cbeggroup",
+    "slug": "getpracticehelp",
+    "displayName": "GPH Intelligence — Healthcare Service Provider Finder",
+    "description": "Find the right healthcare service vendor for your medical practice. Search 100,000+ verified providers across medical billing, credentialing, IT, legal, compliance, and more — matched to your specialty, EHR, and location.",
+    "iconUrl": "https://api.smithery.ai/servers/cbeggroup/getpracticehelp/icon",
+    "verified": false,
+    "useCount": 135,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-14T13:45:29.692Z",
+    "homepage": "https://www.getpracticehelp.com/providers/",
+    "bySmithery": false,
+    "owner": "org_01KNBVZZN7RE6JVDT0TH3SRZB2",
+    "score": 0.008849557522123894
+  },
+  "detail": {
+    "qualifiedName": "cbeggroup/getpracticehelp",
+    "displayName": "GPH Intelligence — Healthcare Service Provider Finder",
+    "description": "Find the right healthcare service vendor for your medical practice. Search 100,000+ verified providers across medical billing, credentialing, IT, legal, compliance, and more — matched to your specialty, EHR, and location.",
+    "iconUrl": "https://api.smithery.ai/servers/cbeggroup/getpracticehelp/icon",
+    "remote": true,
+    "deploymentUrl": "https://getpracticehelp--cbeggroup.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://getpracticehelp--cbeggroup.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "match_practice",
+        "description": "Find the best healthcare service providers for a medical practice based on specialty, size, location, EHR system, and budget. Returns ranked matches with quality scores.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City where the practice is located"
+            },
+            "state": {
+              "type": "string",
+              "description": "Two-letter state abbreviation (e.g. 'TX', 'CA', 'NY')"
+            },
+            "category": {
+              "type": "string",
+              "description": "Service category needed (e.g. 'Medical Billing & RCM', 'Credentialing Services', 'Healthcare IT & EHR')"
+            },
+            "specialty": {
+              "type": "string",
+              "description": "Medical specialty of the practice (e.g. 'Family Medicine', 'Cardiology', 'Pediatrics')"
+            },
+            "ehr_system": {
+              "type": "string",
+              "description": "EHR system used by the practice (e.g. 'Epic', 'athenahealth', 'AdvancedMD')"
+            },
+            "budget_range": {
+              "enum": [
+                "Under $500",
+                "$500-$2,000",
+                "$2,000-$5,000",
+                "$5,000+",
+                "Not sure"
+              ],
+              "type": "string",
+              "description": "Monthly budget range"
+            },
+            "practice_size": {
+              "enum": [
+                "Solo",
+                "Small",
+                "Mid-size",
+                "Large"
+              ],
+              "type": "string",
+              "description": "Size of the practice"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_providers",
+        "description": "Search for healthcare service providers by category, location, and quality rating. Returns a paginated list of providers with quality scores and contact information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City name to filter by"
+            },
+            "page": {
+              "type": "number",
+              "description": "Page number for pagination (default 1)"
+            },
+            "state": {
+              "type": "string",
+              "description": "Two-letter state abbreviation"
+            },
+            "category": {
+              "type": "string",
+              "description": "Service category to search (e.g. 'Medical Billing & RCM')"
+            },
+            "per_page": {
+              "type": "number",
+              "description": "Number of results to return (default 10, max 50)"
+            },
+            "min_rating": {
+              "type": "number",
+              "description": "Minimum quality score (0-100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_provider_detail",
+        "description": "Get full profile details for a specific healthcare service provider including description, services, contact information, quality score, and reviews.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Provider slug identifier (e.g. 'ams-solutions-inc-dallas-tx')"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "find_vendor",
+        "description": "Find the best healthcare service vendor for a medical practice",
+        "arguments": [
+          {
+            "name": "need",
+            "description": "What the practice needs help with (e.g. medical billing, credentialing, EHR)",
+            "required": true
+          },
+          {
+            "name": "location",
+            "description": "City and state of the practice",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

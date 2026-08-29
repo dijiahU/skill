@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "eutpdrf9q8",
+  "namespace": "drausal",
+  "slug": "gohighlevel-mcp",
+  "name": "GoHighLevel MCP Server",
+  "description": "Enables AI assistants to interact with GoHighLevel's complete API including contacts, opportunities, calendars, workflows, communications, and business management tools. Supports both Bearer token and OAuth2 authentication with automatic token management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with GoHighLevel's complete API including contacts, opportunities, calendars, workflows, communications, and business management tools. Supports both Bearer token and OAuth2 authentication with automatic token management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BEARER_TOKEN_BEARER": {
+          "description": "Your GoHighLevel API key for bearer token authentication",
+          "type": "string"
+        },
+        "BEARER_TOKEN_BEARERAUTH": {
+          "description": "Your GoHighLevel API key for bearer token authentication",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_ID_AGENCY_ACCESS": {
+          "description": "OAuth2 client ID for agency-level operations",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_ID_LOCATION_ACCESS": {
+          "description": "OAuth2 client ID for location-specific operations",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_SECRET_AGENCY_ACCESS": {
+          "description": "OAuth2 client secret for agency-level operations",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_SECRET_LOCATION_ACCESS": {
+          "description": "OAuth2 client secret for location-specific operations",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "BEARER_TOKEN_BEARERAUTH",
+            "BEARER_TOKEN_BEARER"
+          ]
+        },
+        {
+          "required": [
+            "OAUTH_CLIENT_ID_AGENCY_ACCESS",
+            "OAUTH_CLIENT_SECRET_AGENCY_ACCESS"
+          ]
+        },
+        {
+          "required": [
+            "OAUTH_CLIENT_ID_LOCATION_ACCESS",
+            "OAUTH_CLIENT_SECRET_LOCATION_ACCESS"
+          ]
+        }
+      ]
+    },
+    "id": "eutpdrf9q8",
+    "name": "GoHighLevel MCP Server",
+    "namespace": "drausal",
+    "repository": {
+      "url": "https://github.com/drausal/gohighlevel-mcp"
+    },
+    "slug": "gohighlevel-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/eutpdrf9q8"
+  }
+}

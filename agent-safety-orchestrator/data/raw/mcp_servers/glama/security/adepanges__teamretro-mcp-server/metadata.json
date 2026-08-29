@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "v70elvd74e",
+  "namespace": "adepanges",
+  "slug": "teamretro-mcp-server",
+  "name": "TeamRetro MCP Server",
+  "description": "An unofficial MCP server that enables Claude to interact with TeamRetro.com's API for team retrospective management, providing direct pass-through to TeamRetro's public API endpoints with multiple authentication options.",
+  "discoveryQueries": [
+    "compliance",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An unofficial MCP server that enables Claude to interact with TeamRetro.com's API for team retrospective management, providing direct pass-through to TeamRetro's public API endpoints with multiple authentication options.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TEAMRETRO_TOKEN": {
+          "description": "Your TeamRetro bearer token for bearer authentication",
+          "type": "string"
+        },
+        "TEAMRETRO_API_KEY": {
+          "description": "Your TeamRetro API key for apiKey authentication",
+          "type": "string"
+        },
+        "TEAMRETRO_BASE_URL": {
+          "description": "Base URL for TeamRetro API",
+          "type": "string",
+          "default": "https://api.teamretro.com"
+        },
+        "TEAMRETRO_PASSWORD": {
+          "description": "Your TeamRetro password for basic authentication",
+          "type": "string"
+        },
+        "TEAMRETRO_USERNAME": {
+          "description": "Your TeamRetro username for basic authentication",
+          "type": "string"
+        },
+        "TEAMRETRO_AUTH_TYPE": {
+          "description": "Authentication type (apiKey, basic, or bearer)",
+          "type": "string",
+          "default": "apiKey"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "TEAMRETRO_AUTH_TYPE",
+            "TEAMRETRO_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "TEAMRETRO_AUTH_TYPE",
+            "TEAMRETRO_USERNAME",
+            "TEAMRETRO_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "TEAMRETRO_AUTH_TYPE",
+            "TEAMRETRO_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "v70elvd74e",
+    "name": "TeamRetro MCP Server",
+    "namespace": "adepanges",
+    "repository": {
+      "url": "https://github.com/adepanges/teamretro-mcp-server"
+    },
+    "slug": "teamretro-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/v70elvd74e"
+  }
+}

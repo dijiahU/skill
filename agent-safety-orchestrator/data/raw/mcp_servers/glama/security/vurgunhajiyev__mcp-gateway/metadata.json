@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "pivd116gzp",
+  "namespace": "vurgunhajiyev",
+  "slug": "mcp-gateway",
+  "name": "MCP Gateway",
+  "description": "A production-ready unified entry point for AI agents that implements the Model Context Protocol (MCP). It provides a secure gateway with rate limiting, authentication, and observability for managing and proxying requests to multiple downstream APIs.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A production-ready unified entry point for AI agents that implements the Model Context Protocol (MCP). It provides a secure gateway with rate limiting, authentication, and observability for managing and proxying requests to multiple downstream APIs.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GATEWAY_PORT": {
+          "description": "The port on which the gateway server will run.",
+          "type": "string"
+        },
+        "GATEWAY_DEBUG": {
+          "description": "Enables or disables debug/dev mode.",
+          "type": "string",
+          "default": "true"
+        },
+        "GATEWAY_ENVIRONMENT": {
+          "description": "The environment the gateway is running in (e.g., development, production).",
+          "type": "string",
+          "default": "development"
+        },
+        "GATEWAY_AUTH_ENABLED": {
+          "description": "Determines if authentication is enabled for the gateway.",
+          "type": "string",
+          "default": "true"
+        },
+        "GATEWAY_API_KEYS_FILE": {
+          "description": "Path to the JSON file defining authorized API keys.",
+          "type": "string",
+          "default": "config/api_keys.json"
+        },
+        "GATEWAY_UPSTREAM_CONFIG_FILE": {
+          "description": "Path to the JSON file defining upstream API configurations.",
+          "type": "string",
+          "default": "config/upstreams.json"
+        },
+        "GATEWAY_RATE_LIMIT__DEFAULT_RPM": {
+          "description": "The default requests per minute allowed per identity.",
+          "type": "string",
+          "default": "60"
+        },
+        "GATEWAY_RATE_LIMIT__BURST_ALLOWANCE": {
+          "description": "The burst allowance for rate limiting.",
+          "type": "string",
+          "default": "10"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "pivd116gzp",
+    "name": "MCP Gateway",
+    "namespace": "vurgunhajiyev",
+    "repository": {
+      "url": "https://github.com/vurgunhajiyev/mcp-gateway"
+    },
+    "slug": "mcp-gateway",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pivd116gzp"
+  }
+}

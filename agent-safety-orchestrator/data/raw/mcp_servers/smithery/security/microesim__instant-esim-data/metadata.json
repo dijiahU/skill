@@ -1,0 +1,443 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "MicroEsim/instant-esim-data",
+  "namespace": "MicroEsim",
+  "slug": "instant-esim-data",
+  "displayName": "MicroEsim",
+  "description": "MicroEsim MCP connects your AI agent to global eSIM networks. Instead of manually browsing data plans, just tell your agent where you're going and when — it'll recommend the best 5G plan across 200+ countries based on your itinerary, dates, and budget. Instant, secure, and hassle-free. Travel smarter, not harder.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "id": "fd4d4aa2-4cf0-4bd3-b49a-2e804cf828a4",
+    "qualifiedName": "MicroEsim/instant-esim-data",
+    "namespace": "microesim",
+    "slug": "instant-esim-data",
+    "displayName": "MicroEsim",
+    "description": "MicroEsim MCP connects your AI agent to global eSIM networks. Instead of manually browsing data plans, just tell your agent where you're going and when — it'll recommend the best 5G plan across 200+ countries based on your itinerary, dates, and budget. Instant, secure, and hassle-free. Travel smarter, not harder.",
+    "iconUrl": "https://api.smithery.ai/servers/MicroEsim/instant-esim-data/icon",
+    "verified": false,
+    "useCount": 440,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-23T02:43:55.610Z",
+    "homepage": "https://microesim.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBV58W0CEWY3VQZSQM7WQ3R",
+    "score": 0.018867924528301886
+  },
+  "detail": {
+    "qualifiedName": "MicroEsim/instant-esim-data",
+    "displayName": "MicroEsim",
+    "description": "MicroEsim MCP connects your AI agent to global eSIM networks. Instead of manually browsing data plans, just tell your agent where you're going and when — it'll recommend the best 5G plan across 200+ countries based on your itinerary, dates, and budget. Instant, secure, and hassle-free. Travel smarter, not harder.",
+    "iconUrl": "https://api.smithery.ai/servers/MicroEsim/instant-esim-data/icon",
+    "remote": true,
+    "deploymentUrl": "https://microesim.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://microesim.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_catalog",
+        "description": "Search for products from the online store, hosted on Shopify.\n\nThis tool can be used to search for products using natural language queries, specific filter criteria, or both.\nAt least one of query or filters must be provided.\n\nResults are paginated, with initial results limited to improve experience.\nUse the pagination.cursor from the response to fetch additional pages when users request more results.\n\nResponse conforms to the UCP catalog search capability (dev.ucp.shopping.catalog.search).\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "type": "object",
+              "properties": {
+                "ucp-agent": {
+                  "type": "object",
+                  "properties": {
+                    "profile": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Agent profile URI for UCP discovery."
+                    }
+                  }
+                }
+              },
+              "description": "MCP transport metadata for UCP agent discovery."
+            },
+            "catalog": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "description": "Free-text search query."
+                },
+                "context": {
+                  "type": "object",
+                  "properties": {
+                    "intent": {
+                      "type": "string",
+                      "description": "Background context describing the buyer's intent."
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "ISO 4217 currency code (e.g., 'USD', 'CAD')."
+                    },
+                    "language": {
+                      "type": "string",
+                      "description": "IETF BCP 47 language tag (e.g., 'en', 'fr', 'de')."
+                    },
+                    "postal_code": {
+                      "type": "string",
+                      "description": "Postal or ZIP code."
+                    },
+                    "address_region": {
+                      "type": "string",
+                      "description": "First-level administrative division (e.g., 'CA' for California)."
+                    },
+                    "address_country": {
+                      "type": "string",
+                      "description": "ISO 3166-1 alpha-2 country code (e.g., 'US', 'CA', 'GB')."
+                    }
+                  },
+                  "description": "Provisional buyer signals for relevance and localization."
+                },
+                "filters": {
+                  "type": "object",
+                  "properties": {
+                    "price": {
+                      "type": "object",
+                      "properties": {
+                        "max": {
+                          "type": "integer",
+                          "description": "Maximum price in minor currency units (e.g., 10000 for $100.00)."
+                        },
+                        "min": {
+                          "type": "integer",
+                          "description": "Minimum price in minor currency units (e.g., 5000 for $50.00)."
+                        }
+                      },
+                      "description": "Price range filter in ISO 4217 minor units (e.g., 5000 = $50.00)."
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Filter by product categories using OR logic."
+                    }
+                  },
+                  "description": "Filter criteria to narrow search results."
+                },
+                "signals": {
+                  "type": "object",
+                  "properties": {
+                    "dev.ucp.buyer_ip": {
+                      "type": "string",
+                      "description": "Buyer IP address (IPv4 or IPv6)."
+                    },
+                    "dev.ucp.user_agent": {
+                      "type": "string",
+                      "description": "HTTP User-Agent header value."
+                    }
+                  },
+                  "description": "Environment data provided by the platform for authorization and abuse prevention."
+                },
+                "pagination": {
+                  "type": "object",
+                  "properties": {
+                    "limit": {
+                      "type": "integer",
+                      "default": 10,
+                      "description": "Requested page size. Defaults to 10, maximum is 250. Implementations may clamp to a lower maximum."
+                    },
+                    "cursor": {
+                      "type": "string",
+                      "description": "Opaque cursor from a previous response to fetch the next page."
+                    }
+                  },
+                  "description": "Pagination parameters."
+                }
+              },
+              "description": "Catalog search parameters."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_cart",
+        "description": "Get the cart including items, shipping options, discount info, and checkout url for a given cart id",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cart_id": {
+              "type": "string",
+              "description": "Shopify cart id, formatted like: gid://shopify/Cart/c1-66330c6d752c2b242bb8487474949791?key=fa8913e951098d30d68033cf6b7b50f3"
+            }
+          }
+        }
+      },
+      {
+        "name": "update_cart",
+        "description": "Perform updates to a cart, including adding/removing/updating line items, buyer information, shipping details, discount codes, gift cards and notes in one consolidated call. Shipping options become available after adding items and delivery address. When creating a new cart, only addItems is required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "note": {
+              "type": "string",
+              "description": "A note or special instructions for the cart. Optional - can ask if customer wants to add special instructions."
+            },
+            "cart_id": {
+              "type": "string",
+              "description": "Identifier for the cart being updated. If not provided, a new cart will be created."
+            },
+            "add_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "product_variant_id",
+                  "quantity"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "product_variant_id": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "items"
+              ],
+              "description": "Items to add to the cart. Required when creating a new cart."
+            },
+            "update_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "quantity"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              },
+              "required": [
+                "items"
+              ],
+              "description": "Existing cart line items to update quantities for. Use quantity 0 to remove an item."
+            },
+            "buyer_identity": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "country_code": {
+                  "type": "string",
+                  "description": "ISO country code, used for regional pricing."
+                }
+              },
+              "description": "Information about the buyer including email, phone, and delivery address.",
+              "additionalProperties": false
+            },
+            "discount_codes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Discount or promo codes to apply to the cart. Only prompt if customer mentions having a discount code."
+            },
+            "gift_card_codes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Gift card codes to apply to the cart. Only prompt if customer mentions having a gift card."
+            },
+            "remove_line_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "required": [
+                "items"
+              ],
+              "description": "List of line item IDs to remove explicitly."
+            },
+            "delivery_addresses_to_add": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "selected": {
+                    "type": "boolean",
+                    "description": "Optional - should this address be selected for delivery (first address defaults true)."
+                  },
+                  "delivery_address": {
+                    "type": "object",
+                    "properties": {
+                      "zip": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "phone": {
+                        "type": "string"
+                      },
+                      "address1": {
+                        "type": "string"
+                      },
+                      "address2": {
+                        "type": "string"
+                      },
+                      "last_name": {
+                        "type": "string"
+                      },
+                      "first_name": {
+                        "type": "string"
+                      },
+                      "country_code": {
+                        "type": "string",
+                        "description": "ISO country code, used for regional pricing."
+                      },
+                      "province_code": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "description": "Information about the delivery addresses to add."
+            },
+            "selected_delivery_options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "group_id",
+                  "option_handle"
+                ],
+                "properties": {
+                  "group_id": {
+                    "type": "string",
+                    "description": "The ID of the delivery group to select."
+                  },
+                  "option_handle": {
+                    "type": "string",
+                    "description": "The handle of the delivery option to select."
+                  }
+                }
+              },
+              "description": "The delivery options to select for the cart."
+            },
+            "delivery_addresses_to_replace": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "selected": {
+                    "type": "boolean",
+                    "description": "Optional - should this address be selected for delivery (first address defaults true)."
+                  },
+                  "delivery_address": {
+                    "type": "object",
+                    "properties": {
+                      "zip": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "phone": {
+                        "type": "string"
+                      },
+                      "address1": {
+                        "type": "string"
+                      },
+                      "address2": {
+                        "type": "string"
+                      },
+                      "last_name": {
+                        "type": "string"
+                      },
+                      "first_name": {
+                        "type": "string"
+                      },
+                      "country_code": {
+                        "type": "string",
+                        "description": "ISO country code, used for regional pricing."
+                      },
+                      "province_code": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "description": "Delivery addresses to apply to the cart, replaces all existing cart delivery addresses. Removes all delivery addresses when empty."
+            }
+          }
+        }
+      },
+      {
+        "name": "search_shop_policies_and_faqs",
+        "description": "Used to get facts about the stores policies, products, or services.\nSome examples of questions you can ask are:\n  - What is your return policy?\n  - What is your shipping policy?\n  - What is your phone number?\n  - What are your hours of operation?\"\n",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "A natural language query."
+            },
+            "context": {
+              "type": "string",
+              "description": "Additional information about the request such as user demographics, mood, location, or other relevant details that could help in tailoring the response appropriately."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_product_details",
+        "description": "Look up a product by ID. Pass the 'options' parameter to select a specific variant for the product card. Without options, the first available variant is returned.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "description": "ISO 3166-1 alpha-2 country code for which to return localized results (e.g., 'US', 'CA', 'GB')."
+            },
+            "options": {
+              "type": "object",
+              "description": "Variant options to select a specific variant, e.g. {\"Size\": \"10\", \"Color\": \"Black\"}. Without options, the first available variant is returned. Option matching is case-insensitive and partial options are accepted."
+            },
+            "language": {
+              "type": "string",
+              "description": "ISO 639-1 language code for which to return localized results (e.g., 'EN', 'FR', 'DE')."
+            },
+            "product_id": {
+              "type": "string",
+              "description": "The product ID, e.g. gid://shopify/Product/123"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

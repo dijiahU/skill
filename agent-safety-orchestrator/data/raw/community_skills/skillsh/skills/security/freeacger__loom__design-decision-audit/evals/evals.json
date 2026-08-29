@@ -1,0 +1,363 @@
+{
+  "skill_name": "design-decision-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "请审计这份短设计稿：.agents/skills/design-decision-audit/evals/files/minimal-migration-design.md。重点只看输出结构是否正确：必须包含 Executive Summary、Triggered Modules、Findings、Suggested Additions、Open Questions、Report Path，并且不能直接修改原文档。",
+      "expected_output": "A lightweight audit that follows the exact output structure, does not edit the source document, writes a report under docs/reports, and gives a three-option comparison table plus a recommendation for each material finding.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/minimal-migration-design.md",
+        "AGENTS.md",
+        "docs/design-docs/design-decision-checklist.md"
+      ],
+      "expectations": [
+        "The response uses the required section structure from the skill",
+        "The audit does not modify the source document",
+        "The response includes a report path under docs/reports",
+        "Each material finding includes a three-option comparison table, one recommended option, and reasons the other options were not selected"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "review 这份短设计文档 .agents/skills/design-decision-audit/evals/files/state-machine-review-design.md 。我不想直接改稿，只需要你告诉我缺了哪些关键设计决策，并给出可以直接补进去的建议段落。请特别判断应该触发哪些 checklist 条件模块。",
+      "expected_output": "An audit that correctly triggers the state machine, concurrency, and async-job style modules when the document clearly implies them, reports findings in CRXX [P#] format, compares three repair options in table form per material finding, and proposes copy-ready additions based on the recommended option.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/state-machine-review-design.md",
+        "AGENTS.md",
+        "docs/design-docs/design-decision-checklist.md"
+      ],
+      "expectations": [
+        "The audit triggers the state machine or orchestration module",
+        "The audit identifies at least one concurrency or recovery-related design gap",
+        "The findings use the CRXX [P#] format",
+        "At least one material finding includes a three-option comparison table, one recommendation, and rejection reasons for the other options"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "帮我检查这个真实方案是不是能直接进实现：docs/exec-plans/completed/2026-03-09-user-language-field-remediation-implementation-plan.md。虽然它是 implementation plan，但我想按 design review 的方式看有没有前置决策缺失、兼容性风险或者数据处理问题。输出报告到 docs/reports。",
+      "expected_output": "A realistic audit over a repo document that surfaces missing design decisions, compatibility risks, or data handling gaps and writes the report to docs/reports.",
+      "files": [
+        "docs/exec-plans/completed/2026-03-09-user-language-field-remediation-implementation-plan.md",
+        "AGENTS.md",
+        "docs/design-docs/design-decision-checklist.md"
+      ],
+      "expectations": [
+        "The audit applies the design-decision checklist to an implementation-facing document",
+        "The output surfaces compatibility, data handling, or migration gaps",
+        "The audit writes a report to docs/reports"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "请审计这份简单设计稿：.agents/skills/design-decision-audit/evals/files/simple-copy-design.md。重点验证你不要过度触发复杂模块。这只是一个文案与展示字段调整，不涉及状态机、并发控制、异步任务、人工审核或扫描告警。",
+      "expected_output": "An audit that stays within the core checklist, does not invent complex triggered modules, and keeps findings focused on the actual scope of a simple design.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/simple-copy-design.md",
+        "AGENTS.md",
+        "docs/design-docs/design-decision-checklist.md"
+      ],
+      "expectations": [
+        "The audit does not trigger state machine, concurrency, async job, human review, or scan-and-alert modules",
+        "The audit keeps findings scoped to simple compatibility, rollout, or observability questions",
+        "The findings still use the CRXX [P#] format if any findings are present"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "review 这份性能设计文档 .agents/skills/design-decision-audit/evals/files/index-tuning-design.md 。这里明确是查询路径和索引优化，请验证模块命中要克制：应该关注性能与索引，不要误触发状态机、锁、人工审核之类无关模块。",
+      "expected_output": "An audit that triggers the performance and index module, stays focused on query and storage effects, and avoids unrelated orchestration or human-review modules.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/index-tuning-design.md",
+        "AGENTS.md",
+        "docs/design-docs/design-decision-checklist.md"
+      ],
+      "expectations": [
+        "The audit triggers the performance and index module",
+        "The audit does not trigger state machine, human review, or scan-and-alert modules",
+        "The findings remain focused on query impact, index plan, compatibility, or observability"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "请审计这份边界测试设计稿：.agents/skills/design-decision-audit/evals/files/status-label-alignment-design.md。这里会出现 `status`、`enum`、`source` 这些词，但它不是状态机改造。请验证不要因为这些词就误触发状态机、并发、异步任务或人工审核模块。",
+      "expected_output": "An audit that treats the design as a compatibility and contract-alignment change, does not over-trigger orchestration modules, and keeps findings focused on schema, compatibility, or observability issues.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/status-label-alignment-design.md",
+        "AGENTS.md",
+        "docs/design-docs/design-decision-checklist.md"
+      ],
+      "expectations": [
+        "The audit does not trigger state machine, concurrency, async job, or human review modules",
+        "The findings focus on compatibility, schema, or source-of-truth concerns rather than workflow transitions",
+        "The findings use the CRXX [P#] format if any findings are present"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "review 这份边界测试设计文档 .agents/skills/design-decision-audit/evals/files/json-payload-contract-design.md 。这里有 shared JSON、status/source 字段、unknown keys 等内容。请验证应该命中半结构化 payload 模块，但不要误触发状态机、人工审核或扫描告警模块。",
+      "expected_output": "An audit that triggers the semi-structured payload module, stays focused on schema ownership and merge rules, and avoids unrelated state-machine or scan modules.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/json-payload-contract-design.md",
+        "AGENTS.md",
+        "docs/design-docs/design-decision-checklist.md"
+      ],
+      "expectations": [
+        "The audit triggers the semi-structured payload module",
+        "The audit does not trigger state machine, human review, or scan-and-alert modules",
+        "The findings remain focused on schema ownership, merge rules, compatibility, or observability"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "请把这份文档当作来自另一个没有 AGENTS.md、没有 CONTRIBUTING.md、也没有固定报告目录的仓库，只按文档本身做通用设计审计：.agents/skills/design-decision-audit/evals/files/standalone-generic-design.md。不需要保存到文件，只在对话里输出。",
+      "expected_output": "An audit that falls back to the skill's default rules, does not rely on repo-specific conventions, uses the required section structure, sets Report Path to chat-only, and includes table-based option analysis for material findings.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/standalone-generic-design.md"
+      ],
+      "expectations": [
+        "The audit can run without relying on AGENTS.md, CONTRIBUTING.md, or a repo checklist",
+        "The Report Path section uses chat-only output rather than a docs/reports path",
+        "The findings use the default CRXX [P#] format when no repo-specific format is inherited",
+        "Each material finding includes a three-option comparison table, one recommended option, and reasons the other options were not selected"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "review 这份独立设计稿 .agents/skills/design-decision-audit/evals/files/standalone-checklist-design.md，并优先遵循我提供的 checklist：.agents/skills/design-decision-audit/evals/files/standalone-review-checklist.md。把它当作另一个仓库的文档，不要套用当前仓库现有规则。",
+      "expected_output": "An audit that prioritizes the explicitly provided checklist over unrelated repo conventions, keeps the standard section structure, focuses on the decisions called out by the provided checklist, and compares three repair options in table form for each material finding.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/standalone-checklist-design.md",
+        ".agents/skills/design-decision-audit/evals/files/standalone-review-checklist.md"
+      ],
+      "expectations": [
+        "The audit follows the explicitly provided checklist instead of depending on the repo checklist",
+        "The findings focus on rollout, data handling, and observability items named in the provided checklist",
+        "The output keeps the required six-section structure even in standalone mode",
+        "Each material finding includes a three-option comparison table, one recommended option, and reasons the other options were not selected"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "review 这份独立设计稿 .agents/skills/design-decision-audit/evals/files/conflict-checklist-design.md。优先使用我提供的 design checklist：.agents/skills/design-decision-audit/evals/files/conflict-design-review-checklist.md。另一个文件 .agents/skills/design-decision-audit/evals/files/conflict-release-checklist.md 只是无关的 release checklist，不要把它混进设计审计结论里，也不要保存报告到文件。",
+      "expected_output": "An audit that obeys the explicitly provided design checklist, ignores the unrelated release checklist, keeps the six required sections, stays chat-only, and includes three-option repair analysis in table form for each material finding.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/conflict-checklist-design.md",
+        ".agents/skills/design-decision-audit/evals/files/conflict-design-review-checklist.md",
+        ".agents/skills/design-decision-audit/evals/files/conflict-release-checklist.md"
+      ],
+      "expectations": [
+        "The audit prioritizes the explicitly provided design checklist over the unrelated release checklist",
+        "The findings stay focused on rollout, data handling, backward compatibility, or observability rather than approvals or deployment ownership",
+        "The Report Path section stays chat-only and the output keeps the required six-section structure",
+        "Each material finding includes a three-option comparison table, one recommended option, and reasons the other options were not selected"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "请审计这份设计文档 .agents/skills/design-decision-audit/evals/files/standalone-generic-design.md。虽然文档内容是英文，但请根据我的中文指令自动用中文输出整份审计结果，不要保存到文件。",
+      "expected_output": "An audit that infers Chinese from the user instruction, keeps the standard section structure in Chinese, stays chat-only, and still includes table-based option analysis for material findings.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/standalone-generic-design.md"
+      ],
+      "expectations": [
+        "The audit outputs the report in Chinese rather than English",
+        "The report uses the localized Chinese section headings while preserving the standard structure",
+        "The Report Path section remains chat-only",
+        "Each material finding includes a three-option comparison table, one recommended option, and reasons the other options were not selected"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "审查 .agents/skills/design-decision-audit/evals/files/minimal-migration-design.md",
+      "expected_output": "A full design-decision audit triggered from a minimal Chinese prompt, using Chinese output, the standard section structure, and table-based option analysis for material findings.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/minimal-migration-design.md"
+      ],
+      "expectations": [
+        "The minimal Chinese prompt still triggers a full design-decision audit",
+        "The audit outputs the report in Chinese",
+        "The report uses the standard section structure rather than a one-line summary",
+        "Each material finding includes a three-option comparison table, one recommended option, and reasons the other options were not selected"
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "review .agents/skills/design-decision-audit/evals/files/state-machine-review-design.md",
+      "expected_output": "A full design-decision audit triggered from a minimal English prompt, using English output, the standard section structure, triggered modules, and table-based option analysis for material findings.",
+      "files": [
+        ".agents/skills/design-decision-audit/evals/files/state-machine-review-design.md"
+      ],
+      "expectations": [
+        "The minimal English prompt still triggers a full design-decision audit",
+        "The audit outputs the report in English",
+        "The audit still identifies the state-machine style triggered modules",
+        "At least one material finding includes a three-option comparison table, one recommended option, and reasons the other options were not selected"
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "review docs/design-decisions/2026-03-30-design-skill-system-redesign.md for missing rollout, compatibility, or observability decisions. Do not edit the document.",
+      "expected_output": "This should trigger design-decision-audit because the request explicitly asks for a design-style review over a design decision document and focuses on missing decisions rather than implementation or copy editing. The output should stay in audit mode and avoid editing the source document.",
+      "files": [
+        "docs/design-decisions/2026-03-30-design-skill-system-redesign.md",
+        "AGENTS.md"
+      ],
+      "assertions": [
+        {
+          "name": "routing_should_trigger_true",
+          "description": "This prompt should trigger design-decision-audit because it explicitly requests a design review over a decision document",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_reason_matches_boundary",
+          "description": "The response explains that the task is about missing design decisions, compatibility, and observability rather than implementation or editing",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_output_stays_in_scope",
+          "description": "The output stays in audit mode and does not rewrite the design or switch to implementation planning",
+          "type": "qualitative"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "请审查 docs/exec-plans/active/2026-03-31-skill-evaluation-implementation.md，把它当成 implementation-facing design 来看前置决策、兼容性风险和数据处理问题，不要直接改文档。",
+      "expected_output": "This should trigger design-decision-audit because the task asks for a design-style audit of an implementation-facing plan, specifically focused on missing decisions and compatibility or data-handling risks. The response should keep the audit structure and avoid direct editing.",
+      "files": [
+        "docs/exec-plans/active/2026-03-31-skill-evaluation-implementation.md",
+        "AGENTS.md"
+      ],
+      "assertions": [
+        {
+          "name": "routing_should_trigger_true",
+          "description": "This prompt should trigger design-decision-audit because it requests a design review over an implementation-facing document",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_reason_matches_boundary",
+          "description": "The response identifies missing design decisions, compatibility risks, and data-handling review as the reason to use this skill",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_output_stays_in_scope",
+          "description": "The response stays in review mode and does not transform into an implementation task list",
+          "type": "qualitative"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "prompt": "audit skills/design-decision-audit/evals/files/standalone-generic-design.md as a standalone design document and tell me which decisions are missing before implementation starts.",
+      "expected_output": "This should trigger design-decision-audit because the prompt explicitly asks for a standalone design audit that identifies missing decisions before implementation. The response should use the audit structure and stay focused on reviewable design gaps.",
+      "files": [
+        "skills/design-decision-audit/evals/files/standalone-generic-design.md"
+      ],
+      "assertions": [
+        {
+          "name": "routing_should_trigger_true",
+          "description": "This prompt should trigger design-decision-audit because it directly asks for a standalone design audit before implementation",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_reason_matches_boundary",
+          "description": "The response explains that the job is to identify missing design decisions rather than execute or rewrite the document",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_output_stays_in_scope",
+          "description": "The output remains a structured audit and does not expand into implementation work",
+          "type": "qualitative"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "prompt": "Review README.md for wording, concision, and tone. Suggest copy edits but do not perform a design review.",
+      "expected_output": "This should NOT trigger design-decision-audit because the task is a writing-quality review over documentation, not a design or implementation-facing audit. The more appropriate route is writing-clearly-and-concisely.",
+      "files": [
+        "README.md"
+      ],
+      "assertions": [
+        {
+          "name": "routing_should_trigger_false",
+          "description": "This prompt should not trigger design-decision-audit because it asks for copy editing and tone review, not design review",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_reason_matches_boundary",
+          "description": "The response explains that wording and concision review is outside the design-audit boundary",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_preferred_skill_writing-clearly-and-concisely",
+          "description": "The response points to writing-clearly-and-concisely as the better fit for documentation wording review",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_output_stays_in_scope",
+          "description": "The response does not force the documentation request into a design-audit structure",
+          "type": "qualitative"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "prompt": "The login API started returning 500 after today's deploy. Investigate the root cause and propose the smallest safe fix.",
+      "expected_output": "This should NOT trigger design-decision-audit because the task is a live debugging investigation over unexpected behavior, not a review of design decisions in a document. The more appropriate route is systematic-debugging.",
+      "assertions": [
+        {
+          "name": "routing_should_trigger_false",
+          "description": "This prompt should not trigger design-decision-audit because it is a debugging request about a production issue",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_reason_matches_boundary",
+          "description": "The response explains that this is root-cause investigation rather than a document audit",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_preferred_skill_systematic-debugging",
+          "description": "The response points to systematic-debugging as the better fit for investigating the regression",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_output_stays_in_scope",
+          "description": "The response does not try to recast a runtime debugging task as a design-document audit",
+          "type": "qualitative"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "prompt": "Turn docs/design-decisions/2026-03-30-design-skill-system-redesign.md into an implementation plan with concrete steps and files to touch.",
+      "expected_output": "This should NOT trigger design-decision-audit because the user is asking for an implementation plan, not a review of missing design decisions. The more appropriate route is writing-plans.",
+      "files": [
+        "docs/design-decisions/2026-03-30-design-skill-system-redesign.md"
+      ],
+      "assertions": [
+        {
+          "name": "routing_should_trigger_false",
+          "description": "This prompt should not trigger design-decision-audit because it asks for execution planning rather than design review",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_reason_matches_boundary",
+          "description": "The response explains that the task has moved from audit into concrete implementation planning",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_preferred_skill_writing-plans",
+          "description": "The response points to writing-plans as the better fit for producing a step-by-step implementation plan",
+          "type": "qualitative"
+        },
+        {
+          "name": "routing_output_stays_in_scope",
+          "description": "The response does not keep the task inside the audit skill once the requested output is an implementation plan",
+          "type": "qualitative"
+        }
+      ]
+    }
+  ]
+}

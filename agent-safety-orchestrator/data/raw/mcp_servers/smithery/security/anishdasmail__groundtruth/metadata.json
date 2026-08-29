@@ -1,0 +1,924 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "anishdasmail/groundtruth",
+  "namespace": "anishdasmail",
+  "slug": "groundtruth",
+  "displayName": "Ground Truth",
+  "description": "Live verification tools for AI agents: endpoint checks, pricing analysis, security headers, compliance signals, claim checks, and evidence-backed competitive research against public web data.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "trust",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "53787b56-b8d4-4c08-a0a3-0753e7ba354b",
+    "qualifiedName": "anishdasmail/groundtruth",
+    "namespace": "anishdasmail",
+    "slug": "groundtruth",
+    "displayName": "Ground Truth",
+    "description": "Live verification tools for AI agents: endpoint checks, pricing analysis, security headers, compliance signals, claim checks, and evidence-backed competitive research against public web data.",
+    "iconUrl": "https://ground-truth-mcp.anishdasmail.workers.dev/icon.svg",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-30T17:35:50.560Z",
+    "homepage": "https://ground-truth-mcp.anishdasmail.workers.dev/",
+    "bySmithery": false,
+    "owner": "org_01KQE3PGMR58EHFMP9Q4JZT5PN",
+    "score": 0.036154949784791966
+  },
+  "detail": {
+    "qualifiedName": "anishdasmail/groundtruth",
+    "displayName": "Ground Truth",
+    "description": "Live verification tools for AI agents: endpoint checks, pricing analysis, security headers, compliance signals, claim checks, and evidence-backed competitive research against public web data.",
+    "iconUrl": "https://ground-truth-mcp.anishdasmail.workers.dev/icon.svg",
+    "remote": true,
+    "deploymentUrl": "https://groundtruth--anishdasmail.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://groundtruth--anishdasmail.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_endpoint",
+        "description": "Perform one live, unauthenticated fetch against a public URL or API endpoint and report status, content type, timing, and likely auth or rate-limit signals.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Public http(s) URL or bare domain to probe. Bare domains like google.com are normalized to https:// automatically."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Normalized URL that was actually fetched."
+            },
+            "error": {
+              "type": "string",
+              "description": "Validation or network error when the request could not be completed."
+            },
+            "status": {
+              "type": "integer",
+              "description": "HTTP status code returned by the endpoint, when a response was received."
+            },
+            "inputUrl": {
+              "type": "string",
+              "description": "Original user input when normalization changed it, for example when https:// was added."
+            },
+            "accessible": {
+              "type": "boolean",
+              "description": "True when the endpoint returned a 2xx HTTP status."
+            },
+            "contentType": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Response Content-Type header, if present."
+            },
+            "rateLimited": {
+              "type": "boolean",
+              "description": "True when the server responded with 429 Too Many Requests."
+            },
+            "authRequired": {
+              "type": "boolean",
+              "description": "True when the server responded with 401 or 403, which usually means credentials are required."
+            },
+            "responseTimeMs": {
+              "type": "integer",
+              "description": "Elapsed request time in milliseconds."
+            },
+            "sampleResponse": {
+              "type": "string",
+              "description": "First 1,000 characters of the response body for quick inspection."
+            }
+          },
+          "required": [
+            "url",
+            "accessible"
+          ]
+        }
+      },
+      {
+        "name": "estimate_market",
+        "description": "Search npm or PyPI to estimate how crowded a package category is before you claim that a market is empty, niche, or competitive.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Short registry search phrase to evaluate, for example 'mcp memory server' or 'edge orm'."
+            },
+            "registry": {
+              "enum": [
+                "npm",
+                "pypi"
+              ],
+              "type": "string",
+              "description": "Registry to search. Use 'npm' for JavaScript ecosystems and 'pypi' for Python ecosystems."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search phrase that was evaluated."
+            },
+            "registry": {
+              "enum": [
+                "npm",
+                "pypi"
+              ],
+              "type": "string",
+              "description": "Registry that was searched."
+            },
+            "topResults": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "description",
+                  "version"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Package name returned by the registry."
+                  },
+                  "score": {
+                    "type": "string",
+                    "description": "Registry relevance score when npm provides one."
+                  },
+                  "version": {
+                    "type": "string",
+                    "description": "Latest version string returned in the result payload."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Short package summary from registry metadata."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Representative top search matches that help interpret the market count."
+            },
+            "totalResults": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "Total number of matching packages reported by the registry search."
+            }
+          },
+          "required": [
+            "query",
+            "registry",
+            "totalResults",
+            "topResults"
+          ]
+        }
+      },
+      {
+        "name": "check_pricing",
+        "description": "Fetch a public pricing page and extract first-pass pricing signals before you quote plan costs, free tiers, or plan names.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Public pricing or plans URL to analyze. Prefer the specific pricing page rather than a generic homepage."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Pricing page that was analyzed."
+            },
+            "error": {
+              "type": "string",
+              "description": "Fetch or parsing error when the pricing page could not be analyzed."
+            },
+            "cached": {
+              "type": "boolean",
+              "description": "True when the page body came from the 5-minute cache."
+            },
+            "pageLength": {
+              "type": "integer",
+              "description": "Size of the fetched page body in characters."
+            },
+            "pricesFound": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Distinct price-like strings extracted from the page text."
+            },
+            "hasFreeTrial": {
+              "type": "boolean",
+              "description": "True when the page contains signals that a free trial exists."
+            },
+            "hasFreeOption": {
+              "type": "boolean",
+              "description": "True when the page contains signals that a free plan or $0 option exists."
+            },
+            "plansDetected": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Lowercased heuristic plan labels detected from the page text."
+            }
+          },
+          "required": [
+            "url"
+          ]
+        }
+      },
+      {
+        "name": "inspect_security_headers",
+        "description": "Fetch a public URL and inspect security-relevant response headers before you claim that a product or endpoint has a strong browser-facing baseline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Public http(s) URL or bare domain to inspect. Bare domains are normalized to https:// automatically."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Normalized URL that was fetched."
+            },
+            "error": {
+              "type": "string",
+              "description": "Validation or network error when the request could not be completed."
+            },
+            "https": {
+              "type": "boolean",
+              "description": "True when the normalized URL used https."
+            },
+            "score": {
+              "enum": [
+                "strong",
+                "moderate",
+                "weak"
+              ],
+              "type": "string",
+              "description": "Heuristic security-header score based on how many tracked headers were present."
+            },
+            "status": {
+              "type": "integer",
+              "description": "HTTP status code returned by the endpoint."
+            },
+            "headers": {
+              "type": "object",
+              "properties": {
+                "xFrameOptions": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "referrerPolicy": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "permissionsPolicy": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "xContentTypeOptions": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "contentSecurityPolicy": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "crossOriginOpenerPolicy": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "strictTransportSecurity": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "crossOriginResourcePolicy": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "description": "Tracked response headers and their raw values when present.",
+              "additionalProperties": false
+            },
+            "inputUrl": {
+              "type": "string",
+              "description": "Original user input when normalization changed it."
+            },
+            "accessible": {
+              "type": "boolean",
+              "description": "True when the endpoint returned an HTTP response."
+            },
+            "presentCount": {
+              "type": "integer",
+              "description": "Number of tracked security headers that were present."
+            },
+            "missingRecommended": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Tracked headers that were not present on the response."
+            }
+          },
+          "required": [
+            "url",
+            "accessible",
+            "https"
+          ]
+        }
+      },
+      {
+        "name": "compare_pricing_pages",
+        "description": "Compare two to five public pricing pages side by side before you make competitive pricing or packaging claims.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "Public pricing page URL for that vendor or product."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Short vendor or product label to use in the comparison output."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 5,
+              "minItems": 2,
+              "description": "Two to five named pricing pages to compare side by side."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "pages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "error": {
+                    "type": "string"
+                  },
+                  "cached": {
+                    "type": "boolean"
+                  },
+                  "pageLength": {
+                    "type": "integer"
+                  },
+                  "pricesFound": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "hasFreeTrial": {
+                    "type": "boolean"
+                  },
+                  "hasFreeOption": {
+                    "type": "boolean"
+                  },
+                  "plansDetected": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Per-page pricing signals returned in input order."
+            },
+            "summary": {
+              "type": "object",
+              "required": [
+                "pagesCompared",
+                "pagesWithVisiblePrices",
+                "pagesWithFreeOption",
+                "pagesWithFreeTrial"
+              ],
+              "properties": {
+                "pagesCompared": {
+                  "type": "integer"
+                },
+                "pagesWithFreeTrial": {
+                  "type": "integer"
+                },
+                "pagesWithFreeOption": {
+                  "type": "integer"
+                },
+                "pagesWithVisiblePrices": {
+                  "type": "integer"
+                }
+              },
+              "description": "Aggregate counts across all compared pricing pages.",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "pages",
+            "summary"
+          ]
+        }
+      },
+      {
+        "name": "compare_competitors",
+        "description": "Compare two or more exact package names side by side using live npm or PyPI metadata.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 10,
+              "minItems": 2,
+              "description": "Two to ten exact package names from the same registry. Use exact registry names, not search phrases."
+            },
+            "registry": {
+              "enum": [
+                "npm",
+                "pypi"
+              ],
+              "type": "string",
+              "description": "Registry that all package names belong to. Returned metadata fields differ slightly between npm and PyPI."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Package names that were requested for comparison."
+            },
+            "registry": {
+              "enum": [
+                "npm",
+                "pypi"
+              ],
+              "type": "string",
+              "description": "Registry used for all comparisons."
+            },
+            "comparisons": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "found"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "error": {
+                    "type": "string"
+                  },
+                  "found": {
+                    "type": "boolean"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "cached": {
+                    "type": "boolean"
+                  },
+                  "created": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "license": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "keywords": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "lastPublished": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "latestVersion": {
+                    "type": "string"
+                  },
+                  "totalVersions": {
+                    "type": "integer"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Per-package lookup results returned in input order."
+            }
+          },
+          "required": [
+            "packages",
+            "registry",
+            "comparisons"
+          ]
+        }
+      },
+      {
+        "name": "verify_claim",
+        "description": "Check whether a factual claim is supported by a specific set of public evidence URLs that you already have.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "claim": {
+              "type": "string",
+              "description": "Plain-language claim to verify, for example 'AWS Business support includes 24/7 phone support'."
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 20,
+              "minItems": 1,
+              "description": "Keywords or short phrases that should appear on supporting pages."
+            },
+            "evidence_urls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 10,
+              "minItems": 1,
+              "description": "One to ten public documentation, pricing, policy, or support URLs that are likely to contain direct evidence for the claim."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "claim": {
+              "type": "string",
+              "description": "Claim that was evaluated."
+            },
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "url",
+                  "accessible",
+                  "supports"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "error": {
+                    "type": "string"
+                  },
+                  "cached": {
+                    "type": "boolean"
+                  },
+                  "supports": {
+                    "type": "boolean"
+                  },
+                  "accessible": {
+                    "type": "boolean"
+                  },
+                  "matchRatio": {
+                    "type": "number"
+                  },
+                  "keywordsTotal": {
+                    "type": "integer"
+                  },
+                  "keywordsMatched": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Per-source evidence results."
+            },
+            "verdict": {
+              "type": "object",
+              "required": [
+                "supporting",
+                "contradicting",
+                "total",
+                "confidence",
+                "summary"
+              ],
+              "properties": {
+                "total": {
+                  "type": "integer"
+                },
+                "summary": {
+                  "enum": [
+                    "CONFIRMED",
+                    "UNCONFIRMED",
+                    "LIKELY TRUE",
+                    "LIKELY FALSE"
+                  ],
+                  "type": "string"
+                },
+                "confidence": {
+                  "type": "number"
+                },
+                "supporting": {
+                  "type": "integer"
+                },
+                "contradicting": {
+                  "type": "integer"
+                }
+              },
+              "description": "Aggregate verdict across all supplied sources.",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "claim",
+            "sources",
+            "verdict"
+          ]
+        }
+      },
+      {
+        "name": "assess_compliance_posture",
+        "description": "Scan a public security, trust, compliance, or legal page for common enterprise buying signals before you claim a vendor supports a particular posture.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Public trust, security, compliance, or policy URL to scan."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Compliance or trust page that was analyzed."
+            },
+            "error": {
+              "type": "string",
+              "description": "Fetch or parsing error when the page could not be analyzed."
+            },
+            "cached": {
+              "type": "boolean",
+              "description": "True when the page body came from the 5-minute cache."
+            },
+            "signals": {
+              "type": "object",
+              "required": [
+                "soc2",
+                "iso27001",
+                "gdpr",
+                "hipaa",
+                "dpa",
+                "subprocessorList",
+                "sso",
+                "scim",
+                "encryption",
+                "dataResidency"
+              ],
+              "properties": {
+                "dpa": {
+                  "type": "boolean"
+                },
+                "sso": {
+                  "type": "boolean"
+                },
+                "gdpr": {
+                  "type": "boolean"
+                },
+                "scim": {
+                  "type": "boolean"
+                },
+                "soc2": {
+                  "type": "boolean"
+                },
+                "hipaa": {
+                  "type": "boolean"
+                },
+                "iso27001": {
+                  "type": "boolean"
+                },
+                "encryption": {
+                  "type": "boolean"
+                },
+                "dataResidency": {
+                  "type": "boolean"
+                },
+                "subprocessorList": {
+                  "type": "boolean"
+                }
+              },
+              "description": "Boolean scan results for common enterprise compliance and security signals.",
+              "additionalProperties": false
+            },
+            "pageLength": {
+              "type": "integer",
+              "description": "Size of the fetched page body in characters."
+            },
+            "matchedSignals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Signal names that were detected on the page."
+            }
+          },
+          "required": [
+            "url"
+          ]
+        }
+      },
+      {
+        "name": "test_hypothesis",
+        "description": "Run a small verification plan made of concrete live checks and summarize whether a hypothesis is supported.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "One explicit check in the plan. Supported types are endpoint_exists, npm_count_above, npm_count_below, and response_contains."
+              },
+              "maxItems": 10,
+              "minItems": 1,
+              "description": "Ordered list of one to ten checks to run."
+            },
+            "hypothesis": {
+              "type": "string",
+              "description": "Claim to test, for example 'there are fewer than 50 MCP email servers on npm'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "type",
+                  "passed",
+                  "actual"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "endpoint_exists",
+                      "npm_count_above",
+                      "npm_count_below",
+                      "response_contains"
+                    ],
+                    "type": "string"
+                  },
+                  "actual": {
+                    "type": [
+                      "string",
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "passed": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Per-test execution results in input order."
+            },
+            "verdict": {
+              "type": "object",
+              "required": [
+                "passed",
+                "failed",
+                "summary"
+              ],
+              "properties": {
+                "failed": {
+                  "type": "integer"
+                },
+                "passed": {
+                  "type": "integer"
+                },
+                "summary": {
+                  "enum": [
+                    "SUPPORTED",
+                    "REFUTED",
+                    "PARTIALLY SUPPORTED"
+                  ],
+                  "type": "string"
+                }
+              },
+              "description": "High-level verdict for the hypothesis.",
+              "additionalProperties": false
+            },
+            "hypothesis": {
+              "type": "string",
+              "description": "Hypothesis that was evaluated."
+            }
+          },
+          "required": [
+            "hypothesis",
+            "tests",
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

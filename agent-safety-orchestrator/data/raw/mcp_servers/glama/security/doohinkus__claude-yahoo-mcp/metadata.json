@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "aib6dm8wl4",
+  "namespace": "doohinkus",
+  "slug": "claude-yahoo-mcp",
+  "name": "Yahoo Mail MCP Server",
+  "description": "Enables LLMs to read, search, and send emails through Yahoo Mail using secure OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables LLMs to read, search, and send emails through Yahoo Mail using secure OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "YAHOO_EMAIL": {
+          "description": "Your Yahoo email address",
+          "type": "string"
+        },
+        "YAHOO_CLIENT_ID": {
+          "description": "Your Yahoo OAuth2 client ID",
+          "type": "string"
+        },
+        "YAHOO_REDIRECT_URI": {
+          "description": "Your OAuth2 redirect URI (default: https://localhost/callback)",
+          "type": "string"
+        },
+        "YAHOO_CLIENT_SECRET": {
+          "description": "Your Yahoo OAuth2 client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "YAHOO_EMAIL",
+        "YAHOO_CLIENT_ID",
+        "YAHOO_CLIENT_SECRET",
+        "YAHOO_REDIRECT_URI"
+      ]
+    },
+    "id": "aib6dm8wl4",
+    "name": "Yahoo Mail MCP Server",
+    "namespace": "doohinkus",
+    "repository": {
+      "url": "https://github.com/doohinkus/gemini-yahoo-mcp"
+    },
+    "slug": "claude-yahoo-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/aib6dm8wl4"
+  }
+}

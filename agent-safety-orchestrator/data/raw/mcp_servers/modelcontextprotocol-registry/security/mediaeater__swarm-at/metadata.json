@@ -1,0 +1,67 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.Mediaeater/swarm-at",
+  "slug": "Mediaeater__swarm-at",
+  "title": "",
+  "description": "Settlement protocol for AI agent swarms with hash-chained ledger and trust management",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.Mediaeater/swarm-at",
+      "description": "Settlement protocol for AI agent swarms with hash-chained ledger and trust management",
+      "repository": {
+        "url": "https://github.com/Mediaeater/swarm.at",
+        "source": "github"
+      },
+      "version": "0.4.1",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "swarm-at-sdk",
+          "version": "0.4.1",
+          "transport": {
+            "type": "stdio"
+          },
+          "runtimeArguments": [
+            {
+              "value": "-m",
+              "type": "positional"
+            },
+            {
+              "value": "swarm_at.mcp",
+              "type": "positional"
+            }
+          ],
+          "environmentVariables": [
+            {
+              "description": "Base URL for the swarm.at API (default: https://api.swarm.at)",
+              "format": "string",
+              "name": "SWARM_API_URL"
+            },
+            {
+              "description": "API key for authenticated endpoints (settlement, credits, webhooks)",
+              "format": "string",
+              "isSecret": true,
+              "name": "SWARM_API_KEY"
+            }
+          ]
+        }
+      ],
+      "remotes": [
+        {
+          "type": "sse",
+          "url": "https://api.swarm.at"
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-02-07T23:43:47.558605Z",
+        "publishedAt": "2026-02-07T23:43:47.558605Z",
+        "updatedAt": "2026-02-07T23:43:47.558605Z",
+        "isLatest": false
+      }
+    }
+  }
+}

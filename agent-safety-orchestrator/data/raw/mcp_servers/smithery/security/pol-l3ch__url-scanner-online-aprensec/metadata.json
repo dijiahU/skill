@@ -1,0 +1,81 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "pol-l3ch/url-scanner-online-aprensec",
+  "namespace": "pol-l3ch",
+  "slug": "url-scanner-online-aprensec",
+  "displayName": "URL Scanner Online by Aprensec — URL & Domain Security Scanner",
+  "description": "Scan any URL, domain, or IP address for security threats using URLScanner.online.\n\nReturns a full security report including:\n  - Threat verdict (safe / suspicious / malicious) and 0–100 security score\n  - Threat intelligence across 70+ feeds (malware, phishing, blocklists)\n  - SSL certificate validity, expiry, issuer, and OCSP status\n  - HTTP security headers audit (missing / misconfigured)\n  - DNS records (A, AAAA, MX, TXT, NS, SOA)\n  - WHOIS registration data (registrar, dates, country)\n  - Full redirect chain analysis\n  - AI-generated summary\n\nFree to use. No account required. 10 scans/day per IP.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "audit",
+    "vulnerability",
+    "phishing",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "e68bf87e-f05a-4a92-bd4d-6120e45ab23b",
+    "qualifiedName": "pol-l3ch/url-scanner-online-aprensec",
+    "namespace": "pol-l3ch",
+    "slug": "url-scanner-online-aprensec",
+    "displayName": "URL Scanner Online by Aprensec — URL & Domain Security Scanner",
+    "description": "Scan any URL, domain, or IP address for security threats using URLScanner.online.\n\nReturns a full security report including:\n  - Threat verdict (safe / suspicious / malicious) and 0–100 security score\n  - Threat intelligence across 70+ feeds (malware, phishing, blocklists)\n  - SSL certificate validity, expiry, issuer, and OCSP status\n  - HTTP security headers audit (missing / misconfigured)\n  - DNS records (A, AAAA, MX, TXT, NS, SOA)\n  - WHOIS registration data (registrar, dates, country)\n  - Full redirect chain analysis\n  - AI-generated summary\n\nFree to use. No account required. 10 scans/day per IP.",
+    "iconUrl": "https://api.smithery.ai/servers/pol-l3ch/url-scanner-online-aprensec/icon",
+    "verified": false,
+    "useCount": 1002,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T20:07:32.557Z",
+    "homepage": "https://urlscanner.online/ai-blue-team",
+    "bySmithery": false,
+    "owner": "org_01KNQB0AG0VRN6RJR6QAF0H6SZ",
+    "score": 0.03611971104231166
+  },
+  "detail": {
+    "qualifiedName": "pol-l3ch/url-scanner-online-aprensec",
+    "displayName": "URL Scanner Online by Aprensec — URL & Domain Security Scanner",
+    "description": "Scan any URL, domain, or IP address for security threats using URLScanner.online.\n\nReturns a full security report including:\n  - Threat verdict (safe / suspicious / malicious) and 0–100 security score\n  - Threat intelligence across 70+ feeds (malware, phishing, blocklists)\n  - SSL certificate validity, expiry, issuer, and OCSP status\n  - HTTP security headers audit (missing / misconfigured)\n  - DNS records (A, AAAA, MX, TXT, NS, SOA)\n  - WHOIS registration data (registrar, dates, country)\n  - Full redirect chain analysis\n  - AI-generated summary\n\nFree to use. No account required. 10 scans/day per IP.",
+    "iconUrl": "https://api.smithery.ai/servers/pol-l3ch/url-scanner-online-aprensec/icon",
+    "remote": true,
+    "deploymentUrl": "https://url-scanner-online-aprensec--pol-l3ch.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://url-scanner-online-aprensec--pol-l3ch.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_url",
+        "description": "Perform a full security scan on a URL, domain, or IP address using URLScanner.online.\nReturns a detailed security report including:\n- Threat intelligence (malware, phishing, blocklist hits)\n- SSL certificate validity, expiry, and chain\n- HTTP security headers audit\n- DNS records (A, AAAA, MX, TXT, NS, SOA)\n- WHOIS registration data\n- Redirect chain analysis\n- Security score 0–100 and verdict (safe/suspicious/malicious)\n\nUse this tool to: check if a link is safe before clicking, investigate phishing URLs,\naudit website security posture, or gather reconnaissance on a domain.\n\nRate limit: 10 scans per day per IP.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL, domain, or IP to scan. Examples: 'https://suspicious-site.xyz', 'example.com', '185.220.101.1'"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_scan",
+        "description": "Retrieve the result of a previously submitted URL scan by its scan ID.\nUse this when scan_url times out, to poll an in-progress scan, or to re-fetch a recent result.\nScans are retained for approximately 1 hour.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scan_id": {
+              "type": "string",
+              "description": "The scan ID returned by scan_url (e.g. '3f4a1b2c-...')"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

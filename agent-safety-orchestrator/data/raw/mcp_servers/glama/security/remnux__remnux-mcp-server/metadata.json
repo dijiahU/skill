@@ -1,0 +1,108 @@
+{
+  "registry": "glama",
+  "id": "nmqw7kivvr",
+  "namespace": "REMnux",
+  "slug": "remnux-mcp-server",
+  "name": "REMnux MCP Server",
+  "description": "Enables AI assistants to execute malware analysis tools on a REMnux system via Docker, SSH, or local connections. It provides automated file-type analysis, structured tool discovery, and security guardrails for streamlined malware investigation.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to execute malware analysis tools on a REMnux system via Docker, SSH, or local connections. It provides automated file-type analysis, structured tool discovery, and security guardrails for streamlined malware investigation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "host": {
+          "description": "SSH host (required for ssh mode)",
+          "type": "string"
+        },
+        "mode": {
+          "description": "Connection mode: docker, ssh, or local",
+          "type": "string",
+          "default": "docker"
+        },
+        "port": {
+          "description": "SSH port (for ssh mode)",
+          "type": "string",
+          "default": "22"
+        },
+        "user": {
+          "description": "SSH user (for ssh mode)",
+          "type": "string",
+          "default": "remnux"
+        },
+        "sandbox": {
+          "description": "Enable path sandboxing (restrict files to samples/output dirs)",
+          "type": "string",
+          "default": "off"
+        },
+        "timeout": {
+          "description": "Default command timeout in seconds",
+          "type": "string",
+          "default": "300"
+        },
+        "password": {
+          "description": "SSH password (for ssh mode; uses SSH agent if omitted)",
+          "type": "string"
+        },
+        "MCP_TOKEN": {
+          "description": "Bearer token for HTTP auth (environment variable alternative to --http-token)",
+          "type": "string"
+        },
+        "container": {
+          "description": "Docker container name/ID",
+          "type": "string",
+          "default": "remnux"
+        },
+        "http-host": {
+          "description": "HTTP bind address (for http transport)",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "http-port": {
+          "description": "HTTP server port (for http transport)",
+          "type": "string",
+          "default": "3000"
+        },
+        "transport": {
+          "description": "Transport mode: stdio or http",
+          "type": "string",
+          "default": "stdio"
+        },
+        "http-token": {
+          "description": "Bearer token for HTTP auth",
+          "type": "string"
+        },
+        "output-dir": {
+          "description": "Output directory path inside REMnux",
+          "type": "string",
+          "default": "/home/remnux/files/output"
+        },
+        "samples-dir": {
+          "description": "Samples directory path inside REMnux",
+          "type": "string",
+          "default": "/home/remnux/files/samples"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "nmqw7kivvr",
+    "name": "REMnux MCP Server",
+    "namespace": "REMnux",
+    "repository": {
+      "url": "https://github.com/REMnux/remnux-mcp-server"
+    },
+    "slug": "remnux-mcp-server",
+    "spdxLicense": {
+      "name": "GPL 3.0",
+      "url": "https://spdx.org/licenses/GPL-3.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nmqw7kivvr"
+  }
+}

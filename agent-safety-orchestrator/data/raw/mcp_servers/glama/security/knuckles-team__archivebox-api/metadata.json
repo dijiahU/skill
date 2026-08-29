@@ -1,0 +1,176 @@
+{
+  "registry": "glama",
+  "id": "xh7gmnvufo",
+  "namespace": "Knuckles-Team",
+  "slug": "archivebox-api",
+  "name": "ArchiveBox API",
+  "description": "Enables programmatic interaction with ArchiveBox web archiving functionality through a comprehensive API wrapper. Supports adding URLs to archives, managing snapshots, and executing CLI commands with multiple authentication methods and policy-based access control.",
+  "discoveryQueries": [
+    "policy",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables programmatic interaction with ArchiveBox web archiving functionality through a comprehensive API wrapper. Supports adding URLs to archives, managing snapshots, and executing CLI commands with multiple authentication methods and policy-based access control.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Host address for HTTP transport",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "Port number for HTTP transport",
+          "type": "string",
+          "default": "8000"
+        },
+        "AUTH_TYPE": {
+          "description": "Authentication type: 'none', 'static', 'jwt', 'oauth-proxy', 'oidc-proxy', 'remote-oauth'",
+          "type": "string",
+          "default": "none"
+        },
+        "TRANSPORT": {
+          "description": "Transport method: 'stdio', 'http', or 'sse'",
+          "type": "string",
+          "default": "stdio"
+        },
+        "EUNOMIA_TYPE": {
+          "description": "Eunomia authorization type: 'none', 'embedded', 'remote'",
+          "type": "string",
+          "default": "none"
+        },
+        "TOKEN_ISSUER": {
+          "description": "Issuer for JWT verification",
+          "type": "string"
+        },
+        "OIDC_BASE_URL": {
+          "description": "Base URL for OIDC Proxy",
+          "type": "string"
+        },
+        "ARCHIVEBOX_URL": {
+          "description": "URL of the ArchiveBox instance",
+          "type": "string"
+        },
+        "OAUTH_BASE_URL": {
+          "description": "Base URL for OAuth Proxy",
+          "type": "string"
+        },
+        "OIDC_CLIENT_ID": {
+          "description": "OIDC client ID",
+          "type": "string"
+        },
+        "TOKEN_AUDIENCE": {
+          "description": "Audience for JWT verification",
+          "type": "string"
+        },
+        "TOKEN_JWKS_URI": {
+          "description": "JWKS URI for JWT verification",
+          "type": "string"
+        },
+        "OIDC_CONFIG_URL": {
+          "description": "OIDC configuration URL",
+          "type": "string"
+        },
+        "REMOTE_BASE_URL": {
+          "description": "Base URL for Remote OAuth",
+          "type": "string"
+        },
+        "ARCHIVEBOX_TOKEN": {
+          "description": "Token for token authentication",
+          "type": "string"
+        },
+        "ARCHIVEBOX_VERIFY": {
+          "description": "Whether to verify SSL certificates",
+          "type": "string",
+          "default": "True"
+        },
+        "ARCHIVEBOX_API_KEY": {
+          "description": "API key for API key authentication",
+          "type": "string"
+        },
+        "EUNOMIA_REMOTE_URL": {
+          "description": "URL for remote Eunomia server",
+          "type": "string"
+        },
+        "OIDC_CLIENT_SECRET": {
+          "description": "OIDC client secret",
+          "type": "string"
+        },
+        "ARCHIVEBOX_PASSWORD": {
+          "description": "Password for basic authentication",
+          "type": "string"
+        },
+        "ARCHIVEBOX_USERNAME": {
+          "description": "Username for basic authentication",
+          "type": "string"
+        },
+        "EUNOMIA_POLICY_FILE": {
+          "description": "Policy file for embedded Eunomia",
+          "type": "string",
+          "default": "mcp_policies.json"
+        },
+        "REMOTE_AUTH_SERVERS": {
+          "description": "Comma-separated list of authorization servers for Remote OAuth",
+          "type": "string"
+        },
+        "OAUTH_UPSTREAM_CLIENT_ID": {
+          "description": "Upstream client ID for OAuth Proxy",
+          "type": "string"
+        },
+        "ALLOWED_CLIENT_REDIRECT_URIS": {
+          "description": "Comma-separated list of allowed client redirect URIs",
+          "type": "string"
+        },
+        "OAUTH_UPSTREAM_AUTH_ENDPOINT": {
+          "description": "Upstream authorization endpoint for OAuth Proxy",
+          "type": "string"
+        },
+        "OAUTH_UPSTREAM_CLIENT_SECRET": {
+          "description": "Upstream client secret for OAuth Proxy",
+          "type": "string"
+        },
+        "OAUTH_UPSTREAM_TOKEN_ENDPOINT": {
+          "description": "Upstream token endpoint for OAuth Proxy",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ARCHIVEBOX_URL",
+            "ARCHIVEBOX_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "ARCHIVEBOX_URL",
+            "ARCHIVEBOX_USERNAME",
+            "ARCHIVEBOX_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "ARCHIVEBOX_URL",
+            "ARCHIVEBOX_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "xh7gmnvufo",
+    "name": "ArchiveBox API",
+    "namespace": "Knuckles-Team",
+    "repository": {
+      "url": "https://github.com/Knuckles-Team/archivebox-api"
+    },
+    "slug": "archivebox-api",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xh7gmnvufo"
+  }
+}

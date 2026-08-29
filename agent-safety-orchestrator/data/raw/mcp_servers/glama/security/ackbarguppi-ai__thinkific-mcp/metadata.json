@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "hu4kbb6rwy",
+  "namespace": "ackbarguppi-ai",
+  "slug": "thinkific-mcp",
+  "name": "Thinkific MCP Server",
+  "description": "Enables AI assistants to manage Thinkific sites through the REST Admin API, providing tools for handling courses, students, enrollments, and orders. It features 24 specialized tools and resources with support for dual authentication and automatic rate-limit management.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to manage Thinkific sites through the REST Admin API, providing tools for handling courses, students, enrollments, and orders. It features 24 specialized tools and resources with support for dual authentication and automatic rate-limit management.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "THINKIFIC_API_KEY": {
+          "description": "Your Thinkific API key from Settings → Code & Analytics → API",
+          "type": "string"
+        },
+        "THINKIFIC_SUBDOMAIN": {
+          "description": "Your Thinkific site subdomain (e.g. my-school from my-school.thinkific.com)",
+          "type": "string"
+        },
+        "THINKIFIC_OAUTH_TOKEN": {
+          "description": "OAuth2 Bearer token (alternative to API Key auth)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "THINKIFIC_API_KEY",
+            "THINKIFIC_SUBDOMAIN"
+          ]
+        },
+        {
+          "required": [
+            "THINKIFIC_OAUTH_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "hu4kbb6rwy",
+    "name": "Thinkific MCP Server",
+    "namespace": "ackbarguppi-ai",
+    "repository": {
+      "url": "https://github.com/ackbarguppi-ai/thinkific-mcp"
+    },
+    "slug": "thinkific-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hu4kbb6rwy"
+  }
+}

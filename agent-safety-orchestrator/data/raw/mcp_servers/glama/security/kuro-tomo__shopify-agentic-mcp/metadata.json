@@ -1,0 +1,90 @@
+{
+  "registry": "glama",
+  "id": "vwzbboprvj",
+  "namespace": "kuro-tomo",
+  "slug": "shopify-agentic-mcp",
+  "name": "Shopify Agentic MCP Gateway",
+  "description": "Enables AI agents to autonomously browse inventory, negotiate terms, manage carts, and execute secure payments on Shopify stores using standardized protocols. It provides a bridge for LLMs to handle the entire commerce lifecycle from discovery to order tracking through a verifiable mandate chain.",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to autonomously browse inventory, negotiate terms, manage carts, and execute secure payments on Shopify stores using standardized protocols. It provides a bridge for LLMs to handle the entire commerce lifecycle from discovery to order tracking through a verifiable mandate chain.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FEE_RATE": {
+          "description": "Platform fee rate as decimal (e.g., 0.005 = 0.5%)",
+          "type": "string",
+          "default": "0.005"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "info"
+        },
+        "SHOPIFY_API_KEY": {
+          "description": "Shopify app API key",
+          "type": "string"
+        },
+        "GATEWAY_BASE_URL": {
+          "description": "Public gateway URL",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "FEE_WALLET_ADDRESS": {
+          "description": "Wallet address for fee collection",
+          "type": "string"
+        },
+        "SHOPIFY_API_SECRET": {
+          "description": "Shopify app API secret",
+          "type": "string"
+        },
+        "SHOPIFY_ACCESS_TOKEN": {
+          "description": "Admin API access token",
+          "type": "string"
+        },
+        "SHOPIFY_STORE_DOMAIN": {
+          "description": "Your Shopify store domain (e.g., store.myshopify.com)",
+          "type": "string"
+        },
+        "AP2_SIGNING_PRIVATE_KEY": {
+          "description": "ES256 private key in JWK format for mandate signing",
+          "type": "string"
+        },
+        "SHOPIFY_STOREFRONT_TOKEN": {
+          "description": "Storefront API access token",
+          "type": "string"
+        },
+        "AP2_VERIFICATION_PUBLIC_KEY": {
+          "description": "ES256 public key in JWK format (defaults to deriving from private key)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SHOPIFY_STORE_DOMAIN",
+        "SHOPIFY_STOREFRONT_TOKEN",
+        "SHOPIFY_ACCESS_TOKEN",
+        "SHOPIFY_API_KEY",
+        "SHOPIFY_API_SECRET",
+        "AP2_SIGNING_PRIVATE_KEY"
+      ]
+    },
+    "id": "vwzbboprvj",
+    "name": "Shopify Agentic MCP Gateway",
+    "namespace": "kuro-tomo",
+    "repository": {
+      "url": "https://github.com/kuro-tomo/shopify-agentic-mcp"
+    },
+    "slug": "shopify-agentic-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vwzbboprvj"
+  }
+}

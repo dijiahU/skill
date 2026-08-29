@@ -1,0 +1,51 @@
+{
+  "registry": "glama",
+  "id": "v1kkjrl3ra",
+  "namespace": "pietz",
+  "slug": "mcp-applescript",
+  "name": "MCP AppleScript",
+  "description": "Enables Large Language Models to automate macOS applications and execute AppleScript commands through natural language. It features built-in security protections including application allowlists and dangerous pattern detection to prevent unauthorized or risky system operations.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables Large Language Models to automate macOS applications and execute AppleScript commands through natural language. It features built-in security protections including application allowlists and dangerous pattern detection to prevent unauthorized or risky system operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TIMEOUT": {
+          "description": "Script execution timeout in seconds.",
+          "type": "string",
+          "default": "30"
+        },
+        "ALLOWED_APPS": {
+          "description": "Comma-separated list of allowed applications (case-insensitive). Use '*' to allow all applications (default), or an empty string to block all.",
+          "type": "string",
+          "default": "*"
+        },
+        "BLOCK_DANGEROUS": {
+          "description": "Enable or disable dangerous pattern detection (e.g., shell scripts, system control, file system access).",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "v1kkjrl3ra",
+    "name": "MCP AppleScript",
+    "namespace": "pietz",
+    "repository": {
+      "url": "https://github.com/pietz/mcp-applescript"
+    },
+    "slug": "mcp-applescript",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/v1kkjrl3ra"
+  }
+}

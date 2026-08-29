@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "efm9ecaj8a",
+  "namespace": "coleam00",
+  "slug": "remote-mcp-server-with-auth",
+  "name": "PostgreSQL MCP Server with GitHub OAuth",
+  "description": "An MCP server that enables chatting with PostgreSQL databases using secure GitHub authentication for access control between read and write operations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [],
+    "description": "An MCP server that enables chatting with PostgreSQL databases using secure GitHub authentication for access control between read and write operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Environment (development or production)",
+          "type": "string"
+        },
+        "SENTRY_DSN": {
+          "description": "Optional Sentry DSN for monitoring",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL database connection string",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "Client ID for GitHub OAuth authentication",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Client secret for GitHub OAuth authentication",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Random encryption key for cookie encryption (generate with openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY",
+        "DATABASE_URL"
+      ]
+    },
+    "id": "efm9ecaj8a",
+    "name": "PostgreSQL MCP Server with GitHub OAuth",
+    "namespace": "coleam00",
+    "repository": {
+      "url": "https://github.com/coleam00/remote-mcp-server-with-auth"
+    },
+    "slug": "remote-mcp-server-with-auth",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/efm9ecaj8a"
+  }
+}

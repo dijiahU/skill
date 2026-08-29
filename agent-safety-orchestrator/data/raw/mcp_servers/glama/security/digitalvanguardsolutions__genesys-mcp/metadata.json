@@ -1,0 +1,77 @@
+{
+  "registry": "glama",
+  "id": "k0ob1jg0jt",
+  "namespace": "DigitalVanguardSolutions",
+  "slug": "Genesys-MCP",
+  "name": "Genesys MCP",
+  "description": "Enables AI agents to interact with Genesys Cloud platform through MCP tools, resources, and prompts, supporting queues, conversations, users, presence, and analytics with production-ready features like Streamable HTTP and per-request authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to interact with Genesys Cloud platform through MCP tools, resources, and prompts, supporting queues, conversations, users, presence, and analytics with production-ready features like Streamable HTTP and per-request authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "HTTP bind host",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "MCP_PORT": {
+          "description": "HTTP bind port",
+          "type": "string",
+          "default": "8000"
+        },
+        "LOG_LEVEL": {
+          "description": "Log level (DEBUG/INFO/WARNING/ERROR/CRITICAL)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport selection (stdio or http)",
+          "type": "string",
+          "default": "stdio"
+        },
+        "GENESYS_REGION": {
+          "description": "Genesys Cloud region (e.g. mypurecloud.com, mypurecloud.de, apne2.pure.cloud)",
+          "type": "string",
+          "default": "mypurecloud.com"
+        },
+        "GENESYS_CLIENT_ID": {
+          "description": "OAuth Client Credentials client id",
+          "type": "string"
+        },
+        "GENESYS_CLIENT_SECRET": {
+          "description": "OAuth Client Credentials client secret",
+          "type": "string"
+        },
+        "GENESYS_MCP_ENABLE_WRITES": {
+          "description": "Opt-in to low-blast-radius write tools",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GENESYS_CLIENT_ID",
+        "GENESYS_CLIENT_SECRET"
+      ]
+    },
+    "id": "k0ob1jg0jt",
+    "name": "Genesys MCP",
+    "namespace": "DigitalVanguardSolutions",
+    "repository": {
+      "url": "https://github.com/DigitalVanguardSolutions/Genesys-MCP"
+    },
+    "slug": "Genesys-MCP",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/k0ob1jg0jt"
+  }
+}

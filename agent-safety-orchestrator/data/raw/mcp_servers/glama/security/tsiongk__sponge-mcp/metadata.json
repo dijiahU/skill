@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "e0lo0e6t1b",
+  "namespace": "tsiongk",
+  "slug": "sponge-mcp",
+  "name": "Sponge MCP Server",
+  "description": "Provides a Model Context Protocol interface to the Sponge wallet API for managing digital assets and transaction histories. It enables users to securely check balances, retrieve addresses, and perform transfers using DAuth-style credential exchange.",
+  "discoveryQueries": [
+    "credential"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides a Model Context Protocol interface to the Sponge wallet API for managing digital assets and transaction histories. It enables users to securely check balances, retrieve addresses, and perform transfers using DAuth-style credential exchange.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "The host address to bind the server to",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "PORT": {
+          "description": "The port to bind the server to",
+          "type": "string",
+          "default": "8080"
+        },
+        "DEDALUS_AS_URL": {
+          "description": "The URL for the Dedalus AS server",
+          "type": "string",
+          "default": "https://as.dedaluslabs.ai"
+        },
+        "SPONGE_API_KEY": {
+          "description": "DAuth-compatible API key authentication (provided by the MCP client via DAuth credentials in production flows)",
+          "type": "string"
+        },
+        "SPONGE_BASE_URL": {
+          "description": "Configurable Sponge base URL",
+          "type": "string",
+          "default": "https://api.wallet.paysponge.com"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SPONGE_API_KEY"
+      ]
+    },
+    "id": "e0lo0e6t1b",
+    "name": "Sponge MCP Server",
+    "namespace": "tsiongk",
+    "repository": {
+      "url": "https://github.com/tsiongk/sponge-mcp"
+    },
+    "slug": "sponge-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/e0lo0e6t1b"
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "salrad/code-sentinel",
+  "namespace": "salrad",
+  "slug": "code-sentinel",
+  "displayName": "Code Sentinel",
+  "description": "Expose security vulnerabilities, deceptive constructs, and unfinished code before they reach production. Reveal architectural and design pattern usage with clear, actionable guidance to improve consistency and maintainability. Generate concise visual reports that highlight strengths and prioritize issues to speed up reviews and refactoring.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "vulnerability",
+    "secret",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "643812cc-ca7d-44e5-943b-c2be64555e11",
+    "qualifiedName": "salrad/code-sentinel",
+    "namespace": "salrad",
+    "slug": "code-sentinel",
+    "displayName": "Code Sentinel",
+    "description": "Expose security vulnerabilities, deceptive constructs, and unfinished code before they reach production. Reveal architectural and design pattern usage with clear, actionable guidance to improve consistency and maintainability. Generate concise visual reports that highlight strengths and prioritize issues to speed up reviews and refactoring.",
+    "iconUrl": "https://api.smithery.ai/servers/salrad/code-sentinel/icon",
+    "verified": false,
+    "useCount": 765,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-01-03T08:11:32.234Z",
+    "homepage": "https://www.npmjs.com/package/code-sentinel-mcp?activeTab=readme",
+    "bySmithery": false,
+    "owner": "org_01KNBTRM60Y8JGY9E0AKY90P9Q",
+    "score": 0.019230769230769232
+  },
+  "detail": {
+    "qualifiedName": "salrad/code-sentinel",
+    "displayName": "Code Sentinel",
+    "description": "Expose security vulnerabilities, deceptive constructs, and unfinished code before they reach production. Reveal architectural and design pattern usage with clear, actionable guidance to improve consistency and maintainability. Generate concise visual reports that highlight strengths and prioritize issues to speed up reviews and refactoring.",
+    "iconUrl": "https://api.smithery.ai/servers/salrad/code-sentinel/icon",
+    "remote": true,
+    "deploymentUrl": "https://code-sentinel--salrad.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://code-sentinel--salrad.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "analyze_code",
+        "description": "Analyze code for security issues, errors, deceptive patterns, and placeholders. Returns a structured analysis with issues and strengths.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The source code to analyze"
+            },
+            "filename": {
+              "type": "string",
+              "description": "The filename (used to detect language). Example: 'app.ts'"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_report",
+        "description": "Analyze code and generate a detailed HTML report with visual indicators for issues and strengths.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The source code to analyze"
+            },
+            "filename": {
+              "type": "string",
+              "description": "The filename (used to detect language). Example: 'app.ts'"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_security",
+        "description": "Check code for security vulnerabilities only (hardcoded secrets, SQL injection, XSS, etc.)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The source code to check"
+            },
+            "filename": {
+              "type": "string",
+              "description": "The filename"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_deceptive_patterns",
+        "description": "Check for code patterns that hide errors or create false confidence (empty catches, silent failures, etc.)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The source code to check"
+            },
+            "filename": {
+              "type": "string",
+              "description": "The filename"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_placeholders",
+        "description": "Check for placeholder code, dummy data, TODO/FIXME comments, and incomplete implementations",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The source code to check"
+            },
+            "filename": {
+              "type": "string",
+              "description": "The filename"
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_patterns",
+        "description": "Analyze code for architectural, design, and implementation patterns. Detects pattern usage, inconsistencies, and provides actionable suggestions for improvement.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The source code to analyze"
+            },
+            "level": {
+              "enum": [
+                "architectural",
+                "design",
+                "code",
+                "all"
+              ],
+              "type": "string",
+              "description": "Pattern level to analyze: 'architectural' (system structure), 'design' (GoF patterns), 'code' (implementation idioms), or 'all' (default)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Optional natural language query to focus analysis (e.g., 'how is error handling done?')"
+            },
+            "filename": {
+              "type": "string",
+              "description": "The filename (used to detect language)"
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_design_patterns",
+        "description": "Focused analysis of Gang of Four (GoF) design patterns in code. Detects Singleton, Factory, Observer, Strategy, and other classic patterns with confidence levels and implementation details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The source code to analyze"
+            },
+            "filename": {
+              "type": "string",
+              "description": "The filename (used to detect language)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

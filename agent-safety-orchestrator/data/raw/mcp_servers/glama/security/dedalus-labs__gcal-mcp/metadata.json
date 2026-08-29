@@ -1,0 +1,87 @@
+{
+  "registry": "glama",
+  "id": "aa1uabd22m",
+  "namespace": "dedalus-labs",
+  "slug": "gcal-mcp",
+  "name": "gcal-mcp",
+  "description": "A Google Calendar MCP server that provides comprehensive tools for managing calendars, events, and settings using OAuth2 authentication via the Dedalus framework. It enables users to perform operations such as event scheduling, searching, and free/busy queries through natural language interfaces.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Google Calendar MCP server that provides comprehensive tools for managing calendars, events, and settings using OAuth2 authentication via the Dedalus framework. It enables users to perform operations such as event scheduling, searching, and free/busy queries through natural language interfaces.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OAUTH_ENABLED": {
+          "description": "Whether OAuth is enabled (e.g., 'true')",
+          "type": "string",
+          "default": "true"
+        },
+        "DEDALUS_AS_URL": {
+          "description": "The Dedalus platform AS URL",
+          "type": "string",
+          "default": "https://as.dedaluslabs.ai"
+        },
+        "OAUTH_BASE_URL": {
+          "description": "Google Calendar API base URL",
+          "type": "string",
+          "default": "https://www.googleapis.com/calendar/v3"
+        },
+        "DEDALUS_API_KEY": {
+          "description": "Your Dedalus API key (dsk-live-* or dsk-test-*)",
+          "type": "string"
+        },
+        "DEDALUS_API_URL": {
+          "description": "The Dedalus platform API URL",
+          "type": "string",
+          "default": "https://api.dedaluslabs.ai"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "Your Google OAuth 2.0 Client ID",
+          "type": "string"
+        },
+        "OAUTH_TOKEN_URL": {
+          "description": "Google OAuth 2.0 token URL",
+          "type": "string",
+          "default": "https://oauth2.googleapis.com/token"
+        },
+        "OAUTH_AUTHORIZE_URL": {
+          "description": "Google OAuth 2.0 authorization URL",
+          "type": "string",
+          "default": "https://accounts.google.com/o/oauth2/auth"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "Your Google OAuth 2.0 Client Secret",
+          "type": "string"
+        },
+        "OAUTH_SCOPES_AVAILABLE": {
+          "description": "Comma-separated list of Google Calendar API scopes",
+          "type": "string",
+          "default": "https://www.googleapis.com/auth/calendar,https://www.googleapis.com/auth/calendar.events"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OAUTH_CLIENT_ID",
+        "OAUTH_CLIENT_SECRET",
+        "DEDALUS_API_KEY"
+      ]
+    },
+    "id": "aa1uabd22m",
+    "name": "gcal-mcp",
+    "namespace": "dedalus-labs",
+    "repository": {
+      "url": "https://github.com/dedalus-labs/gcal-mcp"
+    },
+    "slug": "gcal-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/aa1uabd22m"
+  }
+}

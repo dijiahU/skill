@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "ujwg0sbqau",
+  "namespace": "mingovvv",
+  "slug": "tlc-portal-mcp",
+  "name": "tlc-portal-mcp",
+  "description": "Enables Claude Code and Codex to manage TwolineCloud internal portal vacation functions through a local stdio-based MCP server. Supports browser-based authentication, leave balance queries, vacation request submissions, and cancellations with locally stored JWT tokens.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables Claude Code and Codex to manage TwolineCloud internal portal vacation functions through a local stdio-based MCP server. Supports browser-based authentication, leave balance queries, vacation request submissions, and cancellations with locally stored JWT tokens.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORTAL_BASE_URL": {
+          "description": "포탈 주소",
+          "type": "string",
+          "default": "https://portal.example.internal"
+        },
+        "PORTAL_LOGIN_PATH": {
+          "description": "로그인 진입 경로",
+          "type": "string",
+          "default": "/login"
+        },
+        "PORTAL_TIMEOUT_SECONDS": {
+          "description": "API 요청 타임아웃(초)",
+          "type": "string",
+          "default": "15"
+        },
+        "PORTAL_MCP_SESSION_FILE": {
+          "description": "로컬 세션 저장 파일",
+          "type": "string",
+          "default": ".portal-session.json"
+        },
+        "PORTAL_LOGIN_SUCCESS_URL": {
+          "description": "로그인 성공 후 도달 URL",
+          "type": "string",
+          "default": "/dashboard/landing"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ujwg0sbqau",
+    "name": "tlc-portal-mcp",
+    "namespace": "mingovvv",
+    "repository": {
+      "url": "https://github.com/mingovvv/tlc-portal-mcp"
+    },
+    "slug": "tlc-portal-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ujwg0sbqau"
+  }
+}

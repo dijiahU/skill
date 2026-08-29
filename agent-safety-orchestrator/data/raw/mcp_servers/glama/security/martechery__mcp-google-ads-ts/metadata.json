@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "vz7h143kq0",
+  "namespace": "martechery",
+  "slug": "mcp-google-ads-ts",
+  "name": "Google Ads MCP Server",
+  "description": "Enables interaction with Google Ads through the Google Ads API using GCloud authentication. Supports GAQL query execution, performance data retrieval, account management, and resource discovery with pagination and multiple output formats.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables interaction with Google Ads through the Google Ads API using GCloud authentication. Supports GAQL query execution, performance data retrieval, account management, and resource discovery with pagination and multiple output formats.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GOOGLE_ADS_AUTH_TYPE": {
+          "description": "Authentication type for Google Ads API",
+          "type": "string"
+        },
+        "GOOGLE_ADS_API_VERSION": {
+          "description": "API version override (default v19). Example: v21",
+          "type": "string",
+          "default": "v19"
+        },
+        "GOOGLE_ADS_CUSTOMER_ID": {
+          "description": "10‑digit Ads customer ID. If omitted, tools will list accessible accounts and ask you to pick one",
+          "type": "string"
+        },
+        "GOOGLE_ADS_ACCESS_TOKEN": {
+          "description": "Direct token override for dev/tests (bypasses ADC)",
+          "type": "string"
+        },
+        "GOOGLE_ADS_GCLOUD_USE_CLI": {
+          "description": "Optional CLI token fallback (true/false)",
+          "type": "string"
+        },
+        "GOOGLE_ADS_DEVELOPER_TOKEN": {
+          "description": "Developer token (required for Ads API calls)",
+          "type": "string"
+        },
+        "GOOGLE_ADS_CREDENTIALS_PATH": {
+          "description": "Required for oauth and service_account modes - path to credentials file",
+          "type": "string"
+        },
+        "GOOGLE_ADS_LOGIN_CUSTOMER_ID": {
+          "description": "Manager (MCC) account ID; only needed when acting on a child through an MCC",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_ADS_AUTH_TYPE",
+        "GOOGLE_ADS_DEVELOPER_TOKEN"
+      ]
+    },
+    "id": "vz7h143kq0",
+    "name": "Google Ads MCP Server",
+    "namespace": "martechery",
+    "repository": {
+      "url": "https://github.com/martechery/mcp-google-ads-ts"
+    },
+    "slug": "mcp-google-ads-ts",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vz7h143kq0"
+  }
+}

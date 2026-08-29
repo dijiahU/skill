@@ -1,0 +1,87 @@
+{
+  "registry": "glama",
+  "id": "xjrqgijqvv",
+  "namespace": "kebabmane",
+  "slug": "asl-mcp",
+  "name": "Amazon Security Lake MCP Server",
+  "description": "Provides structured access to OCSF-normalized security data stored in Amazon Security Lake, enabling AI assistants to search for IP addresses, GuardDuty findings, and explore available data sources.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides structured access to OCSF-normalized security data stored in Amazon Security Lake, enabling AI assistants to search for IP addresses, GuardDuty findings, and explore available data sources.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ASL_MCP_LOG_LEVEL": {
+          "description": "Log level for the server",
+          "type": "string",
+          "default": "INFO"
+        },
+        "ASL_MCP_AWS_REGION": {
+          "description": "AWS region where Security Lake is configured",
+          "type": "string",
+          "default": "us-east-1"
+        },
+        "ASL_MCP_AWS_PROFILE": {
+          "description": "AWS profile to use for credentials",
+          "type": "string"
+        },
+        "ASL_MCP_ATHENA_WORKGROUP": {
+          "description": "Athena workgroup to use for queries",
+          "type": "string",
+          "default": "primary"
+        },
+        "ASL_MCP_MAX_QUERY_RESULTS": {
+          "description": "Maximum number of query results to return",
+          "type": "string",
+          "default": "1000"
+        },
+        "ASL_MCP_QUERY_TIMEOUT_SECONDS": {
+          "description": "Timeout in seconds for Athena queries",
+          "type": "string",
+          "default": "300"
+        },
+        "ASL_MCP_ATHENA_OUTPUT_LOCATION": {
+          "description": "S3 location for Athena query results",
+          "type": "string"
+        },
+        "ASL_MCP_SECURITY_LAKE_DATABASE": {
+          "description": "The Glue database name for Security Lake",
+          "type": "string",
+          "default": "amazon_security_lake_glue_db"
+        },
+        "ASL_MCP_AUTO_DISCOVER_RESOURCES": {
+          "description": "Enable or disable automatic resource discovery",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ASL_MCP_AWS_REGION"
+          ]
+        },
+        {
+          "required": [
+            "ASL_MCP_ATHENA_OUTPUT_LOCATION"
+          ]
+        }
+      ]
+    },
+    "id": "xjrqgijqvv",
+    "name": "Amazon Security Lake MCP Server",
+    "namespace": "kebabmane",
+    "repository": {
+      "url": "https://github.com/kebabmane/asl-mcp"
+    },
+    "slug": "asl-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xjrqgijqvv"
+  }
+}

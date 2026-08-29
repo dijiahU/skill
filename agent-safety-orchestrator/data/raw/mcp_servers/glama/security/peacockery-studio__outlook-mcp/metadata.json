@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "a2rl6nctm1",
+  "namespace": "peacockery-studio",
+  "slug": "outlook-mcp",
+  "name": "Outlook MCP Server",
+  "description": "Connects Claude to Microsoft Outlook through the Microsoft Graph API, enabling email management (list, search, read, send) and calendar operations (list, create, accept, decline, delete events) via OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Connects Claude to Microsoft Outlook through the Microsoft Graph API, enabling email management (list, search, read, send) and calendar operations (list, create, accept, decline, delete events) via OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MS_CLIENT_ID": {
+          "description": "Your Azure application client ID from Azure Portal > App Registrations > Your App",
+          "type": "string"
+        },
+        "USE_TEST_MODE": {
+          "description": "Enable test mode with simulated responses for testing without real API calls",
+          "type": "string",
+          "default": "false"
+        },
+        "MS_CLIENT_SECRET": {
+          "description": "Your Azure client secret VALUE (not Secret ID) from Azure Portal > App Registrations > Your App > Certificates & secrets",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MS_CLIENT_ID",
+        "MS_CLIENT_SECRET"
+      ]
+    },
+    "id": "a2rl6nctm1",
+    "name": "Outlook MCP Server",
+    "namespace": "peacockery-studio",
+    "repository": {
+      "url": "https://github.com/peacockery-studio/outlook-mcp"
+    },
+    "slug": "outlook-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a2rl6nctm1"
+  }
+}

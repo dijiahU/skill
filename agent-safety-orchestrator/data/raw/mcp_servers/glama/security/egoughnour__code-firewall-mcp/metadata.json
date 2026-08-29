@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "f0fspa6wp6",
+  "namespace": "egoughnour",
+  "slug": "code-firewall-mcp",
+  "name": "Code Firewall MCP",
+  "description": "A security filter that blocks dangerous code patterns by comparing normalized structural syntax trees against a blacklist of known threats using vector embeddings. It acts as a gatekeeper to prevent malicious code execution by identifying dangerous structures regardless of specific identifiers or literals.",
+  "discoveryQueries": [
+    "security",
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A security filter that blocks dangerous code patterns by comparing normalized structural syntax trees against a blacklist of known threats using vector embeddings. It acts as a gatekeeper to prevent malicious code execution by identifying dangerous structures regardless of specific identifiers or literals.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OLLAMA_URL": {
+          "description": "Ollama server URL",
+          "type": "string",
+          "default": "http://localhost:11434"
+        },
+        "EMBEDDING_MODEL": {
+          "description": "Ollama embedding model",
+          "type": "string",
+          "default": "nomic-embed-text"
+        },
+        "FIREWALL_DATA_DIR": {
+          "description": "Data storage directory",
+          "type": "string",
+          "default": "/tmp/code-firewall"
+        },
+        "NEAR_MISS_THRESHOLD": {
+          "description": "Near-miss recording threshold",
+          "type": "string",
+          "default": "0.70"
+        },
+        "SIMILARITY_THRESHOLD": {
+          "description": "Block threshold (0-1)",
+          "type": "string",
+          "default": "0.85"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "f0fspa6wp6",
+    "name": "Code Firewall MCP",
+    "namespace": "egoughnour",
+    "repository": {
+      "url": "https://github.com/egoughnour/code-firewall-mcp"
+    },
+    "slug": "code-firewall-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/f0fspa6wp6"
+  }
+}

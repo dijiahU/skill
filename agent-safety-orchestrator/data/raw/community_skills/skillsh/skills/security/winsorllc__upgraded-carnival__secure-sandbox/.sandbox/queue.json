@@ -1,0 +1,62 @@
+{
+  "queue": [
+    {
+      "id": "cmd_mm1xoxok_1",
+      "command": "rm -rf /tmp/test",
+      "risk_level": "dangerous",
+      "risk_score": 75,
+      "risk_reasons": [
+        "Destructive operation"
+      ],
+      "context": {
+        "cwd": "/tmp",
+        "user": "test"
+      },
+      "status": "approved",
+      "created_at": "2026-02-25T11:11:18.404Z",
+      "approved_at": "2026-02-25T11:11:18.405Z",
+      "approved_by": "test",
+      "rejection_reason": null,
+      "execution_result": null,
+      "approval_notes": ""
+    },
+    {
+      "id": "cmd_mm1xoxom_1",
+      "command": "rm -rf /tmp/reject-test",
+      "risk_level": "dangerous",
+      "risk_score": 75,
+      "risk_reasons": [
+        "Destructive"
+      ],
+      "context": {},
+      "status": "rejected",
+      "created_at": "2026-02-25T11:11:18.406Z",
+      "approved_at": null,
+      "approved_by": null,
+      "rejection_reason": "Test rejection",
+      "execution_result": null,
+      "rejected_at": "2026-02-25T11:11:18.406Z",
+      "rejected_by": "system"
+    },
+    {
+      "id": "cmd_mm1xoxoq_1",
+      "command": "rm -rf /tmp/dangerous-test",
+      "risk_level": "dangerous",
+      "risk_score": 75,
+      "risk_reasons": [
+        "Dangerous pattern: \\brm\\s+-[rf]+..."
+      ],
+      "context": {
+        "cwd": "/job/.pi/skills/secure-sandbox",
+        "user": "unknown"
+      },
+      "status": "pending",
+      "created_at": "2026-02-25T11:11:18.410Z",
+      "approved_at": null,
+      "approved_by": null,
+      "rejection_reason": null,
+      "execution_result": null
+    }
+  ],
+  "last_id": 0
+}

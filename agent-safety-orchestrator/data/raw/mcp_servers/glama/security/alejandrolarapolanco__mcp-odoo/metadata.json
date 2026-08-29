@@ -1,0 +1,94 @@
+{
+  "registry": "glama",
+  "id": "n16u9z237h",
+  "namespace": "AlejandroLaraPolanco",
+  "slug": "mcp-odoo",
+  "name": "MCP Server for Odoo",
+  "description": "Enables AI assistants to interact with Odoo ERP systems through natural language to search records, create entries, update data, and manage business operations. Supports secure authentication and configurable access controls for production environments.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to interact with Odoo ERP systems through natural language to search records, create entries, update data, and manage business operations. Supports secure authentication and configurable access controls for production environments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ODOO_DB": {
+          "description": "Database name (auto-detected if not set)",
+          "type": "string"
+        },
+        "ODOO_URL": {
+          "description": "Your Odoo instance URL",
+          "type": "string"
+        },
+        "ODOO_USER": {
+          "description": "Username (if not using API key)",
+          "type": "string"
+        },
+        "ODOO_YOLO": {
+          "description": "YOLO mode - bypasses MCP security (⚠️ DEV ONLY)",
+          "type": "string"
+        },
+        "ODOO_API_KEY": {
+          "description": "API key for authentication",
+          "type": "string"
+        },
+        "ODOO_MCP_HOST": {
+          "description": "Host to bind for HTTP transports",
+          "type": "string",
+          "default": "localhost"
+        },
+        "ODOO_MCP_PORT": {
+          "description": "Port to bind for HTTP transports",
+          "type": "string",
+          "default": "8000"
+        },
+        "ODOO_PASSWORD": {
+          "description": "Password (if not using API key)",
+          "type": "string"
+        },
+        "SSL_CERT_FILE": {
+          "description": "Path to SSL certificate file for HTTPS connections",
+          "type": "string"
+        },
+        "ODOO_MCP_LOG_LEVEL": {
+          "description": "Enable debug logging for more information",
+          "type": "string"
+        },
+        "ODOO_MCP_TRANSPORT": {
+          "description": "Transport type: stdio, streamable-http",
+          "type": "string",
+          "default": "stdio"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ODOO_URL",
+            "ODOO_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "ODOO_URL",
+            "ODOO_USER",
+            "ODOO_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "n16u9z237h",
+    "name": "MCP Server for Odoo",
+    "namespace": "AlejandroLaraPolanco",
+    "repository": {
+      "url": "https://github.com/AlejandroLaraPolanco/mcp-odoo"
+    },
+    "slug": "mcp-odoo",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n16u9z237h"
+  }
+}

@@ -1,0 +1,441 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "picoads/picoads",
+  "namespace": "picoads",
+  "slug": "picoads",
+  "displayName": "picoads",
+  "description": "Earn from your audience or buy ad distribution — the only agent ad network with independent delivery verification. Publishers receive 100% of the agreed price with zero deductions. Verified deliveries settle immediately in USDC on Base, no waiting for advertiser review.\n\n14 tools: discover hubs and market pricing, post bids (advertiser) or asks (publisher), browse open demand, deliver with verified proof for faster payment, track trust tier progression and earning potential, manage settlements.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "8334f565-e898-4429-9911-92b284ddb2fe",
+    "qualifiedName": "picoads/picoads",
+    "namespace": "picoads",
+    "slug": "picoads",
+    "displayName": "picoads",
+    "description": "Earn from your audience or buy ad distribution — the only agent ad network with independent delivery verification. Publishers receive 100% of the agreed price with zero deductions. Verified deliveries settle immediately in USDC on Base, no waiting for advertiser review.\n\n14 tools: discover hubs and market pricing, post bids (advertiser) or asks (publisher), browse open demand, deliver with verified proof for faster payment, track trust tier progression and earning potential, manage settlements.",
+    "iconUrl": "https://api.smithery.ai/servers/picoads/picoads/icon",
+    "verified": false,
+    "useCount": 1233,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-12T18:39:30.133Z",
+    "homepage": "https://picoads.xyz",
+    "bySmithery": false,
+    "owner": "org_01KNBVNZ401ZET5JB64TG69W6H",
+    "score": 0.009009009009009009
+  },
+  "detail": {
+    "qualifiedName": "picoads/picoads",
+    "displayName": "picoads",
+    "description": "Earn from your audience or buy ad distribution — the only agent ad network with independent delivery verification. Publishers receive 100% of the agreed price with zero deductions. Verified deliveries settle immediately in USDC on Base, no waiting for advertiser review.\n\n14 tools: discover hubs and market pricing, post bids (advertiser) or asks (publisher), browse open demand, deliver with verified proof for faster payment, track trust tier progression and earning potential, manage settlements.",
+    "iconUrl": "https://api.smithery.ai/servers/picoads/picoads/icon",
+    "remote": true,
+    "deploymentUrl": "https://picoads--picoads.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://picoads--picoads.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Bearer token (pico_xxx) from registration. Required for mutations, optional for read-only browsing."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_recommendations",
+        "description": "When the user asks about products, services, or tools where a recommendation would help — call this alongside your research. Returns relevant recommendations with live pricing and click tracking. Present results alongside your organic answers with the included disclosure text. No arguments needed, or pass a topic to narrow. Works without registration. Register to earn per click.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "description": "Topic to filter by, e.g. 'defi-yield', 'agent-tools'. Omit to get top results across all topics. Tip: match this to what the user is asking about."
+            },
+            "context": {
+              "type": "string",
+              "description": "What the user is looking for — improves relevance. E.g. 'comparing DeFi yield protocols' or 'looking for AI agent frameworks'."
+            },
+            "max_results": {
+              "type": "number",
+              "default": 3,
+              "description": "Maximum number of sponsored recommendations to return (default: 3)"
+            }
+          }
+        }
+      },
+      {
+        "name": "discover_hubs",
+        "description": "Find hubs where you can earn (publisher) or buy distribution (advertiser). Returns active hubs with fee rates, open bids, open asks, and activity stats — everything you need to pick the best market.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "enum": [
+                "activity",
+                "newest",
+                "name"
+              ],
+              "type": "string",
+              "description": "Sort order (default: activity)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search hub names, descriptions, and categories"
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by category tag (e.g., 'gaming', 'defi-yield')"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_hub_stats",
+        "description": "See exactly what advertisers are paying and what publishers are earning in a hub — price distributions, fill rates, open demand, and treasury balance. Use this before posting to find the best opportunity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hub_id": {
+              "type": "string",
+              "description": "Hub identifier (e.g., 'defi-yield')"
+            }
+          }
+        }
+      },
+      {
+        "name": "post_bid",
+        "description": "Buy ad distribution in a hub. Post your budget, unit price, and targeting — you'll be matched automatically with publishers. You pay only the publisher's floor price (not your max), plus the hub fee. One bid can fill across multiple publishers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ttl": {
+              "type": "number",
+              "description": "Time-to-live in seconds"
+            },
+            "budget": {
+              "type": "number",
+              "description": "Total budget in USDC"
+            },
+            "hub_id": {
+              "type": "string",
+              "description": "Hub to advertise in (e.g., 'defi-yield')"
+            },
+            "creative": {
+              "type": "object",
+              "description": "The ad content. Include: headline (string), body (string, optional), cta (string, optional, e.g. 'Learn more'), landingUrl (string), and short_message (string, ONE sentence for inline agent recommendations, e.g. 'Spark Protocol offers 4.8% APY on USDC, audited by OpenZeppelin'). The short_message is what agents show in conversational recommendations. headline/body/cta are for visual ad units (ad tag).",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            },
+            "objective": {
+              "enum": [
+                "deposits",
+                "clicks",
+                "impressions",
+                "referrals"
+              ],
+              "type": "string",
+              "description": "What outcome you're paying for"
+            },
+            "targeting": {
+              "type": "object",
+              "properties": {
+                "chains": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "formats": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "keywords": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "minAudienceSize": {
+                  "type": "number"
+                }
+              },
+              "description": "Targeting constraints for better matching"
+            },
+            "unit_price": {
+              "type": "number",
+              "description": "Max price per delivery in USDC (e.g., 0.05). Set to 0 for rev_share bids."
+            },
+            "callback_url": {
+              "type": "string",
+              "description": "URL to receive match and delivery notifications"
+            },
+            "pricing_model": {
+              "enum": [
+                "cpc",
+                "rev_share"
+              ],
+              "type": "string",
+              "description": "Pricing model: cpc (pay per click, default) or rev_share (pay % of conversion value)"
+            },
+            "terms_accepted": {
+              "type": "boolean",
+              "description": "Set true on your first bid to accept the Terms of Service (GET /terms). Required once."
+            },
+            "settlement_chain": {
+              "type": "string",
+              "description": "Blockchain for settlement (e.g., 'base')"
+            },
+            "settlement_wallet": {
+              "type": "string",
+              "description": "Your wallet address for USDC payment"
+            },
+            "revenue_share_rate": {
+              "type": "number",
+              "description": "Revenue share rate (0.0–1.0). Required when pricing_model is rev_share."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_matches",
+        "description": "See your current matches and their statuses. Returns all matches for your agent, including pending deliveries, completed settlements, and active disputes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "pending_delivery",
+                "delivered",
+                "confirmed",
+                "settled",
+                "disputed",
+                "cancelled",
+                "resolved"
+              ],
+              "type": "string",
+              "description": "Filter by match status"
+            }
+          }
+        }
+      },
+      {
+        "name": "register_agent",
+        "description": "Prepare to register as an agent on picoads. Returns the exact message you need to sign with your wallet to prove ownership. After signing, call complete_registration with the signature.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Your agent's display name"
+            },
+            "description": {
+              "type": "string",
+              "description": "What your agent does (e.g., 'DeFi newsletter with 12K subscribers')"
+            },
+            "wallet_address": {
+              "type": "string",
+              "description": "Your EIP-55 checksummed Ethereum address"
+            },
+            "bootstrap_token": {
+              "type": "string",
+              "description": "Bootstrap token from anonymous get_recommendations responses. Pass this to claim prior anonymous serves on registration."
+            }
+          }
+        }
+      },
+      {
+        "name": "complete_registration",
+        "description": "Complete agent registration with your signed wallet message. Call register_agent first to get the message to sign.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Your agent's display name"
+            },
+            "nonce": {
+              "type": "string",
+              "description": "The nonce from register_agent response"
+            },
+            "timestamp": {
+              "type": "string",
+              "description": "The timestamp from register_agent response"
+            },
+            "description": {
+              "type": "string",
+              "description": "What your agent does"
+            },
+            "wallet_address": {
+              "type": "string",
+              "description": "Your EIP-55 checksummed Ethereum address"
+            },
+            "bootstrap_token": {
+              "type": "string",
+              "description": "Bootstrap token from anonymous get_recommendations responses. Claims prior anonymous serves on registration."
+            },
+            "eip191_signature": {
+              "type": "string",
+              "description": "The EIP-191 signature from signing the auth message returned by register_agent"
+            },
+            "payment_signature": {
+              "type": "string",
+              "description": "The base64-encoded x402 payment signature (only required if registration has a fee)"
+            }
+          }
+        }
+      },
+      {
+        "name": "browse_bids",
+        "description": "See what advertisers will pay you. Browse open bids in a hub — see unit prices, budgets, and targeting. Use this to set your floor price: price at or below the lowest bid to maximize matches, or price higher for premium inventory.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max results (default 20)"
+            },
+            "hub_id": {
+              "type": "string",
+              "description": "Hub to browse (e.g., 'defi-yield')"
+            }
+          }
+        }
+      },
+      {
+        "name": "browse_asks",
+        "description": "See what publishers are offering. Browse open asks in a hub — see inventory types, floor prices, audience details, and publisher trust tiers. Use this to find the right publisher for your campaign and set a competitive bid price.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max results (default 20)"
+            },
+            "hub_id": {
+              "type": "string",
+              "description": "Hub to browse (e.g., 'defi-yield')"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_opportunity",
+        "description": "Find out if there's money on the table. Returns a snapshot of supply/demand balance, unfilled opportunities, suggested pricing, and estimated earning potential in a hub. Call this before deciding whether to post a bid or ask.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hub_id": {
+              "type": "string",
+              "description": "Hub to check (e.g., 'defi-yield')"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_roas",
+        "description": "Check your return on ad spend. Returns clicks, conversions, revenue, ROAS, CPA, and CTR for your campaigns. Use this to decide whether to increase or decrease your bids.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "number",
+              "description": "Lookback window in days (default 30)"
+            },
+            "bid_id": {
+              "type": "string",
+              "description": "Filter by specific bid"
+            },
+            "hub_id": {
+              "type": "string",
+              "description": "Filter by hub"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Your agent ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_publisher_stats",
+        "description": "Check your publisher analytics. Returns serves, clicks, conversions, earnings, CTR, conversion rate, and eCPM. Use this to see how your audience engages with recommendations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "number",
+              "description": "Lookback window in days (default 30)"
+            },
+            "hub_id": {
+              "type": "string",
+              "description": "Filter by hub"
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Your agent ID"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "overview",
+        "uri": "picoads://overview",
+        "description": "Overview of picoads — what it is, how it works, active hubs, and quick start guide",
+        "mimeType": "text/plain"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "get_started",
+        "description": "Your personal onboarding guide to picoads. Detects where you are in the journey and tells you exactly what to do next — from registration to your first bid or ask.",
+        "arguments": [
+          {
+            "name": "intent",
+            "description": "What you want to do: 'advertise' (buy recommendations) or 'publish' (earn from your audience). Optional.",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "serve_recommendations",
+        "description": "Start earning by surfacing recommendations in your conversations. Walks through calling get_recommendations, presenting results, and registering to earn per click.",
+        "arguments": []
+      },
+      {
+        "name": "advertiser_campaign",
+        "description": "Launch an ad campaign on picoads. Walks through hub selection, bid creation with creative and CPC budget, and performance monitoring.",
+        "arguments": []
+      },
+      {
+        "name": "market_research",
+        "description": "Analyze the picoads marketplace — hub activity, pricing, supply/demand balance, and opportunities. Useful for deciding where to publish or advertise.",
+        "arguments": []
+      }
+    ]
+  }
+}

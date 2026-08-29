@@ -1,0 +1,92 @@
+{
+  "registry": "glama",
+  "id": "nuji9z1e55",
+  "namespace": "edogola4",
+  "slug": "mcp",
+  "name": "MCP Server with External Tools",
+  "description": "Enables AI models to access external services including weather data, file system operations, and SQLite database interactions through a standardized JSON-RPC interface. Features production-ready architecture with security, rate limiting, and comprehensive error handling.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI models to access external services including weather data, file system operations, and SQLite database interactions through a standardized JSON-RPC interface. Features production-ready architecture with security, rate limiting, and comprehensive error handling.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "DB_PATH": {
+          "description": "SQLite database path",
+          "type": "string",
+          "default": "./data/mcp-db.sqlite"
+        },
+        "LOG_FILE": {
+          "description": "Log file path",
+          "type": "string",
+          "default": "logs/mcp-server.log"
+        },
+        "NODE_ENV": {
+          "description": "Node environment",
+          "type": "string",
+          "default": "development"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "info"
+        },
+        "SANDBOX_DIR": {
+          "description": "Sandbox directory for file system operations",
+          "type": "string",
+          "default": "./sandbox"
+        },
+        "MAX_FILE_SIZE_MB": {
+          "description": "Maximum file size in megabytes",
+          "type": "string",
+          "default": "10"
+        },
+        "MAX_REQUEST_SIZE": {
+          "description": "Maximum request size",
+          "type": "string",
+          "default": "1mb"
+        },
+        "OPENWEATHER_API_KEY": {
+          "description": "OpenWeatherMap API key for weather functionality",
+          "type": "string"
+        },
+        "RATE_LIMIT_WINDOW_MS": {
+          "description": "Rate limit window in milliseconds (15 minutes)",
+          "type": "string",
+          "default": "900000"
+        },
+        "RATE_LIMIT_MAX_REQUESTS": {
+          "description": "Maximum requests per rate limit window",
+          "type": "string",
+          "default": "100"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OPENWEATHER_API_KEY"
+      ]
+    },
+    "id": "nuji9z1e55",
+    "name": "MCP Server with External Tools",
+    "namespace": "edogola4",
+    "repository": {
+      "url": "https://github.com/edogola4/mcp"
+    },
+    "slug": "mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nuji9z1e55"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "registry": "glama",
+  "id": "a6ko2mrjkr",
+  "namespace": "bradmb",
+  "slug": "vivint-mcp",
+  "name": "Vivint Security System MCP Server",
+  "description": "Provides read-only access to Vivint home security systems through an unofficial API. Enables monitoring of system status, devices, sensors, cameras, locks, thermostats, and recent events through natural language.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides read-only access to Vivint home security systems through an unofficial API. Enables monitoring of system status, devices, sensors, cameras, locks, thermostats, and recent events through natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Server host binding",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8000"
+        },
+        "AUTH_TYPE": {
+          "description": "Authentication type (jwt/oauth)",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "DEBUG_MODE": {
+          "description": "Enable debug mode",
+          "type": "string",
+          "default": "false"
+        },
+        "JWT_ISSUER": {
+          "description": "JWT issuer",
+          "type": "string",
+          "default": "vivint-mcp-server"
+        },
+        "AUTH_SECRET": {
+          "description": "Strong secret for HMAC JWT signing",
+          "type": "string"
+        },
+        "ENVIRONMENT": {
+          "description": "Environment (development/production)",
+          "type": "string",
+          "default": "development"
+        },
+        "AUTH_ENABLED": {
+          "description": "Enable authentication",
+          "type": "string",
+          "default": "true"
+        },
+        "JWT_AUDIENCE": {
+          "description": "JWT audience",
+          "type": "string",
+          "default": "vivint-mcp-client"
+        },
+        "JWT_ALGORITHM": {
+          "description": "JWT algorithm (HS256/RS256)",
+          "type": "string"
+        },
+        "JWT_PUBLIC_KEY": {
+          "description": "Public key for RSA JWT verification",
+          "type": "string"
+        },
+        "JWT_PRIVATE_KEY": {
+          "description": "Private key for RSA JWT signing",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_ID": {
+          "description": "OAuth client ID",
+          "type": "string"
+        },
+        "VIVINT_MFA_CODE": {
+          "description": "6-digit MFA code for 2FA/MFA setup",
+          "type": "string"
+        },
+        "VIVINT_PASSWORD": {
+          "description": "Your Vivint password",
+          "type": "string"
+        },
+        "VIVINT_USERNAME": {
+          "description": "Your Vivint email address",
+          "type": "string"
+        },
+        "VIVINT_SYSTEM_ID": {
+          "description": "Specific system ID if you have multiple systems",
+          "type": "string"
+        },
+        "RATE_LIMIT_ENABLED": {
+          "description": "Enable rate limiting for login endpoints",
+          "type": "string",
+          "default": "true"
+        },
+        "TOKEN_EXPIRY_HOURS": {
+          "description": "Token expiry hours",
+          "type": "string",
+          "default": "24"
+        },
+        "OAUTH_CLIENT_SECRET": {
+          "description": "OAuth client secret",
+          "type": "string"
+        },
+        "OAUTH_REDIRECT_URIS": {
+          "description": "OAuth redirect URIs (comma-separated)",
+          "type": "string",
+          "default": "https://claude.ai/api/mcp/auth_callback,http://localhost:3000/callback,http://localhost:8080/callback"
+        },
+        "VIVINT_MFA_AUTO_WAIT": {
+          "description": "Auto wait for MFA",
+          "type": "string",
+          "default": "false"
+        },
+        "CLOUDFLARE_TUNNEL_URL": {
+          "description": "Cloudflare tunnel URL",
+          "type": "string"
+        },
+        "TOKEN_REFRESH_INTERVAL": {
+          "description": "Token refresh interval in seconds",
+          "type": "string",
+          "default": "18000"
+        },
+        "RATE_LIMIT_MAX_ATTEMPTS": {
+          "description": "Maximum rate limit attempts",
+          "type": "string",
+          "default": "1"
+        },
+        "SESSION_REFRESH_INTERVAL": {
+          "description": "Session refresh interval in seconds",
+          "type": "string",
+          "default": "900"
+        },
+        "OAUTH_DISABLE_NEW_CLIENTS": {
+          "description": "Disable new OAuth clients",
+          "type": "string",
+          "default": "false"
+        },
+        "VIVINT_REFRESH_TOKEN_FILE": {
+          "description": "File path for storing refresh tokens",
+          "type": "string",
+          "default": ".vivint_tokens.json"
+        },
+        "RATE_LIMIT_LOCKOUT_MINUTES": {
+          "description": "Rate limit lockout duration in minutes",
+          "type": "string",
+          "default": "5"
+        }
+      },
+      "type": "object",
+      "required": [
+        "VIVINT_USERNAME",
+        "VIVINT_PASSWORD"
+      ]
+    },
+    "id": "a6ko2mrjkr",
+    "name": "Vivint Security System MCP Server",
+    "namespace": "bradmb",
+    "repository": {
+      "url": "https://github.com/bradmb/vivint-mcp"
+    },
+    "slug": "vivint-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a6ko2mrjkr"
+  }
+}

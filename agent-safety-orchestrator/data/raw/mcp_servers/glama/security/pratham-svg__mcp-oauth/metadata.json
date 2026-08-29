@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "ltli48vbh2",
+  "namespace": "pratham-svg",
+  "slug": "MCP-OAuth",
+  "name": "Auth0 OAuth MCP Server",
+  "description": "A Model Context Protocol server that requires user authentication via Auth0 before enabling secure API access on behalf of the authenticated user.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server that requires user authentication via Auth0 before enabling secure API access on behalf of the authenticated user.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "The environment setting - use development for local development",
+          "type": "string"
+        },
+        "AUTH0_SCOPE": {
+          "description": "The scopes requested by the MCP Server. Here we request basic profile info (openid email profile), refresh token capability (offline_access), and API access (read:todos)",
+          "type": "string"
+        },
+        "API_BASE_URL": {
+          "description": "The base URL where your Todos API is running",
+          "type": "string"
+        },
+        "AUTH0_DOMAIN": {
+          "description": "The domain of your Auth0 tenant (e.g., acme.auth0.com)",
+          "type": "string"
+        },
+        "AUTH0_AUDIENCE": {
+          "description": "The unique identifier for your API which you registered in the Auth0 dashbaord (e.g., urn:todos-api)",
+          "type": "string"
+        },
+        "AUTH0_CLIENT_ID": {
+          "description": "The Client ID from the Auth0 application you created",
+          "type": "string"
+        },
+        "AUTH0_CLIENT_SECRET": {
+          "description": "The Client Secret from the Auth0 application you created",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AUTH0_DOMAIN",
+        "AUTH0_CLIENT_ID",
+        "AUTH0_CLIENT_SECRET",
+        "AUTH0_AUDIENCE",
+        "AUTH0_SCOPE",
+        "API_BASE_URL"
+      ]
+    },
+    "id": "ltli48vbh2",
+    "name": "Auth0 OAuth MCP Server",
+    "namespace": "pratham-svg",
+    "repository": {
+      "url": "https://github.com/pratham-svg/MCP-OAuth"
+    },
+    "slug": "MCP-OAuth",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ltli48vbh2"
+  }
+}

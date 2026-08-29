@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "w9btfphjbq",
+  "namespace": "creatrcollective",
+  "slug": "zohocrm-mcp-server",
+  "name": "Zoho CRM Integration",
+  "description": "Connects Claude to Zoho CRM with read-only access, enabling natural language queries to search records, list modules, retrieve field information, and count records using OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Connects Claude to Zoho CRM with read-only access, enabling natural language queries to search records, list modules, retrieve field information, and count records using OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SCOPES": {
+          "description": "The OAuth scopes required for Zoho CRM access",
+          "type": "string",
+          "default": "ZohoCRM.settings.READ,ZohoCRM.modules.READ,ZohoSearch.securesearch.READ,ZohoCRM.settings.layouts.READ"
+        },
+        "NODE_ENV": {
+          "description": "The Node.js environment mode",
+          "type": "string",
+          "default": "production"
+        },
+        "ZOHO_CLIENT_ID": {
+          "description": "Your Zoho Client ID from the Zoho Developer Console",
+          "type": "string"
+        },
+        "ZOHO_CLIENT_SECRET": {
+          "description": "Your Zoho Client Secret from the Zoho Developer Console",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ZOHO_CLIENT_ID",
+        "ZOHO_CLIENT_SECRET"
+      ]
+    },
+    "id": "w9btfphjbq",
+    "name": "Zoho CRM Integration",
+    "namespace": "creatrcollective",
+    "repository": {
+      "url": "https://github.com/creatrcollective/zohocrm-mcp-server"
+    },
+    "slug": "zohocrm-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/w9btfphjbq"
+  }
+}

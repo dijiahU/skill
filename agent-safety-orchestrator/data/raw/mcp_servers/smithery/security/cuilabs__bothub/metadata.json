@@ -1,0 +1,222 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "cuilabs/bothub",
+  "namespace": "cuilabs",
+  "slug": "bothub",
+  "displayName": "BotHub - The Trust Layer for AI Agents",
+  "description": "Search and discover 600+ ranked AI agents, bots, LLMs, MCP servers, and frameworks on the Bothub registry.\n\n**8 tools:**\n- `search_agents` — Search by query, category, type, with sorting\n- `get_agent` — Full agent details (scores, trust, model stack, integrations)\n- `get_agent_trust` — Trust score breakdown (identity, verification, badges)\n- `get_agent_manifest` — BAIP v2 manifest (machine-readable agent identity)\n- `get_categories` — All 33 agent categories with counts\n- `get_market_report` — Market intelligence (Fear & Greed Index, sector rotation)\n- `get_score_history` — Score history for charting BMS trends\n- `get_leaderboard` — Launch leaderboard with velocity scoring\n\n**4 prompts:**\n- `compare-agents` — Side-by-side comparison of multiple agents\n- `agent-report` — Comprehensive report with trust breakdown + 30-day history\n- `market-analysis` — Full market analysis with Fear & Greed, sector trends\n- `find-agent` — Recommend the best agent for a specific use case\n\n**3 resources:**\n",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "id": "cfac385e-83e2-4aa4-bffe-1bb0bf8e2b55",
+    "qualifiedName": "cuilabs/bothub",
+    "namespace": "cuilabs",
+    "slug": "bothub",
+    "displayName": "BotHub - The Trust Layer for AI Agents",
+    "description": "Search and discover 600+ ranked AI agents, bots, LLMs, MCP servers, and frameworks on the Bothub registry.\n\n**8 tools:**\n- `search_agents` — Search by query, category, type, with sorting\n- `get_agent` — Full agent details (scores, trust, model stack, integrations)\n- `get_agent_trust` — Trust score breakdown (identity, verification, badges)\n- `get_agent_manifest` — BAIP v2 manifest (machine-readable agent identity)\n- `get_categories` — All 33 agent categories with counts\n- `get_market_report` — Market intelligence (Fear & Greed Index, sector rotation)\n- `get_score_history` — Score history for charting BMS trends\n- `get_leaderboard` — Launch leaderboard with velocity scoring\n\n**4 prompts:**\n- `compare-agents` — Side-by-side comparison of multiple agents\n- `agent-report` — Comprehensive report with trust breakdown + 30-day history\n- `market-analysis` — Full market analysis with Fear & Greed, sector trends\n- `find-agent` — Recommend the best agent for a specific use case\n\n**3 resources:**\n",
+    "iconUrl": "https://api.smithery.ai/servers/cuilabs/bothub/icon",
+    "verified": false,
+    "useCount": 38,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T21:00:50.940Z",
+    "homepage": "https://bothub.tech",
+    "bySmithery": false,
+    "owner": "org_01KNPFN10JWQSSSEEPJ26WSZ19",
+    "score": 0.03932411674347158
+  },
+  "detail": {
+    "qualifiedName": "cuilabs/bothub",
+    "displayName": "BotHub - The Trust Layer for AI Agents",
+    "description": "Search and discover 600+ ranked AI agents, bots, LLMs, MCP servers, and frameworks on the Bothub registry.\n\n**8 tools:**\n- `search_agents` — Search by query, category, type, with sorting\n- `get_agent` — Full agent details (scores, trust, model stack, integrations)\n- `get_agent_trust` — Trust score breakdown (identity, verification, badges)\n- `get_agent_manifest` — BAIP v2 manifest (machine-readable agent identity)\n- `get_categories` — All 33 agent categories with counts\n- `get_market_report` — Market intelligence (Fear & Greed Index, sector rotation)\n- `get_score_history` — Score history for charting BMS trends\n- `get_leaderboard` — Launch leaderboard with velocity scoring\n\n**4 prompts:**\n- `compare-agents` — Side-by-side comparison of multiple agents\n- `agent-report` — Comprehensive report with trust breakdown + 30-day history\n- `market-analysis` — Full market analysis with Fear & Greed, sector trends\n- `find-agent` — Recommend the best agent for a specific use case\n\n**3 resources:**\n- Registry overview (market report + platform health)\n- All categories with agent counts\n- Top 20 agents by market score\n\nNo API key required. All endpoints are public.\n\nBuilt by [CUI Labs](https://cuilabs.io) · [API Docs](https://bothub.tech/api-docs) · [npm](https://www.npmjs.com/package/@bothub-tech/mcp-server)",
+    "iconUrl": "https://api.smithery.ai/servers/cuilabs/bothub/icon",
+    "remote": true,
+    "deploymentUrl": "https://bothub.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://bothub.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_agents",
+        "description": "Search the Bothub AI agent registry. Returns ranked agents with scores, trust levels, and metadata.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "enum": [
+                "score",
+                "trending",
+                "newest"
+              ],
+              "type": "string",
+              "description": "Sort order (default: score)"
+            },
+            "type": {
+              "type": "string",
+              "description": "Agent type: agent, bot, assistant, copilot, model, llm, framework, tool, mcp_server, platform"
+            },
+            "limit": {
+              "type": "number",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max results (default: 10)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search query (title, description, creator)"
+            },
+            "category": {
+              "type": "string",
+              "description": "Category slug (e.g. coding, security, chatbots)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_agent",
+        "description": "Get detailed info about a specific AI agent including scores, trust, model stack, and integrations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Agent slug (e.g. cursor, claude-code)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_agent_trust",
+        "description": "Get trust score breakdown — identity, verification, completeness, badges.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Agent slug"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_agent_manifest",
+        "description": "Fetch BAIP v2 manifest — machine-readable agent identity card.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Agent slug"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_categories",
+        "description": "List all agent categories with counts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_market_report",
+        "description": "AI agent market intelligence — Fear & Greed Index, sector rotation, verification stats.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_score_history",
+        "description": "Score history snapshots for charting BMS trends.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": 1,
+              "description": "Days to look back (default: 30)"
+            },
+            "slug": {
+              "type": "string",
+              "description": "Agent slug"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_leaderboard",
+        "description": "Launch leaderboard — velocity-scored ranking of recently launched agents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "registry-overview",
+        "uri": "bothub://registry/overview",
+        "description": "Bothub registry overview — total agents, categories, verification stats, and platform health"
+      },
+      {
+        "name": "categories",
+        "uri": "bothub://registry/categories",
+        "description": "All 33 agent categories with agent counts and slugs"
+      },
+      {
+        "name": "top-agents",
+        "uri": "bothub://registry/top-agents",
+        "description": "Top 20 agents ranked by Bothub Market Score"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "compare-agents",
+        "description": "Compare two or more AI agents side by side on Bothub — scores, trust, pricing, model stack",
+        "arguments": [
+          {
+            "name": "slugs",
+            "description": "Comma-separated agent slugs (e.g. cursor,github-copilot,claude-code)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "agent-report",
+        "description": "Generate a detailed report about an AI agent from the Bothub registry",
+        "arguments": [
+          {
+            "name": "slug",
+            "description": "Agent slug (e.g. cursor)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "market-analysis",
+        "description": "Analyze the current AI agent market using Bothub intelligence data",
+        "arguments": []
+      },
+      {
+        "name": "find-agent",
+        "description": "Help find the best AI agent for a specific use case using Bothub data",
+        "arguments": [
+          {
+            "name": "use_case",
+            "description": "What you need the agent for (e.g. code review, customer support, data analysis)",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

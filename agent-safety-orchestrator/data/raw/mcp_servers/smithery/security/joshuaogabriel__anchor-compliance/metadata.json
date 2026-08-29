@@ -1,0 +1,210 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "joshuaogabriel/anchor-compliance",
+  "namespace": "joshuaogabriel",
+  "slug": "anchor-compliance",
+  "displayName": "anchor-compliance",
+  "description": "Australian advertising & marketing compliance for AI assistants. Scan websites, check ad/social/email copy, and look up regulator guidelines (ACCC, TGA, ASIC, AHPRA, ACMA) directly from Claude, ChatGPT, or Cursor.\n\nTools:\n\n- `scan_website_compliance` — audit any public URL for AU advertising risk\n- `check_ad_copy` — analyse ad, social, or email copy for regulatory issues\n- `get_compliance_guidelines` — look up rules by industry & jurisdiction\n\nFree tier: 20 scans / 40 ad checks / 60 guideline lookups per IP per hour. Indicative results only — not legal advice.\n\nBuilt by [Anchor Compliance](https://anchorcompliance.io).",
+  "discoveryQueries": [
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "24aa3410-059e-431c-8bdf-d418d69ea7e8",
+    "qualifiedName": "joshuaogabriel/anchor-compliance",
+    "namespace": "joshuaogabriel",
+    "slug": "anchor-compliance",
+    "displayName": "anchor-compliance",
+    "description": "Australian advertising & marketing compliance for AI assistants. Scan websites, check ad/social/email copy, and look up regulator guidelines (ACCC, TGA, ASIC, AHPRA, ACMA) directly from Claude, ChatGPT, or Cursor.\n\nTools:\n\n- `scan_website_compliance` — audit any public URL for AU advertising risk\n- `check_ad_copy` — analyse ad, social, or email copy for regulatory issues\n- `get_compliance_guidelines` — look up rules by industry & jurisdiction\n\nFree tier: 20 scans / 40 ad checks / 60 guideline lookups per IP per hour. Indicative results only — not legal advice.\n\nBuilt by [Anchor Compliance](https://anchorcompliance.io).",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/anchorcompliance.io.ico",
+    "verified": false,
+    "useCount": 4,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-19T10:14:04.441Z",
+    "homepage": "https://anchorcompliance.io/mcp",
+    "bySmithery": false,
+    "owner": "org_01KPJKK23F9AE3Z8ZXSPHDZB4D",
+    "score": 0.03639371381306865
+  },
+  "detail": {
+    "qualifiedName": "joshuaogabriel/anchor-compliance",
+    "displayName": "anchor-compliance",
+    "description": "Australian advertising & marketing compliance for AI assistants. Scan websites, check ad/social/email copy, and look up regulator guidelines (ACCC, TGA, ASIC, AHPRA, ACMA) directly from Claude, ChatGPT, or Cursor.\n\nTools:\n\n- `scan_website_compliance` — audit any public URL for AU advertising risk\n- `check_ad_copy` — analyse ad, social, or email copy for regulatory issues\n- `get_compliance_guidelines` — look up rules by industry & jurisdiction\n\nFree tier: 20 scans / 40 ad checks / 60 guideline lookups per IP per hour. Indicative results only — not legal advice.\n\nBuilt by [Anchor Compliance](https://anchorcompliance.io).",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/anchorcompliance.io.ico",
+    "remote": true,
+    "deploymentUrl": "https://anchor-compliance--joshuaogabriel.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://anchor-compliance--joshuaogabriel.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "defaultIndustry": {
+              "type": "string",
+              "x-from": {
+                "query": "defaultIndustry"
+              },
+              "default": "general",
+              "x-order": 1,
+              "description": "Default industry vertical"
+            },
+            "defaultJurisdiction": {
+              "type": "string",
+              "x-from": {
+                "query": "defaultJurisdiction"
+              },
+              "default": "AU",
+              "x-order": 0,
+              "description": "Default jurisdiction code"
+            },
+            "addDisclaimersByDefault": {
+              "type": "boolean",
+              "x-from": {
+                "query": "addDisclaimersByDefault"
+              },
+              "default": true,
+              "x-order": 2,
+              "description": "Append suggested disclaimers in rewrites"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_website_compliance",
+        "description": "Scans a public website URL for potential advertising and marketing compliance issues across Australian regulatory frameworks (ACCC, TGA, ASIC, AHPRA, ACMA). Returns an indicative risk score, top issues found, and a link to the full report. Indicative only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Public URL of the website or page to scan (e.g. https://example.com)"
+            },
+            "industry": {
+              "type": "string",
+              "description": "Optional industry: healthcare, gambling, financial-services, automotive, real-estate, insurance, legal"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_ad_copy",
+        "description": "Analyses ad, social, or email copy for potential regulatory risk under Australian advertising law. Returns risk level, flagged phrases, and indicative suggested edits. Indicative only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The ad copy, social post, or email body to analyse"
+            },
+            "industry": {
+              "type": "string",
+              "description": "Industry context: healthcare, gambling, financial-services, automotive, real-estate, insurance, legal, general"
+            },
+            "jurisdiction": {
+              "type": "string",
+              "description": "Jurisdiction code (default: AU)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_compliance_guidelines",
+        "description": "Returns a summary of advertising and marketing compliance guidelines for a given industry and jurisdiction (e.g. healthcare in AU, gambling in NSW). Indicative summary only — always cross-check with the cited source.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "industry": {
+              "type": "string",
+              "description": "Industry: healthcare, gambling, financial-services, automotive, real-estate, insurance, legal"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Optional platform filter: web, social, email, broadcast"
+            },
+            "jurisdiction": {
+              "type": "string",
+              "description": "Jurisdiction code (default: AU). State codes accepted: NSW, VIC, QLD, etc."
+            }
+          }
+        }
+      },
+      {
+        "name": "rewrite_content_compliant",
+        "description": "Rewrites ad, social, email, or web copy into a lower-risk, more compliant version under Australian advertising law. Returns the rewritten copy, a list of changes made, and (optionally) suggested disclaimers. Indicative only — not legal advice. Always have a qualified compliance professional review before publishing.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "maxLength": 8000,
+              "minLength": 10,
+              "description": "The ad, social post, email, or web copy to rewrite into a lower-risk, compliant version"
+            },
+            "industry": {
+              "type": "string",
+              "description": "Industry context: healthcare, gambling, financial-services, automotive, real-estate, insurance, legal, general"
+            },
+            "jurisdiction": {
+              "type": "string",
+              "description": "Jurisdiction code (default: AU)"
+            },
+            "add_disclaimers": {
+              "type": "boolean",
+              "description": "If true, append suggested disclaimers/compliance clauses (default: true)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "compliance_audit",
+        "description": "Run a structured AU advertising compliance audit against a given website URL.",
+        "arguments": [
+          {
+            "name": "url",
+            "description": "Public website URL to audit",
+            "required": true
+          },
+          {
+            "name": "industry",
+            "description": "Industry vertical (optional)",
+            "required": false
+          },
+          {
+            "name": "jurisdiction",
+            "description": "Jurisdiction code, default AU",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "rewrite_for_compliance",
+        "description": "Rewrite marketing copy into a lower-risk, AU-compliant version with suggested disclaimers.",
+        "arguments": [
+          {
+            "name": "content",
+            "description": "The marketing copy to rewrite",
+            "required": true
+          },
+          {
+            "name": "industry",
+            "description": "Industry vertical (optional)",
+            "required": false
+          },
+          {
+            "name": "jurisdiction",
+            "description": "Jurisdiction code, default AU",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

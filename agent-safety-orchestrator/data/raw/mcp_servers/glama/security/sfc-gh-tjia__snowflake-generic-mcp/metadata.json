@@ -1,0 +1,100 @@
+{
+  "registry": "glama",
+  "id": "vt4wiqekc9",
+  "namespace": "sfc-gh-tjia",
+  "slug": "snowflake-generic-mcp",
+  "name": "Snowflake MCP Server",
+  "description": "Enables AI assistants to securely connect to Snowflake data warehouses and execute SQL queries through natural language interactions. Supports multiple authentication methods and provides formatted query results with built-in security controls.",
+  "discoveryQueries": [
+    "security",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to securely connect to Snowflake data warehouses and execute SQL queries through natural language interactions. Supports multiple authentication methods and provides formatted query results with built-in security controls.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SNOWFLAKE_ROLE": {
+          "description": "Your Snowflake role",
+          "type": "string"
+        },
+        "SNOWFLAKE_SCHEMA": {
+          "description": "Your Snowflake schema",
+          "type": "string"
+        },
+        "SNOWFLAKE_ACCOUNT": {
+          "description": "Your Snowflake account identifier (e.g., abc12345.us-east-1.snowflakecomputing.com)",
+          "type": "string"
+        },
+        "SNOWFLAKE_DATABASE": {
+          "description": "Your Snowflake database",
+          "type": "string"
+        },
+        "SNOWFLAKE_MAX_ROWS": {
+          "description": "Maximum number of rows to return from queries",
+          "type": "string"
+        },
+        "SNOWFLAKE_PASSWORD": {
+          "description": "Your Snowflake password",
+          "type": "string"
+        },
+        "SNOWFLAKE_USERNAME": {
+          "description": "Your Snowflake username",
+          "type": "string"
+        },
+        "SNOWFLAKE_WAREHOUSE": {
+          "description": "Your Snowflake warehouse",
+          "type": "string"
+        },
+        "SNOWFLAKE_AUTHENTICATOR": {
+          "description": "Authentication method (e.g., externalbrowser for SSO)",
+          "type": "string"
+        },
+        "SNOWFLAKE_PRIVATE_KEY_PATH": {
+          "description": "Path to your RSA private key file (e.g., /path/to/rsa_key.p8)",
+          "type": "string"
+        },
+        "SNOWFLAKE_PRIVATE_KEY_PASSPHRASE": {
+          "description": "Passphrase for the private key (optional)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SNOWFLAKE_ACCOUNT",
+            "SNOWFLAKE_USERNAME",
+            "SNOWFLAKE_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SNOWFLAKE_ACCOUNT",
+            "SNOWFLAKE_USERNAME",
+            "SNOWFLAKE_PRIVATE_KEY_PATH"
+          ]
+        },
+        {
+          "required": [
+            "SNOWFLAKE_ACCOUNT",
+            "SNOWFLAKE_USERNAME",
+            "SNOWFLAKE_AUTHENTICATOR"
+          ]
+        }
+      ]
+    },
+    "id": "vt4wiqekc9",
+    "name": "Snowflake MCP Server",
+    "namespace": "sfc-gh-tjia",
+    "repository": {
+      "url": "https://github.com/sfc-gh-tjia/snowflake-generic-mcp"
+    },
+    "slug": "snowflake-generic-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vt4wiqekc9"
+  }
+}

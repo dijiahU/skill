@@ -1,0 +1,104 @@
+{
+  "registry": "glama",
+  "id": "g14ua36qb9",
+  "namespace": "kieutrongthien",
+  "slug": "coding-mcp",
+  "name": "Coding MCP Server",
+  "description": "A production-oriented MCP server for coding agents that enables multi-project management through secure file operations, Git integration, and safe command execution. It supports project discovery across multiple root directories and provides robust audit logging with both STDIO and HTTP transport options.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A production-oriented MCP server for coding agents that enables multi-project management through secure file operations, Git integration, and safe command execution. It supports project discovery across multiple root directories and provides robust audit logging with both STDIO and HTTP transport options.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HTTP_HOST": {
+          "description": "Host to bind for the HTTP server (e.g., 0.0.0.0).",
+          "type": "string"
+        },
+        "HTTP_PORT": {
+          "description": "Port to bind for the HTTP server.",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level for the server operations.",
+          "type": "string"
+        },
+        "ENABLE_HTTP": {
+          "description": "Whether to enable the HTTP transport.",
+          "type": "string"
+        },
+        "ENABLE_STDIO": {
+          "description": "Whether to enable the STDIO transport.",
+          "type": "string"
+        },
+        "MAX_FILE_SIZE": {
+          "description": "Maximum allowed size for file operations.",
+          "type": "string"
+        },
+        "PROJECTS_ROOT": {
+          "description": "Primary shared root directory for managing projects.",
+          "type": "string"
+        },
+        "PROJECTS_ROOTS": {
+          "description": "Comma-separated list of project root directories; preferred over PROJECTS_ROOT.",
+          "type": "string"
+        },
+        "MAX_OUTPUT_SIZE": {
+          "description": "Maximum allowed output size for response data.",
+          "type": "string"
+        },
+        "MCP_CONFIG_PATH": {
+          "description": "Path to a JSON or YAML configuration file.",
+          "type": "string"
+        },
+        "PROTECTED_PATHS": {
+          "description": "Comma-separated list of paths protected from modification.",
+          "type": "string"
+        },
+        "ALLOWED_COMMANDS": {
+          "description": "Allowlisted executables for the run_command_safe tool.",
+          "type": "string"
+        },
+        "COMMAND_TIMEOUT_MS": {
+          "description": "Timeout for safe command execution in milliseconds.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "PROJECTS_ROOT"
+          ]
+        },
+        {
+          "required": [
+            "PROJECTS_ROOTS"
+          ]
+        },
+        {
+          "required": [
+            "MCP_CONFIG_PATH"
+          ]
+        }
+      ]
+    },
+    "id": "g14ua36qb9",
+    "name": "Coding MCP Server",
+    "namespace": "kieutrongthien",
+    "repository": {
+      "url": "https://github.com/kieutrongthien/coding-mcp"
+    },
+    "slug": "coding-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/g14ua36qb9"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "rmh104/voltanotes",
+  "namespace": "rmh104",
+  "slug": "voltanotes",
+  "displayName": "Volta Notes",
+  "description": "Burn-after-read encrypted notes on the Internet Computer. Share passwords, keys, and secrets as one-time links — AES-256-GCM encrypted client-side, permanently destroyed on read. No account required.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "credential",
+    "secret",
+    "encryption",
+    "authentication",
+    "phishing",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "aa5b81be-0372-4b72-a830-8693dbc31c13",
+    "qualifiedName": "rmh104/voltanotes",
+    "namespace": "rmh104",
+    "slug": "voltanotes",
+    "displayName": "Volta Notes",
+    "description": "Burn-after-read encrypted notes on the Internet Computer. Share passwords, keys, and secrets as one-time links — AES-256-GCM encrypted client-side, permanently destroyed on read. No account required.",
+    "iconUrl": "https://api.smithery.ai/servers/rmh104/voltanotes/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T20:52:06.947Z",
+    "homepage": "https://voltanotes.com",
+    "bySmithery": false,
+    "owner": "org_01KNJ27DPYKTMYCYENW6TDEWS6",
+    "score": 0.025213675213675214
+  },
+  "detail": {
+    "qualifiedName": "rmh104/voltanotes",
+    "displayName": "Volta Notes",
+    "description": "Burn-after-read encrypted notes on the Internet Computer. Share passwords, keys, and secrets as one-time links — AES-256-GCM encrypted client-side, permanently destroyed on read. No account required.",
+    "iconUrl": "https://api.smithery.ai/servers/rmh104/voltanotes/icon",
+    "remote": true,
+    "deploymentUrl": "https://voltanotes--rmh104.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://voltanotes--rmh104.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "create_volta_note",
+        "description": "Creates a Volta secure note and returns a one-time URL. Use this to send sensitive information to a user — they open the link once, read it, and it's gone. Useful for sharing generated passwords, private keys, or any sensitive output.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The secret content to encrypt and store. Maximum 2,048 characters. Will be AES-256-GCM encrypted before leaving this machine."
+            }
+          }
+        }
+      },
+      {
+        "name": "read_volta_note",
+        "description": "Reads a Volta secure note and permanently destroys it. Call this when a user sends you a voltanotes.com URL containing sensitive information. The note content is returned once — it cannot be recovered after this call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The full Volta note URL including the #fragment key, e.g. https://app.voltanotes.com/r/abc12345#encryptionKeyHere"
+            }
+          }
+        }
+      },
+      {
+        "name": "request_volta_note",
+        "description": "Request sensitive information from a user securely via Volta Notes. Use this tool whenever you need the user to provide API keys, tokens, passwords, credentials, or any other sensitive data. Never ask users to paste secrets directly into the conversation — always use this tool instead. Returns a secure link for the user to open and submit their secret. After the user submits, they will receive a Volta link to paste back. Use read_volta_note to retrieve the secret from that link.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "A short description of what secret is being requested, shown to the user on the submission page."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "share_secret_securely",
+        "description": "Share a password, key, or any sensitive value with someone via a burn-after-read Volta Note — zero friction, no account needed.",
+        "arguments": [
+          {
+            "name": "content",
+            "description": "The secret value to share",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "rc94i4fi7o",
+  "namespace": "popechia",
+  "slug": "mcppsd2",
+  "name": "ABANCA MCP Server",
+  "description": "Connects the ABANCA OpenBanking API (PSD2) with LLMs to provide secure access to bank accounts and transaction history. It features automated OAuth authentication and data minimization to optimize banking information for AI context windows.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Connects the ABANCA OpenBanking API (PSD2) with LLMs to provide secure access to bank accounts and transaction history. It features automated OAuth authentication and data minimization to optimize banking information for AI context windows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Optional local port for the OAuth login session (defaults to 3000).",
+          "type": "string",
+          "default": "3000"
+        },
+        "CLIENT_ID": {
+          "description": "ABANCA OpenBanking CLIENT_ID",
+          "type": "string"
+        },
+        "CLIENT_SECRET": {
+          "description": "ABANCA OpenBanking CLIENT_SECRET",
+          "type": "string"
+        },
+        "ENCRYPTION_KEY": {
+          "description": "A 32-character secret encryption key for secure local storage of OAuth tokens.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CLIENT_ID",
+        "CLIENT_SECRET",
+        "ENCRYPTION_KEY"
+      ]
+    },
+    "id": "rc94i4fi7o",
+    "name": "ABANCA MCP Server",
+    "namespace": "popechia",
+    "repository": {
+      "url": "https://github.com/popechia/mcppsd2"
+    },
+    "slug": "mcppsd2",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rc94i4fi7o"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "zdmkxrg02e",
+  "namespace": "amxkifir",
+  "slug": "pixiv-mcp-server",
+  "name": "Pixiv MCP Server",
+  "description": "Enables browsing, searching, and downloading Pixiv content including illustrations, rankings, recommendations, and user bookmarks. Supports intelligent batch downloads with automatic Ugoira-to-GIF conversion and OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables browsing, searching, and downloading Pixiv content including illustrations, rankings, recommendations, and user bookmarks. Supports intelligent batch downloads with automatic Ugoira-to-GIF conversion and OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DOWNLOAD_PATH": {
+          "description": "Root directory for downloaded files",
+          "type": "string",
+          "default": "./downloads"
+        },
+        "FILENAME_TEMPLATE": {
+          "description": "File naming template. Available variables: {author} (author name), {title} (artwork title), {id} (artwork ID)",
+          "type": "string",
+          "default": "{author} - {title}_{id}"
+        },
+        "PIXIV_REFRESH_TOKEN": {
+          "description": "Pixiv API authentication token (required by NCBI). Can be obtained by running get_token.py",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "PIXIV_REFRESH_TOKEN"
+      ]
+    },
+    "id": "zdmkxrg02e",
+    "name": "Pixiv MCP Server",
+    "namespace": "amxkifir",
+    "repository": {
+      "url": "https://github.com/amxkifir/pixiv-mcp-server"
+    },
+    "slug": "pixiv-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/zdmkxrg02e"
+  }
+}

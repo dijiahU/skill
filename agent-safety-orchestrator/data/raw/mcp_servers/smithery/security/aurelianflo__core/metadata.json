@@ -1,0 +1,648 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "aurelianflo/core",
+  "namespace": "aurelianflo",
+  "slug": "core",
+  "displayName": "AurelianFlo",
+  "description": "Pay-per-call compliance API for OFAC screening, vendor diligence, and audit-ready document output. No subscription, no API keys — settle each call in USDC on Base",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "compliance",
+    "encryption",
+    "authorization",
+    "sbom"
+  ],
+  "rawRecord": {
+    "id": "159546f0-58dc-49f9-958e-45236a84ea81",
+    "qualifiedName": "aurelianflo/core",
+    "namespace": "aurelianflo",
+    "slug": "core",
+    "displayName": "AurelianFlo",
+    "description": "Pay-per-call compliance API for OFAC screening, vendor diligence, and audit-ready document output. No subscription, no API keys — settle each call in USDC on Base",
+    "iconUrl": "https://api.smithery.ai/servers/aurelianflo/core/icon",
+    "verified": true,
+    "useCount": 875,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-05T23:53:57.251Z",
+    "homepage": "https://api.aurelianflo.com/mcp/docs",
+    "bySmithery": false,
+    "owner": "org_01KNJ26TCTKVE3WMNZ9CQTEBJC",
+    "score": 0.007692307692307693
+  },
+  "detail": {
+    "qualifiedName": "aurelianflo/core",
+    "displayName": "AurelianFlo",
+    "description": "Pay-per-call compliance API for OFAC screening, vendor diligence, and audit-ready document output. No subscription, no API keys — settle each call in USDC on Base",
+    "iconUrl": "https://api.smithery.ai/servers/aurelianflo/core/icon",
+    "remote": true,
+    "deploymentUrl": "https://core--aurelianflo.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://core--aurelianflo.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "server.capabilities",
+        "description": "Free capability and connection check for AurelianFlo, including OFAC wallet screening tools, direct and Smithery-hosted access modes, and which tools require x402 payment.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "wallet.ofac.report",
+        "description": "Run an OFAC screening of a crypto wallet address and return either the structured sanctions-check payload or a PDF or DOCX artifact.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Optional asset or network ticker filter such as ETH, USDC, XBT, TRX, ARB, or BSC."
+            },
+            "address": {
+              "type": "string",
+              "minLength": 10,
+              "description": "Crypto wallet address to screen against OFAC SDN digital currency address designations."
+            },
+            "output_format": {
+              "enum": [
+                "json",
+                "pdf",
+                "docx"
+              ],
+              "type": "string",
+              "description": "Select json for the structured report payload or pdf|docx for a generated artifact."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "wallet.ofac.screen",
+        "description": "Screen a crypto wallet address against OFAC SDN digital currency address designations for sanctioned wallet exposure, returning exact hits, sanctioned entity metadata, asset coverage, and a manual-review signal.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Optional asset or network ticker filter such as ETH, USDC, XBT, TRX, ARB, or BSC."
+            },
+            "address": {
+              "type": "string",
+              "minLength": 10,
+              "description": "Crypto wallet address to screen against OFAC SDN digital currency address designations."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "wallet.ofac.batch",
+        "description": "Screen a batch of crypto wallet addresses against OFAC SDN digital currency address designations before payout, onboarding, or treasury movement, returning per-wallet results plus a batch-level proceed-or-pause decision.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Optional asset or network ticker filter such as ETH, USDC, XBT, TRX, ARB, or BSC."
+            },
+            "addresses": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 10,
+                "description": "Crypto wallet address to screen against OFAC SDN digital currency address designations."
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Crypto wallet addresses to screen against OFAC SDN digital currency address designations."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "compliance.edd.report",
+        "description": "Generate an enhanced due diligence memo for a wallet set using exact-match OFAC wallet screening, sanctions evidence summary, required follow-up, and JSON, PDF, or DOCX output.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Optional asset or network ticker filter such as ETH, USDC, XBT, TRX, ARB, or BSC."
+            },
+            "addresses": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 10,
+                "description": "Crypto wallet address to screen for OFAC sanctions exposure and include in the enhanced due diligence memo."
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Crypto wallet addresses to screen for OFAC sanctions exposure and include in the enhanced due diligence memo."
+            },
+            "case_name": {
+              "type": "string",
+              "description": "Optional case or review title shown in the memo."
+            },
+            "jurisdiction": {
+              "type": "string",
+              "description": "Optional jurisdiction or operating region for the case."
+            },
+            "reference_id": {
+              "type": "string",
+              "description": "Optional internal case or review reference."
+            },
+            "requested_by": {
+              "type": "string",
+              "description": "Optional requester, owner, or reviewing team."
+            },
+            "subject_name": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Human-readable subject or counterparty name for the memo."
+            },
+            "artifact_only": {
+              "type": "boolean",
+              "description": "When output_format is pdf or docx, return a compact artifact-first response without the full memo payload."
+            },
+            "output_format": {
+              "enum": [
+                "json",
+                "pdf",
+                "docx"
+              ],
+              "type": "string",
+              "description": "Select json for the structured memo payload or pdf|docx for a generated artifact."
+            },
+            "review_reason": {
+              "type": "string",
+              "description": "Optional reason the EDD memo is being prepared."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "simulation.montecarlo.report",
+        "description": "Run a supported Monte Carlo workflow and return either the structured report payload or a PDF or DOCX artifact.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Optional report title override."
+            },
+            "request": {
+              "type": "object",
+              "description": "Underlying simulation request payload.",
+              "additionalProperties": {
+                "description": "Simulation request field accepted by the selected workflow."
+              }
+            },
+            "analysis_type": {
+              "enum": [
+                "probability",
+                "batch-probability",
+                "compare",
+                "sensitivity",
+                "forecast",
+                "composed",
+                "optimize"
+              ],
+              "type": "string",
+              "description": "Simulation workflow to summarize into a report or generated artifact."
+            },
+            "output_format": {
+              "enum": [
+                "json",
+                "pdf",
+                "docx"
+              ],
+              "type": "string",
+              "description": "Select json for the structured report payload or pdf|docx for a generated artifact."
+            },
+            "summary_focus": {
+              "type": "string",
+              "description": "Optional summary emphasis or focus area."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "simulation.montecarlo.decision",
+        "description": "Generate a structured decision report from any supported Monte Carlo workflow, including executive summary, headline metrics, and spreadsheet-friendly tables.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Optional report title override."
+            },
+            "request": {
+              "type": "object",
+              "description": "Underlying simulation request payload.",
+              "additionalProperties": {
+                "description": "Simulation request field accepted by the selected workflow."
+              }
+            },
+            "analysis_type": {
+              "enum": [
+                "probability",
+                "batch-probability",
+                "compare",
+                "sensitivity",
+                "forecast",
+                "composed",
+                "optimize"
+              ],
+              "type": "string",
+              "description": "Simulation workflow to summarize into a decision report."
+            },
+            "summary_focus": {
+              "type": "string",
+              "description": "Optional summary emphasis or focus area."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "report.pdf.generate",
+        "description": "Generate a PDF artifact from structured report tables, metrics, and summary content.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "object",
+              "description": "Optional raw result payload attached for audit or downstream use.",
+              "additionalProperties": {
+                "description": "Raw result value keyed by result field name."
+              }
+            },
+            "tables": {
+              "type": "object",
+              "description": "Named tables rendered into the report artifact.",
+              "additionalProperties": {
+                "type": "object",
+                "required": [
+                  "columns",
+                  "rows"
+                ],
+                "properties": {
+                  "rows": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "Single table row keyed by column name.",
+                      "additionalProperties": {
+                        "description": "Cell value keyed by the matching column name."
+                      }
+                    },
+                    "description": "Table row objects keyed by column name."
+                  },
+                  "columns": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Single table column label to render in order."
+                    },
+                    "description": "Ordered table column labels."
+                  }
+                },
+                "description": "Named table specification rendered into the report artifact.",
+                "additionalProperties": false
+              }
+            },
+            "report_meta": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Report title shown in the generated artifact."
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Author or generating system."
+                },
+                "report_type": {
+                  "type": "string",
+                  "description": "Optional report classification."
+                }
+              },
+              "description": "Report metadata shown in the generated artifact.",
+              "additionalProperties": {
+                "description": "Additional report metadata value keyed by metadata name."
+              }
+            },
+            "export_artifacts": {
+              "type": "object",
+              "description": "Optional prior export metadata carried alongside the report payload.",
+              "additionalProperties": {
+                "description": "Prior artifact metadata value keyed by artifact name."
+              }
+            },
+            "headline_metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label"
+                ],
+                "properties": {
+                  "unit": {
+                    "type": "string",
+                    "description": "Optional unit for the metric value."
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Metric label shown in the report."
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "description": "String value."
+                      },
+                      {
+                        "type": "number",
+                        "description": "Numeric value."
+                      },
+                      {
+                        "type": "integer",
+                        "description": "Integer value."
+                      },
+                      {
+                        "type": "boolean",
+                        "description": "Boolean value."
+                      },
+                      {
+                        "type": "null",
+                        "description": "Null value."
+                      }
+                    ],
+                    "description": "Metric value."
+                  }
+                },
+                "description": "Headline metric rendered near the top of the report.",
+                "additionalProperties": false
+              },
+              "description": "Optional headline metrics rendered near the top of the report."
+            },
+            "executive_summary": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "Executive summary bullet to render near the top of the report."
+              },
+              "description": "Optional executive summary bullets."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "report.docx.generate",
+        "description": "Generate a DOCX artifact from structured report tables, metrics, and summary content.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "object",
+              "description": "Optional raw result payload attached for audit or downstream use.",
+              "additionalProperties": {
+                "description": "Raw result value keyed by result field name."
+              }
+            },
+            "tables": {
+              "type": "object",
+              "description": "Named tables rendered into the report artifact.",
+              "additionalProperties": {
+                "type": "object",
+                "required": [
+                  "columns",
+                  "rows"
+                ],
+                "properties": {
+                  "rows": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "Single table row keyed by column name.",
+                      "additionalProperties": {
+                        "description": "Cell value keyed by the matching column name."
+                      }
+                    },
+                    "description": "Table row objects keyed by column name."
+                  },
+                  "columns": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Single table column label to render in order."
+                    },
+                    "description": "Ordered table column labels."
+                  }
+                },
+                "description": "Named table specification rendered into the report artifact.",
+                "additionalProperties": false
+              }
+            },
+            "report_meta": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Report title shown in the generated artifact."
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Author or generating system."
+                },
+                "report_type": {
+                  "type": "string",
+                  "description": "Optional report classification."
+                }
+              },
+              "description": "Report metadata shown in the generated artifact.",
+              "additionalProperties": {
+                "description": "Additional report metadata value keyed by metadata name."
+              }
+            },
+            "export_artifacts": {
+              "type": "object",
+              "description": "Optional prior export metadata carried alongside the report payload.",
+              "additionalProperties": {
+                "description": "Prior artifact metadata value keyed by artifact name."
+              }
+            },
+            "headline_metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label"
+                ],
+                "properties": {
+                  "unit": {
+                    "type": "string",
+                    "description": "Optional unit for the metric value."
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Metric label shown in the report."
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "description": "String value."
+                      },
+                      {
+                        "type": "number",
+                        "description": "Numeric value."
+                      },
+                      {
+                        "type": "integer",
+                        "description": "Integer value."
+                      },
+                      {
+                        "type": "boolean",
+                        "description": "Boolean value."
+                      },
+                      {
+                        "type": "null",
+                        "description": "Null value."
+                      }
+                    ],
+                    "description": "Metric value."
+                  }
+                },
+                "description": "Headline metric rendered near the top of the report.",
+                "additionalProperties": false
+              },
+              "description": "Optional headline metrics rendered near the top of the report."
+            },
+            "executive_summary": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "Executive summary bullet to render near the top of the report."
+              },
+              "description": "Optional executive summary bullets."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "ofac.wallet.batch",
+        "description": "Prepare a batch crypto wallet OFAC screening request and response brief.",
+        "arguments": [
+          {
+            "name": "addresses",
+            "description": "Comma-separated crypto wallet addresses to screen against OFAC.",
+            "required": true
+          },
+          {
+            "name": "asset",
+            "description": "Optional asset or network ticker context.",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "ofac.wallet.screen",
+        "description": "Prepare a crypto wallet address OFAC screening request and response brief.",
+        "arguments": [
+          {
+            "name": "address",
+            "description": "Crypto wallet address to screen against OFAC.",
+            "required": true
+          },
+          {
+            "name": "asset",
+            "description": "Optional asset or network ticker context.",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "simulation.report.decision",
+        "description": "Prepare a Monte Carlo decision report request.",
+        "arguments": [
+          {
+            "name": "analysis_type",
+            "description": "Simulation workflow to summarize.",
+            "required": true
+          },
+          {
+            "name": "decision_title",
+            "description": "Optional report title.",
+            "required": false
+          },
+          {
+            "name": "objective",
+            "description": "Optional decision objective or review context.",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "report.artifact.render",
+        "description": "Prepare a PDF or DOCX report rendering request.",
+        "arguments": [
+          {
+            "name": "format",
+            "description": "Artifact format to generate.",
+            "required": true
+          },
+          {
+            "name": "title",
+            "description": "Optional report title.",
+            "required": false
+          },
+          {
+            "name": "audience",
+            "description": "Optional audience or review context.",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

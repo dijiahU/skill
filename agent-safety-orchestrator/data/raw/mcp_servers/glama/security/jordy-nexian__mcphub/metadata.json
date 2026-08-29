@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "hdlunkafji",
+  "namespace": "jordy-nexian",
+  "slug": "mcphub",
+  "name": "Nexian MCP Hub",
+  "description": "A multi-tenant integration platform that connects MSP systems like HaloPSA, Microsoft 365, and HubSpot to a single remote MCP server. It provides normalized, AI-safe tools for managing third-party services with built-in security policies and audit logging.",
+  "discoveryQueries": [
+    "security",
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A multi-tenant integration platform that connects MSP systems like HaloPSA, Microsoft 365, and HubSpot to a single remote MCP server. It provides normalized, AI-safe tools for managing third-party services with built-in security policies and audit logging.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_URL": {
+          "description": "The backend API URL for the core services.",
+          "type": "string"
+        },
+        "APP_URL": {
+          "description": "The URL of the web application (e.g., Vercel web URL).",
+          "type": "string"
+        },
+        "MCP_URL": {
+          "description": "The URL of the MCP service.",
+          "type": "string"
+        },
+        "SESSION_SECRET": {
+          "description": "A shared secret for sessions that must match between the API and MCP services.",
+          "type": "string"
+        },
+        "NEXT_PUBLIC_API_URL": {
+          "description": "The public API URL used by the frontend to point to the backend API.",
+          "type": "string"
+        },
+        "NEXT_PUBLIC_MCP_URL": {
+          "description": "The public MCP URL used by the frontend to point to the MCP invoke service.",
+          "type": "string"
+        },
+        "HALOPSA_REDIRECT_URI": {
+          "description": "The redirect URI for HaloPSA integration, pointing to the API callback URL.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NEXT_PUBLIC_API_URL",
+        "NEXT_PUBLIC_MCP_URL",
+        "API_URL",
+        "APP_URL",
+        "SESSION_SECRET"
+      ]
+    },
+    "id": "hdlunkafji",
+    "name": "Nexian MCP Hub",
+    "namespace": "jordy-nexian",
+    "repository": {
+      "url": "https://github.com/jordy-nexian/mcphub"
+    },
+    "slug": "mcphub",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hdlunkafji"
+  }
+}

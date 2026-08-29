@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "g3om65wpm9",
+  "namespace": "NocteDefensor",
+  "slug": "LudusMCP",
+  "name": "LudusMCP Server",
+  "description": "A Model Context Protocol server that enables natural language control of Ludus cybersecurity training environments, allowing users to deploy, manage, and configure virtualized security training ranges.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server that enables natural language control of Ludus cybersecurity training environments, allowing users to deploy, manage, and configure virtualized security training ranges.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LUDUS_API_KEY": {
+          "description": "Ludus API key from 'ludus apikey' command",
+          "type": "string"
+        },
+        "LUDUS_SSH_HOST": {
+          "description": "SSH host for Ludus server connection",
+          "type": "string"
+        },
+        "LUDUS_SSH_USERNAME": {
+          "description": "SSH username for Ludus server connection",
+          "type": "string"
+        },
+        "LUDUS_ADMIN_USERNAME": {
+          "description": "Your Ludus admin account username",
+          "type": "string"
+        },
+        "LUDUS_WIREGUARD_CONFIG_PATH": {
+          "description": "Path to WireGuard .conf file if using WireGuard",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "LUDUS_ADMIN_USERNAME",
+            "LUDUS_API_KEY",
+            "LUDUS_WIREGUARD_CONFIG_PATH"
+          ]
+        },
+        {
+          "required": [
+            "LUDUS_ADMIN_USERNAME",
+            "LUDUS_API_KEY",
+            "LUDUS_SSH_HOST",
+            "LUDUS_SSH_USERNAME"
+          ]
+        }
+      ]
+    },
+    "id": "g3om65wpm9",
+    "name": "LudusMCP Server",
+    "namespace": "NocteDefensor",
+    "repository": {
+      "url": "https://github.com/NocteDefensor/LudusMCP"
+    },
+    "slug": "LudusMCP",
+    "spdxLicense": {
+      "name": "GPL 3.0",
+      "url": "https://spdx.org/licenses/GPL-3.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/g3om65wpm9"
+  }
+}

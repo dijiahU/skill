@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "cnrvici7la",
+  "namespace": "harshapalnati",
+  "slug": "raworc-mcpserver",
+  "name": "Raworc MCP Server",
+  "description": "Enables AI assistants to interact with Raworc's agent runtime platform through seamless integration. Supports session management, message handling, space and agent management, and secure secret storage operations.",
+  "discoveryQueries": [
+    "secret"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Raworc's agent runtime platform through seamless integration. Supports session management, message handling, space and agent management, and secure secret storage operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "info"
+        },
+        "RAWORC_API_URL": {
+          "description": "Raworc API base URL",
+          "type": "string",
+          "default": "http://raworc.remoteagent.com:9000/api/v0"
+        },
+        "RAWORC_TIMEOUT": {
+          "description": "Request timeout in seconds",
+          "type": "string",
+          "default": "30"
+        },
+        "RAWORC_PASSWORD": {
+          "description": "Password for authentication",
+          "type": "string"
+        },
+        "RAWORC_USERNAME": {
+          "description": "Username for authentication",
+          "type": "string"
+        },
+        "RAWORC_AUTH_TOKEN": {
+          "description": "Authentication token",
+          "type": "string"
+        },
+        "RAWORC_DEFAULT_SPACE": {
+          "description": "Default space to use",
+          "type": "string",
+          "default": "default"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "RAWORC_AUTH_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "RAWORC_USERNAME",
+            "RAWORC_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "cnrvici7la",
+    "name": "Raworc MCP Server",
+    "namespace": "harshapalnati",
+    "repository": {
+      "url": "https://github.com/harshapalnati/raworc-mcpserver"
+    },
+    "slug": "raworc-mcpserver",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/cnrvici7la"
+  }
+}

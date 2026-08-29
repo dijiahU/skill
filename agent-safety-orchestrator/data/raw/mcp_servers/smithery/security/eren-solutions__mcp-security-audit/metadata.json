@@ -1,0 +1,169 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "eren-solutions/mcp-security-audit",
+  "namespace": "eren-solutions",
+  "slug": "mcp-security-audit",
+  "displayName": "Security Auditor",
+  "description": "AI-powered code security auditor. Scans GitHub repos for vulnerabilities with OWASP/CWE references and remediation guidance.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "vulnerability",
+    "owasp"
+  ],
+  "rawRecord": {
+    "id": "6b040638-4d12-4a51-8dfc-57dcdfeb2429",
+    "qualifiedName": "eren-solutions/mcp-security-audit",
+    "namespace": "eren-solutions",
+    "slug": "mcp-security-audit",
+    "displayName": "Security Auditor",
+    "description": "AI-powered code security auditor. Scans GitHub repos for vulnerabilities with OWASP/CWE references and remediation guidance.",
+    "iconUrl": "https://api.smithery.ai/servers/eren-solutions/mcp-security-audit/icon",
+    "verified": false,
+    "useCount": 309,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-14T15:54:28.174Z",
+    "homepage": "https://github.com/eren-solutions/mcp-security-audit",
+    "bySmithery": false,
+    "owner": "org_01KNBVG5Z91N5Y93CP8P6QZA5K",
+    "score": 0.03125
+  },
+  "detail": {
+    "qualifiedName": "eren-solutions/mcp-security-audit",
+    "displayName": "Security Auditor",
+    "description": "AI-powered code security auditor. Scans GitHub repos for vulnerabilities with OWASP/CWE references and remediation guidance.",
+    "iconUrl": "https://api.smithery.ai/servers/eren-solutions/mcp-security-audit/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcp-security-audit--eren-solutions.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-security-audit--eren-solutions.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "security_scan",
+        "description": "Run a full security audit on a GitHub repository. Clones the repo, scans source files with LLM-powered analysis, returns OWASP/CWE findings with remediation. Takes 1-10 minutes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "branch": {
+              "type": "string",
+              "title": "Branch",
+              "default": "main",
+              "description": "Git branch to scan. Defaults to main."
+            },
+            "repo_url": {
+              "type": "string",
+              "title": "Repo Url",
+              "description": "GitHub repository URL to scan, e.g. https://github.com/owner/repo."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "audit_status",
+        "description": "Check the status of a running or completed security audit. Returns findings if complete.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "audit_id": {
+              "type": "string",
+              "title": "Audit Id",
+              "description": "The audit ID returned by security_scan."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "audit_list",
+        "description": "List recent security audits with summary information including status and risk scores.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 10,
+              "description": "Maximum number of audits to return (1-50)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "audit_stats",
+        "description": "Get aggregate audit statistics — total scans, findings breakdown by severity, average risk score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "scan_workflow",
+        "description": "Step-by-step guide to scan a repository for security vulnerabilities.",
+        "arguments": []
+      },
+      {
+        "name": "interpret_results",
+        "description": "How to interpret audit results and prioritize fixes.",
+        "arguments": []
+      }
+    ]
+  }
+}

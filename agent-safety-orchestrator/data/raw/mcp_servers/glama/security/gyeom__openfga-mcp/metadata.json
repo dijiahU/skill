@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "bgrniaux4k",
+  "namespace": "Gyeom",
+  "slug": "openfga-mcp",
+  "name": "OpenFGA MCP Server",
+  "description": "Enables users to manage OpenFGA authorization models, stores, and relationship tuples through natural language. It supports permission checks, batch tuple operations, and the deployment of authorization models across different environments.",
+  "discoveryQueries": [
+    "authorization"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables users to manage OpenFGA authorization models, stores, and relationship tuples through natural language. It supports permission checks, batch tuple operations, and the deployment of authorization models across different environments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OPENFGA_PROD_URL": {
+          "description": "The URL for the production OpenFGA server.",
+          "type": "string"
+        },
+        "OPENFGA_LOCAL_URL": {
+          "description": "The URL for the local OpenFGA server.",
+          "type": "string",
+          "default": "http://localhost:8080"
+        },
+        "OPENFGA_STAGING_URL": {
+          "description": "The URL for the staging OpenFGA server.",
+          "type": "string"
+        },
+        "OPENFGA_ENVIRONMENTS": {
+          "description": "Recommended. A JSON string containing environment configurations. Example: '{\"prod\": {\"url\": \"https://openfga.example.com\", \"defaultStoreId\": \"01ABC...\"}}'",
+          "type": "string"
+        },
+        "OPENFGA_PROD_STORE_ID": {
+          "description": "The default Store ID for the production environment.",
+          "type": "string"
+        },
+        "OPENFGA_LOCAL_STORE_ID": {
+          "description": "The default Store ID for the local environment.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "OPENFGA_ENVIRONMENTS"
+          ]
+        },
+        {
+          "required": [
+            "OPENFGA_PROD_URL"
+          ]
+        },
+        {
+          "required": [
+            "OPENFGA_STAGING_URL"
+          ]
+        },
+        {
+          "required": [
+            "OPENFGA_LOCAL_URL"
+          ]
+        }
+      ]
+    },
+    "id": "bgrniaux4k",
+    "name": "OpenFGA MCP Server",
+    "namespace": "Gyeom",
+    "repository": {
+      "url": "https://github.com/Gyeom/openfga-mcp"
+    },
+    "slug": "openfga-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bgrniaux4k"
+  }
+}

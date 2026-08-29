@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "sl79emxjyt",
+  "namespace": "yarmijosp94",
+  "slug": "evaluar-mcp",
+  "name": "Evaluar MCP Server",
+  "description": "Enables users to manage and launch eTalent recruitment processes on the Evaluar platform directly from their IDE. It supports authentication, company selection, position searching, and end-to-end process management including creation and assignment.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables users to manage and launch eTalent recruitment processes on the Evaluar platform directly from their IDE. It supports authentication, company selection, position searching, and end-to-end process management including creation and assignment.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "EVALUAR_API_URL": {
+          "description": "Base URL for the Evaluar API.",
+          "type": "string",
+          "default": "https://apis.evaluar.com"
+        },
+        "EVALUAR_AUTH_URL": {
+          "description": "Auth URL for Evaluar authentication token.",
+          "type": "string",
+          "default": "https://auth.evaluar.com/auth/realms/evcore/protocol/openid-connect/token"
+        },
+        "EVALUAR_CLIENT_ID": {
+          "description": "Client ID for the Evaluar application.",
+          "type": "string",
+          "default": "evcap"
+        },
+        "EVALUAR_GRAPHQL_URL": {
+          "description": "GraphQL endpoint for Evaluar services.",
+          "type": "string",
+          "default": "https://apis.evaluar.com/v2/graphql"
+        }
+      },
+      "type": "object",
+      "required": [
+        "EVALUAR_AUTH_URL",
+        "EVALUAR_API_URL",
+        "EVALUAR_GRAPHQL_URL",
+        "EVALUAR_CLIENT_ID"
+      ]
+    },
+    "id": "sl79emxjyt",
+    "name": "Evaluar MCP Server",
+    "namespace": "yarmijosp94",
+    "repository": {
+      "url": "https://github.com/yarmijosp94/evaluar-mcp"
+    },
+    "slug": "evaluar-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sl79emxjyt"
+  }
+}

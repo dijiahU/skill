@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "c9ff9x1d2v",
+  "namespace": "kunwarmahen",
+  "slug": "ssh-mcp-server",
+  "name": "SSH Read-Only MCP Server",
+  "description": "Enables secure remote SSH command execution with strict read-only enforcement, allowing safe delegation of SSH access to Claude while preventing write operations. Supports connection pooling, command validation, and comprehensive logging for audit trails.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure remote SSH command execution with strict read-only enforcement, allowing safe delegation of SSH access to Claude while preventing write operations. Supports connection pooling, command validation, and comprehensive logging for audit trails.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Bind address for HTTP mode",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "Port for HTTP mode",
+          "type": "string",
+          "default": "3000"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Communication transport: stdio, http, or streamable-http",
+          "type": "string",
+          "default": "stdio"
+        },
+        "MCP_SERVER_NAME": {
+          "description": "Display name for the server",
+          "type": "string",
+          "default": "SSH Read-Only MCP Server"
+        },
+        "MCP_ENABLE_BROADCAST": {
+          "description": "Enable multicast discovery announcements",
+          "type": "string",
+          "default": "true"
+        },
+        "MCP_BROADCAST_INTERVAL": {
+          "description": "Seconds between broadcast announcements",
+          "type": "string",
+          "default": "30"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "c9ff9x1d2v",
+    "name": "SSH Read-Only MCP Server",
+    "namespace": "kunwarmahen",
+    "repository": {
+      "url": "https://github.com/kunwarmahen/ssh-mcp-server"
+    },
+    "slug": "ssh-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/c9ff9x1d2v"
+  }
+}

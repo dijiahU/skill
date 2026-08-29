@@ -1,0 +1,147 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "viktorboyko528/agentic-shelf",
+  "namespace": "viktorboyko528",
+  "slug": "agentic-shelf",
+  "displayName": "Agentic Shelf — Live Inventory",
+  "description": "Real-time product catalog and inventory across multi-tenant e-commerce stores via MCP. AI agents can call:\n\n- `check_stock(sku)` — live inventory + price + same-day shipping availability\n- `get_product_details(sku)` — full catalog metadata (title, description, image, tags)\n- `get_price(sku)` — current price in USD\n\nEach merchant signs up at [agenticshelf.ai/console](https://www.agenticshelf.ai/console), OAuth-connects their Shopify store, and the MCP endpoint surfaces their live catalog scoped by Firebase token. WooCommerce, BigCommerce, and Magento backends on the roadmap.\n\n**Auth model:** anonymous `tools/list` for discovery; per-tenant Firebase Bearer token required to actually query a specific merchant's inventory.\n\n**Roadmap:** agent-initiated checkout via Stripe Agentic Commerce Protocol (ACP), `create_checkout(sku, qty)` tool, and per-merchant write_orders scope. Tracked at agenticshelf.ai/roadmap.\n\nBuilt by [Agentic Shelf](https://www.agenticshelf.ai) — measurement, optimizatio",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "3fbea640-c38d-4bf7-8059-0b5bc0c98a71",
+    "qualifiedName": "viktorboyko528/agentic-shelf",
+    "namespace": "viktorboyko528",
+    "slug": "agentic-shelf",
+    "displayName": "Agentic Shelf — Live Inventory",
+    "description": "Real-time product catalog and inventory across multi-tenant e-commerce stores via MCP. AI agents can call:\n\n- `check_stock(sku)` — live inventory + price + same-day shipping availability\n- `get_product_details(sku)` — full catalog metadata (title, description, image, tags)\n- `get_price(sku)` — current price in USD\n\nEach merchant signs up at [agenticshelf.ai/console](https://www.agenticshelf.ai/console), OAuth-connects their Shopify store, and the MCP endpoint surfaces their live catalog scoped by Firebase token. WooCommerce, BigCommerce, and Magento backends on the roadmap.\n\n**Auth model:** anonymous `tools/list` for discovery; per-tenant Firebase Bearer token required to actually query a specific merchant's inventory.\n\n**Roadmap:** agent-initiated checkout via Stripe Agentic Commerce Protocol (ACP), `create_checkout(sku, qty)` tool, and per-merchant write_orders scope. Tracked at agenticshelf.ai/roadmap.\n\nBuilt by [Agentic Shelf](https://www.agenticshelf.ai) — measurement, optimizatio",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.agenticshelf.ai.ico",
+    "verified": false,
+    "useCount": 15,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-18T19:59:33.602Z",
+    "homepage": "https://www.agenticshelf.ai",
+    "bySmithery": false,
+    "owner": "org_01KPH1CYS1P0RCR96MYBA5G9QG",
+    "score": 0.02631578947368421
+  },
+  "detail": {
+    "qualifiedName": "viktorboyko528/agentic-shelf",
+    "displayName": "Agentic Shelf — Live Inventory",
+    "description": "Real-time product catalog and inventory across multi-tenant e-commerce stores via MCP. AI agents can call:\n\n- `check_stock(sku)` — live inventory + price + same-day shipping availability\n- `get_product_details(sku)` — full catalog metadata (title, description, image, tags)\n- `get_price(sku)` — current price in USD\n\nEach merchant signs up at [agenticshelf.ai/console](https://www.agenticshelf.ai/console), OAuth-connects their Shopify store, and the MCP endpoint surfaces their live catalog scoped by Firebase token. WooCommerce, BigCommerce, and Magento backends on the roadmap.\n\n**Auth model:** anonymous `tools/list` for discovery; per-tenant Firebase Bearer token required to actually query a specific merchant's inventory.\n\n**Roadmap:** agent-initiated checkout via Stripe Agentic Commerce Protocol (ACP), `create_checkout(sku, qty)` tool, and per-merchant write_orders scope. Tracked at agenticshelf.ai/roadmap.\n\nBuilt by [Agentic Shelf](https://www.agenticshelf.ai) — measurement, optimization, and competitive intelligence for AI shopping agents.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.agenticshelf.ai.ico",
+    "remote": true,
+    "deploymentUrl": "https://agentic-shelf.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agentic-shelf.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_stock",
+        "description": "\n    Check real-time inventory, price, and shipping for a product SKU.\n\n    This tool queries the connected e-commerce platform (Shopify, WooCommerce, etc.)\n    for live inventory data. Returns current stock level, price, and\n    availability status.\n\n    Args:\n        sku: Product SKU (Stock Keeping Unit) - e.g., \"RED-WIDGET-001\"\n\n    Returns:\n        Dictionary with:\n        - sku: The requested SKU\n        - stock: Current inventory count\n        - price: Current price in USD\n        - can_ship_today: Boolean indicating same-day shipping availability\n        - message: Human-readable status message\n\n    Example:\n        >>> await check_stock(\"WIDGET-001\")\n        {\n            \"sku\": \"WIDGET-001\",\n            \"stock\": 42,\n            \"price\": 29.99,\n            \"can_ship_today\": True,\n            \"message\": \"✅ WIDGET-001 (Awesome Widget) - 42 in stock at $29.99\"\n        }\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sku": {
+              "type": "string",
+              "title": "Sku"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_product_details",
+        "description": "\n    Get full product details optimized for AI agents (structured JSON).\n\n    Args:\n        sku: Product SKU - e.g., \"WIDGET-001\"\n\n    Returns:\n        Dictionary with catalog fields; ``found`` is False when the SKU is missing.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sku": {
+              "type": "string",
+              "title": "Sku"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_price",
+        "description": "\n    Get current price for a product SKU.\n\n    Args:\n        sku: Product SKU - e.g., \"WIDGET-001\"\n\n    Returns:\n        Dictionary with sku and current price\n\n    Example:\n        >>> await get_price(\"WIDGET-001\")\n        {\"sku\": \"WIDGET-001\", \"price\": 29.99, \"currency\": \"USD\"}\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sku": {
+              "type": "string",
+              "title": "Sku"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "list_products",
+        "description": "List products from the connected store, paginated.\n\n    Use this tool when an agent needs to DISCOVER products by browsing the\n    catalog rather than VERIFYING a known SKU. The response includes the SKU\n    for every product, so a follow-up ``check_stock(sku)`` or\n    ``get_product_details(sku)`` is a natural next step.\n\n    Args:\n        limit: Number of products to return (1-50, default 10).\n        cursor: Opaque cursor from a previous response's ``next_cursor``.\n            Omit for the first page.\n\n    Returns:\n        Dictionary with:\n        - products: list of {sku, title, description (≤400 chars),\n          product_type, tags, price, currency, available, image_url,\n          storefront_url}\n        - next_cursor: str or null — pass to the next call to paginate\n        - has_more: bool — whether more products exist\n        - live / source: provenance flags\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 10
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor",
+              "default": null
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "search_products",
+        "description": "Search products in the connected store by keyword.\n\n    Use this when a shopper's query suggests specific terms the agent can\n    match against product titles or tags — e.g. \"HEPA air purifier\" or\n    \"leather wristwatch\". Matches Shopify's native storefront search\n    behavior, so results align with what customers would find on the site.\n\n    Args:\n        query: Keyword or phrase to match.\n        limit: Max products to return (1-50, default 10).\n\n    Returns:\n        Same shape as ``list_products``. Empty products list when no matches.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 10
+            },
+            "query": {
+              "type": "string",
+              "title": "Query"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

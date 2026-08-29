@@ -1,0 +1,83 @@
+{
+  "registry": "glama",
+  "id": "heofo6af3r",
+  "namespace": "Michibiku",
+  "slug": "company-mcp",
+  "name": "Company MCP Server - Google Workspace Integration",
+  "description": "Enables Claude to interact with Google Workspace services including Gmail, Drive, Sheets, Docs, and Calendar. Provides comprehensive tools for reading, creating, and managing emails, files, spreadsheets, documents, and calendar events with built-in safety controls and audit logging.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to interact with Google Workspace services including Gmail, Drive, Sheets, Docs, and Calendar. Provides comprehensive tools for reading, creating, and managing emails, files, spreadsheets, documents, and calendar events with built-in safety controls and audit logging.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AUTH_MODE": {
+          "description": "Authentication mode (e.g., 'oauth' or 'service-account')",
+          "type": "string"
+        },
+        "OAUTH_TOKEN_PATH": {
+          "description": "Path to the OAuth token JSON file",
+          "type": "string"
+        },
+        "GMAIL_SEND_ENABLED": {
+          "description": "Enable Gmail send/reply/draft operations",
+          "type": "string",
+          "default": "false"
+        },
+        "DRIVE_DELETE_ENABLED": {
+          "description": "Enable Drive delete operations",
+          "type": "string",
+          "default": "false"
+        },
+        "DRIVE_MODIFY_ENABLED": {
+          "description": "Enable Drive modification operations (create folder, set permission, copy, upload, move)",
+          "type": "string",
+          "default": "false"
+        },
+        "GMAIL_DELETE_ENABLED": {
+          "description": "Enable Gmail delete operations",
+          "type": "string",
+          "default": "false"
+        },
+        "CALENDAR_MODIFY_ENABLED": {
+          "description": "Enable Calendar modification operations (create, update, delete events)",
+          "type": "string",
+          "default": "false"
+        },
+        "DRIVE_ALLOWLIST_FOLDERS": {
+          "description": "Comma-separated list of allowed folder IDs for Drive operations (required for Service Account mode)",
+          "type": "string"
+        },
+        "CALENDAR_DRY_RUN_DEFAULT": {
+          "description": "Default dry-run mode for Calendar create/update operations",
+          "type": "string",
+          "default": "true"
+        },
+        "GMAIL_MODIFY_LABELS_ENABLED": {
+          "description": "Enable Gmail label modification operations",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AUTH_MODE",
+        "OAUTH_TOKEN_PATH"
+      ]
+    },
+    "id": "heofo6af3r",
+    "name": "Company MCP Server - Google Workspace Integration",
+    "namespace": "Michibiku",
+    "repository": {
+      "url": "https://github.com/Michibiku/company-mcp"
+    },
+    "slug": "company-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/heofo6af3r"
+  }
+}

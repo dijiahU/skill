@@ -1,0 +1,444 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "traderhc/agenthc",
+  "namespace": "traderhc",
+  "slug": "agenthc",
+  "displayName": "AgentHC Market Intelligence ",
+  "description": "Access comprehensive market intelligence across stocks, crypto, macro, and fixed income to make data-driven investment decisions. Track real-time sentiment, institutional positioning, and cross-asset correlations to identify emerging market trends. Navigate complex financial landscapes with specialized insights into Federal Reserve policy, market regimes, and risk detection.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "id": "d9b7ead2-bf06-4907-ada7-53f8da2f0eee",
+    "qualifiedName": "traderhc/agenthc",
+    "namespace": "traderhc",
+    "slug": "agenthc",
+    "displayName": "AgentHC Market Intelligence ",
+    "description": "Access comprehensive market intelligence across stocks, crypto, macro, and fixed income to make data-driven investment decisions. Track real-time sentiment, institutional positioning, and cross-asset correlations to identify emerging market trends. Navigate complex financial landscapes with specialized insights into Federal Reserve policy, market regimes, and risk detection.",
+    "iconUrl": "https://api.smithery.ai/servers/traderhc/agenthc/icon",
+    "verified": false,
+    "useCount": 197,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-13T06:12:54.968Z",
+    "homepage": "https://smithery.ai/servers/traderhc/agenthc",
+    "bySmithery": false,
+    "owner": "org_01KNBV8B48XG43311YVFFY9ZGT",
+    "score": 0.013157894736842105
+  },
+  "detail": {
+    "qualifiedName": "traderhc/agenthc",
+    "displayName": "AgentHC Market Intelligence ",
+    "description": "Access comprehensive market intelligence across stocks, crypto, macro, and fixed income to make data-driven investment decisions. Track real-time sentiment, institutional positioning, and cross-asset correlations to identify emerging market trends. Navigate complex financial landscapes with specialized insights into Federal Reserve policy, market regimes, and risk detection.",
+    "iconUrl": "https://api.smithery.ai/servers/traderhc/agenthc/icon",
+    "remote": true,
+    "deploymentUrl": "https://agenthc--traderhc.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agenthc--traderhc.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "agentHcApiKey"
+          ],
+          "properties": {
+            "agentHcApiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "agentHcApiKey"
+              },
+              "description": "AgentHC API key. Get free at https://api.traderhc.com/docs (register endpoint). Prefix: aghc_"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_market_snapshot",
+        "description": "Real-time market snapshot: indices, volatility, yields, commodities, crypto, sentiment, and market regime.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_crypto_data",
+        "description": "Crypto market data: prices, dominance, sentiment, and cycle analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_news_sentiment",
+        "description": "Market news sentiment analysis with breaking news detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_economic_calendar",
+        "description": "Economic event calendar with upcoming releases and data analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_technical_analysis",
+        "description": "Technical analysis for any ticker: indicators, levels, trend detection, and signal strength.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ticker": {
+              "type": "string",
+              "description": "Ticker symbol"
+            },
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_bonds_data",
+        "description": "Bond market intelligence: yield curve, credit spreads, and fixed income analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_fed_data",
+        "description": "Federal Reserve intelligence: policy stance, rate expectations, and liquidity trend.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_macro_data",
+        "description": "Macro economic data: inflation, employment, money supply, and financial conditions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_correlations",
+        "description": "Cross-market correlation tracking with anomaly detection and regime classification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_sectors",
+        "description": "Sector rotation analysis: performance, leadership, and cycle positioning.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_divergences",
+        "description": "Cross-asset divergence detection across price, breadth, and volume.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_etf_flows",
+        "description": "ETF flow tracking: rotation signals and flow-based sentiment.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_options_flow",
+        "description": "Options flow analysis: ratios, positioning, and unusual activity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_polymarket",
+        "description": "Prediction market odds for policy, economic outlook, and crypto.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_crypto_derivatives",
+        "description": "Crypto derivatives data: funding rates, open interest, and sentiment signals.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_earnings",
+        "description": "Earnings calendar with surprises and analyst estimates.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_alpha_signals",
+        "description": "Systematic multi-factor alpha signal composite with conviction scoring.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_regime",
+        "description": "Market regime detection with transition probabilities and playbooks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_tail_risk",
+        "description": "Crisis detection engine with early warning indicators and historical playbooks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_liquidity",
+        "description": "Fed liquidity tracking, regime detection, and bank stress signals.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_credit_cycle",
+        "description": "Credit cycle intelligence: spreads, lending conditions, and cycle phase detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_positioning",
+        "description": "Institutional positioning: sentiment surveys, extremes, and crowded trade detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_smart_money",
+        "description": "Smart vs dumb money divergence tracking and phase detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_vol_surface",
+        "description": "Volatility surface intelligence: term structure, skew, and regime detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_currency",
+        "description": "FX market intelligence: dollar analysis, carry trades, and EM stress detection.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_valuations",
+        "description": "Market valuation analysis with percentile rankings and forward projections.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_hedge_fund_setups",
+        "description": "Institutional trading playbooks with regime-specific setups.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      {
+        "name": "get_unified_view",
+        "description": "Full unified intelligence — all modules aggregated into a single view with regime, bias, and top insights.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "depth": {
+              "enum": [
+                "quick",
+                "standard",
+                "deep"
+              ],
+              "type": "string",
+              "default": "standard"
+            },
+            "topic": {
+              "type": "string",
+              "description": "Focus topic"
+            },
+            "include_prompt": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

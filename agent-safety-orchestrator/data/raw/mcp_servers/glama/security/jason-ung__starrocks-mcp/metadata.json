@@ -1,0 +1,77 @@
+{
+  "registry": "glama",
+  "id": "upxh38vyso",
+  "namespace": "jason-ung",
+  "slug": "starrocks-mcp",
+  "name": "starrocks-mcp",
+  "description": "A read-only MCP server that enables users to query and explore StarRocks databases through AI assistants like Claude. It supports SQL execution, schema discovery, and secure LDAP authentication for data analysis and metadata exploration.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A read-only MCP server that enables users to query and explore StarRocks databases through AI assistants like Claude. It supports SQL execution, schema discovery, and secure LDAP authentication for data analysis and metadata exploration.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "STARROCKS_HOST": {
+          "description": "StarRocks host",
+          "type": "string"
+        },
+        "STARROCKS_PORT": {
+          "description": "StarRocks port",
+          "type": "string",
+          "default": "9030"
+        },
+        "STARROCKS_USER": {
+          "description": "Your LDAP username",
+          "type": "string"
+        },
+        "MAX_QUERY_LENGTH": {
+          "description": "Maximum SQL query length",
+          "type": "string",
+          "default": "10000"
+        },
+        "STARROCKS_DATABASE": {
+          "description": "Default database",
+          "type": "string",
+          "default": "ads"
+        },
+        "STARROCKS_PASSWORD": {
+          "description": "Your LDAP password",
+          "type": "string"
+        },
+        "DEFAULT_QUERY_TIMEOUT_MS": {
+          "description": "Default query timeout (ms)",
+          "type": "string",
+          "default": "30000"
+        }
+      },
+      "type": "object",
+      "required": [
+        "STARROCKS_HOST",
+        "STARROCKS_USER",
+        "STARROCKS_PASSWORD"
+      ]
+    },
+    "id": "upxh38vyso",
+    "name": "starrocks-mcp",
+    "namespace": "jason-ung",
+    "repository": {
+      "url": "https://github.com/jason-ung/starrocks-mcp"
+    },
+    "slug": "starrocks-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/upxh38vyso"
+  }
+}

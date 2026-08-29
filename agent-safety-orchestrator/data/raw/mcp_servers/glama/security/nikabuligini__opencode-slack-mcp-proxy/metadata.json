@@ -1,0 +1,86 @@
+{
+  "registry": "glama",
+  "id": "lx3lgil2uq",
+  "namespace": "NikaBuligini",
+  "slug": "opencode-slack-mcp-proxy",
+  "name": "OpenCode Slack MCP Proxy",
+  "description": "A local proxy server that enables Slack MCP integration for opencode by rewriting OAuth-specific endpoints and callback flows. It ensures compatibility between Slack's authentication requirements and opencode's fixed local callback structure.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A local proxy server that enables Slack MCP integration for opencode by rewriting OAuth-specific endpoints and callback flows. It ensures compatibility between Slack's authentication requirements and opencode's fixed local callback structure.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "facade port, alternative to FACADE_PORT",
+          "type": "string",
+          "default": "3120"
+        },
+        "LOG_LEVEL": {
+          "description": "pino log level, default info",
+          "type": "string",
+          "default": "info"
+        },
+        "FACADE_HOST": {
+          "description": "facade host, default 127.0.0.1",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "FACADE_PORT": {
+          "description": "facade port, default 3120",
+          "type": "string",
+          "default": "3120"
+        },
+        "CALLBACK_HOST": {
+          "description": "callback listener host, default 127.0.0.1",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "CALLBACK_PORT": {
+          "description": "callback port, default 3118",
+          "type": "string",
+          "default": "3118"
+        },
+        "OPENCODE_HOST": {
+          "description": "opencode callback host, default 127.0.0.1",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "OPENCODE_PORT": {
+          "description": "opencode callback port, default 19876",
+          "type": "string",
+          "default": "19876"
+        },
+        "REQUEST_TIMEOUT_MS": {
+          "description": "timeout for Slack and local proxy requests, default 10000",
+          "type": "string",
+          "default": "10000"
+        },
+        "OPENCODE_CALLBACK_PATH": {
+          "description": "opencode callback path, default /mcp/oauth/callback",
+          "type": "string",
+          "default": "/mcp/oauth/callback"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "lx3lgil2uq",
+    "name": "OpenCode Slack MCP Proxy",
+    "namespace": "NikaBuligini",
+    "repository": {
+      "url": "https://github.com/NikaBuligini/opencode-slack-mcp-proxy"
+    },
+    "slug": "opencode-slack-mcp-proxy",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lx3lgil2uq"
+  }
+}

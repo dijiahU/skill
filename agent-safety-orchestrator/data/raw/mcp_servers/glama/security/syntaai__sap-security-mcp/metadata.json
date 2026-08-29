@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "tbmqv1bt39",
+  "namespace": "SYNTAAI",
+  "slug": "sap-security-mcp",
+  "name": "SyntaAI SAP Security MCP Server",
+  "description": "Enables AI assistants to perform real-time SAP security audits and risk assessments by analyzing user roles, system parameters, and segregation of duties via RFC integration. It provides 17 specialized tools for monitoring security compliance and generating comprehensive audit reports directly from SAP systems.",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to perform real-time SAP security audits and risk assessments by analyzing user roles, system parameters, and segregation of duties via RFC integration. It provides 17 specialized tools for monitoring security compliance and generating comprehensive audit reports directly from SAP systems.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SAP_HOST": {
+          "description": "Your SAP system host address",
+          "type": "string"
+        },
+        "SAP_USER": {
+          "description": "RFC-enabled SAP communication user",
+          "type": "string"
+        },
+        "SAP_SYSNR": {
+          "description": "SAP system number (e.g., 00)",
+          "type": "string"
+        },
+        "SAP_CLIENT": {
+          "description": "SAP client number (e.g., 100)",
+          "type": "string"
+        },
+        "SAP_PASSWORD": {
+          "description": "Password for the SAP communication user",
+          "type": "string"
+        },
+        "MCP_SECRET_KEY": {
+          "description": "Secret key for MCP authentication",
+          "type": "string"
+        },
+        "JCO_SERVICE_URL": {
+          "description": "JCo Microservice URL (default: http://localhost:8080)",
+          "type": "string",
+          "default": "http://localhost:8080"
+        },
+        "JCO_SERVICE_API_KEY": {
+          "description": "API key for the JCo microservice",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "JCO_SERVICE_URL",
+        "SAP_HOST",
+        "SAP_SYSNR",
+        "SAP_CLIENT",
+        "SAP_USER",
+        "SAP_PASSWORD"
+      ]
+    },
+    "id": "tbmqv1bt39",
+    "name": "SyntaAI SAP Security MCP Server",
+    "namespace": "SYNTAAI",
+    "repository": {
+      "url": "https://github.com/SYNTAAI/sap-security-mcp"
+    },
+    "slug": "sap-security-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tbmqv1bt39"
+  }
+}

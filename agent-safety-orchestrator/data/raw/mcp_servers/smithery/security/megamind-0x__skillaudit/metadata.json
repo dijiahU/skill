@@ -1,0 +1,125 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "megamind-0x/skillaudit",
+  "namespace": "megamind-0x",
+  "slug": "skillaudit",
+  "displayName": "SkillAudit",
+  "description": "Security scanner for AI agent skills and MCP servers. Detects credential theft, data exfiltration, prompt injection, obfuscated code, and 80+ threat patterns. Free API + CLI (npx skillaudit). Premium deep scans via x402 micropayments.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "scanner",
+    "audit",
+    "vulnerability",
+    "credential",
+    "authentication",
+    "phishing",
+    "ransomware",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "60dae0bf-595f-45f6-92d7-76f35e59a186",
+    "qualifiedName": "megamind-0x/skillaudit",
+    "namespace": "megamind-0x",
+    "slug": "skillaudit",
+    "displayName": "SkillAudit",
+    "description": "Security scanner for AI agent skills and MCP servers. Detects credential theft, data exfiltration, prompt injection, obfuscated code, and 80+ threat patterns. Free API + CLI (npx skillaudit). Premium deep scans via x402 micropayments.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/skillaudit.vercel.app.ico",
+    "verified": false,
+    "useCount": 1,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-15T13:10:26.062Z",
+    "homepage": "https://skillaudit.vercel.app",
+    "bySmithery": false,
+    "owner": "org_01KNBV98YC9W49NHXQ1B5ZY5G4",
+    "score": 0.038926681783824635
+  },
+  "detail": {
+    "qualifiedName": "megamind-0x/skillaudit",
+    "displayName": "SkillAudit",
+    "description": "Security scanner for AI agent skills and MCP servers. Detects credential theft, data exfiltration, prompt injection, obfuscated code, and 80+ threat patterns. Free API + CLI (npx skillaudit). Premium deep scans via x402 micropayments.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/skillaudit.vercel.app.ico",
+    "remote": true,
+    "deploymentUrl": "https://skillaudit--megamind-0x.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://skillaudit--megamind-0x.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_url",
+        "description": "Scan a skill/MCP server by URL for security issues. Returns risk level, findings, and verdict.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL of the skill file or MCP server to scan"
+            }
+          }
+        }
+      },
+      {
+        "name": "scan_github",
+        "description": "Scan a GitHub repository for skill files and security issues.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "repo": {
+              "type": "string",
+              "description": "GitHub repository in owner/name format (e.g. modelcontextprotocol/servers)"
+            },
+            "branch": {
+              "type": "string",
+              "description": "Branch to scan (default: main)"
+            }
+          }
+        }
+      },
+      {
+        "name": "gate_check",
+        "description": "Pre-install gate check. Returns allow/warn/deny decision for a skill URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL of the skill to check"
+            },
+            "threshold": {
+              "enum": [
+                "clean",
+                "low",
+                "moderate",
+                "high",
+                "critical"
+              ],
+              "type": "string",
+              "description": "Risk threshold (default: moderate). Deny if risk >= threshold."
+            }
+          }
+        }
+      },
+      {
+        "name": "reputation_check",
+        "description": "Check the reputation of a domain based on aggregated scan history.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to check (e.g. example.com)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "g60cywir3o",
+  "namespace": "drewburchfield",
+  "slug": "help-scout-mcp-server",
+  "name": "Help Scout MCP Server",
+  "description": "Connects Claude and other AI assistants to Help Scout customer support data with advanced search capabilities, conversation analysis, and enterprise-grade security features including PII redaction.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Connects Claude and other AI assistants to Help Scout customer support data with advanced search capabilities, conversation analysis, and enterprise-grade security features including PII redaction.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ALLOW_PII": {
+          "description": "Include message content in responses",
+          "type": "string",
+          "default": "false"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging verbosity (error, warn, info, debug)",
+          "type": "string",
+          "default": "info"
+        },
+        "CACHE_TTL_SECONDS": {
+          "description": "Cache duration for API responses",
+          "type": "string",
+          "default": "300"
+        },
+        "HELPSCOUT_API_KEY": {
+          "description": "Personal Access Token (format: Bearer token) - Alternative to OAuth2",
+          "type": "string"
+        },
+        "HELPSCOUT_BASE_URL": {
+          "description": "Help Scout API endpoint",
+          "type": "string",
+          "default": "https://api.helpscout.net/v2/"
+        },
+        "HELPSCOUT_CLIENT_ID": {
+          "description": "OAuth2 Client ID from Help Scout My Apps",
+          "type": "string"
+        },
+        "HELPSCOUT_CLIENT_SECRET": {
+          "description": "OAuth2 Client Secret from Help Scout My Apps",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "HELPSCOUT_CLIENT_ID",
+            "HELPSCOUT_CLIENT_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "HELPSCOUT_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "g60cywir3o",
+    "name": "Help Scout MCP Server",
+    "namespace": "drewburchfield",
+    "repository": {
+      "url": "https://github.com/drewburchfield/help-scout-mcp-server"
+    },
+    "slug": "help-scout-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/g60cywir3o"
+  }
+}

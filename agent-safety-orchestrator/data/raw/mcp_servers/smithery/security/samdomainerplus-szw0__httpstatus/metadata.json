@@ -1,0 +1,792 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "samdomainerplus-szw0/httpstatus",
+  "namespace": "samdomainerplus-szw0",
+  "slug": "httpstatus",
+  "displayName": "Httpstatus MCP",
+  "description": "AI-callable tools for API mocking, testing, monitoring, security, and automation by Httpstatus.com",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "policy"
+  ],
+  "rawRecord": {
+    "id": "0667ca04-cc66-41a2-8df0-5b897652dfa0",
+    "qualifiedName": "samdomainerplus-szw0/httpstatus",
+    "namespace": "samdomainerplus-szw0",
+    "slug": "httpstatus",
+    "displayName": "Httpstatus MCP",
+    "description": "AI-callable tools for API mocking, testing, monitoring, security, and automation by Httpstatus.com",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/httpstatus.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-11T12:32:07.254Z",
+    "homepage": "https://httpstatus.com/mcp",
+    "bySmithery": false,
+    "owner": "org_01KNY88WQXQWF2584BR839VYQJ",
+    "score": 0.007692307692307693
+  },
+  "detail": {
+    "qualifiedName": "samdomainerplus-szw0/httpstatus",
+    "displayName": "Httpstatus MCP",
+    "description": "AI-callable tools for API mocking, testing, monitoring, security, and automation by Httpstatus.com",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/httpstatus.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://httpstatus--samdomainerplus-szw0.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://httpstatus--samdomainerplus-szw0.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "create_mock",
+        "description": "Create an API mock definition.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "method": {
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "type": "string"
+            },
+            "delayMs": {
+              "type": "integer",
+              "maximum": 120000,
+              "minimum": 0
+            },
+            "isPublic": {
+              "type": "boolean"
+            },
+            "priority": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0
+            },
+            "matchType": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "integer",
+              "default": 200,
+              "maximum": 599,
+              "minimum": 100
+            },
+            "urlPattern": {
+              "type": "string"
+            },
+            "requestType": {
+              "enum": [
+                "REST",
+                "GraphQL"
+              ],
+              "type": "string"
+            },
+            "responseBody": {},
+            "responseHeaders": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "update_mock",
+        "description": "Update an existing API mock by id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "method": {
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "type": "string"
+            },
+            "delayMs": {
+              "type": "integer",
+              "maximum": 120000,
+              "minimum": 0
+            },
+            "isPublic": {
+              "type": "boolean"
+            },
+            "priority": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0
+            },
+            "matchType": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "integer",
+              "maximum": 599,
+              "minimum": 100
+            },
+            "urlPattern": {
+              "type": "string"
+            },
+            "requestType": {
+              "enum": [
+                "REST",
+                "GraphQL"
+              ],
+              "type": "string"
+            },
+            "responseBody": {},
+            "responseHeaders": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_mock",
+        "description": "Delete an existing API mock by id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "list_mocks",
+        "description": "List API mocks with optional filtering and pagination.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "create_chaos_rule",
+        "description": "Create a reusable API chaos endpoint mapping.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string"
+            },
+            "method": {
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "type": "string"
+            },
+            "headers": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "targetUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "chaosConfig": {
+              "type": "object",
+              "properties": {
+                "errorRate": {
+                  "type": "number",
+                  "maximum": 1,
+                  "minimum": 0
+                },
+                "latencyMs": {
+                  "type": "integer",
+                  "maximum": 30000,
+                  "minimum": 0
+                },
+                "timeoutMs": {
+                  "type": "integer",
+                  "maximum": 60000,
+                  "minimum": 0
+                },
+                "forceStatus": {
+                  "type": "integer",
+                  "maximum": 599,
+                  "minimum": 100
+                },
+                "responseDelayMs": {
+                  "type": "integer",
+                  "maximum": 30000,
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            },
+            "maxExecutions": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "expiryTimestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "rateLimitPerMinute": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "disable_chaos_rule",
+        "description": "Disable a chaos rule by id.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_chaos_rules",
+        "description": "List reusable API chaos endpoint mappings.",
+        "inputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "run_redirect_analyzer",
+        "description": "Analyze redirect chain behavior for a URL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "maxHops": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "run_cors_debug",
+        "description": "Run CORS diagnostics for a target URL and origin.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "origin": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        }
+      },
+      {
+        "name": "automation_create_workflow",
+        "description": "Create an API automation workflow from steps you define. Use this when the user asks to generate automation for a URL or API: you define the steps (method, path, assertions) and send them. Preferred for a single URL or a few endpoints when the user does not provide an OpenAPI spec or Postman collection. Saves to Automation Studio and exports to API Testing (/app/api-testing). Returns workflowId, dashboardUrl (link to API Testing dashboard or the new workflow), and optional apiWorkflowId. Tell the user to view results at the dashboardUrl (e.g. https://httpstatus.com/app/api-testing).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "method",
+                  "path"
+                ],
+                "properties": {
+                  "body": {},
+                  "name": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "method": {
+                    "enum": [
+                      "GET",
+                      "POST",
+                      "PUT",
+                      "PATCH",
+                      "DELETE",
+                      "HEAD",
+                      "OPTIONS"
+                    ],
+                    "type": "string"
+                  },
+                  "extract": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "path"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "headers": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "assertions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "enum": [
+                            "status",
+                            "json_path",
+                            "header",
+                            "body_contains"
+                          ],
+                          "type": "string"
+                        },
+                        "equals": {
+                          "type": "integer"
+                        },
+                        "exists": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "baseUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "variables": {
+              "type": "object"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "automation_generate_from_openapi",
+        "description": "Generate an automation workflow from an OpenAPI/Swagger spec (JSON or YAML string). Use only when the user provides a full OpenAPI spec. For a single URL or endpoints without a spec, use automation_create_workflow instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "baseUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "openapiSpec": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "automation_import_postman_collection",
+        "description": "Convert an exported Postman collection (JSON object the user already has) into an automation workflow. Use only when the user explicitly provides or pastes a Postman collection. For a URL or API without a Postman export, use automation_create_workflow instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "postmanCollection": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "automation_run_workflow",
+        "description": "Run an existing automation workflow by workflowId. Returns runId and status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "workflowId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "automation_get_workflow_status",
+        "description": "Get status, step results, and logs for a workflow run by runId.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "runId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "start_resolve",
+        "description": "Resolve natural-language developer intent to HttpStatus.com tools via the /start router (retrieval-first, optional AI). Returns session_id, tools with routes, confidence, and resolution_layer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object",
+              "description": "Optional hints (e.g. url, source)."
+            },
+            "message": {
+              "type": "string",
+              "description": "What the user wants to do in plain language."
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Optional session UUID from a prior start_resolve call."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_security_scan",
+        "description": "Scan a URL for common security issues: missing security headers (HSTS, CSP, X-Frame-Options, etc.), TLS configuration, CORS policy, and XSS vectors. Returns a scored report per check category.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to scan."
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "headers",
+                  "tls",
+                  "cors",
+                  "csp",
+                  "hsts",
+                  "xss"
+                ],
+                "type": "string"
+              },
+              "description": "Subset of checks to run. Omit to run all."
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_openapi",
+        "description": "Validate an OpenAPI 2.x/3.x specification (JSON or YAML string) against the spec and report errors, warnings, and schema violations. Returns a structured list of issues with paths and severity.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spec": {
+              "type": "string",
+              "description": "Full OpenAPI spec as a JSON or YAML string."
+            },
+            "format": {
+              "enum": [
+                "json",
+                "yaml"
+              ],
+              "type": "string",
+              "description": "Hint for parsing. Auto-detected if omitted."
+            }
+          }
+        }
+      },
+      {
+        "name": "decode_jwt",
+        "description": "Decode a JSON Web Token and return the header, payload, and signature metadata. Optionally verify the signature with a secret or public key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "The JWT string to decode."
+            },
+            "secret": {
+              "type": "string",
+              "description": "HMAC secret or PEM public key for verification."
+            },
+            "verifySignature": {
+              "type": "boolean",
+              "description": "Attempt signature verification (requires secret)."
+            }
+          }
+        }
+      },
+      {
+        "name": "run_trace",
+        "description": "Submit distributed trace data (Jaeger, Zipkin, OpenTelemetry, or generic) for analysis. Returns span summary, critical path, slowest operations, and an optional shareable link.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "share": {
+              "type": "boolean",
+              "description": "Create a shareable link for this trace."
+            },
+            "format": {
+              "enum": [
+                "jaeger",
+                "zipkin",
+                "otel",
+                "generic"
+              ],
+              "type": "string",
+              "description": "Trace format hint."
+            },
+            "traceData": {
+              "type": "object",
+              "description": "Trace payload object (Jaeger/Zipkin/OTEL JSON)."
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_har",
+        "description": "Analyze an HTTP Archive (HAR) file object. Returns performance summary, waterfall timings, largest requests, error responses, and third-party breakdown.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "har": {
+              "type": "object",
+              "description": "HAR file contents as a JSON object."
+            },
+            "includeTimings": {
+              "type": "boolean",
+              "description": "Include per-entry timing breakdown."
+            },
+            "filterMimeTypes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Only report entries matching these MIME types."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_ssl",
+        "description": "Check the SSL/TLS certificate for a hostname: validity, expiry, issuer chain, protocol versions, and cipher suites. Returns days-until-expiry and any chain errors.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "integer",
+              "maximum": 65535,
+              "minimum": 1,
+              "description": "Port to connect to. Defaults to 443."
+            },
+            "hostname": {
+              "type": "string",
+              "description": "Domain or IP to check (no scheme)."
+            },
+            "checkChain": {
+              "type": "boolean",
+              "description": "Validate full certificate chain."
+            }
+          }
+        }
+      },
+      {
+        "name": "create_monitor",
+        "description": "Create an uptime monitor for a URL. Returns monitorId, dashboard URL, and next check time. Use get_monitor_status to fetch results.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL to monitor."
+            },
+            "body": {
+              "type": "string",
+              "description": "Request body for POST/PUT/PATCH monitors."
+            },
+            "name": {
+              "type": "string",
+              "description": "Display name for the monitor."
+            },
+            "method": {
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "type": "string",
+              "description": "HTTP method. Defaults to GET."
+            },
+            "headers": {
+              "type": "object",
+              "description": "Custom request headers.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "regions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Regions to run checks from (e.g. [\"us-east\", \"eu-west\"])."
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "maximum": 30000,
+              "minimum": 500,
+              "description": "Request timeout in ms. Defaults to 10000."
+            },
+            "alertOnFailure": {
+              "type": "boolean",
+              "description": "Send alerts on failure. Defaults to true."
+            },
+            "expectedStatus": {
+              "type": "integer",
+              "maximum": 599,
+              "minimum": 100,
+              "description": "Expected HTTP status code. Defaults to 200."
+            },
+            "intervalSeconds": {
+              "type": "integer",
+              "maximum": 86400,
+              "minimum": 60,
+              "description": "Check interval in seconds. Defaults to 300."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_monitor_status",
+        "description": "Get the current status, uptime percentage, and recent check history for a monitor created with create_monitor.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "monitorId": {
+              "type": "string",
+              "description": "Monitor ID returned by create_monitor."
+            },
+            "historyHours": {
+              "type": "integer",
+              "maximum": 168,
+              "minimum": 1,
+              "description": "How many hours of history to return. Defaults to 24."
+            },
+            "includeHistory": {
+              "type": "boolean",
+              "description": "Include recent check results."
+            }
+          }
+        }
+      },
+      {
+        "name": "capture_webhook",
+        "description": "Create or connect to a webhook capture bin and return the capture URL. Returns captureId, webhookUrl to share with the caller, and any requests already received. Use captureId on subsequent calls to poll for new requests.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "captureId": {
+              "type": "string",
+              "description": "Existing capture ID to poll. Omit to create a new bin."
+            },
+            "maxRequests": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum requests to return. Defaults to 10."
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "maximum": 300,
+              "minimum": 5,
+              "description": "How long to wait for the first request. Defaults to 30."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

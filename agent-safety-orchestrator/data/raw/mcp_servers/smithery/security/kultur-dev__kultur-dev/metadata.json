@@ -1,0 +1,198 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "kultur-dev/kultur-dev",
+  "namespace": "kultur-dev",
+  "slug": "kultur-dev",
+  "displayName": "Kultur.dev",
+  "description": "Cultural Intelligence Infrastructure for AI Agents. Analyze content for cultural sensitivity across 195 countries, detect taboos and geopolitical risks, get localization guidance in 15 tones, compare Hofstede cultural dimensions, and access holiday calendars — all via MCP. Trusted by enterprise teams for global content compliance.",
+  "discoveryQueries": [
+    "vulnerability"
+  ],
+  "rawRecord": {
+    "id": "d8a4d844-33eb-4fb9-862e-a9cc5825839e",
+    "qualifiedName": "kultur-dev/kultur-dev",
+    "namespace": "kultur-dev",
+    "slug": "kultur-dev",
+    "displayName": "Kultur.dev",
+    "description": "Cultural Intelligence Infrastructure for AI Agents. Analyze content for cultural sensitivity across 195 countries, detect taboos and geopolitical risks, get localization guidance in 15 tones, compare Hofstede cultural dimensions, and access holiday calendars — all via MCP. Trusted by enterprise teams for global content compliance.",
+    "iconUrl": "https://api.smithery.ai/servers/kultur-dev/kultur-dev/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-01T00:06:43.567Z",
+    "homepage": "https://kultur.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVZENJZ272GN2VCMV4TF72",
+    "score": 0.010869565217391304
+  },
+  "detail": {
+    "qualifiedName": "kultur-dev/kultur-dev",
+    "displayName": "Kultur.dev",
+    "description": "Cultural Intelligence Infrastructure for AI Agents. Analyze content for cultural sensitivity across 195 countries, detect taboos and geopolitical risks, get localization guidance in 15 tones, compare Hofstede cultural dimensions, and access holiday calendars — all via MCP. Trusted by enterprise teams for global content compliance.",
+    "iconUrl": "https://api.smithery.ai/servers/kultur-dev/kultur-dev/icon",
+    "remote": true,
+    "deploymentUrl": "https://kultur-dev--kultur-dev.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://kultur-dev--kultur-dev.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "x-from": {
+                "query": "api_key"
+              },
+              "x-order": 0,
+              "description": "Your Kultur.dev API key. Get a free key with 1,000 credits at https://kultur.dev/signup"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "analyze_cultural_context",
+        "description": "Analyze text or concepts for cultural context and risk across 195 countries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to analyze"
+            },
+            "target_markets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "ISO 3166-1 alpha-2 country codes (e.g. [\"JP\", \"DE\", \"SA\"])"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_cultural_sensitivity",
+        "description": "Check content for critical cultural sensitivities, taboos, or offensive material.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to check"
+            },
+            "target_markets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "ISO 3166-1 alpha-2 country codes"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_localization_guidance",
+        "description": "Get specific guidance on how to localize content for a target market.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to localize"
+            },
+            "target_market": {
+              "type": "string",
+              "description": "ISO 3166-1 alpha-2 country code"
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_cultures",
+        "description": "Compare Hofstede cultural dimensions between two countries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_a": {
+              "type": "string",
+              "description": "First country name or ISO code"
+            },
+            "country_b": {
+              "type": "string",
+              "description": "Second country name or ISO code"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_communication_style",
+        "description": "Get the preferred business communication style for a specific country.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "description": "Country name or ISO code"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_holiday_calendar",
+        "description": "Get important cultural and religious holidays for a specific country.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "month": {
+              "type": "string",
+              "description": "Optional month — number (1-12) or name (e.g. 'October')"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country name or ISO code"
+            }
+          }
+        }
+      },
+      {
+        "name": "analyze_hofstede",
+        "description": "Analyze a country against Hofstede's 6-D cultural model with dimension scores and contextual impact.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "description": "Country name or ISO 3166-1 alpha-2 code (e.g. 'India' or 'JP')"
+            }
+          }
+        }
+      },
+      {
+        "name": "scan_geopolitical_risk",
+        "description": "Scan content against 44 geopolitical rules across 6 regions (APAC, MENA, South Asia, Africa, LATAM) and return a market-level risk heatmap.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to scan for geopolitical sensitivities"
+            },
+            "markets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional ISO 3166-1 alpha-2 codes. Omit to scan all 39 markets with rules."
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

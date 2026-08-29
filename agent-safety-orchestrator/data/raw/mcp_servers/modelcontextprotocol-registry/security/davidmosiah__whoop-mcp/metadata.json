@@ -1,0 +1,76 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.davidmosiah/whoop-mcp",
+  "slug": "davidmosiah__whoop-mcp",
+  "title": "",
+  "description": "Privacy-first, unofficial WHOOP MCP server for AI health, sleep, recovery, and performance agents.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.davidmosiah/whoop-mcp",
+      "description": "Privacy-first, unofficial WHOOP MCP server for AI health, sleep, recovery, and performance agents.",
+      "repository": {
+        "url": "https://github.com/davidmosiah/whoop-mcp",
+        "source": "github"
+      },
+      "version": "0.1.1",
+      "packages": [
+        {
+          "registryType": "npm",
+          "identifier": "whoop-mcp-unofficial",
+          "version": "0.1.1",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "WHOOP OAuth client ID. Optional when configured with whoop-mcp-server setup.",
+              "format": "string",
+              "name": "WHOOP_CLIENT_ID"
+            },
+            {
+              "description": "WHOOP OAuth client secret. Prefer whoop-mcp-server setup so this secret is stored in ~/.whoop-mcp/config.json instead of MCP client config.",
+              "format": "string",
+              "isSecret": true,
+              "name": "WHOOP_CLIENT_SECRET"
+            },
+            {
+              "description": "Redirect URI configured in the WHOOP Developer Dashboard. Optional when configured with whoop-mcp-server setup.",
+              "format": "string",
+              "name": "WHOOP_REDIRECT_URI"
+            },
+            {
+              "description": "Optional local path for OAuth tokens. Defaults to ~/.whoop-mcp/tokens.json.",
+              "format": "string",
+              "name": "WHOOP_TOKEN_PATH"
+            },
+            {
+              "description": "Optional payload mode: summary, structured, or raw. Defaults to structured.",
+              "format": "string",
+              "name": "WHOOP_PRIVACY_MODE"
+            },
+            {
+              "description": "Optional SQLite cache toggle. Set to true or sqlite to enable.",
+              "format": "string",
+              "name": "WHOOP_CACHE"
+            },
+            {
+              "description": "Optional local SQLite cache path. Defaults to ~/.whoop-mcp/cache.sqlite.",
+              "format": "string",
+              "name": "WHOOP_CACHE_PATH"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-30T15:42:57.571142Z",
+        "publishedAt": "2026-04-30T15:42:57.571142Z",
+        "updatedAt": "2026-04-30T15:42:57.571142Z",
+        "isLatest": false
+      }
+    }
+  }
+}

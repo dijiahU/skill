@@ -1,0 +1,1126 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "databr/api",
+  "namespace": "databr",
+  "slug": "api",
+  "displayName": "DataBR",
+  "description": "Access comprehensive Brazilian public data across economic, judicial, environmental, and healthcare sectors. Conduct due diligence, market research, and compliance checks using official government records. Streamline analysis of Brazilian companies, legislation, and public spending to make data-driven decisions.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "4f761792-ae9b-4a4e-98fc-efb4ea259dd9",
+    "qualifiedName": "databr/api",
+    "namespace": "databr",
+    "slug": "api",
+    "displayName": "DataBR",
+    "description": "Access comprehensive Brazilian public data across economic, judicial, environmental, and healthcare sectors. Conduct due diligence, market research, and compliance checks using official government records. Streamline analysis of Brazilian companies, legislation, and public spending to make data-driven decisions.",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-25T01:05:36.817Z",
+    "homepage": "https://smithery.ai/servers/databr/api",
+    "bySmithery": false,
+    "owner": "org_01KNBVDFPP8HHCGE5PR0FADQF5",
+    "score": 0.015151515151515152
+  },
+  "detail": {
+    "qualifiedName": "databr/api",
+    "displayName": "DataBR",
+    "description": "Access comprehensive Brazilian public data across economic, judicial, environmental, and healthcare sectors. Conduct due diligence, market research, and compliance checks using official government records. Streamline analysis of Brazilian companies, legislation, and public spending to make data-driven decisions.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://api--databr.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://api--databr.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "analise_competicao",
+        "description": "Análise de competição no mercado por CNAE: players, concentração, barreiras.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnae": {
+              "type": "string",
+              "description": "Código CNAE do setor"
+            }
+          }
+        }
+      },
+      {
+        "name": "analise_esg",
+        "description": "Score ESG de empresa: impacto ambiental, compliance social, governança.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa"
+            }
+          }
+        }
+      },
+      {
+        "name": "analise_litigio",
+        "description": "Análise de risco de litígio de empresa: processos, valores em disputa, tendências.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa"
+            }
+          }
+        }
+      },
+      {
+        "name": "analise_mercado_trabalho",
+        "description": "Análise do mercado de trabalho por UF: emprego, salários, setores, tendências.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP, RJ, MG)"
+            }
+          }
+        }
+      },
+      {
+        "name": "analise_setor",
+        "description": "Análise setorial por CNPJ ou código CNAE. Inclui regulação e benchmarks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnae": {
+              "type": "string",
+              "description": "Código CNAE para regulação setorial. Alternativo a 'cnpj'."
+            },
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa. Alternativo a 'cnae'."
+            }
+          }
+        }
+      },
+      {
+        "name": "buscar_diario_oficial",
+        "description": "Busca publicações no Diário Oficial Municipal via Querido Diário (OK.org.br).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP, RJ). Opcional."
+            },
+            "query": {
+              "type": "string",
+              "description": "Termo de busca (ex: nome de empresa, licitação, contrato)"
+            }
+          }
+        }
+      },
+      {
+        "name": "buscar_diarios_por_tema",
+        "description": "Busca publicações em diários oficiais municipais filtradas por tema (ex: educacao, saude, meio-ambiente).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tema": {
+              "type": "string",
+              "description": "Tema de classificação (ex: educacao, saude, meio-ambiente)"
+            }
+          }
+        }
+      },
+      {
+        "name": "buscar_licitacao",
+        "description": "Busca licitações e contratações públicas no PNCP (Portal Nacional de Contratações Públicas).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ do órgão contratante"
+            }
+          }
+        }
+      },
+      {
+        "name": "buscar_processos_judiciais",
+        "description": "Busca processos judiciais por CPF ou CNPJ no DataJud CNJ (todos os tribunais).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "documento": {
+              "type": "string",
+              "description": "CPF ou CNPJ do interessado no processo"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_acidentes_transito",
+        "description": "Retorna dados de acidentes rodoviários da PRF (Polícia Rodoviária Federal).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP)"
+            },
+            "ano": {
+              "type": "string",
+              "description": "Ano de referência (ex: 2025)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_aeronave",
+        "description": "Consulta aeronaves no RAB (Registro Aeronáutico Brasileiro) da ANAC.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefixo": {
+              "type": "string",
+              "description": "Prefixo da aeronave (ex: PT-ABC). Quando omitido, lista aeronaves."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_beneficios_sociais",
+        "description": "Consulta beneficiários de programas sociais federais (Bolsa Família) por município.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP)"
+            },
+            "municipio": {
+              "type": "string",
+              "description": "Código IBGE do município"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_candidatos",
+        "description": "Busca candidatos a cargos eletivos no TSE (Tribunal Superior Eleitoral).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP)"
+            },
+            "nome": {
+              "type": "string",
+              "description": "Nome do candidato"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_censo_escolar",
+        "description": "Retorna dados do Censo Escolar (INEP): escolas, matrículas, docentes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_cnae",
+        "description": "Consulta atividade econômica (CNAE) por código. Retorna descrição, divisão e seção.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "codigo": {
+              "type": "string",
+              "description": "Código CNAE (ex: 6201-5 para desenvolvimento de software)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_combustiveis",
+        "description": "Retorna preços de combustíveis coletados pela ANP em postos de todo o Brasil.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_comercio_exterior",
+        "description": "Retorna dados de comércio exterior do Brasil (COMEXSTAT): exportações ou importações.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'exportacoes' ou 'importacoes'. Padrão: exportacoes."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_contas_publicas",
+        "description": "Consulta dados de finanças públicas do Tesouro Nacional: RREO, RGF, DCA, entes federados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ano": {
+              "type": "string",
+              "description": "Ano de referência (ex: 2025)"
+            },
+            "ente": {
+              "type": "string",
+              "description": "Código do ente federado"
+            },
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'rreo' (execução), 'rgf' (gestão fiscal), 'dca' (disponibilidades), 'entes' (entes federados)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_contratos_federais",
+        "description": "Consulta contratos federais no Portal da Transparência (CGU).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ do contratado"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_credito_bcb",
+        "description": "Retorna dados de crédito do BCB: volume de crédito ou taxas de juros praticadas.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo de consulta: 'volume' para volume de crédito, 'taxas' para taxas de juros. Padrão: volume."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_dengue",
+        "description": "Consulta notificações de dengue do SINAN/DATASUS. Dados de arboviroses por município e período.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Número máximo de registros (padrão: 50)"
+            },
+            "municipio": {
+              "type": "string",
+              "description": "Código IBGE do município"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_deputados",
+        "description": "Busca deputados federais na Câmara dos Deputados. Filtre por UF e/ou partido.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP, RJ). Opcional."
+            },
+            "partido": {
+              "type": "string",
+              "description": "Sigla do partido (ex: PT, PL). Opcional."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_desmatamento",
+        "description": "Retorna dados de desmatamento na Amazônia: alertas DETER (tempo real) ou PRODES (anual).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'deter' (alertas tempo real) ou 'prodes' (consolidado anual). Padrão: deter."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_diarios_municipais",
+        "description": "Busca publicações em diários oficiais municipais via Querido Diário (OK.org.br).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Termo de busca (ex: nome de empresa, licitação)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_embargos_ambientais",
+        "description": "Lista embargos do IBAMA: áreas interditadas por infrações ambientais.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_emprego",
+        "description": "Retorna dados de emprego formal no Brasil: RAIS (anual) ou CAGED (mensal).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'rais' (anual) ou 'caged' (mensal). Padrão: caged."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_empresa",
+        "description": "Consulta dados completos de empresa brasileira por CNPJ. Retorna razão social, situação cadastral, endereço, atividade econômica (CNAE) e sócios.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa, com ou sem formatação"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_endereco",
+        "description": "Consulta endereço brasileiro por CEP (Código de Endereçamento Postal).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cep": {
+              "type": "string",
+              "description": "CEP (8 dígitos, com ou sem hífen)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_estabelecimento_saude",
+        "description": "Busca estabelecimentos de saúde no Brasil (CNES/DATASUS). Pode buscar por código CNES individual ou listar por município (código IBGE) ou UF (código numérico).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Código numérico do estado (ex: 33 para RJ, 35 para SP). Para listar estabelecimentos."
+            },
+            "cnes": {
+              "type": "string",
+              "description": "Código CNES do estabelecimento (7 dígitos). Quando informado, retorna um único estabelecimento."
+            },
+            "municipio": {
+              "type": "string",
+              "description": "Código IBGE do município (6 dígitos). Para listar estabelecimentos."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_fatos_relevantes",
+        "description": "Busca fatos relevantes publicados por empresas na CVM. Pode buscar por protocolo.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "protocolo": {
+              "type": "string",
+              "description": "Número do protocolo CVM (opcional). Quando omitido, retorna últimos fatos."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_financiamento_eleitoral",
+        "description": "Consulta bens declarados ou doações de campanha de candidatos (TSE).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'bens' (patrimônio declarado) ou 'doacoes' (doações recebidas)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_focus",
+        "description": "Retorna relatório Focus do BCB com expectativas de mercado (IPCA, Selic, PIB, câmbio).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_fundo_investimento",
+        "description": "Consulta fundos de investimento pela CVM: dados cadastrais, cotas diárias ou análise.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ do fundo de investimento"
+            },
+            "detalhe": {
+              "type": "string",
+              "description": "Nível: 'cadastro', 'cotas' (histórico), 'analise'. Padrão: cadastro."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_geografia_brasil",
+        "description": "Retorna estados ou regiões do Brasil (IBGE).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'estados' ou 'regioes'. Padrão: estados."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_hospitais",
+        "description": "Consulta hospitais e leitos do CNES/DATASUS. Lista hospitais com quantidade de leitos por tipo.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Número máximo de registros (padrão: 50)"
+            },
+            "municipio": {
+              "type": "string",
+              "description": "Código IBGE do município"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_ibovespa",
+        "description": "Retorna composição e cotação do índice IBOVESPA (B3).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_icms",
+        "description": "Consulta alíquotas ICMS: interna de um estado, interestadual entre dois estados, ou tabela completa com todos os 27 estados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "UF para consulta de alíquota interna (2 letras). Ex: SP"
+            },
+            "origem": {
+              "type": "string",
+              "description": "UF de origem para cálculo interestadual. Ex: SP"
+            },
+            "destino": {
+              "type": "string",
+              "description": "UF de destino para cálculo interestadual. Ex: MA"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_indicador_bcb",
+        "description": "Consulta indicadores do BCB por código SGS, ou serviços OLINDA (IFDATA, base monetária).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "serie": {
+              "type": "string",
+              "description": "Código da série SGS (ex: 432 para IPCA). Quando omitido, use 'servico'."
+            },
+            "servico": {
+              "type": "string",
+              "description": "Serviço OLINDA: 'ifdata', 'base-monetaria'. Usado quando 'serie' não é informado."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_indicadores_ibge",
+        "description": "Retorna indicadores econômicos do IBGE: PNAD, INPC, PIM, IPCA-15, PMC, PMS.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "indicador": {
+              "type": "string",
+              "description": "Nome: 'pnad' (emprego), 'inpc' (inflação), 'pim' (indústria), 'ipca15' (prévias), 'pmc' (comércio), 'pms' (serviços)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_ipea",
+        "description": "Consulta séries temporais do IPEA por código, busca por nome, ou lista temas.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "acao": {
+              "type": "string",
+              "description": "Use 'temas' para listar temas. Alternativo a codigo/busca."
+            },
+            "busca": {
+              "type": "string",
+              "description": "Texto para buscar séries. Alternativo a 'codigo'."
+            },
+            "codigo": {
+              "type": "string",
+              "description": "Código da série IPEA. Alternativo a 'busca'."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_jurisprudencia",
+        "description": "Busca decisões recentes em tribunais superiores (STF e STJ). Retorna lista de decisões com classe, relator, ementa.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tribunal": {
+              "type": "string",
+              "description": "Tribunal: 'stf' ou 'stj'"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_medicamento",
+        "description": "Busca medicamento registrado na ANVISA pelo número de registro.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "registro": {
+              "type": "string",
+              "description": "Número de registro ANVISA do medicamento"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_mortalidade",
+        "description": "Consulta dados de mortalidade do SIM/DATASUS (Sistema de Informação sobre Mortalidade). Filtros por município, CID, sexo, idade.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Número máximo de registros (padrão: 50)"
+            },
+            "municipio": {
+              "type": "string",
+              "description": "Código IBGE do município"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_municipio",
+        "description": "Consulta dados de município brasileiro por código IBGE ou lista municípios de um estado (UF).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP, RJ) para listar municípios. Alternativo a 'codigo'."
+            },
+            "codigo": {
+              "type": "string",
+              "description": "Código IBGE do município (7 dígitos). Alternativo a 'uf'."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_nascimentos",
+        "description": "Consulta dados de nascidos vivos do SINASC/DATASUS. Filtros por município, sexo, peso.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "string",
+              "description": "Número máximo de registros (padrão: 50)"
+            },
+            "municipio": {
+              "type": "string",
+              "description": "Código IBGE do município"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_orcamento",
+        "description": "Consulta despesas do orçamento federal por órgão e ano (dados SIAFI via Portal da Transparência).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ano": {
+              "type": "string",
+              "description": "Ano do orçamento (ex: 2025)"
+            },
+            "orgao": {
+              "type": "string",
+              "description": "Código SIAFI do órgão (ex: 26000 para MEC). Opcional."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_orcamento_funcional",
+        "description": "Consulta orçamento federal por classificação funcional-programática.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ano": {
+              "type": "string",
+              "description": "Ano do orçamento (ex: 2025)"
+            },
+            "funcao": {
+              "type": "string",
+              "description": "Código da função (ex: 12 para educação)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_partidos",
+        "description": "Lista partidos políticos, frentes parlamentares ou blocos partidários na Câmara.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'partidos', 'frentes' (parlamentares), 'blocos' (partidários). Padrão: partidos."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_pix_estatisticas",
+        "description": "Retorna estatísticas do sistema de pagamentos PIX (volume, quantidade de transações).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_planos_saude",
+        "description": "Lista operadoras e planos de saúde registrados na ANS.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_populacao",
+        "description": "Retorna estimativas populacionais do Brasil por estado e município (IBGE).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_processo_judicial",
+        "description": "Consulta processo judicial pelo número unificado CNJ. Retorna dados do processo, partes, movimentações.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "numero": {
+              "type": "string",
+              "description": "Número do processo CNJ (ex: 0000000-00.0000.0.00.0000)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_proposicoes",
+        "description": "Busca proposições legislativas (projetos de lei) na Câmara dos Deputados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ano": {
+              "type": "string",
+              "description": "Ano de apresentação (ex: 2025)"
+            },
+            "tema": {
+              "type": "string",
+              "description": "Tema da proposição"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_reservas_internacionais",
+        "description": "Retorna dados de reservas internacionais do Brasil (BCB).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_selic",
+        "description": "Retorna a taxa Selic atual e histórico recente do Banco Central do Brasil.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_senadores",
+        "description": "Busca senadores federais no Senado Federal. Filtre por UF e/ou partido.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "Sigla do estado (ex: SP, RJ)"
+            },
+            "partido": {
+              "type": "string",
+              "description": "Sigla do partido (ex: PT, PL)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_servidores_federais",
+        "description": "Consulta servidores públicos federais por CPF ou nome (Portal da Transparência / CGU).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cpf": {
+              "type": "string",
+              "description": "CPF do servidor"
+            },
+            "nome": {
+              "type": "string",
+              "description": "Nome do servidor"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_tarifas_energia",
+        "description": "Retorna tarifas de energia elétrica da ANEEL por distribuidora.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "distribuidora": {
+              "type": "string",
+              "description": "Nome da distribuidora (ex: ENEL, CEMIG). Opcional."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_tcu_acordaos",
+        "description": "Busca acórdãos (decisões) do TCU (Tribunal de Contas da União).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_tcu_certidao",
+        "description": "Verifica certidão de regularidade de empresa no TCU (Tribunal de Contas da União).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_tcu_inabilitados",
+        "description": "Lista pessoas inabilitadas pelo TCU para exercer cargo público.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_titulos_tesouro",
+        "description": "Retorna dados do Tesouro Direto: títulos disponíveis, taxas e preços.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_transparencia",
+        "description": "Consulta dados de transparência federal: cartões corporativos, viagens, emendas, obras, transferências, pensionistas.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo: 'cartoes', 'viagens', 'emendas', 'obras', 'transferencias', 'pensionistas'"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_transportador",
+        "description": "Consulta transportadores rodoviários no RNTRC (ANTT).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rntrc": {
+              "type": "string",
+              "description": "Número RNTRC. Quando omitido, lista transportadores."
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_tributos_ncm",
+        "description": "Consulta carga tributária aproximada de um produto/serviço pelo código NCM ou NBS. Retorna alíquotas federal, estadual e municipal (fonte: IBPT).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "uf": {
+              "type": "string",
+              "description": "UF do estado (2 letras). Ex: SP, RJ, MG"
+            },
+            "codigo": {
+              "type": "string",
+              "description": "Código NCM (produtos, 8 dígitos) ou NBS/LC116 (serviços). Ex: 22030000, 0107"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_uso_solo",
+        "description": "Retorna dados de classificação de uso do solo (MapBiomas).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "consultar_vacinacao",
+        "description": "Consulta doses aplicadas do PNI/DATASUS (Programa Nacional de Imunizações) por ano.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ano": {
+              "type": "string",
+              "description": "Ano da vacinação (2020-2030)"
+            },
+            "limit": {
+              "type": "string",
+              "description": "Número máximo de registros (padrão: 50)"
+            }
+          }
+        }
+      },
+      {
+        "name": "consultar_votacoes",
+        "description": "Retorna votações recentes na Câmara dos Deputados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "cotacao_acoes",
+        "description": "Retorna cotação de ação na B3 (Bolsa de Valores do Brasil) pelo ticker.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ticker": {
+              "type": "string",
+              "description": "Ticker da ação (ex: PETR4, VALE3, ITUB4)"
+            }
+          }
+        }
+      },
+      {
+        "name": "cotacao_cambio",
+        "description": "Retorna a taxa de câmbio PTAX do Banco Central do Brasil para a moeda solicitada (compra e venda).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "moeda": {
+              "type": "string",
+              "description": "Código da moeda (ex: USD, EUR, GBP, JPY, ARS)"
+            }
+          }
+        }
+      },
+      {
+        "name": "credito_score",
+        "description": "Calcula score de crédito de empresa (modelo 3 fatores: cadastral, compliance, judicial).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa"
+            }
+          }
+        }
+      },
+      {
+        "name": "descobrir_casos_uso",
+        "description": "Lista casos de uso e exemplos práticos da API DataBR para diferentes setores (compliance, due diligence, saúde pública, etc).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "due_diligence_empresa",
+        "description": "Due diligence completa de empresa: cadastro + compliance + judicial + setor.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa alvo"
+            }
+          }
+        }
+      },
+      {
+        "name": "indicadores_macro",
+        "description": "Retorna indicadores macroeconômicos do Brasil: IPCA (inflação), Selic (juros), PIB e câmbio USD.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "listar_municipios_diarios",
+        "description": "Lista municípios com diários oficiais disponíveis no Querido Diário.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "listar_temas_diarios",
+        "description": "Lista temas de classificação disponíveis nos diários oficiais municipais.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "panorama_economico",
+        "description": "Panorama econômico do Brasil: PIB, inflação, câmbio, emprego, comércio exterior consolidados.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "perfil_completo_empresa",
+        "description": "Perfil completo de empresa: cadastro + compliance + setor + sócios.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa"
+            }
+          }
+        }
+      },
+      {
+        "name": "perfil_municipio",
+        "description": "Perfil completo de município: demografia, economia, saúde, educação, meio ambiente.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "codigo": {
+              "type": "string",
+              "description": "Código IBGE do município (7 dígitos)"
+            }
+          }
+        }
+      },
+      {
+        "name": "rede_influencia",
+        "description": "Mapeia rede de influência empresarial: sócios cruzados, participações, conexões políticas.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa"
+            }
+          }
+        }
+      },
+      {
+        "name": "risco_ambiental",
+        "description": "Avaliação de risco ambiental de município: desmatamento, embargos, licenciamento.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "municipio": {
+              "type": "string",
+              "description": "Código IBGE do município"
+            }
+          }
+        }
+      },
+      {
+        "name": "verificar_compliance",
+        "description": "Verifica pendências de compliance de empresa no CEIS (empresa sancionada) e CNEP (empresa punida) do Portal da Transparência / CGU.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "CNPJ da empresa"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

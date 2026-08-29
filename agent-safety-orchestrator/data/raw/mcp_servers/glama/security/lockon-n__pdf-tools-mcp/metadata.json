@@ -1,0 +1,47 @@
+{
+  "registry": "glama",
+  "id": "srsvyjs7qt",
+  "namespace": "lockon-n",
+  "slug": "pdf-tools-mcp",
+  "name": "PDF Tools MCP Server",
+  "description": "A comprehensive tool server for reading, merging, and extracting content from PDF files via local paths or direct URLs. It enables metadata retrieval, regex searching, and page-specific text extraction with built-in caching and workspace-restricted security.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A comprehensive tool server for reading, merging, and extracting content from PDF files via local paths or direct URLs. It enables metadata retrieval, regex searching, and page-specific text extraction with built-in caching and workspace-restricted security.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "tempfile_dir": {
+          "description": "The directory for temporary files used for URL support. PDFs from URLs are downloaded here. Default is ~/.pdf_tools_temp",
+          "type": "string",
+          "default": "~/.pdf_tools_temp"
+        },
+        "workspace_path": {
+          "description": "The directory the tool can access. For security reasons, this tool can only access files within the specified workspace directory and cannot access files outside the workspace directory.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "workspace_path"
+      ]
+    },
+    "id": "srsvyjs7qt",
+    "name": "PDF Tools MCP Server",
+    "namespace": "lockon-n",
+    "repository": {
+      "url": "https://github.com/lockon-n/pdf-tools-mcp"
+    },
+    "slug": "pdf-tools-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/srsvyjs7qt"
+  }
+}

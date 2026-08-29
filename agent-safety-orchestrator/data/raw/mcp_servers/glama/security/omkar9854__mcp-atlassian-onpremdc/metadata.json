@@ -1,0 +1,111 @@
+{
+  "registry": "glama",
+  "id": "wd8ccjv06s",
+  "namespace": "omkar9854",
+  "slug": "mcp-atlassian-onpremdc",
+  "name": "MCP Atlassian",
+  "description": "A Model Context Protocol server for Atlassian Jira and Confluence that supports both Cloud and On-Prem/Data Center deployments. It enables AI assistants to search, create, and manage issues and pages using secure authentication methods like PAT and OAuth.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server for Atlassian Jira and Confluence that supports both Cloud and On-Prem/Data Center deployments. It enables AI assistants to search, create, and manage issues and pages using secure authentication methods like PAT and OAuth.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JIRA_URL": {
+          "description": "The URL of your Jira instance (e.g., https://your-company.atlassian.net).",
+          "type": "string"
+        },
+        "JIRA_USERNAME": {
+          "description": "Your Jira username or email address (required for Cloud).",
+          "type": "string"
+        },
+        "CONFLUENCE_URL": {
+          "description": "The URL of your Confluence instance (e.g., https://your-company.atlassian.net/wiki).",
+          "type": "string"
+        },
+        "JIRA_API_TOKEN": {
+          "description": "Your Jira API token (required for Cloud).",
+          "type": "string"
+        },
+        "JIRA_CLIENT_KEY": {
+          "description": "Path to the client key for Jira authentication.",
+          "type": "string"
+        },
+        "JIRA_SSL_VERIFY": {
+          "description": "Set to 'false' to disable SSL certificate verification for Jira.",
+          "type": "string"
+        },
+        "JIRA_CLIENT_CERT": {
+          "description": "Path to the client certificate for Jira authentication.",
+          "type": "string"
+        },
+        "CONFLUENCE_USERNAME": {
+          "description": "Your Confluence username or email address (required for Cloud).",
+          "type": "string"
+        },
+        "JIRA_PERSONAL_TOKEN": {
+          "description": "Personal Access Token for Jira Server/Data Center (replaces username/API token).",
+          "type": "string"
+        },
+        "CONFLUENCE_API_TOKEN": {
+          "description": "Your Confluence API token (required for Cloud).",
+          "type": "string"
+        },
+        "CONFLUENCE_CLIENT_KEY": {
+          "description": "Path to the client key for Confluence authentication.",
+          "type": "string"
+        },
+        "CONFLUENCE_SSL_VERIFY": {
+          "description": "Set to 'false' to disable SSL certificate verification for Confluence.",
+          "type": "string"
+        },
+        "CONFLUENCE_CLIENT_CERT": {
+          "description": "Path to the client certificate for Confluence authentication.",
+          "type": "string"
+        },
+        "CONFLUENCE_PERSONAL_TOKEN": {
+          "description": "Personal Access Token for Confluence Server/Data Center (replaces username/API token).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "JIRA_URL",
+            "JIRA_USERNAME",
+            "JIRA_API_TOKEN",
+            "CONFLUENCE_URL",
+            "CONFLUENCE_USERNAME",
+            "CONFLUENCE_API_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "JIRA_URL",
+            "JIRA_PERSONAL_TOKEN",
+            "CONFLUENCE_URL",
+            "CONFLUENCE_PERSONAL_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "wd8ccjv06s",
+    "name": "MCP Atlassian",
+    "namespace": "omkar9854",
+    "repository": {
+      "url": "https://github.com/omkar9854/mcp-atlassian-onpremdc"
+    },
+    "slug": "mcp-atlassian-onpremdc",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/wd8ccjv06s"
+  }
+}

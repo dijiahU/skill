@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "a3ooja4kkv",
+  "namespace": "Ena-turcotte6",
+  "slug": "mcp-access-oauth",
+  "name": "MCP Access OAuth Server",
+  "description": "A Cloudflare Workers-based MCP server that enables secure remote connections using built-in OAuth authentication via Cloudflare Access. It provides identity-based access control for MCP tools and supports persistent state management through Durable Objects and SSE.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Cloudflare Workers-based MCP server that enables secure remote connections using built-in OAuth authentication via Cloudflare Access. It provides identity-based access control for MCP tools and supports persistent state management through Durable Objects and SSE.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ACCESS_JWKS_URL": {
+          "description": "The JWKS URL for your Access for SaaS OIDC application.",
+          "type": "string"
+        },
+        "ACCESS_CLIENT_ID": {
+          "description": "The Client ID from your Access for SaaS OIDC application.",
+          "type": "string"
+        },
+        "ACCESS_TOKEN_URL": {
+          "description": "The token URL for your Access for SaaS OIDC application.",
+          "type": "string"
+        },
+        "ACCESS_CLIENT_SECRET": {
+          "description": "The Client secret from your Access for SaaS OIDC application.",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random string used for cookie encryption (e.g., generated via 'openssl rand -hex 32').",
+          "type": "string"
+        },
+        "ACCESS_AUTHORIZATION_URL": {
+          "description": "The authorization URL for your Access for SaaS OIDC application.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ACCESS_CLIENT_ID",
+        "ACCESS_CLIENT_SECRET",
+        "ACCESS_TOKEN_URL",
+        "ACCESS_AUTHORIZATION_URL",
+        "ACCESS_JWKS_URL",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "a3ooja4kkv",
+    "name": "MCP Access OAuth Server",
+    "namespace": "Ena-turcotte6",
+    "repository": {
+      "url": "https://github.com/Ena-turcotte6/mcp-access-oauth"
+    },
+    "slug": "mcp-access-oauth",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a3ooja4kkv"
+  }
+}

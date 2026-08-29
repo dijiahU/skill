@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "qmjwel9w9s",
+  "namespace": "ampcome-mcps",
+  "slug": "google-calendar-mcp",
+  "name": "Google Calendar MCP Server",
+  "description": "Enables Claude to manage Google Calendar events, schedules, and meetings through natural conversation. It supports viewing calendars, creating Google Meet events, and searching for upcoming activities using Nango for authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to manage Google Calendar events, schedules, and meetings through natural conversation. It supports viewing calendars, creating Google Meet events, and searching for upcoming activities using Nango for authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NANGO_CONNECTION_ID": {
+          "description": "The connection ID created when a user connects their Google account",
+          "type": "string"
+        },
+        "NANGO_INTEGRATION_ID": {
+          "description": "The ID of your Google Calendar integration in Nango",
+          "type": "string"
+        },
+        "NANGO_NANGO_BASE_URL": {
+          "description": "The base URL for the Nango API",
+          "type": "string",
+          "default": "https://api.nango.dev"
+        },
+        "NANGO_NANGO_SECRET_KEY": {
+          "description": "Your Nango secret key, found in your Nango project settings",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NANGO_NANGO_SECRET_KEY",
+        "NANGO_CONNECTION_ID",
+        "NANGO_INTEGRATION_ID"
+      ]
+    },
+    "id": "qmjwel9w9s",
+    "name": "Google Calendar MCP Server",
+    "namespace": "ampcome-mcps",
+    "repository": {
+      "url": "https://github.com/ampcome-mcps/google-calendar-mcp"
+    },
+    "slug": "google-calendar-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/qmjwel9w9s"
+  }
+}

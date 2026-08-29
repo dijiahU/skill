@@ -1,0 +1,1248 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "aleksander/vastlint",
+  "namespace": "aleksander",
+  "slug": "vastlint",
+  "displayName": "vastlint - IAB XML VAST validator and linter",
+  "description": "VAST XML validation MCP server for programmatic video advertising. Over $30 billion in annual CTV and video ad spend flows through VAST XML — malformed tags cause lost impressions, broken tracking, and revenue discrepancies between platforms.\n\nValidates VAST tags against IAB Tech Lab VAST 2.0, 3.0, 4.0, 4.1, 4.2, and 4.3 specifications, W3C XML 1.0 well-formedness, RFC 3986 URI syntax, IANA media types, ISO 4217 currency codes, Ad-ID registry format, and IAB SIMID 1.0–1.2. 118 rules covering required fields, schema validation, structural correctness, security, deprecated features, and value formats.\n\nTools: validate_vast (validate inline XML), validate_vast_url (fetch and validate a VAST URL, following wrapper chains), list_rules (browse all 118 rules), explain_rule (get fix guidance for a specific rule), fix_vast (auto-fix common issues).\n\nBuilt on a zero-dependency Rust core. Sub-millisecond latency. No data retention — VAST XML is validated ephemerally and never stored. Self-hostabl",
+  "discoveryQueries": [
+    "vetter",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "cf2fc6f8-a338-4057-88f0-95b2ce7877e6",
+    "qualifiedName": "aleksander/vastlint",
+    "namespace": "aleksander",
+    "slug": "vastlint",
+    "displayName": "vastlint - IAB XML VAST validator and linter",
+    "description": "VAST XML validation MCP server for programmatic video advertising. Over $30 billion in annual CTV and video ad spend flows through VAST XML — malformed tags cause lost impressions, broken tracking, and revenue discrepancies between platforms.\n\nValidates VAST tags against IAB Tech Lab VAST 2.0, 3.0, 4.0, 4.1, 4.2, and 4.3 specifications, W3C XML 1.0 well-formedness, RFC 3986 URI syntax, IANA media types, ISO 4217 currency codes, Ad-ID registry format, and IAB SIMID 1.0–1.2. 118 rules covering required fields, schema validation, structural correctness, security, deprecated features, and value formats.\n\nTools: validate_vast (validate inline XML), validate_vast_url (fetch and validate a VAST URL, following wrapper chains), list_rules (browse all 118 rules), explain_rule (get fix guidance for a specific rule), fix_vast (auto-fix common issues).\n\nBuilt on a zero-dependency Rust core. Sub-millisecond latency. No data retention — VAST XML is validated ephemerally and never stored. Self-hostabl",
+    "iconUrl": "https://api.smithery.ai/servers/aleksander/vastlint/icon",
+    "verified": true,
+    "useCount": 220,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-30T06:34:51.066Z",
+    "homepage": "https://vastlint.org",
+    "bySmithery": false,
+    "owner": "org_01KPJ07KHK4FP23GJ4EFRK0NFV",
+    "score": 0.007936507936507936
+  },
+  "detail": {
+    "qualifiedName": "aleksander/vastlint",
+    "displayName": "vastlint - IAB XML VAST validator and linter",
+    "description": "VAST XML validation MCP server for programmatic video advertising. Over $30 billion in annual CTV and video ad spend flows through VAST XML — malformed tags cause lost impressions, broken tracking, and revenue discrepancies between platforms.\n\nValidates VAST tags against IAB Tech Lab VAST 2.0, 3.0, 4.0, 4.1, 4.2, and 4.3 specifications, W3C XML 1.0 well-formedness, RFC 3986 URI syntax, IANA media types, ISO 4217 currency codes, Ad-ID registry format, and IAB SIMID 1.0–1.2. 118 rules covering required fields, schema validation, structural correctness, security, deprecated features, and value formats.\n\nTools: validate_vast (validate inline XML), validate_vast_url (fetch and validate a VAST URL, following wrapper chains), list_rules (browse all 118 rules), explain_rule (get fix guidance for a specific rule), fix_vast (auto-fix common issues).\n\nBuilt on a zero-dependency Rust core. Sub-millisecond latency. No data retention — VAST XML is validated ephemerally and never stored. Self-hostable via Docker or cargo. Apache 2.0 licensed.",
+    "iconUrl": "https://api.smithery.ai/servers/aleksander/vastlint/icon",
+    "remote": true,
+    "deploymentUrl": "https://aleksuix-vastlint.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://aleksuix-vastlint.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "validate_vast",
+        "description": "Validate a VAST XML tag against the IAB VAST 2.0-4.3 specification. Returns all issues found with severity, rule ID, location, and spec reference. A document is valid when errors == 0, regardless of warning or info count. Use wrapper_depth when validating a document inside a wrapper chain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "xml": {
+              "type": "string",
+              "description": "Raw VAST XML string to validate."
+            },
+            "wrapper_depth": {
+              "type": "integer",
+              "format": "uint8",
+              "default": 0,
+              "minimum": 0,
+              "description": "Current wrapper chain depth (0 = root document). Default: 0."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "severity",
+                  "message",
+                  "spec_ref"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "col": {
+                    "type": "integer"
+                  },
+                  "line": {
+                    "type": "integer"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning",
+                      "info"
+                    ],
+                    "type": "string"
+                  },
+                  "spec_ref": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "summary": {
+              "type": "object",
+              "required": [
+                "errors",
+                "warnings",
+                "infos"
+              ],
+              "properties": {
+                "infos": {
+                  "type": "integer"
+                },
+                "errors": {
+                  "type": "integer"
+                },
+                "warnings": {
+                  "type": "integer"
+                }
+              }
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid",
+            "version",
+            "summary",
+            "issues"
+          ]
+        }
+      },
+      {
+        "name": "validate_vast_url",
+        "description": "Fetch a VAST tag from a URL and validate it. Handles redirects. Use max_depth to control how deep wrapper chains are followed (default 5, per IAB VAST 4.x recommendation). AI agents typically receive VAST URLs rather than raw XML -- use this tool for that case.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL of a VAST tag to fetch and validate."
+            },
+            "max_depth": {
+              "type": "integer",
+              "format": "uint8",
+              "default": 5,
+              "minimum": 0,
+              "description": "Maximum wrapper chain depth to follow. Default: 5 (IAB VAST 4.x recommendation)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "severity",
+                  "message",
+                  "spec_ref"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "col": {
+                    "type": "integer"
+                  },
+                  "line": {
+                    "type": "integer"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning",
+                      "info"
+                    ],
+                    "type": "string"
+                  },
+                  "spec_ref": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "summary": {
+              "type": "object",
+              "required": [
+                "errors",
+                "warnings",
+                "infos"
+              ],
+              "properties": {
+                "infos": {
+                  "type": "integer"
+                },
+                "errors": {
+                  "type": "integer"
+                },
+                "warnings": {
+                  "type": "integer"
+                }
+              }
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "valid",
+            "version",
+            "summary",
+            "issues"
+          ]
+        }
+      },
+      {
+        "name": "list_rules",
+        "description": "List the full catalog of VAST validation rules available in vastlint. Returns rule IDs, default severities, and descriptions. Call this once and cache the result -- the catalog is static. Use rule IDs from this list with explain_rule for full details and fix guidance.",
+        "inputSchema": {
+          "type": "object"
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "severity",
+                  "description",
+                  "source"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "count",
+            "rules"
+          ]
+        }
+      },
+      {
+        "name": "explain_rule",
+        "description": "Get full details for a specific VAST validation rule: description, spec reference, severity, what triggers it, and how to fix it. Use rule IDs from list_rules. This is the primary tool for understanding and fixing VAST issues flagged by validate_vast.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rule_id": {
+              "type": "string",
+              "description": "Rule ID to explain, e.g. \"VAST-4.1-adservingid-missing\". Use list_rules to get valid IDs."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "severity": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "severity",
+            "description",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "fix_vast",
+        "description": "Auto-fix a VAST XML tag. Applies all deterministic, safe fixes: HTTP → HTTPS upgrades in all URL-bearing elements, and removal of deprecated attributes. Returns the repaired XML, a list of every fix applied (rule ID + description + path), and any remaining issues that require manual intervention. Always re-validate the returned xml with validate_vast to confirm no errors remain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "xml": {
+              "type": "string",
+              "description": "Raw VAST XML string to auto-fix."
+            },
+            "wrapper_depth": {
+              "type": "integer",
+              "format": "uint8",
+              "default": 0,
+              "minimum": 0,
+              "description": "Current wrapper chain depth (0 = root document). Default: 0."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "xml": {
+              "type": "string"
+            },
+            "applied": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "rule_id",
+                  "description",
+                  "path"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "rule_id": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "remaining": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "severity",
+                  "message",
+                  "spec_ref"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "type": "string"
+                  },
+                  "spec_ref": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "applied_count": {
+              "type": "integer"
+            },
+            "remaining_count": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "xml",
+            "applied_count",
+            "remaining_count",
+            "applied",
+            "remaining"
+          ]
+        }
+      },
+      {
+        "name": "get_adcp_capabilities",
+        "description": "AdCP protocol discovery. Returns the AdCP version, supported protocols, and governance capabilities of this vastlint agent. Call this first when integrating vastlint into an AdCP creative pipeline — it declares which VAST creative features can be evaluated (spec compliance, HTTPS enforcement, wrapper depth). Part of the Ad Context Protocol (AdCP 3.0) specification.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "protocols": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter to specific protocol names. When omitted, returns all supported protocols."
+            },
+            "adcp_major_version": {
+              "type": "integer",
+              "description": "AdCP major version the caller's payloads conform to. When omitted, assumes highest supported version (3)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "adcp": {
+              "type": "object",
+              "required": [
+                "major_versions",
+                "idempotency"
+              ],
+              "properties": {
+                "idempotency": {
+                  "type": "object",
+                  "required": [
+                    "supported"
+                  ],
+                  "properties": {
+                    "supported": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "major_versions": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "specialisms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "supported_protocols": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "status",
+            "adcp",
+            "supported_protocols",
+            "specialisms"
+          ]
+        }
+      },
+      {
+        "name": "list_content_standards",
+        "description": "AdCP content-standards specialism. Lists content governance standards. When called with an 'account' object, returns buyer-defined standards stored for that brand. Without an account, returns the built-in catalog of VAST-relevant standards. Supports cursor-based pagination via the 'pagination' object. Requires Bearer authentication: Authorization: Bearer <api_key>.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account": {
+              "type": "object",
+              "properties": {
+                "brand": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "operator": {
+                  "type": "string"
+                }
+              },
+              "description": "Buyer account context (brand domain + operator)."
+            },
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "page_token": {
+              "type": "string",
+              "description": "Legacy top-level alias."
+            },
+            "pagination": {
+              "type": "object",
+              "properties": {
+                "cursor": {
+                  "type": "string"
+                },
+                "max_results": {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 1
+                }
+              },
+              "description": "Cursor-based pagination controls. Preferred over top-level max_results/page_token."
+            },
+            "max_results": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Legacy top-level alias."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "pagination": {
+              "type": "object",
+              "required": [
+                "has_more"
+              ],
+              "properties": {
+                "cursor": {
+                  "type": "string"
+                },
+                "has_more": {
+                  "type": "boolean"
+                },
+                "total_count": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content_standards": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "required": [
+            "status",
+            "content_standards",
+            "pagination"
+          ]
+        }
+      },
+      {
+        "name": "create_content_standards",
+        "description": "AdCP content-standards specialism. Creates a new set of content quality policies for a brand. Policies include brand safety rules, imagery quality requirements, and compliance constraints. Returns a standards_id that can be used with calibrate_content and validate_content_delivery. Requires Bearer authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "channels_any": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "languages_any": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Optional scope constraints: restrict policies to specific languages or channels."
+            },
+            "account": {
+              "type": "object",
+              "required": [
+                "brand"
+              ],
+              "properties": {
+                "brand": {
+                  "type": "object",
+                  "required": [
+                    "domain"
+                  ],
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "operator": {
+                  "type": "string"
+                }
+              },
+              "description": "Buyer account that owns this content standard (brand domain required)."
+            },
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "policies": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "policy_id",
+                  "enforcement",
+                  "policy"
+                ],
+                "properties": {
+                  "policy": {
+                    "type": "string"
+                  },
+                  "channels": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "policy_id": {
+                    "type": "string"
+                  },
+                  "enforcement": {
+                    "enum": [
+                      "must",
+                      "should",
+                      "may"
+                    ],
+                    "type": "string"
+                  },
+                  "policy_categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": "Array of content quality policies. Each policy has an ID, enforcement level (must/should/may), and natural-language rule text."
+            },
+            "idempotency_key": {
+              "type": "string",
+              "description": "Optional unique key to make this request idempotent. Re-submitting the same key returns the original result without creating a duplicate."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "replayed": {
+              "type": "boolean"
+            },
+            "standards_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "standards_id"
+          ]
+        }
+      },
+      {
+        "name": "get_content_standards",
+        "description": "AdCP content-standards specialism. Retrieves the full details of a specific content standard, including all policies and their enforcement levels. Requires Bearer authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account": {
+              "type": "object",
+              "properties": {
+                "brand": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "operator": {
+                  "type": "string"
+                }
+              },
+              "description": "Buyer account context. Scopes the lookup to a specific brand."
+            },
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "standards_id": {
+              "type": "string",
+              "description": "ID of the content standard set to retrieve. Returned by create_content_standards."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "object"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "policies": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "standards_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "standards_id",
+            "policies"
+          ]
+        }
+      },
+      {
+        "name": "update_content_standards",
+        "description": "AdCP content-standards specialism. Updates the policies on an existing content standard set. The supplied policies array replaces the existing policy set. Requires Bearer authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account": {
+              "type": "object",
+              "properties": {
+                "brand": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "operator": {
+                  "type": "string"
+                }
+              },
+              "description": "Buyer account context. Scopes the update to a specific brand."
+            },
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "policies": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "policy_id",
+                  "enforcement",
+                  "policy"
+                ],
+                "properties": {
+                  "policy": {
+                    "type": "string"
+                  },
+                  "channels": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "policy_id": {
+                    "type": "string"
+                  },
+                  "enforcement": {
+                    "enum": [
+                      "must",
+                      "should",
+                      "may"
+                    ],
+                    "type": "string"
+                  },
+                  "policy_categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": "Replacement policy array. Fully replaces the existing policies on the standard set."
+            },
+            "standards_id": {
+              "type": "string",
+              "description": "ID of the content standard set to update. Returned by create_content_standards."
+            },
+            "idempotency_key": {
+              "type": "string",
+              "description": "Optional unique key to make this request idempotent. Re-submitting the same key returns the original result without creating a duplicate."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "policies": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "standards_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "standards_id",
+            "policies"
+          ]
+        }
+      },
+      {
+        "name": "calibrate_content",
+        "description": "AdCP content-standards specialism. Evaluates a creative artifact against a content standard set before delivery. Returns a per-policy verdict and an overall pass/fail result. Use this as a pre-flight check before launching a campaign. Requires Bearer authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account": {
+              "type": "object",
+              "properties": {
+                "brand": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "operator": {
+                  "type": "string"
+                }
+              },
+              "description": "Buyer account context. Scopes the evaluation to a specific brand."
+            },
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "artifact": {
+              "type": "object",
+              "properties": {
+                "assets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "width": {
+                        "type": "integer"
+                      },
+                      "height": {
+                        "type": "integer"
+                      },
+                      "alt_text": {
+                        "type": "string"
+                      },
+                      "duration_ms": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "artifact_id": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "property_rid": {
+                  "type": "string"
+                }
+              },
+              "description": "Creative artifact to evaluate: metadata and asset URLs (image, video) to check against each policy."
+            },
+            "standards_id": {
+              "type": "string",
+              "description": "ID of the content standard set to evaluate against. Returned by create_content_standards."
+            },
+            "idempotency_key": {
+              "type": "string",
+              "description": "Optional unique key to make this request idempotent. Re-submitting the same key returns the original result without re-evaluating."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "policy_id",
+                  "result"
+                ],
+                "properties": {
+                  "reason": {
+                    "type": "string"
+                  },
+                  "result": {
+                    "enum": [
+                      "pass",
+                      "fail"
+                    ],
+                    "type": "string"
+                  },
+                  "policy_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail"
+              ],
+              "type": "string"
+            },
+            "standards_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "standards_id",
+            "verdict",
+            "rules"
+          ]
+        }
+      },
+      {
+        "name": "validate_content_delivery",
+        "description": "AdCP content-standards specialism. Validates that delivered creatives met the content standards. Accepts delivery records with creative references and returns per-record compliance status plus an overall summary. Requires Bearer authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "account": {
+              "type": "object",
+              "properties": {
+                "brand": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "operator": {
+                  "type": "string"
+                }
+              },
+              "description": "Buyer account context. Scopes the validation to a specific brand."
+            },
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "records": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "record_id"
+                ],
+                "properties": {
+                  "artifact": {
+                    "type": "object",
+                    "properties": {
+                      "assets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "artifact_id": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "property_rid": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "record_id": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Delivery records to validate. Each record references a creative artifact that was delivered."
+            },
+            "standards_id": {
+              "type": "string",
+              "description": "ID of the content standard set to validate delivery against. Returned by create_content_standards."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "results": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "record_id",
+                  "compliant"
+                ],
+                "properties": {
+                  "compliant": {
+                    "type": "boolean"
+                  },
+                  "record_id": {
+                    "type": "string"
+                  },
+                  "violations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "summary": {
+              "type": "object",
+              "required": [
+                "total",
+                "compliant",
+                "violations"
+              ],
+              "properties": {
+                "total": {
+                  "type": "integer"
+                },
+                "compliant": {
+                  "type": "integer"
+                },
+                "violations": {
+                  "type": "integer"
+                }
+              }
+            },
+            "standards_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "standards_id",
+            "summary",
+            "results"
+          ]
+        }
+      },
+      {
+        "name": "list_creatives",
+        "description": "AdCP creative governance. Lists creatives known to this agent. For a validation-only agent like vastlint, this always returns an empty collection — creatives are validated on demand via validate_vast rather than stored. Requires Bearer authentication.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object",
+              "description": "Caller-supplied context object. Echoed back unchanged in the response.",
+              "additionalProperties": true
+            },
+            "page_token": {
+              "type": "string",
+              "description": "Opaque pagination cursor."
+            },
+            "max_results": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of creatives to return per page."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ],
+              "type": "string"
+            },
+            "creatives": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "pagination": {
+              "type": "object",
+              "required": [
+                "total_results",
+                "max_results"
+              ],
+              "properties": {
+                "max_results": {
+                  "type": "integer"
+                },
+                "total_results": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "required": [
+            "status",
+            "creatives",
+            "pagination"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "registry": "glama",
+  "id": "nev3rvj0bm",
+  "namespace": "DynamicEndpoints",
+  "slug": "m365-core-mcp",
+  "name": "Microsoft 365 Core MCP Server",
+  "description": "Provides comprehensive management of Microsoft 365 services including Exchange, SharePoint, Teams, Azure AD, Intune device management, security & compliance frameworks, and universal access to 1000+ Microsoft Graph API endpoints with advanced features like batch operations, delta queries, and real-time webhooks.",
+  "discoveryQueries": [
+    "security",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides comprehensive management of Microsoft 365 services including Exchange, SharePoint, Teams, Azure AD, Intune device management, security & compliance frameworks, and universal access to 1000+ Microsoft Graph API endpoints with advanced features like batch operations, delta queries, and real-time webhooks.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Port for HTTP server if needed",
+          "type": "string",
+          "default": "3000"
+        },
+        "USE_HTTP": {
+          "description": "Set to 'true' to use HTTP transport instead of stdio",
+          "type": "string",
+          "default": "false"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level: debug, info, warn, error",
+          "type": "string",
+          "default": "info"
+        },
+        "STATELESS": {
+          "description": "Set to 'true' to use stateless HTTP mode (no session management)",
+          "type": "string",
+          "default": "false"
+        },
+        "MS_CLIENT_ID": {
+          "description": "Your Microsoft Azure AD application (client) ID",
+          "type": "string"
+        },
+        "MS_TENANT_ID": {
+          "description": "Your Microsoft Azure AD tenant ID",
+          "type": "string"
+        },
+        "MS_CLIENT_SECRET": {
+          "description": "Your Microsoft Azure AD application client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MS_TENANT_ID",
+        "MS_CLIENT_ID",
+        "MS_CLIENT_SECRET"
+      ]
+    },
+    "id": "nev3rvj0bm",
+    "name": "Microsoft 365 Core MCP Server",
+    "namespace": "DynamicEndpoints",
+    "repository": {
+      "url": "https://github.com/DynamicEndpoints/m365-core-mcp"
+    },
+    "slug": "m365-core-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nev3rvj0bm"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "csm8dkb1wo",
+  "namespace": "nordeim",
+  "slug": "Security-MCP-Server-v3",
+  "name": "Security MCP Server",
+  "description": "Provides AI agents like Claude with secure, controlled access to network security tools like nmap for scanning private networks and lab environments. Features comprehensive safety controls, circuit breakers, and production-ready monitoring.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides AI agents like Claude with secure, controlled access to network security tools like nmap for scanning private networks and lab environments. Features comprehensive safety controls, circuit breakers, and production-ready monitoring.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL",
+          "type": "string",
+          "default": "INFO"
+        },
+        "MCP_CONFIG_FILE": {
+          "description": "Path to configuration file (YAML/JSON)",
+          "type": "string"
+        },
+        "MCP_SERVER_HOST": {
+          "description": "HTTP server host (http mode only)",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_SERVER_PORT": {
+          "description": "HTTP server port (http mode only)",
+          "type": "string",
+          "default": "8080"
+        },
+        "MCP_SERVER_TRANSPORT": {
+          "description": "Transport mode: stdio (for Claude) or http (for API)",
+          "type": "string",
+          "default": "stdio"
+        },
+        "MCP_SECURITY_ALLOW_INTRUSIVE": {
+          "description": "Allow intrusive operations (nmap -A, vuln scripts). WARNING: Only enable in controlled environments!",
+          "type": "string",
+          "default": "false"
+        },
+        "MCP_SECURITY_TIMEOUT_SECONDS": {
+          "description": "Default timeout in seconds",
+          "type": "string",
+          "default": "300"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "csm8dkb1wo",
+    "name": "Security MCP Server",
+    "namespace": "nordeim",
+    "repository": {
+      "url": "https://github.com/nordeim/Security-MCP-Server-v3"
+    },
+    "slug": "Security-MCP-Server-v3",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/csm8dkb1wo"
+  }
+}

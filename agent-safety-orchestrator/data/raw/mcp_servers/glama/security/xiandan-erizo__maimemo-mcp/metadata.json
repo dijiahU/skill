@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "d5uc5k9xzd",
+  "namespace": "xiandan-erizo",
+  "slug": "maimemo-mcp",
+  "name": "maimemo-mcp",
+  "description": "A read-only MCP server that provides access to Maimemo study data, including vocabulary progress, word lists, and notepads. It supports both stdio and HTTP transports with authentication and rate limiting for secure data access.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A read-only MCP server that provides access to Maimemo study data, including vocabulary progress, word lists, and notepads. It supports both stdio and HTTP transports with authentication and rate limiting for secure data access.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MAIMEMO_TOKEN": {
+          "description": "Your Maimemo OpenAPI token for authentication.",
+          "type": "string"
+        },
+        "MAIMEMO_BASE_URL": {
+          "description": "The base URL for Maimemo OpenAPI requests.",
+          "type": "string",
+          "default": "https://open.maimemo.com/open"
+        },
+        "MAIMEMO_HTTP_HOST": {
+          "description": "The host for the HTTP transport server.",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "MAIMEMO_HTTP_PORT": {
+          "description": "The port for the HTTP transport server.",
+          "type": "string",
+          "default": "3333"
+        },
+        "MCP_SERVER_AUTH_TOKEN": {
+          "description": "Required when MAIMEMO_HTTP_HOST is not 127.0.0.1, localhost, or ::1; used for bearer authentication in HTTP transport.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MAIMEMO_TOKEN"
+      ]
+    },
+    "id": "d5uc5k9xzd",
+    "name": "maimemo-mcp",
+    "namespace": "xiandan-erizo",
+    "repository": {
+      "url": "https://github.com/xiandan-erizo/maimemo-mcp"
+    },
+    "slug": "maimemo-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/d5uc5k9xzd"
+  }
+}

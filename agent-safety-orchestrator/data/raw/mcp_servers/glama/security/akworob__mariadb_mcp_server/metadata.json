@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "i9t725szmr",
+  "namespace": "akworob",
+  "slug": "mariadb_mcp_server",
+  "name": "MariaDB MCP Server",
+  "description": "Enables AI assistants to interact with MariaDB databases through schema exploration, query execution, and database statistics. Includes security features like read-only mode, parameterized queries, and connection pooling with support for both JSON and Markdown output formats.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to interact with MariaDB databases through schema exploration, query execution, and database statistics. Includes security features like read-only mode, parameterized queries, and connection pooling with support for both JSON and Markdown output formats.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MARIADB_HOST": {
+          "description": "Database server hostname",
+          "type": "string"
+        },
+        "MARIADB_PORT": {
+          "description": "Database server port",
+          "type": "string",
+          "default": "3306"
+        },
+        "MARIADB_USER": {
+          "description": "Database username",
+          "type": "string"
+        },
+        "MARIADB_DATABASE": {
+          "description": "Default database (optional)",
+          "type": "string"
+        },
+        "MARIADB_PASSWORD": {
+          "description": "Database password",
+          "type": "string"
+        },
+        "MARIADB_POOL_SIZE": {
+          "description": "Connection pool size",
+          "type": "string",
+          "default": "5"
+        },
+        "MARIADB_READ_ONLY": {
+          "description": "Set to \"false\" to allow write queries",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MARIADB_HOST",
+        "MARIADB_USER",
+        "MARIADB_PASSWORD"
+      ]
+    },
+    "id": "i9t725szmr",
+    "name": "MariaDB MCP Server",
+    "namespace": "akworob",
+    "repository": {
+      "url": "https://github.com/akworob/mariadb_mcp_server"
+    },
+    "slug": "mariadb_mcp_server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/i9t725szmr"
+  }
+}

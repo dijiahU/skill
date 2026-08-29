@@ -1,0 +1,55 @@
+{
+  "registry": "glama",
+  "id": "ws5tkgczpi",
+  "namespace": "GraysonCAdams",
+  "slug": "alexa-mcp",
+  "name": "alexa-mcp",
+  "description": "An MCP server that enables users to manage their Amazon Alexa shopping lists directly from MCP clients like Claude. It provides tools for listing, adding, updating, and deleting shopping list items through secure Amazon account authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "An MCP server that enables users to manage their Amazon Alexa shopping lists directly from MCP clients like Claude. It provides tools for listing, adding, updating, and deleting shopping list items through secure Amazon account authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PROXY_PORT": {
+          "description": "Port for the browser login proxy (used during initial authentication)",
+          "type": "string",
+          "default": "3001"
+        },
+        "AMAZON_PAGE": {
+          "description": "Amazon domain to authenticate against",
+          "type": "string",
+          "default": "amazon.com"
+        },
+        "COOKIE_PATH": {
+          "description": "Path to the persisted Alexa authentication cookie",
+          "type": "string",
+          "default": "~/.alexa-mcp/cookie.json"
+        },
+        "ALEXA_COOKIE": {
+          "description": "Pre-seeded cookie JSON (alternative to COOKIE_PATH file)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ws5tkgczpi",
+    "name": "alexa-mcp",
+    "namespace": "GraysonCAdams",
+    "repository": {
+      "url": "https://github.com/GraysonCAdams/alexa-mcp"
+    },
+    "slug": "alexa-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ws5tkgczpi"
+  }
+}

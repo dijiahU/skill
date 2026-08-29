@@ -1,0 +1,297 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "miggie8888/FDN-Pro",
+  "namespace": "miggie8888",
+  "slug": "FDN-Pro",
+  "displayName": "Financial Data Normalizer",
+  "description": "The most complete financial compliance agent in the x402 ecosystem. Combines verified TradFi data (GLEIF LEI, OpenFIGI FIGI), on-chain DeFi normalization, OFAC sanctions screening, and AML pattern detection — all in one pay-per-call agent on Base mainnet.",
+  "discoveryQueries": [
+    "trust",
+    "compliance",
+    "sbom",
+    "siem",
+    "waf",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "4695d691-fae0-4949-9d13-a185fc2a1d7d",
+    "qualifiedName": "miggie8888/FDN-Pro",
+    "namespace": "miggie8888",
+    "slug": "FDN-Pro",
+    "displayName": "Financial Data Normalizer",
+    "description": "The most complete financial compliance agent in the x402 ecosystem. Combines verified TradFi data (GLEIF LEI, OpenFIGI FIGI), on-chain DeFi normalization, OFAC sanctions screening, and AML pattern detection — all in one pay-per-call agent on Base mainnet.",
+    "iconUrl": "https://api.smithery.ai/servers/miggie8888/FDN-Pro/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-26T04:00:41.032Z",
+    "homepage": "https://github.com/miggie8888/Financial-Data-Normalizer-Mainnet",
+    "bySmithery": false,
+    "owner": "org_01KQ3Z170QPDBD04BW26QQSQTZ",
+    "score": 0.008620689655172414
+  },
+  "detail": {
+    "qualifiedName": "miggie8888/FDN-Pro",
+    "displayName": "Financial Data Normalizer",
+    "description": "The most complete financial compliance agent in the x402 ecosystem. Combines verified TradFi data (GLEIF LEI, OpenFIGI FIGI), on-chain DeFi normalization, OFAC sanctions screening, and AML pattern detection — all in one pay-per-call agent on Base mainnet.",
+    "iconUrl": "https://api.smithery.ai/servers/miggie8888/FDN-Pro/icon",
+    "remote": true,
+    "deploymentUrl": "https://financial-data-normalizer.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://financial-data-normalizer.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "normalize_financial_record",
+        "description": "Normalize raw TradFi records into structured JSON. Standardizes dates to ISO 8601, currencies to ISO 4217, infers asset class, flags anomalies. Supports FIX, SWIFT, ISO20022 target schemas.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "raw_record": {
+              "type": "string",
+              "description": "Raw financial record as a JSON string, CSV row, or free text. Example: {\"symbol\":\"AAPL US\",\"qty\":\"500\",\"px\":\"198.42 USD\",\"date\":\"04/10/26\"}"
+            },
+            "record_type": {
+              "enum": [
+                "transaction",
+                "trade",
+                "position",
+                "price_tick",
+                "corporate_action"
+              ],
+              "type": "string",
+              "description": "The category of financial record being normalized."
+            },
+            "target_schema": {
+              "type": "string",
+              "description": "Optional target schema name for output formatting. Supported: FIX, SWIFT, ISO20022."
+            }
+          }
+        }
+      },
+      {
+        "name": "normalize_onchain_transaction",
+        "description": "Normalize a raw on-chain/DeFi transaction into a TradFi-compatible record. Handles EVM tx hashes, DEX swaps (Uniswap, Curve), token transfers, bridges, NFT trades. Returns protocol, asset amounts, USD value estimate, and regulatory field mapping.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "enum": [
+                "ethereum",
+                "base",
+                "arbitrum",
+                "optimism",
+                "polygon",
+                "solana",
+                "bnb"
+              ],
+              "type": "string",
+              "description": "The blockchain network where the transaction occurred."
+            },
+            "raw_tx": {
+              "type": "string",
+              "description": "Raw transaction as a hash string (0x...), JSON tx object, or DEX event log. Example: {\"hash\":\"0x...\",\"from\":\"0x...\",\"to\":\"0xUniswapV3\",\"value\":\"0\"}"
+            },
+            "tx_type": {
+              "enum": [
+                "transfer",
+                "swap",
+                "bridge",
+                "mint",
+                "burn",
+                "stake",
+                "unknown"
+              ],
+              "type": "string",
+              "description": "Optional hint about the transaction type to improve classification accuracy."
+            },
+            "reporting_standard": {
+              "enum": [
+                "MiFID_II",
+                "Dodd-Frank",
+                "EMIR",
+                "generic"
+              ],
+              "type": "string",
+              "description": "Optional target regulatory reporting standard for field mapping in the output."
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_regulatory_fields",
+        "description": "Check a financial record for regulatory completeness under MiFID II, Dodd-Frank, EMIR, or SEC Rule 605. Returns missing and invalid fields with remediation guidance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "record": {
+              "type": "object",
+              "description": "The financial record to validate as a JSON object. Can be a TradFi record or a normalized DeFi transaction."
+            },
+            "regulation": {
+              "enum": [
+                "MiFID_II",
+                "Dodd-Frank",
+                "EMIR",
+                "SEC_Rule_605"
+              ],
+              "type": "string",
+              "description": "The target regulation to validate against. MiFID_II for EU, Dodd-Frank for US swaps, EMIR for EU derivatives, SEC_Rule_605 for US order execution."
+            }
+          }
+        }
+      },
+      {
+        "name": "enrich_counterparty",
+        "description": "Verify a counterparty by legal name against the GLEIF Global LEI Index — the authoritative regulatory database used by central banks worldwide. Returns verified LEI code, jurisdiction, entity status, and registered address. Zero AI tokens on GLEIF hits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "counterparty_name": {
+              "type": "string",
+              "description": "The full legal entity name of the counterparty to look up. Example: Goldman Sachs International"
+            }
+          }
+        }
+      },
+      {
+        "name": "lookup_instrument",
+        "description": "Resolve an ISIN, CUSIP, SEDOL, or ticker symbol to a verified FIGI code, exchange, and security type using the OpenFIGI database. Auto-detects identifier type from format. Zero AI tokens.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id_type": {
+              "enum": [
+                "TICKER",
+                "ID_ISIN",
+                "ID_CUSIP",
+                "ID_SEDOL"
+              ],
+              "type": "string",
+              "description": "Optional: force a specific identifier type. If omitted, the type is auto-detected from the identifier format."
+            },
+            "identifier": {
+              "type": "string",
+              "description": "The instrument identifier to resolve. Accepts ISIN (12 chars, e.g. US0378331005), CUSIP (9 chars), SEDOL (7 chars), or ticker symbol (e.g. AAPL)."
+            }
+          }
+        }
+      },
+      {
+        "name": "resolve_wallet_identity",
+        "description": "Resolve a blockchain wallet address to an entity name, type, and risk context. Identifies known exchange hot wallets, protocol contracts, DAO treasuries, and labeled DeFi addresses. Essential for KYA (Know Your Agent/Address) workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "enum": [
+                "ethereum",
+                "base",
+                "arbitrum",
+                "optimism",
+                "polygon"
+              ],
+              "type": "string",
+              "description": "The blockchain network the address exists on. Defaults to ethereum if not specified."
+            },
+            "address": {
+              "type": "string",
+              "description": "The EVM wallet or contract address to resolve (0x-prefixed hexadecimal). Example: 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            }
+          }
+        }
+      },
+      {
+        "name": "screen_sanctions",
+        "description": "Screen counterparty names and blockchain wallet addresses against the OFAC SDN list, NONSDN Consolidated list, and UN Security Council sanctions in real-time. Uses fuzzy name matching (score 0-100) and native crypto address lookup. Returns match details, sanctions program, and required legal action.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of entity or individual names to screen against sanctions lists. Example: [\"Lazarus Group\", \"Kim Jong Un\"]"
+            },
+            "min_score": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 50,
+              "description": "Minimum fuzzy match confidence score threshold (0-100). Score 85 is recommended for production compliance. Lower values increase sensitivity but may produce false positives."
+            },
+            "wallet_addresses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of blockchain wallet addresses (EVM 0x format) to screen against the OFAC crypto address list. Example: [\"0x098B716B8Aaf21512996dC57EB0615e2383E2f96\"]"
+            }
+          }
+        }
+      },
+      {
+        "name": "detect_aml_patterns",
+        "description": "Analyze a set of financial transactions for Anti-Money Laundering red flags. Detects structuring (CTR threshold avoidance below $10k), smurfing, layering, velocity spikes, round-trip transactions, dormancy activation, and threshold avoidance. Returns risk score, risk level, flagged transactions, and SAR filing recommendation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entity_name": {
+              "type": "string",
+              "description": "Name of the entity being analyzed. Used for context in the pattern analysis and SAR recommendation."
+            },
+            "transactions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique transaction identifier"
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "Receiving account, wallet address, or entity identifier"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Transaction date in ISO 8601 format (YYYY-MM-DD)"
+                  },
+                  "from": {
+                    "type": "string",
+                    "description": "Sending account, wallet address, or entity identifier"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Transaction type (e.g. wire, transfer, swap, deposit)"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "description": "Transaction amount in the specified currency"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "ISO 4217 currency code (e.g. USD, EUR, USDC)"
+                  }
+                }
+              },
+              "description": "List of financial transactions to analyze. Each transaction should include id, amount, currency, date, from, to, and type fields. Accepts TradFi transactions, on-chain transfers, or mixed datasets."
+            },
+            "lookback_days": {
+              "type": "integer",
+              "description": "Analysis window in days. Patterns are evaluated within this time window. Default is 30 days. Use 7 for weekly review, 90 for quarterly."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

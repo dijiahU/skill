@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "a0mg48fsgb",
+  "namespace": "Traia-IO",
+  "slug": "website-scraper-mcp-mcp-server",
+  "name": "Website Scraper MCP Server",
+  "description": "Extracts clean text content and metadata from website URLs using Beautiful Soup through a standardized interface for AI agents. It supports both Bearer token authentication and a blockchain-based pay-per-use protocol for flexible access.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Extracts clean text content and metadata from website URLs using Beautiful Soup through a standardized interface for AI agents. It supports both Bearer token authentication and a blockchain-based pay-per-use protocol for flexible access.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port.",
+          "type": "string",
+          "default": "8000"
+        },
+        "STAGE": {
+          "description": "Environment stage (options: MAINNET, TESTNET).",
+          "type": "string",
+          "default": "MAINNET"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level.",
+          "type": "string",
+          "default": "INFO"
+        },
+        "SERVER_ADDRESS": {
+          "description": "Server's payment address (for HTTP 402 protocol).",
+          "type": "string"
+        },
+        "D402_TESTING_MODE": {
+          "description": "Set to 'true' for local testing without settlement.",
+          "type": "string",
+          "default": "false"
+        },
+        "D402_FACILITATOR_URL": {
+          "description": "Facilitator service URL.",
+          "type": "string"
+        },
+        "MCP_OPERATOR_ADDRESS": {
+          "description": "Operator's public address corresponding to the private key. Required for on-chain settlement in production.",
+          "type": "string"
+        },
+        "WEB_SCRAPPING_API_KEY": {
+          "description": "Your Website Scraper MCP API key (required for server operation and payment mode).",
+          "type": "string"
+        },
+        "D402_FACILITATOR_API_KEY": {
+          "description": "API key for private facilitator.",
+          "type": "string"
+        },
+        "MCP_OPERATOR_PRIVATE_KEY": {
+          "description": "Private key for signing settlement attestations. Required for on-chain settlement in production.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WEB_SCRAPPING_API_KEY",
+        "SERVER_ADDRESS"
+      ]
+    },
+    "id": "a0mg48fsgb",
+    "name": "Website Scraper MCP Server",
+    "namespace": "Traia-IO",
+    "repository": {
+      "url": "https://github.com/Traia-IO/website-scraper-mcp-mcp-server"
+    },
+    "slug": "website-scraper-mcp-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/a0mg48fsgb"
+  }
+}

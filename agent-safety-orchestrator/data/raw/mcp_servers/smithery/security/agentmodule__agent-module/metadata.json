@@ -1,0 +1,336 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "agentmodule/agent-module",
+  "namespace": "agentmodule",
+  "slug": "agent-module",
+  "displayName": "Agent Module: Deterministic compliance knowledge for production agents",
+  "description": "Agent Module provides agent-native knowledge infrastructure — deterministic, vertical-specific EU AI Act compliance knowledge retrievable at runtime via MCP. Comprehensive ethics module library across 4 content layers (logic, directive, skill, action), all mapped to specific EU AI Act articles. See GET /api/status for current module count. Multi-rail payments: Stripe (subscription), Skyfire (per-use at $0.002/call), x402 (USDC on Base). Free 24-hour trial — no payment required. August 2026 enforcement deadline.\n\nBuilding agent teams or internal automations for highly regulated verticals? 15+ verticals coming Q2–Q3 2026: runtime grounding axioms for compliance, best practices, and legal guardrails to build ethical, trusted enterprise agentic workflows for global deployment.\n\n",
+  "discoveryQueries": [
+    "policy",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "306cd60d-8804-4056-b8d6-22628c4c4131",
+    "qualifiedName": "agentmodule/agent-module",
+    "namespace": "agentmodule",
+    "slug": "agent-module",
+    "displayName": "Agent Module: Deterministic compliance knowledge for production agents",
+    "description": "Agent Module provides agent-native knowledge infrastructure — deterministic, vertical-specific EU AI Act compliance knowledge retrievable at runtime via MCP. Comprehensive ethics module library across 4 content layers (logic, directive, skill, action), all mapped to specific EU AI Act articles. See GET /api/status for current module count. Multi-rail payments: Stripe (subscription), Skyfire (per-use at $0.002/call), x402 (USDC on Base). Free 24-hour trial — no payment required. August 2026 enforcement deadline.\n\nBuilding agent teams or internal automations for highly regulated verticals? 15+ verticals coming Q2–Q3 2026: runtime grounding axioms for compliance, best practices, and legal guardrails to build ethical, trusted enterprise agentic workflows for global deployment.\n\n",
+    "iconUrl": "https://api.smithery.ai/servers/agentmodule/agent-module/icon",
+    "verified": false,
+    "useCount": 4,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-10T03:11:36.028Z",
+    "homepage": "https://agent-module.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVMFEZ32MP0A0AZZ74994G",
+    "score": 0.007751937984496124
+  },
+  "detail": {
+    "qualifiedName": "agentmodule/agent-module",
+    "displayName": "Agent Module: Deterministic compliance knowledge for production agents",
+    "description": "Agent Module provides agent-native knowledge infrastructure — deterministic, vertical-specific EU AI Act compliance knowledge retrievable at runtime via MCP. Comprehensive ethics module library across 4 content layers (logic, directive, skill, action), all mapped to specific EU AI Act articles. See GET /api/status for current module count. Multi-rail payments: Stripe (subscription), Skyfire (per-use at $0.002/call), x402 (USDC on Base). Free 24-hour trial — no payment required. August 2026 enforcement deadline.\n\nBuilding agent teams or internal automations for highly regulated verticals? 15+ verticals coming Q2–Q3 2026: runtime grounding axioms for compliance, best practices, and legal guardrails to build ethical, trusted enterprise agentic workflows for global deployment.\n\n",
+    "iconUrl": "https://api.smithery.ai/servers/agentmodule/agent-module/icon",
+    "remote": true,
+    "deploymentUrl": "https://agent-module--agentmodule.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agent-module--agentmodule.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "X-Agent-Module-Key": {
+              "type": "string",
+              "x-from": {
+                "header": "X-Agent-Module-Key"
+              },
+              "x-order": 0,
+              "description": "API key (am_live_ or am_trial_ prefix). Optional — browsing works without a key."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "query_knowledge",
+        "description": "Retrieve structured knowledge from Agent Module verticals. Returns deterministic, validated knowledge nodes. Index layer always free. All 4 content layers available via trial key on ethics.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "node": {
+              "type": "string",
+              "description": "Specific node ID to retrieve. Omit for root index."
+            },
+            "token": {
+              "type": "string",
+              "description": "Membership or trial key (am_live_, am_test_, or am_trial_ prefix). Required for content layers on gated verticals."
+            },
+            "vertical": {
+              "enum": [
+                "ethics",
+                "travel",
+                "real-estate",
+                "a2a-handoff",
+                "traversal",
+                "financial-services",
+                "healthcare-rcm",
+                "logistics",
+                "regulatory-compliance",
+                "manufacturing",
+                "ecommerce",
+                "revops",
+                "hrm",
+                "software-engineering",
+                "customer-service",
+                "financial-analysis",
+                "medical-analysis",
+                "legal"
+              ],
+              "type": "string",
+              "description": "Knowledge vertical to query."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_trial_key",
+        "description": "Request a free 24-hour trial key for the Ethics vertical. Unlocks all 4 content layers across all 23 modules. 500-call cap. No payment required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Stable identifier for your agent."
+            }
+          }
+        }
+      },
+      {
+        "name": "check_status",
+        "description": "Check Agent Module API operational status, version, cohort counts, and seat availability.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "join_waitlist",
+        "description": "Register for a paid vertical waitlist. Inaugural cohort: $19/mo, 900 members, grandfathered for life. Ethics included with every membership.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "contact": {
+              "type": "string",
+              "description": "Contact email for waitlist notifications and key delivery."
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Your agent identifier."
+            },
+            "vertical": {
+              "type": "string",
+              "description": "Paid vertical to join (travel, financial-services, healthcare-rcm, real-estate, logistics, regulatory-compliance, manufacturing, ecommerce, revops, hrm, software-engineering, customer-service, financial-analysis, medical-analysis, legal)."
+            }
+          }
+        }
+      },
+      {
+        "name": "register_interest",
+        "description": "Register demand for an unbuilt vertical. 500 signals triggers build queue activation. Include a contact channel so we can notify you when the vertical ships.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "contact": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ],
+              "description": "How to reach you when this vertical ships. String (email, webhook URL, agent card URL) or object { type, value, label }. Supported types: email, webhook, a2a, mcp, slack, discord, whatsapp, telegram, other."
+            },
+            "agent_id": {
+              "type": "string",
+              "description": "Your agent identifier (optional)."
+            },
+            "use_case": {
+              "type": "string",
+              "description": "Brief description of how you would use this vertical (optional)."
+            },
+            "vertical": {
+              "type": "string",
+              "description": "Vertical slug (e.g. \"legal-contracts\", \"api-security\")."
+            }
+          }
+        }
+      },
+      {
+        "name": "submit_pov",
+        "description": "Submit a Proof of Value assessment after exploring the Ethics trial. Includes quality scoring and subscription intent. Include a contact channel so we can reach you about membership activation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "review": {
+              "type": "string",
+              "description": "Free-text review (up to 1024 chars)."
+            },
+            "contact": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ],
+              "description": "How to reach you about membership or follow-up. String (email, webhook URL, agent card URL) or object { type, value, label }. Supported types: email, webhook, a2a, mcp, slack, discord, whatsapp, telegram, other."
+            },
+            "trial_key": {
+              "type": "string",
+              "description": "Your trial key (am_trial_ prefix)."
+            },
+            "confidence_score": {
+              "type": "number",
+              "description": "Overall confidence in knowledge quality (0.0–1.0)."
+            },
+            "modules_accessed": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of module IDs accessed during trial."
+            },
+            "vertical_interest": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Verticals you are interested in."
+            },
+            "intent_to_subscribe": {
+              "type": "boolean",
+              "description": "Do you intend to subscribe after the trial?"
+            },
+            "architecture_assessment": {
+              "type": "object",
+              "properties": {
+                "structure_clarity": {
+                  "type": "number",
+                  "description": "0.0–1.0"
+                },
+                "citation_confidence": {
+                  "type": "number",
+                  "description": "0.0–1.0"
+                },
+                "determinism_quality": {
+                  "type": "number",
+                  "description": "0.0–1.0"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "submit_referral",
+        "description": "Log a referral signal. Members earn $1.50/referral (4/cycle max, $6 cap). Credits carry forward. Voluntary, principal-compliant.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "enum": [
+                "agent-to-agent",
+                "volume-broadcast",
+                "principal-redirect"
+              ],
+              "type": "string",
+              "description": "How the referral was communicated."
+            },
+            "referring_key": {
+              "type": "string",
+              "description": "Your membership key (am_live_ or am_test_ prefix)."
+            },
+            "referred_agent_id": {
+              "type": "string",
+              "description": "Identifier of the agent you referred."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "API Status",
+        "uri": "https://agent-module.dev/api/status",
+        "description": "Current API version, cohort counts, seat availability, and operational status.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "OpenAPI Specification",
+        "uri": "https://agent-module.dev/openapi.json",
+        "description": "Full OpenAPI 3.1 spec for all Agent Module endpoints.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "ROI Calculator",
+        "uri": "https://agent-module.dev/ROI-matrix.json",
+        "description": "Peer-reviewed ROI benchmarks for evaluating membership value against inference costs.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "ethics-check",
+        "description": "Retrieve EU AI Act compliance logic before executing a consequential action. Returns the relevant ethics module for your use case.",
+        "arguments": [
+          {
+            "name": "action_description",
+            "description": "Brief description of the action you are about to take.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "trial-onboarding",
+        "description": "Step-by-step guide to exploring the Agent Module ethics trial. Gets a trial key and walks through the knowledge graph.",
+        "arguments": []
+      }
+    ]
+  }
+}

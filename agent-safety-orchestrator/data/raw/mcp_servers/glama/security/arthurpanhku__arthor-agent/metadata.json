@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "nsilrbjb4u",
+  "namespace": "arthurpanhku",
+  "slug": "arthor-agent",
+  "name": "Arthor-Agent",
+  "description": "AI agent for security teams: automate assessment of documents, questionnaires & reports. Multi-format parsing, RAG knowledge base, OpenAI/Ollama. Risks, compliance gaps, remediations. MIT.",
+  "discoveryQueries": [
+    "security",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "AI agent for security teams: automate assessment of documents, questionnaires & reports. Multi-format parsing, RAG knowledge base, OpenAI/Ollama. Risks, compliance gaps, remediations. MIT.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LLM_PROVIDER": {
+          "description": "The LLM provider to use. Can be 'ollama' or 'openai'.",
+          "type": "string",
+          "default": "ollama"
+        },
+        "OLLAMA_MODEL": {
+          "description": "The model name to use when LLM_PROVIDER is set to 'ollama'.",
+          "type": "string",
+          "default": "llama2"
+        },
+        "OPENAI_MODEL": {
+          "description": "The model name to use when LLM_PROVIDER is set to 'openai'.",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "The API key required for OpenAI when LLM_PROVIDER is set to 'openai'.",
+          "type": "string"
+        },
+        "OLLAMA_BASE_URL": {
+          "description": "The base URL for the Ollama local LLM backend.",
+          "type": "string",
+          "default": "http://localhost:11434"
+        },
+        "UPLOAD_MAX_FILES": {
+          "description": "The maximum number of files allowed per assessment upload.",
+          "type": "string",
+          "default": "10"
+        },
+        "CHROMA_PERSIST_DIR": {
+          "description": "The absolute or relative path to the directory where the Chroma vector database will persist its data.",
+          "type": "string",
+          "default": "./data/chroma"
+        },
+        "UPLOAD_MAX_FILE_SIZE_MB": {
+          "description": "The maximum allowed file size for document uploads in megabytes.",
+          "type": "string",
+          "default": "50"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "nsilrbjb4u",
+    "name": "Arthor-Agent",
+    "namespace": "arthurpanhku",
+    "repository": {
+      "url": "https://github.com/arthurpanhku/DocSentinel"
+    },
+    "slug": "arthor-agent",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nsilrbjb4u"
+  }
+}

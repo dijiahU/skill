@@ -1,0 +1,123 @@
+{
+  "registry": "glama",
+  "id": "eqvrs610r7",
+  "namespace": "srotzin",
+  "slug": "hivetrust",
+  "name": "hivetrust",
+  "description": "KYA (Know Your Agent) identity, trust scoring, and insurance protocol for autonomous AI agents. Issues verifiable credentials, computes real-time trust scores, and provides agent liability coverage on Base L2.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "KYA (Know Your Agent) identity, trust scoring, and insurance protocol for autonomous AI agents. Issues verifiable credentials, computes real-time trust scores, and provides agent liability coverage on Base L2.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server listen port",
+          "type": "string",
+          "default": "3001"
+        },
+        "DB_PATH": {
+          "description": "SQLite database file path",
+          "type": "string",
+          "default": "data/hivetrust.db"
+        },
+        "NODE_ENV": {
+          "description": "Node environment",
+          "type": "string",
+          "default": "development"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging verbosity",
+          "type": "string",
+          "default": "info"
+        },
+        "BASE_RPC_URL": {
+          "description": "Base L2 RPC endpoint",
+          "type": "string",
+          "default": "https://mainnet.base.org"
+        },
+        "HIVEAGENT_URL": {
+          "description": "HiveAgent platform URL",
+          "type": "string",
+          "default": "https://hiveagentiq.com"
+        },
+        "CDP_API_KEY_ID": {
+          "description": "Coinbase CDP key ID",
+          "type": "string"
+        },
+        "HIVETRUST_HOST": {
+          "description": "Public base URL",
+          "type": "string"
+        },
+        "FEDERATION_PEERS": {
+          "description": "Comma-separated peer URLs",
+          "type": "string"
+        },
+        "FEDERATION_SECRET": {
+          "description": "Shared secret for peer sync",
+          "type": "string"
+        },
+        "CDP_API_KEY_SECRET": {
+          "description": "Coinbase CDP key secret",
+          "type": "string"
+        },
+        "INTERNAL_API_TOKEN": {
+          "description": "Service-to-service auth token",
+          "type": "string"
+        },
+        "INSURANCE_BASE_RATE": {
+          "description": "Base premium as fraction of insured value",
+          "type": "string",
+          "default": "0.015"
+        },
+        "INSURANCE_MIN_SCORE": {
+          "description": "Minimum score for insurance eligibility",
+          "type": "string",
+          "default": "300"
+        },
+        "WEBHOOK_SIGNING_SECRET": {
+          "description": "HMAC secret for webhook payloads",
+          "type": "string"
+        },
+        "COLLATERAL_POOL_ADDRESS": {
+          "description": "USDC escrow contract on Base L2",
+          "type": "string"
+        },
+        "INSURANCE_MAX_COVERAGE_USDC": {
+          "description": "Per-transaction coverage cap",
+          "type": "string",
+          "default": "100000"
+        },
+        "SCORE_REFRESH_INTERVAL_MINUTES": {
+          "description": "Background score recompute frequency",
+          "type": "string",
+          "default": "60"
+        }
+      },
+      "type": "object",
+      "required": [
+        "HIVETRUST_HOST",
+        "INTERNAL_API_TOKEN",
+        "WEBHOOK_SIGNING_SECRET",
+        "CDP_API_KEY_ID",
+        "CDP_API_KEY_SECRET",
+        "COLLATERAL_POOL_ADDRESS",
+        "FEDERATION_SECRET"
+      ]
+    },
+    "id": "eqvrs610r7",
+    "name": "hivetrust",
+    "namespace": "srotzin",
+    "repository": {
+      "url": "https://github.com/srotzin/hivetrust"
+    },
+    "slug": "hivetrust",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/eqvrs610r7"
+  }
+}

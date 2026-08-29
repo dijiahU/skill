@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "b3ez35rqhi",
+  "namespace": "CrBatista",
+  "slug": "mcp-cli-github-integration",
+  "name": "GitHub Integration Hub",
+  "description": "Enables AI agents to interact with GitHub through OAuth-authenticated operations including starting authorization flows, listing repositories, and creating issues using stored access tokens.",
+  "discoveryQueries": [
+    "authorization"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to interact with GitHub through OAuth-authenticated operations including starting authorization flows, listing repositories, and creating issues using stored access tokens.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "The port the server will listen on",
+          "type": "string",
+          "default": "3000"
+        },
+        "DATABASE_FILE": {
+          "description": "The path to the SQLite database file",
+          "type": "string",
+          "default": "./github-integration-hub.db"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "Your GitHub OAuth client ID",
+          "type": "string"
+        },
+        "GITHUB_API_BASE_URL": {
+          "description": "The GitHub API base URL",
+          "type": "string",
+          "default": "https://api.github.com"
+        },
+        "GITHUB_REDIRECT_URI": {
+          "description": "The GitHub OAuth redirect URI (must match the GitHub OAuth app configuration)",
+          "type": "string",
+          "default": "http://localhost:3000/auth/github/callback"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Your GitHub OAuth client secret",
+          "type": "string"
+        },
+        "GITHUB_OAUTH_TOKEN_URL": {
+          "description": "The GitHub OAuth token URL",
+          "type": "string",
+          "default": "https://github.com/login/oauth/access_token"
+        },
+        "GITHUB_OAUTH_AUTHORIZE_URL": {
+          "description": "The GitHub OAuth authorization URL",
+          "type": "string",
+          "default": "https://github.com/login/oauth/authorize"
+        },
+        "GITHUB_INTEGRATION_HUB_BASE_URL": {
+          "description": "The base URL for the GitHub Integration Hub",
+          "type": "string",
+          "default": "http://localhost:3000"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET"
+      ]
+    },
+    "id": "b3ez35rqhi",
+    "name": "GitHub Integration Hub",
+    "namespace": "CrBatista",
+    "repository": {
+      "url": "https://github.com/CrBatista/mcp-cli-github-integration"
+    },
+    "slug": "mcp-cli-github-integration",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b3ez35rqhi"
+  }
+}

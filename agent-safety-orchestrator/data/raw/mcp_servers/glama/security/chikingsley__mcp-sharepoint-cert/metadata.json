@@ -1,0 +1,88 @@
+{
+  "registry": "glama",
+  "id": "gv0fyu6aah",
+  "namespace": "chikingsley",
+  "slug": "mcp-sharepoint-cert",
+  "name": "SharePoint MCP Server (Certificate Auth)",
+  "description": "Enables MCP clients to securely manage Microsoft SharePoint resources like documents and folders using certificate-based authentication without client secrets. It provides 14 tools for file operations, directory management, and metadata updates, including intelligent content extraction for PDF, Word, and Excel files.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables MCP clients to securely manage Microsoft SharePoint resources like documents and folders using certificate-based authentication without client secrets. It provides 14 tools for file operations, directory management, and metadata updates, including intelligent content extraction for PDF, Word, and Excel files.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SHP_ID_APP": {
+          "description": "Azure AD application client ID",
+          "type": "string"
+        },
+        "SHP_SITE_URL": {
+          "description": "SharePoint site URL",
+          "type": "string"
+        },
+        "SHP_CERT_PATH": {
+          "description": "Path to certificate PEM file",
+          "type": "string"
+        },
+        "SHP_MAX_DEPTH": {
+          "description": "Max folder depth for tree operations",
+          "type": "string",
+          "default": "15"
+        },
+        "SHP_TENANT_ID": {
+          "description": "Microsoft tenant ID",
+          "type": "string"
+        },
+        "SHP_BATCH_DELAY": {
+          "description": "Delay between batches (seconds)",
+          "type": "string",
+          "default": "0.1"
+        },
+        "SHP_DOC_LIBRARY": {
+          "description": "Document library path",
+          "type": "string",
+          "default": "Shared Documents"
+        },
+        "SHP_LEVEL_DELAY": {
+          "description": "Delay between levels (seconds)",
+          "type": "string",
+          "default": "0.5"
+        },
+        "SHP_CERT_THUMBPRINT": {
+          "description": "Certificate thumbprint (SHA1)",
+          "type": "string"
+        },
+        "SHP_MAX_FOLDERS_PER_LEVEL": {
+          "description": "Max folders per level",
+          "type": "string",
+          "default": "100"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SHP_ID_APP",
+        "SHP_TENANT_ID",
+        "SHP_SITE_URL",
+        "SHP_DOC_LIBRARY",
+        "SHP_CERT_PATH",
+        "SHP_CERT_THUMBPRINT"
+      ]
+    },
+    "id": "gv0fyu6aah",
+    "name": "SharePoint MCP Server (Certificate Auth)",
+    "namespace": "chikingsley",
+    "repository": {
+      "url": "https://github.com/peacockery-studio/mcp-sharepoint-cert"
+    },
+    "slug": "mcp-sharepoint-cert",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gv0fyu6aah"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "jp66qraijs",
+  "namespace": "bill-kopp-ai-dev",
+  "slug": "percival-deep-research",
+  "name": "Percival Deep Research",
+  "description": "An MCP server that provides autonomous, multi-source web research capabilities for AI agents. It delivers comprehensive, validated information through deep research tools while maintaining security and compatibility with various LLM providers.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that provides autonomous, multi-source web research capabilities for AI agents. It delivers comprehensive, validated information through deep research tools while maintaining security and compatibility with various LLM providers.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FAST_LLM": {
+          "description": "Model identifier for the fast LLM, must be prefixed with 'openai:', e.g., 'openai:e2ee-qwen-2-5-7b-p'.",
+          "type": "string"
+        },
+        "RETRIEVER": {
+          "description": "Web search engine to use, e.g., 'duckduckgo' (default, no API key required).",
+          "type": "string"
+        },
+        "SMART_LLM": {
+          "description": "Model identifier for the smart LLM, must be prefixed with 'openai:', e.g., 'openai:minimax-m27'.",
+          "type": "string"
+        },
+        "STRATEGIC_LLM": {
+          "description": "Model identifier for the strategic LLM, must be prefixed with 'openai:', e.g., 'openai:zai-org-glm-4.7-flash'.",
+          "type": "string"
+        },
+        "OPENAI_API_KEY": {
+          "description": "API key for the Generative LLM Provider (e.g., Venice, MiniMax, OpenRouter).",
+          "type": "string"
+        },
+        "OPENAI_BASE_URL": {
+          "description": "Base URL for the LLM provider API, e.g., https://api.venice.ai/api/v1.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OPENAI_API_KEY",
+        "OPENAI_BASE_URL",
+        "FAST_LLM",
+        "RETRIEVER"
+      ]
+    },
+    "id": "jp66qraijs",
+    "name": "Percival Deep Research",
+    "namespace": "bill-kopp-ai-dev",
+    "repository": {
+      "url": "https://github.com/bill-kopp-ai-dev/percival-deep-research"
+    },
+    "slug": "percival-deep-research",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jp66qraijs"
+  }
+}

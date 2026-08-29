@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "liku0jsf81",
+  "namespace": "HCF-S",
+  "slug": "amikonet-signer-mcp-server",
+  "name": "AmikoNet Signer MCP Server",
+  "description": "A secure local DID signer for AmikoNet that manages private keys and creates cryptographic signatures for decentralized authentication. Supports Ed25519, Solana, and EVM chains while ensuring private keys never leave your local machine.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A secure local DID signer for AmikoNet that manages private keys and creates cryptographic signatures for decentralized authentication. Supports Ed25519, Solana, and EVM chains while ensuring private keys never leave your local machine.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AGENT_DID": {
+          "description": "Your DID (Decentralized Identifier) - generic format that auto-detects provider",
+          "type": "string"
+        },
+        "AGENT_EVM_DID": {
+          "description": "Your EVM/Ethereum DID (e.g., did:ethr:0x... or did:pkh:eip155:... or raw Ethereum address)",
+          "type": "string"
+        },
+        "AGENT_SOLANA_DID": {
+          "description": "Your Solana DID (e.g., did:pkh:solana:... or raw Solana address)",
+          "type": "string"
+        },
+        "AGENT_PRIVATE_KEY": {
+          "description": "Your private key corresponding to AGENT_DID - format depends on DID type",
+          "type": "string"
+        },
+        "AGENT_EVM_PRIVATE_KEY": {
+          "description": "Your EVM/Ethereum private key in hex format (with or without 0x prefix)",
+          "type": "string"
+        },
+        "AGENT_SOLANA_PRIVATE_KEY": {
+          "description": "Your Solana private key in Base58 format",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "AGENT_DID",
+            "AGENT_PRIVATE_KEY"
+          ]
+        },
+        {
+          "required": [
+            "AGENT_SOLANA_DID",
+            "AGENT_SOLANA_PRIVATE_KEY"
+          ]
+        },
+        {
+          "required": [
+            "AGENT_EVM_DID",
+            "AGENT_EVM_PRIVATE_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "liku0jsf81",
+    "name": "AmikoNet Signer MCP Server",
+    "namespace": "HCF-S",
+    "repository": {
+      "url": "https://github.com/HCF-S/amikonet-signer-mcp-server"
+    },
+    "slug": "amikonet-signer-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/liku0jsf81"
+  }
+}

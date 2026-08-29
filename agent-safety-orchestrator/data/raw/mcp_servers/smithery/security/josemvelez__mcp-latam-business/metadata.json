@@ -1,0 +1,1420 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "josemvelez/mcp-latam-business",
+  "namespace": "josemvelez",
+  "slug": "mcp-latam-business",
+  "displayName": "LatAm Business Tools",
+  "description": "Latin American business compliance suite — 28 tools for AI agents covering tax ID validation, banking, VAT, e-invoicing, and labor calendar across **Brazil, Mexico, Chile, Argentina, and Colombia**.\n\n## Coverage\n\n- 🇧🇷 **Brazil** — CPF, CNPJ, PIX keys, NF-e/NF-C/NFS-e\n- 🇲🇽 **Mexico** — RFC, CLABE, CFDI 4.0\n- 🇨🇱 **Chile** — RUT, DTE\n- 🇦🇷 **Argentina** — CUIT, CUIL, CBU, Factura Electrónica\n- 🇨🇴 **Colombia** — NIT, CC, Factura Electrónica\n\n## 28 tools across 4 modules\n\n- **Validation (17)** — Tax IDs, bank accounts, postal codes, holidays\n- **Business Rules (4)** — Payment terms, invoice requirements, VAT rules, e-invoicing obligations\n- **Labor Helpers (3)** — Working days, public holidays in range, next payment date\n- **Invoice & VAT (4)** — Schema validation, VAT breakdown, treatment suggestion, amount calculation\n\nNo auth, read-only, offline. Reference data only — not legal advice.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "cabd1612-80d2-4969-833a-4de950c50fa0",
+    "qualifiedName": "josemvelez/mcp-latam-business",
+    "namespace": "josemvelez",
+    "slug": "mcp-latam-business",
+    "displayName": "LatAm Business Tools",
+    "description": "Latin American business compliance suite — 28 tools for AI agents covering tax ID validation, banking, VAT, e-invoicing, and labor calendar across **Brazil, Mexico, Chile, Argentina, and Colombia**.\n\n## Coverage\n\n- 🇧🇷 **Brazil** — CPF, CNPJ, PIX keys, NF-e/NF-C/NFS-e\n- 🇲🇽 **Mexico** — RFC, CLABE, CFDI 4.0\n- 🇨🇱 **Chile** — RUT, DTE\n- 🇦🇷 **Argentina** — CUIT, CUIL, CBU, Factura Electrónica\n- 🇨🇴 **Colombia** — NIT, CC, Factura Electrónica\n\n## 28 tools across 4 modules\n\n- **Validation (17)** — Tax IDs, bank accounts, postal codes, holidays\n- **Business Rules (4)** — Payment terms, invoice requirements, VAT rules, e-invoicing obligations\n- **Labor Helpers (3)** — Working days, public holidays in range, next payment date\n- **Invoice & VAT (4)** — Schema validation, VAT breakdown, treatment suggestion, amount calculation\n\nNo auth, read-only, offline. Reference data only — not legal advice.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-03T16:39:11.897Z",
+    "homepage": "https://github.com/josemvelez78/mcp-latam-business",
+    "bySmithery": false,
+    "owner": "org_01KPP9KKJMQAJEXHHWY185P02F",
+    "score": 0.029487179487179487
+  },
+  "detail": {
+    "qualifiedName": "josemvelez/mcp-latam-business",
+    "displayName": "LatAm Business Tools",
+    "description": "Latin American business compliance suite — 28 tools for AI agents covering tax ID validation, banking, VAT, e-invoicing, and labor calendar across **Brazil, Mexico, Chile, Argentina, and Colombia**.\n\n## Coverage\n\n- 🇧🇷 **Brazil** — CPF, CNPJ, PIX keys, NF-e/NF-C/NFS-e\n- 🇲🇽 **Mexico** — RFC, CLABE, CFDI 4.0\n- 🇨🇱 **Chile** — RUT, DTE\n- 🇦🇷 **Argentina** — CUIT, CUIL, CBU, Factura Electrónica\n- 🇨🇴 **Colombia** — NIT, CC, Factura Electrónica\n\n## 28 tools across 4 modules\n\n- **Validation (17)** — Tax IDs, bank accounts, postal codes, holidays\n- **Business Rules (4)** — Payment terms, invoice requirements, VAT rules, e-invoicing obligations\n- **Labor Helpers (3)** — Working days, public holidays in range, next payment date\n- **Invoice & VAT (4)** — Schema validation, VAT breakdown, treatment suggestion, amount calculation\n\nNo auth, read-only, offline. Reference data only — not legal advice.",
+    "iconUrl": "https://api.smithery.ai/servers/josemvelez/mcp-latam-business/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcp-latam-business--josemvelez.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-latam-business--josemvelez.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "validate_cpf",
+        "description": "Validates a Brazilian CPF (Cadastro de Pessoas Físicas) — the 11-digit individual taxpayer identification number issued by the Receita Federal. Applies the official two-pass modulo-11 checksum algorithm. Returns { valid: boolean, cpf: string } for valid CPFs, or { valid: false, reason: string } for invalid format or failed checksum. Rejects known invalid sequences (all same digits). Use when processing Brazilian e-commerce orders, fintech onboarding, KYC flows, or any compliance workflow requiring a verified Brazilian individual tax ID. Offline validation only — does not query Receita Federal.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cpf": {
+              "type": "string",
+              "description": "11-digit Brazilian CPF, with or without formatting. Example: '123.456.789-09' or '12345678909'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "cpf": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_cnpj",
+        "description": "Validates a Brazilian CNPJ (Cadastro Nacional da Pessoa Jurídica) — the 14-digit company registration number issued by the Receita Federal. Applies the official two-pass weighted checksum algorithm. Returns { valid: boolean, cnpj: string } for valid CNPJs, or { valid: false, reason: string } for invalid format or failed checksum. Use when processing Brazilian B2B invoices (Notas Fiscais), supplier onboarding, or any compliance workflow requiring a verified Brazilian company tax ID. Offline validation only.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "14-digit Brazilian CNPJ, with or without formatting. Example: '11.222.333/0001-81' or '11222333000181'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_pix_key",
+        "description": "Validates a Brazilian PIX key — the instant payment identifier used by Brazil's central bank payment system (Banco Central do Brasil). Supports all 4 PIX key types: CPF (11 digits), CNPJ (14 digits), email address, phone number (+55 format), and EVP (random UUID key). Returns { valid: boolean, type: 'cpf'|'cnpj'|'email'|'phone'|'evp', key: string } or { valid: false, reason: string }. Use when processing PIX transfers, validating payment recipients, or building Brazilian payment flows in AI agents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "PIX key to validate. Can be CPF, CNPJ, email, phone (+5511999999999) or EVP UUID. Example: 'user@email.com' or '+5511987654321'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "cpf",
+                "cnpj",
+                "email",
+                "phone",
+                "evp"
+              ],
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_brazil_holidays",
+        "description": "Returns all Brazilian national public holidays for a given year as a structured list. Each holiday includes { date: 'YYYY-MM-DD', name: string, name_en: string }. Moveable holidays (Carnival, Good Friday, Corpus Christi) are dynamically calculated using the Easter algorithm. Returns 12 national holidays defined by Brazilian federal law. Use when calculating business deadlines, invoice payment dates, SLA periods, or scheduling tasks that must avoid non-working days in Brazil.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "validate_rfc_mx",
+        "description": "Validates a Mexican RFC (Registro Federal de Contribuyentes) — the tax identification number issued by the SAT (Servicio de Administración Tributaria). Validates format for both individuals (13 characters: 4 letters + 6 digit date + 3 alphanumeric homoclave) and companies (12 characters: 3 letters + 6 digit date + 3 alphanumeric homoclave). Returns { valid: boolean, type: 'individual'|'company', rfc: string } or { valid: false, reason: string }. Use when processing Mexican CFDI invoices, supplier registration, or any Mexican tax compliance workflow.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rfc": {
+              "type": "string",
+              "description": "Mexican RFC with or without spaces. Example: 'ABCD850101ABC' (individual) or 'ABC850101AB1' (company)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "rfc": {
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "individual",
+                "company"
+              ],
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_mexico_holidays",
+        "description": "Returns all Mexican national public holidays for a given year as a structured list. Each holiday includes { date: 'YYYY-MM-DD', name: string, name_en: string }. Moveable holidays (Constitution Day, President's Day, Revolution Day) follow the Mexican Monday rule (primer lunes de febrero/tercer lunes de noviembre). Returns 9 mandatory national holidays defined by Mexican law. Use when calculating Mexican business deadlines, CFDI payment dates, or scheduling tasks that must avoid non-working days in Mexico.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "validate_rut_cl",
+        "description": "Validates a Chilean RUT (Rol Único Tributario) — the tax identification number used by individuals and companies in Chile, issued by the SII (Servicio de Impuestos Internos). Applies the official modulo-11 checksum algorithm with check digit 'K' support. Returns { valid: boolean, rut: string, check_digit: string } or { valid: false, reason: string }. Use when processing Chilean DTE electronic invoices, supplier registration, or any Chilean tax compliance workflow. Accepts formats with or without dots and dash.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rut": {
+              "type": "string",
+              "description": "Chilean RUT with or without formatting. Example: '12.345.678-9' or '12345678-9' or '123456789'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "rut": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "check_digit": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_chile_holidays",
+        "description": "Returns all Chilean national public holidays for a given year as a structured list. Each holiday includes { date: 'YYYY-MM-DD', name: string, name_en: string }. Easter-dependent holidays (Good Friday, Holy Saturday) are dynamically calculated. Returns 16 mandatory national holidays defined by Chilean law. Use when calculating Chilean business deadlines, DTE invoice dates, or scheduling tasks that must avoid non-working days in Chile.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "validate_cuit",
+        "description": "Validates an Argentine CUIT (Código Único de Identificación Tributaria) — the tax identification number for companies, self-employed workers, and legal entities in Argentina, issued by AFIP (Administración Federal de Ingresos Públicos). Applies the official weighted modulo-11 checksum algorithm. Returns { valid: boolean, cuit: string, type: string } or { valid: false, reason: string }. CUIT prefix identifies entity type: 20/23/24/27 for individuals, 30/33/34 for companies. Use when processing Argentine invoices, supplier registration, or AFIP compliance workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cuit": {
+              "type": "string",
+              "description": "Argentine CUIT with or without formatting. Example: '20-12345678-9' or '20123456789'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "cuit": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_cuil",
+        "description": "Validates an Argentine CUIL (Código Único de Identificación Laboral) — the labor identification number for individuals in Argentina, used for employment records and social security (ANSES). Uses the same weighted modulo-11 checksum as CUIT. Returns { valid: boolean, cuil: string } or { valid: false, reason: string }. Use when processing Argentine payroll, employment contracts, or any social security compliance workflow.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cuil": {
+              "type": "string",
+              "description": "Argentine CUIL with or without formatting. Example: '20-12345678-9' or '20123456789'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "cuil": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_argentina_holidays",
+        "description": "Returns all Argentine national public holidays for a given year as a structured list. Each holiday includes { date: 'YYYY-MM-DD', name: string, name_en: string }. Moveable holidays (Carnival, Good Friday) are dynamically calculated. Returns 15 national holidays defined by Argentine law. Use when calculating Argentine business deadlines, invoice payment dates, or scheduling tasks that must avoid non-working days in Argentina.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "validate_nit_co",
+        "description": "Validates a Colombian NIT (Número de Identificación Tributaria) — the tax identification number for companies and legal entities in Colombia, issued by the DIAN (Dirección de Impuestos y Aduanas Nacionales). Applies the official weighted modulo-11 checksum algorithm with the DIAN verification digit. Returns { valid: boolean, nit: string, verification_digit: string } or { valid: false, reason: string }. Use when processing Colombian electronic invoices (factura electrónica), supplier registration, or DIAN compliance workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "nit": {
+              "type": "string",
+              "description": "Colombian NIT with or without verification digit. Example: '900123456-7' or '9001234567'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "nit": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "verification_digit": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_cc_co",
+        "description": "Validates the format of a Colombian Cédula de Ciudadanía (CC) — the national identity document for Colombian citizens. Verifies that the number is between 6 and 10 digits as required by the Registraduría Nacional. Returns { valid: boolean, cc: string } or { valid: false, reason: string }. Use when processing Colombian individual tax filings, employment contracts, or KYC onboarding flows requiring a verified Colombian citizen ID. Note: checksum validation is not publicly available for CC numbers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cc": {
+              "type": "string",
+              "description": "Colombian Cédula de Ciudadanía number. Example: '1234567890'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "cc": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_clabe_mx",
+        "description": "Validates a Mexican CLABE (Clave Bancaria Estandarizada) — the 18-digit standardized bank account number used for electronic transfers in Mexico, as defined by BANXICO (Banco de México). Applies the official weighted modulo-10 checksum algorithm (weights: 3,7,1 repeating). Returns { valid: boolean, clabe: string, bank_code: string, city_code: string } or { valid: false, reason: string }. Use when processing Mexican wire transfers, validating supplier bank accounts, or building Mexican payment flows in AI agents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "clabe": {
+              "type": "string",
+              "description": "18-digit Mexican CLABE bank account number. Example: '032180000118359719'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "clabe": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "bank_code": {
+              "type": "string"
+            },
+            "city_code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "validate_cbu_ar",
+        "description": "Validates an Argentine CBU (Clave Bancaria Uniforme) — the 22-digit standardized bank account identifier used for electronic transfers in Argentina, as defined by BCRA (Banco Central de la República Argentina). Applies the official weighted modulo-10 checksum algorithm validated in two blocks: the 8-digit bank/branch block and the 14-digit account block. Returns { valid: boolean, cbu: string, bank_code: string } or { valid: false, reason: string }. Use when processing Argentine wire transfers, validating supplier bank accounts, or building Argentine payment flows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cbu": {
+              "type": "string",
+              "description": "22-digit Argentine CBU bank account number. Example: '0720309988000019834160'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "cbu": {
+              "type": "string"
+            },
+            "valid": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "bank_code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_colombia_holidays",
+        "description": "Returns all Colombian national public holidays for a given year as a structured list. Each holiday includes { date: 'YYYY-MM-DD', name: string, name_en: string }. Colombia uses the 'Ley de Puentes' (Law 51/1983) which moves most holidays to the following Monday. Easter-dependent holidays are dynamically calculated. Returns 18 national holidays defined by Colombian law. Use when calculating Colombian business deadlines, factura electrónica payment dates, or scheduling tasks avoiding non-working days in Colombia.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "Calendar year as a 4-digit integer. Example: 2026"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "year",
+            "country",
+            "total_holidays",
+            "holidays"
+          ]
+        }
+      },
+      {
+        "name": "validate_postal_code_latam",
+        "description": "Validates a postal code format for a given Latin American country using the official pattern for that country. Returns { valid: boolean, postal_code: string, country: string, format: string }. Supports BR (8-digit CEP), MX (5-digit CP), CL (7-digit with dash), AR (4-digit legacy or CPA alphanumeric), CO (6-digit). Use in e-commerce checkout validation, address verification, or logistics workflows across LatAm markets.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "postal_code": {
+              "type": "string",
+              "description": "Postal code to validate. Example: '01310-100' for BR, '06600' for MX, '8320000' for CL"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL', 'AR', 'CO'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "format": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "get_payment_terms_latam",
+        "description": "Returns the typical and legal B2B payment terms for a given Latin American country — default payment period, common commercial practices, and late payment rules where defined by law. Returns { country, default_days, common_terms, late_payment_notes, currency, notes }. Supports BR, MX, CL, AR, CO. Use when generating invoices, setting payment due dates, or automating accounts receivable workflows in LatAm markets. Information provided as reference only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "common_terms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "default_days": {
+              "type": "number"
+            },
+            "late_payment_notes": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_invoice_requirements_latam",
+        "description": "Returns the mandatory fields required on a valid electronic invoice for a given Latin American country, based on official tax authority requirements. Returns { country, invoice_type, mandatory_fields: [], electronic_system, notes }. Covers NF-e/NF-C (Brazil), CFDI 4.0 (Mexico), DTE (Chile), Factura Electrónica (Argentina/Colombia). Use when generating invoices for LatAm customers, validating invoice templates, or building invoice compliance checks in agent workflows. Information provided as reference only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL', 'AR', 'CO'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "invoice_type": {
+              "type": "string"
+            },
+            "mandatory_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "electronic_system": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_vat_rules_latam",
+        "description": "Returns all VAT/IVA rules for a given Latin American country — standard rate, reduced rates, exempt categories, withholding rules, and special regimes. Returns { country, standard_rate, reduced_rates, exempt_categories, withholding, special_regimes, currency, notes }. Supports BR, MX, CL, AR, CO. Brazil returns ICMS/ISS/PIS/COFINS structure. Use when calculating LatAm invoice taxes, determining correct rate for e-commerce checkout, or building tax compliance workflows. Information provided as reference only — not legal or tax advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL', 'AR', 'CO'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "withholding": {
+              "type": "string"
+            },
+            "reduced_rates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "standard_rate": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "special_regimes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exempt_categories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "get_einvoicing_rules_latam",
+        "description": "Returns the current e-invoicing (electronic invoicing) obligations for a given Latin American country — whether mandatory for B2B/B2G/B2C, the electronic system used, required formats, and key compliance notes. Returns { country, b2b_mandatory, b2g_mandatory, b2c_mandatory, system, formats, mandatory_since, notes }. Supports BR, MX, CL, AR, CO. Use when building invoice generation systems, determining compliance requirements for LatAm customers, or automating invoice submission workflows.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL', 'AR', 'CO'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "system": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "formats": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "b2b_mandatory": {
+              "type": "boolean"
+            },
+            "b2c_mandatory": {
+              "type": "boolean"
+            },
+            "b2g_mandatory": {
+              "type": "boolean"
+            },
+            "mandatory_since": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_public_holidays_range_latam",
+        "description": "Returns all public holidays that fall within a given date range for a specified Latin American country. Returns { country, start_date, end_date, total_holidays, holidays: [{date, name, name_en}] }. Supports BR, MX, CL, AR, CO. Use when calculating SLA periods, project timelines, delivery windows, or any workflow that must skip non-working days across LatAm countries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "type": "string",
+              "description": "End date in YYYY-MM-DD format. Example: '2026-12-31'"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in YYYY-MM-DD format. Example: '2026-01-01'"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "end_date": {
+              "type": "string"
+            },
+            "holidays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "name",
+                  "name_en"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "start_date": {
+              "type": "string"
+            },
+            "total_holidays": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "calculate_working_days_latam",
+        "description": "Counts the number of working days between two dates (inclusive) for a given Latin American country, excluding weekends and that country's national public holidays (including moveable Easter-based holidays). Returns { country, start_date, end_date, working_days, holidays_excluded }. Supports BR, MX, CL, AR, CO. Use when calculating cross-border SLA periods, invoice payment deadlines, or project timelines that must account for different national holiday calendars across LatAm.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end_date": {
+              "type": "string",
+              "description": "End date in YYYY-MM-DD format, inclusive. Example: '2026-01-31'"
+            },
+            "start_date": {
+              "type": "string",
+              "description": "Start date in YYYY-MM-DD format, inclusive. Example: '2026-01-01'"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CO'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "end_date": {
+              "type": "string"
+            },
+            "start_date": {
+              "type": "string"
+            },
+            "working_days": {
+              "type": "number"
+            },
+            "holidays_excluded": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_next_payment_date_latam",
+        "description": "Calculates the next valid payment date for a given Latin American country, skipping weekends and national public holidays (fixed and moveable Easter-based). Supports rules: 'last_working_day_of_month' (salary payment in BR/AR), 'first_working_day_of_month', 'nth_working_day' (e.g. 5th working day for BR salary), 'next_working_day'. Returns { country, reference_date, rule, result_date }. Use when scheduling salary payments, NF-e/CFDI payment due dates, or any automated payment workflow that must avoid non-working days in LatAm.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "number",
+              "description": "For nth_working_day rule: which working day of the month. Example: 5 for 5th working day."
+            },
+            "rule": {
+              "enum": [
+                "last_working_day_of_month",
+                "first_working_day_of_month",
+                "next_working_day",
+                "nth_working_day"
+              ],
+              "type": "string",
+              "description": "Payment rule to apply."
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CO'"
+            },
+            "reference_date": {
+              "type": "string",
+              "description": "Reference date in YYYY-MM-DD format. Example: '2026-01-31'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rule": {
+              "type": "string"
+            },
+            "error": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "result_date": {
+              "type": "string"
+            },
+            "reference_date": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_invoice_schema_latam",
+        "description": "Validates whether an invoice JSON object contains the mandatory fields required for a valid electronic invoice in a given Latin American country, based on official tax authority requirements (SEFAZ, SAT, SII, AFIP, DIAN). Returns { valid: boolean, country, missing_fields: [], present_fields: [], warnings: [] }. Use when building invoice generation pipelines, pre-submission validation, or compliance checks in agent workflows. Information is reference only — not legal advice.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "invoice": {
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "subtotal": {
+                  "type": "number"
+                },
+                "line_items": {
+                  "type": "array"
+                },
+                "tax_amount": {
+                  "type": "number"
+                },
+                "invoice_date": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "supplier_name": {
+                  "type": "string"
+                },
+                "electronic_key": {
+                  "type": "string"
+                },
+                "invoice_number": {
+                  "type": "string"
+                },
+                "payment_method": {
+                  "type": "string"
+                },
+                "customer_tax_id": {
+                  "type": "string"
+                },
+                "supplier_tax_id": {
+                  "type": "string"
+                }
+              },
+              "description": "Invoice object to validate",
+              "additionalProperties": false
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL', 'AR', 'CO'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "country": {
+              "type": "string"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "missing_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "present_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "valid"
+          ]
+        }
+      },
+      {
+        "name": "calculate_vat_breakdown_latam",
+        "description": "Calculates a VAT/IVA breakdown for invoice line items in a given Latin American country, grouping amounts by tax rate and computing totals. For Brazil, returns ICMS, PIS, COFINS breakdown. For Mexico, returns IVA breakdown. For Chile/Argentina/Colombia, returns IVA breakdown. Returns { country, lines_summary, tax_breakdown, subtotal, total_tax, total }. Each line item requires { description, quantity, unit_price, tax_rate }.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "unit_price",
+                  "tax_rate"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "number",
+                    "description": "Quantity"
+                  },
+                  "tax_rate": {
+                    "type": "number",
+                    "description": "Tax rate as percentage. Example: 16 for 16% IVA (Mexico) or 19 for 19% IVA (Chile)"
+                  },
+                  "unit_price": {
+                    "type": "number",
+                    "description": "Unit price excluding tax"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Item description"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Array of invoice line items"
+            },
+            "currency": {
+              "type": "string",
+              "description": "Currency code. Example: 'BRL', 'MXN', 'CLP'. Defaults to country currency."
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code. Example: 'BR', 'MX', 'CL'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "number"
+            },
+            "country": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "subtotal": {
+              "type": "number"
+            },
+            "total_tax": {
+              "type": "number"
+            },
+            "lines_summary": {
+              "type": "array"
+            },
+            "tax_breakdown": {
+              "type": "array"
+            }
+          },
+          "required": [
+            "country",
+            "currency",
+            "lines_summary",
+            "tax_breakdown",
+            "subtotal",
+            "total_tax",
+            "total"
+          ]
+        }
+      },
+      {
+        "name": "suggest_vat_treatment_latam",
+        "description": "Suggests the likely VAT/IVA treatment for a transaction in Latin American markets based on seller country, buyer country, buyer tax registration status, and operation type. Covers domestic transactions, exports (zero-rated), imports, and cross-border services. Returns { treatment, description, seller_charges_tax, applicable_rate, notes, disclaimer }. Use when building checkout tax logic, invoice generation, or cross-border LatAm compliance workflows. Always verify with a tax advisor for real transactions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "buyer_country": {
+              "type": "string",
+              "description": "Buyer's country ISO code. Example: 'CL', 'CO'"
+            },
+            "operation_type": {
+              "enum": [
+                "goods",
+                "services",
+                "digital_services"
+              ],
+              "type": "string",
+              "description": "Type of supply"
+            },
+            "seller_country": {
+              "type": "string",
+              "description": "Seller's country ISO code. Example: 'BR', 'MX'"
+            },
+            "buyer_is_tax_registered": {
+              "type": "boolean",
+              "description": "Whether the buyer is tax registered (B2B) or not (B2C)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "notes": {
+              "type": "string"
+            },
+            "treatment": {
+              "type": "string"
+            },
+            "disclaimer": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "buyer_country": {
+              "type": "string"
+            },
+            "operation_type": {
+              "type": "string"
+            },
+            "seller_country": {
+              "type": "string"
+            },
+            "applicable_rate": {
+              "type": "string"
+            },
+            "seller_charges_tax": {
+              "type": "boolean"
+            },
+            "buyer_is_tax_registered": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "treatment",
+            "description",
+            "seller_charges_tax",
+            "applicable_rate",
+            "seller_country",
+            "buyer_country",
+            "buyer_is_tax_registered",
+            "operation_type",
+            "notes",
+            "disclaimer"
+          ]
+        }
+      },
+      {
+        "name": "calculate_vat_amount_latam",
+        "description": "Calculates tax amounts from either a net (excluding tax) or gross (including tax) amount for a given tax rate, with country context for currency and tax label. Returns { country, net_amount, tax_amount, gross_amount, tax_rate, tax_label, currency }. Use when building pricing tools, invoice calculators, or checkout flows across LatAm markets that need to split gross prices into net + tax components.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "description": "The amount to calculate tax for"
+            },
+            "currency": {
+              "type": "string",
+              "description": "Override currency. Defaults to country currency."
+            },
+            "tax_rate": {
+              "type": "number",
+              "description": "Tax rate as a percentage. Example: 16 for 16% IVA (Mexico) or 19 for 19% IVA (Chile)"
+            },
+            "amount_type": {
+              "enum": [
+                "net",
+                "gross"
+              ],
+              "type": "string",
+              "description": "Whether the input amount is net (excluding tax) or gross (including tax)"
+            },
+            "country_code": {
+              "type": "string",
+              "description": "Two-letter ISO country code for currency and context. Example: 'BR', 'MX', 'CL'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "tax_rate": {
+              "type": "number"
+            },
+            "tax_label": {
+              "type": "string"
+            },
+            "net_amount": {
+              "type": "number"
+            },
+            "tax_amount": {
+              "type": "number"
+            },
+            "gross_amount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "country",
+            "net_amount",
+            "tax_amount",
+            "gross_amount",
+            "tax_rate",
+            "tax_label",
+            "currency"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

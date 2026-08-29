@@ -1,0 +1,90 @@
+{
+  "registry": "glama",
+  "id": "x53yscyjxd",
+  "namespace": "thomastx05",
+  "slug": "magento-mcp",
+  "name": "Magento MCP Server",
+  "description": "Enables AI assistants to manage Adobe Commerce and Magento 2 instances through business-level tools for catalog, promotions, CMS, and SEO. It features secure OAuth 1.0 authentication, safety guardrails for bulk operations, and built-in diagnostic reports for store health.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to manage Adobe Commerce and Magento 2 instances through business-level tools for catalog, promotions, CMS, and SEO. It features secure OAuth 1.0 authentication, safety guardrails for bulk operations, and built-in diagnostic reports for store health.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FASTLY_API_TOKEN": {
+          "description": "Optional: Fastly API token for cache purging.",
+          "type": "string"
+        },
+        "MAGENTO_BASE_URL": {
+          "description": "The base URL of your Magento 2 / Adobe Commerce instance (e.g., https://your-magento-instance.com).",
+          "type": "string"
+        },
+        "FASTLY_SERVICE_ID": {
+          "description": "Optional: Fastly Service ID for targeted cache invalidation.",
+          "type": "string"
+        },
+        "MAGENTO_OAUTH_TOKEN": {
+          "description": "OAuth 1.0 Access Token from Magento Integration setup.",
+          "type": "string"
+        },
+        "MAGENTO_ADMIN_PASSWORD": {
+          "description": "Magento admin password (alternative to OAuth auth).",
+          "type": "string"
+        },
+        "MAGENTO_ADMIN_USERNAME": {
+          "description": "Magento admin username (alternative to OAuth auth).",
+          "type": "string"
+        },
+        "MAGENTO_OAUTH_CONSUMER_KEY": {
+          "description": "OAuth 1.0 Consumer Key from Magento Integration setup.",
+          "type": "string"
+        },
+        "MAGENTO_OAUTH_TOKEN_SECRET": {
+          "description": "OAuth 1.0 Access Token Secret from Magento Integration setup.",
+          "type": "string"
+        },
+        "MAGENTO_OAUTH_CONSUMER_SECRET": {
+          "description": "OAuth 1.0 Consumer Secret from Magento Integration setup.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MAGENTO_OAUTH_CONSUMER_KEY",
+            "MAGENTO_OAUTH_CONSUMER_SECRET",
+            "MAGENTO_OAUTH_TOKEN",
+            "MAGENTO_OAUTH_TOKEN_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "MAGENTO_ADMIN_USERNAME",
+            "MAGENTO_ADMIN_PASSWORD"
+          ]
+        }
+      ],
+      "required": [
+        "MAGENTO_BASE_URL"
+      ]
+    },
+    "id": "x53yscyjxd",
+    "name": "Magento MCP Server",
+    "namespace": "thomastx05",
+    "repository": {
+      "url": "https://github.com/thomastx05/magento-mcp"
+    },
+    "slug": "magento-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/x53yscyjxd"
+  }
+}

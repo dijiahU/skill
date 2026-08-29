@@ -1,0 +1,87 @@
+{
+  "registry": "glama",
+  "id": "jxui5sucif",
+  "namespace": "xydong-web",
+  "slug": "mcp-nexus",
+  "name": "mcp-nexus",
+  "description": "A multi-provider MCP server that acts as a unified bridge for Tavily, Brave Search, and GrokSearch APIs. It features a comprehensive Admin UI for managing API key rotation, client authentication, and real-time usage monitoring across all search providers.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A multi-provider MCP server that acts as a unified bridge for Tavily, Brave Search, and GrokSearch APIs. It features a comprehensive Admin UI for managing API key rotation, client authentication, and real-time usage monitoring across all search providers.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "The host address for the server to listen on.",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "The port for the server to listen on.",
+          "type": "string",
+          "default": "8787"
+        },
+        "DATABASE_URL": {
+          "description": "Connection string for the database. For local setups, a file-based SQLite DB is recommended.",
+          "type": "string",
+          "default": "file:./tavily_bridge.db"
+        },
+        "BRAVE_API_KEY": {
+          "description": "A single Brave Search API key. For multi-key support, use the Admin UI.",
+          "type": "string"
+        },
+        "ADMIN_API_TOKEN": {
+          "description": "Bearer token for accessing the Admin API.",
+          "type": "string"
+        },
+        "ENABLE_QUERY_AUTH": {
+          "description": "If true, enables MCP client token authentication for the /mcp endpoint.",
+          "type": "string",
+          "default": "false"
+        },
+        "FIRECRAWL_API_KEY": {
+          "description": "Optional Firecrawl API key used for supplemental source/fetch fallback.",
+          "type": "string"
+        },
+        "SEARCH_SOURCE_MODE": {
+          "description": "Defines search behavior: tavily_only, brave_only, combined, or brave_prefer_tavily_fallback.",
+          "type": "string",
+          "default": "brave_prefer_tavily_fallback"
+        },
+        "GROK_SEARCH_ENABLED": {
+          "description": "Enables/disables Grok tool exposure (web_search, get_sources, etc.).",
+          "type": "string",
+          "default": "false"
+        },
+        "KEY_ENCRYPTION_SECRET": {
+          "description": "A 32-byte (256-bit) secret key used for encrypting and decrypting upstream API keys stored in the database.",
+          "type": "string"
+        },
+        "TAVILY_BRIDGE_BASE_URL": {
+          "description": "Deployment URL for the mcp-nexus bridge-server (used by stdio-http-bridge).",
+          "type": "string"
+        },
+        "TAVILY_BRIDGE_MCP_TOKEN": {
+          "description": "Client bearer token used for authenticate with the MCP endpoint (used by stdio-http-bridge).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "jxui5sucif",
+    "name": "mcp-nexus",
+    "namespace": "xydong-web",
+    "repository": {
+      "url": "https://github.com/xydong-web/mcp-nexus"
+    },
+    "slug": "mcp-nexus",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jxui5sucif"
+  }
+}

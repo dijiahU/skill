@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "ybtpy87n3g",
+  "namespace": "Schimmilab",
+  "slug": "withings-mcp-server",
+  "name": "Withings MCP Server",
+  "description": "Enables access to Withings Health API data including body measurements, activity tracking, sleep analysis, workouts, and heart rate monitoring through OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables access to Withings Health API data including body measurements, activity tracking, sleep analysis, workouts, and heart rate monitoring through OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WITHINGS_CLIENT_ID": {
+          "description": "Your Withings API Client ID from the Developer Dashboard",
+          "type": "string"
+        },
+        "WITHINGS_ACCESS_TOKEN": {
+          "description": "Your Withings OAuth2 access token (generated during authentication)",
+          "type": "string"
+        },
+        "WITHINGS_REDIRECT_URI": {
+          "description": "The redirect URI configured in your Withings application",
+          "type": "string",
+          "default": "http://localhost:8080/callback"
+        },
+        "WITHINGS_CLIENT_SECRET": {
+          "description": "Your Withings API Client Secret from the Developer Dashboard",
+          "type": "string"
+        },
+        "WITHINGS_REFRESH_TOKEN": {
+          "description": "Your Withings OAuth2 refresh token (generated during authentication)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WITHINGS_CLIENT_ID",
+        "WITHINGS_CLIENT_SECRET",
+        "WITHINGS_ACCESS_TOKEN",
+        "WITHINGS_REFRESH_TOKEN"
+      ]
+    },
+    "id": "ybtpy87n3g",
+    "name": "Withings MCP Server",
+    "namespace": "Schimmilab",
+    "repository": {
+      "url": "https://github.com/Schimmilab/withings-mcp-server"
+    },
+    "slug": "withings-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ybtpy87n3g"
+  }
+}

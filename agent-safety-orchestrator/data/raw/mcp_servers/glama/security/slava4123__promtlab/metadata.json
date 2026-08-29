@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "tl5a21ylha",
+  "namespace": "Slava4123",
+  "slug": "promtlab",
+  "name": "promtlab",
+  "description": "Self-hosted AI prompt library with collections, tags, version history, team collaboration and scoped API keys (pvlt_\\*) with allowed_tools whitelist. OAuth 2.1 discovery + 30 tools for Claude/Cursor/Windsurf.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Self-hosted AI prompt library with collections, tags, version history, team collaboration and scoped API keys (pvlt_\\*) with allowed_tools whitelist. OAuth 2.1 discovery + 30 tools for Claude/Cursor/Windsurf.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "JWT_SECRET": {
+          "description": "Secret key for JWT token generation",
+          "type": "string"
+        },
+        "DATABASE_HOST": {
+          "description": "Database host",
+          "type": "string"
+        },
+        "DATABASE_NAME": {
+          "description": "Database name",
+          "type": "string"
+        },
+        "DATABASE_PORT": {
+          "description": "Database port",
+          "type": "string"
+        },
+        "DATABASE_USER": {
+          "description": "Database user",
+          "type": "string"
+        },
+        "DATABASE_PASSWORD": {
+          "description": "Database password",
+          "type": "string"
+        },
+        "OPENROUTER_API_KEY": {
+          "description": "API key for OpenRouter (used for AI features like prompt improvement)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "DATABASE_HOST",
+            "DATABASE_USER",
+            "DATABASE_PASSWORD",
+            "DATABASE_NAME",
+            "DATABASE_PORT"
+          ]
+        }
+      ],
+      "required": [
+        "JWT_SECRET",
+        "OPENROUTER_API_KEY"
+      ]
+    },
+    "id": "tl5a21ylha",
+    "name": "promtlab",
+    "namespace": "Slava4123",
+    "repository": {
+      "url": "https://github.com/Slava4123/promtlab"
+    },
+    "slug": "promtlab",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/tl5a21ylha"
+  }
+}

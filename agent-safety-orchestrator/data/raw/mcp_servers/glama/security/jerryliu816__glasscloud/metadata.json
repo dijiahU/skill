@@ -1,0 +1,85 @@
+{
+  "registry": "glama",
+  "id": "uo8wmrgl8n",
+  "namespace": "jerryliu816",
+  "slug": "glasscloud",
+  "name": "GlassCloud",
+  "description": "A cloud relay server that bridges the GlassBridge smart glasses app with Google services like Gmail and Calendar via the Model Context Protocol. It provides secure OAuth authentication and WebSocket communication to enable voice-controlled tool execution on mobile devices.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A cloud relay server that bridges the GlassBridge smart glasses app with Google services like Gmail and Calendar via the Model Context Protocol. It provides secure OAuth authentication and WebSocket communication to enable voice-controlled tool execution on mobile devices.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port.",
+          "type": "string",
+          "default": "3000"
+        },
+        "NODE_ENV": {
+          "description": "Environment mode (development | production).",
+          "type": "string",
+          "default": "development"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (trace | debug | info | warn | error).",
+          "type": "string",
+          "default": "debug"
+        },
+        "JWT_SECRET": {
+          "description": "Security - MUST be unique random value (32+ chars). Used for signing JWT tokens. Generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\"",
+          "type": "string"
+        },
+        "CORS_ORIGINS": {
+          "description": "Allowed CORS origins for the web console.",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "DATABASE_PATH": {
+          "description": "Path to the SQLite database file.",
+          "type": "string",
+          "default": "./data/glasscloud.db"
+        },
+        "ENCRYPTION_KEY": {
+          "description": "Security - MUST be unique random value (32+ chars). Used for AES-256-GCM encryption of OAuth tokens at rest. Generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\"",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Google OAuth Client ID from Google Cloud Console. Optional for dev, required for production.",
+          "type": "string"
+        },
+        "GOOGLE_CALLBACK_URL": {
+          "description": "Google OAuth callback URL.",
+          "type": "string",
+          "default": "http://localhost:3000/auth/google/callback"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Google OAuth Client Secret from Google Cloud Console. Optional for dev, required for production.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "JWT_SECRET",
+        "ENCRYPTION_KEY"
+      ]
+    },
+    "id": "uo8wmrgl8n",
+    "name": "GlassCloud",
+    "namespace": "jerryliu816",
+    "repository": {
+      "url": "https://github.com/jerryliu816/glasscloud"
+    },
+    "slug": "glasscloud",
+    "spdxLicense": {
+      "name": "AGPL 3.0",
+      "url": "https://spdx.org/licenses/AGPL-3.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/uo8wmrgl8n"
+  }
+}

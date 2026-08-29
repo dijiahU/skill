@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "cznwz3pasa",
+  "namespace": "gchallen",
+  "slug": "withings-mcp",
+  "name": "Withings MCP Client",
+  "description": "Enables retrieval of health data from Withings smart scales including weight measurements and comprehensive body composition metrics like fat mass, muscle mass, and hydration levels. Supports multiple users, unit preferences, and OAuth authentication for secure access to personal health data.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables retrieval of health data from Withings smart scales including weight measurements and comprehensive body composition metrics like fat mass, muscle mass, and hydration levels. Supports multiple users, unit preferences, and OAuth authentication for secure access to personal health data.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WITHINGS_CLIENT_ID": {
+          "description": "Your Withings Client ID from the developer account",
+          "type": "string"
+        },
+        "WITHINGS_UNIT_SYSTEM": {
+          "description": "Optional: Set default units (metric=kg, imperial=lb)",
+          "type": "string",
+          "default": "metric"
+        },
+        "WITHINGS_USER_ATTRIB": {
+          "description": "Optional: Pin to specific user (0=device owner, 1+=other users)",
+          "type": "string",
+          "default": "0"
+        },
+        "WITHINGS_ACCESS_TOKEN": {
+          "description": "Your access token obtained from OAuth authorization",
+          "type": "string"
+        },
+        "WITHINGS_REDIRECT_URI": {
+          "description": "Your redirect URI for OAuth callback",
+          "type": "string",
+          "default": "http://localhost:3000/callback"
+        },
+        "WITHINGS_CLIENT_SECRET": {
+          "description": "Your Withings Client Secret from the developer account",
+          "type": "string"
+        },
+        "WITHINGS_REFRESH_TOKEN": {
+          "description": "Your refresh token obtained from OAuth authorization",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WITHINGS_CLIENT_ID",
+        "WITHINGS_CLIENT_SECRET",
+        "WITHINGS_ACCESS_TOKEN",
+        "WITHINGS_REFRESH_TOKEN"
+      ]
+    },
+    "id": "cznwz3pasa",
+    "name": "Withings MCP Client",
+    "namespace": "gchallen",
+    "repository": {
+      "url": "https://github.com/gchallen/withings-mcp"
+    },
+    "slug": "withings-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/cznwz3pasa"
+  }
+}

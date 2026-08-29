@@ -1,0 +1,60 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "com.prizmad/mcp-server",
+  "slug": "prizmad__mcp-server",
+  "title": "Prizmad",
+  "description": "Generate AI UGC video ads from any product URL — avatars, voiceover, OAuth Connect.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+      "name": "com.prizmad/mcp-server",
+      "description": "Generate AI UGC video ads from any product URL — avatars, voiceover, OAuth Connect.",
+      "title": "Prizmad",
+      "repository": {
+        "url": "https://github.com/prizmad/Prizmad-MCP-server",
+        "source": "github"
+      },
+      "version": "2.0.1",
+      "websiteUrl": "https://prizmad.com",
+      "packages": [
+        {
+          "registryType": "npm",
+          "identifier": "@prizmad/mcp-server",
+          "version": "2.0.1",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Your Prizmad API key. Get one at https://prizmad.com/api-keys",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "PRIZMAD_API_KEY"
+            },
+            {
+              "description": "Override base URL (defaults to https://prizmad.com).",
+              "default": "https://prizmad.com",
+              "name": "PRIZMAD_BASE_URL"
+            }
+          ]
+        }
+      ],
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://prizmad.com/api/mcp"
+        }
+      ],
+      "_meta": {}
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-30T06:58:08.963044Z",
+        "publishedAt": "2026-04-30T06:58:08.963044Z",
+        "updatedAt": "2026-04-30T06:58:08.963044Z",
+        "isLatest": false
+      }
+    }
+  }
+}

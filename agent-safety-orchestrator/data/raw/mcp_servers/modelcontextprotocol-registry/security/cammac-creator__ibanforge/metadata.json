@@ -1,0 +1,58 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.cammac-creator/ibanforge",
+  "slug": "cammac-creator__ibanforge",
+  "title": "",
+  "description": "IBAN validation, BIC/SWIFT lookup, Swiss BC-Nummer, EMI/vIBAN, SEPA + VoP, compliance scoring.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+      "name": "io.github.cammac-creator/ibanforge",
+      "description": "IBAN validation, BIC/SWIFT lookup, Swiss BC-Nummer, EMI/vIBAN, SEPA + VoP, compliance scoring.",
+      "repository": {
+        "url": "https://github.com/cammac-creator/ibanforge",
+        "source": "github",
+        "subfolder": "mcp"
+      },
+      "version": "1.0.1",
+      "websiteUrl": "https://ibanforge.com",
+      "packages": [
+        {
+          "registryType": "npm",
+          "registryBaseUrl": "https://registry.npmjs.org",
+          "identifier": "ibanforge-mcp",
+          "version": "1.0.1",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Optional Bearer ifk_* API key (free tier 200 req/month).",
+              "isSecret": true,
+              "name": "IBANFORGE_API_KEY"
+            },
+            {
+              "description": "Override the API base URL (default https://api.ibanforge.com).",
+              "name": "IBANFORGE_API_BASE"
+            }
+          ]
+        }
+      ],
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://api.ibanforge.com/mcp"
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-28T05:02:22.793082Z",
+        "publishedAt": "2026-04-28T05:02:22.793082Z",
+        "updatedAt": "2026-04-28T05:02:22.793082Z",
+        "isLatest": false
+      }
+    }
+  }
+}

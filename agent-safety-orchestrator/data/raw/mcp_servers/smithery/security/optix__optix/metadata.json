@@ -1,0 +1,726 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "optix/OPTIX",
+  "namespace": "optix",
+  "slug": "OPTIX",
+  "displayName": "OPTIX: Operational Platform for Threat Intelligence Exploration",
+  "description": "A standalone Python/FastAPI server that implements the Model Context Protocol (MCP) for the OPTIX threat intelligence platform. It exposes 26 analyst-friendly tools that AI assistants and programmatic consumers can use to query threat feeds, search documents and indicators, manage watchlists, triage IOCs, generate detection rules, trigger AI research, and produce intelligence reports — without needing to understand OPTIX's internal REST API. Operational Platform Threat Intelligence Exploration: OPTIX.",
+  "discoveryQueries": [
+    "vulnerability",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "b6055609-c4f1-4646-9e57-3d396dab50aa",
+    "qualifiedName": "optix/OPTIX",
+    "namespace": "optix",
+    "slug": "OPTIX",
+    "displayName": "OPTIX: Operational Platform for Threat Intelligence Exploration",
+    "description": "A standalone Python/FastAPI server that implements the Model Context Protocol (MCP) for the OPTIX threat intelligence platform. It exposes 26 analyst-friendly tools that AI assistants and programmatic consumers can use to query threat feeds, search documents and indicators, manage watchlists, triage IOCs, generate detection rules, trigger AI research, and produce intelligence reports — without needing to understand OPTIX's internal REST API. Operational Platform Threat Intelligence Exploration: OPTIX.",
+    "iconUrl": "https://api.smithery.ai/servers/optix/OPTIX/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-19T16:24:25.957Z",
+    "homepage": "https://optixthreatintelligence.co.uk/optix-api#mcp-setup",
+    "bySmithery": false,
+    "owner": "org_01KPJ4RFQX2JA2Q2TVDHQWXV5A",
+    "score": 0.014492753623188406
+  },
+  "detail": {
+    "qualifiedName": "optix/OPTIX",
+    "displayName": "OPTIX: Operational Platform for Threat Intelligence Exploration",
+    "description": "A standalone Python/FastAPI server that implements the Model Context Protocol (MCP) for the OPTIX threat intelligence platform. It exposes 26 analyst-friendly tools that AI assistants and programmatic consumers can use to query threat feeds, search documents and indicators, manage watchlists, triage IOCs, generate detection rules, trigger AI research, and produce intelligence reports — without needing to understand OPTIX's internal REST API. Operational Platform Threat Intelligence Exploration: OPTIX.",
+    "iconUrl": "https://api.smithery.ai/servers/optix/OPTIX/icon",
+    "remote": true,
+    "deploymentUrl": "https://optix--optix.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://optix--optix.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Your OPTIX API key. Create one in OPTIX → Settings → API Keys. Must start with optix_"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "feed.get",
+        "description": "Retrieve the OPTIX threat intelligence feed — a paginated stream of curated, scored intelligence documents from all configured sources. Use this when an analyst asks for recent threat reports, wants to browse new intelligence, or needs to filter by severity or TLP classification. Each entry includes a severity rating (critical/high/medium/low), TLP label, IOC count, publisher, and AI summary. Supports filtering by severity, TLP, and date range. Use `document.get` to fetch the full detail for any entry returned here. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum number of entries to return (1–100). Default: 20."
+            },
+            "since": {
+              "type": "string",
+              "description": "ISO 8601 datetime. Only return documents published after this time."
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "description": "Number of entries to skip for pagination. Default: 0."
+            },
+            "tlp_filter": {
+              "enum": [
+                "TLP:WHITE",
+                "TLP:GREEN",
+                "TLP:AMBER",
+                "TLP:RED"
+              ],
+              "type": "string",
+              "description": "Filter by TLP classification. One of: TLP:WHITE, TLP:GREEN, TLP:AMBER, TLP:RED."
+            },
+            "severity_filter": {
+              "enum": [
+                "critical",
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string",
+              "description": "Filter by severity level. One of: critical, high, medium, low."
+            }
+          }
+        }
+      },
+      {
+        "name": "search.indicator",
+        "description": "Search OPTIX for a specific indicator of compromise (IOC) by its raw value. Use this when an analyst provides an IP address, domain name, file hash, URL, or email address and wants to know if OPTIX has seen it and with what confidence. Returns matching IOC entities with their numeric IDs, confidence scores, and linked report references. IMPORTANT: Call this first to find an IOC's numeric entity ID before calling `ioc.context`, which requires that ID for enrichment lookup. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "The indicator value to search for, e.g. '185.220.101.45', 'malicious-domain.ru'."
+            },
+            "type_hint": {
+              "type": "string",
+              "description": "Optional entity type to narrow the search. Valid values: IOC, Infrastructure, ThreatActor, MalwareFamily."
+            }
+          }
+        }
+      },
+      {
+        "name": "incident.report",
+        "description": "Submit a structured incident report to OPTIX and generate a tactical intelligence report. Provide the incident title, description, severity, TLP, observed indicators, and analyst notes. Returns a confirmation with the assigned reference ID. NOTE: This operation costs 40 OPTIX credits. Call `account.status` first if you are unsure whether the account has sufficient credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tlp": {
+              "enum": [
+                "TLP:WHITE",
+                "TLP:GREEN",
+                "TLP:AMBER"
+              ],
+              "type": "string",
+              "default": "TLP:GREEN",
+              "description": "TLP classification. Accepts TLP:WHITE, TLP:GREEN, or TLP:AMBER. Default: TLP:GREEN."
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 300,
+              "minLength": 3,
+              "description": "Short descriptive title for the incident."
+            },
+            "severity": {
+              "enum": [
+                "critical",
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string",
+              "description": "Incident severity level."
+            },
+            "indicators": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of raw indicator values observed during the incident."
+            },
+            "description": {
+              "type": "string",
+              "minLength": 10,
+              "description": "Detailed narrative of the incident including the attack chain."
+            },
+            "analyst_notes": {
+              "type": "string",
+              "description": "Additional analyst context, hypotheses, or remediation steps."
+            }
+          }
+        }
+      },
+      {
+        "name": "entity.get",
+        "description": "Fetch a named threat intelligence entity from OPTIX by name, alias, or numeric ID. Use this for any entity type: threat actor (e.g. 'APT28', 'Fancy Bear'), malware family (e.g. 'LockBit', 'Cobalt Strike'), campaign, vulnerability (e.g. 'CVE-2023-44487'), or tool. Alias resolution is supported and case-insensitive — common aliases and alternate names are automatically matched to the canonical entity. Returns a markdown-formatted profile including description, confidence, aliases, associated IOCs, and MITRE ATT&CK metadata. TIP: For threat actor queries specifically, prefer `actor.profile` which returns a richer composite view in one call.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Name or numeric ID of the entity. Examples: 'APT28', 'CVE-2023-44487', '42'."
+            },
+            "entity_type": {
+              "type": "string",
+              "description": "Optional type to narrow the search: ThreatActor, MalwareFamily, Tool, Campaign, Vulnerability, Technique, IOC, Infrastructure, Target."
+            }
+          }
+        }
+      },
+      {
+        "name": "account.status",
+        "description": "Retrieve the current OPTIX account credit balance, monthly allocation, usage, and account context. Call this before any credit-consuming operation (incident.report: 40 credits; report.generate: 40 credits; entity.research: 15 credits; entity.ask / detection.rule / detection.tradecraft: 4 credits each) if the analyst asks whether they can afford it, or if you are uncertain about the balance. Returns balance, allocation, credits used this month, reset date, and whether the account uses a shared organisational pool. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "document.get",
+        "description": "Fetch a specific intelligence document from OPTIX by its numeric ID. Returns full document metadata including title, publisher, TLP, severity, AI summary, cyber score, and content type tags. Get the document ID from `feed.get` (feed entries include IDs), `search.documents` results, or the `id` field in any intelligence document reference. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "document_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX document identifier, e.g. 1042."
+            }
+          }
+        }
+      },
+      {
+        "name": "search.documents",
+        "description": "Full-text search across all OPTIX intelligence documents. Use this tool when an analyst wants to find documents by keyword, topic, publisher, or content type. Supports filtering by publisher and date range. Returns paginated document summaries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Maximum results to return (1–100). Default: 20."
+            },
+            "query": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Search string, minimum 2 characters. Examples: 'LockBit', 'supply chain attack', 'CVE-2024-3400'."
+            },
+            "since": {
+              "type": "string",
+              "description": "ISO 8601 datetime. Only return documents published after this time."
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "description": "Results to skip for pagination. Default: 0."
+            },
+            "publisher": {
+              "type": "string",
+              "description": "Filter by publisher name, e.g. 'Mandiant', 'CISA'."
+            },
+            "content_type": {
+              "type": "string",
+              "description": "Filter by content type tag: ThreatResearch, MalwareAnalysis, Vulnerability, etc."
+            }
+          }
+        }
+      },
+      {
+        "name": "report.list",
+        "description": "List intelligence reports stored in OPTIX. These are AI-generated reports (tactical, strategic, operational, technical, or RFI) created by analysts or automated pipelines. Filter by report type, TLP level, or linked entity (entity_id). Use with `entity_id` to find all reports referencing a specific threat actor or malware family — entity IDs come from `entity.get` or `actor.profile`. Use `report.get` with the returned report ID to read the full text. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Maximum reports to return (1–200). Default: 20."
+            },
+            "entity_id": {
+              "type": "integer",
+              "description": "Filter to reports referencing this entity ID."
+            },
+            "tlp_level": {
+              "type": "string",
+              "description": "Filter by TLP level, e.g. 'TLP:GREEN'."
+            },
+            "report_type": {
+              "enum": [
+                "tactical",
+                "strategic",
+                "technical",
+                "operational",
+                "rfi"
+              ],
+              "type": "string",
+              "description": "Filter by type: tactical, strategic, technical, operational, rfi."
+            }
+          }
+        }
+      },
+      {
+        "name": "report.get",
+        "description": "Retrieve a specific OPTIX intelligence report by its numeric ID, including the full report content, status, TLP classification, and associated entities. IMPORTANT: Requires a report ID (not an entity ID). Get report IDs from `report.list`, `report.generate`, or the `latest_report_id` field in `actor.profile`. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "report_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric intelligence report identifier."
+            }
+          }
+        }
+      },
+      {
+        "name": "detection.attack_matrix",
+        "description": "Retrieve the OPTIX MITRE ATT&CK coverage matrix showing which techniques have been observed in intelligence data and which have existing detection rules. Use this to understand the overall detection posture or look up coverage for a specific technique. Returns per-technique detail rows including tactic, document count, and whether a detection procedure exists. Pair with `detection.rule` to create rules for uncovered techniques. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "technique_id": {
+              "type": "string",
+              "description": "Specific MITRE ATT&CK technique ID to look up, e.g. 'T1566'. Omit to get the full matrix."
+            }
+          }
+        }
+      },
+      {
+        "name": "watchlist.list",
+        "description": "List all threat actors, malware families, and other entities currently on the analyst's OPTIX watchlist. Watchlisted entities trigger notifications when new intelligence documents reference them. Use this before `watchlist.remove` to confirm which entities are watched and to find their numeric IDs. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "watchlist.add",
+        "description": "Add an entity to the analyst's OPTIX watchlist so that new intelligence documents mentioning it trigger notifications. Requires a numeric entity ID (ID is returned by `entity.get`, `actor.profile`, or any search result). Idempotent — safe to call if the entity is already being watched. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entity_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX entity identifier to start watching."
+            }
+          }
+        }
+      },
+      {
+        "name": "watchlist.remove",
+        "description": "Remove an entity from the analyst's OPTIX watchlist to stop receiving notifications about it. Requires the numeric entity ID — use `watchlist.list` to see current entries with their IDs. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entity_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX entity identifier to stop watching."
+            }
+          }
+        }
+      },
+      {
+        "name": "feed.headlines",
+        "description": "Retrieve the current OPTIX threat intelligence headlines — a short list of AI-synthesised sentences summarising the most active threats from recent intelligence documents. Use when an analyst asks for a quick situational awareness briefing, 'what's happening right now?', or needs a summary before diving into specific reports. No parameters required. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "feed.cards",
+        "description": "Retrieve profile-matched situational awareness threat cards from OPTIX. Each card profiles an active threat actor or malware campaign relevant to your organisation's sector and shows observed MITRE ATT&CK techniques, targeted sectors, document count, and a severity assessment. Supports 24h, 7d, and 30d time windows. Use this for board-level or situational-awareness reporting. To get a full profile for a card actor, call `actor.profile`. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sector": {
+              "type": "string",
+              "description": "Filter cards to a specific sector, e.g. 'Finance', 'Healthcare'."
+            },
+            "time_range": {
+              "enum": [
+                "24h",
+                "7d",
+                "30d"
+              ],
+              "type": "string",
+              "default": "7d",
+              "description": "Time window for threat card generation: 24h, 7d, or 30d. Default: 7d."
+            }
+          }
+        }
+      },
+      {
+        "name": "ioc.context",
+        "description": "Retrieve enriched community context for a specific IOC by its numeric entity ID. Returns analyst vote tallies (malicious vs benign), community-assigned tags, co-occurring threat actors, malware families, associated ATT&CK techniques, related campaigns, and source document IDs — formatted as readable markdown. Use this to assess an IOC's reputation and threat context in depth. Requires a numeric IOC entity ID — use `search.indicator` first to find the ID if you only have a raw value (IP, domain, hash, etc.). This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ioc_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX entity identifier for the IOC. Use search.indicator to find the ID."
+            }
+          }
+        }
+      },
+      {
+        "name": "detection.coverage_gaps",
+        "description": "Analyse a specific intelligence document to identify MITRE ATT&CK techniques it references and determine which lack detection rule coverage. Returns a per-technique breakdown with gap count and coverage status. Use after fetching a document (via `document.get` or `search.documents`) to understand your detection blind spots for that threat report. Pair with `detection.rule` to close gaps for specific technique IDs. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "document_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX document identifier to analyse."
+            }
+          }
+        }
+      },
+      {
+        "name": "search.ai",
+        "description": "Natural language threat intelligence search across OPTIX documents and entities. Use 'natural' mode to let OPTIX expand the query with AI-inferred synonyms, aliases, and related terms before searching. Use 'keyword' mode for literal matching. Returns ranked document hits, named entities, and optionally an AI-synthesised answer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "natural",
+                "keyword"
+              ],
+              "type": "string",
+              "default": "natural",
+              "description": "Search mode: 'natural' for AI-expanded NLP search (default), 'keyword' for literal matching."
+            },
+            "query": {
+              "type": "string",
+              "minLength": 2,
+              "description": "Natural language question or keyword. Examples: 'What TTPs does APT29 use?', 'LockBit ransomware IOCs'."
+            }
+          }
+        }
+      },
+      {
+        "name": "entity.research",
+        "description": "Trigger deep AI research on a specific OPTIX entity (threat actor, malware family, vulnerability, tool, campaign, or technique). OPTIX crawls authoritative external sources, enriches the entity's profile with structured intelligence, and returns a detailed research summary. Supported entity types: ThreatActor, MalwareFamily, Vulnerability, Tool, Campaign, Technique. Requires a numeric entity ID — use `entity.get` or `actor.profile` first to find the ID. WHEN TO ESCALATE: Use this only when `actor.profile` or `entity.get` does not provide sufficient depth, or when the analyst explicitly requests deep research or wants fresh enrichment from external sources. NOTE: This operation costs 15 OPTIX credits. Call `account.status` first if you are unsure whether the account has sufficient credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entity_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX entity identifier. Use entity.get to find it."
+            },
+            "force_refresh": {
+              "type": "boolean",
+              "default": false,
+              "description": "Set true to force a new research run even if recent results exist. Default: false."
+            }
+          }
+        }
+      },
+      {
+        "name": "entity.ask",
+        "description": "Generate a SIEM threat hunting query for a specific threat entity. Given an entity ID (ThreatActor, MalwareFamily, Tool, or Vulnerability) and a target SIEM language, OPTIX generates a comprehensive hunting query informed by the entity's known TTPs, IOCs, and intelligence history. Supported SIEM languages: kql, splunk_spl, s1ql_v1, s1ql_v2, crowdstrike, elastic_eql, exabeam, chronicle_yara_l, sigma, carbon_black, palo_alto_xql. Use `entity.get` or `actor.profile` first to find the numeric entity ID. NOTE: This operation costs 4 OPTIX credits. Call `account.status` first if unsure about the balance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "type": "string",
+              "description": "Target SIEM language. Supported: kql, splunk_spl, s1ql_v1, s1ql_v2, crowdstrike, elastic_eql, exabeam, chronicle_yara_l, sigma, carbon_black, palo_alto_xql."
+            },
+            "entity_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX entity identifier (ThreatActor, MalwareFamily, Tool, or Vulnerability)."
+            }
+          }
+        }
+      },
+      {
+        "name": "detection.rule",
+        "description": "Generate a SIEM detection rule for a specific MITRE ATT&CK technique. OPTIX creates a detection query in the requested SIEM language using available intelligence context. Optionally enriches the rule with context from a specific document (document_id) or entity (entity_id). Find technique IDs from `detection.attack_matrix` or `detection.coverage_gaps`. Supported SIEM languages: kql, splunk_spl, s1ql_v1, s1ql_v2, crowdstrike, elastic_eql, exabeam, chronicle_yara_l, sigma, carbon_black, palo_alto_xql. NOTE: This operation costs 4 OPTIX credits. Call `account.status` first if unsure about the balance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "type": "string",
+              "description": "Target SIEM language. Supported: kql, splunk_spl, s1ql_v1, s1ql_v2, crowdstrike, elastic_eql, exabeam, chronicle_yara_l, sigma, carbon_black, palo_alto_xql."
+            },
+            "entity_id": {
+              "type": "integer",
+              "description": "Optional entity ID (ThreatActor or MalwareFamily) to enrich the rule."
+            },
+            "document_id": {
+              "type": "integer",
+              "description": "Optional document ID to incorporate document-specific detection context."
+            },
+            "technique_id": {
+              "type": "string",
+              "description": "MITRE ATT&CK technique ID, e.g. 'T1059.001' (PowerShell)."
+            },
+            "custom_context": {
+              "type": "string",
+              "description": "Additional analyst context to guide generation, e.g. specific log sources or environment details."
+            },
+            "technique_name": {
+              "type": "string",
+              "description": "Human-readable technique name, e.g. 'PowerShell'. Improves generation quality."
+            }
+          }
+        }
+      },
+      {
+        "name": "detection.tradecraft",
+        "description": "Generate a SIEM threat hunting query covering the complete known tradecraft (TTPs, tools, behaviours) of a specific threat actor or malware family. Unlike `detection.rule` (which targets a single technique), this tool produces a broad multi-technique hunt designed to surface any activity by the named adversary. Optionally scope to specific technique entries. Supported SIEM languages: kql, splunk_spl, s1ql_v1, s1ql_v2, crowdstrike, elastic_eql, exabeam, chronicle_yara_l, sigma, carbon_black, palo_alto_xql. NOTE: This operation costs 4 OPTIX credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "type": "string",
+              "description": "Target SIEM language. Supported: kql, splunk_spl, s1ql_v1, s1ql_v2, crowdstrike, elastic_eql, exabeam, chronicle_yara_l, sigma, carbon_black, palo_alto_xql."
+            },
+            "entity_id": {
+              "type": "integer",
+              "description": "Optional OPTIX entity ID to enrich the query with structured intelligence."
+            },
+            "entity_name": {
+              "type": "string",
+              "description": "Name of the threat actor or malware family, e.g. 'APT29' or 'LockBit'."
+            },
+            "entity_type": {
+              "enum": [
+                "ThreatActor",
+                "MalwareFamily"
+              ],
+              "type": "string",
+              "description": "Entity type: ThreatActor or MalwareFamily."
+            },
+            "technique_entries": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "Optional technique scope list. Each item may have techniqueId, techniqueName, description."
+            }
+          }
+        }
+      },
+      {
+        "name": "report.generate",
+        "description": "Generate a strategic, operational, technical, or RFI intelligence report in OPTIX using a natural language query. OPTIX searches its document corpus and entity knowledge base to produce a structured, cited report. Returns a report ID that can be retrieved with `report.get` once generation completes. NOTE: This operation costs 40 OPTIX credits. Call `account.status` first if you are unsure whether the account has sufficient credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tlp": {
+              "enum": [
+                "TLP:WHITE",
+                "TLP:GREEN",
+                "TLP:AMBER"
+              ],
+              "type": "string",
+              "default": "TLP:GREEN",
+              "description": "TLP classification for the report. Default: TLP:GREEN."
+            },
+            "query": {
+              "type": "string",
+              "minLength": 10,
+              "description": "Natural language description of what the report should cover."
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 300,
+              "minLength": 3,
+              "description": "Report title, e.g. 'Q3 Ransomware Threat Landscape'."
+            },
+            "report_type": {
+              "enum": [
+                "tactical",
+                "strategic",
+                "technical",
+                "operational",
+                "rfi"
+              ],
+              "type": "string",
+              "default": "tactical",
+              "description": "Report type: tactical, strategic, technical, operational, or rfi. Default: tactical."
+            }
+          }
+        }
+      },
+      {
+        "name": "feedback.vote",
+        "description": "Submit a relevance vote (upvote or downvote) on an OPTIX intelligence document. Upvotes signal that the document is relevant and valuable; downvotes signal it is not relevant to the organisation's threat profile. Community votes improve OPTIX scoring and feed personalisation over time.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "vote": {
+              "enum": [
+                "up",
+                "down"
+              ],
+              "type": "string",
+              "description": "Vote direction: 'up' for relevant, 'down' for not relevant."
+            },
+            "scope": {
+              "enum": [
+                "platform",
+                "org"
+              ],
+              "type": "string",
+              "default": "platform",
+              "description": "Vote visibility: 'platform' (all analysts) or 'org' (your organisation only). Default: platform."
+            },
+            "document_id": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numeric OPTIX document identifier to vote on."
+            }
+          }
+        }
+      },
+      {
+        "name": "feed.save_view",
+        "description": "Save a named feed filter configuration in OPTIX so the analyst can recall it later. For example: save a filter for 'critical ransomware last 7 days' with severity=critical, contentType=ThreatResearch as a named view. Returns the saved view ID and name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1,
+              "description": "Human-readable name for this saved view, e.g. 'Critical malware last 7 days'."
+            },
+            "filters": {
+              "type": "object",
+              "default": {},
+              "description": "Filter configuration to save. Common keys: severity, tlp, contentType, publisher, publishedAfter, publishedBefore. Pass an empty object to save a default view with no filters."
+            }
+          }
+        }
+      },
+      {
+        "name": "actor.profile",
+        "description": "⭐ RECOMMENDED STARTING POINT for any threat actor query. Accepts an actor name or alias ('APT28', 'Fancy Bear', 'Sofacy', 'Cozy Bear', 'LockBit', 'Lazarus Group', etc.) and returns a rich, readable actor profile in a single call — no follow-up calls needed for the core picture. \n\nThe response includes: actor profile and description, all known aliases, ATT&CK techniques with tactic names, IOCs grouped by type (IP, domain, hash, URL), linked malware families, number of related intelligence reports, and the latest report summary if one exists. \n\nAlias resolution is automatic and case-insensitive — the tool resolves common aliases to the canonical entity name and reports when it does so (e.g. \"Resolved 'Fancy Bear' → APT28\"). \n\nThis tool is free (no credit cost). To trigger deep AI research on the actor, call `entity.research` afterwards (15 credits). To generate a SIEM hunting query, call `entity.ask` (4 credits).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "actor_name": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Name or known alias of the threat actor to profile. Accepts canonical names ('APT28') and common aliases ('Fancy Bear', 'Sofacy', 'IRON TWILIGHT', 'Cozy Bear'). Case-insensitive. Examples: 'APT29', 'LockBit', 'Lazarus Group'."
+            }
+          }
+        }
+      },
+      {
+        "name": "actor.list",
+        "description": "List ALL threat actors the workspace is currently tracking in OPTIX. Paginates automatically — returns the complete actor inventory, not just a single page. Use this when an analyst asks 'what actors are we tracking?', 'which threat groups do we have intelligence on?', or wants to browse the full actor inventory before diving into a specific profile. Returns each actor's canonical name, known aliases, type, confidence, and first/last seen dates — no full profiles or IOC data. To get the full profile for a specific actor, call `actor.profile`. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Optional cap on results. Omit to retrieve all tracked actors (recommended). Set only when you need a quick sample."
+            }
+          }
+        }
+      },
+      {
+        "name": "ioc.triage",
+        "description": "Apply a triage verdict to one or more IOCs in OPTIX. Triage decisions record analyst judgement about whether an IOC is genuinely malicious, a false positive, benign, expired, or under monitoring. Supports bulk operations on multiple IOC entity IDs at once. Scope as 'platform' to share the decision globally or 'org' to keep it within your organisation. IOC entity IDs come from `search.indicator` or the numeric id in any IOC context result. This tool is free (no credit cost).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "enum": [
+                "platform",
+                "org"
+              ],
+              "type": "string",
+              "default": "platform",
+              "description": "Decision scope: 'platform' (global) or 'org' (organisation-only). Default: platform."
+            },
+            "status": {
+              "enum": [
+                "confirmed",
+                "false_positive",
+                "expired",
+                "benign",
+                "monitoring",
+                "unresolved"
+              ],
+              "type": "string",
+              "description": "Triage verdict: confirmed (active malicious), false_positive, benign (known good), expired (formerly active), monitoring, unresolved."
+            },
+            "entity_ids": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 1,
+              "description": "List of OPTIX entity IDs (IOCs) to triage. At least one required."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "threat-brief",
+        "description": "Generate a structured threat intelligence brief for a named entity. Pulls available OPTIX intelligence and produces a concise analyst-ready summary covering attribution, TTPs, recent activity, and recommended actions.",
+        "arguments": [
+          {
+            "name": "entity_name",
+            "description": "Name of the threat actor, malware family, or campaign to brief (e.g. 'APT29', 'LockBit').",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "ioc-triage",
+        "description": "Run a structured triage workflow for a suspicious indicator of compromise. Guides the analyst through context gathering, confidence scoring, and a final triage verdict using OPTIX community intelligence.",
+        "arguments": [
+          {
+            "name": "indicator",
+            "description": "The indicator value to triage, e.g. '185.220.101.45', 'malicious-domain.ru', or a file hash.",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

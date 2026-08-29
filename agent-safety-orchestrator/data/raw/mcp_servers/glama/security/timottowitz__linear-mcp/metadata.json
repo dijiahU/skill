@@ -1,0 +1,66 @@
+{
+  "registry": "glama",
+  "id": "o248lbyace",
+  "namespace": "timottowitz",
+  "slug": "linear-mcp",
+  "name": "Linear MCP Server",
+  "description": "Enables interaction with Linear's API to manage issues, projects, and teams. Supports creating, updating, searching, and deleting issues, along with project management and team operations through API key authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Linear's API to manage issues, projects, and teams. Supports creating, updating, searching, and deleting issues, along with project management and team operations through API key authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LINEAR_API_KEY": {
+          "description": "Your Linear personal API key for authentication",
+          "type": "string"
+        },
+        "LINEAR_CLIENT_ID": {
+          "description": "Your OAuth application client ID (alternative authentication method)",
+          "type": "string"
+        },
+        "LINEAR_REDIRECT_URI": {
+          "description": "OAuth redirect URI for callback",
+          "type": "string",
+          "default": "http://localhost:3000/callback"
+        },
+        "LINEAR_CLIENT_SECRET": {
+          "description": "Your OAuth application client secret (alternative authentication method)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "LINEAR_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "LINEAR_CLIENT_ID",
+            "LINEAR_CLIENT_SECRET",
+            "LINEAR_REDIRECT_URI"
+          ]
+        }
+      ]
+    },
+    "id": "o248lbyace",
+    "name": "Linear MCP Server",
+    "namespace": "timottowitz",
+    "repository": {
+      "url": "https://github.com/timottowitz/linear-mcp"
+    },
+    "slug": "linear-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/o248lbyace"
+  }
+}

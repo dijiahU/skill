@@ -1,0 +1,101 @@
+{
+  "registry": "glama",
+  "id": "f20oo8oams",
+  "namespace": "Sudip-Pandit",
+  "slug": "mcp-healthcare-project",
+  "name": "MCP Healthcare System",
+  "description": "A production-grade MCP server that enables AI assistants to securely manage healthcare data through clinical tools for patient vitals, lab results, and medication ordering. It prioritizes security and compliance with features like HIPAA-ready audit logging, PII redaction, and role-based access control.",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A production-grade MCP server that enables AI assistants to securely manage healthcare data through clinical tools for patient vitals, lab results, and medication ordering. It prioritizes security and compliance with features like HIPAA-ready audit logging, PII redaction, and role-based access control.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DB_HOST": {
+          "description": "Database host address",
+          "type": "string",
+          "default": "localhost"
+        },
+        "DB_NAME": {
+          "description": "The name of the database",
+          "type": "string",
+          "default": "clinical_mcp"
+        },
+        "DB_PORT": {
+          "description": "Database port number",
+          "type": "string",
+          "default": "5432"
+        },
+        "DB_USER": {
+          "description": "The database username",
+          "type": "string",
+          "default": "postgres"
+        },
+        "REDIS_URL": {
+          "description": "The connection URL for Redis",
+          "type": "string",
+          "default": "redis://localhost:6379"
+        },
+        "AWS_REGION": {
+          "description": "AWS region for KMS or other AWS services",
+          "type": "string"
+        },
+        "DB_PASSWORD": {
+          "description": "The database password",
+          "type": "string",
+          "default": "postgres"
+        },
+        "EHR_API_KEY": {
+          "description": "API key for authenticating with the EHR backend",
+          "type": "string"
+        },
+        "EHR_API_URL": {
+          "description": "The URL for the EHR Backend API",
+          "type": "string",
+          "default": "http://localhost:8080"
+        },
+        "ENVIRONMENT": {
+          "description": "Application environment (local, development, staging, production)",
+          "type": "string",
+          "default": "development"
+        },
+        "ANTHROPIC_API_KEY": {
+          "description": "Your Claude API key",
+          "type": "string"
+        },
+        "AWS_ACCESS_KEY_ID": {
+          "description": "AWS access key identifier",
+          "type": "string"
+        },
+        "ENCRYPTION_KEY_ID": {
+          "description": "Encryption key ID (e.g., AWS KMS ARN) for data protection",
+          "type": "string"
+        },
+        "AWS_SECRET_ACCESS_KEY": {
+          "description": "AWS secret access key",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "id": "f20oo8oams",
+    "name": "MCP Healthcare System",
+    "namespace": "Sudip-Pandit",
+    "repository": {
+      "url": "https://github.com/Sudip-Pandit/mcp-healthcare-project"
+    },
+    "slug": "mcp-healthcare-project",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/f20oo8oams"
+  }
+}

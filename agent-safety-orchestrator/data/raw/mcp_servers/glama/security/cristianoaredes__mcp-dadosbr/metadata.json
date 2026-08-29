@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "f3fz0kn6ly",
+  "namespace": "cristianoaredes",
+  "slug": "mcp-dadosbr",
+  "name": "MCP DadosBR",
+  "description": "Enables Brazilian business data lookup through CNPJ (company registry) and CEP (postal code) queries, with intelligent web search capabilities powered by Tavily for due diligence, compliance, and customer verification.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables Brazilian business data lookup through CNPJ (company registry) and CEP (postal code) queries, with intelligent web search capabilities powered by Tavily for due diligence, compliance, and customer verification.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MAX_QUERIES": {
+          "description": "Maximum number of search queries (default: 10)",
+          "type": "string",
+          "default": "10"
+        },
+        "MAX_RESULTS": {
+          "description": "Maximum results per query (default: 5)",
+          "type": "string",
+          "default": "5"
+        },
+        "MCP_API_KEY": {
+          "description": "API key for REST endpoint authentication",
+          "type": "string"
+        },
+        "MCP_HTTP_PORT": {
+          "description": "HTTP server port (default: 3000)",
+          "type": "string",
+          "default": "3000"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport mode: 'stdio' (default) or 'http'",
+          "type": "string",
+          "default": "stdio"
+        },
+        "TAVILY_API_KEY": {
+          "description": "Tavily API key for web searches (required for cnpj_search and cnpj_intelligence tools). Get your key at https://tavily.com",
+          "type": "string"
+        },
+        "CEP_API_BASE_URL": {
+          "description": "Custom CEP API endpoint (default: OpenCEP)",
+          "type": "string"
+        },
+        "CNPJ_API_BASE_URL": {
+          "description": "Custom CNPJ API endpoint (default: OpenCNPJ)",
+          "type": "string"
+        },
+        "MCP_DISABLE_RATE_LIMIT": {
+          "description": "Disable rate limiting (default: false)",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "TAVILY_API_KEY"
+      ]
+    },
+    "id": "f3fz0kn6ly",
+    "name": "MCP DadosBR",
+    "namespace": "cristianoaredes",
+    "repository": {
+      "url": "https://github.com/cristianoaredes/mcp-dadosbr"
+    },
+    "slug": "mcp-dadosbr",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/f3fz0kn6ly"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "scan_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "risk_score": 80,
+  "risk_level": "HIGH",
+  "recommendation": "BLOCK",
+  "findings": [
+    {
+      "type": "regex",
+      "description": "AWS access key pattern detected",
+      "severity": "HIGH",
+      "evidence": "Matched Credential_AWS_Access_Key: AKIAIOSFODNN7EXAMPLE"
+    },
+    {
+      "type": "regex",
+      "description": "Data exfiltration to webhook.site detected",
+      "severity": "CRITICAL",
+      "evidence": "Matched Exfil_Webhook_Site: webhook.site/abc123"
+    },
+    {
+      "type": "regex",
+      "description": "Curl command posting data externally",
+      "severity": "MEDIUM",
+      "evidence": "Matched Exfil_Curl_Post: curl -X POST https://..."
+    }
+  ]
+}

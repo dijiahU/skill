@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "jmhwg28jk4",
+  "namespace": "istefox",
+  "slug": "istefox-dt-mcp",
+  "name": "istefox-dt-mcp",
+  "description": "DEVONthink 4 connector with six tools for search, retrieval, and write operations. Dry-run by default, append-only audit log, selective undo via\naudit_id; macOS-only, MIT, local-only, clean-room implementation.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:local-only"
+    ],
+    "description": "DEVONthink 4 connector with six tools for search, retrieval, and write operations. Dry-run by default, append-only audit log, selective undo via\naudit_id; macOS-only, MIT, local-only, clean-room implementation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ISTEFOX_RAG_MODEL": {
+          "description": "Override the embedding model (e.g. BAAI/bge-m3). Only used when RAG is enabled.",
+          "type": "string",
+          "default": "paraphrase-multilingual-MiniLM-L12-v2"
+        },
+        "ISTEFOX_RAG_ENABLED": {
+          "description": "If truthy: enables the vector RAG provider.",
+          "type": "string",
+          "default": "false"
+        },
+        "ISTEFOX_PREVIEW_TTL_S": {
+          "description": "Override TTL in seconds for preview_token (default 5 minutes). Valid range: 1–3600.",
+          "type": "string",
+          "default": "300"
+        },
+        "ISTEFOX_WEBHOOK_TOKEN": {
+          "description": "Optional token for RAG webhook sync.",
+          "type": "string"
+        },
+        "ISTEFOX_FAST_LIST_DATABASES": {
+          "description": "If truthy (1/true/yes/on): list_databases skips computing record_count (returns null). Useful on large databases.",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "jmhwg28jk4",
+    "name": "istefox-dt-mcp",
+    "namespace": "istefox",
+    "repository": {
+      "url": "https://github.com/istefox/istefox-dt-mcp"
+    },
+    "slug": "istefox-dt-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jmhwg28jk4"
+  }
+}

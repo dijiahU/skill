@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "yop92a8mbw",
+  "namespace": "abhinv98",
+  "slug": "postgre-mcp",
+  "name": "PostgreSQL MCP Server",
+  "description": "Enables AI agents to query, explore, and analyze PostgreSQL databases through the Model Context Protocol. It provides robust security features including read-only mode, schema restrictions, and query timeouts for safe data interaction.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI agents to query, explore, and analyze PostgreSQL databases through the Model Context Protocol. It provides robust security features including read-only mode, schema restrictions, and query timeouts for safe data interaction.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "sslMode": {
+          "description": "SSL connection mode. Options: disable (no SSL), prefer (use SSL if available), require (force SSL).",
+          "type": "string",
+          "default": "prefer"
+        },
+        "timeout": {
+          "description": "Query timeout in seconds. Queries exceeding this duration are automatically terminated. Range: 1-300.",
+          "type": "string",
+          "default": "30"
+        },
+        "readOnly": {
+          "description": "When enabled, only SELECT and EXPLAIN queries are permitted. Prevents all data modifications.",
+          "type": "string",
+          "default": "true"
+        },
+        "allowedSchemas": {
+          "description": "List of database schemas AI agents can access. Queries are restricted to these schemas only.",
+          "type": "string",
+          "default": "[\"public\"]"
+        },
+        "maxQueryResults": {
+          "description": "Maximum number of rows returned by a single query. Range: 1-10,000.",
+          "type": "string",
+          "default": "1000"
+        },
+        "connectionString": {
+          "description": "PostgreSQL connection URL in the format postgresql://username:password@host:port/database",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "connectionString"
+      ]
+    },
+    "id": "yop92a8mbw",
+    "name": "PostgreSQL MCP Server",
+    "namespace": "abhinv98",
+    "repository": {
+      "url": "https://github.com/abhinv98/postgre-mcp"
+    },
+    "slug": "postgre-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/yop92a8mbw"
+  }
+}

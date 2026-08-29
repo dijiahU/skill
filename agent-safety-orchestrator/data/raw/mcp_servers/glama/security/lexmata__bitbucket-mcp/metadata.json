@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "gb2xytzii7",
+  "namespace": "Lexmata",
+  "slug": "bitbucket-mcp",
+  "name": "Bitbucket Cloud MCP Server",
+  "description": "Enables interaction with Bitbucket Cloud through 25+ tools for managing repositories, pull requests, branches, commits, issues, pipelines, and code search with OAuth 2.0 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Bitbucket Cloud through 25+ tools for managing repositories, pull requests, branches, commits, issues, pipelines, and code search with OAuth 2.0 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BITBUCKET_CLIENT_ID": {
+          "description": "Your Bitbucket OAuth 2.0 client ID",
+          "type": "string"
+        },
+        "BITBUCKET_ACCESS_TOKEN": {
+          "description": "Your Bitbucket app password for authentication",
+          "type": "string"
+        },
+        "BITBUCKET_CLIENT_SECRET": {
+          "description": "Your Bitbucket OAuth 2.0 client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "BITBUCKET_ACCESS_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "BITBUCKET_CLIENT_ID",
+            "BITBUCKET_CLIENT_SECRET"
+          ]
+        }
+      ]
+    },
+    "id": "gb2xytzii7",
+    "name": "Bitbucket Cloud MCP Server",
+    "namespace": "Lexmata",
+    "repository": {
+      "url": "https://github.com/Lexmata/bitbucket-mcp"
+    },
+    "slug": "bitbucket-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gb2xytzii7"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "registry": "glama",
+  "id": "u6sgb7ltlc",
+  "namespace": "azeth-protocol",
+  "slug": "mcp-server",
+  "name": "mcp-azeth",
+  "description": "Trust infrastructure for the machine economy. Gives AI agents non-custodial smart accounts (ERC-4337), x402 payments, on-chain reputation via ERC-8004 trust registry, and service discovery. 8 tools: create accounts, transfer, check balances, pay for x402 services, publish/discover services, manage payment agreements, and send encrypted messages.",
+  "discoveryQueries": [
+    "trust",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Trust infrastructure for the machine economy. Gives AI agents non-custodial smart accounts (ERC-4337), x402 payments, on-chain reputation via ERC-8004 trust registry, and service discovery. 8 tools: create accounts, transfer, check balances, pay for x402 services, publish/discover services, manage payment agreements, and send encrypted messages.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AZETH_CHAIN": {
+          "description": "The target blockchain network: \"baseSepolia\", \"ethereumSepolia\", \"base\", or \"ethereum\"",
+          "type": "string",
+          "default": "baseSepolia"
+        },
+        "PIMLICO_API_KEY": {
+          "description": "Pimlico bundler API key. Falls back to Azeth server bundler proxy if not set.",
+          "type": "string"
+        },
+        "AZETH_SERVER_URL": {
+          "description": "Azeth API server URL.",
+          "type": "string",
+          "default": "https://api.azeth.ai"
+        },
+        "AZETH_PRIVATE_KEY": {
+          "description": "Account owner's private key. Auto-generated and saved to ~/.azeth/key if not set.",
+          "type": "string"
+        },
+        "AZETH_GUARDIAN_KEY": {
+          "description": "Separate guardian key for co-signing high-value operations.",
+          "type": "string"
+        },
+        "AZETH_RPC_URL_BASE": {
+          "description": "Custom RPC endpoint for Base.",
+          "type": "string"
+        },
+        "XMTP_ENCRYPTION_KEY": {
+          "description": "For persistent XMTP messaging across restarts.",
+          "type": "string"
+        },
+        "AZETH_RPC_URL_ETHEREUM": {
+          "description": "Custom RPC endpoint for Ethereum.",
+          "type": "string"
+        },
+        "AZETH_RPC_URL_ETH_SEPOLIA": {
+          "description": "Custom RPC endpoint for Ethereum Sepolia.",
+          "type": "string"
+        },
+        "AZETH_RPC_URL_BASE_SEPOLIA": {
+          "description": "Custom RPC endpoint for Base Sepolia.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "u6sgb7ltlc",
+    "name": "mcp-azeth",
+    "namespace": "azeth-protocol",
+    "repository": {
+      "url": "https://github.com/azeth-protocol/mcp-server"
+    },
+    "slug": "mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/u6sgb7ltlc"
+  }
+}

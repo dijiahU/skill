@@ -1,0 +1,63 @@
+{
+  "registry": "glama",
+  "id": "j8ln4ka5ol",
+  "namespace": "greenoceanbird",
+  "slug": "traffic_analysis",
+  "name": "AutoSOC Agent",
+  "description": "An automated security operations center MCP server that uses LLMs and network analysis tools like Tshark to detect threats in traffic data. It enables users to automatically ingest PCAP files, query specific packets, and generate intelligent security analysis reports.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "An automated security operations center MCP server that uses LLMs and network analysis tools like Tshark to detect threats in traffic data. It enables users to automatically ingest PCAP files, query specific packets, and generate intelligent security analysis reports.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DB_NAME": {
+          "description": "Database file name (default: blackboard.db)",
+          "type": "string",
+          "default": "blackboard.db"
+        },
+        "TSHARK_PATH": {
+          "description": "Tshark executable path (default: auto-discovery)",
+          "type": "string",
+          "default": "自动查找"
+        },
+        "APP_WORKSPACE": {
+          "description": "System working directory (default: ./workspace)",
+          "type": "string",
+          "default": "./workspace"
+        },
+        "DEFAULT_TIMEOUT": {
+          "description": "Default subprocess timeout in seconds (default: 30)",
+          "type": "string",
+          "default": "30"
+        },
+        "DROPZONE_FOLDER": {
+          "description": "Traffic packet inbox directory (default: pcap_inbox)",
+          "type": "string",
+          "default": "pcap_inbox"
+        },
+        "MAX_PACKET_LIMIT": {
+          "description": "Maximum packets returned in a single query (default: 1000)",
+          "type": "string",
+          "default": "1000"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "j8ln4ka5ol",
+    "name": "AutoSOC Agent",
+    "namespace": "greenoceanbird",
+    "repository": {
+      "url": "https://github.com/greenoceanbird/traffic_analysis"
+    },
+    "slug": "traffic_analysis",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j8ln4ka5ol"
+  }
+}

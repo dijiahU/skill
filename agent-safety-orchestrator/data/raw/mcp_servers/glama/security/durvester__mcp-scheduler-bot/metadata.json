@@ -1,0 +1,112 @@
+{
+  "registry": "glama",
+  "id": "rtiwq968vw",
+  "namespace": "durvester",
+  "slug": "mcp-scheduler-bot",
+  "name": "Practice Fusion MCP Server",
+  "description": "Enables interaction with Practice Fusion EHR through 19 healthcare tools for patient management, appointment scheduling, insurance verification, and document handling. Supports both local and remote access with OAuth2 authentication and structured data resources.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables interaction with Practice Fusion EHR through 19 healthcare tools for patient management, appointment scheduling, insurance verification, and document handling. Supports both local and remote access with OAuth2 authentication and structured data resources.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Node environment (production, development, etc.)",
+          "type": "string"
+        },
+        "HTTP_HOST": {
+          "description": "HTTP server host (restrict to localhost unless external access needed)",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "HTTP_PORT": {
+          "description": "HTTP server port (only used when TRANSPORT_TYPE=http)",
+          "type": "string",
+          "default": "3000"
+        },
+        "PF_SCOPES": {
+          "description": "API scopes (space-separated list of required OAuth scopes)",
+          "type": "string"
+        },
+        "PF_API_URL": {
+          "description": "Practice Fusion API Base URL",
+          "type": "string",
+          "default": "https://qa-api.practicefusion.com"
+        },
+        "PF_CLIENT_ID": {
+          "description": "Practice Fusion API Client ID (required, get from Practice Fusion Developer Support)",
+          "type": "string"
+        },
+        "PF_TOKEN_PATH": {
+          "description": "OAuth token endpoint path",
+          "type": "string",
+          "default": "/ehr/oauth2/token"
+        },
+        "TRANSPORT_TYPE": {
+          "description": "Transport Type: 'stdio' (default) or 'http'",
+          "type": "string",
+          "default": "stdio"
+        },
+        "PF_CALLBACK_URL": {
+          "description": "OAuth callback URL for local development",
+          "type": "string",
+          "default": "http://localhost:3456/oauth/callback"
+        },
+        "HTTP_ENABLE_CORS": {
+          "description": "Enable CORS support",
+          "type": "string",
+          "default": "true"
+        },
+        "PF_CALLBACK_PORT": {
+          "description": "OAuth callback port",
+          "type": "string",
+          "default": "3456"
+        },
+        "PF_CLIENT_SECRET": {
+          "description": "Practice Fusion API Client Secret (required, get from Practice Fusion Developer Support)",
+          "type": "string"
+        },
+        "PF_AUTHORIZE_PATH": {
+          "description": "OAuth authorization endpoint path",
+          "type": "string",
+          "default": "/ehr/oauth2/auth"
+        },
+        "HTTP_ALLOWED_ORIGINS": {
+          "description": "Comma-separated list of allowed origins for CORS",
+          "type": "string",
+          "default": "http://localhost:*,https://localhost:*"
+        },
+        "HTTP_SESSION_TIMEOUT_MS": {
+          "description": "Session timeout in milliseconds",
+          "type": "string",
+          "default": "1800000"
+        },
+        "HTTP_REQUIRE_ORIGIN_VALIDATION": {
+          "description": "Enable origin validation for security",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": [
+        "PF_CLIENT_ID",
+        "PF_CLIENT_SECRET"
+      ]
+    },
+    "id": "rtiwq968vw",
+    "name": "Practice Fusion MCP Server",
+    "namespace": "durvester",
+    "repository": {
+      "url": "https://github.com/durvester/mcp-scheduler-bot"
+    },
+    "slug": "mcp-scheduler-bot",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rtiwq968vw"
+  }
+}

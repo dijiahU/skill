@@ -1,0 +1,138 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "agentmint/agentmintmcp",
+  "namespace": "agentmint",
+  "slug": "agentmintmcp",
+  "displayName": "AgentMint",
+  "description": "Cryptographic authorization for AI agents. Scoped delegation, checkpoint escalation, Ed25519 signed receipts. Block prompt injection at the tool boundary.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "secret",
+    "encryption",
+    "authentication",
+    "authorization",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "7a3a10ec-04b4-4851-97fd-c7db0f712c84",
+    "qualifiedName": "agentmint/agentmintmcp",
+    "namespace": "agentmint",
+    "slug": "agentmintmcp",
+    "displayName": "AgentMint",
+    "description": "Cryptographic authorization for AI agents. Scoped delegation, checkpoint escalation, Ed25519 signed receipts. Block prompt injection at the tool boundary.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/agent-mint.dev.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-04T14:58:46.176Z",
+    "homepage": "https://agent-mint.dev",
+    "bySmithery": false,
+    "owner": "org_01KNBVHBWM38NG4KJ2D35JDQHS",
+    "score": 0.017645245800585605
+  },
+  "detail": {
+    "qualifiedName": "agentmint/agentmintmcp",
+    "displayName": "AgentMint",
+    "description": "Cryptographic authorization for AI agents. Scoped delegation, checkpoint escalation, Ed25519 signed receipts. Block prompt injection at the tool boundary.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/agent-mint.dev.ico",
+    "remote": true,
+    "deploymentUrl": "https://agentmintmcp--agentmint.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agentmintmcp--agentmint.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "agentmint_issue_plan",
+        "description": "Human approves a scoped authorization plan.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ttl": {
+              "type": "integer",
+              "default": 300
+            },
+            "user": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "action": {
+              "type": "string"
+            },
+            "max_depth": {
+              "type": "integer",
+              "default": 2
+            },
+            "delegates_to": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "requires_checkpoint": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": null
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "agentmint_authorize",
+        "description": "Agent requests authorization before acting.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent": {
+              "type": "string"
+            },
+            "action": {
+              "type": "string"
+            },
+            "plan_id": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "agentmint_audit",
+        "description": "View authorization audit trail.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "plan_id": {
+              "type": "string",
+              "default": null
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object"
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

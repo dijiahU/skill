@@ -1,0 +1,71 @@
+{
+  "registry": "glama",
+  "id": "qvf4450be9",
+  "namespace": "jayozer",
+  "slug": "agentbuilder-outlook-mcp",
+  "name": "MCP Outlook Server",
+  "description": "Enables sending emails through Microsoft Outlook using the Microsoft Graph API. Provides the missing send-email capability for Agent Builder's Outlook connector with support for both delegated and app-only authentication flows.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables sending emails through Microsoft Outlook using the Microsoft Graph API. Provides the missing send-email capability for Agent Builder's Outlook connector with support for both delegated and app-only authentication flows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GRAPH_CLIENT_ID": {
+          "description": "Required for app-only client credentials flow",
+          "type": "string"
+        },
+        "GRAPH_TENANT_ID": {
+          "description": "Required for app-only client credentials flow",
+          "type": "string"
+        },
+        "GRAPH_CLIENT_SECRET": {
+          "description": "Required for app-only client credentials flow",
+          "type": "string"
+        },
+        "GRAPH_DEFAULT_SENDER": {
+          "description": "Mailbox to send from, e.g., user@outlook.com",
+          "type": "string"
+        },
+        "GRAPH_USER_ACCESS_TOKEN": {
+          "description": "Optional delegated bearer token (e.g., from Graph Explorer) for quick testing",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GRAPH_USER_ACCESS_TOKEN",
+            "GRAPH_DEFAULT_SENDER"
+          ]
+        },
+        {
+          "required": [
+            "GRAPH_DEFAULT_SENDER",
+            "GRAPH_TENANT_ID",
+            "GRAPH_CLIENT_ID",
+            "GRAPH_CLIENT_SECRET"
+          ]
+        }
+      ]
+    },
+    "id": "qvf4450be9",
+    "name": "MCP Outlook Server",
+    "namespace": "jayozer",
+    "repository": {
+      "url": "https://github.com/jayozer/agentbuilder-outlook-mcp"
+    },
+    "slug": "agentbuilder-outlook-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/qvf4450be9"
+  }
+}

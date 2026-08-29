@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "nq9ft7mre8",
+  "namespace": "Nirmal123K",
+  "slug": "mssql-mcp",
+  "name": "MSSQL MCP Server",
+  "description": "Enables AI assistants to interact with both local SQL Server and Azure SQL Database through natural language, supporting queries, data manipulation, and schema operations with built-in security features.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants to interact with both local SQL Server and Azure SQL Database through natural language, supporting queries, data manipulation, and schema operations with built-in security features.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "READONLY": {
+          "description": "Restrict to read-only operations",
+          "type": "string",
+          "default": "false"
+        },
+        "SQL_USER": {
+          "description": "Username (local SQL Server only)",
+          "type": "string"
+        },
+        "SERVER_NAME": {
+          "description": "SQL Server hostname",
+          "type": "string"
+        },
+        "SQL_PASSWORD": {
+          "description": "Password (local SQL Server only)",
+          "type": "string"
+        },
+        "DATABASE_NAME": {
+          "description": "Target database name",
+          "type": "string"
+        },
+        "TRUST_SERVER_CERTIFICATE": {
+          "description": "Trust self-signed certificates",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SERVER_NAME",
+            "DATABASE_NAME",
+            "SQL_USER",
+            "SQL_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SERVER_NAME",
+            "DATABASE_NAME"
+          ]
+        }
+      ]
+    },
+    "id": "nq9ft7mre8",
+    "name": "MSSQL MCP Server",
+    "namespace": "Nirmal123K",
+    "repository": {
+      "url": "https://github.com/Nirmal123K/mssql-mcp"
+    },
+    "slug": "mssql-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nq9ft7mre8"
+  }
+}

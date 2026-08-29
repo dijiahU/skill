@@ -1,0 +1,53 @@
+{
+  "registry": "glama",
+  "id": "smboww50li",
+  "namespace": "ANSH-RIYAL",
+  "slug": "FastMCP",
+  "name": "FastMCP Supply Chain Optimizer",
+  "description": "A custom implementation for real-time supply chain optimization that enables parallel tool calling to provide intelligent inventory management recommendations and actionable insights in response to live supply chain events.",
+  "discoveryQueries": [
+    "supply chain"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A custom implementation for real-time supply chain optimization that enables parallel tool calling to provide intelligent inventory management recommendations and actionable insights in response to live supply chain events.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CUSTOM_API_URL": {
+          "description": "URL for local LLM API when not using Gemini",
+          "type": "string",
+          "default": "http://localhost:8050"
+        },
+        "GEMINI_API_KEY": {
+          "description": "API key for Gemini AI, can be replaced with a local LLM API",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GEMINI_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "CUSTOM_API_URL"
+          ]
+        }
+      ]
+    },
+    "id": "smboww50li",
+    "name": "FastMCP Supply Chain Optimizer",
+    "namespace": "ANSH-RIYAL",
+    "repository": {
+      "url": "https://github.com/ANSH-RIYAL/FastMCP"
+    },
+    "slug": "FastMCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/smboww50li"
+  }
+}

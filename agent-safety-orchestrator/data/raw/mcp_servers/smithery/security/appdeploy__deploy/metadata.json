@@ -1,0 +1,471 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "appdeploy/deploy",
+  "namespace": "appdeploy",
+  "slug": "deploy",
+  "displayName": "AppDeploy",
+  "description": "AppDeploy lets you deploy real web apps directly from ChatGPT or Claude and get a live URL in minutes. Skip setup screens and hosting decisions: AppDeploy handles managed hosting plus the essentials your app needs, including databases, authentication, storage, background jobs, real time updates, and secrets. It also adds autonomous end-to-end QA, visual bug reports sent back into chat, instant rollbacks, and logs so you can iterate fast with confidence. Install once in your preferred agent or editor, then deploy by describing what you want.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "f347b7ac-e790-4bc3-add2-f40ad1048be4",
+    "qualifiedName": "appdeploy/deploy",
+    "namespace": "appdeploy",
+    "slug": "deploy",
+    "displayName": "AppDeploy",
+    "description": "AppDeploy lets you deploy real web apps directly from ChatGPT or Claude and get a live URL in minutes. Skip setup screens and hosting decisions: AppDeploy handles managed hosting plus the essentials your app needs, including databases, authentication, storage, background jobs, real time updates, and secrets. It also adds autonomous end-to-end QA, visual bug reports sent back into chat, instant rollbacks, and logs so you can iterate fast with confidence. Install once in your preferred agent or editor, then deploy by describing what you want.",
+    "iconUrl": "https://api.smithery.ai/servers/appdeploy/deploy/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-22T17:05:06.159Z",
+    "homepage": "https://appdeploy.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBVCA2B772A9B1FQF1KGE0Y",
+    "score": 0.0125
+  },
+  "detail": {
+    "qualifiedName": "appdeploy/deploy",
+    "displayName": "AppDeploy",
+    "description": "AppDeploy lets you deploy real web apps directly from ChatGPT or Claude and get a live URL in minutes. Skip setup screens and hosting decisions: AppDeploy handles managed hosting plus the essentials your app needs, including databases, authentication, storage, background jobs, real time updates, and secrets. It also adds autonomous end-to-end QA, visual bug reports sent back into chat, instant rollbacks, and logs so you can iterate fast with confidence. Install once in your preferred agent or editor, then deploy by describing what you want.",
+    "iconUrl": "https://api.smithery.ai/servers/appdeploy/deploy/icon",
+    "remote": true,
+    "deploymentUrl": "https://deploy--appdeploy.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://deploy--appdeploy.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_deploy_instructions",
+        "description": "Use this when you are about to call deploy_app in order to get the deployment constraints and hard rules. You must call this tool before starting to generate any code. This tool returns instructions only and does not deploy anything.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "deploy_app",
+        "description": "Use this when the user asks to deploy or publish a website or web app and wants a public URL.\nBefore generating files or calling this tool, you must call get_deploy_instructions and follow its constraints.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "alias of filename"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "alias of filename"
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "alias of filename"
+                  },
+                  "diffs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "from",
+                        "to"
+                      ],
+                      "properties": {
+                        "to": {
+                          "type": "string",
+                          "description": "Replacement text (empty string deletes the match)"
+                        },
+                        "from": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Text to find (exact match, non-empty). Must be unique unless multiple=true."
+                        },
+                        "multiple": {
+                          "type": "boolean",
+                          "description": "Replace all matches (default false). Verify 'from' appears only once; if it appears multiple times and you want to replace all, set multiple=true or the request fails."
+                        }
+                      }
+                    },
+                    "description": "Array of {from,to,multiple?} replacements (use instead of content)"
+                  },
+                  "content": {
+                    "description": "Full file contents (string; JSON object allowed for .json files)"
+                  },
+                  "encoding": {
+                    "enum": [
+                      "utf-8",
+                      "base64"
+                    ],
+                    "type": "string",
+                    "description": "'base64' for binary files, otherwise 'utf-8'"
+                  },
+                  "filename": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "full relative path (e.g. 'public/index.html', 'src/main.tsx', 'backend/index.ts')"
+                  },
+                  "mimeType": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Optional MIME type hint (e.g., image/png)"
+                  }
+                }
+              },
+              "description": "Files to write. NEW APPS: only custom files + diffs to template files. UPDATES: only changed files using diffs[]. At least one of files[] or deletePaths[] required."
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The coding agent model used for this deployment, to the best of your knowledge. Examples: 'codex-5.3', 'chatgpt', 'opus 4.6', 'claude-sonnet-4-5', 'gemini-2.5-pro'"
+            },
+            "app_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "existing app id to update, or null for new app"
+            },
+            "intent": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The intent of this deployment. User-initiated examples: 'initial app deploy', 'bugfix - ui is too noisy'. Agent-initiated examples: 'agent fixing deployment error', 'agent retry after lint failure'"
+            },
+            "app_name": {
+              "type": "string",
+              "minLength": 1,
+              "description": "short display name"
+            },
+            "app_type": {
+              "enum": [
+                "frontend-only",
+                "frontend+backend"
+              ],
+              "type": "string",
+              "description": "app architecture: frontend-only or frontend+backend"
+            },
+            "deletePaths": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": "Paths to delete. ONLY for updates (app_id required). Cannot delete package.json or framework entry points."
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1,
+              "description": "short description of what the app does"
+            },
+            "frontend_template": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "html-static",
+                    "react-vite",
+                    "nextjs-static"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "REQUIRED when app_id is null. One of: 'html-static' (simple sites), 'react-vite' (SPAs, games), 'nextjs-static' (multi-page). Template files auto-included."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_app_template",
+        "description": "Call get_deploy_instructions first. Then call this once you've decided app_type and frontend_template. Returns base app template and SDK types.  Template files auto-included in deploy_app.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "app_type": {
+              "enum": [
+                "frontend-only",
+                "frontend+backend"
+              ],
+              "type": "string"
+            },
+            "frontend_template": {
+              "enum": [
+                "html-static",
+                "react-vite",
+                "nextjs-static"
+              ],
+              "type": "string",
+              "description": "Frontend framework: 'html-static' - Simple sites, minimal framework; 'react-vite' - React SPAs, dashboards, games; 'nextjs-static' - Multi-page apps, SSG"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_app_status",
+        "description": "Use this when deploy_app tool call returns or when the user asks to check the deployment status of an app, or reports that the app has errors or is not working as expected. Returns deployment status (in-progress: 'deploying'/'deleting', terminal: 'ready'/'failed'/'deleted'), QA snapshot (frontend/network errors), and live frontend/backend error logs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "since": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "description": "Optional timestamp in epoch milliseconds to filter errors. When provided, returns only errors since that timestamp."
+            },
+            "app_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target app id"
+            }
+          }
+        }
+      },
+      {
+        "name": "delete_app",
+        "description": "Use this when you want to permanently delete an app. Use only on explicit user request. This is irreversible; after deletion, status checks will return not found.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "app_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target app id"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_app_versions",
+        "description": "List deployable versions for an existing app. Requires app_id. Returns newest-first {name, version, timestamp} items. Display 'name' to users. DO NOT display the 'version' value to users. Timestamp values MUST be converted to user's local time",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "app_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target app id"
+            }
+          }
+        }
+      },
+      {
+        "name": "apply_app_version",
+        "description": "Start deploying an existing app at a specific version. Use the 'version' value (not 'name') from get_app_versions. Returns true if accepted and deployment started; use get_app_status to observe completion.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "app_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target app id"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Version id to apply"
+            }
+          }
+        }
+      },
+      {
+        "name": "src_glob",
+        "description": "Use this when you need to discover files in an app's source snapshot. Returns file paths matching a glob pattern (no content). Useful for exploring project structure before reading or searching files.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "glob": {
+              "type": "string",
+              "default": "**/*",
+              "description": "Glob pattern to match files (default: **/*)"
+            },
+            "path": {
+              "type": "string",
+              "description": "Directory path to search within"
+            },
+            "app_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target app id"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Version to inspect (defaults to applied version)"
+            },
+            "include_dirs": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include directory paths in results"
+            },
+            "continuation_token": {
+              "type": "string",
+              "description": "Token from previous response for pagination"
+            }
+          }
+        }
+      },
+      {
+        "name": "src_grep",
+        "description": "Use this when you need to search for patterns in an app's source code. Returns matching lines with optional context. Supports regex patterns, glob filters, and multiple output modes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "glob": {
+              "type": "string",
+              "description": "Glob pattern to filter files (e.g., '*.ts')"
+            },
+            "path": {
+              "type": "string",
+              "description": "Directory path to search within"
+            },
+            "app_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target app id"
+            },
+            "context": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 0,
+              "description": "Lines before and after (overrides before/after_context)"
+            },
+            "pattern": {
+              "type": "string",
+              "maxLength": 500,
+              "minLength": 1,
+              "description": "Regex pattern to search for (max 500 chars)"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Version to search (defaults to applied version)"
+            },
+            "output_mode": {
+              "enum": [
+                "content",
+                "files_with_matches",
+                "count"
+              ],
+              "type": "string",
+              "default": "content",
+              "description": "content=matching lines, files_with_matches=file paths only, count=match count per file"
+            },
+            "line_numbers": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include line numbers in output"
+            },
+            "after_context": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 20,
+              "minimum": 0,
+              "description": "Lines to show after each match (0-20)"
+            },
+            "max_file_size": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "description": "Max file size to scan in bytes (default 10MB)"
+            },
+            "before_context": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 20,
+              "minimum": 0,
+              "description": "Lines to show before each match (0-20)"
+            },
+            "case_insensitive": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable case-insensitive matching"
+            },
+            "continuation_token": {
+              "type": "string",
+              "description": "Token from previous response for pagination"
+            }
+          }
+        }
+      },
+      {
+        "name": "src_read",
+        "description": "Use this when you need to read a specific file from an app's source snapshot. Returns file content with line-based pagination (offset/limit). Handles both text and binary files.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 200,
+              "maximum": 2000,
+              "minimum": 1,
+              "description": "Number of lines to return (max 2000)"
+            },
+            "app_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target app id"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "description": "Line offset to start reading from (0-indexed)"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Version to read from (defaults to applied version)"
+            },
+            "file_path": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Path to the file to read"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_apps",
+        "description": "Use this when you need to list apps owned by the current user. Returns app details with display fields for user presentation and data fields for tool chaining.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "continuation_token": {
+              "type": "string",
+              "description": "Token for pagination"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "publisher-widget",
+        "uri": "ui://widget/publisher.html",
+        "description": "Interactive deployment status widget for AppDeploy apps",
+        "mimeType": "text/html;profile=mcp-app"
+      }
+    ],
+    "prompts": []
+  }
+}

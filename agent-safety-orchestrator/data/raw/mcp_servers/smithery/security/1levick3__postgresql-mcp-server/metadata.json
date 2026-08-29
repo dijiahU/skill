@@ -1,0 +1,84 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "1Levick3/postgresql-mcp-server",
+  "namespace": "1Levick3",
+  "slug": "postgresql-mcp-server",
+  "displayName": "PostgreSQL Database Query Server",
+  "description": "Enable direct execution of custom SQL queries against PostgreSQL databases with support for parameterized queries and configurable timeouts. Securely manage database connections with SSL/TLS and connection pooling. Simplify database management and monitoring through an MCP-compliant interface.",
+  "discoveryQueries": [
+    "security",
+    "encryption",
+    "firewall"
+  ],
+  "rawRecord": {
+    "id": "7bdd2615-5e63-4afd-b0e4-7dda4c01a6ad",
+    "qualifiedName": "1Levick3/postgresql-mcp-server",
+    "namespace": "1levick3",
+    "slug": "postgresql-mcp-server",
+    "displayName": "PostgreSQL Database Query Server",
+    "description": "Enable direct execution of custom SQL queries against PostgreSQL databases with support for parameterized queries and configurable timeouts. Securely manage database connections with SSL/TLS and connection pooling. Simplify database management and monitoring through an MCP-compliant interface.",
+    "iconUrl": "https://api.smithery.ai/servers/1Levick3/postgresql-mcp-server/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": false,
+    "isDeployed": true,
+    "createdAt": "2025-04-28T13:00:48.703Z",
+    "homepage": "https://github.com/1Levick3/postgresql-mcp-server",
+    "bySmithery": false,
+    "owner": "org_01KNB7H2P1ZKZXC89HXFD8AVCJ",
+    "score": 0.012195121951219513
+  },
+  "detail": {
+    "qualifiedName": "1Levick3/postgresql-mcp-server",
+    "displayName": "PostgreSQL Database Query Server",
+    "description": "Enable direct execution of custom SQL queries against PostgreSQL databases with support for parameterized queries and configurable timeouts. Securely manage database connections with SSL/TLS and connection pooling. Simplify database management and monitoring through an MCP-compliant interface.",
+    "iconUrl": "https://api.smithery.ai/servers/1Levick3/postgresql-mcp-server/icon",
+    "remote": false,
+    "deploymentUrl": null,
+    "connections": [
+      {
+        "type": "stdio",
+        "bundleUrl": "https://backend.smithery.ai/storage/v1/object/public/bundles/@1Levick3/postgresql-mcp-server/server.mcpb",
+        "runtime": "node",
+        "configSchema": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "execute_custom_query",
+        "description": "Execute a custom SQL query against the database. WARNING: Use with care. Do not expose to untrusted input.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "SQL query to execute"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional parameter values for the query"
+            },
+            "timeout": {
+              "type": "number",
+              "description": "Optional query timeout in milliseconds"
+            },
+            "connectionString": {
+              "type": "string",
+              "description": "PostgreSQL connection string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

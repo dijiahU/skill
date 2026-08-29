@@ -1,0 +1,93 @@
+{
+  "registry": "glama",
+  "id": "ubk2svbb17",
+  "namespace": "shameerampcome",
+  "slug": "servicenow-mcp",
+  "name": "ServiceNow MCP Server",
+  "description": "Enables Claude to interact with ServiceNow instances to manage incidents, service catalogs, workflows, and knowledge bases through the ServiceNow API. It supports comprehensive operations including record querying, script execution, and user management using various authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables Claude to interact with ServiceNow instances to manage incidents, service catalogs, workflows, and knowledge bases through the ServiceNow API. It supports comprehensive operations including record querying, script execution, and user management using various authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SERVICENOW_API_KEY": {
+          "description": "ServiceNow API key (required for api_key auth)",
+          "type": "string"
+        },
+        "SERVICENOW_PASSWORD": {
+          "description": "Password for ServiceNow (required for basic auth)",
+          "type": "string"
+        },
+        "SERVICENOW_USERNAME": {
+          "description": "Username for ServiceNow (required for basic auth)",
+          "type": "string"
+        },
+        "SERVICENOW_AUTH_TYPE": {
+          "description": "The authentication method to use: basic, oauth, or api_key",
+          "type": "string"
+        },
+        "SERVICENOW_CLIENT_ID": {
+          "description": "OAuth client ID (required for oauth)",
+          "type": "string"
+        },
+        "SERVICENOW_TOKEN_URL": {
+          "description": "OAuth token URL, usually https://<instance>.service-now.com/oauth_token.do (required for oauth)",
+          "type": "string"
+        },
+        "SERVICENOW_INSTANCE_URL": {
+          "description": "The URL of your ServiceNow instance (e.g., https://your-instance.service-now.com)",
+          "type": "string"
+        },
+        "SERVICENOW_CLIENT_SECRET": {
+          "description": "OAuth client secret (required for oauth)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_AUTH_TYPE",
+            "SERVICENOW_USERNAME",
+            "SERVICENOW_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_AUTH_TYPE",
+            "SERVICENOW_CLIENT_ID",
+            "SERVICENOW_CLIENT_SECRET",
+            "SERVICENOW_TOKEN_URL"
+          ]
+        },
+        {
+          "required": [
+            "SERVICENOW_INSTANCE_URL",
+            "SERVICENOW_AUTH_TYPE",
+            "SERVICENOW_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "ubk2svbb17",
+    "name": "ServiceNow MCP Server",
+    "namespace": "shameerampcome",
+    "repository": {
+      "url": "https://github.com/shameerampcome/servicenow-mcp"
+    },
+    "slug": "servicenow-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ubk2svbb17"
+  }
+}

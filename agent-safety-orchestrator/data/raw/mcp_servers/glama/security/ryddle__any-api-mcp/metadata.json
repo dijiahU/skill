@@ -1,0 +1,81 @@
+{
+  "registry": "glama",
+  "id": "nd2ubcw0js",
+  "namespace": "ryddle",
+  "slug": "any-api-mcp",
+  "name": "Any API MCP Server",
+  "description": "Dynamically converts any API with an OpenAPI v3 specification into MCP tools for AI assistants. It supports multiple authentication methods including OAuth2, Bearer tokens, and API keys for flexible integration.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Dynamically converts any API with an OpenAPI v3 specification into MCP tools for AI assistants. It supports multiple authentication methods including OAuth2, Bearer tokens, and API keys for flexible integration.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_KEY": {
+          "description": "API Key or identifier used for authentication.",
+          "type": "string"
+        },
+        "API_URL": {
+          "description": "The base URL of the API to be exposed.",
+          "type": "string"
+        },
+        "AUTH_TYPE": {
+          "description": "Authentication method to use (none, basic, api-key, bearer-token, bearer-endpoint, oauth2-client-credentials).",
+          "type": "string"
+        },
+        "API_SECRET": {
+          "description": "API Secret or password used for authentication.",
+          "type": "string"
+        },
+        "CONFIG_PATH": {
+          "description": "Path to configuration file (e.g., ./config.json)",
+          "type": "string"
+        },
+        "SERVER_NAME": {
+          "description": "Custom name for the MCP server.",
+          "type": "string"
+        },
+        "AUTH_ENDPOINT": {
+          "description": "Authentication endpoint path (required for bearer-endpoint type).",
+          "type": "string"
+        },
+        "AUTH_TOKEN_PATH": {
+          "description": "JSON path to the token in the authentication response (e.g., 'token').",
+          "type": "string"
+        },
+        "OPENAPI_SPEC_PATH": {
+          "description": "Local path to the OpenAPI spec file (JSON or YAML).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "CONFIG_PATH"
+          ]
+        },
+        {
+          "required": [
+            "API_URL",
+            "OPENAPI_SPEC_PATH"
+          ]
+        }
+      ]
+    },
+    "id": "nd2ubcw0js",
+    "name": "Any API MCP Server",
+    "namespace": "ryddle",
+    "repository": {
+      "url": "https://github.com/ryddle/any-api-mcp"
+    },
+    "slug": "any-api-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nd2ubcw0js"
+  }
+}

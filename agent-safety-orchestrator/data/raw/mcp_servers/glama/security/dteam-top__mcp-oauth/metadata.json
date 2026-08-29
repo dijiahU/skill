@@ -1,0 +1,88 @@
+{
+  "registry": "glama",
+  "id": "cjk6exdyo7",
+  "namespace": "DTeam-Top",
+  "slug": "mcp-oauth",
+  "name": "OAuth 2.1 MCP Server",
+  "description": "A Next.js-based MCP server template that implements OAuth 2.1 authentication with support for both SSE and Streamable HTTP transports. Provides a reference implementation for building authenticated MCP servers that work with Claude, Cursor, VSCode, and other MCP clients.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Next.js-based MCP server template that implements OAuth 2.1 authentication with support for both SSE and Streamable HTTP transports. Provides a reference implementation for building authenticated MCP servers that work with Claude, Cursor, VSCode, and other MCP clients.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "REDIS_URL": {
+          "description": "Redis connection string (required if you need SSE transport to work, i.e. you want to support Claude Desktop and Web)",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL database connection string (required for OAuth authentication to work, this is where sessions etc. live)",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_ID": {
+          "description": "Your GitHub client ID",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "A Google OAuth client ID",
+          "type": "string"
+        },
+        "DISCORD_CLIENT_ID": {
+          "description": "Your Discord client ID",
+          "type": "string"
+        },
+        "BETTER_AUTH_SECRET": {
+          "description": "Any random string for Better Auth",
+          "type": "string"
+        },
+        "GITHUB_CLIENT_SECRET": {
+          "description": "Your GitHub client secret",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "A Google OAuth client secret",
+          "type": "string"
+        },
+        "NEXT_PUBLIC_BASE_URL": {
+          "description": "The base URL for the Next.js application",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "DISCORD_CLIENT_SECRET": {
+          "description": "Your Discord client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABASE_URL",
+        "BETTER_AUTH_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "DISCORD_CLIENT_ID",
+        "DISCORD_CLIENT_SECRET",
+        "NEXT_PUBLIC_BASE_URL",
+        "REDIS_URL"
+      ]
+    },
+    "id": "cjk6exdyo7",
+    "name": "OAuth 2.1 MCP Server",
+    "namespace": "DTeam-Top",
+    "repository": {
+      "url": "https://github.com/DTeam-Top/mcp-oauth"
+    },
+    "slug": "mcp-oauth",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/cjk6exdyo7"
+  }
+}

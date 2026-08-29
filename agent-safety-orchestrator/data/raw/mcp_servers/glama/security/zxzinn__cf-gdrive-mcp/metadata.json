@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "d4le53ka9x",
+  "namespace": "zxzinn",
+  "slug": "cf-gdrive-mcp",
+  "name": "Cloudflare Google OAuth MCP Server",
+  "description": "A remote MCP server deployable on Cloudflare Workers that provides integrated Google OAuth authentication for secure tool access. It serves as a reference implementation for building persistent, authenticated MCP connections using Cloudflare Durable Objects and Streamable HTTP.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A remote MCP server deployable on Cloudflare Workers that provides integrated Google OAuth authentication for secure tool access. It serves as a reference implementation for building persistent, authenticated MCP connections using Cloudflare Durable Objects and Streamable HTTP.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOSTED_DOMAIN": {
+          "description": "Optional: Use this to restrict access to a specific Google Workspace hosted domain.",
+          "type": "string"
+        },
+        "ALLOWED_API_KEYS": {
+          "description": "A comma-separated list of API keys authorized to access the MCP endpoints.",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "The Client ID for your Google Cloud OAuth Client app.",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "The Client secret for your Google Cloud OAuth Client app.",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random string used for encrypting cookies (e.g., generated with 'openssl rand -hex 32').",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY",
+        "ALLOWED_API_KEYS"
+      ]
+    },
+    "id": "d4le53ka9x",
+    "name": "Cloudflare Google OAuth MCP Server",
+    "namespace": "zxzinn",
+    "repository": {
+      "url": "https://github.com/zxzinn/cf-gdrive-mcp"
+    },
+    "slug": "cf-gdrive-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/d4le53ka9x"
+  }
+}

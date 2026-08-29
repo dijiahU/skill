@@ -1,0 +1,53 @@
+{
+  "registry": "glama",
+  "id": "q07x80qy59",
+  "namespace": "step-security",
+  "slug": "stepsecurity-mcp",
+  "name": "stepsecurity-mcp",
+  "description": "MCP server for the StepSecurity platform that enables investigating supply-chain and CI/CD security issues through natural language.",
+  "discoveryQueries": [
+    "security",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:remote-capable"
+    ],
+    "description": "MCP server for the StepSecurity platform that enables investigating supply-chain and CI/CD security issues through natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "debug / info / warn / error. Logs go to stderr.",
+          "type": "string",
+          "default": "info"
+        },
+        "STEP_SECURITY_API_KEY": {
+          "description": "Your StepSecurity API key. Sent as Authorization: Bearer <key>. A read-only key is sufficient.",
+          "type": "string"
+        },
+        "STEP_SECURITY_CUSTOMER": {
+          "description": "Your tenant identifier. When set, customer is optional on every tool call.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "STEP_SECURITY_API_KEY"
+      ]
+    },
+    "id": "q07x80qy59",
+    "name": "stepsecurity-mcp",
+    "namespace": "step-security",
+    "repository": {
+      "url": "https://github.com/step-security/stepsecurity-mcp"
+    },
+    "slug": "stepsecurity-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/q07x80qy59"
+  }
+}

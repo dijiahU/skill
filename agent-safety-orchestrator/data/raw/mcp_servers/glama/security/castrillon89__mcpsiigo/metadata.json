@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "s3lduy3qpr",
+  "namespace": "castrillon89",
+  "slug": "mcpsiigo",
+  "name": "Siigo MCP Server",
+  "description": "Enables interaction with the Siigo API to manage products, customers, and invoices with enterprise-grade security features like RBAC and audit logging. It supports financial reporting operations and secure data handling through the Model Context Protocol.",
+  "discoveryQueries": [
+    "security",
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with the Siigo API to manage products, customers, and invoices with enterprise-grade security features like RBAC and audit logging. It supports financial reporting operations and secure data handling through the Model Context Protocol.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "The execution environment, usually set to 'production'.",
+          "type": "string"
+        },
+        "SIIGO_ROLE": {
+          "description": "The security role for the server: 'viewer' (read-only), 'editor' (read + create/update), or 'admin' (full access).",
+          "type": "string",
+          "default": "viewer"
+        },
+        "SIIGO_BASE_URL": {
+          "description": "Base URL for the Siigo API (e.g., https://sandbox.siigo.com for testing).",
+          "type": "string"
+        },
+        "SIIGO_USERNAME": {
+          "description": "Email address of the Siigo account with API access.",
+          "type": "string"
+        },
+        "ENABLE_AUDIT_LOG": {
+          "description": "Whether to enable audit logging for all operations.",
+          "type": "string",
+          "default": "true"
+        },
+        "SIIGO_ACCESS_KEY": {
+          "description": "The API access key provided by Siigo.",
+          "type": "string"
+        },
+        "MASK_SENSITIVE_DATA": {
+          "description": "Whether to mask sensitive data in the log files.",
+          "type": "string",
+          "default": "true"
+        },
+        "RATE_LIMIT_REQUESTS": {
+          "description": "Number of allowed requests per tool within the rate limit window.",
+          "type": "string",
+          "default": "50"
+        },
+        "RATE_LIMIT_WINDOW_MS": {
+          "description": "The duration of the rate limit window in milliseconds.",
+          "type": "string",
+          "default": "60000"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SIIGO_USERNAME",
+        "SIIGO_ACCESS_KEY"
+      ]
+    },
+    "id": "s3lduy3qpr",
+    "name": "Siigo MCP Server",
+    "namespace": "castrillon89",
+    "repository": {
+      "url": "https://github.com/castrillon89/mcpsiigo"
+    },
+    "slug": "mcpsiigo",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/s3lduy3qpr"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "s14awu9cto",
+  "namespace": "mahrukh-n8n",
+  "slug": "freedcampMCP",
+  "name": "Freedcamp MCP Server",
+  "description": "Enables to manage Freedcamp projects, tasks, users, and comments through natural language with HMAC-SHA1 authentication and name resolution.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables to manage Freedcamp projects, tasks, users, and comments through natural language with HMAC-SHA1 authentication and name resolution.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Log level: debug, info, warn, error",
+          "type": "string",
+          "default": "info"
+        },
+        "CACHE_TTL_MS": {
+          "description": "Name resolution cache TTL in ms",
+          "type": "string",
+          "default": "60000"
+        },
+        "FREEDCAMP_API_KEY": {
+          "description": "Freedcamp API key",
+          "type": "string"
+        },
+        "FREEDCAMP_API_URL": {
+          "description": "Base URL for self-hosted Freedcamp",
+          "type": "string",
+          "default": "https://freedcamp.com"
+        },
+        "REQUEST_TIMEOUT_MS": {
+          "description": "HTTP request timeout in ms",
+          "type": "string",
+          "default": "30000"
+        },
+        "FREEDCAMP_API_SECRET": {
+          "description": "Freedcamp API secret",
+          "type": "string"
+        },
+        "MAX_CONCURRENT_REQUESTS": {
+          "description": "Max concurrent API requests",
+          "type": "string",
+          "default": "6"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FREEDCAMP_API_KEY",
+        "FREEDCAMP_API_SECRET"
+      ]
+    },
+    "id": "s14awu9cto",
+    "name": "Freedcamp MCP Server",
+    "namespace": "mahrukh-n8n",
+    "repository": {
+      "url": "https://github.com/mahrukh-n8n/freedcampMCP"
+    },
+    "slug": "freedcampMCP",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/s14awu9cto"
+  }
+}

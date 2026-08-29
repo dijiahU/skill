@@ -1,0 +1,96 @@
+{
+  "registry": "glama",
+  "id": "yyzueufbby",
+  "namespace": "Gcluowenqiang",
+  "slug": "Mysql-mcp",
+  "name": "Mysql-mcp",
+  "description": "A specialized MySQL MCP server for Cursor that enables users to query table structures, execute SQL, and generate database documentation. It features multiple security modes to ensure safe interaction while providing tools for database overviews and query caching.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A specialized MySQL MCP server for Cursor that enables users to query table structures, execute SQL, and generate database documentation. It features multiple security modes to ensure safe interaction while providing tools for database overviews and query caching.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MYSQL_HOST": {
+          "description": "数据库主机地址 (Database host address)",
+          "type": "string"
+        },
+        "MYSQL_PORT": {
+          "description": "数据库端口 (Database port)",
+          "type": "string"
+        },
+        "MYSQL_DATABASE": {
+          "description": "数据库名称 (Database name)",
+          "type": "string"
+        },
+        "MYSQL_PASSWORD": {
+          "description": "数据库密码 (Database password)",
+          "type": "string"
+        },
+        "MYSQL_USERNAME": {
+          "description": "数据库用户名 (Database username)",
+          "type": "string"
+        },
+        "MYSQL_MAX_RETRIES": {
+          "description": "最大重试次数（默认：3）",
+          "type": "string",
+          "default": "3"
+        },
+        "MYSQL_QUERY_TIMEOUT": {
+          "description": "查询超时时间（秒，默认：60）",
+          "type": "string",
+          "default": "60"
+        },
+        "MYSQL_SECURITY_MODE": {
+          "description": "安全模式 (readonly/limited_write/full_access，默认：readonly)",
+          "type": "string",
+          "default": "readonly"
+        },
+        "MYSQL_ALLOWED_SCHEMAS": {
+          "description": "允许访问的数据库列表，支持三种配置方式：'*' (允许访问所有有权限的数据库), 'auto' (自动发现有权限的数据库), 'db1,db2,db3' (明确指定数据库列表)",
+          "type": "string"
+        },
+        "MYSQL_CONNECT_TIMEOUT": {
+          "description": "连接超时时间（秒，默认：30）",
+          "type": "string",
+          "default": "30"
+        },
+        "MYSQL_MAX_RESULT_ROWS": {
+          "description": "最大返回行数（默认：1000）",
+          "type": "string",
+          "default": "1000"
+        },
+        "MYSQL_ENABLE_QUERY_LOG": {
+          "description": "是否启用查询日志（true/false，默认：false）",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MYSQL_HOST",
+        "MYSQL_PORT",
+        "MYSQL_USERNAME",
+        "MYSQL_PASSWORD",
+        "MYSQL_DATABASE"
+      ]
+    },
+    "id": "yyzueufbby",
+    "name": "Mysql-mcp",
+    "namespace": "Gcluowenqiang",
+    "repository": {
+      "url": "https://github.com/Gcluowenqiang/Mysql-mcp"
+    },
+    "slug": "Mysql-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/yyzueufbby"
+  }
+}

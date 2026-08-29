@@ -1,0 +1,73 @@
+{
+  "registry": "glama",
+  "id": "erw7nor5p4",
+  "namespace": "mcp-nexus",
+  "slug": "mcp-suite",
+  "name": "mcp-suite",
+  "description": "A production-grade TypeScript MCP server that provides AI agents with structured access to real-world data across financial markets, Web3/DeFi, developer tools, and healthcare domains. It features built-in authentication, domain isolation, caching, and rate limiting for reliable API integrations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A production-grade TypeScript MCP server that provides AI agents with structured access to real-world data across financial markets, Web3/DeFi, developer tools, and healthcare domains. It features built-in authentication, domain isolation, caching, and rate limiting for reliable API integrations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_PORT": {
+          "description": "Port for HTTP transport; only used with --transport http.",
+          "type": "string",
+          "default": "3000"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level: debug, info, warn, or error.",
+          "type": "string",
+          "default": "info"
+        },
+        "GITHUB_TOKEN": {
+          "description": "Token for GitHub API to enable Developer Tools domain.",
+          "type": "string"
+        },
+        "AUTH_DISABLED": {
+          "description": "Set to true to disable authentication for local development only.",
+          "type": "string",
+          "default": "false"
+        },
+        "FHIR_BASE_URL": {
+          "description": "Base URL for FHIR server; defaults to public HAPI sandbox.",
+          "type": "string",
+          "default": "https://hapi.fhir.org/baseR4"
+        },
+        "MCP_JWT_SECRET": {
+          "description": "Secret for JWT validation; required in production unless AUTH_DISABLED is true.",
+          "type": "string"
+        },
+        "ALCHEMY_API_KEY": {
+          "description": "API key for Alchemy to enable Web3/DeFi domain.",
+          "type": "string"
+        },
+        "OPENSEA_API_KEY": {
+          "description": "API key for OpenSea to enable Web3/DeFi domain.",
+          "type": "string"
+        },
+        "ALPHA_VANTAGE_API_KEY": {
+          "description": "API key for Alpha Vantage to enable Financial Markets domain.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "erw7nor5p4",
+    "name": "mcp-suite",
+    "namespace": "mcp-nexus",
+    "repository": {
+      "url": "https://github.com/mcp-nexus/mcp-suite"
+    },
+    "slug": "mcp-suite",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/erw7nor5p4"
+  }
+}

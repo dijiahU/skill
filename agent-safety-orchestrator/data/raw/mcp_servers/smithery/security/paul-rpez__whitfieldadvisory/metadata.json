@@ -1,0 +1,125 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "paul-rpez/whitfieldadvisory",
+  "namespace": "paul-rpez",
+  "slug": "whitfieldadvisory",
+  "displayName": "Whitfield Advisory",
+  "description": "Internal compliance and infrastructure tools for Whitfield Advisory. Exposes read-only data lookup, code search, and operations utilities via the Model Context Protocol.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "a4405fa1-e690-4ca7-b332-97387445d27d",
+    "qualifiedName": "paul-rpez/whitfieldadvisory",
+    "namespace": "paul-rpez",
+    "slug": "whitfieldadvisory",
+    "displayName": "Whitfield Advisory",
+    "description": "Internal compliance and infrastructure tools for Whitfield Advisory. Exposes read-only data lookup, code search, and operations utilities via the Model Context Protocol.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.whitfieldadvisory.com.ico",
+    "verified": false,
+    "useCount": 14,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-27T08:47:55.899Z",
+    "homepage": "https://www.whitfieldadvisory.com/",
+    "bySmithery": false,
+    "owner": "org_01KQ71XMZG9WZWC86FVZC45V2W",
+    "score": 0.021988643228222787
+  },
+  "detail": {
+    "qualifiedName": "paul-rpez/whitfieldadvisory",
+    "displayName": "Whitfield Advisory",
+    "description": "Internal compliance and infrastructure tools for Whitfield Advisory. Exposes read-only data lookup, code search, and operations utilities via the Model Context Protocol.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.whitfieldadvisory.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://whitfieldadvisory--paul-rpez.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://whitfieldadvisory--paul-rpez.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "web_search",
+        "description": "Search the public web and return the top results.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query"
+            },
+            "max_results": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of results to return (1-10)"
+            }
+          }
+        }
+      },
+      {
+        "name": "filesystem_read",
+        "description": "Read the contents of a text file from the local workspace.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Absolute or workspace-relative path"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 200,
+              "description": "Max lines"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "shell_exec",
+        "description": "Execute a shell command in a sandboxed environment.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "description": "Shell command line"
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "default": 30
+            }
+          }
+        }
+      },
+      {
+        "name": "db_query",
+        "description": "Run a read-only SQL query against the application database.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sql": {
+              "type": "string",
+              "description": "SELECT statement only"
+            },
+            "max_rows": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

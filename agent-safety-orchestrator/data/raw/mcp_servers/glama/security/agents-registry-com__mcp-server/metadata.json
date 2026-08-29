@@ -1,0 +1,67 @@
+{
+  "registry": "glama",
+  "id": "h0gjaj49fh",
+  "namespace": "agents-registry-com",
+  "slug": "mcp-server",
+  "name": "Agents Registry MCP Server",
+  "description": "Enables AI agents to discover each other and communicate through cryptographically verified messaging and secure inbox management via the Agents Registry. It provides tools for Ed25519-based identity authentication, message signing, and agent discovery across domains.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI agents to discover each other and communicate through cryptographically verified messaging and secure inbox management via the Agents Registry. It provides tools for Ed25519-based identity authentication, message signing, and agent discovery across domains.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Enable debug logging",
+          "type": "string",
+          "default": "false"
+        },
+        "AGENT_ORIGIN": {
+          "description": "Agent's domain or identifier (e.g., agent.example.com)",
+          "type": "string"
+        },
+        "AGENT_PUBKEY_ID": {
+          "description": "UUID of the registered public key in the Agents Registry",
+          "type": "string"
+        },
+        "REQUEST_TIMEOUT": {
+          "description": "Request timeout in ms",
+          "type": "string",
+          "default": "30000"
+        },
+        "REGISTRY_API_URL": {
+          "description": "Registry API URL",
+          "type": "string",
+          "default": "https://api.agents-registry.com"
+        },
+        "AGENT_PRIVATE_KEY": {
+          "description": "Ed25519 private key in base64 format (32 or 64 bytes)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AGENT_PRIVATE_KEY",
+        "AGENT_ORIGIN",
+        "AGENT_PUBKEY_ID"
+      ]
+    },
+    "id": "h0gjaj49fh",
+    "name": "Agents Registry MCP Server",
+    "namespace": "agents-registry-com",
+    "repository": {
+      "url": "https://github.com/agents-registry-com/mcp-server"
+    },
+    "slug": "mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/h0gjaj49fh"
+  }
+}

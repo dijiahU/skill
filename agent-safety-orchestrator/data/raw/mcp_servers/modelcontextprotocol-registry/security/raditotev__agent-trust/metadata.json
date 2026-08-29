@@ -1,0 +1,70 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.raditotev/agent-trust",
+  "slug": "raditotev__agent-trust",
+  "title": "AgentTrust",
+  "description": "MCP Server for Agent Reputation & Trust Scoring",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.raditotev/agent-trust",
+      "description": "MCP Server for Agent Reputation & Trust Scoring",
+      "title": "AgentTrust",
+      "repository": {
+        "url": "https://github.com/raditotev/agent-trust",
+        "source": "github"
+      },
+      "version": "0.1.0",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "agent-trust-mcp",
+          "version": "0.1.0",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "PostgreSQL asyncpg connection string",
+              "isRequired": true,
+              "format": "string",
+              "name": "DATABASE_URL"
+            },
+            {
+              "description": "Redis connection string",
+              "isRequired": true,
+              "format": "string",
+              "name": "REDIS_URL"
+            },
+            {
+              "description": "Path to Ed25519 private key PEM file",
+              "isRequired": true,
+              "format": "string",
+              "name": "SIGNING_KEY_PATH"
+            },
+            {
+              "description": "Authentication provider: agentauth | standalone | both (default: both)",
+              "format": "string",
+              "name": "AUTH_PROVIDER"
+            },
+            {
+              "description": "Access token for AgentAuth MCP tool calls",
+              "format": "string",
+              "isSecret": true,
+              "name": "AGENTAUTH_ACCESS_TOKEN"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-03-21T10:48:05.398471Z",
+        "publishedAt": "2026-03-21T10:48:05.398471Z",
+        "updatedAt": "2026-03-21T10:48:05.398471Z",
+        "isLatest": false
+      }
+    }
+  }
+}

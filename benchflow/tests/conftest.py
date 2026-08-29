@@ -1,0 +1,121 @@
+"""Test fixtures."""
+
+import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import pytest
+
+REPO_ROOT = Path(__file__).parent.parent
+SRC_ROOT = REPO_ROOT / "src"
+if str(SRC_ROOT) not in sys.path:
+    sys.path.insert(0, str(SRC_ROOT))
+
+# Unless LITELLM_MODE is PRODUCTION, importing litellm runs load_dotenv(),
+# which walks ancestor directories and injects any developer `.env` (real API
+# keys included) into os.environ for the rest of the pytest process — breaking
+# env-sensitive tests that run after a litellm-importing module. Same intent
+# as isolate_local_dotenv below, but for litellm's import-time side effect.
+os.environ.setdefault("LITELLM_MODE", "PRODUCTION")
+
+# Vendored upstream tasks ship their own pytest files (task verifiers, run
+# inside task sandboxes) — they are fixtures, not suite tests.
+collect_ignore = ["fixtures/skillsbench_slice"]
+
+REF_TASKS = REPO_ROOT / ".cache" / "datasets" / "benchflow" / "examples" / "tasks"
+
+
+@pytest.fixture(autouse=True)
+def isolate_local_dotenv(monkeypatch, tmp_path) -> None:
+    """Keep developer-machine `.env` secrets out of unit tests."""
+    monkeypatch.setenv("BENCHFLOW_DOTENV_PATH", str(tmp_path / ".env"))
+
+
+@pytest.fixture(autouse=True)
+def skip_update_check(monkeypatch) -> None:
+    """Keep the `bench traj` PyPI latest-version check out of unit tests.
+
+    Tests that exercise the hint delete this variable and monkeypatch the
+    fetch instead of touching the network.
+    """
+    monkeypatch.setenv("BENCHFLOW_SKIP_UPDATE_CHECK", "1")
+
+
+@pytest.fixture(autouse=True)
+def skip_traj_wait(monkeypatch) -> None:
+    """Keep the post-upload storage-verification poll out of unit tests.
+
+    Tests that exercise the wait loop set their own budget and monkeypatch
+    the status fetch instead of touching the network.
+    """
+    monkeypatch.setenv("BENCHFLOW_TRAJ_WAIT_SECONDS", "0")
+
+
+@pytest.fixture
+def hello_world_task_dir() -> Path:
+    path = REF_TASKS / "hello-world"
+    if not path.exists():
+        pytest.skip("Reference tasks not available")
+    return path
+
+
+@pytest.fixture
+def build_result_json(tmp_path):
+    """Factory: call SDK._build_result with 14-field defaults and return parsed result.json.
+
+    Accepts `trajectory_source` override so callers that care about that field can
+    set it; otherwise defaults to None. The `rollout_dir` used is `tmp_path / "trial"`
+    (created if missing). Any override via kwargs is merged on top of the defaults.
+    """
+
+    def _build(**overrides) -> dict:
+        from benchflow.sdk import SDK
+
+        rollout_dir = tmp_path / "trial"
+        rollout_dir.mkdir(exist_ok=True)
+        defaults = dict(
+            task_name="t1",
+            rollout_name="trial-1",
+            agent="test",
+            agent_name="",
+            model="",
+            n_tool_calls=0,
+            prompts=["x"],
+            error=None,
+            verifier_error=None,
+            trajectory=[],
+            partial_trajectory=False,
+            trajectory_source=None,
+            rewards={"reward": 1.0},
+            started_at=datetime.now(),
+            timing={},
+        )
+        defaults.update(overrides)
+        SDK._build_result(rollout_dir, **defaults)
+        return json.loads((rollout_dir / "result.json").read_text())
+
+    return _build
+
+
+@pytest.fixture
+def job_factory(tmp_path):
+    """Create a Evaluation with n task directories and a mocked SDK."""
+    from benchflow.evaluation import Evaluation, EvaluationConfig, RetryConfig
+
+    def _make(n_tasks=1, max_retries=0):
+        tasks_dir = tmp_path / "tasks"
+        tasks_dir.mkdir(exist_ok=True)
+        for i in range(n_tasks):
+            td = tasks_dir / f"task-{i}"
+            td.mkdir(exist_ok=True)
+            (td / "task.toml").write_text(
+                'version = "1.0"\n[verifier]\ntimeout_sec = 60\n'
+                "[agent]\ntimeout_sec = 60\n[environment]\n"
+            )
+        cfg = EvaluationConfig(retry=RetryConfig(max_retries=max_retries))
+        job = Evaluation(tasks_dir=tasks_dir, jobs_dir=tmp_path / "jobs", config=cfg)
+        return job, tasks_dir
+
+    return _make

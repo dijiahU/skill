@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "lfpzheqdox",
+  "namespace": "tufantunc",
+  "slug": "ssh-mcp",
+  "name": "SSH MCP Server",
+  "description": "A Model Context Protocol server that allows LLMs to securely execute shell commands on remote Linux and Windows systems via SSH. It supports password and key-based authentication, command timeouts, and sudo elevation for administrative tasks.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server that allows LLMs to securely execute shell commands on remote Linux and Windows systems via SSH. It supports password and key-based authentication, command timeouts, and sudo elevation for administrative tasks.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "key": {
+          "description": "Path to private SSH key",
+          "type": "string"
+        },
+        "host": {
+          "description": "Hostname or IP of the Linux or Windows server",
+          "type": "string"
+        },
+        "port": {
+          "description": "SSH port (default: 22)",
+          "type": "string",
+          "default": "22"
+        },
+        "user": {
+          "description": "SSH username",
+          "type": "string"
+        },
+        "timeout": {
+          "description": "Command execution timeout in milliseconds (default: 60000ms = 1 minute)",
+          "type": "string",
+          "default": "60000"
+        },
+        "maxChars": {
+          "description": "Maximum allowed characters for the command input (default: 1000). Use none or 0 to disable the limit.",
+          "type": "string",
+          "default": "1000"
+        },
+        "password": {
+          "description": "SSH password (or use key for key-based auth)",
+          "type": "string"
+        },
+        "suPassword": {
+          "description": "Password for su elevation (when you need a persistent root shell)",
+          "type": "string"
+        },
+        "disableSudo": {
+          "description": "Flag to disable the sudo-exec tool completely. Useful when sudo access is not needed or not available.",
+          "type": "string"
+        },
+        "sudoPassword": {
+          "description": "Password for sudo elevation (when executing commands with sudo)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "host",
+        "user"
+      ]
+    },
+    "id": "lfpzheqdox",
+    "name": "SSH MCP Server",
+    "namespace": "tufantunc",
+    "repository": {
+      "url": "https://github.com/tufantunc/ssh-mcp"
+    },
+    "slug": "ssh-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lfpzheqdox"
+  }
+}

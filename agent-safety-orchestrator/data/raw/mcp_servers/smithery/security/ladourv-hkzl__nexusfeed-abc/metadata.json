@@ -1,0 +1,152 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "ladourv-hkzl/nexusfeed-abc",
+  "namespace": "ladourv-hkzl",
+  "slug": "nexusfeed-abc",
+  "displayName": "NexusFeed: ABC License Compliance",
+  "description": "Real-time US state ABC (Alcoholic Beverage Control) liquor license compliance records for AI agents. Covers CA, TX, NY, FL � extracted from state portals with verifiability metadata on every response.",
+  "discoveryQueries": [
+    "policy",
+    "credential",
+    "compliance",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "da4a33be-a26a-43af-9924-e839f08a371a",
+    "qualifiedName": "ladourv-hkzl/nexusfeed-abc",
+    "namespace": "ladourv-hkzl",
+    "slug": "nexusfeed-abc",
+    "displayName": "NexusFeed: ABC License Compliance",
+    "description": "Real-time US state ABC (Alcoholic Beverage Control) liquor license compliance records for AI agents. Covers CA, TX, NY, FL � extracted from state portals with verifiability metadata on every response.",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-06T23:25:57.027Z",
+    "homepage": "https://smithery.ai/servers/ladourv-hkzl/nexusfeed-abc",
+    "bySmithery": false,
+    "owner": "org_01KNJCXAHC09MM6JVQRDHK0WS7",
+    "score": 0.01098901098901099
+  },
+  "detail": {
+    "qualifiedName": "ladourv-hkzl/nexusfeed-abc",
+    "displayName": "NexusFeed: ABC License Compliance",
+    "description": "Real-time US state ABC (Alcoholic Beverage Control) liquor license compliance records for AI agents. Covers CA, TX, NY, FL - extracted from state portals with verifiability metadata on every response.",
+    "iconUrl": "https://api.smithery.ai/servers/ladourv-hkzl/nexusfeed-abc/icon",
+    "remote": true,
+    "deploymentUrl": "https://nexusfeed-abc--ladourv-hkzl.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://nexusfeed-abc--ladourv-hkzl.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "NexusFeed API Key",
+              "x-order": 0,
+              "description": "Your NexusFeed API key (sk_live_...). Get one at https://rapidapi.com/ladourv/api/abc-license-compliance-api or contact ops@nexusfeed.dev. Forwarded as the X-API-Key header on every call."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "ltl_get_fuel_surcharge",
+        "description": "Returns current LTL carrier fuel surcharge percentages and the DOE diesel price that triggered each rate. Covers ODFL, Saia, Estes, ABF, R+L, TForce. Use instead of browsing carrier websites — those pages are JS-rendered or PDFs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "weeks": {
+              "type": "integer",
+              "default": 1,
+              "description": "Weeks of history to return (default 1, max 260)."
+            },
+            "carriers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of carrier SCAC codes (e.g. ['ODFL', 'SAIA']). Omit for all."
+            }
+          }
+        }
+      },
+      {
+        "name": "ltl_list_carriers",
+        "description": "Returns metadata for all supported LTL carriers — SCAC codes, data products, fuel surcharge update day, and extraction method.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "abc_search_licenses",
+        "description": "Searches a US state ABC board database for liquor licenses matching a business name, owner name, or address. Returns license type, status (ACTIVE/SUSPENDED/EXPIRED/REVOKED), expiration date, and suspension history. Supports CA, TX, NY, FL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string",
+              "description": "Two-letter US state code (CA, TX, NY, or FL)."
+            },
+            "address": {
+              "type": "string",
+              "description": "Street address to search for."
+            },
+            "owner_name": {
+              "type": "string",
+              "description": "License owner name to search for."
+            },
+            "trade_name": {
+              "type": "string",
+              "description": "Business DBA name to search for."
+            }
+          }
+        }
+      },
+      {
+        "name": "abc_lookup_license",
+        "description": "Looks up a specific liquor license by its state-issued license number. Returns full record including status, expiration, address, conditions, and suspension history. Faster and more precise than abc_search_licenses.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string",
+              "description": "Two-letter US state code (CA, TX, NY, or FL)."
+            },
+            "license_number": {
+              "type": "string",
+              "description": "State-issued license number."
+            }
+          }
+        }
+      },
+      {
+        "name": "abc_list_states",
+        "description": "Returns metadata for all supported US states — agency name, data freshness SLA, extraction method, and CAPTCHA requirements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": [
+      {
+        "name": "freight_audit_workflow",
+        "description": "Multi-step LTL invoice audit against published carrier tariffs."
+      },
+      {
+        "name": "license_compliance_check",
+        "description": "Compliance verification before distributor orders, insurance binding, or merchant onboarding."
+      }
+    ]
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "registry": "glama",
+  "id": "vyuee0to8u",
+  "namespace": "mlsloynaz",
+  "slug": "mcp-sql-server",
+  "name": "mcp-sqlserver",
+  "description": "An MCP server for Microsoft SQL Server that enables executing read-only queries, listing tables, and describing database schemas. It offers specialized support for custom ports and multiple authentication methods including SQL credentials, NTLM, and Windows Integrated Auth.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server for Microsoft SQL Server that enables executing read-only queries, listing tables, and describing database schemas. It offers specialized support for custom ports and multiple authentication methods including SQL credentials, NTLM, and Windows Integrated Auth.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MSSQL_PORT": {
+          "description": "The SQL Server port. Defaults to 9123.",
+          "type": "string",
+          "default": "9123"
+        },
+        "MSSQL_USER": {
+          "description": "The SQL login username. Required unless using Windows Integrated authentication.",
+          "type": "string"
+        },
+        "MSSQL_CLIENT": {
+          "description": "Client key under 'clients' (e.g. a specific database name) used when loading configuration from a connections map file.",
+          "type": "string"
+        },
+        "MSSQL_DOMAIN": {
+          "description": "The NTLM domain for domain\\user authentication.",
+          "type": "string"
+        },
+        "MSSQL_SERVER": {
+          "description": "The SQL Server host address (e.g. 192.168.100.65).",
+          "type": "string"
+        },
+        "MSSQL_ENCRYPT": {
+          "description": "Whether to use encryption for the connection ('true' or 'false').",
+          "type": "string",
+          "default": "false"
+        },
+        "MSSQL_DATABASE": {
+          "description": "The database name to connect to. Defaults to 'master'.",
+          "type": "string",
+          "default": "master"
+        },
+        "MSSQL_PASSWORD": {
+          "description": "The SQL login password. Required unless using Windows Integrated authentication.",
+          "type": "string"
+        },
+        "MSSQL_TRUST_CERT": {
+          "description": "Set to 'true' to trust self-signed or development certificates.",
+          "type": "string"
+        },
+        "MSSQL_CONFIG_PATH": {
+          "description": "Path to the JSON connections file. Defaults to 'connections.json' in the current working directory.",
+          "type": "string"
+        },
+        "MSSQL_ENVIRONMENT": {
+          "description": "Environment key (e.g. staging, prod) used when loading configuration from a connections map file.",
+          "type": "string"
+        },
+        "MSSQL_WINDOWS_INTEGRATED": {
+          "description": "Set to 'true' to use the current Windows OS user for authentication (requires msnodesqlv8).",
+          "type": "string"
+        },
+        "MSSQL_TRUST_SERVER_CERTIFICATE": {
+          "description": "Alternative environment variable to 'MSSQL_TRUST_CERT'; set to 'true' to trust the server certificate.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "MSSQL_ENVIRONMENT",
+            "MSSQL_CLIENT"
+          ]
+        },
+        {
+          "required": [
+            "MSSQL_SERVER",
+            "MSSQL_USER",
+            "MSSQL_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "MSSQL_SERVER",
+            "MSSQL_WINDOWS_INTEGRATED"
+          ]
+        }
+      ]
+    },
+    "id": "vyuee0to8u",
+    "name": "mcp-sqlserver",
+    "namespace": "mlsloynaz",
+    "repository": {
+      "url": "https://github.com/mlsloynaz/mcp-sql-server"
+    },
+    "slug": "mcp-sql-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/vyuee0to8u"
+  }
+}

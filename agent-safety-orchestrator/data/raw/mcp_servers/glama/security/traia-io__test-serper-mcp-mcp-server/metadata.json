@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "kjk6qhsrpa",
+  "namespace": "Traia-IO",
+  "slug": "test-serper-mcp-mcp-server",
+  "name": "test-serper-mcp",
+  "description": "Provides access to Serper.dev's Google Search API for searching, news, images, and places with support for both API key authentication and blockchain-based pay-per-use payment.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides access to Serper.dev's Google Search API for searching, news, images, and places with support for both API key authentication and blockchain-based pay-per-use payment.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8000"
+        },
+        "STAGE": {
+          "description": "Environment stage (options: MAINNET, TESTNET)",
+          "type": "string",
+          "default": "MAINNET"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "INFO"
+        },
+        "SERVER_ADDRESS": {
+          "description": "Server's payment address (for HTTP 402 protocol)",
+          "type": "string"
+        },
+        "D402_TESTING_MODE": {
+          "description": "Set to 'true' for local testing without settlement",
+          "type": "string",
+          "default": "false"
+        },
+        "D402_FACILITATOR_URL": {
+          "description": "Facilitator service URL",
+          "type": "string",
+          "default": "https://facilitator.d402.net"
+        },
+        "MCP_OPERATOR_ADDRESS": {
+          "description": "Operator's public address (for verification)",
+          "type": "string"
+        },
+        "TEST_SERPER_MCP_API_KEY": {
+          "description": "Your test-serper-mcp API key (required)",
+          "type": "string"
+        },
+        "D402_FACILITATOR_API_KEY": {
+          "description": "For private facilitator",
+          "type": "string"
+        },
+        "MCP_OPERATOR_PRIVATE_KEY": {
+          "description": "Private key for signing settlement attestations",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "TEST_SERPER_MCP_API_KEY"
+      ]
+    },
+    "id": "kjk6qhsrpa",
+    "name": "test-serper-mcp",
+    "namespace": "Traia-IO",
+    "repository": {
+      "url": "https://github.com/Traia-IO/test-serper-mcp-mcp-server"
+    },
+    "slug": "test-serper-mcp-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/kjk6qhsrpa"
+  }
+}

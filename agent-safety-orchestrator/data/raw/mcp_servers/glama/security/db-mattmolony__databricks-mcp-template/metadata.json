@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "ykyjy64ne1",
+  "namespace": "db-mattmolony",
+  "slug": "databricks-mcp-template",
+  "name": "Databricks MCP Server Template",
+  "description": "Enables AI assistants like Claude to interact with Databricks workspaces through secure OAuth authentication. Supports custom prompts, tools for workspace management, and SQL query execution via a deployable MCP server on Databricks Apps.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI assistants like Claude to interact with Databricks workspaces through secure OAuth authentication. Supports custom prompts, tools for workspace management, and SQL query execution via a deployable MCP server on Databricks Apps.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SERVER_NAME": {
+          "description": "The name of your MCP server (comes from config.yaml)",
+          "type": "string"
+        },
+        "DATABRICKS_HOST": {
+          "description": "The Databricks workspace URL (e.g., https://your-workspace.cloud.databricks.com)",
+          "type": "string"
+        },
+        "DATABRICKS_APP_URL": {
+          "description": "The URL of the deployed Databricks app (e.g., https://your-app.databricksapps.com)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABRICKS_HOST",
+        "DATABRICKS_APP_URL",
+        "SERVER_NAME"
+      ]
+    },
+    "id": "ykyjy64ne1",
+    "name": "Databricks MCP Server Template",
+    "namespace": "db-mattmolony",
+    "repository": {
+      "url": "https://github.com/db-mattmolony/databricks-mcp-template"
+    },
+    "slug": "databricks-mcp-template",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ykyjy64ne1"
+  }
+}

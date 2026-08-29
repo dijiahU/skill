@@ -1,0 +1,155 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "tponscr-debug/oracle-h",
+  "namespace": "tponscr-debug",
+  "slug": "oracle-h",
+  "displayName": "Oracle-H",
+  "description": "Secure critical actions by requiring real-time human approval via Telegram before execution. Prevent irreversible mistakes in destructive or financial operations by providing full context to human operators. Monitor request statuses continuously to ensure only verified decisions proceed.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "credential",
+    "compliance",
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "57be58d0-4150-429d-9688-3dea580be16d",
+    "qualifiedName": "tponscr-debug/oracle-h",
+    "namespace": "tponscr-debug",
+    "slug": "oracle-h",
+    "displayName": "Oracle-H",
+    "description": "Secure critical actions by requiring real-time human approval via Telegram before execution. Prevent irreversible mistakes in destructive or financial operations by providing full context to human operators. Monitor request statuses continuously to ensure only verified decisions proceed.",
+    "iconUrl": "https://api.smithery.ai/servers/tponscr-debug/oracle-h/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-26T22:24:42.564Z",
+    "homepage": "https://oracle-h.online/",
+    "bySmithery": false,
+    "owner": "org_01KNBVEM9CD2N2JBZE6K3JWVMH",
+    "score": 0.01020408163265306
+  },
+  "detail": {
+    "qualifiedName": "tponscr-debug/oracle-h",
+    "displayName": "Oracle-H",
+    "description": "Secure critical actions by requiring real-time human approval via Telegram before execution. Prevent irreversible mistakes in destructive or financial operations by providing full context to human operators. Monitor request statuses continuously to ensure only verified decisions proceed.",
+    "iconUrl": "https://api.smithery.ai/servers/tponscr-debug/oracle-h/icon",
+    "remote": true,
+    "deploymentUrl": "https://oracle-h--tponscr-debug.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://oracle-h--tponscr-debug.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "baseUrl": {
+              "type": "string",
+              "x-from": {
+                "query": "baseUrl"
+              },
+              "default": "https://oracle-h.online",
+              "x-order": 1,
+              "description": "ORACLE-H API base URL"
+            },
+            "signatureKey": {
+              "type": "string",
+              "x-from": {
+                "query": "signatureKey"
+              },
+              "default": "demo-signature-key-change-in-production",
+              "x-order": 0,
+              "description": "Your ORACLE-H agent signature key (Bearer Token)"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "oracle_validate",
+        "description": "Submit a critical or irreversible action to ORACLE-H for human approval before executing it. The human operator receives a Telegram notification with full context (action, rationale, risk) and can approve or reject with a single tap. ALWAYS use this tool before executing destructive, financial, or irreversible operations. Returns a request_id to poll for the decision via oracle_poll_status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "minLength": 15,
+              "description": "Precise technical description of the action you are about to execute (min 15 chars)"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 15,
+              "description": "Why this action is necessary and why it is the optimal path (min 15 chars)"
+            },
+            "signature_key": {
+              "type": "string",
+              "description": "Your ORACLE-H agent signature key (Bearer Token). Optional if set at connection level."
+            },
+            "financial_amount": {
+              "type": "number",
+              "default": 0,
+              "minimum": 0,
+              "description": "Financial amount at stake in USD (0 if none)"
+            },
+            "projected_impact": {
+              "type": "string",
+              "minLength": 15,
+              "description": "Risk and impact if this action fails or is wrong. Must describe potential damage (min 15 chars)"
+            },
+            "expires_in_seconds": {
+              "type": "number",
+              "default": 300,
+              "minimum": 30,
+              "description": "How long to wait for the human response before timing out (default: 300 seconds = 5 minutes)"
+            }
+          }
+        }
+      },
+      {
+        "name": "oracle_poll_status",
+        "description": "Check the current status of a validation request previously submitted via oracle_validate. Poll every 10-15 seconds until status is 'approved' or 'rejected'. If 'expired', the human did not respond in time — abort the action immediately.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "request_id": {
+              "type": "string",
+              "description": "The request_id returned by oracle_validate"
+            },
+            "signature_key": {
+              "type": "string",
+              "description": "Your ORACLE-H agent signature key (Bearer Token). Optional if set at connection level."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "validate_before_destructive_action",
+        "description": "Use this prompt before executing any destructive, irreversible, or high-risk action. Submits the action for human approval via ORACLE-H.",
+        "arguments": [
+          {
+            "name": "action",
+            "description": "The action you are about to execute",
+            "required": true
+          },
+          {
+            "name": "rationale",
+            "description": "Why this action is necessary",
+            "required": true
+          },
+          {
+            "name": "risk",
+            "description": "What could go wrong if the action fails",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

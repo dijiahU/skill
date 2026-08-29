@@ -1,0 +1,93 @@
+{
+  "registry": "glama",
+  "id": "e3fcioorqr",
+  "namespace": "schwarztim",
+  "slug": "elastic-mcp",
+  "name": "Elastic MCP Server",
+  "description": "Provides comprehensive tools for managing Elasticsearch clusters, including security management, search operations, and index administration. It enables users to monitor cluster health, handle InfoSec tasks, and execute complex queries using Elasticsearch Query DSL and ES|QL.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides comprehensive tools for managing Elasticsearch clusters, including security management, search operations, and index administration. It enables users to monitor cluster health, handle InfoSec tasks, and execute complex queries using Elasticsearch Query DSL and ES|QL.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string",
+          "default": "info"
+        },
+        "ELASTIC_URL": {
+          "description": "Elasticsearch cluster URL",
+          "type": "string"
+        },
+        "ELASTIC_TIMEOUT": {
+          "description": "Request timeout in ms",
+          "type": "string",
+          "default": "30000"
+        },
+        "ELASTIC_PASSWORD": {
+          "description": "Basic auth password",
+          "type": "string"
+        },
+        "ELASTIC_USERNAME": {
+          "description": "Basic auth username",
+          "type": "string"
+        },
+        "ELASTIC_API_KEY_ID": {
+          "description": "API key ID (alternative to encoded)",
+          "type": "string"
+        },
+        "ELASTIC_API_KEY_SECRET": {
+          "description": "API key secret (use with ID)",
+          "type": "string"
+        },
+        "ELASTIC_API_KEY_ENCODED": {
+          "description": "Pre-encoded API key (base64)",
+          "type": "string"
+        },
+        "ELASTIC_SKIP_SSL_VERIFY": {
+          "description": "Skip SSL verification",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ELASTIC_API_KEY_ENCODED"
+          ]
+        },
+        {
+          "required": [
+            "ELASTIC_API_KEY_ID",
+            "ELASTIC_API_KEY_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "ELASTIC_USERNAME",
+            "ELASTIC_PASSWORD"
+          ]
+        }
+      ],
+      "required": [
+        "ELASTIC_URL"
+      ]
+    },
+    "id": "e3fcioorqr",
+    "name": "Elastic MCP Server",
+    "namespace": "schwarztim",
+    "repository": {
+      "url": "https://github.com/schwarztim/elastic-mcp"
+    },
+    "slug": "elastic-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/e3fcioorqr"
+  }
+}

@@ -1,0 +1,195 @@
+---
+title: ASP.NET Core Authentication System
+source_url: https://docs.duendesoftware.com/aspnet-core-authentication-system/
+source_type: llms-full-txt
+content_hash: sha256:e82ca02f7ebac8c7e8ce5ca00de0a479956ac5f90a908b87f0eafc4147c8108e
+last_fetched: '2025-12-16T19:17:19Z'
+doc_id: aspnet-core-authentication-system
+---
+
+> Learn how to configure and use ASP.NET Core authentication handlers for OpenID Connect and cookie-based session management in BFF applications
+
+To configure authentication in the BFF, youâll need to configure both the OpenID Connect login flow and the cookie handlers.
+
+## Automatic Authentication Configuration V4
+
+[Section titled âAutomatic Authentication Configuration â](#automatic-authentication-configuration)
+
+In V4, a simplified mechanism for wiring up authentication has been introduced. The main purpose for the BFF is to handle the OpenID Connect login flow and to protect the APIs using Cookies. In V3, you explicitly had to configure the ASP.NET Core authentication system to enable this. In V4, this is now simplified.
+
+A call `BffBuilder.ConfigureOpenIdConnect()` will make sure that:
+
+1. The authentication pipeline is configured with the appropriate authentication schemes.
+2. The OpenID Connect pipeline is configured with default values.
+3. The CookieHandler is configured using recommended practices. This can be tweaked by calling `BffBuilder.ConfigureCookies()`
+
+Below is an example on how to configure the BFFâs authentication pipeline.
+
+```csharp
+services.AddBff()
+    .ConfigureOpenIdConnect(options =>
+    {
+        options.Authority = "https://demo.duendesoftware.com";
+        options.ClientId = "interactive.confidential";
+        options.ClientSecret = "secret";
+        options.ResponseType = "code";
+        options.ResponseMode = "query";
+
+
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.SaveTokens = true;
+        options.MapInboundClaims = false;
+
+
+        options.Scope.Clear();
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.Scope.Add("api");
+        options.Scope.Add("offline_access");
+
+
+        options.TokenValidationParameters.NameClaimType = "name";
+        options.TokenValidationParameters.RoleClaimType = "role";
+    });
+```
+
+Each frontend can have custom OpenID Connect configuration and Cookie Configuration. This can both be configured programmatically via [Configuration](/bff/fundamentals/multi-frontend/configuration/).
+
+## Manually Configuring Authentication
+
+[Section titled âManually Configuring Authenticationâ](#manually-configuring-authentication)
+
+You typically use the following two ASP.NET Core authentication handlers to implement remote authentication:
+
+* the OpenID Connect authentication handler to interact with the remote OIDC / OAuth token service, e.g. Duende IdentityServer
+* the cookie handler to do local session management
+
+The BFF relies on the configuration of the ASP.NET Core default authentication schemes. Both the OpenID Connect authentication handler and cookie handler need to be configured, with the ASP.NET Core authentication system default schemes specified:
+
+* `DefaultScheme` should be the cookie handler, so the BFF can do local session management;
+* `DefaultChallengeScheme` should be the OpenID Connect handler, so the BFF defaults to remote authentication;
+* `DefaultSignOutScheme` should be the OpenID Connect handler, so the BFF uses remote sign-out.
+
+A minimal configuration looks like this:
+
+```csharp
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = "cookie";
+        options.DefaultChallengeScheme = "oidc";
+        options.DefaultSignOutScheme = "oidc";
+    })
+    .AddCookie("cookie", options => {
+        // ...
+    })
+    .AddOpenIdConnect("oidc", options => {
+        // ...
+    });
+```
+
+Now letâs look at some more details!
+
+### The OpenID Connect Authentication Handler
+
+[Section titled âThe OpenID Connect Authentication Handlerâ](#the-openid-connect-authentication-handler)
+
+The OpenID Connect (OIDC) handler connects the application to the authentication / access token system.
+
+It can be configured to use any OpenID Connect provider: [Duende IdentityServer](https://duendesoftware.com/products/identityserver/), [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id), [Auth0](https://auth0.com/), [Google Cloud Identity Platform](https://cloud.google.com/identity-platform), [Amazon Cognito](https://aws.amazon.com/cognito/), and more.
+
+The exact settings to use depend on the OIDC provider and its configuration settings. We recommend to:
+
+* use authorization code flow with PKCE
+* use a *response\_mode* of *query* since this plays nicer with *SameSite* cookies
+* use a strong client secret. Since the BFF can be a confidential client, it is possible to use strong client authentication like JWT assertions, JAR, or mTLS. Shared secrets work as well.
+* turn off inbound claims mapping
+* save the tokens into the authentication session so they can be automatically managed
+* request a refresh token using the *offline\_access* scope
+
+```csharp
+builder.Services.AddAuthentication().AddOpenIdConnect("oidc", options =>
+{
+    options.Authority = "https://demo.duendesoftware.com";
+
+
+    // confidential client using code flow + PKCE
+    options.ClientId = "spa";
+    options.ClientSecret = "secret";
+    options.ResponseType = "code";
+
+
+    // query response type is compatible with strict SameSite mode
+    options.ResponseMode = "query";
+
+
+    // get claims without mappings
+    options.MapInboundClaims = false;
+    options.GetClaimsFromUserInfoEndpoint = true;
+
+
+    // save tokens into authentication session
+    // to enable automatic token management
+    options.SaveTokens = true;
+
+
+    // request scopes
+    options.Scope.Clear();
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+    options.Scope.Add("API");
+
+
+    // and refresh token
+    options.Scope.Add("offline_access");
+});
+```
+
+The OIDC handler will use the default sign-in handler (the cookie handler) to establish a session after successful validation of the OIDC response.
+
+### The Cookie Handler
+
+[Section titled âThe Cookie Handlerâ](#the-cookie-handler)
+
+The cookie handler is responsible for establishing the session and manage authentication session related data.
+
+Things to consider:
+
+* determine the session lifetime and if the session lifetime should be sliding or absolute
+* it is recommended to use a cookie name [prefix](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-07#section-4.1.3) if compatible with your application
+* use the highest available *SameSite* mode that is compatible with your application, e.g. *strict*, but at least *lax*
+
+```csharp
+builder.Services.AddAuthentication().AddCookie("cookie", options =>
+{
+    // set session lifetime
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+
+
+    // sliding or absolute
+    options.SlidingExpiration = false;
+
+
+    // host prefixed cookie name
+    options.Cookie.Name = "__Host-spa";
+
+
+    // strict SameSite handling
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
+```
+
+### Choosing Between SameSite.Lax and SameSite.Strict
+
+[Section titled âChoosing Between SameSite.Lax and SameSite.Strictâ](#choosing-between-samesitelax-and-samesitestrict)
+
+The [SameSite cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#samesitesamesite-value) is a feature of modern browsers that restricts cookies so that they are only sent to pages originating from the [site](https://developer.mozilla.org/en-US/docs/Glossary/Site) where the cookie was originally issued. This prevents CSRF attacks and helps with improving privacy, because cross-site requests will no longer implicitly include the userâs credentials.
+
+If you configure `SameSiteMode.Strict`, this means that if a user originates from an external site and is redirected or linked to the BFF application, then the authentication cookie is not sent automatically. So, the application will consider the user to be not logged in, even though there may be a valid authentication cookie in the cookie jar. If the user refreshes the page, or visits a link on your site that forces a complete page reload, then the authentication cookie will be sent along normally again.
+
+This also happens when you have an identity provider thatâs hosted on a different site than the BFF, in combination with `SameSiteMode.Strict`. After successful authentication at the IdP, the user will be redirected back to the BFF site. The server will then place an authentication cookie in the browser, but the browser will not automatically include it in subsequent requests until the full page is manually reloaded by the user. This means the user appears to still be logged out, even though the cookie is there.
+
+So, if you have an Identity Provider thatâs hosted under a different site than your BFF, you may want to configure your cookie policy to be `SameSiteMode.Lax`.
+
+Note
+
+Chrome will make an exception for cookies set without a `SameSite` attribute less than 2 minutes ago. Such cookies will also be sent with non-idempotent (e.g. POST) top-level cross-site requests despite normal `SameSite=Lax` cookies requiring top-level cross-site requests to have a safe (e.g. GET) HTTP method. Support for this intervention (âLax + POSTâ) will be removed in the future. (source: [chromestatus](https://chromestatus.com/feature/5088147346030592))

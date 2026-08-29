@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "up6s34zjhk",
+  "namespace": "Intelligent-Internet",
+  "slug": "gemini-cli-mcp-openai-bridge",
+  "name": "Gemini CLI MCP/OpenAI Bridge",
+  "description": "Exposes Gemini CLI's built-in tools and external MCP proxies through a unified MCP endpoint while providing an OpenAI-compatible API for Gemini models. It features configurable security modes to safely manage file system operations, web searches, and shell command execution.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Exposes Gemini CLI's built-in tools and external MCP proxies through a unified MCP endpoint while providing an OpenAI-compatible API for Gemini models. It features configurable security modes to safely manage file system operations, web searches, and shell command execution.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GEMINI_API_KEY": {
+          "description": "API key for authentication. The server automatically uses this if provided.",
+          "type": "string"
+        },
+        "GEMINI_MCP_HOST": {
+          "description": "Host address for the server to listen on. Use 0.0.0.0 to listen on all network interfaces.",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "GEMINI_MCP_PORT": {
+          "description": "Port for the server to listen on.",
+          "type": "string",
+          "default": "8765"
+        },
+        "GEMINI_TOOLS_DEFAULT_MODEL": {
+          "description": "Default model for tool execution, such as web search summarization.",
+          "type": "string",
+          "default": "gemini-2.5-flash"
+        },
+        "GOOGLE_APPLICATION_CREDENTIALS": {
+          "description": "Path to the Google application credentials JSON file for authentication.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "up6s34zjhk",
+    "name": "Gemini CLI MCP/OpenAI Bridge",
+    "namespace": "Intelligent-Internet",
+    "repository": {
+      "url": "https://github.com/Intelligent-Internet/gemini-cli-mcp-openai-bridge"
+    },
+    "slug": "gemini-cli-mcp-openai-bridge",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/up6s34zjhk"
+  }
+}

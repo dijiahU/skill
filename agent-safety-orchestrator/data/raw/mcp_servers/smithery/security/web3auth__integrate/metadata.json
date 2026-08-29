@@ -1,0 +1,224 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "web3auth/integrate",
+  "namespace": "web3auth",
+  "slug": "integrate",
+  "displayName": "MetaMask Embedded Wallets MCP",
+  "description": "MetaMask Embedded Wallets MCP (formerly Web3Auth) gives AI coding assistants live access to Embedded Wallets documentation, SDK references, integration examples, and community troubleshooting. MetaMask Embedded Wallets is not a wallet app itself, but embedded wallet infrastructure that helps developers add non-custodial Web3 wallets to web, mobile, and gaming apps using familiar login methods like Google, GitHub, email, SMS, and other OAuth or passwordless flows.\n\nThis MCP server is built for real integration work. It lets agents search docs, fetch full documentation pages, retrieve complete example code, inspect SDK types and hooks, and surface real-world implementation issues. It is especially useful for tasks like choosing the right SDK, implementing social login, understanding key derivation behavior, avoiding wallet address changes caused by auth or configuration mistakes, and debugging framework-specific issues across React, Next.js, Flutter, React Native, and other platforms.\n\nU",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "c7318e13-47b9-4fab-9e66-ce883c653a99",
+    "qualifiedName": "web3auth/integrate",
+    "namespace": "web3auth",
+    "slug": "integrate",
+    "displayName": "MetaMask Embedded Wallets MCP",
+    "description": "MetaMask Embedded Wallets MCP (formerly Web3Auth) gives AI coding assistants live access to Embedded Wallets documentation, SDK references, integration examples, and community troubleshooting. MetaMask Embedded Wallets is not a wallet app itself, but embedded wallet infrastructure that helps developers add non-custodial Web3 wallets to web, mobile, and gaming apps using familiar login methods like Google, GitHub, email, SMS, and other OAuth or passwordless flows.\n\nThis MCP server is built for real integration work. It lets agents search docs, fetch full documentation pages, retrieve complete example code, inspect SDK types and hooks, and surface real-world implementation issues. It is especially useful for tasks like choosing the right SDK, implementing social login, understanding key derivation behavior, avoiding wallet address changes caused by auth or configuration mistakes, and debugging framework-specific issues across React, Next.js, Flutter, React Native, and other platforms.\n\nU",
+    "iconUrl": "https://api.smithery.ai/servers/web3auth/integrate/icon",
+    "verified": false,
+    "useCount": 180,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-31T12:01:43.086Z",
+    "homepage": "https://docs.metamask.io/embedded-wallets/build-with-ai/",
+    "bySmithery": false,
+    "owner": "org_01KNBQ4JH103Q3TNYJVM7HK7X9",
+    "score": 0.0226890756302521
+  },
+  "detail": {
+    "qualifiedName": "web3auth/integrate",
+    "displayName": "MetaMask Embedded Wallets MCP",
+    "description": "MetaMask Embedded Wallets MCP (formerly Web3Auth) gives AI coding assistants live access to Embedded Wallets documentation, SDK references, integration examples, and community troubleshooting. MetaMask Embedded Wallets is not a wallet app itself, but embedded wallet infrastructure that helps developers add non-custodial Web3 wallets to web, mobile, and gaming apps using familiar login methods like Google, GitHub, email, SMS, and other OAuth or passwordless flows.\n\nThis MCP server is built for real integration work. It lets agents search docs, fetch full documentation pages, retrieve complete example code, inspect SDK types and hooks, and surface real-world implementation issues. It is especially useful for tasks like choosing the right SDK, implementing social login, understanding key derivation behavior, avoiding wallet address changes caused by auth or configuration mistakes, and debugging framework-specific issues across React, Next.js, Flutter, React Native, and other platforms.\n\nUse it when you want an AI assistant to generate or review MetaMask Embedded Wallets integrations using current source material instead of stale model memory. Pair it with the MetaMask Embedded Wallets Skill for best results: the skill teaches the assistant how to reason about architecture, authentication, SDK selection, and common pitfalls, while this MCP server provides up-to-date docs, examples, SDK references, and implementation details.",
+    "iconUrl": "https://api.smithery.ai/servers/web3auth/integrate/icon",
+    "remote": true,
+    "deploymentUrl": "https://web3auth.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://web3auth.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_docs",
+        "description": "Search MetaMask Embedded Wallets (Web3Auth) documentation and examples. Use for SDK discovery, feature lookup, and finding relevant examples. Returns doc page links with snippets and matching example projects.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chain": {
+              "enum": [
+                "evm",
+                "solana",
+                "other"
+              ],
+              "type": "string",
+              "description": "Filter examples by blockchain family"
+            },
+            "query": {
+              "type": "string",
+              "description": "What you are looking for -- e.g. 'React custom auth', 'Android deep linking', 'JWT grouped connections'"
+            },
+            "category": {
+              "enum": [
+                "quick-start",
+                "custom-auth",
+                "blockchain",
+                "feature",
+                "playground"
+              ],
+              "type": "string",
+              "description": "Filter examples by category"
+            },
+            "platform": {
+              "enum": [
+                "react",
+                "vue",
+                "js",
+                "react-native",
+                "android",
+                "ios",
+                "flutter",
+                "unity",
+                "unreal",
+                "node"
+              ],
+              "type": "string",
+              "description": "Filter examples by platform"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_doc",
+        "description": "Fetch the full content of a MetaMask Embedded Wallets documentation page. Use after search_docs to read the actual doc. Tries Algolia, then llms.txt, then GitHub raw MDX as fallbacks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "A docs.metamask.io URL, e.g. https://docs.metamask.io/embedded-wallets/sdk/react/"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_example",
+        "description": "Fetch the complete source code of a Web3Auth integration example from GitHub. Returns all source files needed to understand how the integration works. Examples are the PRIMARY reference for integration patterns — always prefer example code over raw SDK source.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Example name, e.g. 'React Quick Start' or 'Android Firebase'"
+            },
+            "chain": {
+              "enum": [
+                "evm",
+                "solana",
+                "other"
+              ],
+              "type": "string",
+              "description": "Filter by blockchain family"
+            },
+            "category": {
+              "enum": [
+                "quick-start",
+                "custom-auth",
+                "blockchain",
+                "feature",
+                "playground"
+              ],
+              "type": "string",
+              "description": "Filter by category"
+            },
+            "platform": {
+              "enum": [
+                "react",
+                "vue",
+                "js",
+                "react-native",
+                "android",
+                "ios",
+                "flutter",
+                "unity",
+                "unreal",
+                "node"
+              ],
+              "type": "string",
+              "description": "Filter by platform"
+            },
+            "auth_method": {
+              "type": "string",
+              "description": "Filter by auth method, e.g. 'auth0', 'firebase', 'google', 'grouped'"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_sdk_reference",
+        "description": "Fetch SDK source code (type definitions, interfaces, hooks) from the open-source Web3Auth SDK repos. Use for REFERENCE and DEBUGGING only — to verify exact type shapes, constructor signatures, available hooks, and error types. Do NOT use this to discover features; many SDK options are internal or legacy. Always use get_example first for integration patterns.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "focus": {
+              "enum": [
+                "types",
+                "hooks",
+                "main-class",
+                "errors",
+                "all"
+              ],
+              "type": "string",
+              "default": "types",
+              "description": "What kind of source to focus on. 'types' = interfaces/types (default, most useful). 'hooks' = React hooks / Vue composables. 'errors' = error types. 'main-class' = SDK implementation. 'all' = everything."
+            },
+            "module": {
+              "type": "string",
+              "description": "Specific SDK module to fetch, e.g. 'core-types', 'react-hooks', 'modal-types', 'main-class'. Omit to get default type definitions. Call without module first to see available modules."
+            },
+            "platform": {
+              "enum": [
+                "react",
+                "vue",
+                "js",
+                "react-native",
+                "android",
+                "ios",
+                "flutter",
+                "unity",
+                "unreal",
+                "node"
+              ],
+              "type": "string",
+              "description": "Target platform SDK to fetch source for"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_community",
+        "description": "Search or fetch posts from the MetaMask Embedded Wallets community forum (builder.metamask.io). Use for troubleshooting real user issues, finding workarounds, and checking if an issue is known. Provide a query to search or a topic_id to read the full discussion.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query, e.g. 'popup blocked safari', 'JWT error', 'Android unstable connection'"
+            },
+            "topic_id": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
+              "description": "Discourse topic ID to fetch the full discussion thread"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

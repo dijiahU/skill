@@ -1,0 +1,206 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "nexbid/agentic_commerce",
+  "namespace": "nexbid",
+  "slug": "agentic_commerce",
+  "displayName": "agentic_commerce",
+  "description": "Agentic commerce infrastructure for AI agents. MCP-native product discovery, contextual ad matching, and purchase facilitation with European privacy compliance (nDSG/GDPR).",
+  "discoveryQueries": [
+    "compliance",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "233445dd-2d2d-477e-af47-635f0bc2c9d2",
+    "qualifiedName": "nexbid/agentic_commerce",
+    "namespace": "nexbid",
+    "slug": "agentic_commerce",
+    "displayName": "agentic_commerce",
+    "description": "Agentic commerce infrastructure for AI agents. MCP-native product discovery, contextual ad matching, and purchase facilitation with European privacy compliance (nDSG/GDPR).",
+    "iconUrl": "https://api.smithery.ai/servers/nexbid/agentic_commerce/icon",
+    "verified": false,
+    "useCount": 4,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-05T17:41:24.445Z",
+    "homepage": "https://smithery.ai/servers/nexbid/agentic_commerce",
+    "bySmithery": false,
+    "owner": "org_01KNJ26PAW584YYQ2SAZPDN2J8",
+    "score": 0.007692307692307693
+  },
+  "detail": {
+    "qualifiedName": "nexbid/agentic_commerce",
+    "displayName": "agentic_commerce",
+    "description": "Agentic commerce infrastructure for AI agents. MCP-native product discovery, contextual ad matching, and purchase facilitation with European privacy compliance (nDSG/GDPR).",
+    "iconUrl": "https://api.smithery.ai/servers/nexbid/agentic_commerce/icon",
+    "remote": true,
+    "deploymentUrl": "https://agentic_commerce--nexbid.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agentic_commerce--nexbid.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "nexbid_search",
+        "description": "<tool_description>\nSearch and discover products AND recipes in the Nexbid marketplace. Nexbid Agent Discovery — search and discover advertiser products through an open marketplace. Returns ranked results matching the query — products with prices/availability/links, and recipes with ingredients/targeting signals/nutrition.\n</tool_description>\n\n<when_to_use>\nPrimary discovery tool. Use for any product or recipe query.\nUse content_type filter: \"product\" (only products), \"recipe\" (only recipes), \"all\" (both, default).\nFor known product IDs use nexbid_product instead.\nFor category overview use nexbid_categories first.\n</when_to_use>\n\n<intent_guidance>\n<purchase>Return top 3, price prominent, include checkout readiness</purchase>\n<compare>Return up to 10, tabular format, highlight differences</compare>\n<research>Return details, specs, availability info</research>\n<browse>Return varied results, suggest categories. For recipes: show cuisine, difficulty, time.</browse>\n</intent_guidance>\n\n<combination_hints>\nAfter search with purchase intent → nexbid_purchase for top result\nAfter search with compare intent → nexbid_product for detailed specs\nFor category exploration → nexbid_categories first, then search within\nFor multi-turn refinement → pass previous queries in previous_queries array to consolidate search context\nRecipe results include targeting signals (occasions, audience, season) useful for contextual ad matching.\n</combination_hints>\n\n<output_format>\nMarkdown table for compare intent, bullet list for others.\nProducts: product name, price with currency, availability status.\nRecipes: recipe name, cuisine, difficulty, time, key ingredients, dietary tags.\n</output_format>",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "geo": {
+              "type": "string",
+              "maxLength": 2,
+              "minLength": 2,
+              "description": "ISO 3166-1 alpha-2 country code (default: CH)"
+            },
+            "brand": {
+              "type": "string",
+              "description": "Filter by brand name"
+            },
+            "query": {
+              "type": "string",
+              "maxLength": 500,
+              "minLength": 1,
+              "description": "Natural language product or recipe query"
+            },
+            "intent": {
+              "enum": [
+                "purchase",
+                "compare",
+                "research",
+                "browse"
+              ],
+              "type": "string",
+              "description": "User intent for the search"
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by product category"
+            },
+            "currency": {
+              "enum": [
+                "CHF",
+                "EUR",
+                "USD",
+                "GBP"
+              ],
+              "type": "string",
+              "description": "Currency for budget filtering"
+            },
+            "max_results": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Maximum number of results (1-50, default: 10)"
+            },
+            "content_type": {
+              "enum": [
+                "all",
+                "product",
+                "recipe"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Filter by content type: product, recipe, or all (default)"
+            },
+            "budget_max_cents": {
+              "type": "integer",
+              "description": "Maximum budget in cents (e.g. 20000 for CHF 200)",
+              "exclusiveMinimum": 0
+            },
+            "budget_min_cents": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Minimum budget in cents"
+            },
+            "previous_queries": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "maxItems": 10,
+              "description": "Previous queries in this search session for multi-turn refinement (oldest first, max 10). Example: [\"running shoes\", \"waterproof only\"]"
+            }
+          }
+        }
+      },
+      {
+        "name": "nexbid_product",
+        "description": "<tool_description>\nGet detailed product information by ID from the Nexbid marketplace. Returns full product details including price, availability, description, and purchase link.\n</tool_description>\n\n<when_to_use>\nWhen you have a specific product UUID from a previous nexbid_search result.\nDo NOT use for browsing — use nexbid_search instead.\n</when_to_use>\n\n<combination_hints>\nTypically called after nexbid_search to get full details on a specific product.\nIf user wants to buy → follow with nexbid_purchase.\n</combination_hints>\n\n<output_format>\nFull product details: name, description, price, currency, availability, brand, category, purchase link.\n</output_format>",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "product_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Product UUID"
+            }
+          }
+        }
+      },
+      {
+        "name": "nexbid_categories",
+        "description": "<tool_description>\nList all available product categories in the Nexbid marketplace with product counts. Optionally filter by country.\n</tool_description>\n\n<when_to_use>\nWhen user wants to explore what is available before searching.\nUse BEFORE nexbid_search to help narrow down the query.\n</when_to_use>\n\n<combination_hints>\nnexbid_categories → nexbid_search with category filter for targeted results.\nGood starting point for browse intent.\n</combination_hints>\n\n<output_format>\nList of categories with product counts. Optionally filtered by country.\n</output_format>",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "geo": {
+              "type": "string",
+              "maxLength": 2,
+              "minLength": 2,
+              "description": "ISO 3166-1 alpha-2 country code to filter categories"
+            }
+          }
+        }
+      },
+      {
+        "name": "nexbid_purchase",
+        "description": "<tool_description>\nInitiate a purchase for a product found via nexbid_search. Returns a checkout link that the user can click to complete the purchase at the retailer. The agent should present this link to the user for confirmation.\n</tool_description>\n\n<when_to_use>\nONLY after user has expressed clear purchase intent for a specific product.\nRequires a product UUID from nexbid_search or nexbid_product.\nALWAYS confirm with user before calling this tool.\n</when_to_use>\n\n<combination_hints>\nnexbid_search (purchase intent) → nexbid_purchase → present checkout link to user.\nAfter purchase → nexbid_order_status to check if completed.\nUse checkout_mode=wallet_pay when the user has a connected wallet with active mandate.\n</combination_hints>\n\n<output_format>\nFor prefill_link (default): Checkout URL that the user clicks to complete purchase at the retailer.\nFor wallet_pay: Intent ID and status for mandate-based authorization.\nInclude product name and price for user confirmation.\n</output_format>",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "quantity": {
+              "type": "integer",
+              "default": 1,
+              "maximum": 99,
+              "minimum": 1,
+              "description": "Quantity to purchase (default: 1)"
+            },
+            "product_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Product UUID to purchase"
+            },
+            "checkout_mode": {
+              "enum": [
+                "prefill_link",
+                "wallet_pay"
+              ],
+              "type": "string",
+              "description": "Checkout mode. Default: prefill_link. wallet_pay requires a connected wallet with active mandate."
+            }
+          }
+        }
+      },
+      {
+        "name": "nexbid_order_status",
+        "description": "<tool_description>\nCheck the status of a purchase intent created via nexbid_purchase.\n</tool_description>\n\n<when_to_use>\nAfter nexbid_purchase was called and user wants to know the order status.\nRequires the intent_id UUID returned by nexbid_purchase.\n</when_to_use>\n\n<combination_hints>\nAlways follows nexbid_purchase. No other tool needed after this.\n</combination_hints>\n\n<output_format>\nCurrent status (pending/completed/expired), checkout link if still active.\n</output_format>",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "intent_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Purchase intent UUID from nexbid_purchase"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

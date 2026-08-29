@@ -1,0 +1,65 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.danielcregg/rosettahub-mcp-server",
+  "slug": "danielcregg__rosettahub-mcp-server",
+  "title": "",
+  "description": "Manage RosettaHUB student AWS accounts — budgets, AWS CLI, access control.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.danielcregg/rosettahub-mcp-server",
+      "description": "Manage RosettaHUB student AWS accounts — budgets, AWS CLI, access control.",
+      "repository": {
+        "url": "https://github.com/danielcregg/rosettahub-mcp-server",
+        "source": "github"
+      },
+      "version": "0.1.1",
+      "packages": [
+        {
+          "registryType": "pypi",
+          "identifier": "rosettahub-mcp-server",
+          "version": "0.1.1",
+          "runtimeHint": "uvx",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "RosettaHUB API key",
+              "isRequired": true,
+              "format": "string",
+              "isSecret": true,
+              "name": "RH_API_KEY"
+            },
+            {
+              "description": "RosettaHUB organization name",
+              "isRequired": true,
+              "format": "string",
+              "name": "RH_ORG"
+            },
+            {
+              "description": "Default AWS region for commands",
+              "format": "string",
+              "default": "eu-west-1",
+              "name": "RH_AWS_REGION"
+            },
+            {
+              "description": "Override WSDL endpoint URL",
+              "format": "string",
+              "name": "RH_WSDL_URL"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-02-19T23:11:08.690632Z",
+        "publishedAt": "2026-02-19T23:11:08.690632Z",
+        "updatedAt": "2026-02-19T23:11:08.690632Z",
+        "isLatest": false
+      }
+    }
+  }
+}

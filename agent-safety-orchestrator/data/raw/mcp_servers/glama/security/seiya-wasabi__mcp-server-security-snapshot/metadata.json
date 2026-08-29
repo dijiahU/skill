@@ -1,0 +1,55 @@
+{
+  "registry": "glama",
+  "id": "nfeu2t8oqo",
+  "namespace": "Seiya-wasabi",
+  "slug": "mcp-server-security-snapshot",
+  "name": "mcp-server-security-snapshot",
+  "description": "An MCP server that gives Claude and other AI agents the ability to audit any public URL's HTTP security headers.\n\nWhat it checks:\n\n* HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy\n* HTTPS enforcement and redirect chain depth\n* Presence of security.txt, robots.txt, sitemap.xml\n\nPayment model:\n\n* 0.05 USDC per scan, paid automatically on Base via the x402 proto",
+  "discoveryQueries": [
+    "security",
+    "audit",
+    "policy",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server that gives Claude and other AI agents the ability to audit any public URL's HTTP security headers.\n\nWhat it checks:\n\n* HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy\n* HTTPS enforcement and redirect chain depth\n* Presence of security.txt, robots.txt, sitemap.xml\n\nPayment model:\n\n* 0.05 USDC per scan, paid automatically on Base via the x402 proto",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NETWORK": {
+          "description": "base or base-sepolia",
+          "type": "string",
+          "default": "base"
+        },
+        "API_BASE_URL": {
+          "description": "Override API endpoint",
+          "type": "string",
+          "default": "https://api.cybersecurity-japan.com"
+        },
+        "WALLET_PRIVATE_KEY": {
+          "description": "Private key of paying wallet (0x...)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WALLET_PRIVATE_KEY"
+      ]
+    },
+    "id": "nfeu2t8oqo",
+    "name": "mcp-server-security-snapshot",
+    "namespace": "Seiya-wasabi",
+    "repository": {
+      "url": "https://github.com/Seiya-wasabi/mcp-server-security-snapshot"
+    },
+    "slug": "mcp-server-security-snapshot",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nfeu2t8oqo"
+  }
+}

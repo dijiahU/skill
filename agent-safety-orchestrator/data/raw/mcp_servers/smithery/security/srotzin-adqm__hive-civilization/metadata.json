@@ -1,0 +1,112 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "srotzin-adqm/hive-civilization",
+  "namespace": "srotzin-adqm",
+  "slug": "hive-civilization",
+  "displayName": "Hive Civilization",
+  "description": "Hive is a 70-service trust and settlement network built for autonomous AI agents.\n\nGive your agent a sovereign W3C DID, behavioral trust score, and access to 4 settlement rails (USDC / USDCx / ALEO / USAD) — all in one POST request.\n\n**What you get:**\n- `POST /v1/gate/onboard` — sovereign DID + API key, free\n- `GET /v1/trust/score/{did}` — behavioral trust score (0–100)\n- `POST /v1/bank/settle` — settle on USDC, USDCx (ZK), USAD (anonymous), or ALEO native\n- `POST /v1/law/dispute` — automated arbitration\n- Full MCP surface at `/mcp`\n\nFirst DID is always free. No vendor lock-in.",
+  "discoveryQueries": [
+    "trust",
+    "credential"
+  ],
+  "rawRecord": {
+    "id": "1c338056-d9d9-4751-b02e-9f30340b757c",
+    "qualifiedName": "srotzin-adqm/hive-civilization",
+    "namespace": "srotzin-adqm",
+    "slug": "hive-civilization",
+    "displayName": "Hive Civilization",
+    "description": "Hive is a 70-service trust and settlement network built for autonomous AI agents.\n\nGive your agent a sovereign W3C DID, behavioral trust score, and access to 4 settlement rails (USDC / USDCx / ALEO / USAD) — all in one POST request.\n\n**What you get:**\n- `POST /v1/gate/onboard` — sovereign DID + API key, free\n- `GET /v1/trust/score/{did}` — behavioral trust score (0–100)\n- `POST /v1/bank/settle` — settle on USDC, USDCx (ZK), USAD (anonymous), or ALEO native\n- `POST /v1/law/dispute` — automated arbitration\n- Full MCP surface at `/mcp`\n\nFirst DID is always free. No vendor lock-in.",
+    "iconUrl": "https://api.smithery.ai/servers/srotzin-adqm/hive-civilization/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-17T17:21:28.206Z",
+    "homepage": "https://www.thehiveryiq.com",
+    "bySmithery": false,
+    "owner": "org_01KNK71CJ8RA26R1KKXHMSR8VV",
+    "score": 0.05505279034690799
+  },
+  "detail": {
+    "qualifiedName": "srotzin-adqm/hive-civilization",
+    "displayName": "Hive Civilization",
+    "description": "Hive is a 70-service trust and settlement network built for autonomous AI agents.\n\nGive your agent a sovereign W3C DID, behavioral trust score, and access to 4 settlement rails (USDC / USDCx / ALEO / USAD) — all in one POST request.\n\n**What you get:**\n- `POST /v1/gate/onboard` — sovereign DID + API key, free\n- `GET /v1/trust/score/{did}` — behavioral trust score (0–100)\n- `POST /v1/bank/settle` — settle on USDC, USDCx (ZK), USAD (anonymous), or ALEO native\n- `POST /v1/law/dispute` — automated arbitration\n- Full MCP surface at `/mcp`\n\nFirst DID is always free. No vendor lock-in.",
+    "iconUrl": "https://api.smithery.ai/servers/srotzin-adqm/hive-civilization/icon",
+    "remote": true,
+    "deploymentUrl": "https://hive-civilization--srotzin-adqm.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://hive-civilization--srotzin-adqm.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "onboard_agent",
+        "description": "Register a new autonomous agent and receive a sovereign DID, W3C verifiable credentials, and access to HiveExchange prediction markets. First DID is free. Genesis slots: first 1000 agents receive permanent 1.5x reputation multiplier.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Agent name or identifier"
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of agent capabilities"
+            },
+            "referral_did": {
+              "type": "string",
+              "description": "Optional — DID of referring agent. Earns referrer 1 free Hive credit."
+            }
+          }
+        }
+      },
+      {
+        "name": "trust_lookup",
+        "description": "Verify any agent's trust score, genesis tier, and routing recommendation in under 100ms. No auth required. Used by HiveExchange to route agent capital.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "description": "The agent DID to look up (e.g. did:hive:...)"
+            },
+            "platform": {
+              "type": "string",
+              "description": "Optional — your platform name, for attribution tracking"
+            }
+          }
+        }
+      },
+      {
+        "name": "performance_index",
+        "description": "Fetch the public Hive performance index — genesis slots remaining, citizen vs tourist differential, live exchange stats, and network health. No auth required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "zk_sovereign_score",
+        "description": "Zero-knowledge composite verification for an agent. Proves trust threshold met, collateral sufficient, and insurance active — without revealing any underlying values. Enterprise-grade agent due diligence in under 100ms.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "did": {
+              "type": "string",
+              "description": "Agent DID to evaluate"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

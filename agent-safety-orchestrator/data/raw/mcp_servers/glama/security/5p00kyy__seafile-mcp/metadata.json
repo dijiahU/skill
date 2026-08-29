@@ -1,0 +1,87 @@
+{
+  "registry": "glama",
+  "id": "v6836rfolg",
+  "namespace": "5p00kyy",
+  "slug": "seafile-mcp",
+  "name": "Seafile MCP Server",
+  "description": "Enables AI assistants to interact with Seafile cloud storage for managing self-hosted files and directories. It supports operations such as reading, writing, moving, and searching across libraries using either account-based or library-specific authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Seafile cloud storage for managing self-hosted files and directories. It supports operations such as reading, writing, moving, and searching across libraries using either account-based or library-specific authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SEAFILE_REPO_ID": {
+          "description": "Library UUID for library-specific authentication",
+          "type": "string"
+        },
+        "SEAFILE_TIMEOUT": {
+          "description": "Request timeout in seconds (default: 30)",
+          "type": "string",
+          "default": "30"
+        },
+        "SEAFILE_PASSWORD": {
+          "description": "Your password for account-based authentication",
+          "type": "string"
+        },
+        "SEAFILE_USERNAME": {
+          "description": "Your email for account-based authentication",
+          "type": "string"
+        },
+        "SEAFILE_REPO_TOKEN": {
+          "description": "API token from library settings for library-specific authentication",
+          "type": "string"
+        },
+        "SEAFILE_SERVER_URL": {
+          "description": "Your Seafile server URL",
+          "type": "string"
+        },
+        "SEAFILE_MAX_READ_SIZE": {
+          "description": "Max file size to read (default: 1MB)",
+          "type": "string",
+          "default": "1MB"
+        },
+        "SEAFILE_MAX_WRITE_SIZE": {
+          "description": "Max upload size (default: 10MB)",
+          "type": "string",
+          "default": "10MB"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SEAFILE_USERNAME",
+            "SEAFILE_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SEAFILE_REPO_TOKEN",
+            "SEAFILE_REPO_ID"
+          ]
+        }
+      ],
+      "required": [
+        "SEAFILE_SERVER_URL"
+      ]
+    },
+    "id": "v6836rfolg",
+    "name": "Seafile MCP Server",
+    "namespace": "5p00kyy",
+    "repository": {
+      "url": "https://github.com/5p00kyy/seafile-mcp"
+    },
+    "slug": "seafile-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/v6836rfolg"
+  }
+}

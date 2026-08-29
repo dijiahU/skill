@@ -1,0 +1,120 @@
+{
+  "registry": "glama",
+  "id": "i4fjria8tg",
+  "namespace": "Xiyueyy",
+  "slug": "ssh-mcp",
+  "name": "ssh-mcp-server",
+  "description": "An MCP server that enables remote SSH command execution and bidirectional file transfers through a standardized interface. It allows AI assistants to securely manage remote servers while keeping credentials isolated and applying command-level security controls.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "An MCP server that enables remote SSH command execution and bidirectional file transfers through a standardized interface. It allows AI assistants to securely manage remote servers while keeping credentials isolated and applying command-level security controls.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "pty": {
+          "description": "Allocate pseudo-tty for command execution",
+          "type": "string"
+        },
+        "ssh": {
+          "description": "SSH connection config in JSON or legacy format",
+          "type": "string"
+        },
+        "host": {
+          "description": "SSH host or host alias from ssh config",
+          "type": "string"
+        },
+        "port": {
+          "description": "SSH port",
+          "type": "string"
+        },
+        "password": {
+          "description": "SSH password",
+          "type": "string"
+        },
+        "username": {
+          "description": "SSH username",
+          "type": "string"
+        },
+        "admin-ids": {
+          "description": "Comma-separated admin IDs, e.g. 10001,10002",
+          "type": "string"
+        },
+        "blacklist": {
+          "description": "Command blacklist (comma-separated regex)",
+          "type": "string"
+        },
+        "whitelist": {
+          "description": "Command whitelist (comma-separated regex)",
+          "type": "string"
+        },
+        "passphrase": {
+          "description": "Private key passphrase",
+          "type": "string"
+        },
+        "privateKey": {
+          "description": "SSH private key path",
+          "type": "string"
+        },
+        "socksProxy": {
+          "description": "SOCKS proxy URL",
+          "type": "string"
+        },
+        "config-file": {
+          "description": "JSON configuration file path",
+          "type": "string"
+        },
+        "pre-connect": {
+          "description": "Pre-connect configured SSH servers on startup",
+          "type": "string"
+        },
+        "ssh-config-file": {
+          "description": "SSH config file path",
+          "type": "string"
+        },
+        "astrbot-config-file": {
+          "description": "Path to AstrBot data/config/cmd_config.json",
+          "type": "string"
+        },
+        "require-astrbot-admin": {
+          "description": "Require operatorId to match allowed admin IDs",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "host"
+          ]
+        },
+        {
+          "required": [
+            "config-file"
+          ]
+        },
+        {
+          "required": [
+            "ssh"
+          ]
+        }
+      ]
+    },
+    "id": "i4fjria8tg",
+    "name": "ssh-mcp-server",
+    "namespace": "Xiyueyy",
+    "repository": {
+      "url": "https://github.com/Xiyueyy/ssh-mcp"
+    },
+    "slug": "ssh-mcp",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/i4fjria8tg"
+  }
+}

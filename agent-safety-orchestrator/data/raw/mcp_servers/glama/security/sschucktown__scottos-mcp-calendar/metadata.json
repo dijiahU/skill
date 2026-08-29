@@ -1,0 +1,89 @@
+{
+  "registry": "glama",
+  "id": "p7v5m374n9",
+  "namespace": "sschucktown",
+  "slug": "scottos-mcp-calendar",
+  "name": "ScottOS MCP Calendar Server",
+  "description": "Enables ChatGPT to interact with Google Calendar through a remote MCP server. Provides tools to list, create, update, and delete calendar events with OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables ChatGPT to interact with Google Calendar through a remote MCP server. Provides tools to list, create, update, and delete calendar events with OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PGHOST": {
+          "description": "PostgreSQL host",
+          "type": "string"
+        },
+        "PGUSER": {
+          "description": "PostgreSQL user",
+          "type": "string"
+        },
+        "PGDATABASE": {
+          "description": "PostgreSQL database name",
+          "type": "string"
+        },
+        "PGPASSWORD": {
+          "description": "PostgreSQL password",
+          "type": "string"
+        },
+        "DATABASE_URL": {
+          "description": "The database URL",
+          "type": "string"
+        },
+        "GOOGLE_SCOPES": {
+          "description": "Google API scopes (default provided in .env.example)",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Google OAuth 2.0 Client ID",
+          "type": "string"
+        },
+        "OAUTH_REDIRECT_URI": {
+          "description": "OAuth redirect URI (https://YOUR-RENDER-URL/oauth2callback)",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Google OAuth 2.0 Client Secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_CLIENT_ID",
+            "GOOGLE_CLIENT_SECRET",
+            "OAUTH_REDIRECT_URI",
+            "DATABASE_URL"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_CLIENT_ID",
+            "GOOGLE_CLIENT_SECRET",
+            "OAUTH_REDIRECT_URI",
+            "PGHOST",
+            "PGDATABASE",
+            "PGUSER",
+            "PGPASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "p7v5m374n9",
+    "name": "ScottOS MCP Calendar Server",
+    "namespace": "sschucktown",
+    "repository": {
+      "url": "https://github.com/sschucktown/scottos-mcp-calendar"
+    },
+    "slug": "scottos-mcp-calendar",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/p7v5m374n9"
+  }
+}

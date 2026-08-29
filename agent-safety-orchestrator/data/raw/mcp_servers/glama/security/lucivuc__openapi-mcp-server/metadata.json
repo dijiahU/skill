@@ -1,0 +1,126 @@
+{
+  "registry": "glama",
+  "id": "zna0p0xif2",
+  "namespace": "luciVuc",
+  "slug": "openapi-mcp-server",
+  "name": "OpenAPI MCP Server",
+  "description": "A generic MCP server that dynamically converts OpenAPI-defined REST APIs into tools for LLMs like Claude. It supports multiple authentication methods and transport protocols, enabling seamless interaction with any OpenAPI-compliant API.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "A generic MCP server that dynamically converts OpenAPI-defined REST APIs into tools for LLMs like Claude. It supports multiple authentication methods and transport protocols, enabling seamless interaction with any OpenAPI-compliant API.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HTTP_HOST": {
+          "description": "Host for HTTP transport.",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "HTTP_PORT": {
+          "description": "Port for HTTP transport.",
+          "type": "string",
+          "default": "3000"
+        },
+        "NAMESPACE": {
+          "description": "Namespace for the MCP server tools.",
+          "type": "string"
+        },
+        "TOOLS_MODE": {
+          "description": "Tools loading mode: \"all\" (load all endpoint-based tools), \"dynamic\" (load only meta-tools), or \"explicit\" (load only tools specified in includeTools).",
+          "type": "string",
+          "default": "all"
+        },
+        "API_HEADERS": {
+          "description": "Comma-separated key:value pairs for API authentication headers (e.g., \"Authorization:Bearer token123,X-API-Key:your-api-key\").",
+          "type": "string"
+        },
+        "SERVER_NAME": {
+          "description": "Name for the MCP server.",
+          "type": "string",
+          "default": "openapi-mcp-server"
+        },
+        "API_BASE_URL": {
+          "description": "Base URL for the API endpoints.",
+          "type": "string"
+        },
+        "INCLUDE_TAGS": {
+          "description": "Comma-separated list of OpenAPI tags to include.",
+          "type": "string"
+        },
+        "ENDPOINT_PATH": {
+          "description": "Endpoint path for HTTP transport.",
+          "type": "string",
+          "default": "/mcp"
+        },
+        "SERVER_VERSION": {
+          "description": "Version of the server.",
+          "type": "string",
+          "default": "1.0.3"
+        },
+        "TRANSPORT_TYPE": {
+          "description": "Transport type to use: \"stdio\" or \"http\".",
+          "type": "string",
+          "default": "stdio"
+        },
+        "OPENAPI_SPEC_PATH": {
+          "description": "Path or URL to the OpenAPI specification file (JSON or YAML).",
+          "type": "string"
+        },
+        "INCLUDE_OPERATIONS": {
+          "description": "Comma-separated list of HTTP methods (e.g., GET, POST) to include.",
+          "type": "string"
+        },
+        "OPENAPI_SPEC_INLINE": {
+          "description": "The OpenAPI specification content provided directly as a string.",
+          "type": "string"
+        },
+        "DISABLE_ABBREVIATION": {
+          "description": "Set to \"true\" to disable tool name optimization/abbreviation.",
+          "type": "string"
+        },
+        "OPENAPI_SPEC_FROM_STDIN": {
+          "description": "Set to \"true\" to read the OpenAPI specification from standard input.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "OPENAPI_SPEC_PATH"
+          ]
+        },
+        {
+          "required": [
+            "OPENAPI_SPEC_FROM_STDIN"
+          ]
+        },
+        {
+          "required": [
+            "OPENAPI_SPEC_INLINE"
+          ]
+        }
+      ],
+      "required": [
+        "API_BASE_URL"
+      ]
+    },
+    "id": "zna0p0xif2",
+    "name": "OpenAPI MCP Server",
+    "namespace": "luciVuc",
+    "repository": {
+      "url": "https://github.com/luciVuc/openapi-mcp-server"
+    },
+    "slug": "openapi-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/zna0p0xif2"
+  }
+}

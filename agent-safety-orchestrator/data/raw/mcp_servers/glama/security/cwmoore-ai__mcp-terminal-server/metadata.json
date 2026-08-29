@@ -1,0 +1,97 @@
+{
+  "registry": "glama",
+  "id": "k4nfeggzg0",
+  "namespace": "cwmoore-ai",
+  "slug": "mcp-terminal-server",
+  "name": "MCP Terminal Server",
+  "description": "A lightweight FastAPI server that allows remote execution of shell commands on Windows, with real-time output streaming and security features like API key authentication and rate limiting.",
+  "discoveryQueries": [
+    "security",
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A lightweight FastAPI server that allows remote execution of shell commands on Windows, with real-time output streaming and security features like API key authentication and rate limiting.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Host address to bind to",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "Port number for the server",
+          "type": "string",
+          "default": "8000"
+        },
+        "MCP_LOG_FILE": {
+          "description": "Path to log file",
+          "type": "string",
+          "default": "mcp_terminal_server.log"
+        },
+        "MCP_LOG_LEVEL": {
+          "description": "Log level (debug, info, warning, error, critical)",
+          "type": "string",
+          "default": "info"
+        },
+        "MCP_MAX_LOG_SIZE_MB": {
+          "description": "Maximum log file size in MB",
+          "type": "string",
+          "default": "10"
+        },
+        "MCP_LOG_BACKUP_COUNT": {
+          "description": "Number of log backup files to keep",
+          "type": "string",
+          "default": "5"
+        },
+        "MCP_TERMINAL_API_KEY": {
+          "description": "API key for authentication",
+          "type": "string"
+        },
+        "MCP_WORKING_DIRECTORY": {
+          "description": "Working directory for the server",
+          "type": "string"
+        },
+        "MCP_RESTART_ON_FAILURE": {
+          "description": "Whether to restart the server on failure",
+          "type": "string",
+          "default": "true"
+        },
+        "MCP_MAX_RESTART_ATTEMPTS": {
+          "description": "Maximum number of restart attempts",
+          "type": "string",
+          "default": "5"
+        },
+        "MCP_RESTART_DELAY_SECONDS": {
+          "description": "Delay between restart attempts",
+          "type": "string",
+          "default": "10"
+        },
+        "MCP_SHUTDOWN_TIMEOUT_SECONDS": {
+          "description": "Timeout for graceful shutdown",
+          "type": "string",
+          "default": "30"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MCP_TERMINAL_API_KEY"
+      ]
+    },
+    "id": "k4nfeggzg0",
+    "name": "MCP Terminal Server",
+    "namespace": "cwmoore-ai",
+    "repository": {
+      "url": "https://github.com/cwmoore-ai/mcp-terminal-server"
+    },
+    "slug": "mcp-terminal-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/k4nfeggzg0"
+  }
+}

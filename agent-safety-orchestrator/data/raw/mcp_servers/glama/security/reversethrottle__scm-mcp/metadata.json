@@ -1,0 +1,55 @@
+{
+  "registry": "glama",
+  "id": "dh8bwwcg9l",
+  "namespace": "ReverseThrottle",
+  "slug": "scm-mcp",
+  "name": "scm-mcp",
+  "description": "A Model Context Protocol server for managing Palo Alto Networks Strata Cloud Manager firewall configurations through natural language in Claude. It provides 149 tools covering the full configuration lifecycle including policy objects, security rules, NAT, and profiles with multi-tenant support.",
+  "discoveryQueries": [
+    "security",
+    "policy",
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server for managing Palo Alto Networks Strata Cloud Manager firewall configurations through natural language in Claude. It provides 149 tools covering the full configuration lifecycle including policy objects, security rules, NAT, and profiles with multi-tenant support.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SCM_TSG_ID": {
+          "description": "Default Tenant Service Group ID",
+          "type": "string"
+        },
+        "SCM_CLIENT_ID": {
+          "description": "OAuth2 client ID from the SCM service account",
+          "type": "string"
+        },
+        "SCM_TSG_<NAME>": {
+          "description": "Named TSG alias — pass <NAME> as tsg_id to any tool",
+          "type": "string"
+        },
+        "SCM_CLIENT_SECRET": {
+          "description": "OAuth2 client secret from the SCM service account",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SCM_CLIENT_ID",
+        "SCM_CLIENT_SECRET",
+        "SCM_TSG_ID"
+      ]
+    },
+    "id": "dh8bwwcg9l",
+    "name": "scm-mcp",
+    "namespace": "ReverseThrottle",
+    "repository": {
+      "url": "https://github.com/ReverseThrottle/scm-mcp"
+    },
+    "slug": "scm-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/dh8bwwcg9l"
+  }
+}

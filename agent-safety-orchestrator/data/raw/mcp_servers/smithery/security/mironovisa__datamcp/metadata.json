@@ -1,0 +1,238 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "mironovisa/datamcp",
+  "namespace": "mironovisa",
+  "slug": "datamcp",
+  "displayName": "DataMCP",
+  "description": "DataMCP turns your PostgreSQL into an MCP endpoint that Cursor, Claude Desktop, VS Code, and Windsurf can actually use — without handing out raw connection strings to every developer on the team.\n\n**How it works:** connect your database once, set which tables each API key can touch, share the MCP URL. AI tools get schema context and query access. You get an audit trail of every query that ran.\n\n**6 MCP tools:** `query`, `get_schema`, `get_table_details`, `get_permissions`, `get_schema_changes`, `resync_schema`\n\n- Per-table permission controls (read, write, or none — per key)\n- AES-256-GCM encrypted credentials\n- Full query audit log in the dashboard\n- OAuth 2.0 for seamless client authorization\n- Free tier available\n\nNo self-hosting. No config files on developer machines. Just a URL and an API key.",
+  "discoveryQueries": [
+    "credential",
+    "authentication",
+    "authorization",
+    "firewall"
+  ],
+  "rawRecord": {
+    "id": "5b65755a-0984-4011-b335-c72bd3b5ff41",
+    "qualifiedName": "mironovisa/datamcp",
+    "namespace": "mironovisa",
+    "slug": "datamcp",
+    "displayName": "DataMCP",
+    "description": "DataMCP turns your PostgreSQL into an MCP endpoint that Cursor, Claude Desktop, VS Code, and Windsurf can actually use — without handing out raw connection strings to every developer on the team.\n\n**How it works:** connect your database once, set which tables each API key can touch, share the MCP URL. AI tools get schema context and query access. You get an audit trail of every query that ran.\n\n**6 MCP tools:** `query`, `get_schema`, `get_table_details`, `get_permissions`, `get_schema_changes`, `resync_schema`\n\n- Per-table permission controls (read, write, or none — per key)\n- AES-256-GCM encrypted credentials\n- Full query audit log in the dashboard\n- OAuth 2.0 for seamless client authorization\n- Free tier available\n\nNo self-hosting. No config files on developer machines. Just a URL and an API key.",
+    "iconUrl": "https://api.smithery.ai/servers/mironovisa/datamcp/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-21T14:14:26.321Z",
+    "homepage": "https://datamcp.app",
+    "bySmithery": false,
+    "owner": "org_01KPR671QV1VFB1MV5RBDH5KQ3",
+    "score": 0.04494949494949495
+  },
+  "detail": {
+    "qualifiedName": "mironovisa/datamcp",
+    "displayName": "DataMCP",
+    "description": "DataMCP turns your PostgreSQL into an MCP endpoint that Cursor, Claude Desktop, VS Code, and Windsurf can actually use — without handing out raw connection strings to every developer on the team.\n\n**How it works:** connect your database once, set which tables each API key can touch, share the MCP URL. AI tools get schema context and query access. You get an audit trail of every query that ran.\n\n**6 MCP tools:** `query`, `get_schema`, `get_table_details`, `get_permissions`, `get_schema_changes`, `resync_schema`\n\n- Per-table permission controls (read, write, or none — per key)\n- AES-256-GCM encrypted credentials\n- Full query audit log in the dashboard\n- OAuth 2.0 for seamless client authorization\n- Free tier available\n\nNo self-hosting. No config files on developer machines. Just a URL and an API key.",
+    "iconUrl": "https://api.smithery.ai/servers/mironovisa/datamcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://datamcp--mironovisa.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://datamcp--mironovisa.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "setup",
+        "description": "Get started with DataMCP. Returns instructions for connecting your first PostgreSQL database.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_connections",
+        "description": "List all database and API connections for the authenticated user",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "database",
+                "openapi",
+                "git"
+              ],
+              "type": "string",
+              "description": "Filter connections by type (optional)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_schema",
+        "description": "Get the current database schema for a specific connection",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "connectionId": {
+              "type": "string",
+              "description": "The connection ID (e.g., conn_abc123)"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_tables",
+        "description": "Search for tables by name across all connections",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query (table name)"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_api_endpoints",
+        "description": "List all API endpoints for a specific OpenAPI connection",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "connectionId": {
+              "type": "string",
+              "description": "The OpenAPI connection ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_endpoints",
+        "description": "Search for API endpoints across all OpenAPI connections",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query (endpoint path or description)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_repository_structure",
+        "description": "Get the file tree structure of a Git repository",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "connectionId": {
+              "type": "string",
+              "description": "The Git connection ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_file_content",
+        "description": "Get the content of a specific file from a Git repository",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "The file path (e.g., src/index.ts)"
+            },
+            "connectionId": {
+              "type": "string",
+              "description": "The Git connection ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_repository_files",
+        "description": "Search for files in a Git repository by path or extension",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query (file path pattern)"
+            },
+            "extension": {
+              "type": "string",
+              "description": "Filter by file extension (e.g., .ts, .js)"
+            },
+            "connectionId": {
+              "type": "string",
+              "description": "The Git connection ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_commit_history",
+        "description": "Get the commit history of a Git repository",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of commits to return (default: 10)"
+            },
+            "connectionId": {
+              "type": "string",
+              "description": "The Git connection ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_readme",
+        "description": "Get the README content of a Git repository",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "connectionId": {
+              "type": "string",
+              "description": "The Git connection ID"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "analyze_schema",
+        "description": "Review the database schema and surface design issues, missing indexes, denormalization opportunities, and naming inconsistencies.",
+        "arguments": []
+      },
+      {
+        "name": "describe_schema",
+        "description": "Generate concise, human-readable descriptions for every table and column that lacks one, using code/migration context.",
+        "arguments": []
+      },
+      {
+        "name": "investigate_issue",
+        "description": "Run a structured investigation on a data or behavior issue using SELECTs against this database.",
+        "arguments": [
+          {
+            "name": "issue",
+            "description": "Describe the issue or question (e.g. \"users signing up in the last 24h are not getting welcome emails\").",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "find_slow_candidates",
+        "description": "Identify tables and query patterns most likely to become performance hotspots, based on the schema alone.",
+        "arguments": []
+      }
+    ]
+  }
+}

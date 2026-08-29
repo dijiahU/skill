@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "uc7v8fudf1",
+  "namespace": "JaviEzpeleta",
+  "slug": "gmail-mcp-server",
+  "name": "Gmail MCP Server",
+  "description": "Enables AI assistants to interact with Gmail through OAuth2 authentication, allowing users to list, search, read emails, and create drafts with a safety-first design that prevents accidental sends by default.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Gmail through OAuth2 authentication, allowing users to list, search, read emails, and create drafts with a safety-first design that prevents accidental sends by default.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GMAIL_CLIENT_ID": {
+          "description": "Your Gmail OAuth2 client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "GMAIL_CLIENT_SECRET": {
+          "description": "Your Gmail OAuth2 client secret from Google Cloud Console",
+          "type": "string"
+        },
+        "GMAIL_REFRESH_TOKEN": {
+          "description": "Your Gmail OAuth2 refresh token (generate using npm run setup)",
+          "type": "string"
+        },
+        "OAUTH_REDIRECT_PORT": {
+          "description": "OAuth setup port (must match the redirect URI configured in Google Cloud Console)",
+          "type": "string",
+          "default": "8765"
+        },
+        "GMAIL_ALLOW_DIRECT_SEND": {
+          "description": "Enable direct email sending (disabled by default for safety - creates drafts instead)",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GMAIL_CLIENT_ID",
+        "GMAIL_CLIENT_SECRET",
+        "GMAIL_REFRESH_TOKEN"
+      ]
+    },
+    "id": "uc7v8fudf1",
+    "name": "Gmail MCP Server",
+    "namespace": "JaviEzpeleta",
+    "repository": {
+      "url": "https://github.com/JaviEzpeleta/gmail-mcp-server"
+    },
+    "slug": "gmail-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/uc7v8fudf1"
+  }
+}

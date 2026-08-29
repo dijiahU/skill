@@ -1,0 +1,90 @@
+{
+  "registry": "glama",
+  "id": "y0f46ja2ur",
+  "namespace": "TocharianOU",
+  "slug": "elasticsearch-mcp",
+  "name": "Elasticsearch MCP Server Solution",
+  "description": "Enables comprehensive interaction with Elasticsearch APIs through natural language queries, specifically optimized for security analysis, threat detection, incident investigation, and compliance monitoring with advanced machine learning capabilities for anomaly detection.",
+  "discoveryQueries": [
+    "security",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables comprehensive interaction with Elasticsearch APIs through natural language queries, specifically optimized for security analysis, threat detection, incident investigation, and compliance monitoring with advanced machine learning capabilities for anomaly detection.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ES_URL": {
+          "description": "Your Elasticsearch instance URL",
+          "type": "string"
+        },
+        "ES_API_KEY": {
+          "description": "Elasticsearch API key for authentication",
+          "type": "string"
+        },
+        "ES_CA_CERT": {
+          "description": "Path to custom CA certificate for Elasticsearch SSL/TLS",
+          "type": "string"
+        },
+        "ES_PASSWORD": {
+          "description": "Elasticsearch password for basic authentication",
+          "type": "string"
+        },
+        "ES_USERNAME": {
+          "description": "Elasticsearch username for basic authentication",
+          "type": "string"
+        },
+        "MCP_HTTP_HOST": {
+          "description": "HTTP server host (when using HTTP transport)",
+          "type": "string",
+          "default": "localhost"
+        },
+        "MCP_HTTP_PORT": {
+          "description": "HTTP server port (when using HTTP transport)",
+          "type": "string",
+          "default": "3000"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport mode selection (stdio for Claude Desktop, http for remote access)",
+          "type": "string",
+          "default": "stdio"
+        },
+        "NODE_TLS_REJECT_UNAUTHORIZED": {
+          "description": "Set to 0 to disable SSL certificate validation (development/testing only)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ES_URL",
+            "ES_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "ES_URL",
+            "ES_USERNAME",
+            "ES_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "y0f46ja2ur",
+    "name": "Elasticsearch MCP Server Solution",
+    "namespace": "TocharianOU",
+    "repository": {
+      "url": "https://github.com/TocharianOU/elasticsearch-mcp"
+    },
+    "slug": "elasticsearch-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/y0f46ja2ur"
+  }
+}

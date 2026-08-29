@@ -1,0 +1,173 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "eren-solutions/agent-guardrail",
+  "namespace": "eren-solutions",
+  "slug": "agent-guardrail",
+  "displayName": "Agent Guardrail",
+  "description": "Action-level policy enforcement for AI agents — control what agents DO, not just what they say. Evaluate actions against configurable security policies before execution.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "guardrail",
+    "policy",
+    "vetter",
+    "authorization",
+    "firewall"
+  ],
+  "rawRecord": {
+    "id": "e5545ad9-71aa-4c12-bdf0-85282b8a0e64",
+    "qualifiedName": "eren-solutions/agent-guardrail",
+    "namespace": "eren-solutions",
+    "slug": "agent-guardrail",
+    "displayName": "Agent Guardrail",
+    "description": "Action-level policy enforcement for AI agents — control what agents DO, not just what they say. Evaluate actions against configurable security policies before execution.",
+    "iconUrl": "https://api.smithery.ai/servers/eren-solutions/agent-guardrail/icon",
+    "verified": false,
+    "useCount": 148,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-14T15:29:58.000Z",
+    "homepage": "https://guardrail-mcp.157-230-82-223.sslip.io/",
+    "bySmithery": false,
+    "owner": "org_01KNBVG5Z91N5Y93CP8P6QZA5K",
+    "score": 0.01818181818181818
+  },
+  "detail": {
+    "qualifiedName": "eren-solutions/agent-guardrail",
+    "displayName": "Agent Guardrail",
+    "description": "Action-level policy enforcement for AI agents — control what agents DO, not just what they say. Evaluate actions against configurable security policies before execution.",
+    "iconUrl": "https://api.smithery.ai/servers/eren-solutions/agent-guardrail/icon",
+    "remote": true,
+    "deploymentUrl": "https://agent-guardrail--eren-solutions.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agent-guardrail--eren-solutions.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "evaluate_action",
+        "description": "Evaluate whether an agent action is allowed by the guardrail policy. Call this BEFORE executing any tool, shell command, or HTTP request.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "title": "Target",
+              "default": "",
+              "description": "Target resource path or URL, e.g. /etc/passwd, https://api.example.com."
+            },
+            "agent_id": {
+              "type": "string",
+              "title": "Agent Id",
+              "description": "Unique identifier of the agent. Must be registered first via register_agent."
+            },
+            "cost_usd": {
+              "type": "number",
+              "title": "Cost Usd",
+              "default": 0,
+              "description": "Estimated cost in USD for spend tracking and budget enforcement."
+            },
+            "tool_name": {
+              "type": "string",
+              "title": "Tool Name",
+              "default": "",
+              "description": "Name of the tool being invoked, e.g. bash, write_file, curl."
+            },
+            "action_type": {
+              "type": "string",
+              "title": "Action Type",
+              "description": "Category of action: tool_call, shell, http, file_read, file_write, database, api_call."
+            }
+          }
+        }
+      },
+      {
+        "name": "register_agent",
+        "description": "Register a new agent with the guardrail system. Must be called before evaluate_action.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Human-readable name for the agent, e.g. code-reviewer, data-analyst."
+            },
+            "framework": {
+              "type": "string",
+              "title": "Framework",
+              "default": "",
+              "description": "Agent framework: langchain, autogen, crewai, claude-code."
+            },
+            "description": {
+              "type": "string",
+              "title": "Description",
+              "default": "",
+              "description": "Short description of what this agent does."
+            }
+          }
+        }
+      },
+      {
+        "name": "list_agents",
+        "description": "List all agents currently registered in the guardrail system. Shows active and killed agents.\n\n    Returns:\n        Array of agent records with fields: id, name, framework, description, status, created_at.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_stats",
+        "description": "Retrieve aggregate statistics from the guardrail system including evaluation counts, policy data, and agent metrics.\n\n    Returns:\n        Statistics object with fields: total_evaluations, allowed_count, denied_count, agent_count, policy_count.\n    ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "kill_agent",
+        "description": "Emergency kill-switch: immediately block ALL actions for an agent. Use when an agent is misbehaving or compromised.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "title": "Agent Id",
+              "description": "Unique identifier of the agent to kill. All subsequent actions will be denied."
+            }
+          }
+        }
+      },
+      {
+        "name": "unkill_agent",
+        "description": "Re-enable a previously killed agent, restoring its ability to have actions evaluated.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "title": "Agent Id",
+              "description": "Unique identifier of the agent to reactivate."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "setup_guardrail",
+        "description": "Step-by-step guide to set up guardrail enforcement for a new agent.",
+        "arguments": []
+      },
+      {
+        "name": "security_best_practices",
+        "description": "Security best practices for AI agent governance.",
+        "arguments": []
+      }
+    ]
+  }
+}

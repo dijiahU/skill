@@ -1,0 +1,564 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "finance-district/agent-wallet",
+  "namespace": "finance-district",
+  "slug": "agent-wallet",
+  "displayName": "Finance District",
+  "description": "Manage cryptocurrency portfolios across multiple blockchains through integrated swaps, transfers, and real-time price tracking. Discover and execute DeFi yield strategies to earn passive income while monitoring risk scores and performance. Simplify complex blockchain tasks with automated payment authorizations and a comprehensive guide for secure asset management.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "id": "fe373aa7-74ee-4520-839f-b6f0a5ea8009",
+    "qualifiedName": "finance-district/agent-wallet",
+    "namespace": "finance-district",
+    "slug": "agent-wallet",
+    "displayName": "Finance District",
+    "description": "Manage cryptocurrency portfolios across multiple blockchains through integrated swaps, transfers, and real-time price tracking. Discover and execute DeFi yield strategies to earn passive income while monitoring risk scores and performance. Simplify complex blockchain tasks with automated payment authorizations and a comprehensive guide for secure asset management.",
+    "iconUrl": "https://api.smithery.ai/servers/finance-district/agent-wallet/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-05T04:01:18.351Z",
+    "homepage": "https://smithery.ai/servers/finance-district/agent-wallet",
+    "bySmithery": false,
+    "owner": "org_01KNBVHZ99559Y5FNX0N46C6VK",
+    "score": 0.010101010101010102
+  },
+  "detail": {
+    "qualifiedName": "finance-district/agent-wallet",
+    "displayName": "Finance District",
+    "description": "Manage cryptocurrency portfolios across multiple blockchains through integrated swaps, transfers, and real-time price tracking. Discover and execute DeFi yield strategies to earn passive income while monitoring risk scores and performance. Simplify complex blockchain tasks with automated payment authorizations and a comprehensive guide for secure asset management.",
+    "iconUrl": "https://api.smithery.ai/servers/finance-district/agent-wallet/icon",
+    "remote": true,
+    "deploymentUrl": "https://agent-wallet--finance-district.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agent-wallet--finance-district.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "getTokenPrice",
+        "description": "Look up the current USD market price and 24-hour percentage change for a cryptocurrency or stablecoin. Use this whenever the user asks about a token's price, wants to compare token values, or needs pricing context before a swap, transfer, or yield decision.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token ticker symbol (case-insensitive). Examples: 'BTC', 'ETH', 'SOL', 'USDC', 'FDUSD', 'ARB'."
+            }
+          }
+        }
+      },
+      {
+        "name": "getMyInfo",
+        "description": "Get information about the authenticated user and their wallet",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "depositForYield",
+        "description": "Deposit tokens into a DeFi yield strategy to earn passive income. Requires a strategy ID from discoverYieldStrategies. Creates a tracked position that accrues yield over time.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "Token to deposit (e.g. \"USDC\", \"WETH\", or 0x...) "
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount to deposit in decimal"
+            },
+            "chainKey": {
+              "type": "string",
+              "description": "Blockchain identifier. Accepts: chain ID (8453), chain name (\"base\"), or CAIP-2 (\"eip155:8453\")"
+            },
+            "strategyId": {
+              "type": "string",
+              "description": "Strategy identifier from discoverYieldStrategies (e.g., 'aave-usdc-v3')"
+            },
+            "fromAccountAddress": {
+              "type": "string",
+              "description": "Account address to deposit from (EOA or Smart Account 0x...)"
+            }
+          }
+        }
+      },
+      {
+        "name": "onboardingAssistant",
+        "description": "Interactive guide that walks you through setting up your Finance District wallet for the first time. Provides a clear checklist with step-by-step instructions to configure your wallet, provision signing keys, and get started with available features. Use this tool when you're new to the wallet or need guidance on initial setup.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tone": {
+              "type": "string",
+              "default": "friendly",
+              "description": "Desired response style: friendly, concise, formal, developer"
+            },
+            "locale": {
+              "type": "string",
+              "default": "en-US",
+              "description": "Locale for localized responses (e.g., en-US, en-GB)"
+            },
+            "context": {
+              "type": "string",
+              "default": null,
+              "description": "Optional contextual information from prior interactions (JSON object as string)"
+            },
+            "question": {
+              "type": "string",
+              "description": "Your current question or where you are in the setup process (e.g., 'I want to get started', 'how do I configure my wallet?', 'what do I do next?')"
+            }
+          }
+        }
+      },
+      {
+        "name": "discoverYieldStrategies",
+        "description": "Discover available DeFi yield strategies across multiple protocols (Aave, Compound, Yearn, etc.). Returns strategies with APY, risk scores, and minimum deposit requirements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 30,
+              "description": "Optional: Maximum number of strategies to return (1-100). Default: 30."
+            },
+            "token": {
+              "type": "string",
+              "default": null,
+              "description": "Optional: Token to filter by (e.g. \"USDC\", \"WETH\", or 0x...). If omitted, returns strategies for all supported tokens."
+            },
+            "sortBy": {
+              "type": "string",
+              "default": "apy",
+              "description": "Optional: Sort field for results. 'apy' sorts by annual percentage yield, 'risk' sorts by risk score. Default: 'apy'."
+            },
+            "chainKey": {
+              "type": "string",
+              "default": null,
+              "description": "Optional: Blockchain identifier to filter results. Accepts: chain ID (8453), chain name (\"base\"), or CAIP-2 (\"eip155:8453\"). If omitted, returns strategies across all supported chains."
+            },
+            "protocolSlug": {
+              "type": "string",
+              "default": null,
+              "description": "Optional: Filter by protocol slug (e.g., 'aave-v3', 'venus', 'compound-v3'). If omitted, returns strategies from all protocols. Takes precedence over type=defi filter."
+            },
+            "sortDirection": {
+              "type": "string",
+              "default": "desc",
+              "description": "Optional: Sort direction. 'desc' for descending (highest first), 'asc' for ascending (lowest first). Default: 'desc'."
+            }
+          }
+        }
+      },
+      {
+        "name": "transferTokens",
+        "description": "Transfer tokens from your wallet (Agent Wallet or Smart Account) to any address. Supports EVM chains (native ETH/MATIC and ERC-20 tokens like USDC, USDT), Solana (native SOL and SPL tokens), and Bitcoin (native BTC). Agent Wallet transfers use standard transactions. Smart Account transfers use ERC-4337 with gas sponsorship where available. Returns transaction hash immediately for Agent Wallet, or user operation hash for Smart Account.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset": {
+              "type": "string",
+              "description": "Asset symbol (e.g., \"ETH\", \"USDC\", \"SOL\", \"BTC\") or token contract address (0x... for EVM, Base58 for Solana SPL tokens)"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount to transfer in decimal"
+            },
+            "chainKey": {
+              "type": "string",
+              "description": "Blockchain identifier. Accepts: chain ID (EVM), chain name i.e., (\"ethereum\", \"base\", \"solana\", \"bitcoin\", \"bitcoin-testnet4\"), or CAIP-2 (\"bip122:000000000933ea013658bf6367f5601c\" for Bitcoin, \"eip155:1\" for Ethereum, \"solana:5eykt4...\" for Solana)"
+            },
+            "toAddress": {
+              "type": "string",
+              "description": "Recipient address or name. Accepts raw addresses (0x-prefixed for EVM, Base58 for Solana, Bech32/Base58 for Bitcoin) or ENS/SNS names (e.g. 'vitalik.eth', 'bonfida.sol')."
+            },
+            "autoApprove": {
+              "type": "boolean",
+              "default": false,
+              "description": "Auto-approve transfer up to configured limit (default: false)"
+            },
+            "fromAccountAddress": {
+              "type": "string",
+              "default": null,
+              "description": "Optional: Specify which wallet to transfer from (Agent Wallet address or Smart Account address). If not provided, system will auto-select or prompt."
+            }
+          }
+        }
+      },
+      {
+        "name": "swapTokens",
+        "description": "Quote or execute a token swap using a provider-agnostic, policy-driven router. Parameters are provided individually (MCP-friendly) and the server constructs a SwapTokensRequest with sane defaults.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "QuoteOnly",
+                "Execute"
+              ],
+              "type": "string",
+              "default": "QuoteOnly",
+              "description": "Optional: execution mode (default: QuoteOnly)"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount of TokenIn to swap in decimal. The server converts to atomic units automatically."
+            },
+            "tokenIn": {
+              "type": "string",
+              "description": "Token name to sell (e.g. \"USDC\", \"ETH\", \"WETH\")"
+            },
+            "chainKey": {
+              "type": "string",
+              "description": "Blockchain identifier. Accepts: chain ID (8453), chain name (\"base\"), or CAIP-2 (\"eip155:8453\", \"solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp\")"
+            },
+            "tokenOut": {
+              "type": "string",
+              "description": "Token name to buy (e.g. \"USDC\", \"ETH\", \"WETH\")"
+            },
+            "objective": {
+              "enum": [
+                "Immediate",
+                "BestExecution",
+                "LowGas",
+                "MevProtected"
+              ],
+              "type": "string",
+              "default": "BestExecution",
+              "description": "Optional: swap objective (default: BestExecution)"
+            },
+            "maxSlippageBps": {
+              "type": "integer",
+              "default": 50,
+              "description": "Optional: max slippage in basis points (0-10000). Default: 50 (0.5%)"
+            },
+            "deadlineSeconds": {
+              "type": "integer",
+              "default": 120,
+              "description": "Optional: swap deadline in seconds from now (default: 120)"
+            }
+          }
+        }
+      },
+      {
+        "name": "getWalletOverview",
+        "description": "Get comprehensive wallet overview including Agent Wallet (EOA) and Smart Accounts with token balances and session state. Shows balances across all 'popular networks' by default, or filters to specific account/chain when provided.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chainKey": {
+              "type": "string",
+              "default": null,
+              "description": "Filter by blockchain chain identifier. Accepts CAIP-2 (e.g., 'eip155:8453'), chain ID (8453), or network name ('bsc'). If omitted, queries all popular networks for Agent Wallet and all registered chains for Smart Accounts."
+            },
+            "accountAddress": {
+              "type": "string",
+              "default": null,
+              "description": "Optional: Filter by account address. EVM: 0x + 40 hex chars. Solana: Base58-encoded, 32-44 chars. Can be Agent Wallet or Smart Account. If omitted, returns both."
+            }
+          }
+        }
+      },
+      {
+        "name": "withdrawFromYield",
+        "description": "Withdraw tokens from a DeFi yield position. Works with any yield position, even those not deposited through this wallet. No position tracking required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chainKey": {
+              "type": "string",
+              "description": "Blockchain identifier. Accepts: chain ID (8453), chain name (\"base\"), or CAIP-2 (\"eip155:8453\")"
+            },
+            "withdrawAmount": {
+              "type": "number",
+              "description": "Amount of vault tokens to withdraw in decimal"
+            },
+            "underlyingToken": {
+              "type": "string",
+              "description": "Underlying token name to receive (e.g. \"USDC\", \"WETH\")"
+            },
+            "vaultTokenAddress": {
+              "type": "string",
+              "description": "Vault token address (0x...) to withdraw from. Use discoverYieldStrategies to find vault token addresses."
+            },
+            "fromAccountAddress": {
+              "type": "string",
+              "description": "Account address holding the vault tokens (EOA or Smart Account)"
+            }
+          }
+        }
+      },
+      {
+        "name": "reportIssue",
+        "description": "Report an issue or bug discovered during MCP server testing. Creates a GitHub issue in the repository with the provided details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of the issue (brief summary)"
+            },
+            "labels": {
+              "type": "string",
+              "default": null,
+              "description": "Optional comma-separated list of labels to apply (e.g., 'bug', 'mcp-tool', 'testing')"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed description of the issue including steps to reproduce, expected behavior, and actual behavior"
+            }
+          }
+        }
+      },
+      {
+        "name": "getX402Content",
+        "description": "Retrieves structured content from HTTP APIs that implement the X-402 protocol standard for controlled access. Intended for premium data and documentation APIs that are pre-configured by the operator of this server. When an API responds with HTTP 402, the tool follows the configured X-402 flow to obtain the corresponding response body in a safe, read-only format. It does not access arbitrary websites, execute code, or expose any underlying credential or key material.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "API endpoint URL supporting X-402 protocol"
+            },
+            "preferredAsset": {
+              "type": "string",
+              "default": null,
+              "description": "Preferred payment asset (FDUSD, USDC, etc.)"
+            },
+            "maxPaymentAmount": {
+              "type": "string",
+              "default": null,
+              "description": "Maximum amount willing to pay (decimal string). If exceeded, prompt user."
+            },
+            "preferredNetwork": {
+              "type": "string",
+              "default": null,
+              "description": "Preferred payment network identifier. Accepts: 'base-sepolia', 'eip155:84532', or chain ID '84532'."
+            },
+            "preferredNetworkName": {
+              "type": "string",
+              "default": null,
+              "description": "Human-readable network name for display (e.g., 'Base Sepolia', 'BSC Testnet', 'Ethereum'). ALWAYS provide this alongside preferredNetwork."
+            }
+          }
+        }
+      },
+      {
+        "name": "resolveNameService",
+        "description": "Resolve ENS names (.eth) or Unstoppable Domains (.crypto, .nft, .wallet etc.) to Ethereum addresses, or Solana Name Service domains (.sol) to Solana pubkeys. Also reverse-resolves EVM addresses (0x...) or Solana pubkeys to their registered names.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "nameOrAddress": {
+              "type": "string",
+              "description": "ENS name (e.g. 'vitalik.eth'), SNS domain (e.g. 'bonfida.sol'), Unstoppable Domain for forward resolution, or an EVM address (0x... 42 chars) or Solana pubkey for reverse resolution."
+            }
+          }
+        }
+      },
+      {
+        "name": "getAppVersion",
+        "description": "Get the application version",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "getAccountActivity",
+        "description": "Get transaction history (native transfers, ERC-20 transfers, NFT activity) for a specific account on a specific blockchain. Supports both Agent Wallet (EOA) and Smart Accounts on EVM and Solana chains. Both account address and chain must be specified - activity cannot be mixed across different chains or accounts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "chainKey": {
+              "type": "string",
+              "description": "Blockchain chain identifier (required). Accepts: CAIP-2 (eip155:8453), short names (base, ethereum, polygon, solana), full names (Base Mainnet), or numeric chain IDs (8453, 1, 137). The service intelligently resolves all formats."
+            },
+            "accountAddress": {
+              "type": "string",
+              "description": "Account address to query - either Agent Wallet (EOA) or Smart Account address (required). EVM: 0x followed by 40 hex characters. Solana: Base58-encoded, 32-44 characters."
+            },
+            "maxTransactions": {
+              "type": "integer",
+              "default": 25,
+              "description": "Maximum number of transactions to return (default: 25, max: 100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "helpNarrative",
+        "description": "Use this when the user asks conceptual or 'why/how' questions about wallet safety, delegation sessions, key management, fees, audit trails, or threat models that need narrative explanations rather than action steps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tone": {
+              "type": "string",
+              "default": "friendly",
+              "description": "Desired response style: friendly, concise, formal, developer"
+            },
+            "locale": {
+              "type": "string",
+              "default": "en-US",
+              "description": "Locale for localized responses (e.g., en-US, en-GB)"
+            },
+            "question": {
+              "type": "string",
+              "description": "Conceptual question about wallet safety, delegation, keys, fees, audits, or threats"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "required": [
+                "ok",
+                "apiVersion"
+              ],
+              "properties": {
+                "ok": {
+                  "type": "boolean"
+                },
+                "error": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "default": null,
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "topic": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "answer": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                },
+                "apiVersion": {
+                  "type": "string"
+                },
+                "highlights": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": null
+                },
+                "references": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "title",
+                      "href"
+                    ],
+                    "properties": {
+                      "href": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "default": null
+                }
+              }
+            },
+            "error": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "details": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                },
+                "retryable": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success"
+          ]
+        }
+      },
+      {
+        "name": "authorizePayment",
+        "description": "Authorize X-402 payment by selecting best requirement from resource server's 402 response and constructing payment authorization.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "autoApprove": {
+              "type": "boolean",
+              "default": false,
+              "description": "Auto-approve: if true, automatically selects best option and authorizes; if false, returns selection for user confirmation"
+            },
+            "paymentRequirementsResponseJson": {
+              "type": "string",
+              "description": "JSON-serialized PaymentRequirementsResponse from resource server (contains x402Version, error, and accepts array)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

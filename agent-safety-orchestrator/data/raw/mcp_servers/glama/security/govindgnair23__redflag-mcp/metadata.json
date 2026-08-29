@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "xwrii0cxba",
+  "namespace": "govindgnair23",
+  "slug": "redflag-mcp",
+  "name": "redflag-mcp",
+  "description": "An MCP server that provides queryable access to Anti-Money Laundering (AML) red flag knowledge from regulatory documents. It enables compliance officers to ask natural-language questions and receive relevant, sourced red flags from a local vector database.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "An MCP server that provides queryable access to Anti-Money Laundering (AML) red flag knowledge from regulatory documents. It enables compliance officers to ask natural-language questions and receive relevant, sourced red flags from a local vector database.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Host address for the HTTP server when MCP_TRANSPORT is 'http'.",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "Port number for the HTTP server when MCP_TRANSPORT is 'http'.",
+          "type": "string",
+          "default": "8000"
+        },
+        "MCP_TRANSPORT": {
+          "description": "Transport mode for the MCP server, e.g., 'stdio' or 'http'.",
+          "type": "string",
+          "default": "stdio"
+        },
+        "OPENAI_API_KEY": {
+          "description": "Your OpenAI API key, required for the extraction pipeline to send text to an OpenAI model.",
+          "type": "string"
+        },
+        "OPENAI_EXTRACTION_MODEL": {
+          "description": "Override the default OpenAI model (gpt-4o-mini) used for extraction.",
+          "type": "string",
+          "default": "gpt-4o-mini"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    "id": "xwrii0cxba",
+    "name": "redflag-mcp",
+    "namespace": "govindgnair23",
+    "repository": {
+      "url": "https://github.com/govindgnair23/redflag-mcp"
+    },
+    "slug": "redflag-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xwrii0cxba"
+  }
+}

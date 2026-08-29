@@ -1,0 +1,296 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "himaan4149-kv55/pretext-pdf",
+  "namespace": "himaan4149-kv55",
+  "slug": "pretext-pdf",
+  "displayName": "pretext-pdf",
+  "description": "Generate professional PDFs from structured JSON. Supports invoices (with GST), reports, tables, encryption, and more. No headless browser — pure Node.js.",
+  "discoveryQueries": [
+    "encryption"
+  ],
+  "rawRecord": {
+    "id": "0f2db89e-6c86-488b-8af0-5a365123ac29",
+    "qualifiedName": "himaan4149-kv55/pretext-pdf",
+    "namespace": "himaan4149-kv55",
+    "slug": "pretext-pdf",
+    "displayName": "pretext-pdf",
+    "description": "Generate professional PDFs from structured JSON. Supports invoices (with GST), reports, tables, encryption, and more. No headless browser — pure Node.js.",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-08T19:03:13.031Z",
+    "homepage": "https://smithery.ai/servers/himaan4149-kv55/pretext-pdf",
+    "bySmithery": false,
+    "owner": "org_01KNQ5EQ9QNDWEE6S594CZTXFW",
+    "score": 0.023255813953488372
+  },
+  "detail": {
+    "qualifiedName": "himaan4149-kv55/pretext-pdf",
+    "displayName": "pretext-pdf",
+    "description": "Generate professional PDFs from structured JSON. Supports invoices (with GST), reports, tables, encryption, and more. No headless browser — pure Node.js.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://pretext-pdf.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://pretext-pdf.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "generate_pdf",
+        "description": "Generate a PDF from a pretext-pdf document descriptor (PdfDocument JSON). Returns base64-encoded PDF bytes. Use list_element_types to see available elements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "document": {
+              "type": "object",
+              "description": "A PdfDocument config object with content array and optional pageSize, margins, fonts, header, footer, watermark, encryption, etc."
+            },
+            "filename": {
+              "type": "string",
+              "default": "document",
+              "description": "Suggested filename (without .pdf extension)"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_invoice",
+        "description": "Generate a professional invoice PDF. Accepts structured invoice data (from/to parties, line items, GST). Returns base64-encoded PDF. Supports INR/USD/EUR/GBP currencies. GST (IGST) is auto-calculated when gst_rate is set on items.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "type": "object",
+              "required": [
+                "company"
+              ],
+              "properties": {
+                "gstin": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "company": {
+                  "type": "string"
+                }
+              },
+              "description": "Billing party (client)"
+            },
+            "date": {
+              "type": "string",
+              "description": "Invoice date ISO format YYYY-MM-DD. Defaults to today."
+            },
+            "from": {
+              "type": "object",
+              "required": [
+                "company"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "gstin": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "company": {
+                  "type": "string"
+                }
+              },
+              "description": "Issuing party (your company)"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "quantity",
+                  "rate"
+                ],
+                "properties": {
+                  "rate": {
+                    "type": "number",
+                    "description": "Unit price"
+                  },
+                  "gst_rate": {
+                    "enum": [
+                      0,
+                      5,
+                      12,
+                      18,
+                      28
+                    ],
+                    "type": "number",
+                    "description": "GST rate %. If set, IGST is calculated."
+                  },
+                  "hsn_code": {
+                    "type": "string",
+                    "description": "HSN/SAC code for India GST"
+                  },
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Line items"
+            },
+            "notes": {
+              "type": "string",
+              "description": "Additional notes or payment terms."
+            },
+            "currency": {
+              "enum": [
+                "INR",
+                "USD",
+                "EUR",
+                "GBP"
+              ],
+              "type": "string",
+              "description": "Currency. Default: INR"
+            },
+            "due_date": {
+              "type": "string",
+              "description": "Payment due date ISO format."
+            },
+            "filename": {
+              "type": "string",
+              "description": "Suggested filename without .pdf extension."
+            },
+            "invoice_number": {
+              "type": "string",
+              "description": "Invoice identifier e.g. INV-2026-001"
+            }
+          }
+        }
+      },
+      {
+        "name": "generate_report",
+        "description": "Generate a professional multi-section report PDF with optional TOC, tables, and callout boxes. Returns base64-encoded PDF.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "Date string. Defaults to today."
+            },
+            "title": {
+              "type": "string",
+              "description": "Report title"
+            },
+            "author": {
+              "type": "string",
+              "description": "Author name"
+            },
+            "filename": {
+              "type": "string",
+              "description": "Suggested filename without .pdf extension."
+            },
+            "sections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "heading",
+                  "body"
+                ],
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "description": "Section body text. Use double newlines (\\n\\n) to separate paragraphs."
+                  },
+                  "table": {
+                    "type": "object",
+                    "required": [
+                      "headers",
+                      "rows"
+                    ],
+                    "properties": {
+                      "rows": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "headers": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "description": "Optional data table"
+                  },
+                  "callout": {
+                    "type": "object",
+                    "required": [
+                      "style",
+                      "text"
+                    ],
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "style": {
+                        "enum": [
+                          "info",
+                          "warning",
+                          "tip",
+                          "note"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "description": "Optional callout / alert box"
+                  },
+                  "heading": {
+                    "type": "string",
+                    "description": "Section heading"
+                  }
+                }
+              },
+              "description": "Report sections"
+            },
+            "subtitle": {
+              "type": "string",
+              "description": "Report subtitle or description"
+            },
+            "include_toc": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include a Table of Contents page. Default: true"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_element_types",
+        "description": "Returns a markdown reference of all pretext-pdf element types and their key properties. Use this before calling generate_pdf to understand what elements and options are available.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

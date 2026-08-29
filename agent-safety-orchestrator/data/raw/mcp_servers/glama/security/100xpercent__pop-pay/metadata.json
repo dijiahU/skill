@@ -1,0 +1,72 @@
+{
+  "registry": "glama",
+  "id": "ubu5upv4dt",
+  "namespace": "100xPercent",
+  "slug": "pop-pay",
+  "name": "pop-pay",
+  "description": "Stop AI agents leaking your card or making hallucinated purchases. No SaaS, No login, Fully local.\n\nA runtime security layer that protects AI agents during online purchases. It sits between the agent and payment forms",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Stop AI agents leaking your card or making hallucinated purchases. No SaaS, No login, Fully local.\n\nA runtime security layer that protects AI agents during online purchases. It sits between the agent and payment forms",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "POP_CDP_URL": {
+          "description": "URL for Chrome DevTools Protocol (CDP) connection",
+          "type": "string",
+          "default": "http://localhost:9222"
+        },
+        "POP_MAX_DAILY": {
+          "description": "Maximum USD per day",
+          "type": "string",
+          "default": "500.0"
+        },
+        "POP_MAX_PER_TX": {
+          "description": "Maximum USD per transaction",
+          "type": "string",
+          "default": "100.0"
+        },
+        "POP_STRIPE_KEY": {
+          "description": "Stripe API key for Stripe Issuing provider",
+          "type": "string"
+        },
+        "POP_AUTO_INJECT": {
+          "description": "Enable CDP card injection",
+          "type": "string",
+          "default": "true"
+        },
+        "POP_BLOCK_LOOPS": {
+          "description": "Block hallucination/retry loops",
+          "type": "string",
+          "default": "true"
+        },
+        "POP_GUARDRAIL_ENGINE": {
+          "description": "Guardrail mode: 'keyword' (zero-cost) or 'llm' (semantic)",
+          "type": "string",
+          "default": "keyword"
+        },
+        "POP_ALLOWED_CATEGORIES": {
+          "description": "Approved vendor categories as a JSON string array",
+          "type": "string",
+          "default": "[\"aws\",\"cloudflare\"]"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ubu5upv4dt",
+    "name": "pop-pay",
+    "namespace": "100xPercent",
+    "repository": {
+      "url": "https://github.com/100xPercent/pop-pay"
+    },
+    "slug": "pop-pay",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ubu5upv4dt"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "registry": "glama",
+  "id": "cvgu4o1yrj",
+  "namespace": "scka-de",
+  "slug": "opensanctions-mcp",
+  "name": "opensanctions-mcp",
+  "description": "MCP server for sanctions screening and PEP checks via OpenSanctions API. Search entities, match against 320+ sanctions lists, and run compound compliance investigations with AI agents.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "MCP server for sanctions screening and PEP checks via OpenSanctions API. Search entities, match against 320+ sanctions lists, and run compound compliance investigations with AI agents.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Set to any value to enable debug logging.",
+          "type": "string"
+        },
+        "OPENSANCTIONS_API_KEY": {
+          "description": "API key for the hosted OpenSanctions API. Get one at https://www.opensanctions.org/api/.",
+          "type": "string"
+        },
+        "OPENSANCTIONS_API_URL": {
+          "description": "API URL. Set to your self-hosted yente instance.",
+          "type": "string",
+          "default": "https://api.opensanctions.org"
+        },
+        "OPENSANCTIONS_DATASET": {
+          "description": "Dataset to screen against. 'default' includes all 320+ sources.",
+          "type": "string",
+          "default": "default"
+        },
+        "OPENSANCTIONS_MAX_RETRIES": {
+          "description": "Max retries for failed API calls.",
+          "type": "string",
+          "default": "3"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "OPENSANCTIONS_API_KEY"
+          ]
+        },
+        {
+          "required": [
+            "OPENSANCTIONS_API_URL"
+          ]
+        }
+      ]
+    },
+    "id": "cvgu4o1yrj",
+    "name": "opensanctions-mcp",
+    "namespace": "scka-de",
+    "repository": {
+      "url": "https://github.com/scka-de/opensanctions-mcp"
+    },
+    "slug": "opensanctions-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/cvgu4o1yrj"
+  }
+}

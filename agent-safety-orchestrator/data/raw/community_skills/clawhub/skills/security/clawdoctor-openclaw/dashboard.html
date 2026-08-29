@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClawDoctor - OpenClaw 健康监控</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        .status-ok { background-color: #10b981; }
+        .status-warning { background-color: #f59e0b; animation: pulse 1s infinite; }
+        .status-error { background-color: #ef4444; animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .log-row:hover { background-color: rgba(55, 65, 81, 0.5); }
+        .fix-card { transition: all 0.3s ease; }
+        .fix-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+        .scan-result { max-height: 400px; overflow-y: auto; }
+        .risk-high { border-left: 4px solid #ef4444; }
+        .risk-medium { border-left: 4px solid #f59e0b; }
+        .risk-low { border-left: 4px solid #3b82f6; }
+        .risk-ok { border-left: 4px solid #10b981; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl">🦞</span>
+                    <div>
+                        <h1 class="text-2xl font-bold">ClawDoctor</h1>
+                        <p class="text-xs text-gray-400" data-i18n="subtitle">OpenClaw 健康监控与修复</p>
+                        <p class="text-xs text-gray-500 mt-0.5" data-i18n="authorShort">作者：梁溪区佳妮电子商务工作室 EC & 小呆呆</p>
+                        <p class="text-xs text-gray-500">Author: Liangxi Jiani E-commerce Studio EC & Xiaodaidai</p>
+                        <p class="text-xs text-gray-400 mt-0.5">
+                            <span data-i18n="contact">联系邮箱</span>: 
+                            <a href="mailto:olveww@gmail.com" class="text-blue-400 hover:text-blue-300 transition">olveww@gmail.com</a>
+                            <span class="text-gray-500 ml-1">Contact: olveww@gmail.com</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Language Switcher -->
+                    <div class="flex items-center bg-gray-700 rounded-lg p-1">
+                        <button onclick="setLanguage('zh')" id="btn-zh" class="px-3 py-1 rounded text-sm font-medium bg-blue-600 text-white transition">中文</button>
+                        <button onclick="setLanguage('en')" id="btn-en" class="px-3 py-1 rounded text-sm font-medium text-gray-400 hover:text-white transition">EN</button>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="relative flex h-3 w-3">
+                            <span id="liveIndicator" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span id="liveIndicatorDot" class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-sm text-gray-400" data-i18n="realtime">实时监控</span>
+                    </div>
+                    <span class="text-sm text-gray-400"><span data-i18n="lastUpdate">最后更新</span>: <span id="lastUpdate">--:--:--</span></span>
+                    <button onclick="refreshData()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition">🔄 <span data-i18n="refresh">刷新</span></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <button onclick="runFullCheck()" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-6 py-4 rounded-xl font-medium transition flex items-center justify-center space-x-2">
+                <span>🔍</span><span data-i18n="btnFullCheck">完整检查</span>
+            </button>
+            <button onclick="runOneClickFix()" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-6 py-4 rounded-xl font-medium transition flex items-center justify-center space-x-2">
+                <span>🔧</span><span data-i18n="btnOneClickFix">一键修复</span>
+            </button>
+            <button onclick="runSecurityScan()" class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 px-6 py-4 rounded-xl font-medium transition flex items-center justify-center space-x-2">
+                <span>🛡️</span><span data-i18n="btnSecurityScan">安全扫描</span>
+            </button>
+        </div>
+
+        <!-- Status Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Gateway Status -->
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 text-sm font-medium" data-i18n="gatewayStatus">Gateway 状态</h3>
+                    <span id="gatewayDot" class="status-dot status-ok"></span>
+                </div>
+                <div class="text-2xl font-bold" id="gatewayStatus">--</div>
+                <div class="text-sm text-gray-500 mt-1">HTTP: <span id="gatewayHttp">--</span></div>
+            </div>
+
+            <!-- Skills Status -->
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 text-sm font-medium" data-i18n="skills">技能</h3>
+                    <span class="status-dot status-ok"></span>
+                </div>
+                <div class="text-2xl font-bold" id="skillsCount">--</div>
+                <div class="text-sm text-gray-500 mt-1" data-i18n="loaded">已加载</div>
+            </div>
+
+            <!-- System Resources -->
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 text-sm font-medium" data-i18n="systemResources">系统资源</h3>
+                    <span class="status-dot status-ok"></span>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">CPU</span>
+                        <span id="cpuUsage" class="font-mono">--%</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500" data-i18n="memory">内存</span>
+                        <span id="memoryUsage" class="font-mono">--%</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500" data-i18n="disk">磁盘</span>
+                        <span id="diskUsage" class="font-mono">--%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div id="resultsPanel" class="hidden bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold" id="resultsTitle">检查结果</h3>
+                <button onclick="closeResults()" class="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <div id="resultsContent" class="scan-result space-y-2"></div>
+        </div>
+
+        <!-- Fix Categories -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h3 class="text-lg font-semibold mb-4" data-i18n="fixFunctions">修复功能</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="runFix('gateway')" class="fix-card bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 px-6 py-4 rounded-xl font-medium transition flex items-center justify-center space-x-2">
+                    <span>🚀</span><span data-i18n="fixGateway">Gateway</span>
+                </button>
+                <button onclick="runFix('config')" class="fix-card bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 px-6 py-4 rounded-xl font-medium transition flex items-center justify-center space-x-2">
+                    <span>⚙️</span><span data-i18n="fixConfig">配置</span>
+                </button>
+                <button onclick="runFix('logs')" class="fix-card bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 px-6 py-4 rounded-xl font-medium transition flex items-center justify-center space-x-2">
+                    <span>📄</span><span data-i18n="fixLogs">日志</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <h3 class="text-lg font-semibold mb-4" data-i18n="resourceTrend">系统资源趋势</h3>
+                <canvas id="resourceChart" height="200"></canvas>
+            </div>
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <h3 class="text-lg font-semibold mb-4" data-i18n="statusChange">状态变化</h3>
+                <canvas id="statusChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Logs -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold" data-i18n="recentLogs">最近日志</h3>
+                <span class="text-sm text-gray-500" data-i18n="showLast20">显示最近 20 条</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-gray-400 border-b border-gray-700">
+                            <th class="pb-3" data-i18n="time">时间</th>
+                            <th class="pb-3">Gateway</th>
+                            <th class="pb-3" data-i18n="skills">技能</th>
+                            <th class="pb-3">CPU</th>
+                            <th class="pb-3" data-i18n="memory">内存</th>
+                            <th class="pb-3" data-i18n="disk">磁盘</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTable" class="text-gray-300"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-center">
+            <div class="text-gray-400 text-sm mb-2">© 2026 ClawDoctor</div>
+            <div class="text-gray-500 text-xs mb-1" data-i18n="author">作者：梁溪区佳妮电子商务工作室 EC & 小呆呆</div>
+            <div class="text-gray-500 text-xs mb-2">Author: Liangxi Jiani E-commerce Studio EC & Xiaodaidai</div>
+            <div class="text-gray-400 text-sm">
+                <span data-i18n="contact">联系邮箱</span>: 
+                <a href="mailto:olveww@gmail.com" class="text-blue-400 hover:text-blue-300 transition">olveww@gmail.com</a>
+            </div>
+            <div class="text-gray-500 text-xs mt-1">Contact: olveww@gmail.com</div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:52691';
+
+        async function loadLogs() {
+            try {
+                const response = await fetch(`${API_BASE}/api/logs`);
+                if (!response.ok) throw new Error('API error');
+                const result = await response.json();
+                return result.data || [];
+            } catch (e) {
+                return generateMockData();
+            }
+        }
+
+        function generateMockData() {
+            const data = [];
+            const now = new Date();
+            for (let i = 20; i >= 0; i--) {
+                const time = new Date(now - i * 60000);
+                data.push({
+                    timestamp: time.toISOString(),
+                    gateway: { status: 'running', http_code: '200' },
+                    skills: { total: 110 },
+                    system: { cpu: 10 + Math.random() * 20, memory: 40 + Math.random() * 20, disk: 6.6 }
+                });
+            }
+            return data;
+        }
+
+        async function runFullCheck() {
+            showResults('完整检查', 'loading');
+            try {
+                const response = await fetch(`${API_BASE}/api/check`);
+                const data = await response.json();
+                const checks = [
+                    { name: 'Gateway', status: data.gateway.status === 'running' ? 'ok' : 'error', 
+                      detail: data.gateway.status === 'running' ? `运行中, PID:${data.gateway.pid}` : '异常' },
+                    { name: '技能', status: 'ok', detail: `${data.skills.total} 个技能` },
+                    { name: 'CPU', status: data.system.cpu < 80 ? 'ok' : 'warning', detail: `${data.system.cpu.toFixed(1)}%` },
+                    { name: '内存', status: data.system.memory < 80 ? 'ok' : 'warning', detail: `${data.system.memory.toFixed(1)}%` },
+                    { name: '磁盘', status: data.system.disk < 80 ? 'ok' : 'warning', detail: `${data.system.disk.toFixed(1)}%` },
+                ];
+                displayCheckResults(checks);
+            } catch (e) {
+                document.getElementById('resultsContent').innerHTML = `<div class="risk-high bg-gray-700/50 p-3 rounded-lg">检查失败: ${e.message}</div>`;
+            }
+        }
+
+        async function runOneClickFix() {
+            showResults('一键修复', 'loading');
+            try {
+                const response = await fetch(`${API_BASE}/api/fix`, { method: 'POST' });
+                const data = await response.json();
+                const fixes = [];
+                for (const [category, items] of Object.entries(data)) {
+                    if (category !== 'timestamp' && Array.isArray(items)) {
+                        fixes.push({ category: category, items: items });
+                    }
+                }
+                displayFixResults(fixes);
+            } catch (e) {
+                document.getElementById('resultsContent').innerHTML = `<div class="risk-high bg-gray-700/50 p-3 rounded-lg">修复失败: ${e.message}</div>`;
+            }
+        }
+
+        async function runSecurityScan() {
+            showResults('安全扫描', 'loading');
+            try {
+                const response = await fetch(`${API_BASE}/api/scan`);
+                const data = await response.json();
+                displaySecurityResults(data.risks || []);
+            } catch (e) {
+                document.getElementById('resultsContent').innerHTML = `<div class="risk-high bg-gray-700/50 p-3 rounded-lg">扫描失败: ${e.message}</div>`;
+            }
+        }
+
+        async function runFix(category) {
+            const names = {'gateway': 'Gateway', 'config': '配置', 'logs': '日志'};
+            showResults(`修复: ${names[category]}`, 'loading');
+            await new Promise(r => setTimeout(r, 1000));
+            displaySimpleResults(['✓ 修复完成']);
+        }
+
+        function showResults(title, type) {
+            const panel = document.getElementById('resultsPanel');
+            document.getElementById('resultsTitle').textContent = title;
+            panel.classList.remove('hidden');
+            if (type === 'loading') {
+                document.getElementById('resultsContent').innerHTML = '<div class="flex items-center justify-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-3">执行中...</span></div>';
+            }
+            panel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeResults() {
+            document.getElementById('resultsPanel').classList.add('hidden');
+        }
+
+        function displayCheckResults(checks) {
+            const contentEl = document.getElementById('resultsContent');
+            let html = '';
+            checks.forEach(check => {
+                const icon = check.status === 'ok' ? '✓' : '✗';
+                const colorClass = check.status === 'ok' ? 'risk-ok' : 'risk-high';
+                html += `<div class="${colorClass} bg-gray-700/50 p-3 rounded-lg"><div class="flex items-center justify-between"><span class="font-medium">${icon} ${check.name}</span><span class="text-sm text-gray-400">${check.status === 'ok' ? '正常' : '异常'}</span></div><div class="text-sm text-gray-400 mt-1">${check.detail}</div></div>`;
+            });
+            contentEl.innerHTML = html;
+        }
+
+        function displayFixResults(fixes) {
+            const contentEl = document.getElementById('resultsContent');
+            let html = '';
+            fixes.forEach(fix => {
+                html += `<div class="risk-ok bg-gray-700/50 p-3 rounded-lg"><div class="font-medium mb-2">📁 ${fix.category}</div><div class="space-y-1">${fix.items.map(item => `<div class="text-sm text-gray-300 pl-4">${item}</div>`).join('')}</div></div>`;
+            });
+            contentEl.innerHTML = html;
+        }
+
+        function displaySecurityResults(risks) {
+            const contentEl = document.getElementById('resultsContent');
+            if (risks.length === 0) {
+                contentEl.innerHTML = '<div class="risk-ok bg-gray-700/50 p-3 rounded-lg">✓ 未发现安全风险</div>';
+                return;
+            }
+            let html = '';
+            risks.forEach(risk => {
+                const colorClass = `risk-${risk.level}`;
+                const icon = risk.level === 'ok' ? '✓' : risk.level === 'high' ? '⚠' : 'ℹ';
+                html += `<div class="${colorClass} bg-gray-700/50 p-3 rounded-lg"><div class="flex items-center"><span class="mr-2">${icon}</span><span>${risk.message}</span></div></div>`;
+            });
+            contentEl.innerHTML = html;
+        }
+
+        function displaySimpleResults(items) {
+            const contentEl = document.getElementById('resultsContent');
+            let html = '<div class="risk-ok bg-gray-700/50 p-3 rounded-lg space-y-2">';
+            items.forEach(item => html += `<div class="text-sm">${item}</div>`);
+            html += '</div>';
+            contentEl.innerHTML = html;
+        }
+
+        function updateStatusCards(latest) {
+            const gatewayStatus = latest.gateway.status;
+            document.getElementById('gatewayStatus').textContent = gatewayStatus === 'running' ? '运行中' : '异常';
+            document.getElementById('gatewayStatus').className = `text-2xl font-bold ${gatewayStatus === 'running' ? 'text-green-400' : 'text-red-400'}`;
+            document.getElementById('gatewayHttp').textContent = latest.gateway.http_code || '--';
+            document.getElementById('gatewayDot').className = `status-dot ${gatewayStatus === 'running' ? 'status-ok' : 'status-error'}`;
+            
+            document.getElementById('skillsCount').textContent = latest.skills?.total || 0;
+            
+            document.getElementById('cpuUsage').textContent = (latest.system?.cpu ?? 0).toFixed(1) + '%';
+            document.getElementById('memoryUsage').textContent = (latest.system?.memory ?? 0).toFixed(1) + '%';
+            document.getElementById('diskUsage').textContent = (latest.system?.disk ?? 0).toFixed(1) + '%';
+        }
+
+        function updateLogTable(data) {
+            const tbody = document.getElementById('logTable');
+            tbody.innerHTML = '';
+            data.slice(-20).reverse().forEach(log => {
+                const time = new Date(log.timestamp).toLocaleTimeString();
+                const row = document.createElement('tr');
+                row.className = 'log-row border-b border-gray-700/50 transition-colors';
+                const gatewayClass = log.gateway.status === 'running' ? 'text-green-400' : 'text-red-400';
+                row.innerHTML = `
+                    <td class="py-3 font-mono text-xs">${time}</td>
+                    <td class="py-3 ${gatewayClass}">${log.gateway.status === 'running' ? '✓ 运行中' : '✗ 异常'}</td>
+                    <td class="py-3">${log.skills?.total || 0}</td>
+                    <td class="py-3 font-mono">${(log.system?.cpu ?? 0).toFixed(1)}%</td>
+                    <td class="py-3 font-mono">${(log.system?.memory ?? 0).toFixed(1)}%</td>
+                    <td class="py-3 font-mono">${(log.system?.disk ?? 0).toFixed(1)}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        let resourceChart, statusChart;
+
+        function updateCharts(data) {
+            const labels = data.map(d => new Date(d.timestamp).toLocaleTimeString());
+            const cpuData = data.map(d => d.system?.cpu || 0);
+            const memoryData = data.map(d => d.system?.memory || 0);
+            
+            if (resourceChart) resourceChart.destroy();
+            resourceChart = new Chart(document.getElementById('resourceChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'CPU %', data: cpuData, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 },
+                        { label: '内存 %', data: memoryData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true, labels: { color: '#9ca3af' } } },
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#374151' }, ticks: { color: '#9ca3af' } },
+                        x: { grid: { color: '#374151' }, ticks: { color: '#9ca3af', maxTicksLimit: 8 } }
+                    }
+                }
+            });
+
+            const statusData = data.map(d => d.gateway.status === 'running' ? 1 : 0);
+            if (statusChart) statusChart.destroy();
+            statusChart = new Chart(document.getElementById('statusChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{ label: '正常=1, 异常=0', data: statusData, backgroundColor: statusData.map(v => v === 1 ? '#10b981' : '#ef4444') }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 1, grid: { color: '#374151' }, ticks: { color: '#9ca3af' } },
+                        x: { grid: { color: '#374151' }, ticks: { color: '#9ca3af', maxTicksLimit: 8 } }
+                    }
+                }
+            });
+        }
+
+        async function refreshData() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            const data = await loadLogs();
+            if (data.length > 0) {
+                updateStatusCards(data[data.length - 1]);
+                updateLogTable(data);
+                updateCharts(data);
+            }
+        }
+
+        function startRealtimeMonitor() {
+            refreshData();
+            setInterval(async () => {
+                try {
+                    const response = await fetch(`${API_BASE}/api/status`);
+                    const data = await response.json();
+                    updateStatusCards(data);
+                } catch (e) {
+                    console.log('实时监控连接失败:', e);
+                }
+            }, 5000);
+            setInterval(refreshData, 30000);
+        }
+
+        // 多语言支持
+        const i18n = {
+            zh: {
+                subtitle: 'OpenClaw 健康监控与修复',
+                realtime: '实时监控',
+                lastUpdate: '最后更新',
+                refresh: '刷新',
+                btnFullCheck: '完整检查',
+                btnOneClickFix: '一键修复',
+                btnSecurityScan: '安全扫描',
+                gatewayStatus: 'Gateway 状态',
+                skills: '技能',
+                loaded: '已加载',
+                systemResources: '系统资源',
+                memory: '内存',
+                disk: '磁盘',
+                fixFunctions: '修复功能',
+                fixGateway: 'Gateway',
+                fixConfig: '配置',
+                fixLogs: '日志',
+                resourceTrend: '系统资源趋势',
+                statusChange: '状态变化',
+                recentLogs: '最近日志',
+                showLast20: '显示最近 20 条',
+                time: '时间',
+                contact: '联系邮箱',
+                by: '作者',
+                authorShort: '作者：梁溪区佳妮电子商务工作室 EC & 小呆呆',
+                author: '作者：梁溪区佳妮电子商务工作室 EC & 小呆呆'
+            },
+            en: {
+                subtitle: 'OpenClaw Health Monitor & Fixer',
+                realtime: 'Real-time Monitor',
+                lastUpdate: 'Last Update',
+                refresh: 'Refresh',
+                btnFullCheck: 'Full Check',
+                btnOneClickFix: 'One-Click Fix',
+                btnSecurityScan: 'Security Scan',
+                gatewayStatus: 'Gateway Status',
+                skills: 'Skills',
+                loaded: 'Loaded',
+                systemResources: 'System Resources',
+                memory: 'Memory',
+                disk: 'Disk',
+                fixFunctions: 'Fix Functions',
+                fixGateway: 'Gateway',
+                fixConfig: 'Config',
+                fixLogs: 'Logs',
+                resourceTrend: 'Resource Trend',
+                statusChange: 'Status Change',
+                recentLogs: 'Recent Logs',
+                showLast20: 'Show Last 20',
+                time: 'Time',
+                contact: 'Contact',
+                by: 'by',
+                author: 'Author: Liangxi Jiani E-commerce Studio EC & Xiaodaidai'
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // 更新按钮样式
+            document.getElementById('btn-zh').className = lang === 'zh' 
+                ? 'px-3 py-1 rounded text-sm font-medium bg-blue-600 text-white transition'
+                : 'px-3 py-1 rounded text-sm font-medium text-gray-400 hover:text-white transition';
+            document.getElementById('btn-en').className = lang === 'en'
+                ? 'px-3 py-1 rounded text-sm font-medium bg-blue-600 text-white transition'
+                : 'px-3 py-1 rounded text-sm font-medium text-gray-400 hover:text-white transition';
+            
+            // 更新所有文本
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.textContent = i18n[lang][key];
+                }
+            });
+        }
+
+        startRealtimeMonitor();
+    </script>
+</body>
+</html>

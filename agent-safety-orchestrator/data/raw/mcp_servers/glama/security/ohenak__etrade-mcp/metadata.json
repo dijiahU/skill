@@ -1,0 +1,54 @@
+{
+  "registry": "glama",
+  "id": "nie92liua5",
+  "namespace": "ohenak",
+  "slug": "etrade-mcp",
+  "name": "E*TRADE MCP Server",
+  "description": "Enables LLMs to retrieve real-time stock and options market data through the E\\*TRADE API using natural language. It features secure OAuth 1.0 authentication, persistent token management, and comprehensive support for stock quotes, options chains, and Greeks.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables LLMs to retrieve real-time stock and options market data through the E\\*TRADE API using natural language. It features secure OAuth 1.0 authentication, persistent token management, and comprehensive support for stock quotes, options chains, and Greeks.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ETRADE_TOKEN_KEY": {
+          "description": "Key used for encrypting stored tokens. Recommended for production use.",
+          "type": "string"
+        },
+        "ETRADE_ENVIRONMENT": {
+          "description": "E*TRADE environment to use. Use 'sandbox' for testing and 'production' for live trading.",
+          "type": "string",
+          "default": "sandbox"
+        },
+        "ETRADE_CONSUMER_KEY": {
+          "description": "Your E*TRADE API consumer key.",
+          "type": "string"
+        },
+        "ETRADE_CONSUMER_SECRET": {
+          "description": "Your E*TRADE API consumer secret.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ETRADE_CONSUMER_KEY",
+        "ETRADE_CONSUMER_SECRET",
+        "ETRADE_ENVIRONMENT"
+      ]
+    },
+    "id": "nie92liua5",
+    "name": "E*TRADE MCP Server",
+    "namespace": "ohenak",
+    "repository": {
+      "url": "https://github.com/ohenak/etrade-mcp"
+    },
+    "slug": "etrade-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nie92liua5"
+  }
+}

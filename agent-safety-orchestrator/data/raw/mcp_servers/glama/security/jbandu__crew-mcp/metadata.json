@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "idd8thpexx",
+  "namespace": "jbandu",
+  "slug": "crew-mcp",
+  "name": "Crew Qualifications & Certifications MCP Server",
+  "description": "Manages airline crew qualifications, certifications, FAA Part 117 compliance, and automated pay calculations. Enables crew scheduling, duty time validation, training tracking, and proactive alerts for expiring licenses and medicals.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Manages airline crew qualifications, certifications, FAA Part 117 compliance, and automated pay calculations. Enables crew scheduling, duty time validation, training tracking, and proactive alerts for expiring licenses and medicals.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "The Node.js environment",
+          "type": "string",
+          "default": "development"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL database connection URL",
+          "type": "string"
+        },
+        "MCP_SERVER_NAME": {
+          "description": "The name of the MCP server",
+          "type": "string",
+          "default": "crew-qualifications-mcp"
+        },
+        "FAA_PART117_ENABLED": {
+          "description": "Enable FAA Part 117 compliance features",
+          "type": "string",
+          "default": "true"
+        },
+        "ALERT_DAYS_BEFORE_EXPIRY": {
+          "description": "Number of days before expiry to send alerts",
+          "type": "string",
+          "default": "60"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DATABASE_URL"
+      ]
+    },
+    "id": "idd8thpexx",
+    "name": "Crew Qualifications & Certifications MCP Server",
+    "namespace": "jbandu",
+    "repository": {
+      "url": "https://github.com/jbandu/crew-mcp"
+    },
+    "slug": "crew-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/idd8thpexx"
+  }
+}

@@ -1,0 +1,905 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "bbeksh/mcppedia",
+  "namespace": "bbeksh",
+  "slug": "mcppedia",
+  "displayName": "MCPpedia",
+  "description": "Search, evaluate, and compare 17,000+ MCP servers from the [MCPpedia](https://mcppedia.org) catalog. Every server is scored on **security, maintenance, efficiency, documentation, and compatibility** — with real CVE scanning and tool-poisoning detection.\n\n## Tools\n\n- **search_servers** — keyword / category / min-score search\n- **get_server_details** — full profile + optional security report (CVEs, tool poisoning, injection risk, dangerous patterns, dep health)\n- **compare_servers** — side-by-side across all five scoring dimensions\n- **get_install_config** — ready-to-paste config for Claude Desktop, Cursor, Claude Code, Windsurf\n- **get_trending** — top-rated / most-starred / newest\n- **get_category_tree** — every category with live server counts\n- **what_changed** — servers re-scored since a given timestamp\n\n## Resources & prompts\n\nBrowsable resources: `mcppedia://trending`, `mcppedia://server/{slug}`, `mcppedia://category/{name}`.\nBuilt-in prompts: `audit-my-mcp-setup`, `find-alternati",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "f194cfb0-c0fd-4712-84d0-66609e381743",
+    "qualifiedName": "bbeksh/mcppedia",
+    "namespace": "bbeksh",
+    "slug": "mcppedia",
+    "displayName": "MCPpedia",
+    "description": "Search, evaluate, and compare 17,000+ MCP servers from the [MCPpedia](https://mcppedia.org) catalog. Every server is scored on **security, maintenance, efficiency, documentation, and compatibility** — with real CVE scanning and tool-poisoning detection.\n\n## Tools\n\n- **search_servers** — keyword / category / min-score search\n- **get_server_details** — full profile + optional security report (CVEs, tool poisoning, injection risk, dangerous patterns, dep health)\n- **compare_servers** — side-by-side across all five scoring dimensions\n- **get_install_config** — ready-to-paste config for Claude Desktop, Cursor, Claude Code, Windsurf\n- **get_trending** — top-rated / most-starred / newest\n- **get_category_tree** — every category with live server counts\n- **what_changed** — servers re-scored since a given timestamp\n\n## Resources & prompts\n\nBrowsable resources: `mcppedia://trending`, `mcppedia://server/{slug}`, `mcppedia://category/{name}`.\nBuilt-in prompts: `audit-my-mcp-setup`, `find-alternati",
+    "iconUrl": "https://api.smithery.ai/servers/bbeksh/mcppedia/icon",
+    "verified": false,
+    "useCount": 59,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-13T00:47:29.268Z",
+    "homepage": "https://mcppedia.org",
+    "bySmithery": false,
+    "owner": "org_01KP24VJXJE6ZY5B85AVJ9SD7H",
+    "score": 0.009523809523809525
+  },
+  "detail": {
+    "qualifiedName": "bbeksh/mcppedia",
+    "displayName": "MCPpedia",
+    "description": "Search, evaluate, and compare 17,000+ MCP servers from the [MCPpedia](https://mcppedia.org) catalog. Every server is scored on **security, maintenance, efficiency, documentation, and compatibility** — with real CVE scanning and tool-poisoning detection.\n\n## Tools\n\n- **search_servers** — keyword / category / min-score search\n- **get_server_details** — full profile + optional security report (CVEs, tool poisoning, injection risk, dangerous patterns, dep health)\n- **compare_servers** — side-by-side across all five scoring dimensions\n- **get_install_config** — ready-to-paste config for Claude Desktop, Cursor, Claude Code, Windsurf\n- **get_trending** — top-rated / most-starred / newest\n- **get_category_tree** — every category with live server counts\n- **what_changed** — servers re-scored since a given timestamp\n\n## Resources & prompts\n\nBrowsable resources: `mcppedia://trending`, `mcppedia://server/{slug}`, `mcppedia://category/{name}`.\nBuilt-in prompts: `audit-my-mcp-setup`, `find-alternative`, `security-review`.\n\n## Why\n\nStop guessing which MCP server is safe. Agents can now discover, audit, and swap MCPs with grounded data — not vibes.\n\nBrowse the full catalog at [mcppedia.org](https://mcppedia.org).",
+    "iconUrl": "https://api.smithery.ai/servers/bbeksh/mcppedia/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcppedia--bbeksh.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcppedia--bbeksh.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_servers",
+        "description": "Search 17K+ scored MCP servers. Categories: developer-tools, data, security, ai-ml, cloud, productivity, etc.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "maximum": 20,
+              "minimum": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "Keyword(s) to search for."
+            },
+            "category": {
+              "type": "string"
+            },
+            "min_score": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "number"
+            },
+            "servers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "slug",
+                  "name",
+                  "tagline",
+                  "url",
+                  "scores",
+                  "stats",
+                  "categories",
+                  "transport"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "stats": {
+                    "type": "object",
+                    "required": [
+                      "github_stars",
+                      "npm_weekly_downloads",
+                      "cve_count",
+                      "token_efficiency_grade",
+                      "health_status"
+                    ],
+                    "properties": {
+                      "cve_count": {
+                        "type": "number"
+                      },
+                      "github_stars": {
+                        "type": "number"
+                      },
+                      "health_status": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "npm_weekly_downloads": {
+                        "type": "number"
+                      },
+                      "token_efficiency_grade": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "scores": {
+                    "type": "object",
+                    "required": [
+                      "total",
+                      "security",
+                      "maintenance",
+                      "efficiency",
+                      "documentation",
+                      "compatibility",
+                      "grade"
+                    ],
+                    "properties": {
+                      "grade": {
+                        "type": "string"
+                      },
+                      "total": {
+                        "type": "number"
+                      },
+                      "security": {
+                        "type": "number"
+                      },
+                      "efficiency": {
+                        "type": "number"
+                      },
+                      "maintenance": {
+                        "type": "number"
+                      },
+                      "compatibility": {
+                        "type": "number"
+                      },
+                      "documentation": {
+                        "type": "number"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "tagline": {
+                    "type": "string"
+                  },
+                  "transport": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "count",
+            "servers"
+          ]
+        }
+      },
+      {
+        "name": "get_server_details",
+        "description": "Full server info: scores, tools, transports. Set security=true for CVE / tool-poisoning / injection report.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string"
+            },
+            "security": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_servers",
+        "description": "Compare 2–5 MCP servers side-by-side across every scoring dimension.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slugs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 5,
+              "minItems": 2
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "missing": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "servers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "slug",
+                  "name",
+                  "tagline",
+                  "url",
+                  "scores",
+                  "stats",
+                  "categories",
+                  "transport"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "stats": {
+                    "type": "object",
+                    "required": [
+                      "github_stars",
+                      "npm_weekly_downloads",
+                      "cve_count",
+                      "token_efficiency_grade",
+                      "health_status"
+                    ],
+                    "properties": {
+                      "cve_count": {
+                        "type": "number"
+                      },
+                      "github_stars": {
+                        "type": "number"
+                      },
+                      "health_status": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "npm_weekly_downloads": {
+                        "type": "number"
+                      },
+                      "token_efficiency_grade": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "scores": {
+                    "type": "object",
+                    "required": [
+                      "total",
+                      "security",
+                      "maintenance",
+                      "efficiency",
+                      "documentation",
+                      "compatibility",
+                      "grade"
+                    ],
+                    "properties": {
+                      "grade": {
+                        "type": "string"
+                      },
+                      "total": {
+                        "type": "number"
+                      },
+                      "security": {
+                        "type": "number"
+                      },
+                      "efficiency": {
+                        "type": "number"
+                      },
+                      "maintenance": {
+                        "type": "number"
+                      },
+                      "compatibility": {
+                        "type": "number"
+                      },
+                      "documentation": {
+                        "type": "number"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "tagline": {
+                    "type": "string"
+                  },
+                  "transport": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "recommended_slug": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "servers",
+            "missing",
+            "recommended_slug"
+          ]
+        }
+      },
+      {
+        "name": "get_install_config",
+        "description": "Installation config for claude-desktop, cursor, claude-code, or windsurf.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string"
+            },
+            "client": {
+              "enum": [
+                "claude-desktop",
+                "cursor",
+                "claude-code",
+                "windsurf"
+              ],
+              "type": "string",
+              "description": "Target client. If omitted, the user will be asked."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_trending",
+        "description": "Top-rated, most-starred, or newest MCP servers. Sort: score|stars|newest.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "enum": [
+                "score",
+                "stars",
+                "newest"
+              ],
+              "type": "string"
+            },
+            "limit": {
+              "type": "number",
+              "maximum": 20,
+              "minimum": 1
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "sort": {
+              "type": "string"
+            },
+            "count": {
+              "type": "number"
+            },
+            "servers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "slug",
+                  "name",
+                  "tagline",
+                  "url",
+                  "scores",
+                  "stats",
+                  "categories",
+                  "transport"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "stats": {
+                    "type": "object",
+                    "required": [
+                      "github_stars",
+                      "npm_weekly_downloads",
+                      "cve_count",
+                      "token_efficiency_grade",
+                      "health_status"
+                    ],
+                    "properties": {
+                      "cve_count": {
+                        "type": "number"
+                      },
+                      "github_stars": {
+                        "type": "number"
+                      },
+                      "health_status": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "npm_weekly_downloads": {
+                        "type": "number"
+                      },
+                      "token_efficiency_grade": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "scores": {
+                    "type": "object",
+                    "required": [
+                      "total",
+                      "security",
+                      "maintenance",
+                      "efficiency",
+                      "documentation",
+                      "compatibility",
+                      "grade"
+                    ],
+                    "properties": {
+                      "grade": {
+                        "type": "string"
+                      },
+                      "total": {
+                        "type": "number"
+                      },
+                      "security": {
+                        "type": "number"
+                      },
+                      "efficiency": {
+                        "type": "number"
+                      },
+                      "maintenance": {
+                        "type": "number"
+                      },
+                      "compatibility": {
+                        "type": "number"
+                      },
+                      "documentation": {
+                        "type": "number"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "tagline": {
+                    "type": "string"
+                  },
+                  "transport": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "count",
+            "sort",
+            "servers"
+          ]
+        }
+      },
+      {
+        "name": "get_category_tree",
+        "description": "Browse every category in the catalog with server counts. Useful before calling get_trending or search_servers.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "categories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "slug",
+                  "name",
+                  "count"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "categories"
+          ]
+        }
+      },
+      {
+        "name": "what_changed",
+        "description": "Servers whose scores were recomputed since a given ISO-8601 timestamp. Powers 'what's new' agents.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "maximum": 50,
+              "minimum": 1
+            },
+            "since": {
+              "type": "string",
+              "description": "ISO-8601 timestamp, e.g. 2026-04-01T00:00:00Z"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "trending",
+        "uri": "mcppedia://trending",
+        "description": "Top 20 MCP servers by composite score. Refreshed daily.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "XcodeBuildMCP",
+        "uri": "mcppedia://server/xcodebuildmcp",
+        "description": "A Model Context Protocol (MCP) server and CLI that provides tools for agent use when working on iOS and macOS projects.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Tavily Mcp",
+        "uri": "mcppedia://server/tavily-mcp",
+        "description": "Production ready MCP server with real-time search, extract, map & crawl.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Memory MCP Server",
+        "uri": "mcppedia://server/memory",
+        "description": "Persistent memory using a knowledge graph",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Brave Search MCP Server",
+        "uri": "mcppedia://server/brave-search",
+        "description": "Web and local search using Brave Search API",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Puppeteer MCP Server",
+        "uri": "mcppedia://server/puppeteer",
+        "description": "Browser automation with Puppeteer for web scraping and testing",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Sequential Thinking MCP Server",
+        "uri": "mcppedia://server/sequential-thinking",
+        "description": "Dynamic problem-solving through sequential thought chains",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Arxiv Mcp Server",
+        "uri": "mcppedia://server/arxiv-mcp-server",
+        "description": "A Model Context Protocol server for searching and analyzing arXiv papers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "PostgreSQL MCP Server",
+        "uri": "mcppedia://server/postgres",
+        "description": "Query and manage PostgreSQL databases directly from AI assistants",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Supabase MCP Server",
+        "uri": "mcppedia://server/supabase",
+        "description": "Manage Supabase projects — databases, auth, storage, and edge functions",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Scrumboy",
+        "uri": "mcppedia://server/scrumboy",
+        "description": "a self-hosted project management & Kanban solution + Instant shareable boards",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Mcp_agent_mail",
+        "uri": "mcppedia://server/mcp-agent-mail",
+        "description": "Asynchronous coordination layer for AI coding agents: identities, inboxes, searchable threads, and advisory file leases over FastMCP + Git + SQLite",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "XcodeBuildMCP",
+        "uri": "mcppedia://server/io-github-cameroncooke-xcodebuildmcp",
+        "description": "XcodeBuildMCP provides tools for Xcode project management, simulator management, and app utilities.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Apify Mcp Server",
+        "uri": "mcppedia://server/apify-mcp-server",
+        "description": "The Apify MCP server enables your AI agents to extract data from social media, search engines, maps, e-commerce sites, or any other website using thousands of ready-made scrapers, crawlers, and automation tools available on the Apify Store.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Python Sdk",
+        "uri": "mcppedia://server/python-sdk",
+        "description": "The official Python SDK for Model Context Protocol servers and clients",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Context7",
+        "uri": "mcppedia://server/context7",
+        "description": "Context7 Platform -- Up-to-date code documentation for LLMs and AI code editors",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Toolsdk Mcp Registry",
+        "uri": "mcppedia://server/toolsdk-mcp-registry",
+        "description": "MCPSDK.dev(ToolSDK.ai)'s Awesome MCP Servers and Packages Registry and Database with Structured JSON configurations. Supports OAuth2.1, DCR...",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Browser Tools Mcp",
+        "uri": "mcppedia://server/browser-tools-mcp",
+        "description": "Monitor browser logs directly from Cursor and other MCP compatible IDEs.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Modelcontextprotocol",
+        "uri": "mcppedia://server/modelcontextprotocol",
+        "description": "The official MCP server implementation for the Perplexity API Platform",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Context Mode",
+        "uri": "mcppedia://server/context-mode",
+        "description": "Privacy-first. MCP is the protocol for tool access. We're the virtualization layer for context.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Firecrawl Mcp Server",
+        "uri": "mcppedia://server/firecrawl-mcp-server",
+        "description": "🔥 Official Firecrawl MCP Server - Adds powerful web scraping and search to Cursor, Claude and any other LLM clients.",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Productivity",
+        "uri": "mcppedia://category/productivity",
+        "description": "28 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Developer Tools",
+        "uri": "mcppedia://category/developer-tools",
+        "description": "67 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Data",
+        "uri": "mcppedia://category/data",
+        "description": "86 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Finance",
+        "uri": "mcppedia://category/finance",
+        "description": "29 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "AI / ML",
+        "uri": "mcppedia://category/ai-ml",
+        "description": "239 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Communication",
+        "uri": "mcppedia://category/communication",
+        "description": "9 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Cloud",
+        "uri": "mcppedia://category/cloud",
+        "description": "40 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Security",
+        "uri": "mcppedia://category/security",
+        "description": "18 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Analytics",
+        "uri": "mcppedia://category/analytics",
+        "description": "17 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Design",
+        "uri": "mcppedia://category/design",
+        "description": "15 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "DevOps",
+        "uri": "mcppedia://category/devops",
+        "description": "16 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Education",
+        "uri": "mcppedia://category/education",
+        "description": "13 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Entertainment",
+        "uri": "mcppedia://category/entertainment",
+        "description": "28 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Health",
+        "uri": "mcppedia://category/health",
+        "description": "3 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Marketing",
+        "uri": "mcppedia://category/marketing",
+        "description": "5 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Search",
+        "uri": "mcppedia://category/search",
+        "description": "12 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Writing",
+        "uri": "mcppedia://category/writing",
+        "description": "9 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Maps & Geo",
+        "uri": "mcppedia://category/maps",
+        "description": "26 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "E-Commerce",
+        "uri": "mcppedia://category/ecommerce",
+        "description": "6 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Legal",
+        "uri": "mcppedia://category/legal",
+        "description": "12 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Browser",
+        "uri": "mcppedia://category/browser",
+        "description": "15 servers",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "Other",
+        "uri": "mcppedia://category/other",
+        "description": "458 servers",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "audit-my-mcp-setup",
+        "description": "Review every MCP server you have installed against MCPpedia's scoring catalog. Flags low-security, abandoned, and high-token servers and suggests swaps."
+      },
+      {
+        "name": "find-alternative",
+        "description": "Given a server slug, suggest alternatives with better security / maintenance scores.",
+        "arguments": [
+          {
+            "name": "slug",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "security-review",
+        "description": "Generate a detailed security writeup for an MCP server. Uses sampling to produce narrative analysis.",
+        "arguments": [
+          {
+            "name": "slug",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

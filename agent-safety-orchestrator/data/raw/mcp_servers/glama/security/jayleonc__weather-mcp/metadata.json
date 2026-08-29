@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "w6liedx90q",
+  "namespace": "Jayleonc",
+  "slug": "weather-mcp",
+  "name": "Weather MCP",
+  "description": "Provides weather query capabilities including current weather, daily/hourly forecasts, air quality data, and weather alerts through QWeather API integration with JWT-based authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Provides weather query capabilities including current weather, daily/hourly forecasts, air quality data, and weather alerts through QWeather API integration with JWT-based authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WEATHER_MCP_AUTH_MODE": {
+          "description": "Authentication mode (local_jwt or admin_introspect)",
+          "type": "string",
+          "default": "local_jwt"
+        },
+        "WEATHER_MCP_SECRET_KEY": {
+          "description": "The HS256 symmetric key, consistent with admin for JWT verification",
+          "type": "string"
+        },
+        "WEATHER_MCP_QWEATHER_API_KEY": {
+          "description": "Your QWeather API Key (must be stored in environment variables/secret management)",
+          "type": "string"
+        },
+        "WEATHER_MCP_QWEATHER_API_HOST": {
+          "description": "Your QWeather API Host (found in QWeather Console -> Setting)",
+          "type": "string"
+        },
+        "WEATHER_MCP_QWEATHER_TIMEOUT_SECONDS": {
+          "description": "HTTP timeout in seconds for QWeather API requests",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WEATHER_MCP_SECRET_KEY",
+        "WEATHER_MCP_QWEATHER_API_HOST",
+        "WEATHER_MCP_QWEATHER_API_KEY"
+      ]
+    },
+    "id": "w6liedx90q",
+    "name": "Weather MCP",
+    "namespace": "Jayleonc",
+    "repository": {
+      "url": "https://github.com/Jayleonc/weather-mcp"
+    },
+    "slug": "weather-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/w6liedx90q"
+  }
+}

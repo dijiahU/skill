@@ -1,0 +1,803 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "StealthMole/stealthmole-mcp",
+  "namespace": "StealthMole",
+  "slug": "stealthmole-mcp",
+  "displayName": "StealthMole",
+  "description": "Investigate cyber threats across the dark web, Telegram, and leak repositories with unified search. Monitor ransomware activity and exposed credentials to quickly assess risk. Drill into detailed findings to streamline incident response and threat hunting.",
+  "discoveryQueries": [
+    "credential",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "13c449f0-9e9c-4571-b916-e793290f1dcb",
+    "qualifiedName": "StealthMole/stealthmole-mcp",
+    "namespace": "stealthmole",
+    "slug": "stealthmole-mcp",
+    "displayName": "StealthMole",
+    "description": "Investigate cyber threats across the dark web, Telegram, and leak repositories with unified search. Monitor ransomware activity and exposed credentials to quickly assess risk. Drill into detailed findings to streamline incident response and threat hunting.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.stealthmole.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2025-10-27T14:06:01.183Z",
+    "homepage": "https://www.stealthmole.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBP28HXKYDP41W2SWD1XMJK",
+    "score": 0.030303030303030304
+  },
+  "detail": {
+    "qualifiedName": "StealthMole/stealthmole-mcp",
+    "displayName": "StealthMole",
+    "description": "Investigate cyber threats across the dark web, Telegram, and leak repositories with unified search. Monitor ransomware activity and exposed credentials to quickly assess risk. Drill into detailed findings to streamline incident response and threat hunting.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/www.stealthmole.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://stealthmole-mcp.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://stealthmole-mcp.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "dark_web_search",
+        "description": "Search dark web content by indicator. Use for investigating threats on the dark web and deep web.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 100
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "target": {
+              "type": "string",
+              "default": "all"
+            },
+            "indicator": {
+              "type": "string"
+            },
+            "order_type": {
+              "type": "string",
+              "default": "createDate"
+            }
+          }
+        }
+      },
+      {
+        "name": "dark_web_targets",
+        "description": "Get available targets for dark web search by indicator.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "indicator": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "telegram_search",
+        "description": "Search Telegram content by indicator. Use for investigating threats on Telegram.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 100
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "target": {
+              "type": "string",
+              "default": "all"
+            },
+            "indicator": {
+              "type": "string"
+            },
+            "order_type": {
+              "type": "string",
+              "default": "createDate"
+            }
+          }
+        }
+      },
+      {
+        "name": "telegram_targets",
+        "description": "Get available targets for Telegram search by indicator.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "indicator": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "credential_search",
+        "description": "Search for leaked credentials. Use for identifying compromised accounts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            }
+          }
+        }
+      },
+      {
+        "name": "credential_export",
+        "description": "Export leaked credentials to CSV/JSON file.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            },
+            "export_type": {
+              "type": "string",
+              "default": "csv"
+            }
+          }
+        }
+      },
+      {
+        "name": "compromised_dataset_search",
+        "description": "Search compromised dataset information. Use for finding leaked credentials with host/URL info.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            }
+          }
+        }
+      },
+      {
+        "name": "compromised_dataset_node",
+        "description": "Get detailed compromised dataset node information.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "node_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "compromised_dataset_export",
+        "description": "Export compromised dataset information to CSV/JSON file.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            },
+            "export_type": {
+              "type": "string",
+              "default": "csv"
+            }
+          }
+        }
+      },
+      {
+        "name": "combo_binder_search",
+        "description": "Search leaked ID/Password combo information from deep and dark web.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            }
+          }
+        }
+      },
+      {
+        "name": "combo_binder_export",
+        "description": "Export combo binder information to CSV/JSON file.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            },
+            "export_type": {
+              "type": "string",
+              "default": "csv"
+            }
+          }
+        }
+      },
+      {
+        "name": "ulp_binder_search",
+        "description": "Search URL-Login-Password combination information from deep and dark web.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            }
+          }
+        }
+      },
+      {
+        "name": "ulp_binder_export",
+        "description": "Export ULP binder information to CSV/JSON file.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "LeakedDate"
+            },
+            "export_type": {
+              "type": "string",
+              "default": "csv"
+            }
+          }
+        }
+      },
+      {
+        "name": "ransomware_monitoring_search",
+        "description": "Search ransomware monitoring data. Use for tracking ransomware threats and attack groups.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string",
+              "default": ""
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "detectionTime"
+            }
+          }
+        }
+      },
+      {
+        "name": "government_monitoring_search",
+        "description": "Search government sector threat monitoring data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string",
+              "default": ""
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "detectionTime"
+            }
+          }
+        }
+      },
+      {
+        "name": "leaked_monitoring_search",
+        "description": "Search enterprise sector threat monitoring data and data leaks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "query": {
+              "type": "string",
+              "default": ""
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "order_type": {
+              "type": "string",
+              "default": "detectionTime"
+            }
+          }
+        }
+      },
+      {
+        "name": "node_details",
+        "description": "Get detailed information about a specific node from any service.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pid": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "node_id": {
+              "type": "string"
+            },
+            "service": {
+              "type": "string"
+            },
+            "data_from": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "include_url": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "include_contents": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          }
+        }
+      },
+      {
+        "name": "search_pagination",
+        "description": "Paginate through search results for dt or tt service using search cache ID.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 50
+            },
+            "order": {
+              "type": "string",
+              "default": "desc"
+            },
+            "cursor": {
+              "type": "integer",
+              "default": 0
+            },
+            "service": {
+              "type": "string"
+            },
+            "search_id": {
+              "type": "string"
+            },
+            "order_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          }
+        }
+      },
+      {
+        "name": "api_usage",
+        "description": "Get API usage quotas by service. Shows quota and usage for each service.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_targets",
+        "description": "Get available targets for a service and indicator.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string"
+            },
+            "indicator": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "download_dark_web_file",
+        "description": "Download file by SHA256 hash from Dark Web service.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "file_hash": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "download_telegram_file",
+        "description": "Download file by SHA256 hash from Telegram service.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "file_hash": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

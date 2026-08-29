@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "eza1zkowb6",
+  "namespace": "alfarom256",
+  "slug": "Aragorn",
+  "name": "Aragorn",
+  "description": "A direct kernel debugger MCP server for Windows security research that connects to VM kernels via kdnet using DbgEng COM interfaces. It exposes over 60 tools for memory inspection, breakpoint management, and coordinated execution control between the host and target VM.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A direct kernel debugger MCP server for Windows security research that connects to VM kernels via kdnet using DbgEng COM interfaces. It exposes over 60 tools for memory inspection, breakpoint management, and coordinated execution control between the host and target VM.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DBGENG_PATH": {
+          "description": "Path to DbgEng DLL",
+          "type": "string",
+          "default": "./dbgeng_bin/dbgeng.dll"
+        },
+        "KD_EXE_PATH": {
+          "description": "Path to kd.exe",
+          "type": "string",
+          "default": "WinDbg Preview's kd.exe"
+        },
+        "SYMBOL_PATH": {
+          "description": "Symbol search path",
+          "type": "string",
+          "default": "Microsoft symbol server"
+        },
+        "ARAGORN_HOST": {
+          "description": "HTTP mode bind address",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "ARAGORN_PORT": {
+          "description": "HTTP mode port",
+          "type": "string",
+          "default": "14401"
+        },
+        "VM_AGENT_URL": {
+          "description": "VM agent URL (for workflow tools)",
+          "type": "string",
+          "default": "http://YOUR_VM_IP:8080"
+        },
+        "KD_CONNECTION": {
+          "description": "kdnet connection string",
+          "type": "string",
+          "default": "net:port=55555,key=...,target=..."
+        },
+        "KD_SERVER_PORT": {
+          "description": "Local TCP port for kd.exe debug server",
+          "type": "string",
+          "default": "14500"
+        },
+        "VM_AGENT_API_KEY": {
+          "description": "VM agent API key",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "eza1zkowb6",
+    "name": "Aragorn",
+    "namespace": "alfarom256",
+    "repository": {
+      "url": "https://github.com/alfarom256/Aragorn"
+    },
+    "slug": "Aragorn",
+    "spdxLicense": {
+      "name": "Do What The F*ck You Want To Public License",
+      "url": "https://spdx.org/licenses/WTFPL.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/eza1zkowb6"
+  }
+}

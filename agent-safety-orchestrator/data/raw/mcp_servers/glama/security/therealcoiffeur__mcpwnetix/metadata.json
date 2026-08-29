@@ -1,0 +1,49 @@
+{
+  "registry": "glama",
+  "id": "m8u37dmag8",
+  "namespace": "therealcoiffeur",
+  "slug": "MCPwnetix",
+  "name": "Acunetix MCP Server",
+  "description": "Exposes the Acunetix Scanner API as a streamable HTTP MCP server, allowing clients to interact with security scanning tools via standardized requests. It enables automated vulnerability management and integration with platforms like GhostReconRev through a containerized bridge.",
+  "discoveryQueries": [
+    "security",
+    "scanner",
+    "vulnerability"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Exposes the Acunetix Scanner API as a streamable HTTP MCP server, allowing clients to interact with security scanning tools via standardized requests. It enables automated vulnerability management and integration with platforms like GhostReconRev through a containerized bridge.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ACUNETIX_API_KEY": {
+          "description": "Acunetix API key sent as the X-Auth header.",
+          "type": "string"
+        },
+        "ACUNETIX_BASE_URL": {
+          "description": "Full Acunetix API base URL, for example https://host.docker.internal:3443/api/v1 when the scanner runs on the Docker host.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ACUNETIX_BASE_URL",
+        "ACUNETIX_API_KEY"
+      ]
+    },
+    "id": "m8u37dmag8",
+    "name": "Acunetix MCP Server",
+    "namespace": "therealcoiffeur",
+    "repository": {
+      "url": "https://github.com/therealcoiffeur/MCPwnetix"
+    },
+    "slug": "MCPwnetix",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/m8u37dmag8"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "registry": "glama",
+  "id": "mwnw2lrjat",
+  "namespace": "OrygnsCode",
+  "slug": "opa-mcp-server",
+  "name": "opa-mcp-server",
+  "description": "MCP server for Open Policy Agent (OPA) and the Rego policy language. Wraps the OPA CLI and Regal linter with 32 tools for authoring, evaluating, and debugging Rego policies through any MCP-compatible client.",
+  "discoveryQueries": [
+    "policy"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "MCP server for Open Policy Agent (OPA) and the Rego policy language. Wraps the OPA CLI and Regal linter with 32 tools for authoring, evaluating, and debugging Rego policies through any MCP-compatible client.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OPA_URL": {
+          "description": "Base URL of an OPA REST endpoint, used by opa_* tools.",
+          "type": "string",
+          "default": "http://localhost:8181"
+        },
+        "OPA_TOKEN": {
+          "description": "Bearer token for OPA, if your instance requires auth. Treated as a secret. Never echoed in logs or tool responses.",
+          "type": "string"
+        },
+        "OPA_BINARY": {
+          "description": "Path to the opa CLI, used by rego_* tools.",
+          "type": "string",
+          "default": "opa"
+        },
+        "REGAL_BINARY": {
+          "description": "Path to the regal linter. Only required by rego_lint.",
+          "type": "string",
+          "default": "regal"
+        },
+        "OPA_MCP_LOG_FILE": {
+          "description": "Path the server appends logs to. The server never writes to stdout; that channel is reserved for the MCP protocol.",
+          "type": "string",
+          "default": "<tmpdir>/orygn-opa-mcp.log"
+        },
+        "OPA_MCP_LOG_LEVEL": {
+          "description": "One of debug, info, warn, error.",
+          "type": "string",
+          "default": "info"
+        },
+        "OPA_MCP_TIMEOUT_MS": {
+          "description": "Hard timeout for any spawned subprocess (opa, regal). After this, the child gets SIGTERM and then SIGKILL.",
+          "type": "string",
+          "default": "30000"
+        },
+        "OPA_MCP_ALLOWED_PATHS": {
+          "description": "Comma- or semicolon-separated list of directories the server is allowed to read policies from. When unset, file-based tools refuse to read from disk.",
+          "type": "string"
+        },
+        "OPA_MCP_HTTP_TIMEOUT_MS": {
+          "description": "Timeout for HTTP requests to the OPA REST API.",
+          "type": "string",
+          "default": "15000"
+        },
+        "OPA_MCP_MAX_RESPONSE_BYTES": {
+          "description": "Hard cap on a single tool response. Larger payloads are truncated with a __truncated: true marker.",
+          "type": "string",
+          "default": "100000"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "mwnw2lrjat",
+    "name": "opa-mcp-server",
+    "namespace": "OrygnsCode",
+    "repository": {
+      "url": "https://github.com/OrygnsCode/opa-mcp-server"
+    },
+    "slug": "opa-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/mwnw2lrjat"
+  }
+}

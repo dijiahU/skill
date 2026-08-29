@@ -1,0 +1,66 @@
+{
+  "registry": "glama",
+  "id": "outfsrqono",
+  "namespace": "Hexpy-Games",
+  "slug": "remote-control-mcp",
+  "name": "remote-control-mcp",
+  "description": "Enables AI services like Claude and Cursor to remotely control a Mac by executing shell commands, managing files, and running AppleScript for UI automation. Access is secured through OAuth 2.0 authentication and encrypted tunnels to protect remote interactions.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI services like Claude and Cursor to remotely control a Mac by executing shell commands, managing files, and running AppleScript for UI automation. Access is secured through OAuth 2.0 authentication and encrypted tunnels to protect remote interactions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Port the MCP server listens on",
+          "type": "string",
+          "default": "3232"
+        },
+        "BASE_URI": {
+          "description": "Public URL of this server — must match your tunnel URL",
+          "type": "string",
+          "default": "http://localhost:3232"
+        },
+        "NODE_ENV": {
+          "description": "Set to production when deploying",
+          "type": "string",
+          "default": "development"
+        },
+        "REDIS_TLS": {
+          "description": "Set to 1 to enable TLS for the Redis connection",
+          "type": "string",
+          "default": "0"
+        },
+        "REDIS_URL": {
+          "description": "Redis connection URL — required in production for token persistence; in-memory fallback used without it",
+          "type": "string"
+        },
+        "BLOCKED_COMMANDS": {
+          "description": "Comma-separated substrings to block in shell_exec",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "BASE_URI"
+      ]
+    },
+    "id": "outfsrqono",
+    "name": "remote-control-mcp",
+    "namespace": "Hexpy-Games",
+    "repository": {
+      "url": "https://github.com/Hexpy-Games/remote-control-mcp"
+    },
+    "slug": "remote-control-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/outfsrqono"
+  }
+}

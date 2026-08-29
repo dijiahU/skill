@@ -1,0 +1,120 @@
+{
+  "registry": "glama",
+  "id": "bnccp0olla",
+  "namespace": "PanosSalt",
+  "slug": "MCP-Gateway",
+  "name": "MCP Gateway",
+  "description": "A production-grade platform that connects AI assistants to internal databases and filesystems through a single authenticated endpoint. It features role-based access control, SSO integration, and built-in tools for querying SQL databases and managing files with full audit logging.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A production-grade platform that connects AI assistants to internal databases and filesystems through a single authenticated endpoint. It features role-based access control, SSO integration, and built-in tools for querying SQL databases and managing files with full audit logging.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "BASE_URL": {
+          "description": "Public-facing URL (used in OAuth callbacks)",
+          "type": "string",
+          "default": "http://localhost:8000"
+        },
+        "LLM_MODEL": {
+          "description": "Anthropic model for SQL generation",
+          "type": "string",
+          "default": "claude-sonnet-4-6"
+        },
+        "SECRET_KEY": {
+          "description": "JWT signing secret — use a random 64-char string",
+          "type": "string"
+        },
+        "CORS_ORIGINS": {
+          "description": "Comma-separated allowed origins for CORS. Must be absolute URLs — wildcards (*) are rejected",
+          "type": "string",
+          "default": "BASE_URL"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL DSN — set automatically by docker-compose; only needed for local (non-Docker) dev",
+          "type": "string"
+        },
+        "ENCRYPTION_KEY": {
+          "description": "Fernet AES key for DB credentials — minimum 32 characters; full key consumed via BLAKE2b",
+          "type": "string"
+        },
+        "ENTRA_GRAPH_URL": {
+          "description": "Microsoft Graph API base URL",
+          "type": "string",
+          "default": "https://graph.microsoft.com/v1.0"
+        },
+        "ANTHROPIC_API_KEY": {
+          "description": "Required for /query/ NL query endpoint",
+          "type": "string"
+        },
+        "POSTGRES_PASSWORD": {
+          "description": "PostgreSQL password — used by docker-compose for both the db service and DATABASE_URL",
+          "type": "string"
+        },
+        "LLM_MAX_TOKENS_SQL": {
+          "description": "Max tokens for SQL generation",
+          "type": "string",
+          "default": "1024"
+        },
+        "ENTRA_AUTHORITY_URL": {
+          "description": "Microsoft identity platform base URL",
+          "type": "string",
+          "default": "https://login.microsoftonline.com"
+        },
+        "LLM_MAX_TOKENS_SUMMARY": {
+          "description": "Max tokens for result summarization",
+          "type": "string",
+          "default": "500"
+        },
+        "OAUTH_CODE_TTL_MINUTES": {
+          "description": "OAuth authorization code validity window",
+          "type": "string",
+          "default": "5"
+        },
+        "FILESYSTEM_ALLOWED_DIRS": {
+          "description": "Comma-separated directories the MCP filesystem tools may access. When empty, no filesystem tools are exposed",
+          "type": "string"
+        },
+        "OAUTH_STATE_TTL_MINUTES": {
+          "description": "OAuth PKCE state validity window — increase for high-latency SSO providers",
+          "type": "string",
+          "default": "10"
+        },
+        "REFRESH_TOKEN_EXPIRE_DAYS": {
+          "description": "OAuth refresh token lifetime",
+          "type": "string",
+          "default": "30"
+        },
+        "ACCESS_TOKEN_EXPIRE_MINUTES": {
+          "description": "JWT access token lifetime",
+          "type": "string",
+          "default": "15"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SECRET_KEY",
+        "ENCRYPTION_KEY",
+        "POSTGRES_PASSWORD",
+        "DATABASE_URL"
+      ]
+    },
+    "id": "bnccp0olla",
+    "name": "MCP Gateway",
+    "namespace": "PanosSalt",
+    "repository": {
+      "url": "https://github.com/PanosSalt/MCP-Gateway"
+    },
+    "slug": "MCP-Gateway",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bnccp0olla"
+  }
+}

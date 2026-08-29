@@ -1,0 +1,65 @@
+{
+  "registry": "glama",
+  "id": "w68e1zaprs",
+  "namespace": "divinedev111",
+  "slug": "mcp-postgres",
+  "name": "mcp-postgres",
+  "description": "Enables AI agents to interact with PostgreSQL databases through schema intelligence, query execution, and DBA tooling including index analysis and health monitoring. Features configurable access levels and audit logging for secure database operations.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI agents to interact with PostgreSQL databases through schema intelligence, query execution, and DBA tooling including index analysis and health monitoring. Features configurable access levels and audit logging for secure database operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DATABASE_URL": {
+          "description": "PostgreSQL connection URL",
+          "type": "string"
+        },
+        "POSTGRES_URL": {
+          "description": "Alternative PostgreSQL connection URL",
+          "type": "string"
+        },
+        "MCP_POSTGRES_ROW_LIMIT": {
+          "description": "Row limit override",
+          "type": "string",
+          "default": "500"
+        },
+        "MCP_POSTGRES_ACCESS_LEVEL": {
+          "description": "Access level override (readonly, readwrite, admin, unrestricted)",
+          "type": "string",
+          "default": "readonly"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "DATABASE_URL"
+          ]
+        },
+        {
+          "required": [
+            "POSTGRES_URL"
+          ]
+        }
+      ]
+    },
+    "id": "w68e1zaprs",
+    "name": "mcp-postgres",
+    "namespace": "divinedev111",
+    "repository": {
+      "url": "https://github.com/divinedev111/mcp-postgres"
+    },
+    "slug": "mcp-postgres",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/w68e1zaprs"
+  }
+}

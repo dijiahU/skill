@@ -1,0 +1,110 @@
+{
+  "registry": "glama",
+  "id": "m7lrynh5xv",
+  "namespace": "samihalawa",
+  "slug": "google-jules-mcp",
+  "name": "Google Jules MCP",
+  "description": "An MCP server for automating Google Jules that enables seamless integration for task creation, code analysis, and AI-powered development workflows. It supports multiple session modes including Browserbase and cookie-based authentication for both local and cloud environments.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "An MCP server for automating Google Jules that enables seamless integration for task creation, code analysis, and AI-powered development workflows. It supports multiple session modes including Browserbase and cookie-based authentication for both local and cloud environments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Enable debug mode with screenshots (true/false).",
+          "type": "string",
+          "default": "false"
+        },
+        "TIMEOUT": {
+          "description": "Browser timeout in milliseconds (default: 30000).",
+          "type": "string",
+          "default": "30000"
+        },
+        "HEADLESS": {
+          "description": "Run browser in headless mode (true/false).",
+          "type": "string",
+          "default": "true"
+        },
+        "COOKIES_PATH": {
+          "description": "File path to save/load cookies (default: ~/.jules-mcp/cookies.json).",
+          "type": "string",
+          "default": "~/.jules-mcp/cookies.json"
+        },
+        "SESSION_MODE": {
+          "description": "Session management mode to use. Options: fresh, chrome-profile, cookies, persistent, browserbase.",
+          "type": "string"
+        },
+        "JULES_DATA_PATH": {
+          "description": "Custom data storage path for task data and history.",
+          "type": "string",
+          "default": "~/.jules-mcp/data.json"
+        },
+        "BROWSERBASE_API_KEY": {
+          "description": "API key for Browserbase, required if SESSION_MODE is 'browserbase'.",
+          "type": "string"
+        },
+        "GOOGLE_AUTH_COOKIES": {
+          "description": "Google authentication cookies string, required if SESSION_MODE is 'cookies'.",
+          "type": "string"
+        },
+        "CHROME_USER_DATA_DIR": {
+          "description": "Path to Chrome user data directory, required if SESSION_MODE is 'chrome-profile' or 'persistent'.",
+          "type": "string"
+        },
+        "BROWSERBASE_PROJECT_ID": {
+          "description": "Project ID for Browserbase, required if SESSION_MODE is 'browserbase'.",
+          "type": "string"
+        },
+        "BROWSERBASE_SESSION_ID": {
+          "description": "Optional existing Browserbase session ID to reuse.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SESSION_MODE",
+            "BROWSERBASE_API_KEY",
+            "BROWSERBASE_PROJECT_ID"
+          ]
+        },
+        {
+          "required": [
+            "SESSION_MODE",
+            "GOOGLE_AUTH_COOKIES"
+          ]
+        },
+        {
+          "required": [
+            "SESSION_MODE",
+            "CHROME_USER_DATA_DIR"
+          ]
+        },
+        {
+          "required": [
+            "SESSION_MODE"
+          ]
+        }
+      ]
+    },
+    "id": "m7lrynh5xv",
+    "name": "Google Jules MCP",
+    "namespace": "samihalawa",
+    "repository": {
+      "url": "https://github.com/samihalawa/google-jules-mcp"
+    },
+    "slug": "google-jules-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/m7lrynh5xv"
+  }
+}

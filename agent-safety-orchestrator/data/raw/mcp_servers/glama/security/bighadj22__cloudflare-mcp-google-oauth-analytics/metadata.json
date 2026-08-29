@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "iq5an17ogm",
+  "namespace": "bighadj22",
+  "slug": "cloudflare-mcp-google-oauth-analytics",
+  "name": "Cloudflare MCP with Google OAuth and Analytics",
+  "description": "A deployable MCP server template for Cloudflare Workers that provides Google OAuth authentication and comprehensive analytics tracking of tool usage, performance metrics, and user behavior.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A deployable MCP server template for Cloudflare Workers that provides Google OAuth authentication and comprehensive analytics tracking of tool usage, performance metrics, and user behavior.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOSTED_DOMAIN": {
+          "description": "Optional: Use this to restrict Google account domain",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google Cloud OAuth client ID",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google Cloud OAuth client secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random string for cookie encryption (e.g. generated via openssl rand -hex 32)",
+          "type": "string"
+        },
+        "MCP_ANALYTICS_API_KEY": {
+          "description": "Your analytics API key from mcpanalytics.dev",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "COOKIE_ENCRYPTION_KEY",
+        "MCP_ANALYTICS_API_KEY"
+      ]
+    },
+    "id": "iq5an17ogm",
+    "name": "Cloudflare MCP with Google OAuth and Analytics",
+    "namespace": "bighadj22",
+    "repository": {
+      "url": "https://github.com/bighadj22/cloudflare-mcp-google-oauth-analytics"
+    },
+    "slug": "cloudflare-mcp-google-oauth-analytics",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/iq5an17ogm"
+  }
+}

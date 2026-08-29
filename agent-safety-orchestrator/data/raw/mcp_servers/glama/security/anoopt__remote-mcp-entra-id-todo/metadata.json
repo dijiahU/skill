@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "bo1p85qi2w",
+  "namespace": "anoopt",
+  "slug": "remote-mcp-entra-id-todo",
+  "name": "Remote MCP Entra ID Todo",
+  "description": "Enables comprehensive Microsoft To Do task management through Microsoft Graph API with Entra ID OAuth authentication. Supports creating, updating, and managing todo lists, tasks, reminders, and due dates through natural language.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive Microsoft To Do task management through Microsoft Graph API with Entra ID OAuth authentication. Supports creating, updating, and managing todo lists, tasks, reminders, and due dates through natural language.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ENTRA_CLIENT_ID": {
+          "description": "Your Azure AD Application (client) ID",
+          "type": "string"
+        },
+        "ENTRA_TENANT_ID": {
+          "description": "Use 'common' for multi-tenant (work/school AND personal Microsoft accounts), 'organizations' for work/school accounts only, 'consumers' for personal accounts only, or your specific tenant ID for single-tenant",
+          "type": "string",
+          "default": "common"
+        },
+        "DEFAULT_TIMEZONE": {
+          "description": "Your preferred timezone for task due dates and reminders (e.g., Asia/Tokyo, America/New_York, Europe/London)",
+          "type": "string",
+          "default": "Europe/London"
+        },
+        "ENTRA_CLIENT_SECRET": {
+          "description": "Your Azure AD client secret value",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "A random string for cookie encryption (e.g., generate with openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ENTRA_CLIENT_ID",
+        "ENTRA_CLIENT_SECRET",
+        "ENTRA_TENANT_ID",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "bo1p85qi2w",
+    "name": "Remote MCP Entra ID Todo",
+    "namespace": "anoopt",
+    "repository": {
+      "url": "https://github.com/anoopt/remote-mcp-entra-id-todo"
+    },
+    "slug": "remote-mcp-entra-id-todo",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/bo1p85qi2w"
+  }
+}

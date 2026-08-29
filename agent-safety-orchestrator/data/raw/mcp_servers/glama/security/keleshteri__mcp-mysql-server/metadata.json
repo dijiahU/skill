@@ -1,0 +1,103 @@
+{
+  "registry": "glama",
+  "id": "byyvshe4w7",
+  "namespace": "keleshteri",
+  "slug": "mcp-mysql-server",
+  "name": "MCP MySQL Server",
+  "description": "Enables Claude Desktop to interact with MySQL databases through secure query execution, schema discovery, and multi-database support with configurable read/write permissions and built-in SQL injection protection.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables Claude Desktop to interact with MySQL databases through secure query execution, schema discovery, and multi-database support with configurable read/write permissions and built-in SQL injection protection.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ALLOW_DDL": {
+          "description": "Enable DDL operations CREATE/ALTER/DROP",
+          "type": "string",
+          "default": "false"
+        },
+        "POOL_SIZE": {
+          "description": "Connection pool size",
+          "type": "string",
+          "default": "10"
+        },
+        "MYSQL_HOST": {
+          "description": "Database host",
+          "type": "string",
+          "default": "localhost"
+        },
+        "MYSQL_PORT": {
+          "description": "Database port",
+          "type": "string",
+          "default": "3306"
+        },
+        "MYSQL_USER": {
+          "description": "Database username",
+          "type": "string",
+          "default": "root"
+        },
+        "ALLOW_WRITE": {
+          "description": "Enable all write operations",
+          "type": "string",
+          "default": "false"
+        },
+        "ALLOW_DELETE": {
+          "description": "Enable DELETE statements",
+          "type": "string",
+          "default": "false"
+        },
+        "ALLOW_INSERT": {
+          "description": "Enable INSERT statements",
+          "type": "string",
+          "default": "false"
+        },
+        "ALLOW_UPDATE": {
+          "description": "Enable UPDATE statements",
+          "type": "string",
+          "default": "false"
+        },
+        "QUERY_TIMEOUT": {
+          "description": "Query timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "ENABLE_LOGGING": {
+          "description": "Enable detailed logging",
+          "type": "string",
+          "default": "false"
+        },
+        "MYSQL_DATABASE": {
+          "description": "Target database (leave empty for multi-DB mode)",
+          "type": "string"
+        },
+        "MYSQL_PASSWORD": {
+          "description": "Database password",
+          "type": "string"
+        },
+        "MYSQL_SOCKET_PATH": {
+          "description": "Unix socket path (optional, overrides host/port)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "byyvshe4w7",
+    "name": "MCP MySQL Server",
+    "namespace": "keleshteri",
+    "repository": {
+      "url": "https://github.com/keleshteri/mcp-mysql-server"
+    },
+    "slug": "mcp-mysql-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/byyvshe4w7"
+  }
+}

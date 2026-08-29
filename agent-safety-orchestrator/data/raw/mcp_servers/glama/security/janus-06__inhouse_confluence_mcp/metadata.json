@@ -1,0 +1,116 @@
+{
+  "registry": "glama",
+  "id": "xfqo6vyfiy",
+  "namespace": "Janus-06",
+  "slug": "inhouse_confluence_mcp",
+  "name": "inhouse_confluence_mcp",
+  "description": "An MCP server implementation for interacting with self-hosted Confluence Data Center or Server instances via search, content retrieval, and optional write operations. It features space auto-discovery, audit logging, and granular access control for secure enterprise collaboration.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server implementation for interacting with self-hosted Confluence Data Center or Server instances via search, content retrieval, and optional write operations. It features space auto-discovery, audit logging, and granular access control for secure enterprise collaboration.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DENIED_SPACES": {
+          "description": "Optional comma-separated list of space keys to explicitly block.",
+          "type": "string"
+        },
+        "WRITE_ENABLED": {
+          "description": "Whether to enable tools that perform write operations (e.g., create_page, update_page).",
+          "type": "string",
+          "default": "false"
+        },
+        "ALLOWED_SPACES": {
+          "description": "Comma-separated list of Confluence space keys that are allowed to be accessed.",
+          "type": "string"
+        },
+        "AUDIT_LOG_PATH": {
+          "description": "The file path where audit logs should be written.",
+          "type": "string",
+          "default": "logs/audit.jsonl"
+        },
+        "CONFLUENCE_PAT": {
+          "description": "Personal Access Token for Confluence authentication.",
+          "type": "string"
+        },
+        "PYTHONIOENCODING": {
+          "description": "Encoding for Python IO, typically set to 'utf-8'.",
+          "type": "string",
+          "default": "utf-8"
+        },
+        "EXPERIMENTAL_LIKES": {
+          "description": "Whether to enable the experimental confluence_get_likes tool.",
+          "type": "string",
+          "default": "false"
+        },
+        "CONFLUENCE_BASE_URL": {
+          "description": "The base URL of the Confluence Data Center or Server instance.",
+          "type": "string"
+        },
+        "CONFLUENCE_PASSWORD": {
+          "description": "Password for basic authentication.",
+          "type": "string"
+        },
+        "CONFLUENCE_USERNAME": {
+          "description": "Username for basic authentication.",
+          "type": "string"
+        },
+        "AUTO_DISCOVER_SPACES": {
+          "description": "If true and ALLOWED_SPACES is empty, the server will auto-load available space keys on startup.",
+          "type": "string",
+          "default": "true"
+        },
+        "CONFLUENCE_AUTH_MODE": {
+          "description": "The authentication mode to use: 'pat' (Personal Access Token) or 'basic' (Username/Password).",
+          "type": "string"
+        },
+        "TOOL_PROBE_ON_STARTUP": {
+          "description": "Whether the server should probe API permissions at startup to expose only reachable tools.",
+          "type": "string",
+          "default": "true"
+        },
+        "SPACE_PROBE_ON_STARTUP": {
+          "description": "Whether the server should probe space permissions at startup.",
+          "type": "string",
+          "default": "true"
+        },
+        "CONFLUENCE_MCP_ENV_FILE": {
+          "description": "Path to a custom environment file to load configurations from.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "CONFLUENCE_BASE_URL",
+            "CONFLUENCE_AUTH_MODE",
+            "CONFLUENCE_PAT"
+          ]
+        },
+        {
+          "required": [
+            "CONFLUENCE_BASE_URL",
+            "CONFLUENCE_AUTH_MODE",
+            "CONFLUENCE_USERNAME",
+            "CONFLUENCE_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "xfqo6vyfiy",
+    "name": "inhouse_confluence_mcp",
+    "namespace": "Janus-06",
+    "repository": {
+      "url": "https://github.com/Janus-06/inhouse_confluence_mcp"
+    },
+    "slug": "inhouse_confluence_mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xfqo6vyfiy"
+  }
+}

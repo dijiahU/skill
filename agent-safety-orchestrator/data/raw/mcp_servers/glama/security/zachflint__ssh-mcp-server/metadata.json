@@ -1,0 +1,91 @@
+{
+  "registry": "glama",
+  "id": "z5zm0cs4oo",
+  "namespace": "ZachFlint",
+  "slug": "ssh-mcp-server",
+  "name": "ssh-mcp-server",
+  "description": "Enables AI assistants to securely execute remote SSH commands, perform file transfers, and monitor system status through a standardized interface. It features robust security controls including command whitelisting, blacklisting, and credential isolation to prevent unauthorized operations.",
+  "discoveryQueries": [
+    "security",
+    "credential"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to securely execute remote SSH commands, perform file transfers, and monitor system status through a standardized interface. It features robust security controls including command whitelisting, blacklisting, and credential isolation to prevent unauthorized operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SSH_HOST": {
+          "description": "SSH server host address",
+          "type": "string"
+        },
+        "SSH_PORT": {
+          "description": "SSH server port (default: 22)",
+          "type": "string",
+          "default": "22"
+        },
+        "SSH_TIMEOUT": {
+          "description": "Default command timeout in milliseconds (default: 30000)",
+          "type": "string",
+          "default": "30000"
+        },
+        "SSH_PASSWORD": {
+          "description": "SSH password",
+          "type": "string"
+        },
+        "SSH_USERNAME": {
+          "description": "SSH username",
+          "type": "string"
+        },
+        "SSH_BLACKLIST": {
+          "description": "Command blacklist, comma-separated regular expressions",
+          "type": "string"
+        },
+        "SSH_WHITELIST": {
+          "description": "Command whitelist, comma-separated regular expressions",
+          "type": "string"
+        },
+        "SSH_PASSPHRASE": {
+          "description": "Private key passphrase",
+          "type": "string"
+        },
+        "SSH_PRIVATE_KEY": {
+          "description": "SSH private key file path",
+          "type": "string"
+        },
+        "SSH_SOCKS_PROXY": {
+          "description": "SOCKS proxy server address (e.g., socks://user:password@host:port)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SSH_HOST",
+            "SSH_USERNAME",
+            "SSH_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "SSH_HOST",
+            "SSH_USERNAME",
+            "SSH_PRIVATE_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "z5zm0cs4oo",
+    "name": "ssh-mcp-server",
+    "namespace": "ZachFlint",
+    "repository": {
+      "url": "https://github.com/ZachFlint/ssh-mcp-server"
+    },
+    "slug": "ssh-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/z5zm0cs4oo"
+  }
+}

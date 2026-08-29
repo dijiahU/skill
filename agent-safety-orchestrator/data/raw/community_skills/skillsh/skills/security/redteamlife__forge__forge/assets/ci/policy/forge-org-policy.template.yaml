@@ -1,0 +1,35 @@
+# FORGE Org Policy Template
+#
+# Host this file centrally (e.g., an internal governance repo or artifact registry)
+# and reference it from forge-governance.yml via a fetch step.
+#
+# Projects may declare stricter settings in their own AI.md but cannot fall below
+# the constraints defined here. The CI workflow validates project config against
+# this policy at runtime.
+
+forge_policy:
+
+  # Minimum FORGE_mode permitted across all projects in this org.
+  # Valid values: Lightweight | Mid | Strict | Full Discipline
+  minimum_mode: Mid
+
+  # Whether execution_mode: auto is permitted for projects in this org.
+  # auto is available at any FORGE_mode by default; set false to prohibit it org-wide.
+  auto_mode_permitted: true
+
+  # Branches that must not be committed to directly.
+  # FORGE hard stop enforces this in the agent; CI enforces it in the pipeline.
+  prohibited_direct_push_branches:
+    - main
+    - master
+    - release/*
+
+  # Evidence artifacts required to be updated in every PR.
+  # Applies to all modes at or above minimum_mode.
+  required_evidence_artifacts:
+    - docs/forge/EVALUATION.md
+    - docs/forge/MEMORY.md
+
+  # Additional artifacts required for Strict and Full Discipline.
+  strict_required_artifacts:
+    - docs/forge/TASKS.yaml

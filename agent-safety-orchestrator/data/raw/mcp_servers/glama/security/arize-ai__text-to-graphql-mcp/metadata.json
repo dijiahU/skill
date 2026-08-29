@@ -1,0 +1,84 @@
+{
+  "registry": "glama",
+  "id": "iogd93xw8f",
+  "namespace": "Arize-ai",
+  "slug": "text-to-graphql-mcp",
+  "name": "Text-to-GraphQL MCP Server",
+  "description": "Converts natural language queries into valid GraphQL queries and executes them against GraphQL APIs. Includes schema introspection, query validation, execution with authentication, and query history tracking.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Converts natural language queries into valid GraphQL queries and executes them against GraphQL APIs. Includes schema introspection, query validation, execution with authentication, and query history tracking.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_HOST": {
+          "description": "Server host address",
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "API_PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "8000"
+        },
+        "MODEL_NAME": {
+          "description": "OpenAI model to use",
+          "type": "string",
+          "default": "gpt-4o"
+        },
+        "OPENAI_API_KEY": {
+          "description": "OpenAI API key for LLM operations",
+          "type": "string"
+        },
+        "GRAPHQL_API_KEY": {
+          "description": "API key for your GraphQL service",
+          "type": "string"
+        },
+        "GRAPHQL_HEADERS": {
+          "description": "Custom headers as JSON (overrides auto-auth)",
+          "type": "string",
+          "default": "{}"
+        },
+        "RECURSION_LIMIT": {
+          "description": "Max recursion for agent workflow",
+          "type": "string",
+          "default": "10"
+        },
+        "GRAPHQL_ENDPOINT": {
+          "description": "GraphQL API endpoint URL",
+          "type": "string"
+        },
+        "GRAPHQL_AUTH_TYPE": {
+          "description": "Authentication method: bearer, apikey, or direct",
+          "type": "string",
+          "default": "bearer"
+        },
+        "MODEL_TEMPERATURE": {
+          "description": "Model temperature for responses",
+          "type": "string",
+          "default": "0"
+        }
+      },
+      "type": "object",
+      "required": [
+        "OPENAI_API_KEY",
+        "GRAPHQL_ENDPOINT",
+        "GRAPHQL_API_KEY"
+      ]
+    },
+    "id": "iogd93xw8f",
+    "name": "Text-to-GraphQL MCP Server",
+    "namespace": "Arize-ai",
+    "repository": {
+      "url": "https://github.com/Arize-ai/text-to-graphql-mcp"
+    },
+    "slug": "text-to-graphql-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/iogd93xw8f"
+  }
+}

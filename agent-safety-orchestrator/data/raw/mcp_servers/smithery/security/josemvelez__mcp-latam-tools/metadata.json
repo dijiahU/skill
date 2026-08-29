@@ -1,0 +1,192 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "josemvelez/mcp-latam-tools",
+  "namespace": "josemvelez",
+  "slug": "mcp-latam-tools",
+  "displayName": "MCP LatAm Tools",
+  "description": "A collection of validation and utility tools for Latin American markets. Covers Brazil (CPF, CNPJ, PIX key validation, national holidays), Mexico (RFC validation, national holidays), and Chile (RUT validation, national holidays). Designed for agents and applications handling tax forms, invoices, payments, e-commerce, and compliance workflows across Latin America.",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "9d925385-3e59-4754-9b2d-e3a4518ae3b9",
+    "qualifiedName": "josemvelez/mcp-latam-tools",
+    "namespace": "josemvelez",
+    "slug": "mcp-latam-tools",
+    "displayName": "MCP LatAm Tools",
+    "description": "A collection of validation and utility tools for Latin American markets. Covers Brazil (CPF, CNPJ, PIX key validation, national holidays), Mexico (RFC validation, national holidays), and Chile (RUT validation, national holidays). Designed for agents and applications handling tax forms, invoices, payments, e-commerce, and compliance workflows across Latin America.",
+    "iconUrl": "https://api.smithery.ai/servers/josemvelez/mcp-latam-tools/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-20T21:27:33.178Z",
+    "homepage": "https://mcp-latam-tools-production.up.railway.app",
+    "bySmithery": false,
+    "owner": "org_01KPP9KKJMQAJEXHHWY185P02F",
+    "score": 0.008771929824561403
+  },
+  "detail": {
+    "qualifiedName": "josemvelez/mcp-latam-tools",
+    "displayName": "MCP LatAm Tools",
+    "description": "A collection of validation and utility tools for Latin American markets. Covers Brazil (CPF, CNPJ, PIX key validation, national holidays), Mexico (RFC validation, national holidays), and Chile (RUT validation, national holidays). Designed for agents and applications handling tax forms, invoices, payments, e-commerce, and compliance workflows across Latin America.",
+    "iconUrl": "https://api.smithery.ai/servers/josemvelez/mcp-latam-tools/icon",
+    "remote": true,
+    "deploymentUrl": "https://mcp-latam-tools--josemvelez.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://mcp-latam-tools--josemvelez.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "validate_cpf",
+        "description": "Validates a Brazilian CPF (Cadastro de Pessoas Físicas) using the official Receita Federal checksum algorithm. Use this tool when processing Brazilian user registrations, invoices, tax forms, e-commerce orders, or any document requiring a valid Brazilian individual taxpayer number. Input must be an 11-digit string (with or without formatting). Returns whether the CPF is mathematically valid, along with the cleaned CPF. Does not verify if the CPF exists in the Receita Federal database — only validates the format and checksum.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cpf": {
+              "type": "string",
+              "description": "The Brazilian CPF to validate. Formatting (dots and dash) is automatically removed. Example: '123.456.789-09' or '12345678909'"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_cnpj",
+        "description": "Validates a Brazilian CNPJ (Cadastro Nacional da Pessoa Jurídica) using the official Receita Federal checksum algorithm. Use this tool when processing Brazilian company registrations, B2B invoices, supplier onboarding, e-commerce orders, or any document requiring a valid Brazilian company taxpayer number. Input must be a 14-digit string (with or without formatting). Returns whether the CNPJ is mathematically valid, along with the cleaned CNPJ. Does not verify if the CNPJ is active in the Receita Federal database.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cnpj": {
+              "type": "string",
+              "description": "The Brazilian CNPJ to validate. Formatting (dots, slash and dash) is automatically removed. Example: '11.222.333/0001-81' or '11222333000181'"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_pix_key",
+        "description": "Validates a Brazilian PIX key format. PIX is Brazil's instant payment system. Use this tool when processing Brazilian payments, validating payment forms, or any fintech application handling Brazilian transfers. Supports all PIX key types: CPF (11 digits), CNPJ (14 digits), email, Brazilian phone number (+55 format), and EVP (random key UUID format). Returns whether the key is valid and the detected key type.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "The PIX key to validate. Can be a CPF, CNPJ, email, phone number (+5511999999999) or EVP UUID. Example: 'user@email.com' or '+5511999999999'"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_brazil_holidays",
+        "description": "Returns Brazilian national public holidays for any given year. Use this tool when calculating delivery dates, scheduling appointments, computing working days, or any task requiring knowledge of non-working days in Brazil. Returns all national holidays with dates in YYYY-MM-DD format and names in both Portuguese and English. Note: Brazil also has state and municipal holidays which vary by location and are not included here.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "The year to get holidays for. Example: 2026"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_rfc_mx",
+        "description": "Validates a Mexican RFC (Registro Federal de Contribuyentes) format for both individuals (13 characters) and companies (12 characters). Use this tool when processing Mexican invoices (CFDI), tax forms, supplier registrations, or any document requiring a valid Mexican taxpayer identifier. Returns whether the RFC format is valid, the detected type (individual or company), and the cleaned RFC. Note: validates format only, does not verify against the SAT registry.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rfc": {
+              "type": "string",
+              "description": "The Mexican RFC to validate. Spaces are automatically removed. Example: 'GODE561231GR8' for individual or 'GME9412171A3' for company"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_rut_cl",
+        "description": "Validates a Chilean RUT (Rol Único Tributario) using the official Chilean modulo-11 checksum algorithm. Use this tool when processing Chilean invoices, tax forms, user registrations, e-commerce orders, or any document requiring a valid Chilean taxpayer identifier. Accepts RUT with or without formatting (dots and dash). Returns whether the RUT is valid and the cleaned RUT. Does not verify if the RUT is active in the SII registry.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "rut": {
+              "type": "string",
+              "description": "The Chilean RUT to validate. Formatting (dots and dash) is automatically removed. Example: '12.345.678-9' or '123456789'"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_mexico_holidays",
+        "description": "Returns Mexican national public holidays for any given year. Use this tool when calculating delivery dates, scheduling appointments, or any task requiring knowledge of non-working days in Mexico. Returns all national holidays with dates in YYYY-MM-DD format and names in both Spanish and English. Note: some Mexican holidays fall on the nearest Monday (puente) — the dates returned are the fixed calendar dates as established by law.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "The year to get holidays for. Example: 2026"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_chile_holidays",
+        "description": "Returns Chilean national public holidays for any given year. Use this tool when calculating delivery dates, scheduling appointments, computing working days, or any task requiring knowledge of non-working days in Chile. Returns all national holidays with dates in YYYY-MM-DD format and names in both Spanish and English.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "The year to get holidays for. Example: 2026"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_cuit",
+        "description": "Validates an Argentine CUIT (Código Único de Identificación Tributaria) using the official AFIP checksum algorithm. CUIT is used by companies, self-employed workers, and other entities for tax purposes. Use this tool when processing Argentine invoices, supplier registrations, B2B transactions, or any document requiring a valid Argentine tax identifier. Accepts CUIT with or without formatting (dashes). Returns whether the CUIT is valid, the entity type detected, and the cleaned CUIT.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cuit": {
+              "type": "string",
+              "description": "The Argentine CUIT to validate. Formatting (dashes) is automatically removed. Example: '30-12345678-9' or '30123456789'"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_cuil",
+        "description": "Validates an Argentine CUIL (Código Único de Identificación Laboral) using the official ANSES checksum algorithm. CUIL is the labor identification number assigned to all workers and employees in Argentina. Use this tool when processing Argentine payroll, employment contracts, social security forms, HR onboarding, or any document requiring a valid Argentine labor identifier. The validation algorithm is identical to CUIT. Returns whether the CUIL is valid and the cleaned CUIL.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cuil": {
+              "type": "string",
+              "description": "The Argentine CUIL to validate. Formatting (dashes) is automatically removed. Example: '20-12345678-9' or '20123456789'"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_argentina_holidays",
+        "description": "Returns Argentine national public holidays for any given year. Use this tool when calculating delivery dates, scheduling appointments, computing working days, or any task requiring knowledge of non-working days in Argentina. Returns all national holidays with dates in YYYY-MM-DD format and names in both Spanish and English. Note: Argentina also has bridge holidays (feriados puente) declared annually by the government which are not included here.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number",
+              "description": "The year to get holidays for. Example: 2026"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "registry": "glama",
+  "id": "ufec06ha1r",
+  "namespace": "ozipi",
+  "slug": "brainloop-mcp-server-v2",
+  "name": "Reddit MCP Server",
+  "description": "Enables interaction with Reddit through OAuth 2.1 authentication, providing tools for searching content, managing notifications, analyzing posts and comments, and demonstrating advanced MCP features like sampling and real-time notifications.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with Reddit through OAuth 2.1 authentication, providing tools for searching content, managing notifications, analyzing posts and comments, and demonstrating advanced MCP features like sampling and real-time notifications.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "Server port",
+          "type": "string",
+          "default": "3000"
+        },
+        "DEBUG": {
+          "description": "Enable debug logging",
+          "type": "string",
+          "default": "false"
+        },
+        "MCP_PORT": {
+          "description": "Port for the MCP server",
+          "type": "string",
+          "default": "3001"
+        },
+        "LOG_LEVEL": {
+          "description": "Logging level (debug, info, warn, error)",
+          "type": "string",
+          "default": "debug"
+        },
+        "JWT_SECRET": {
+          "description": "Secret for JWT signing",
+          "type": "string"
+        },
+        "OAUTH_ISSUER": {
+          "description": "OAuth issuer URL",
+          "type": "string",
+          "default": "http://localhost:3000"
+        },
+        "REDIRECT_URL": {
+          "description": "OAuth redirect URL",
+          "type": "string",
+          "default": "http://localhost:3000/oauth/reddit/callback"
+        },
+        "REDDIT_USERNAME": {
+          "description": "Your Reddit username (optional)",
+          "type": "string"
+        },
+        "REDDIT_CLIENT_ID": {
+          "description": "Your Reddit client ID from the Reddit app configuration",
+          "type": "string"
+        },
+        "REDDIT_USER_AGENT": {
+          "description": "Reddit user agent",
+          "type": "string",
+          "default": "linux:systemprompt-mcp-reddit:v2.0.0"
+        },
+        "OAUTH_ACCESS_TOKEN": {
+          "description": "OAuth access token for authenticated requests",
+          "type": "string"
+        },
+        "REDDIT_ACCESS_TOKEN": {
+          "description": "Reddit access token for API requests",
+          "type": "string"
+        },
+        "REDDIT_CLIENT_SECRET": {
+          "description": "Your Reddit client secret from the Reddit app configuration",
+          "type": "string"
+        },
+        "REDDIT_REFRESH_TOKEN": {
+          "description": "Reddit refresh token for token renewal",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "REDDIT_CLIENT_ID",
+        "REDDIT_CLIENT_SECRET",
+        "JWT_SECRET"
+      ]
+    },
+    "id": "ufec06ha1r",
+    "name": "Reddit MCP Server",
+    "namespace": "ozipi",
+    "repository": {
+      "url": "https://github.com/ozipi/brainloop-mcp-server-v2"
+    },
+    "slug": "brainloop-mcp-server-v2",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ufec06ha1r"
+  }
+}

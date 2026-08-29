@@ -1,0 +1,81 @@
+{
+  "registry": "glama",
+  "id": "ieubzwurib",
+  "namespace": "masx200",
+  "slug": "mcp-webdav-server",
+  "name": "WebDAV MCP Server",
+  "description": "Enables CRUD operations on WebDAV file systems with authentication support, allowing users to manage files and directories through natural language commands. Includes advanced features like file search, range requests, smart editing with diff preview, and directory tree visualization.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables CRUD operations on WebDAV file systems with authentication support, allowing users to manage files and directories through natural language commands. Includes advanced features like file search, range requests, smart editing with diff preview, and directory tree visualization.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AUTH_REALM": {
+          "description": "Authentication realm for MCP server",
+          "type": "string",
+          "default": "MCP WebDAV Server"
+        },
+        "SERVER_PORT": {
+          "description": "Server port for HTTP mode",
+          "type": "string",
+          "default": "3000"
+        },
+        "AUTH_ENABLED": {
+          "description": "Enable/disable authentication for MCP server",
+          "type": "string"
+        },
+        "AUTH_PASSWORD": {
+          "description": "Password for MCP server authentication (can be bcrypt hash with {bcrypt} prefix)",
+          "type": "string"
+        },
+        "AUTH_USERNAME": {
+          "description": "Username for MCP server authentication",
+          "type": "string"
+        },
+        "WEBDAV_PASSWORD": {
+          "description": "Password for WebDAV authentication (must be plain text)",
+          "type": "string"
+        },
+        "WEBDAV_ROOT_URL": {
+          "description": "The URL of the WebDAV server",
+          "type": "string"
+        },
+        "WEBDAV_USERNAME": {
+          "description": "Username for WebDAV authentication",
+          "type": "string"
+        },
+        "WEBDAV_ROOT_PATH": {
+          "description": "The root path on the WebDAV server",
+          "type": "string"
+        },
+        "WEBDAV_AUTH_ENABLED": {
+          "description": "Enable/disable WebDAV authentication",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "WEBDAV_ROOT_URL",
+        "WEBDAV_ROOT_PATH"
+      ]
+    },
+    "id": "ieubzwurib",
+    "name": "WebDAV MCP Server",
+    "namespace": "masx200",
+    "repository": {
+      "url": "https://github.com/masx200/mcp-webdav-server"
+    },
+    "slug": "mcp-webdav-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ieubzwurib"
+  }
+}

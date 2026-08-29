@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "xemkp3g2k4",
+  "namespace": "Ahmed-AG",
+  "slug": "mcp-test",
+  "name": "Google Calendar MCP Server",
+  "description": "Enables natural language queries to Google Calendar API for checking appointments, availability, and events. Supports flexible time ranges, timezone handling, and both service account and OAuth authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables natural language queries to Google Calendar API for checking appointments, availability, and events. Supports flexible time ranges, timezone handling, and both service account and OAuth authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "GOOGLE_CREDENTIALS_JSON": {
+          "description": "JSON content of the Google OAuth 2.0 credentials file",
+          "type": "string"
+        },
+        "GOOGLE_SERVICE_ACCOUNT_KEY": {
+          "description": "JSON content of the Google service account key file",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_SERVICE_ACCOUNT_KEY"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_CREDENTIALS_JSON"
+          ]
+        }
+      ]
+    },
+    "id": "xemkp3g2k4",
+    "name": "Google Calendar MCP Server",
+    "namespace": "Ahmed-AG",
+    "repository": {
+      "url": "https://github.com/Ahmed-AG/mcp-test"
+    },
+    "slug": "mcp-test",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xemkp3g2k4"
+  }
+}

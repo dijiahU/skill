@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "j4bd8fpxhy",
+  "namespace": "ultrade-org",
+  "slug": "ultrade-mcp",
+  "name": "Ultrade MCP Server",
+  "description": "Enables interaction with the Ultrade API to manage wallets, execute market orders, and access real-time trading data. It provides tools for account authentication, market depth analysis, and system status monitoring.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:local-only"
+    ],
+    "description": "Enables interaction with the Ultrade API to manage wallets, execute market orders, and access real-time trading data. It provides tools for account authentication, market depth analysis, and system status monitoring.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ALGORAND_ALGOD": {
+          "description": "The base URL for the Algorand Algod service.",
+          "type": "string",
+          "default": "https://mainnet-api.algonode.cloud"
+        },
+        "ALGORAND_TOKEN": {
+          "description": "The API token/key for the Algod service.",
+          "type": "string"
+        },
+        "ITEMS_PER_PAGE": {
+          "description": "The number of items to display per page for paginated requests.",
+          "type": "string",
+          "default": "10"
+        },
+        "ULTRADE_API_URL": {
+          "description": "The base URL for the Ultrade API.",
+          "type": "string",
+          "default": "https://api.ultrade.io"
+        },
+        "ALGORAND_NETWORK": {
+          "description": "The Algorand network to connect to (e.g., mainnet, testnet).",
+          "type": "string",
+          "default": "mainnet"
+        },
+        "ALGORAND_ALGOD_API": {
+          "description": "The URL for the Algorand Algod API v2 endpoint.",
+          "type": "string",
+          "default": "https://mainnet-api.algonode.cloud/v2"
+        },
+        "ALGORAND_ALGOD_PORT": {
+          "description": "The port used to connect to the Algod service.",
+          "type": "string"
+        },
+        "ALGORAND_AGENT_WALLET_ACTIVE": {
+          "description": "The mnemonic phrase for the active trading wallet used by the agent.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ALGORAND_NETWORK",
+        "ALGORAND_ALGOD_API",
+        "ALGORAND_ALGOD",
+        "ALGORAND_AGENT_WALLET_ACTIVE",
+        "ULTRADE_API_URL"
+      ]
+    },
+    "id": "j4bd8fpxhy",
+    "name": "Ultrade MCP Server",
+    "namespace": "ultrade-org",
+    "repository": {
+      "url": "https://github.com/ultrade-org/ultrade-mcp"
+    },
+    "slug": "ultrade-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j4bd8fpxhy"
+  }
+}

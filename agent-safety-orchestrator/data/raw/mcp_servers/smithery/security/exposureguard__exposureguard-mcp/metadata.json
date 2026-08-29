@@ -1,0 +1,148 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "ExposureGuard/exposureguard-mcp",
+  "namespace": "ExposureGuard",
+  "slug": "exposureguard-mcp",
+  "displayName": "exposureguard-mcp",
+  "description": "ExposureGuard is a domain security scanning platform that grades any domain A through F based on 8 automated checks: SPF, DMARC, SSL/TLS, HTTPS redirect, security headers, DNSSEC, open ports, and MX records. This MCP server exposes 4 tools for AI agents to scan domains, retrieve cached grades, get copy-paste remediation fixes, and discover third-party supply chain dependencies. Built for security teams, DevSecOps pipelines, and AI agents that need to vet domains before interacting with them.\n",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "policy",
+    "vulnerability",
+    "authentication",
+    "phishing",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "3a6312f5-068b-4e81-bc5c-5665c37e8d89",
+    "qualifiedName": "ExposureGuard/exposureguard-mcp",
+    "namespace": "exposureguard",
+    "slug": "exposureguard-mcp",
+    "displayName": "exposureguard-mcp",
+    "description": "ExposureGuard is a domain security scanning platform that grades any domain A through F based on 8 automated checks: SPF, DMARC, SSL/TLS, HTTPS redirect, security headers, DNSSEC, open ports, and MX records. This MCP server exposes 4 tools for AI agents to scan domains, retrieve cached grades, get copy-paste remediation fixes, and discover third-party supply chain dependencies. Built for security teams, DevSecOps pipelines, and AI agents that need to vet domains before interacting with them.\n",
+    "iconUrl": "https://api.smithery.ai/servers/ExposureGuard/exposureguard-mcp/icon",
+    "verified": false,
+    "useCount": 215,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-31T18:00:11.732Z",
+    "homepage": "https://getexposureguard.com/",
+    "bySmithery": false,
+    "owner": "org_01KNBW0415Y41YH8VT5B5WMRCN",
+    "score": 0.029131652661064426
+  },
+  "detail": {
+    "qualifiedName": "ExposureGuard/exposureguard-mcp",
+    "displayName": "exposureguard-mcp",
+    "description": "ExposureGuard is a domain security scanning platform that grades any domain A through F based on 8 automated checks: SPF, DMARC, SSL/TLS, HTTPS redirect, security headers, DNSSEC, open ports, and MX records. This MCP server exposes 4 tools for AI agents to scan domains, retrieve cached grades, get copy-paste remediation fixes, and discover third-party supply chain dependencies. Built for security teams, DevSecOps pipelines, and AI agents that need to vet domains before interacting with them.\n",
+    "iconUrl": "https://api.smithery.ai/servers/ExposureGuard/exposureguard-mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://exposureguard-mcp--exposureguard.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://exposureguard-mcp--exposureguard.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Your ExposureGuard API key. Get one free at https://getexposureguard.com/account"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_domain",
+        "description": "Run a comprehensive 8-point security audit on any domain. Checks SPF (email spoofing prevention), DMARC (email authentication policy), SSL/TLS certificate validity, HTTPS redirect enforcement, security headers (X-Frame-Options, Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options), DNSSEC (DNS integrity), open ports (exposed services on 21/22/23/25/80/443/3306/3389/5432/8080/8443), and MX records. Returns a letter grade A through F, numeric score 0-100, detailed per-check findings with pass/fail status, and a shareable report URL. Takes approximately 8 seconds. Use this when you need a fresh, comprehensive security assessment of a domain before interacting with it.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "The domain name to scan, without protocol or path (e.g. 'example.com', 'api.stripe.com')"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_grade",
+        "description": "Retrieve the most recent cached security grade for a domain without triggering a new scan. Returns the letter grade (A-F), numeric score (0-100), and timestamp of when the grade was last calculated. Results may be up to 24 hours old. Use this for quick lookups when you need a fast answer and don't require the freshest data — returns in under 200ms compared to ~8s for a full scan.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "The domain name to look up (e.g. 'example.com')"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_remediation",
+        "description": "Get actionable, copy-paste fix instructions for every failing security check on a domain. Returns specific DNS TXT records to add (SPF, DMARC), server configuration snippets (Nginx, Apache, Cloudflare) for security headers and HTTPS redirects, and step-by-step instructions for enabling DNSSEC. Each fix includes the exact record or config to apply and which provider/panel to use. Use this after a scan to give users concrete steps they can hand to their DNS provider or sysadmin.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "The domain to get fix instructions for (e.g. 'example.com')"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_dependencies",
+        "description": "Discover all third-party scripts, stylesheets, fonts, images, and iframes loaded by a domain's website. Returns each external resource with its type (script/stylesheet/image/iframe), host, and full URL. Useful for supply-chain risk assessment — reveals what external services the domain depends on and could be compromised through. Also useful for compliance audits and understanding a domain's technology stack.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "The domain to analyze for third-party dependencies (e.g. 'example.com')"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "security_audit",
+        "description": "Run a full security audit on a domain and explain all findings with remediation steps.",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "The domain to audit (e.g. example.com)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "compare_domains",
+        "description": "Compare the security posture of two domains side by side.",
+        "arguments": [
+          {
+            "name": "domain1",
+            "description": "First domain to compare",
+            "required": true
+          },
+          {
+            "name": "domain2",
+            "description": "Second domain to compare",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

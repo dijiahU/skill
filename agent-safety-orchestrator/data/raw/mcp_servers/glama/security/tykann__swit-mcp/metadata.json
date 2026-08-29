@@ -1,0 +1,70 @@
+{
+  "registry": "glama",
+  "id": "pxumob1xx1",
+  "namespace": "TykanN",
+  "slug": "swit-mcp",
+  "name": "Swit MCP Server",
+  "description": "A Model Context Protocol server that integrates with Swit collaboration tools, allowing LLM clients to interact with Swit workspaces, channels, and messages through OAuth authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A Model Context Protocol server that integrates with Swit collaboration tools, allowing LLM clients to interact with Swit workspaces, channels, and messages through OAuth authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "OAUTH_PORT": {
+          "description": "Port for the OAuth callback server",
+          "type": "string",
+          "default": "3000"
+        },
+        "SWIT_API_TOKEN": {
+          "description": "Your Swit API token for Bearer Token authentication",
+          "type": "string"
+        },
+        "SWIT_CLIENT_ID": {
+          "description": "Your Swit client ID from the Swit Developer Console",
+          "type": "string"
+        },
+        "SWIT_API_BASE_URL": {
+          "description": "Base URL for the Swit API",
+          "type": "string",
+          "default": "https://openapi.swit.io/v1"
+        },
+        "SWIT_CLIENT_SECRET": {
+          "description": "Your Swit client secret from the Swit Developer Console",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SWIT_CLIENT_ID",
+            "SWIT_CLIENT_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "SWIT_API_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "pxumob1xx1",
+    "name": "Swit MCP Server",
+    "namespace": "TykanN",
+    "repository": {
+      "url": "https://github.com/TykanN/swit-mcp"
+    },
+    "slug": "swit-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/pxumob1xx1"
+  }
+}

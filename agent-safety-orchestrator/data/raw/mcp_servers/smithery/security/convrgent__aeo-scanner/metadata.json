@@ -1,0 +1,188 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "convrgent/aeo-scanner",
+  "namespace": "convrgent",
+  "slug": "aeo-scanner",
+  "displayName": "AEO Scanner",
+  "description": "AI search visibility audit — triple scoring: AEO, GEO, Agent Readiness. Mention readiness, AI Identity Card, competitive gap analysis, business profile detection. Free scan, $1 audit, $3 compare, $5 fix.",
+  "discoveryQueries": [
+    "scanner",
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "18d8317f-fbdf-40be-9cfe-b8c961cd4ff8",
+    "qualifiedName": "convrgent/aeo-scanner",
+    "namespace": "convrgent",
+    "slug": "aeo-scanner",
+    "displayName": "AEO Scanner",
+    "description": "AI search visibility audit — triple scoring: AEO, GEO, Agent Readiness. Mention readiness, AI Identity Card, competitive gap analysis, business profile detection. Free scan, $1 audit, $3 compare, $5 fix.",
+    "iconUrl": "https://api.smithery.ai/servers/convrgent/aeo-scanner/icon",
+    "verified": false,
+    "useCount": 4371,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-01T18:19:37.306Z",
+    "homepage": "https://scan.convrgent.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBW0MWBT86BP5NJABHF2V7W",
+    "score": 0.025
+  },
+  "detail": {
+    "qualifiedName": "convrgent/aeo-scanner",
+    "displayName": "AEO Scanner",
+    "description": "AI search visibility audit — triple scoring: AEO, GEO, Agent Readiness. Mention readiness, AI Identity Card, competitive gap analysis, business profile detection. Free scan, $1 audit, $3 compare, $5 fix.",
+    "iconUrl": "https://api.smithery.ai/servers/convrgent/aeo-scanner/icon",
+    "remote": true,
+    "deploymentUrl": "https://aeo-scanner--convrgent.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://aeo-scanner--convrgent.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "AEO_API_KEY": {
+              "type": "string",
+              "x-to": {
+                "header": "Authorization"
+              },
+              "x-from": {
+                "header": "AEO_API_KEY"
+              },
+              "x-order": 0,
+              "description": "API key for audit ($1), compare ($3), and fix ($5). Free scan, needs no key, at scan.convrgent.ai"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "scan_site",
+        "description": "Quick AI visibility scan. Returns three scores: AEO Score (0-100, AI search engine findability), GEO Score (0-100, AI citation readiness), and Agent Readiness Score (0-100, AI agent interaction capability). Also returns AI Identity Card with mention readiness (0-100, predicts how likely AI will mention the brand), detected competitors, business profile (commerce/saas/media/general), and top 5 issues. 58+ checks across 12 categories. Free — no API key needed. Does NOT return per-check details or fix code — use audit_site for full breakdown, fix_site for generated fixes, compare_sites to benchmark against a competitor.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Full URL to scan (e.g. https://example.com)"
+            },
+            "pages": {
+              "type": "integer",
+              "default": 3,
+              "maximum": 5,
+              "minimum": 1,
+              "description": "Number of pages to scan (1-5)"
+            }
+          }
+        }
+      },
+      {
+        "name": "audit_site",
+        "description": "Full AI visibility audit across 58+ checks in 12 categories (4 AEO + 4 GEO + 4 Agent Readiness). Returns detailed per-check scores with specific issues and recommendations, AI Identity Card with mention readiness and detected competitors, and business profile. GEO checks include 3 research-backed citation signals: factual density, answer frontloading, and source citations. Does NOT generate fix code — use fix_site for that, or compare_sites to benchmark against a competitor. Requires API key ($1.00 per call). If you get payment_required, tell the user to set AEO_API_KEY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Full URL to audit"
+            },
+            "pages": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of pages to audit (1-10)"
+            },
+            "categories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Filter to specific categories: structured_data, meta_technical, ai_accessibility, content_quality, brand_narrative, citation_readiness, authority_signals, entity_definition, machine_identity, api_discoverability, structured_actions, programmatic_access"
+            }
+          }
+        }
+      },
+      {
+        "name": "fix_site",
+        "description": "Generate complete fix code for all AI visibility issues across AEO, GEO, and Agent Readiness. Returns working code you can apply directly — schema generation, robots.txt, sitemap, llms.txt, meta tags, structured data, citation signals, entity markup. Also returns two-tier score projections: quick wins (critical + high fixes only) and full implementation ceiling (all fixes). Content recommendations include research citations. Run scan_site first to see which issues exist. Requires API key ($5.00 per call). If you get payment_required, tell the user to set AEO_API_KEY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Full URL to generate fixes for"
+            },
+            "pages": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of pages to analyze (1-10)"
+            },
+            "format": {
+              "enum": [
+                "generic",
+                "claude_code"
+              ],
+              "type": "string",
+              "default": "generic",
+              "description": "Output format: generic or claude_code (optimized for Claude Code)"
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_sites",
+        "description": "Competitive gap analysis — scans two sites concurrently, shows side-by-side scores, category-by-category winners, competitive gaps (checks where the competitor scored 20+ higher), and generated overtake fix code with projected scores after closing gaps. Use this when the user wants to benchmark against a competitor or when scan_site detects competitors in the AI Identity Card. Requires API key ($3.00 per call). If you get payment_required, tell the user to set AEO_API_KEY.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Your site URL"
+            },
+            "pages": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 5,
+              "minimum": 1,
+              "description": "Number of pages to scan per site (1-5)"
+            },
+            "competitorUrl": {
+              "type": "string",
+              "description": "Competitor site URL to benchmark against"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "scoring-methodology",
+        "uri": "aeo://reference/scoring-methodology",
+        "description": "How AEO, GEO, and Agent Readiness scores are calculated across 58+ checks in 12 categories. Includes mention readiness, business profiles, competitive analysis, and research sources."
+      }
+    ],
+    "prompts": [
+      {
+        "name": "optimize_site",
+        "description": "Full scan → audit → compare → fix → verify workflow for optimizing a site's AI visibility across AEO, GEO, and Agent Readiness.",
+        "arguments": [
+          {
+            "name": "url",
+            "description": "Website URL to optimize",
+            "required": true
+          },
+          {
+            "name": "priority",
+            "description": "Which score to prioritize. Use 'auto' to let the detected business profile decide.",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

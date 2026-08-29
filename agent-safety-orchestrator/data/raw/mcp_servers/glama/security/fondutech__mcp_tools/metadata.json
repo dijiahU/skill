@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "hxd0m2nytl",
+  "namespace": "fondutech",
+  "slug": "mcp_tools",
+  "name": "MCP Knowledge Vault Search Tool",
+  "description": "Enables searching personal knowledge vaults using hybrid semantic and keyword matching through the Fondu Knowledge Vault API. Retrieves and reranks relevant information from personal knowledge bases with flexible authentication options.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables searching personal knowledge vaults using hybrid semantic and keyword matching through the Fondu Knowledge Vault API. Retrieves and reranks relevant information from personal knowledge bases with flexible authentication options.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FONDU_API_TOKEN": {
+          "description": "Your Fondu API token for accessing the Knowledge Vault API (alternative to FONDU_AUTH_TOKEN)",
+          "type": "string"
+        },
+        "FONDU_AUTH_TOKEN": {
+          "description": "Your Fondu authentication token for accessing the Knowledge Vault API",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "FONDU_AUTH_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "FONDU_API_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "hxd0m2nytl",
+    "name": "MCP Knowledge Vault Search Tool",
+    "namespace": "fondutech",
+    "repository": {
+      "url": "https://github.com/fondutech/mcp_tools"
+    },
+    "slug": "mcp_tools",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hxd0m2nytl"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "lkdfk9vm9n",
+  "namespace": "zekozhang",
+  "slug": "mcp-remote-static",
+  "name": "mcp-remote-static",
+  "description": "Connects MCP clients to remote servers using static OAuth 2.0 client authentication. It is specifically designed for marketplace scenarios that require pre-registered client IDs and secrets through standard authorization code flows.",
+  "discoveryQueries": [
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Connects MCP clients to remote servers using static OAuth 2.0 client authentication. It is specifically designed for marketplace scenarios that require pre-registered client IDs and secrets through standard authorization code flows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "host": {
+          "description": "Callback server hostname. Defaults to localhost.",
+          "type": "string",
+          "default": "localhost"
+        },
+        "debug": {
+          "description": "Enable debug logging.",
+          "type": "string"
+        },
+        "header": {
+          "description": "Custom HTTP request headers in 'HeaderName: value' format.",
+          "type": "string"
+        },
+        "serverUrl": {
+          "description": "MCP server URL (e.g., https://remote.mcp.server/sse)",
+          "type": "string"
+        },
+        "transport": {
+          "description": "Transport strategy. Valid values: sse-only, http-only, sse-first, http-first. Defaults to http-first.",
+          "type": "string",
+          "default": "http-first"
+        },
+        "ignore_tool": {
+          "description": "Ignore specified tools. Use multiple times in arguments or provide tool names.",
+          "type": "string"
+        },
+        "auth_timeout": {
+          "description": "OAuth callback timeout in seconds. Defaults to 30.",
+          "type": "string",
+          "default": "30"
+        },
+        "callbackPort": {
+          "description": "Callback server port number. Defaults to 17091.",
+          "type": "string",
+          "default": "17091"
+        },
+        "static_oauth_client_info": {
+          "description": "Static OAuth client information. Can be a JSON string like '{\"client_id\":\"xxx\",\"client_secret\":\"yyy\"}' or a file path starting with '@' like '@/path/to/oauth_client_info.json'",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "serverUrl",
+        "static_oauth_client_info"
+      ]
+    },
+    "id": "lkdfk9vm9n",
+    "name": "mcp-remote-static",
+    "namespace": "zekozhang",
+    "repository": {
+      "url": "https://github.com/zekozhang/mcp-remote-static"
+    },
+    "slug": "mcp-remote-static",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lkdfk9vm9n"
+  }
+}

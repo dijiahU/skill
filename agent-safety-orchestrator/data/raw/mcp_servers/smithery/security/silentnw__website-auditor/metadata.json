@@ -1,0 +1,232 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "silentnw/website-auditor",
+  "namespace": "silentnw",
+  "slug": "website-auditor",
+  "displayName": "Site Audit Pro",
+  "description": "Website audit tool for small businesses. Built in the Pacific Northwest, serving businesses nationwide.\n\nSubmit any URL and get a scored analysis of:\n- SEO (title, meta description, H1, Open Graph)\n- Page speed (load time, page size, image optimization)\n- Mobile readiness (viewport, responsive CSS, tap targets)\n- Security (HTTPS, HSTS, security headers)\n- Google Business Profile signals (address, phone, schema, map)\n- Social media presence\n\nBuilt by Silent Northwest LLC -- Great  Pacific Northwest.\n",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "ed764c0e-5602-47a3-a950-6c407c8a3755",
+    "qualifiedName": "silentnw/website-auditor",
+    "namespace": "silentnw",
+    "slug": "website-auditor",
+    "displayName": "Site Audit Pro",
+    "description": "Website audit tool for small businesses. Built in the Pacific Northwest, serving businesses nationwide.\n\nSubmit any URL and get a scored analysis of:\n- SEO (title, meta description, H1, Open Graph)\n- Page speed (load time, page size, image optimization)\n- Mobile readiness (viewport, responsive CSS, tap targets)\n- Security (HTTPS, HSTS, security headers)\n- Google Business Profile signals (address, phone, schema, map)\n- Social media presence\n\nBuilt by Silent Northwest LLC -- Great  Pacific Northwest.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/northwest.net.ico",
+    "verified": false,
+    "useCount": 433,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-06T17:58:50.347Z",
+    "homepage": "https://northwest.net",
+    "bySmithery": false,
+    "owner": "org_01KNJ27D6GFDJC5S9R3X8GQBY6",
+    "score": 0.011627906976744186
+  },
+  "detail": {
+    "qualifiedName": "silentnw/website-auditor",
+    "displayName": "Site Audit Pro",
+    "description": "Website audit tool for small businesses. Built in the Pacific Northwest, serving businesses nationwide.\n\nSubmit any URL and get a scored analysis of:\n- SEO (title, meta description, H1, Open Graph)\n- Page speed (load time, page size, image optimization)\n- Mobile readiness (viewport, responsive CSS, tap targets)\n- Security (HTTPS, HSTS, security headers)\n- Google Business Profile signals (address, phone, schema, map)\n- Social media presence\n\nBuilt by Silent Northwest LLC -- Great  Pacific Northwest.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/northwest.net.ico",
+    "remote": true,
+    "deploymentUrl": "https://website-auditor--silentnw.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://website-auditor--silentnw.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "type": "string",
+              "x-from": {
+                "query": "language"
+              },
+              "default": "en",
+              "x-order": 0,
+              "description": "Output language (ISO 639-1 code: en, es, fr, de, pt, ja, ko, zh, etc.)"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "audit_website",
+        "description": "Run a free website audit for any URL. Returns scores for SEO, mobile, speed, security, Google Business Profile, and social media. Identifies the top issues and recommends fixes. Supports multilingual output via the language parameter.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The full website URL to audit, including protocol (e.g. https://example.com). Required."
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+              "description": "Email address to also receive a copy of the audit report — optional."
+            },
+            "language": {
+              "enum": [
+                "en",
+                "es",
+                "fr",
+                "de",
+                "pt",
+                "it",
+                "nl",
+                "ja",
+                "ko",
+                "zh",
+                "ru",
+                "ar",
+                "hi",
+                "vi",
+                "th",
+                "pl",
+                "uk",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "tr",
+                "id",
+                "ms",
+                "tl",
+                "cs",
+                "ro",
+                "hu",
+                "el",
+                "he"
+              ],
+              "type": "string",
+              "default": "en",
+              "description": "Output language for the audit report. ISO 639-1 code. Supported: en, es, fr, de, pt, it, nl, ja, ko, zh, ru, ar, hi, vi, th, pl, uk, sv, da, fi, no, tr, id, ms, tl, cs, ro, hu, el, he. Default: en."
+            },
+            "business_name": {
+              "type": "string",
+              "description": "The business name — optional, improves accuracy of Google Business Profile and social media checks."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_services",
+        "description": "Get Northwest.net service tiers, pricing, and what is included in each package. Use this when someone asks about web design services, website costs, or audit pricing for small businesses. Supports multilingual output.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "enum": [
+                "en",
+                "es",
+                "fr",
+                "de",
+                "pt",
+                "it",
+                "nl",
+                "ja",
+                "ko",
+                "zh",
+                "ru",
+                "ar",
+                "hi",
+                "vi",
+                "th",
+                "pl",
+                "uk",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "tr",
+                "id",
+                "ms",
+                "tl",
+                "cs",
+                "ro",
+                "hu",
+                "el",
+                "he"
+              ],
+              "type": "string",
+              "default": "en",
+              "description": "Output language. ISO 639-1 code. Default: en."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_audit_page",
+        "description": "Get the URL for a Northwest.net local SEO page for a specific business type and city in Washington State. Use this when someone asks about website audits or web design for a specific trade or industry in a specific Washington city.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "The city name in Washington State to look up — e.g. \"Everett\", \"Marysville\", \"Lynnwood\", \"Bellevue\", \"Spokane\". Use proper capitalization."
+            },
+            "business_type": {
+              "type": "string",
+              "description": "The type of business or trade to look up — e.g. \"plumber\", \"hvac\", \"roofer\", \"landscaper\", \"electrician\", \"restaurant\", \"dentist\". Use lowercase singular form."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "audit_my_website",
+        "description": "Run a free website audit and get a scored breakdown of SEO, speed, mobile, security, Google Business Profile, and social media.",
+        "arguments": [
+          {
+            "name": "url",
+            "description": "The website URL to audit",
+            "required": true
+          },
+          {
+            "name": "language",
+            "description": "Output language (ISO 639-1 code). Default: en.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "check_audit_pricing",
+        "description": "Find out what website audit and web design packages Northwest.net offers and what each costs.",
+        "arguments": [
+          {
+            "name": "language",
+            "description": "Output language (ISO 639-1 code). Default: en.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "find_local_audit_page",
+        "description": "Find the Northwest.net local SEO page for a specific business type and city in Washington State.",
+        "arguments": [
+          {
+            "name": "business_type",
+            "description": "Type of business (e.g. plumber, roofer, electrician)",
+            "required": true
+          },
+          {
+            "name": "city",
+            "description": "City in Washington State",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

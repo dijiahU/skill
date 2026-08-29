@@ -1,0 +1,162 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "deep-ai-kr/dev-mcp",
+  "namespace": "deep-ai-kr",
+  "slug": "dev-mcp",
+  "displayName": "dev-mcp",
+  "description": "Browse directories and read files within a safe, configurable root. Pull accurate context from local projects and docs without leaving your workflow. Limit access to a chosen root to keep your environment secure.",
+  "discoveryQueries": [
+    "security",
+    "secure"
+  ],
+  "rawRecord": {
+    "id": "fa2fc6be-deff-4d4b-b5ff-9d47aa0225f9",
+    "qualifiedName": "deep-ai-kr/dev-mcp",
+    "namespace": "deep-ai-kr",
+    "slug": "dev-mcp",
+    "displayName": "dev-mcp",
+    "description": "Browse directories and read files within a safe, configurable root. Pull accurate context from local projects and docs without leaving your workflow. Limit access to a chosen root to keep your environment secure.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": false,
+    "isDeployed": true,
+    "createdAt": "2025-11-14T02:59:57.890Z",
+    "homepage": "https://github.com/deep-ai-kr/dev-mcp",
+    "bySmithery": false,
+    "owner": "org_01KNBT21C7VAG7P0G5AHTGV3QQ",
+    "score": 0.008620689655172414
+  },
+  "detail": {
+    "qualifiedName": "deep-ai-kr/dev-mcp",
+    "displayName": "dev-mcp",
+    "description": "Browse directories and read files within a safe, configurable root. Pull accurate context from local projects and docs without leaving your workflow. Limit access to a chosen root to keep your environment secure.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/github.com.ico",
+    "remote": false,
+    "deploymentUrl": null,
+    "connections": [
+      {
+        "type": "stdio",
+        "bundleUrl": "https://backend.smithery.ai/storage/v1/object/public/bundles/@deep-ai-kr/dev-mcp/server.mcpb",
+        "runtime": "node",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "read_text_file",
+        "description": "Read a text file from the filesystem. Returns the file content as text.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "head": {
+              "type": "number",
+              "description": "If provided, returns only the first N lines"
+            },
+            "path": {
+              "type": "string",
+              "description": "Path to the file to read (relative to root)"
+            },
+            "tail": {
+              "type": "number",
+              "description": "If provided, returns only the last N lines"
+            }
+          }
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Write content to a file. Creates the file if it doesn't exist, overwrites if it does.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the file to write (relative to root)"
+            },
+            "content": {
+              "type": "string",
+              "description": "Content to write to the file"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_directory",
+        "description": "List files and directories in a specified path",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the directory to list (relative to root)"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_directory",
+        "description": "Create a directory. Creates parent directories if they don't exist.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the directory to create (relative to root)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_file_info",
+        "description": "Get detailed information about a file or directory (size, permissions, timestamps, etc.)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the file or directory (relative to root)"
+            }
+          }
+        }
+      },
+      {
+        "name": "move_file",
+        "description": "Move or rename a file or directory",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "Source path (relative to root)"
+            },
+            "destination": {
+              "type": "string",
+              "description": "Destination path (relative to root)"
+            }
+          }
+        }
+      },
+      {
+        "name": "search_files",
+        "description": "Recursively search for files and directories matching a pattern",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Directory to search in (relative to root)"
+            },
+            "pattern": {
+              "type": "string",
+              "description": "Search pattern (case-insensitive, matches partial names)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

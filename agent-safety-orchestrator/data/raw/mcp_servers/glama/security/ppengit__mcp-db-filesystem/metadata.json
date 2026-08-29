@@ -1,0 +1,78 @@
+{
+  "registry": "glama",
+  "id": "jl8g9beryn",
+  "namespace": "ppengit",
+  "slug": "mcp-db-filesystem",
+  "name": "MCP Database Filesystem",
+  "description": "Enables SQL Server database operations (queries, table management) and file system access (read, write, directory listing) with security controls. Supports comprehensive database interactions and file management through a unified MCP interface.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Enables SQL Server database operations (queries, table management) and file system access (read, write, directory listing) with security controls. Supports comprehensive database interactions and file management through a unified MCP interface.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DB_SERVER": {
+          "description": "SQL Server 服务器地址",
+          "type": "string"
+        },
+        "DB_ENCRYPT": {
+          "description": "是否加密连接",
+          "type": "string"
+        },
+        "DB_DATABASE": {
+          "description": "数据库名称",
+          "type": "string"
+        },
+        "DB_PASSWORD": {
+          "description": "密码",
+          "type": "string"
+        },
+        "DB_USERNAME": {
+          "description": "用户名",
+          "type": "string"
+        },
+        "FS_ALLOWED_PATHS": {
+          "description": "允许访问的路径（* 表示所有路径）",
+          "type": "string"
+        },
+        "DB_USE_WINDOWS_AUTH": {
+          "description": "是否使用 Windows 身份验证",
+          "type": "string"
+        },
+        "FS_IGNORE_FILE_LOCKS": {
+          "description": "是否忽略文件锁",
+          "type": "string"
+        },
+        "FS_ALLOWED_EXTENSIONS": {
+          "description": "允许的文件扩展名（*.* 表示所有文件）",
+          "type": "string"
+        },
+        "DB_TRUST_SERVER_CERTIFICATE": {
+          "description": "是否信任服务器证书",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "DB_SERVER",
+        "DB_DATABASE",
+        "DB_USERNAME",
+        "DB_PASSWORD"
+      ]
+    },
+    "id": "jl8g9beryn",
+    "name": "MCP Database Filesystem",
+    "namespace": "ppengit",
+    "repository": {
+      "url": "https://github.com/ppengit/mcp-db-filesystem"
+    },
+    "slug": "mcp-db-filesystem",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jl8g9beryn"
+  }
+}

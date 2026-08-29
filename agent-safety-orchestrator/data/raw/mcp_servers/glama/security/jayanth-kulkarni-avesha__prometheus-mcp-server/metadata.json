@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "j54hqk50he",
+  "namespace": "Jayanth-Kulkarni-Avesha",
+  "slug": "prometheus-mcp-server",
+  "name": "Prometheus MCP Server",
+  "description": "Enables AI assistants to execute PromQL queries and discover metrics across multiple Prometheus tenants using the Model Context Protocol. It supports single and multi-tenant configurations with secure authentication for instant and range query analysis.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to execute PromQL queries and discover metrics across multiple Prometheus tenants using the Model Context Protocol. It supports single and multi-tenant configurations with secure authentication for instant and range query analysis.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ORG_ID": {
+          "description": "Organization ID for multi-tenant setups like Cortex, Mimir, or Thanos.",
+          "type": "string"
+        },
+        "PROMETHEUS_URL": {
+          "description": "The URL of your Prometheus server (e.g., http://localhost:9090). Required for single-tenant configuration.",
+          "type": "string"
+        },
+        "PROMETHEUS_TOKEN": {
+          "description": "Bearer token for authentication.",
+          "type": "string"
+        },
+        "PROMETHEUS_TENANTS": {
+          "description": "A JSON string defining multiple Prometheus tenants. Required for multi-tenant configuration.",
+          "type": "string"
+        },
+        "PROMETHEUS_PASSWORD": {
+          "description": "Password for basic authentication.",
+          "type": "string"
+        },
+        "PROMETHEUS_USERNAME": {
+          "description": "Username for basic authentication.",
+          "type": "string"
+        },
+        "PROMETHEUS_DEFAULT_TENANT": {
+          "description": "The name of the default tenant (defaults to the first tenant in PROMETHEUS_TENANTS if not specified).",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "PROMETHEUS_URL"
+          ]
+        },
+        {
+          "required": [
+            "PROMETHEUS_TENANTS"
+          ]
+        }
+      ]
+    },
+    "id": "j54hqk50he",
+    "name": "Prometheus MCP Server",
+    "namespace": "Jayanth-Kulkarni-Avesha",
+    "repository": {
+      "url": "https://github.com/Jayanth-Kulkarni-Avesha/prometheus-mcp-server"
+    },
+    "slug": "prometheus-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j54hqk50he"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "registry": "glama",
+  "id": "yhfgdrz7ri",
+  "namespace": "bradsjm",
+  "slug": "mail-smtp-mcp",
+  "name": "mail-smtp-mcp",
+  "description": "A TypeScript MCP server that enables LLMs to send outbound emails via SMTP with support for attachments and HTML content. It includes outcome-oriented tools for account validation and enforces strict security policies like recipient allowlists and size limits.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A TypeScript MCP server that enables LLMs to send outbound emails via SMTP with support for attachments and HTML content. It includes outcome-oriented tools for account validation and enforces strict security policies like recipient allowlists and size limits.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MAIL_SMTP_DEFAULT_FROM": {
+          "description": "The default sender address to use for this account.",
+          "type": "string"
+        },
+        "MAIL_SMTP_DEFAULT_HOST": {
+          "description": "The SMTP host for the default account.",
+          "type": "string"
+        },
+        "MAIL_SMTP_DEFAULT_PASS": {
+          "description": "The SMTP password for the default account.",
+          "type": "string"
+        },
+        "MAIL_SMTP_DEFAULT_PORT": {
+          "description": "The SMTP port for the default account.",
+          "type": "string",
+          "default": "587"
+        },
+        "MAIL_SMTP_DEFAULT_USER": {
+          "description": "The SMTP username for the default account.",
+          "type": "string"
+        },
+        "MAIL_SMTP_SEND_ENABLED": {
+          "description": "Must be set to true to enable outbound email sending.",
+          "type": "string",
+          "default": "false"
+        },
+        "MAIL_SMTP_DEFAULT_SECURE": {
+          "description": "Whether to use TLS for the default account connection.",
+          "type": "string",
+          "default": "false"
+        },
+        "MAIL_SMTP_MAX_HTML_CHARS": {
+          "description": "Maximum characters allowed in the HTML body.",
+          "type": "string",
+          "default": "50000"
+        },
+        "MAIL_SMTP_MAX_RECIPIENTS": {
+          "description": "Maximum number of recipients per email.",
+          "type": "string",
+          "default": "10"
+        },
+        "MAIL_SMTP_MAX_TEXT_CHARS": {
+          "description": "Maximum characters allowed in the text body.",
+          "type": "string",
+          "default": "20000"
+        },
+        "MAIL_SMTP_MAX_ATTACHMENTS": {
+          "description": "Maximum number of attachments per email.",
+          "type": "string",
+          "default": "5"
+        },
+        "MAIL_SMTP_ALLOWLIST_DOMAINS": {
+          "description": "Comma-separated list of allowed recipient domains (e.g., example.com,example.org).",
+          "type": "string"
+        },
+        "MAIL_SMTP_MAX_MESSAGE_BYTES": {
+          "description": "Maximum total message size in bytes.",
+          "type": "string",
+          "default": "2500000"
+        },
+        "MAIL_SMTP_SOCKET_TIMEOUT_MS": {
+          "description": "Socket timeout in milliseconds.",
+          "type": "string",
+          "default": "20000"
+        },
+        "MAIL_SMTP_CONNECT_TIMEOUT_MS": {
+          "description": "Connection timeout in milliseconds.",
+          "type": "string",
+          "default": "10000"
+        },
+        "MAIL_SMTP_ALLOWLIST_ADDRESSES": {
+          "description": "Comma-separated list of allowed recipient email addresses.",
+          "type": "string"
+        },
+        "MAIL_SMTP_MAX_ATTACHMENT_BYTES": {
+          "description": "Maximum size of each individual attachment in bytes.",
+          "type": "string",
+          "default": "2000000"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MAIL_SMTP_DEFAULT_HOST",
+        "MAIL_SMTP_DEFAULT_USER",
+        "MAIL_SMTP_DEFAULT_PASS",
+        "MAIL_SMTP_SEND_ENABLED"
+      ]
+    },
+    "id": "yhfgdrz7ri",
+    "name": "mail-smtp-mcp",
+    "namespace": "bradsjm",
+    "repository": {
+      "url": "https://github.com/bradsjm/mail-smtp-mcp"
+    },
+    "slug": "mail-smtp-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/yhfgdrz7ri"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "registry": "glama",
+  "id": "rrhjzpm1x5",
+  "namespace": "prandogabriel",
+  "slug": "ieee2030.5-mcp",
+  "name": "IEEE 2030.5 MCP Server",
+  "description": "Enables interaction with IEEE 2030.5 (SEP 2.0) Smart Energy Profile servers for managing smart energy resources and utility programs. It supports secure certificate-based authentication and provides tools for device discovery, demand response, and metering navigation.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with IEEE 2030.5 (SEP 2.0) Smart Energy Profile servers for managing smart energy resources and utility programs. It supports secure certificate-based authentication and provides tools for device discovery, demand response, and metering navigation.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "IEEE2030_TIMEOUT": {
+          "description": "Request timeout in milliseconds",
+          "type": "string",
+          "default": "30000"
+        },
+        "IEEE2030_BASE_URL": {
+          "description": "Base URL of your IEEE 2030.5 server",
+          "type": "string"
+        },
+        "IEEE2030_INSECURE": {
+          "description": "Skip SSL verification (dev only)",
+          "type": "string",
+          "default": "false"
+        },
+        "IEEE2030_KEY_PATH": {
+          "description": "Path to private key file (if separate)",
+          "type": "string"
+        },
+        "IEEE2030_CERT_PATH": {
+          "description": "Path to certificate file (.pem, .crt)",
+          "type": "string"
+        },
+        "IEEE2030_KEY_VALUE": {
+          "description": "Private key content as string",
+          "type": "string"
+        },
+        "IEEE2030_CERT_VALUE": {
+          "description": "Certificate content as string",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "IEEE2030_CERT_PATH"
+          ]
+        },
+        {
+          "required": [
+            "IEEE2030_CERT_VALUE"
+          ]
+        }
+      ],
+      "required": [
+        "IEEE2030_BASE_URL"
+      ]
+    },
+    "id": "rrhjzpm1x5",
+    "name": "IEEE 2030.5 MCP Server",
+    "namespace": "prandogabriel",
+    "repository": {
+      "url": "https://github.com/prandogabriel/ieee2030.5-mcp"
+    },
+    "slug": "ieee2030.5-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/rrhjzpm1x5"
+  }
+}

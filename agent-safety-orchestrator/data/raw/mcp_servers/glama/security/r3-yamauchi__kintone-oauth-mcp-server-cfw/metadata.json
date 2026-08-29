@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "d59ikwso14",
+  "namespace": "r3-yamauchi",
+  "slug": "kintone-oauth-mcp-server-cfw",
+  "name": "kintone OAuth MCP Server on Cloudflare Workers",
+  "description": "Enables secure interaction with kintone through OAuth authentication, supporting record operations, app configuration management, file operations, and access control without storing API keys locally.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure interaction with kintone through OAuth authentication, supporting record operations, app configuration management, file operations, and access control without storing API keys locally.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "WORKER_URL": {
+          "description": "Your Cloudflare Worker URL",
+          "type": "string"
+        },
+        "CYBOZU_CLIENT_ID": {
+          "description": "Your cybozu.com OAuth client ID",
+          "type": "string"
+        },
+        "CYBOZU_SUBDOMAIN": {
+          "description": "Your cybozu.com subdomain",
+          "type": "string"
+        },
+        "CYBOZU_CLIENT_SECRET": {
+          "description": "Your cybozu.com OAuth client secret",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Random string for cookie encryption (e.g., generated with 'openssl rand -hex 32')",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "CYBOZU_CLIENT_ID",
+        "CYBOZU_CLIENT_SECRET",
+        "CYBOZU_SUBDOMAIN",
+        "COOKIE_ENCRYPTION_KEY",
+        "WORKER_URL"
+      ]
+    },
+    "id": "d59ikwso14",
+    "name": "kintone OAuth MCP Server on Cloudflare Workers",
+    "namespace": "r3-yamauchi",
+    "repository": {
+      "url": "https://github.com/r3-yamauchi/kintone-oauth-mcp-server-cfw"
+    },
+    "slug": "kintone-oauth-mcp-server-cfw",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/d59ikwso14"
+  }
+}

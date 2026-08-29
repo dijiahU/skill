@@ -1,0 +1,61 @@
+{
+  "registry": "glama",
+  "id": "e5z7fhtqdo",
+  "namespace": "Shrike-Security",
+  "slug": "shrike-mcp",
+  "name": "Shrike Security MCP Server",
+  "description": "Protects AI agents from threats like prompt injection, jailbreaks, and SQL injection through a multi-layer scanning pipeline. It also enables PII redaction and rehydration to ensure data privacy during LLM interactions.",
+  "discoveryQueries": [
+    "security",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Protects AI agents from threats like prompt injection, jailbreaks, and SQL injection through a multi-layer scanning pipeline. It also enables PII redaction and rehydration to ensure data privacy during LLM interactions.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_DEBUG": {
+          "description": "Enable debug logging (true/false).",
+          "type": "string",
+          "default": "false"
+        },
+        "SHRIKE_API_KEY": {
+          "description": "API key for authenticated scans (enables L7/L8 LLM layers). Without an API key, scans run on the free tier (regex-only layers L1–L4).",
+          "type": "string"
+        },
+        "SHRIKE_BACKEND_URL": {
+          "description": "URL of the Shrike backend API.",
+          "type": "string",
+          "default": "https://api.shrikesecurity.com/agent"
+        },
+        "MCP_SCAN_TIMEOUT_MS": {
+          "description": "Timeout for scan requests (ms).",
+          "type": "string",
+          "default": "15000"
+        },
+        "MCP_RATE_LIMIT_PER_MINUTE": {
+          "description": "Max requests per minute per customer.",
+          "type": "string",
+          "default": "100"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "e5z7fhtqdo",
+    "name": "Shrike Security MCP Server",
+    "namespace": "Shrike-Security",
+    "repository": {
+      "url": "https://github.com/Shrike-Security/shrike-mcp"
+    },
+    "slug": "shrike-mcp",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/e5z7fhtqdo"
+  }
+}

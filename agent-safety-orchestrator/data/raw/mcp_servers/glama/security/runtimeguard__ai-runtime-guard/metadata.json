@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "xhlzv9sed3",
+  "namespace": "runtimeguard",
+  "slug": "ai-runtime-guard",
+  "name": "ai-runtime-guard",
+  "description": "ai-runtime-guard is an MCP server that sits between your AI agent and your system, enforcing a policy layer before any file or shell action takes effect. No retraining, no prompt engineering, no changes to your agent or workflow, just install, configure once, and your agent operates within the boundaries you set.",
+  "discoveryQueries": [
+    "policy",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "ai-runtime-guard is an MCP server that sits between your AI agent and your system, enforcing a policy layer before any file or shell action takes effect. No retraining, no prompt engineering, no changes to your agent or workflow, just install, configure once, and your agent operates within the boundaries you set.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AIRG_AGENT_ID": {
+          "description": "Identifier for the agent, used to apply per-agent policy overrides (e.g., 'claude-desktop').",
+          "type": "string"
+        },
+        "AIRG_LOG_PATH": {
+          "description": "The absolute path to the activity.log audit trail file.",
+          "type": "string"
+        },
+        "AIRG_WORKSPACE": {
+          "description": "The absolute path to the project root where agent operations are performed.",
+          "type": "string"
+        },
+        "AIRG_POLICY_PATH": {
+          "description": "The absolute path to the policy.json configuration file.",
+          "type": "string"
+        },
+        "AIRG_SERVER_COMMAND": {
+          "description": "The absolute path to the airg-server executable.",
+          "type": "string"
+        },
+        "AIRG_REPORTS_DB_PATH": {
+          "description": "The absolute path to the reports.db database file used for dashboard views.",
+          "type": "string"
+        },
+        "AIRG_APPROVAL_DB_PATH": {
+          "description": "The absolute path to the approvals.db database file.",
+          "type": "string"
+        },
+        "AIRG_APPROVAL_HMAC_KEY_PATH": {
+          "description": "The absolute path to the HMAC key file for database security.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AIRG_AGENT_ID",
+        "AIRG_WORKSPACE",
+        "AIRG_POLICY_PATH",
+        "AIRG_APPROVAL_DB_PATH",
+        "AIRG_APPROVAL_HMAC_KEY_PATH",
+        "AIRG_LOG_PATH",
+        "AIRG_REPORTS_DB_PATH",
+        "AIRG_SERVER_COMMAND"
+      ]
+    },
+    "id": "xhlzv9sed3",
+    "name": "ai-runtime-guard",
+    "namespace": "runtimeguard",
+    "repository": {
+      "url": "https://github.com/runtimeguard/runtime-guard"
+    },
+    "slug": "ai-runtime-guard",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xhlzv9sed3"
+  }
+}

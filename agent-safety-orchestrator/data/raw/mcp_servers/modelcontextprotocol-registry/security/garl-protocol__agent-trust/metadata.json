@@ -1,0 +1,51 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.Garl-Protocol/agent-trust",
+  "slug": "Garl-Protocol__agent-trust",
+  "title": "",
+  "description": "AI agent trust & reputation protocol — verify, score, route, compare, delegate. 18 tools.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.Garl-Protocol/agent-trust",
+      "description": "AI agent trust & reputation protocol — verify, score, route, compare, delegate. 18 tools.",
+      "repository": {
+        "url": "https://github.com/garl-protocol/garl",
+        "source": "github"
+      },
+      "version": "1.1.3",
+      "packages": [
+        {
+          "registryType": "npm",
+          "identifier": "@garl-protocol/mcp-server",
+          "version": "1.1.3",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Your GARL API key (get one via garl_register_agent tool or POST https://api.garl.ai/api/v1/agents/auto-register)",
+              "format": "string",
+              "isSecret": true,
+              "name": "GARL_API_KEY"
+            },
+            {
+              "description": "Your GARL agent UUID (returned on registration)",
+              "format": "string",
+              "name": "GARL_AGENT_ID"
+            }
+          ]
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-03-01T09:10:27.964637Z",
+        "publishedAt": "2026-03-01T09:10:27.964637Z",
+        "updatedAt": "2026-03-01T09:10:27.964637Z",
+        "isLatest": true
+      }
+    }
+  }
+}

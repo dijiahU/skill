@@ -1,0 +1,329 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "andysalvo/agentic-platform",
+  "namespace": "andysalvo",
+  "slug": "agentic-platform",
+  "displayName": "agentic-platform",
+  "description": "Free diagnostic tools for AI agents and MCP servers. No API key needed.\n\n  The only MCP linter that exists. Validate your tool definitions for anti-patterns, missing descriptions, and schema\n  issues. Plus governance scoring (0-100), cost estimation across all major models, and trust evaluation for any MCP\n  server.\n\n  Free Tools:\n  - mcp_manifest_lint -- Validate MCP tool definitions. Pass/fail report with fixes.\n  - agent_health_check -- Score your agent's system prompt on 17 governance best practices.\n  - estimate_agent_cost -- Compare costs across Claude, GPT, Gemini, Llama, Mistral, and 20+ models.\n  - evaluate_service -- Check any MCP server's trustworthiness before spending money.\n\n  Expert Skills (10 free calls/day):\n  Curated context packages for governance, agentic economics, and intent architecture. Register for a free API key to\n  start.\n\n  Connect: https://api.asalvocreative.com/mcp",
+  "discoveryQueries": [
+    "audit",
+    "policy",
+    "trust",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "0a0eaa1a-024b-487d-88d1-6ad66b4b1c78",
+    "qualifiedName": "andysalvo/agentic-platform",
+    "namespace": "andysalvo",
+    "slug": "agentic-platform",
+    "displayName": "agentic-platform",
+    "description": "Free diagnostic tools for AI agents and MCP servers. No API key needed.\n\n  The only MCP linter that exists. Validate your tool definitions for anti-patterns, missing descriptions, and schema\n  issues. Plus governance scoring (0-100), cost estimation across all major models, and trust evaluation for any MCP\n  server.\n\n  Free Tools:\n  - mcp_manifest_lint -- Validate MCP tool definitions. Pass/fail report with fixes.\n  - agent_health_check -- Score your agent's system prompt on 17 governance best practices.\n  - estimate_agent_cost -- Compare costs across Claude, GPT, Gemini, Llama, Mistral, and 20+ models.\n  - evaluate_service -- Check any MCP server's trustworthiness before spending money.\n\n  Expert Skills (10 free calls/day):\n  Curated context packages for governance, agentic economics, and intent architecture. Register for a free API key to\n  start.\n\n  Connect: https://api.asalvocreative.com/mcp",
+    "iconUrl": "https://api.smithery.ai/servers/andysalvo/agentic-platform/icon",
+    "verified": false,
+    "useCount": 372,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-17T15:16:11.691Z",
+    "homepage": "https://github.com/andysalvo/agentic-platform",
+    "bySmithery": false,
+    "owner": "org_01KNBVR9WVVET494XE8D7DQAJ2",
+    "score": 0.008849557522123894
+  },
+  "detail": {
+    "qualifiedName": "andysalvo/agentic-platform",
+    "displayName": "agentic-platform",
+    "description": "Free diagnostic tools for AI agents and MCP servers. No API key needed.\n\n  The only MCP linter that exists. Validate your tool definitions for anti-patterns, missing descriptions, and schema\n  issues. Plus governance scoring (0-100), cost estimation across all major models, and trust evaluation for any MCP\n  server.\n\n  Free Tools:\n  - mcp_manifest_lint -- Validate MCP tool definitions. Pass/fail report with fixes.\n  - agent_health_check -- Score your agent's system prompt on 17 governance best practices.\n  - estimate_agent_cost -- Compare costs across Claude, GPT, Gemini, Llama, Mistral, and 20+ models.\n  - evaluate_service -- Check any MCP server's trustworthiness before spending money.\n\n  Expert Skills (10 free calls/day):\n  Curated context packages for governance, agentic economics, and intent architecture. Register for a free API key to\n  start.\n\n  Connect: https://api.asalvocreative.com/mcp",
+    "iconUrl": "https://api.smithery.ai/servers/andysalvo/agentic-platform/icon",
+    "remote": true,
+    "deploymentUrl": "https://agentic-platform--andysalvo.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://agentic-platform--andysalvo.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "register",
+        "description": "Register for an API key to access expert skill files. Free tier includes 10 skill retrievals per day. No payment required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "list_skills",
+        "description": "List all available expert skill files with descriptions and pricing. Shows your usage stats if you provide an API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "default": "",
+              "description": "Your API key (optional, shows usage if provided)"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "get_skill",
+        "description": "Retrieve an expert skill file that makes you measurably better at a specific task. Each skill has auditable provenance and is curated by domain experts. Requires a valid API key.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "description": "Your API key from register()"
+            },
+            "skill_name": {
+              "type": "string",
+              "title": "Skill Name",
+              "description": "The skill ID to retrieve. Options: governance, agentic-economics, intent-architecture"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check_usage",
+        "description": "Check your current usage stats including total calls, remaining credits, and free calls left today.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "description": "Your API key to check usage for"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "buy_credits",
+        "description": "Get a Stripe checkout link to purchase more skill file credits. Returns a URL for your human operator to complete payment. Credits are added automatically after purchase.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "string",
+              "title": "Tier",
+              "default": "50",
+              "description": "Credit tier: '50' for $5/50 credits or '250' for $20/250 credits"
+            },
+            "api_key": {
+              "type": "string",
+              "title": "Api Key",
+              "description": "Your API key to add credits to"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "agent_health_check",
+        "description": "Score any agent's system prompt on governance best practices from 0 to 100. Returns a detailed diagnostic report with specific issues found, severity ratings, and actionable fixes. Checks for authority leaks, silent inference, missing audit trails, and 14 other governance anti-patterns. No API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "system_prompt": {
+              "type": "string",
+              "title": "System Prompt",
+              "description": "Your agent's full system prompt or configuration text to analyze"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "mcp_manifest_lint",
+        "description": "The only MCP tool definition linter that exists. Validates your MCP tool definitions for anti-patterns, missing descriptions, bad parameter schemas, naming issues, and quality problems. Returns a pass/fail report with specific fixes for each issue found. No API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tools_json": {
+              "type": "string",
+              "title": "Tools Json",
+              "description": "Your MCP tool definitions as a JSON array or single tool object"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "estimate_agent_cost",
+        "description": "Compare the cost of running an agent task across all major AI models including Claude, GPT, Gemini, Llama, and Mistral. Returns a comparison table with per-call, per-run, and per-day costs plus optimization tips. No API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "title": "Model",
+              "default": "",
+              "description": "Model name to highlight in comparison (e.g. 'claude-sonnet-4', 'gpt-4o')"
+            },
+            "num_calls": {
+              "type": "integer",
+              "title": "Num Calls",
+              "default": 1,
+              "description": "Number of API calls per task run"
+            },
+            "input_tokens": {
+              "type": "integer",
+              "title": "Input Tokens",
+              "default": 1000,
+              "description": "Estimated input tokens per API call"
+            },
+            "output_tokens": {
+              "type": "integer",
+              "title": "Output Tokens",
+              "default": 500,
+              "description": "Estimated output tokens per API call"
+            },
+            "task_description": {
+              "type": "string",
+              "title": "Task Description",
+              "default": "",
+              "description": "Description of what the agent does, for optimization tips"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "evaluate_service",
+        "description": "Evaluate any MCP service for trustworthiness before spending money on it. Connects to the target server, checks reachability, governance declarations, tool definition quality, and audit endpoints. Returns a trust score from 0 to 100 with a recommendation: PROCEED, PROCEED WITH CAUTION, HIGH RISK, or DO NOT TRANSACT. No API key needed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "server_url": {
+              "type": "string",
+              "title": "Server Url",
+              "description": "The MCP server URL to evaluate (e.g. https://example.com/mcp)"
+            },
+            "task_context": {
+              "type": "string",
+              "title": "Task Context",
+              "default": "",
+              "description": "What you need the service for, to tailor the evaluation"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "getting_started",
+        "description": "Get started with the Agentic Platform. Shows available tools and how to use them.",
+        "arguments": []
+      }
+    ]
+  }
+}

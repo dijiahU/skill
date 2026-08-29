@@ -1,0 +1,110 @@
+{
+  "registry": "glama",
+  "id": "op7o6g86cm",
+  "namespace": "commercetools",
+  "slug": "commerce-mcp",
+  "name": "commercetools Commerce MCP",
+  "description": "Enables AI agents to interact with commercetools APIs to manage products, categories, orders, carts, and customer data. It provides a comprehensive set of tools for both read-only and full-access operations through secure authentication methods.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "author:official",
+      "hosting:hybrid"
+    ],
+    "description": "Enables AI agents to interact with commercetools APIs to manage products, categories, orders, carts, and customer data. It provides a comprehensive set of tools for both read-only and full-access operations through secure authentication methods.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "port": {
+          "description": "Port to listen on when using remote/streamable mode.",
+          "type": "string"
+        },
+        "tools": {
+          "description": "Tools to enable. Options: 'all', 'all.read', or specific tools like 'products.read,products.create'.",
+          "type": "string"
+        },
+        "apiUrl": {
+          "description": "The commercetools API URL.",
+          "type": "string"
+        },
+        "remote": {
+          "description": "Enable Streamable HTTP (remote) server mode.",
+          "type": "string"
+        },
+        "authUrl": {
+          "description": "The commercetools authentication URL.",
+          "type": "string"
+        },
+        "authType": {
+          "description": "Authentication method: 'client_credentials' (default) or 'auth_token'.",
+          "type": "string",
+          "default": "client_credentials"
+        },
+        "clientId": {
+          "description": "The commercetools client ID. Required for 'client_credentials' authentication.",
+          "type": "string"
+        },
+        "stateless": {
+          "description": "Make the MCP server stateless/stateful.",
+          "type": "string"
+        },
+        "projectKey": {
+          "description": "The commercetools project key.",
+          "type": "string"
+        },
+        "accessToken": {
+          "description": "A pre-existing access token for authentication. Required if authType is 'auth_token'.",
+          "type": "string"
+        },
+        "clientSecret": {
+          "description": "The commercetools client secret. Required for 'client_credentials' authentication.",
+          "type": "string"
+        },
+        "dynamicToolLoadingThreshold": {
+          "description": "The threshold of enabled tools to switch to dynamic tool loading (defaults to 30).",
+          "type": "string",
+          "default": "30"
+        },
+        "DYNAMIC_TOOL_LOADING_THRESHOLD": {
+          "description": "Environment variable to set the dynamic tool loading threshold (defaults to 30).",
+          "type": "string",
+          "default": "30"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "tools",
+            "clientId",
+            "clientSecret",
+            "projectKey",
+            "authUrl",
+            "apiUrl"
+          ]
+        },
+        {
+          "required": [
+            "tools",
+            "accessToken",
+            "authType",
+            "projectKey",
+            "authUrl",
+            "apiUrl"
+          ]
+        }
+      ]
+    },
+    "id": "op7o6g86cm",
+    "name": "commercetools Commerce MCP",
+    "namespace": "commercetools",
+    "repository": {
+      "url": "https://github.com/commercetools/commerce-mcp"
+    },
+    "slug": "commerce-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/op7o6g86cm"
+  }
+}

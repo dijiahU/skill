@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "q89277vzl1",
+  "namespace": "MladenSU",
+  "slug": "cli-mcp-server",
+  "name": "cli-mcp-server",
+  "description": "Command line interface with secure execution and customizable security policies",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Command line interface with secure execution and customizable security policies",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ALLOWED_DIR": {
+          "description": "Base directory for command execution (Required)",
+          "type": "string"
+        },
+        "ALLOWED_FLAGS": {
+          "description": "Comma-separated list of allowed flags or 'all'",
+          "type": "string",
+          "default": "-l,-a,--help"
+        },
+        "COMMAND_TIMEOUT": {
+          "description": "Command execution timeout (seconds)",
+          "type": "string",
+          "default": "30"
+        },
+        "ALLOWED_COMMANDS": {
+          "description": "Comma-separated list of allowed commands or 'all'",
+          "type": "string",
+          "default": "ls,cat,pwd"
+        },
+        "MAX_COMMAND_LENGTH": {
+          "description": "Maximum command string length",
+          "type": "string",
+          "default": "1024"
+        }
+      },
+      "type": "object",
+      "required": [
+        "ALLOWED_DIR"
+      ]
+    },
+    "id": "q89277vzl1",
+    "name": "cli-mcp-server",
+    "namespace": "MladenSU",
+    "repository": {
+      "url": "https://github.com/MladenSU/cli-mcp-server"
+    },
+    "slug": "cli-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/q89277vzl1"
+  }
+}

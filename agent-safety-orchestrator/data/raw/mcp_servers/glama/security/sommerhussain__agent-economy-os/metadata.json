@@ -1,0 +1,93 @@
+{
+  "registry": "glama",
+  "id": "sgryrxtkhx",
+  "namespace": "sommerhussain",
+  "slug": "agent-economy-os",
+  "name": "Universal Agent Economy OS",
+  "description": "Foundational MCP/A2A-native core platform for secure credential injection, native x402 micropayments, and Agent-to-Agent routing.",
+  "discoveryQueries": [
+    "credential",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Foundational MCP/A2A-native core platform for secure credential injection, native x402 micropayments, and Agent-to-Agent routing.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "API_KEY": {
+          "description": "The master API key required to access protected endpoints.",
+          "type": "string"
+        },
+        "REDIS_URL": {
+          "description": "Redis connection string (e.g., `redis://localhost:6379`). Leave empty for in-memory fallback.",
+          "type": "string",
+          "default": ""
+        },
+        "SUPABASE_KEY": {
+          "description": "Your Supabase anon or service-role key.",
+          "type": "string",
+          "default": ""
+        },
+        "SUPABASE_URL": {
+          "description": "Your Supabase project URL (used for credential lookup).",
+          "type": "string",
+          "default": ""
+        },
+        "STRIPE_API_KEY": {
+          "description": "Key for real Stripe integration.",
+          "type": "string",
+          "default": ""
+        },
+        "WEBHOOK_SECRET": {
+          "description": "Secret used to verify HMAC signatures on incoming webhooks.",
+          "type": "string"
+        },
+        "ALLOWED_ORIGINS": {
+          "description": "JSON array of allowed CORS origins.",
+          "type": "string",
+          "default": "[\"*\"]"
+        },
+        "LIGHTNING_ENABLED": {
+          "description": "Enable Lightning network micropayments.",
+          "type": "string",
+          "default": "False"
+        },
+        "BILLING_RATE_PER_CALL": {
+          "description": "Flat rate applied per API call for usage-based billing.",
+          "type": "string",
+          "default": "0.01"
+        },
+        "RATE_LIMIT_MAX_REQUESTS": {
+          "description": "Maximum number of requests an agent can make within the window.",
+          "type": "string",
+          "default": "10"
+        },
+        "RATE_LIMIT_WINDOW_SECONDS": {
+          "description": "Time window in seconds for the rate limit.",
+          "type": "string",
+          "default": "60"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_KEY",
+        "WEBHOOK_SECRET"
+      ]
+    },
+    "id": "sgryrxtkhx",
+    "name": "Universal Agent Economy OS",
+    "namespace": "sommerhussain",
+    "repository": {
+      "url": "https://github.com/agentrails/agent-economy-os"
+    },
+    "slug": "agent-economy-os",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/sgryrxtkhx"
+  }
+}

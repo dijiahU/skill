@@ -1,0 +1,84 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "STUzhy/py_execute_mcp",
+  "namespace": "STUzhy",
+  "slug": "py_execute_mcp",
+  "displayName": "Python execute",
+  "description": "Run Python code in a secure sandbox without local setup. Declare inline dependencies and execute snippets instantly. Prototype, test, and share reproducible results with ease.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "2fc25b7b-7a82-4c70-a2b3-bf81e86401b9",
+    "qualifiedName": "STUzhy/py_execute_mcp",
+    "namespace": "stuzhy",
+    "slug": "py_execute_mcp",
+    "displayName": "Python execute",
+    "description": "Run Python code in a secure sandbox without local setup. Declare inline dependencies and execute snippets instantly. Prototype, test, and share reproducible results with ease.",
+    "iconUrl": "https://api.smithery.ai/servers/STUzhy/py_execute_mcp/icon",
+    "verified": false,
+    "useCount": 129,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2025-09-17T04:31:22.037Z",
+    "homepage": "https://github.com/STUzhy/py_execute_mcp",
+    "bySmithery": false,
+    "owner": "org_01KNB62JCAJ6BNX07RE8EX362Q",
+    "score": 0.014492753623188406
+  },
+  "detail": {
+    "qualifiedName": "STUzhy/py_execute_mcp",
+    "displayName": "Python execute",
+    "description": "Run Python code in a secure sandbox without local setup. Declare inline dependencies and execute snippets instantly. Prototype, test, and share reproducible results with ease.",
+    "iconUrl": "https://api.smithery.ai/servers/STUzhy/py_execute_mcp/icon",
+    "remote": true,
+    "deploymentUrl": "https://py_execute_mcp--stuzhy.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://py_execute_mcp--stuzhy.run.tools",
+        "configSchema": {
+          "type": "object",
+          "title": "MCP Session Configuration",
+          "required": [],
+          "properties": {},
+          "description": "Schema for the /mcp endpoint configuration",
+          "x-query-style": "dot+bracket"
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "python_execute",
+        "description": "Run Python in a Pyodide sandbox with optional PEP 723 requirements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Python code to execute"
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "timeout": {
+              "type": "integer",
+              "default": 60000,
+              "exclusiveMinimum": 0
+            },
+            "requirements": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "resources": null,
+    "prompts": null
+  }
+}

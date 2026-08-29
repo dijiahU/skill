@@ -1,0 +1,100 @@
+{
+  "registry": "glama",
+  "id": "hk1njntuh4",
+  "namespace": "wso2",
+  "slug": "fhir-mcp-server",
+  "name": "FHIR MCP Server",
+  "description": "Provides seamless integration with FHIR APIs, enabling AI/LLM tools to search, retrieve, and analyze clinical healthcare data with support for SMART-on-FHIR authentication and multiple transport protocols.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "Provides seamless integration with FHIR APIs, enabling AI/LLM tools to search, retrieve, and analyze clinical healthcare data with support for SMART-on-FHIR authentication and multiple transport protocols.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FHIR_MCP_HOST": {
+          "description": "The hostname or IP address the MCP server should bind to (e.g., localhost for local-only access, or 0.0.0.0 for all interfaces).",
+          "type": "string",
+          "default": "localhost"
+        },
+        "FHIR_MCP_PORT": {
+          "description": "The port on which the MCP server will listen for incoming client requests.",
+          "type": "string",
+          "default": "8000"
+        },
+        "FHIR_SERVER_SCOPES": {
+          "description": "A space-separated list of OAuth2 scopes to request from the FHIR authorization server (e.g., user/Patient.read user/Observation.read). Add fhirUser openid to enable retrieval of user context for the get_user tool.",
+          "type": "string"
+        },
+        "FHIR_MCP_SERVER_URL": {
+          "description": "If set, this value will be used as the server's base URL instead of generating it from host and port. Useful for custom URL configurations or when behind a proxy.",
+          "type": "string"
+        },
+        "FHIR_SERVER_BASE_URL": {
+          "description": "The base URL of the FHIR server (e.g., https://hapi.fhir.org/baseR4). This is used to generate tool URIs and to route FHIR requests.",
+          "type": "string"
+        },
+        "FHIR_SERVER_CLIENT_ID": {
+          "description": "The OAuth2 client ID used to authorize MCP clients with the FHIR server.",
+          "type": "string"
+        },
+        "FHIR_MCP_REQUEST_TIMEOUT": {
+          "description": "Timeout duration in seconds for requests from the MCP server to the FHIR server.",
+          "type": "string",
+          "default": "30"
+        },
+        "FHIR_SERVER_ACCESS_TOKEN": {
+          "description": "The access token to use for authenticating requests to the FHIR server. If this variable is set, the server will bypass the OAuth2 authorization flow and use this token directly for all requests.",
+          "type": "string"
+        },
+        "FHIR_SERVER_CLIENT_SECRET": {
+          "description": "The client secret corresponding to the FHIR client ID. Used during token exchange.",
+          "type": "string"
+        },
+        "FHIR_SERVER_DISABLE_AUTHORIZATION": {
+          "description": "If set to True, disables authorization checks on the MCP server, allowing connections to publicly accessible FHIR servers.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "FHIR_SERVER_BASE_URL",
+            "FHIR_SERVER_CLIENT_ID",
+            "FHIR_SERVER_CLIENT_SECRET",
+            "FHIR_SERVER_SCOPES"
+          ]
+        },
+        {
+          "required": [
+            "FHIR_SERVER_BASE_URL",
+            "FHIR_SERVER_DISABLE_AUTHORIZATION"
+          ]
+        },
+        {
+          "required": [
+            "FHIR_SERVER_BASE_URL",
+            "FHIR_SERVER_ACCESS_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "hk1njntuh4",
+    "name": "FHIR MCP Server",
+    "namespace": "wso2",
+    "repository": {
+      "url": "https://github.com/wso2/fhir-mcp-server"
+    },
+    "slug": "fhir-mcp-server",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/hk1njntuh4"
+  }
+}

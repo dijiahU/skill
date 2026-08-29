@@ -1,0 +1,110 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "vidursharma202-del/threadline",
+  "namespace": "vidursharma202-del",
+  "slug": "threadline",
+  "displayName": "threadline",
+  "description": "Persistent memory and context layer for AI agents. inject() before your LLM call, update() after. Relevance-scored injection, grant-based access control, user-owned context. Works with OpenAI, Anthropic, Vercel AI SDK, and LangChain. < 50ms retrieval. GDPR-ready. Free tier: 2,500 calls/month.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "0f964a3a-09da-4cb8-8485-e5f328b1a1a6",
+    "qualifiedName": "vidursharma202-del/threadline",
+    "namespace": "vidursharma202-del",
+    "slug": "threadline",
+    "displayName": "threadline",
+    "description": "Persistent memory and context layer for AI agents. inject() before your LLM call, update() after. Relevance-scored injection, grant-based access control, user-owned context. Works with OpenAI, Anthropic, Vercel AI SDK, and LangChain. < 50ms retrieval. GDPR-ready. Free tier: 2,500 calls/month.",
+    "iconUrl": "https://api.smithery.ai/servers/vidursharma202-del/threadline/icon",
+    "verified": false,
+    "useCount": 22,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-31T17:04:13.035Z",
+    "homepage": "https://www.threadline.to/",
+    "bySmithery": false,
+    "owner": "org_01KNBW001ZHCFMZ2YWXBKWNGB4",
+    "score": 0.0375
+  },
+  "detail": {
+    "qualifiedName": "vidursharma202-del/threadline",
+    "displayName": "threadline",
+    "description": "Persistent memory and context layer for AI agents. inject() before your LLM call, update() after. Relevance-scored injection, grant-based access control, user-owned context. Works with OpenAI, Anthropic, Vercel AI SDK, and LangChain. < 50ms retrieval. GDPR-ready. Free tier: 2,500 calls/month.",
+    "iconUrl": "https://api.smithery.ai/servers/vidursharma202-del/threadline/icon",
+    "remote": true,
+    "deploymentUrl": "https://threadline--vidursharma202-del.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://threadline--vidursharma202-del.run.tools",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Your Threadline API key — get one at threadline.to/dashboard"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "inject",
+        "description": "Inject user context into a base system prompt before an LLM call. Returns an enriched prompt with relevant facts about the user automatically inserted.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Your Threadline API key (tl_live_...)."
+            },
+            "userId": {
+              "type": "string",
+              "description": "The unique identifier for the user (UUID)."
+            },
+            "basePrompt": {
+              "type": "string",
+              "description": "Your base system prompt for the agent."
+            }
+          }
+        }
+      },
+      {
+        "name": "update",
+        "description": "Update a user's context after an LLM interaction. Extracts structured facts from the conversation and stores them for future sessions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Your Threadline API key (tl_live_...)."
+            },
+            "userId": {
+              "type": "string",
+              "description": "The unique identifier for the user (UUID)."
+            },
+            "userMessage": {
+              "type": "string",
+              "description": "The message sent by the user."
+            },
+            "agentResponse": {
+              "type": "string",
+              "description": "The response returned by the agent."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

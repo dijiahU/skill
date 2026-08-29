@@ -1,0 +1,80 @@
+{
+  "registry": "glama",
+  "id": "s9wfleciup",
+  "namespace": "pranjal-lnct",
+  "slug": "Scurity-MCP-Server",
+  "name": "Sentinel MCP Server",
+  "description": "Sentinel is an enterprise-grade security server that integrates tools like Semgrep, Trivy, and Gitleaks via Docker to perform automated vulnerability scanning and compliance checks. It enables users to conduct static analysis, secret detection, and AI-powered threat modeling directly through Model Context Protocol-compatible IDEs.",
+  "discoveryQueries": [
+    "security",
+    "vulnerability",
+    "secret",
+    "compliance"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Sentinel is an enterprise-grade security server that integrates tools like Semgrep, Trivy, and Gitleaks via Docker to perform automated vulnerability scanning and compliance checks. It enables users to conduct static analysis, secret detection, and AI-powered threat modeling directly through Model Context Protocol-compatible IDEs.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SENTINEL_LLM_MODEL": {
+          "description": "LLM Model to use",
+          "type": "string",
+          "default": "gpt-4o"
+        },
+        "SENTINEL_LOG_LEVEL": {
+          "description": "Logging level (DEBUG, INFO, WARN, ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "SENTINEL_GRYPE_IMAGE": {
+          "description": "Custom Docker image for Grype",
+          "type": "string",
+          "default": "anchore/grype"
+        },
+        "SENTINEL_LLM_API_KEY": {
+          "description": "API Key for AI Threat Modeling (e.g., OpenAI)",
+          "type": "string"
+        },
+        "SENTINEL_TRIVY_IMAGE": {
+          "description": "Custom Docker image for Trivy",
+          "type": "string",
+          "default": "aquasec/trivy"
+        },
+        "SENTINEL_SEMGREP_IMAGE": {
+          "description": "Custom Docker image for Semgrep",
+          "type": "string",
+          "default": "returntocorp/semgrep"
+        },
+        "SENTINEL_TESTSSL_IMAGE": {
+          "description": "Custom Docker image for testssl.sh",
+          "type": "string",
+          "default": "drwetter/testssl.sh"
+        },
+        "SENTINEL_DOCKER_TIMEOUT": {
+          "description": "Timeout for Docker commands in seconds",
+          "type": "string",
+          "default": "600"
+        },
+        "SENTINEL_SCHEMATHESIS_IMAGE": {
+          "description": "Custom Docker image for Schemathesis",
+          "type": "string",
+          "default": "schemathesis/schemathesis:stable"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "s9wfleciup",
+    "name": "Sentinel MCP Server",
+    "namespace": "pranjal-lnct",
+    "repository": {
+      "url": "https://github.com/pranjal-lnct/Scurity-MCP-Server"
+    },
+    "slug": "Scurity-MCP-Server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/s9wfleciup"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "registry": "glama",
+  "id": "b11gbwlci0",
+  "namespace": "samy-clivolt",
+  "slug": "reddit-mcp-server",
+  "name": "Reddit MCP Server",
+  "description": "Enables comprehensive Reddit interaction including fetching posts, analyzing users and subreddits, searching content, and creating posts/comments. Supports both read-only mode with client credentials and full functionality with user authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive Reddit interaction including fetching posts, analyzing users and subreddits, searching content, and creating posts/comments. Supports both read-only mode with client credentials and full functionality with user authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "REDDIT_PASSWORD": {
+          "description": "Your Reddit password (required for write operations)",
+          "type": "string"
+        },
+        "REDDIT_USERNAME": {
+          "description": "Your Reddit username (required for write operations)",
+          "type": "string"
+        },
+        "REDDIT_CLIENT_ID": {
+          "description": "Your Reddit API client ID",
+          "type": "string"
+        },
+        "REDDIT_USER_AGENT": {
+          "description": "User agent string for Reddit API requests",
+          "type": "string"
+        },
+        "REDDIT_CLIENT_SECRET": {
+          "description": "Your Reddit API client secret",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "REDDIT_CLIENT_ID",
+            "REDDIT_CLIENT_SECRET",
+            "REDDIT_USER_AGENT"
+          ]
+        },
+        {
+          "required": [
+            "REDDIT_CLIENT_ID",
+            "REDDIT_CLIENT_SECRET",
+            "REDDIT_USER_AGENT",
+            "REDDIT_USERNAME",
+            "REDDIT_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "b11gbwlci0",
+    "name": "Reddit MCP Server",
+    "namespace": "samy-clivolt",
+    "repository": {
+      "url": "https://github.com/samy-clivolt/reddit-mcp-server"
+    },
+    "slug": "reddit-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/b11gbwlci0"
+  }
+}

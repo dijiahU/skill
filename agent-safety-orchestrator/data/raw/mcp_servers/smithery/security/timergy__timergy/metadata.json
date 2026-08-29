@@ -1,0 +1,196 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "timergy/timergy",
+  "namespace": "timergy",
+  "slug": "timergy",
+  "displayName": "Timergy",
+  "description": "Create scheduling polls (like Doodle/When2Meet) directly from AI agents. No authentication required.\n\n**Tools:** create_poll, get_poll, vote_on_poll, get_results, finalize_poll\n\n**Workflow:** Create a poll with time slots, share the URL with participants, check results, and finalize the best time.\n\nAlso available as npm package: `npx @timergy/mcp`",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "id": "465b58f8-beea-440f-9795-8965c3cf0dad",
+    "qualifiedName": "timergy/timergy",
+    "namespace": "timergy",
+    "slug": "timergy",
+    "displayName": "Timergy",
+    "description": "Create scheduling polls (like Doodle/When2Meet) directly from AI agents. No authentication required.\n\n**Tools:** create_poll, get_poll, vote_on_poll, get_results, finalize_poll\n\n**Workflow:** Create a poll with time slots, share the URL with participants, check results, and finalize the best time.\n\nAlso available as npm package: `npx @timergy/mcp`",
+    "iconUrl": "https://api.smithery.ai/servers/timergy/timergy/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-16T07:28:20.919Z",
+    "homepage": "https://timergy.com",
+    "bySmithery": false,
+    "owner": "org_01KNBVQFC2QWT2CYQZ7QY2PZ6G",
+    "score": 0.015625
+  },
+  "detail": {
+    "qualifiedName": "timergy/timergy",
+    "displayName": "Timergy",
+    "description": "Create scheduling polls (like Doodle/When2Meet) directly from AI agents. No authentication required.\n\n**Tools:** create_poll, get_poll, vote_on_poll, get_results, finalize_poll\n\n**Workflow:** Create a poll with time slots, share the URL with participants, check results, and finalize the best time.\n\nAlso available as npm package: `npx @timergy/mcp`",
+    "iconUrl": "https://api.smithery.ai/servers/timergy/timergy/icon",
+    "remote": true,
+    "deploymentUrl": "https://timergy--timergy.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://timergy--timergy.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "create_poll",
+        "description": "Create a Timergy scheduling poll (like Doodle) where participants vote on preferred time slots. Provide a title and at least 2-5 time slot options with ISO 8601 date-times (include timezone, e.g. 2026-03-20T18:00:00+02:00 or use UTC with Z suffix). Returns a shareable URL to send to participants and a passphrase for admin access. The passphrase is automatically remembered for finalize_poll. Workflow: create_poll -> share URL -> wait for votes -> get_results -> finalize_poll.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Poll title (e.g. 'Dinner with Moritz')"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "properties": {
+                  "end": {
+                    "type": "string",
+                    "description": "Slot end (ISO 8601 with timezone)"
+                  },
+                  "start": {
+                    "type": "string",
+                    "description": "Slot start (ISO 8601 with timezone)"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "description": "Time slot options (recommend 3-5)"
+            },
+            "deadline": {
+              "type": "string",
+              "description": "Optional voting deadline (ISO 8601)"
+            },
+            "location": {
+              "type": "string",
+              "description": "Optional event location"
+            },
+            "creatorName": {
+              "type": "string",
+              "description": "Name shown as poll creator"
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional poll description"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_poll",
+        "description": "Get poll metadata and time slot options (but NOT votes). Returns title, status, deadline, location, and all available time slots with their option IDs. Use this to retrieve optionId values needed for vote_on_poll or finalize_poll. To see who voted, use get_results instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pollId": {
+              "type": "string",
+              "description": "Poll UUID"
+            }
+          }
+        }
+      },
+      {
+        "name": "vote_on_poll",
+        "description": "Submit votes on a Timergy poll. First call get_poll to retrieve the available optionId values. Each vote maps an optionId to an availability: 'yes' (available), 'maybe' (might work), or 'no' (unavailable). A unique voter token is auto-generated per voter name. Resubmitting with the same voter name updates previous votes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "votes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "optionId",
+                  "availability"
+                ],
+                "properties": {
+                  "optionId": {
+                    "type": "string",
+                    "description": "Time slot option UUID (from get_poll)"
+                  },
+                  "availability": {
+                    "enum": [
+                      "yes",
+                      "maybe",
+                      "no"
+                    ],
+                    "type": "string",
+                    "description": "yes/maybe/no"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "One vote per time slot"
+            },
+            "pollId": {
+              "type": "string",
+              "description": "Poll UUID"
+            },
+            "voterName": {
+              "type": "string",
+              "description": "Name of the voter"
+            },
+            "voterEmail": {
+              "type": "string",
+              "description": "Optional voter email"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_results",
+        "description": "Get voting results for a Timergy poll, showing who voted yes/maybe/no for each time slot. Use this after participants have voted to see which slot has the most availability. To finalize, pick the optionId with the most 'yes' votes and call finalize_poll.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pollId": {
+              "type": "string",
+              "description": "Poll UUID"
+            }
+          }
+        }
+      },
+      {
+        "name": "finalize_poll",
+        "description": "Finalize a poll by picking the winning time slot. Call get_results first to find the best optionId. Uses the passphrase auto-saved from create_poll. If the MCP server was restarted since poll creation, provide the passphrase manually. This locks the poll and notifies participants who provided an email.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pollId": {
+              "type": "string",
+              "description": "Poll UUID"
+            },
+            "optionId": {
+              "type": "string",
+              "description": "Winning time slot option UUID"
+            },
+            "passphrase": {
+              "type": "string",
+              "description": "Admin passphrase"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

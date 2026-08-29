@@ -1,0 +1,194 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "sentinelsignal/verify",
+  "namespace": "sentinelsignal",
+  "slug": "verify",
+  "displayName": "Verify",
+  "description": "Discover and evaluate technical resources by searching based on capabilities, security preferences, and risk levels. Compare multiple options side-by-side to determine which best fits specific workflows or security standards. Receive tailored recommendations for tasks to streamline integration and ensure reliability.",
+  "discoveryQueries": [
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "id": "74813805-87e1-49a1-8465-46a65266fef4",
+    "qualifiedName": "sentinelsignal/verify",
+    "namespace": "sentinelsignal",
+    "slug": "verify",
+    "displayName": "Verify",
+    "description": "Discover and evaluate technical resources by searching based on capabilities, security preferences, and risk levels. Compare multiple options side-by-side to determine which best fits specific workflows or security standards. Receive tailored recommendations for tasks to streamline integration and ensure reliability.",
+    "verified": false,
+    "useCount": 260,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-07T18:19:56.414Z",
+    "homepage": "https://smithery.ai/servers/sentinelsignal/verify",
+    "bySmithery": false,
+    "owner": "org_01KNBVE4Z0GD947PMASQCMXESN",
+    "score": 0.007751937984496124
+  },
+  "detail": {
+    "qualifiedName": "sentinelsignal/verify",
+    "displayName": "Verify",
+    "description": "Discover and evaluate technical resources by searching based on capabilities, security preferences, and risk levels. Compare multiple options side-by-side to determine which best fits specific workflows or security standards. Receive tailored recommendations for tasks to streamline integration and ensure reliability.",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://verify--sentinelsignal.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://verify--sentinelsignal.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_servers",
+        "description": "Search and rank MCP servers by capability, auth preference, client target, and risk tolerance.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Maximum number of ranked candidates to return."
+            },
+            "query": {
+              "type": "string",
+              "description": "Optional free-text query to bias ranking toward a specific use case or domain."
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Normalized capability taxonomy terms such as healthcare, search, read, exec, files, oauth, or prompts."
+            },
+            "client_target": {
+              "enum": [
+                "openai_connectors",
+                "claude_desktop",
+                "smithery",
+                "generic_http",
+                "healthcare"
+              ],
+              "type": "string",
+              "description": "Optional target client or integration surface."
+            },
+            "risk_tolerance": {
+              "enum": [
+                "any",
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string",
+              "description": "How much tool-surface risk is acceptable."
+            },
+            "auth_preference": {
+              "enum": [
+                "any",
+                "oauth",
+                "unauthenticated"
+              ],
+              "type": "string",
+              "description": "Preferred auth mode. Use unauthenticated when the agent must avoid login flows."
+            }
+          }
+        }
+      },
+      {
+        "name": "recommend_servers",
+        "description": "Recommend MCP servers for a plain-language task and return ranked matches with install config.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task": {
+              "type": "string",
+              "description": "Plain-language task description such as 'I need an MCP for healthcare denial scoring in OpenAI connectors'."
+            },
+            "limit": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Maximum number of recommendations to return."
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional explicit capability constraints that override or extend the inferred task capabilities."
+            },
+            "client_target": {
+              "enum": [
+                "openai_connectors",
+                "claude_desktop",
+                "smithery",
+                "generic_http",
+                "healthcare"
+              ],
+              "type": "string",
+              "description": "Optional target client or integration surface."
+            },
+            "risk_tolerance": {
+              "enum": [
+                "any",
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string",
+              "description": "How much tool-surface risk is acceptable."
+            },
+            "auth_preference": {
+              "enum": [
+                "any",
+                "oauth",
+                "unauthenticated"
+              ],
+              "type": "string",
+              "description": "Preferred auth mode."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_server_report",
+        "description": "Return the full machine-readable verify report for a specific MCP server identifier.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "identifier": {
+              "type": "string",
+              "description": "Canonical server identifier in namespace/name format."
+            }
+          }
+        }
+      },
+      {
+        "name": "compare_servers",
+        "description": "Compare up to four MCP servers side by side across score, verdict, auth, tool count, prompts/resources, and freshness.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "identifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 4,
+              "minItems": 2,
+              "description": "Canonical server identifiers in namespace/name format."
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

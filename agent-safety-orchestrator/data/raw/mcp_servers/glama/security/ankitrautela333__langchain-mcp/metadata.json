@@ -1,0 +1,91 @@
+{
+  "registry": "glama",
+  "id": "nxwhwitfu6",
+  "namespace": "ankitrautela333",
+  "slug": "Langchain-mcp",
+  "name": "MCP LLMS-TXT Documentation Server",
+  "description": "An MCP server that enables users to fetch and audit documentation from user-defined llms.txt index files. It provides tools to list documentation sources and retrieve content from specific URLs with built-in domain access controls for secure context retrieval.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "An MCP server that enables users to fetch and audit documentation from user-defined llms.txt index files. It provides tools to list documentation sources and retrieve content from specific URLs with built-in domain access controls for secure context retrieval.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "host": {
+          "description": "The host to use when running with the 'sse' transport (e.g., 'localhost').",
+          "type": "string"
+        },
+        "json": {
+          "description": "Path to a JSON configuration file containing a list of documentation sources.",
+          "type": "string"
+        },
+        "port": {
+          "description": "The port to use when running with the 'sse' transport.",
+          "type": "string"
+        },
+        "urls": {
+          "description": "Directly specify llms.txt URLs with optional names using the format 'name:url'. Multiple URLs can be provided as a space-separated string.",
+          "type": "string"
+        },
+        "yaml": {
+          "description": "Path to a YAML configuration file containing a list of documentation sources.",
+          "type": "string"
+        },
+        "timeout": {
+          "description": "HTTP request timeout in seconds. Defaults to 10.0.",
+          "type": "string",
+          "default": "10.0"
+        },
+        "transport": {
+          "description": "The communication transport to use: 'stdio' or 'sse'. Defaults to 'stdio'.",
+          "type": "string",
+          "default": "stdio"
+        },
+        "allowed_domains": {
+          "description": "Specify which domains to allow for documentation fetching. Use '*' to allow all domains or a space-separated list for specific ones.",
+          "type": "string"
+        },
+        "follow_redirects": {
+          "description": "Whether to follow HTTP redirects (true/false). Defaults to false.",
+          "type": "string",
+          "default": "false"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "urls"
+          ]
+        },
+        {
+          "required": [
+            "yaml"
+          ]
+        },
+        {
+          "required": [
+            "json"
+          ]
+        }
+      ]
+    },
+    "id": "nxwhwitfu6",
+    "name": "MCP LLMS-TXT Documentation Server",
+    "namespace": "ankitrautela333",
+    "repository": {
+      "url": "https://github.com/ankitrautela333/Langchain-mcp"
+    },
+    "slug": "Langchain-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nxwhwitfu6"
+  }
+}

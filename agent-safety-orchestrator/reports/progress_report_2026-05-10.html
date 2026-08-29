@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety Orchestrator Skill — 项目进度汇报（2026-05-10）</title>
+<style>
+:root {
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --fg-soft: #64748b;
+  --bg: #f4f6fb;
+  --bg-card: #ffffff;
+  --bg-soft: #f1f5f9;
+  --border: #e2e8f0;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --done: #16a34a;
+  --done-soft: #dcfce7;
+  --active: #d97706;
+  --active-soft: #fef3c7;
+  --todo: #94a3b8;
+  --todo-soft: #f1f5f9;
+  --shadow: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
+  --shadow-lg: 0 8px 24px -8px rgba(15,23,42,.12);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+               "Noto Sans CJK SC", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.page { max-width: 1040px; margin: 0 auto; padding: 32px 24px 96px; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0b1220 0%, #1e293b 55%, #2563eb 130%);
+  color: #f8fafc;
+  border-radius: 18px;
+  padding: 40px 40px 32px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-lg);
+}
+.hero__meta {
+  font-size: 13px;
+  letter-spacing: .12em;
+  color: #93c5fd;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+.hero__title {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  letter-spacing: -.01em;
+}
+.hero__sub {
+  margin: 0 0 28px;
+  color: #cbd5e1;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.hero__bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(15,23,42,.45);
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,.15);
+}
+.hero__bar-label { font-size: 13px; color: #cbd5e1; min-width: 88px; }
+.progress {
+  flex: 1;
+  height: 12px;
+  background: rgba(255,255,255,.08);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.progress__fill {
+  height: 100%;
+  width: 38%;
+  background: linear-gradient(90deg, #22c55e 0%, #2563eb 100%);
+  border-radius: 999px;
+}
+.progress__pct {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+  min-width: 56px;
+  text-align: right;
+}
+
+/* Sections */
+section { margin-bottom: 36px; }
+h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  letter-spacing: -.005em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+h2 .h2__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+}
+.lead {
+  color: var(--fg-muted);
+  margin: 0 0 18px;
+  font-size: 15px;
+}
+
+/* Stat grid */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow);
+}
+.stat__num {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--fg);
+  line-height: 1.2;
+}
+.stat__num small { font-size: 14px; color: var(--fg-soft); font-weight: 500; margin-left: 2px; }
+.stat__label { font-size: 13px; color: var(--fg-muted); margin-top: 4px; }
+
+/* Module cards */
+.modules { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.module {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+}
+.module__head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.module__title { font-size: 17px; font-weight: 700; margin: 0; }
+.module__sub { color: var(--fg-soft); font-size: 13px; margin-left: auto; }
+.module__desc { color: var(--fg-muted); font-size: 14px; margin: 0 0 14px; }
+
+.bar {
+  height: 8px;
+  background: var(--bg-soft);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.bar__fill { height: 100%; border-radius: 999px; }
+.bar__fill.done { background: linear-gradient(90deg, #22c55e, #16a34a); }
+.bar__fill.active { background: linear-gradient(90deg, #fbbf24, #d97706); }
+.bar__fill.todo { background: var(--todo); }
+
+.steps { display: grid; gap: 8px; }
+.step {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg-soft);
+  align-items: center;
+}
+.step.done { background: var(--done-soft); }
+.step.active { background: var(--active-soft); }
+.step__icon {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  color: #fff;
+}
+.step__icon.done { background: var(--done); }
+.step__icon.active { background: var(--active); }
+.step__icon.todo { background: var(--todo); }
+.step__text { font-size: 14px; color: var(--fg); }
+.step__text small { color: var(--fg-soft); display: block; margin-top: 2px; font-size: 12.5px; }
+.step__tag {
+  font-size: 12px;
+  color: var(--fg-muted);
+  background: rgba(255,255,255,.6);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* Architecture diagram */
+.arch {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 26px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+}
+.arch__row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.arch__box {
+  background: var(--bg-soft);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--fg-muted);
+  text-align: center;
+  min-width: 110px;
+}
+.arch__router {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 14px 22px;
+  min-width: 240px;
+  box-shadow: 0 4px 12px rgba(37,99,235,.25);
+}
+.arch__atom {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+  font-weight: 500;
+}
+.arch__sentinel {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+}
+.arch__arrow {
+  color: var(--fg-soft);
+  font-size: 18px;
+  font-weight: 300;
+}
+
+/* Highlight callouts */
+.callout {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 14px;
+  color: var(--fg-muted);
+  box-shadow: var(--shadow);
+}
+.callout strong { color: var(--fg); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  font-size: 14px;
+}
+th, td {
+  padding: 11px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  background: var(--bg-soft);
+  color: var(--fg-muted);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .02em;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--bg-soft); }
+.num { font-variant-numeric: tabular-nums; text-align: right; color: var(--fg); }
+
+/* Next steps */
+.next-steps {
+  display: grid;
+  gap: 12px;
+}
+.next {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  align-items: start;
+  box-shadow: var(--shadow);
+}
+.next__num {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+.next__title { font-weight: 600; font-size: 15px; margin: 0 0 4px; }
+.next__desc { font-size: 14px; color: var(--fg-muted); margin: 0; }
+
+/* Footer */
+.footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--fg-soft);
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .hero { padding: 28px 24px 24px; }
+  .hero__title { font-size: 24px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .arch__row { gap: 8px; }
+  .arch__router { min-width: 200px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <p class="hero__meta">汇报日期 · 2026-05-10</p>
+    <h1 class="hero__title">Safety Orchestrator Skill — 项目进度汇报</h1>
+    <p class="hero__sub">
+      构建一个以 <strong>Safety Router</strong> 为中枢的统一安全调度层，
+      根据 Agent 执行阶段动态调用相应的<strong>原子安全技能（Atomic Safety Skill）</strong>，
+      并由<strong>安全哨兵 Skill</strong>负责高风险时刻请求人类介入。
+    </p>
+    <div class="hero__bar">
+      <span class="hero__bar-label">总体进度</span>
+      <div class="progress"><div class="progress__fill"></div></div>
+      <span class="progress__pct">~38%</span>
+    </div>
+  </div>
+
+  <!-- 1. 项目目标与架构 -->
+  <section>
+    <h2><span class="h2__num">1</span>项目目标与系统架构</h2>
+    <p class="lead">
+      项目分为三大模块：<strong>① 原子安全技能库</strong>（蒸馏现有公开 skill / MCP server，提炼可复用的细粒度安全能力）；
+      <strong>② 安全哨兵 Skill</strong>（基于 3B Llama 的二分类预测器，判断是否需要人类介入）；
+      <strong>③ Safety Router</strong>（meta-skill 形态的轻量调度层，根据任务阶段决定调用哪个原子技能）。
+    </p>
+
+    <div class="arch">
+      <div class="arch__row">
+        <div class="arch__box">输入理解</div>
+        <div class="arch__box">规划决策</div>
+        <div class="arch__box">工具调用</div>
+        <div class="arch__box">输出生成</div>
+      </div>
+      <div class="arch__row"><span class="arch__arrow">↓</span></div>
+      <div class="arch__row">
+        <div class="arch__box arch__router">Safety Router（meta-skill）<br><small style="opacity:.85;font-weight:400;">按阶段-技能映射决策</small></div>
+      </div>
+      <div class="arch__row"><span class="arch__arrow">↓</span></div>
+      <div class="arch__row">
+        <div class="arch__box arch__atom">意图歧义检测</div>
+        <div class="arch__box arch__atom">参数安全检查</div>
+        <div class="arch__box arch__atom">… 共 95 原子</div>
+        <div class="arch__box arch__sentinel">🛡️ 安全哨兵 Skill</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>最终产出：</strong>1 个 Router meta-skill SKILL.md ＋ 15 个 archetype 级 SKILL.md ＋ 1 个 hook config bundle
+      ＝ <strong>17 个顶层文件</strong>，作为 frozen artifact 出货，可直接接入各种 Agent 框架。
+    </div>
+  </section>
+
+  <!-- 2. 关键数据 -->
+  <section>
+    <h2><span class="h2__num">2</span>关键数据一览</h2>
+    <p class="lead">从公开数据集到原子能力词表，整个蒸馏流水线在成本可控的前提下完成了大规模筛选。</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__num">10,223<small> 条</small></div>
+        <div class="stat__label">从 5 类来源抓取的候选 skill / MCP server</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">1,390<small> 条</small></div>
+        <div class="stat__label">三层预筛漏斗后残量（缩减 86%）</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">95<small> 个</small></div>
+        <div class="stat__label">原子能力词表 v0.3（5 阶段 × 20 archetype）</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">87<small> %</small></div>
+        <div class="stat__label">LLM 审计判定为 safety-relevant（1,211/1,390）</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">$2.51</div>
+        <div class="stat__label">DeepSeek 全量审计实际成本（预估 $4–6）</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">92.8<small> %</small></div>
+        <div class="stat__label">Prompt cache 命中率，显著降低 token 消耗</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">0</div>
+        <div class="stat__label">LLM 审计失败条数（1,390 全部成功）</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">100<small> %</small></div>
+        <div class="stat__label">词表覆盖度（无空 primary_atoms）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 模块进度 -->
+  <section>
+    <h2><span class="h2__num">3</span>三大模块进度</h2>
+    <p class="lead">模块 1 已完成 4/6 子任务（约 70%），正在进入"人工审词表 → 冻结 v1"阶段；模块 2、3 待模块 1 v1 词表冻结后启动。</p>
+
+    <div class="modules">
+
+      <!-- Module 1 -->
+      <div class="module">
+        <div class="module__head">
+          <h3 class="module__title">模块 1 · 原子安全技能库</h3>
+          <span class="module__sub">已完成 4/6 子任务 · 约 70%</span>
+        </div>
+        <p class="module__desc">从公开数据中蒸馏出可复用的细粒度安全能力，是后续 Router 与哨兵的基石。</p>
+        <div class="bar"><div class="bar__fill done" style="width:70%"></div></div>
+        <div class="steps">
+          <div class="step done">
+            <span class="step__icon done">✓</span>
+            <div class="step__text">
+              4.1 数据收集
+              <small>5 类来源抓取 10,223 条候选（4,798 SKILL.md + 5,425 MCP server + 11 份 reference 文档）</small>
+            </div>
+            <span class="step__tag">2026-05-08</span>
+          </div>
+          <div class="step done">
+            <span class="step__icon done">✓</span>
+            <div class="step__text">
+              4.2 三层预筛漏斗（10,223 → 1,390）
+              <small>硬去重 → 近似去重 + 规则过滤 → Embedding 相关性排序，把 LLM 审计成本控制在可承受范围</small>
+            </div>
+            <span class="step__tag">2026-05-08</span>
+          </div>
+          <div class="step done">
+            <span class="step__icon done">✓</span>
+            <div class="step__text">
+              4.3 原子能力词表 v0.3（受控标签集）
+              <small>基于 v2 archetypes + 11 份 references 起草 95 个原子，作为 LLM 审计的标准化输出 schema</small>
+            </div>
+            <span class="step__tag">2026-05-09</span>
+          </div>
+          <div class="step done">
+            <span class="step__icon done">✓</span>
+            <div class="step__text">
+              4.4 LLM 审计 + 原子抽取
+              <small>DeepSeek V3.2 跑完 1,390 条，零失败、$2.51、cache 命中率 92.8%；输出每条记录的 primary/secondary atoms 与风险标签</small>
+            </div>
+            <span class="step__tag">2026-05-09</span>
+          </div>
+          <div class="step active">
+            <span class="step__icon active">→</span>
+            <div class="step__text">
+              4.5 人工 review 词表 → freeze v1 <strong style="color:var(--active);">（当前进行）</strong>
+              <small>对照 LLM 审计实证（命中分布、wrong-parent 模式、新原子建议）判断每个原子保留 / 删除 / 合并 / 重写 / 新增</small>
+            </div>
+            <span class="step__tag">进行中</span>
+          </div>
+          <div class="step">
+            <span class="step__icon todo">·</span>
+            <div class="step__text">
+              4.6 双维度包装：hook config + archetype SKILL.md
+              <small>v1 freeze 后启动；按 enforcement_mode（hook/skill/hybrid）分流，最终产出 17 个顶层文件</small>
+            </div>
+            <span class="step__tag">待启动</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 2 -->
+      <div class="module">
+        <div class="module__head">
+          <h3 class="module__title">模块 2 · 安全哨兵 Skill</h3>
+          <span class="module__sub">尚未启动</span>
+        </div>
+        <p class="module__desc">基于"任务执行轨迹 + 历史人类介入节点"训练的 3B Llama 二分类预测器，最高优先级原子技能。</p>
+        <div class="bar"><div class="bar__fill todo" style="width:0%"></div></div>
+        <div class="steps">
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">5.1 任务执行状态表示设计</div><span class="step__tag">未开始</span></div>
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">5.2 历史交互数据收集 + "人类介入"节点标注</div><span class="step__tag">未开始</span></div>
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">5.3 3B Llama 二分类预测器训练</div><span class="step__tag">未开始</span></div>
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">5.4 可调阈值机制 + 评测</div><span class="step__tag">未开始</span></div>
+        </div>
+      </div>
+
+      <!-- Module 3 -->
+      <div class="module">
+        <div class="module__head">
+          <h3 class="module__title">模块 3 · Safety Router (meta-skill)</h3>
+          <span class="module__sub">尚未启动</span>
+        </div>
+        <p class="module__desc">不是独立 middleware，而是一份 meta-skill SKILL.md —— agent host 的主 LLM 读这份文件就成了 Router。</p>
+        <div class="bar"><div class="bar__fill todo" style="width:0%"></div></div>
+        <div class="steps">
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">6.1 阶段-技能映射表 schema 设计</div><span class="step__tag">未开始</span></div>
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">6.2 描述文件驱动的路由决策实现</div><span class="step__tag">未开始</span></div>
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">6.3 哨兵触发与人类反馈回路</div><span class="step__tag">未开始</span></div>
+          <div class="step"><span class="step__icon todo">·</span><div class="step__text">6.4 端到端集成与延迟基准</div><span class="step__tag">未开始</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. 蒸馏漏斗细节 -->
+  <section>
+    <h2><span class="h2__num">4</span>三层预筛漏斗 · 关键成果</h2>
+    <p class="lead">直接把 10,223 条全量交给 LLM 审计成本不现实（粗估数百到数千美元），三层漏斗按"从免费到便宜"逐层剪枝。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>阶段</th>
+          <th>方法</th>
+          <th class="num">残量</th>
+          <th class="num">缩减</th>
+          <th>成本</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Stage 1</strong> 硬去重</td>
+          <td>SKILL.md / MCP 元数据 hash 指纹去重</td>
+          <td class="num">10,032</td>
+          <td class="num">−1.9%</td>
+          <td>免费</td>
+        </tr>
+        <tr>
+          <td><strong>Stage 2</strong> 近似去重 + 规则过滤</td>
+          <td>MinHash/LSH（Jaccard ≥ 0.85）＋ 短内容过滤 ＋ 跨 registry 仓库 URL 匹配</td>
+          <td class="num">8,053</td>
+          <td class="num">−19.7%</td>
+          <td>免费</td>
+        </tr>
+        <tr>
+          <td><strong>Stage 3</strong> Embedding 相关性</td>
+          <td>智谱 embedding-3 → 与 20 个 archetype 算 cosine，per-anchor top-150 ∪ 全局 ≥ 0.65</td>
+          <td class="num">1,390</td>
+          <td class="num">−82.7%</td>
+          <td>≈ ¥2.5</td>
+        </tr>
+        <tr>
+          <td colspan="2"><strong>合计：10,223 → 1,390</strong></td>
+          <td class="num"><strong>1,390</strong></td>
+          <td class="num"><strong>−86.4%</strong></td>
+          <td><strong>≈ ¥2.5</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5. LLM 审计 Top10 -->
+  <section>
+    <h2><span class="h2__num">5</span>LLM 审计 · 最常被命中的安全能力</h2>
+    <p class="lead">DeepSeek 在 1,390 条候选上抽取的 primary_atoms 命中分布（Top 10）—— 反映现实中公开 skill / MCP server 真正"在做什么"。</p>
+    <table>
+      <thead>
+        <tr><th class="num" style="width:48px">#</th><th>原子能力</th><th class="num">命中数</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">1</td><td>scan-code-for-vulnerabilities / run-sast-scan（静态代码扫描）</td><td class="num">266</td></tr>
+        <tr><td class="num">2</td><td>detect-supply-chain-risk / check-package-cve（包 CVE 检查）</td><td class="num">202</td></tr>
+        <tr><td class="num">3</td><td>scan-code-for-vulnerabilities / detect-hardcoded-secret-in-code（硬编码密钥检测）</td><td class="num">155</td></tr>
+        <tr><td class="num">4</td><td>detect-supply-chain-risk / check-package-typosquat（typosquat 检测）</td><td class="num">101</td></tr>
+        <tr><td class="num">5</td><td>validate-tool-argument-safety / detect-shell-command-injection（命令注入检测）</td><td class="num">99</td></tr>
+        <tr><td class="num">6</td><td>threat-model-task / generate-stride-threat-model（STRIDE 威胁建模）</td><td class="num">91</td></tr>
+        <tr><td class="num">7</td><td>enforce-policy-as-code / evaluate-opa-rego-rule（OPA/Rego 策略评估）</td><td class="num">90</td></tr>
+        <tr><td class="num">8</td><td>detect-prompt-injection / detect-direct-prompt-injection（直接提示注入检测）</td><td class="num">85</td></tr>
+        <tr><td class="num">9</td><td>audit-trail-recording / record-tool-invocation-trace（工具调用轨迹记录）</td><td class="num">79</td></tr>
+        <tr><td class="num">10</td><td>audit-trail-recording / record-decision-trace（决策轨迹记录）</td><td class="num">74</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 6. 下一步 -->
+  <section>
+    <h2><span class="h2__num">6</span>下一步计划</h2>
+    <div class="next-steps">
+      <div class="next">
+        <span class="next__num">1</span>
+        <div>
+          <p class="next__title">完成 §4.5 人工 review v0.3 词表 → freeze v1</p>
+          <p class="next__desc">
+            (a) 自动批改 43 条 wrong-parent 标签；
+            (b) 跑 vocabulary-design 视角的聚合统计（命中数、sibling 共现矩阵、wrong-parent 率、confidence 分布、suggested_new_atoms 聚类）；
+            (c) 对照 5 类决策（保留 / 删除 / 合并 / 新增 / 重写 scope）逐 archetype 判断；
+            (d) commit v1 词表回 SAFETY_ATOMIC_CAPABILITIES.md。
+          </p>
+        </div>
+      </div>
+      <div class="next">
+        <span class="next__num">2</span>
+        <div>
+          <p class="next__title">§4.6 双维度包装：archetype SKILL.md + hook config</p>
+          <p class="next__desc">
+            v1 freeze 后启动。按 enforcement_mode（hook / skill / hybrid）分流，
+            产出 15 个 archetype-level SKILL.md ＋ 1 个 hook config bundle ＋ 1 个 Router meta-skill = 17 个顶层文件。
+          </p>
+        </div>
+      </div>
+      <div class="next">
+        <span class="next__num">3</span>
+        <div>
+          <p class="next__title">启动模块 2 数据准备</p>
+          <p class="next__desc">
+            物色"任务执行轨迹 + 人类介入节点"标注语料来源，为 3B Llama 安全哨兵预测器训练做准备。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    Safety Orchestrator Skill · 项目进度汇报 · 2026-05-10 ·
+    本文档基于 <code>docs/PROJECT_OVERVIEW.md</code> 整理
+  </div>
+
+</div>
+</body>
+</html>

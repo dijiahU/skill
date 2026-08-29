@@ -1,0 +1,120 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "dynamicendpoints/paloalto-device-server",
+  "namespace": "dynamicendpoints",
+  "slug": "paloalto-device-server",
+  "displayName": "Palo Alto Device Server",
+  "description": "Manage your Palo Alto firewalls effortlessly through their REST API. Retrieve system information, perform upgrades, and manage certificates with ease. Streamline your firewall operations and ensure your systems are always up-to-date and secure.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "firewall"
+  ],
+  "rawRecord": {
+    "id": "3d7c0cdb-5b30-4f84-9d7e-4f5dd81eb11d",
+    "qualifiedName": "dynamicendpoints/paloalto-device-server",
+    "namespace": "dynamicendpoints",
+    "slug": "paloalto-device-server",
+    "displayName": "Palo Alto Device Server",
+    "description": "Manage your Palo Alto firewalls effortlessly through their REST API. Retrieve system information, perform upgrades, and manage certificates with ease. Streamline your firewall operations and ensure your systems are always up-to-date and secure.",
+    "verified": false,
+    "useCount": 0,
+    "remote": false,
+    "isDeployed": true,
+    "createdAt": "2025-03-28T06:59:57.080Z",
+    "homepage": "https://smithery.ai/servers/dynamicendpoints/paloalto-device-server",
+    "bySmithery": false,
+    "owner": "org_01KNB4FJDR5834ZAGZXNBZF2NR",
+    "score": 0.0347985347985348
+  },
+  "detail": {
+    "qualifiedName": "dynamicendpoints/paloalto-device-server",
+    "displayName": "Palo Alto Device Server",
+    "description": "Manage your Palo Alto firewalls effortlessly through their REST API. Retrieve system information, perform upgrades, and manage certificates with ease. Streamline your firewall operations and ensure your systems are always up-to-date and secure.",
+    "iconUrl": null,
+    "remote": false,
+    "deploymentUrl": null,
+    "connections": [
+      {
+        "type": "stdio",
+        "bundleUrl": "https://backend.smithery.ai/storage/v1/object/public/bundles/@DynamicEndpoints/paloalto-device-server/server.mcpb",
+        "runtime": "node",
+        "configSchema": {
+          "type": "object",
+          "required": [
+            "panosApiKey"
+          ],
+          "properties": {
+            "panosApiKey": {
+              "type": "string",
+              "description": "Your Palo Alto firewall API key. (required)"
+            },
+            "panosApiBaseUrl": {
+              "type": "string",
+              "default": "https://firewall.example.com/restapi/v11.0",
+              "description": "Base URL for the Palo Alto REST API. Optional, defaults shown."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "get_system_info",
+        "description": "Get system information from the Palo Alto firewall",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "upgrade_firewall",
+        "description": "Upgrade the Palo Alto firewall to the latest PAN-OS version",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "upgrade_ha_firewalls_from_panorama",
+        "description": "Upgrade PAN-OS on Multiple HA Firewalls through Panorama",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "check_install_content_updates",
+        "description": "Automatically Check for and Install Content Updates",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "manage_certificates",
+        "description": "Manage certificates on the Palo Alto firewall",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "run_operational_mode_command",
+        "description": "Run an operational mode command on the Palo Alto firewall",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "description": "Command to run"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

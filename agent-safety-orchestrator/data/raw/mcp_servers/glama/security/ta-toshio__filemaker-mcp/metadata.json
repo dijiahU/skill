@@ -1,0 +1,74 @@
+{
+  "registry": "glama",
+  "id": "xkuj0m6tvc",
+  "namespace": "ta-toshio",
+  "slug": "filemaker-mcp",
+  "name": "FileMaker MCP Server",
+  "description": "Enables read-only access to FileMaker databases through the Data API, allowing users to retrieve records, analyze metadata, search across layouts, and infer relationships while maintaining data security.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables read-only access to FileMaker databases through the Data API, allowing users to retrieve records, analyze metadata, search across layouts, and infer relationships while maintaining data security.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "FM_SERVER": {
+          "description": "FileMaker サーバー URL（HTTPS必須）",
+          "type": "string"
+        },
+        "LOG_LEVEL": {
+          "description": "ログレベル（debug, info, warn, error）",
+          "type": "string",
+          "default": "warn"
+        },
+        "FM_DATABASE": {
+          "description": "データベース名",
+          "type": "string"
+        },
+        "FM_PASSWORD": {
+          "description": "パスワード",
+          "type": "string"
+        },
+        "FM_USERNAME": {
+          "description": "ユーザー名",
+          "type": "string"
+        },
+        "FM_SSL_VERIFY": {
+          "description": "SSL 証明書検証（開発環境でのみ`false`可）",
+          "type": "string",
+          "default": "true"
+        },
+        "FM_API_VERSION": {
+          "description": "Data API バージョン",
+          "type": "string",
+          "default": "vLatest"
+        },
+        "FM_SESSION_TIMEOUT": {
+          "description": "セッションタイムアウト（秒）",
+          "type": "string",
+          "default": "840"
+        }
+      },
+      "type": "object",
+      "required": [
+        "FM_SERVER",
+        "FM_DATABASE",
+        "FM_USERNAME",
+        "FM_PASSWORD"
+      ]
+    },
+    "id": "xkuj0m6tvc",
+    "name": "FileMaker MCP Server",
+    "namespace": "ta-toshio",
+    "repository": {
+      "url": "https://github.com/ta-toshio/filemaker-mcp"
+    },
+    "slug": "filemaker-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/xkuj0m6tvc"
+  }
+}

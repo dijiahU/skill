@@ -1,0 +1,59 @@
+{
+  "registry": "glama",
+  "id": "je8ral7lp7",
+  "namespace": "vsoneji",
+  "slug": "schwab-mcp",
+  "name": "Schwab MCP Server",
+  "description": "Enables AI assistants to securely interact with Charles Schwab accounts through OAuth authentication, providing access to account balances, real-time market quotes, options chains, transaction history, order management, and comprehensive market data.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to securely interact with Charles Schwab accounts through OAuth authentication, providing access to account balances, real-time market quotes, options chains, transaction history, order management, and comprehensive market data.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Optional logging level for debugging (DEBUG, INFO, WARN, ERROR)",
+          "type": "string",
+          "default": "INFO"
+        },
+        "SCHWAB_CLIENT_ID": {
+          "description": "Your Schwab App Key (Client ID) from the Schwab Developer Portal",
+          "type": "string"
+        },
+        "SCHWAB_REDIRECT_URI": {
+          "description": "The OAuth callback URL (e.g., https://your-worker-name.workers.dev/callback)",
+          "type": "string"
+        },
+        "SCHWAB_CLIENT_SECRET": {
+          "description": "Your Schwab App Secret from the Schwab Developer Portal",
+          "type": "string"
+        },
+        "COOKIE_ENCRYPTION_KEY": {
+          "description": "Random encryption key for cookie encryption (generate with: openssl rand -hex 32)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SCHWAB_CLIENT_ID",
+        "SCHWAB_CLIENT_SECRET",
+        "SCHWAB_REDIRECT_URI",
+        "COOKIE_ENCRYPTION_KEY"
+      ]
+    },
+    "id": "je8ral7lp7",
+    "name": "Schwab MCP Server",
+    "namespace": "vsoneji",
+    "repository": {
+      "url": "https://github.com/vsoneji/schwab-mcp"
+    },
+    "slug": "schwab-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/je8ral7lp7"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "patrick-c-nel/bidda-compliance",
+  "namespace": "patrick-c-nel",
+  "slug": "bidda-compliance",
+  "displayName": "Bidda Sovereign Intelligence",
+  "description": "Search and retrieve cryptographically-verified compliance nodes. 3,000+ and growing nodes across 31 pillars  AI Governance, Banking & Global Finance, Cybersecurity, Medical & Healthcare, Legal & IP Sovereignty, ESG and more. Zero hallucination: every node traces to primary legal sources with avg 7 citations.\n",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "b8f46678-9b94-4d14-bad6-f5df2d5284af",
+    "qualifiedName": "patrick-c-nel/bidda-compliance",
+    "namespace": "patrick-c-nel",
+    "slug": "bidda-compliance",
+    "displayName": "Bidda Sovereign Intelligence",
+    "description": "Search and retrieve cryptographically-verified compliance nodes. 3,000+ and growing nodes across 31 pillars  AI Governance, Banking & Global Finance, Cybersecurity, Medical & Healthcare, Legal & IP Sovereignty, ESG and more. Zero hallucination: every node traces to primary legal sources with avg 7 citations.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/bidda.com.ico",
+    "verified": false,
+    "useCount": 13,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-26T15:11:58.561Z",
+    "homepage": "https://bidda.com",
+    "bySmithery": false,
+    "owner": "org_01KQ55BKEF6RB1FWBSZGZY128C",
+    "score": 0.05347222222222223
+  },
+  "detail": {
+    "qualifiedName": "patrick-c-nel/bidda-compliance",
+    "displayName": "Bidda Sovereign Intelligence",
+    "description": "Search and retrieve cryptographically-verified compliance nodes. 3,000+ and growing nodes across 31 pillars  AI Governance, Banking & Global Finance, Cybersecurity, Medical & Healthcare, Legal & IP Sovereignty, ESG and more. Zero hallucination: every node traces to primary legal sources with avg 7 citations.\n",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/bidda.com.ico",
+    "remote": true,
+    "deploymentUrl": "https://bidda-compliance--patrick-c-nel.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://bidda-compliance--patrick-c-nel.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "list_pillars",
+        "description": "List all compliance pillars in the Bidda Sovereign Intelligence registry with node counts. Use this first to discover available compliance domains before searching. Bidda has 3,000+ cryptographically-verified nodes across 31 pillars including Banking, AI Governance, Cybersecurity, Healthcare, Legal, ESG and more.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_nodes",
+        "description": "Search Bidda compliance nodes by keyword. Returns matching node summaries including a one-sentence BLUF (Bottom Line Up Front) — the exact compliance obligation in plain language. Every node traces to a primary legal source (no hallucination). Examples: \"Basel III capital\", \"GDPR data breach\", \"AML transaction monitoring\", \"SOC 2 Type II\".",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Max results (default 10, max 25)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search terms, e.g. \"Basel III capital requirements\", \"GDPR data breach notification 72 hours\", \"FATF travel rule\""
+            },
+            "pillar": {
+              "type": "string",
+              "description": "Optional: filter by pillar name, e.g. \"Banking & Global Finance\", \"Cybersecurity\", \"AI Governance & Law\", \"Medical & Healthcare\""
+            }
+          }
+        }
+      },
+      {
+        "name": "get_node",
+        "description": "Get a specific compliance node by its ID. Returns the node summary: title, compliance pillar, version, last updated, and BLUF. The full node (machine-executable deterministic workflow, actionable schema, primary legal citations, dependency chain) is available at bidda.com.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Node ID, e.g. \"basel-iii-capital\", \"gdpr-article-5-principles\", \"fatf-40-recommendations-2023-consolidated\", \"us-hipaa-privacy-rule\""
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

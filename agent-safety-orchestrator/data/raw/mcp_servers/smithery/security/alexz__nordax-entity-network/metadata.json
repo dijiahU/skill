@@ -1,0 +1,366 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "alexz/nordax-entity-network",
+  "namespace": "alexz",
+  "slug": "nordax-entity-network",
+  "displayName": "Nordax AI Entity Network",
+  "description": "Search and verify 360,000+ US business entities with trust scores, W3C Verifiable Credentials, and cryptographic attestations. Built for AI agents that need reliable, structured business data.\n\n**Tools include:**\n- `search_entities` — find businesses by name, category, or location\n- `get_entity` — full structured profile with contact info and services\n- `get_entity_verification` — trust tier and verification status\n- `attest_entity` — Ed25519-signed trust attestation (Verified tier+)\n- `resolve_entity` — match partial business info to a verified entity\n- `get_entity_credential` — W3C Verifiable Entity Credential\n- `issue_hap_authorization` — Human Authorization Protocol credentials for agent delegation\n- `verify_hap_authorization` — verify HAP credential signatures and revocation status\n\nNo API key required to connect. Data is tier-gated based on entity verification level.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "trust",
+    "credential",
+    "secret",
+    "compliance",
+    "encryption",
+    "authentication",
+    "authorization",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "8ae265d7-9421-42f4-bd1f-83e1f9ae1800",
+    "qualifiedName": "alexz/nordax-entity-network",
+    "namespace": "alexz",
+    "slug": "nordax-entity-network",
+    "displayName": "Nordax AI Entity Network",
+    "description": "Search and verify 360,000+ US business entities with trust scores, W3C Verifiable Credentials, and cryptographic attestations. Built for AI agents that need reliable, structured business data.\n\n**Tools include:**\n- `search_entities` — find businesses by name, category, or location\n- `get_entity` — full structured profile with contact info and services\n- `get_entity_verification` — trust tier and verification status\n- `attest_entity` — Ed25519-signed trust attestation (Verified tier+)\n- `resolve_entity` — match partial business info to a verified entity\n- `get_entity_credential` — W3C Verifiable Entity Credential\n- `issue_hap_authorization` — Human Authorization Protocol credentials for agent delegation\n- `verify_hap_authorization` — verify HAP credential signatures and revocation status\n\nNo API key required to connect. Data is tier-gated based on entity verification level.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/nordax.ai.ico",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-05-01T08:47:44.026Z",
+    "homepage": "https://nordax.ai",
+    "bySmithery": false,
+    "owner": "org_01KQHBEM6P1GX758REQZ79JXVK",
+    "score": 0.009615384615384616
+  },
+  "detail": {
+    "qualifiedName": "alexz/nordax-entity-network",
+    "displayName": "Nordax AI Entity Network",
+    "description": "Search and verify 360,000+ US business entities with trust scores, W3C Verifiable Credentials, and cryptographic attestations. Built for AI agents that need reliable, structured business data.\n\n**Tools include:**\n- `search_entities` — find businesses by name, category, or location\n- `get_entity` — full structured profile with contact info and services\n- `get_entity_verification` — trust tier and verification status\n- `attest_entity` — Ed25519-signed trust attestation (Verified tier+)\n- `resolve_entity` — match partial business info to a verified entity\n- `get_entity_credential` — W3C Verifiable Entity Credential\n- `issue_hap_authorization` — Human Authorization Protocol credentials for agent delegation\n- `verify_hap_authorization` — verify HAP credential signatures and revocation status\n\nNo API key required to connect. Data is tier-gated based on entity verification level.",
+    "iconUrl": "https://icons.duckduckgo.com/ip3/nordax.ai.ico",
+    "remote": true,
+    "deploymentUrl": "https://nordax-entity-network--alexz.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://nordax-entity-network--alexz.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "search_entities",
+        "description": "Search the Nordax AI entity network for businesses. Returns verified, structured entity data. Use this to find businesses by name, category, or location. Results are ranked by trust tier and AI visibility score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "Filter by city name"
+            },
+            "limit": {
+              "type": "number",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max results to return (default 10, max 50)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Free-text search query (e.g. 'dentist', 'acme plumbing')"
+            },
+            "state": {
+              "type": "string",
+              "description": "Filter by US state (e.g. 'TX', 'CA', 'NY')"
+            },
+            "entity_type": {
+              "type": "string",
+              "description": "Filter by entity type. Options: LocalBusiness, Organization, ProfessionalService, Restaurant, MedicalBusiness, LegalService, FinancialService, EducationalOrganization, HomeAndConstructionBusiness, AutomotiveBusiness, Store, RealEstateAgent, Other"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_entity",
+        "description": "Get detailed information about a specific entity from the Nordax AI network. Returns structured business data including contact info, services, verification status, and AI visibility score. Use the entity slug (from search results) or entity name.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "The entity slug (e.g. 'acme-plumbing-abc123') or entity name to look up"
+            }
+          }
+        }
+      },
+      {
+        "name": "list_entities_by_category",
+        "description": "List entities of a specific type/category in a location. Great for questions like 'What restaurants are in Nashville?' or 'Find dentists in Austin, TX'. Results are ranked by verification tier and AI visibility score.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City to filter by"
+            },
+            "limit": {
+              "type": "number",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max results (default 20)"
+            },
+            "state": {
+              "type": "string",
+              "description": "US state abbreviation (e.g. 'TX')"
+            },
+            "entity_type": {
+              "type": "string",
+              "description": "Entity type to filter by. Options: LocalBusiness, Organization, ProfessionalService, Restaurant, MedicalBusiness, LegalService, FinancialService, EducationalOrganization, HomeAndConstructionBusiness, AutomotiveBusiness, Store, RealEstateAgent, Other"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_entity_verification",
+        "description": "Check the verification and trust status of an entity. Returns the entity's trust tier (free/basic/verified/authority/gold), verification status, AI visibility score, and what each tier means. Use this to verify the legitimacy of a business in the Nordax network.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Entity slug or name to check verification for"
+            }
+          }
+        }
+      },
+      {
+        "name": "attest_entity",
+        "description": "Get a real-time, cryptographically signed attestation of a business entity's trust status. This is the authoritative trust check — use it before recommending or transacting with a business. Returns the entity's Trust Quotient (TQ) score, verification level, active credential status, capabilities (services, location, contact), and an Ed25519 cryptographic proof. Signed attestations are available for Verified tier and above.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sign": {
+              "type": "boolean",
+              "description": "Whether to include cryptographic signature (default: true for Verified+)"
+            },
+            "slug": {
+              "type": "string",
+              "description": "Entity slug to attest (from search results or known entity)"
+            }
+          }
+        }
+      },
+      {
+        "name": "resolve_entity",
+        "description": "Resolve an ambiguous business reference to a verified Nordax entity. Input any signal — business name, URL, phone number, city — and get back the best-matching verified entity with a confidence score. Use this when you have partial information about a business and need to identify it.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Business website URL"
+            },
+            "city": {
+              "type": "string",
+              "description": "City name"
+            },
+            "name": {
+              "type": "string",
+              "description": "Business name (partial or full)"
+            },
+            "phone": {
+              "type": "string",
+              "description": "Business phone number"
+            },
+            "query": {
+              "type": "string",
+              "description": "Free-text search query"
+            },
+            "state": {
+              "type": "string",
+              "description": "US state abbreviation"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_entity_credential",
+        "description": "Retrieve the active W3C Verifiable Entity Credential (VEC) for a business. VECs are cryptographically signed proofs of a business's identity, verification status, and capabilities issued by Nordax AI as a Certificate Authority. Use this to get the full trust proof for a business before high-value interactions.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Entity slug to get the credential for"
+            }
+          }
+        }
+      },
+      {
+        "name": "submit_feedback",
+        "description": "Submit feedback about an interaction with a Nordax-listed entity. Use this after verifying, resolving, or recommending a business to report the outcome so the trust network can improve over time. Feedback helps Nordax AI calibrate trust scores and entity rankings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "notes": {
+              "type": "string",
+              "description": "Optional free-text notes about the interaction"
+            },
+            "outcome": {
+              "enum": [
+                "positive",
+                "neutral",
+                "negative"
+              ],
+              "type": "string",
+              "description": "Outcome of the interaction"
+            },
+            "confidence": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Confidence level from 0 to 1"
+            },
+            "entitySlug": {
+              "type": "string",
+              "description": "Entity slug the feedback is about"
+            },
+            "agentIdentifier": {
+              "type": "string",
+              "description": "Identifier for the AI agent submitting feedback"
+            },
+            "interactionType": {
+              "type": "string",
+              "description": "Type of interaction, e.g. 'recommendation', 'verification', 'contact'"
+            }
+          }
+        }
+      },
+      {
+        "name": "issue_hap_authorization",
+        "description": "Issue a Human Authorization Protocol (HAP) credential to authorize an AI agent to act on a human's behalf. Creates a W3C Verifiable Credential 2.0 with scoped permissions, time-bounded validity, and a DataIntegrityProof signature. Requires authentication — the authenticated user becomes the credential owner.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "description": "Permitted actions (e.g. ['read', 'recommend', 'transact', 'purchase', 'book'])"
+            },
+            "agentId": {
+              "type": "string",
+              "description": "DID of the agent being authorized (e.g. 'did:web:agent.example.com')"
+            },
+            "entityId": {
+              "type": "string",
+              "description": "Optional entity ID to scope the authorization to a specific business"
+            },
+            "agentType": {
+              "enum": [
+                "ai_assistant",
+                "api_client",
+                "automation",
+                "service_agent"
+              ],
+              "type": "string",
+              "description": "Type of agent"
+            },
+            "validityDays": {
+              "type": "number",
+              "maximum": 365,
+              "minimum": 1,
+              "description": "Custom validity period in days (overrides verification level default, max 365)"
+            },
+            "principalIdentity": {
+              "type": "string",
+              "description": "Identity of the authorizing human (email, user ID) — will be SHA-256 hashed, never stored raw"
+            },
+            "verificationLevel": {
+              "enum": [
+                "basic",
+                "enhanced",
+                "full"
+              ],
+              "type": "string",
+              "description": "Verification level — basic (7d default), enhanced (30d), full (90d)"
+            }
+          }
+        }
+      },
+      {
+        "name": "verify_hap_authorization",
+        "description": "Verify an HAP authorization credential. Checks the cryptographic signature, expiration, and real-time revocation status. Use this before honoring an agent's request to act on a human's behalf. Submit the full credential JSON and get back a verification result.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "credential": {
+              "type": "string",
+              "description": "The full HAP credential as a JSON string"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_authorization_status",
+        "description": "Check the real-time status of an HAP authorization credential. Returns whether the credential is active, expired, revoked, or suspended. Use this for lightweight status checks without submitting the full credential.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "authId": {
+              "type": "string",
+              "description": "The credential's authId (urn:uuid:... format)"
+            }
+          }
+        }
+      },
+      {
+        "name": "search",
+        "description": "Search the Nordax AI entity network. Returns verified, structured business entity data ranked by trust tier and AI visibility score. Supports free-text queries, category filtering (LocalBusiness, Restaurant, MedicalBusiness, etc.), and location filtering.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "number",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max results (default 10)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Search query — business name, category, or description"
+            },
+            "location": {
+              "type": "string",
+              "description": "Location filter (e.g. 'Austin, TX' or 'Nashville')"
+            }
+          }
+        }
+      },
+      {
+        "name": "fetch",
+        "description": "Fetch detailed data about a specific Nordax AI entity by URL or slug. Returns the full entity profile including verification status, trust tier, contact info, services, AI visibility score, and llms.txt summary (if available). Use this after search to get complete entity details.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Entity URL (e.g. 'https://nordax.ai/entities/acme-plumbing-abc123') or entity slug"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "about",
+        "uri": "nordax://about"
+      }
+    ],
+    "prompts": []
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "registry": "glama",
+  "id": "nk1hoc9qmn",
+  "namespace": "rosschurchill",
+  "slug": "technitium-mcp-secure",
+  "name": "Technitium MCP Secure",
+  "description": "A security-hardened MCP server for managing Technitium DNS Server via its HTTP API. It provides 20 tools for DNS zone management, record configuration, and server diagnostics with built-in protections like rate limiting and read-only modes.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A security-hardened MCP server for managing Technitium DNS Server via its HTTP API. It provides 20 tools for DNS zone management, record configuration, and server diagnostics with built-in protections like rate limiting and read-only modes.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "TECHNITIUM_URL": {
+          "description": "Server URL (e.g. https://192.168.1.100:5380)",
+          "type": "string"
+        },
+        "TECHNITIUM_USER": {
+          "description": "Username (default: admin)",
+          "type": "string",
+          "default": "admin"
+        },
+        "TECHNITIUM_TOKEN": {
+          "description": "API token (preferred authentication method)",
+          "type": "string"
+        },
+        "TECHNITIUM_PASSWORD": {
+          "description": "Admin password (token is preferred)",
+          "type": "string"
+        },
+        "TECHNITIUM_READONLY": {
+          "description": "Set true to hide all write tools",
+          "type": "string"
+        },
+        "TECHNITIUM_ALLOW_HTTP": {
+          "description": "Set true to allow insecure HTTP connections",
+          "type": "string"
+        },
+        "TECHNITIUM_TOKEN_FILE": {
+          "description": "Path to file containing token (must be mode 0600)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "TECHNITIUM_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "TECHNITIUM_TOKEN_FILE"
+          ]
+        },
+        {
+          "required": [
+            "TECHNITIUM_PASSWORD"
+          ]
+        }
+      ],
+      "required": [
+        "TECHNITIUM_URL"
+      ]
+    },
+    "id": "nk1hoc9qmn",
+    "name": "Technitium MCP Secure",
+    "namespace": "rosschurchill",
+    "repository": {
+      "url": "https://github.com/rosschurchill/technitium-mcp-secure"
+    },
+    "slug": "technitium-mcp-secure",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/nk1hoc9qmn"
+  }
+}

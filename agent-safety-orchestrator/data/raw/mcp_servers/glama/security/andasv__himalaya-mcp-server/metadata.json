@@ -1,0 +1,45 @@
+{
+  "registry": "glama",
+  "id": "ko42jrjlqo",
+  "namespace": "andasv",
+  "slug": "himalaya-mcp-server",
+  "name": "Himalaya MCP Server",
+  "description": "Enables AI agents to interact with email accounts via the Himalaya CLI, supporting features like message reading, folder management, and controlled email sending. It prioritizes security with graduated permission modes and the exclusion of destructive operations like permanent deletion.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables AI agents to interact with email accounts via the Himalaya CLI, supporting features like message reading, folder management, and controlled email sending. It prioritizes security with graduated permission modes and the exclusion of destructive operations like permanent deletion.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HIMALAYA_MODE": {
+          "description": "The operating mode of the server. 'readonly' (default) allows only reading operations. 'full' enables write operations like moving or flagging messages. 'dangerzone' enables sending emails.",
+          "type": "string",
+          "default": "readonly"
+        },
+        "APPROVED_RECIPIENTS": {
+          "description": "A comma-separated list of email addresses the AI is allowed to send to. This environment variable is required when HIMALAYA_MODE is set to 'dangerzone'.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "ko42jrjlqo",
+    "name": "Himalaya MCP Server",
+    "namespace": "andasv",
+    "repository": {
+      "url": "https://github.com/andasv/himalaya-mcp-server"
+    },
+    "slug": "himalaya-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ko42jrjlqo"
+  }
+}

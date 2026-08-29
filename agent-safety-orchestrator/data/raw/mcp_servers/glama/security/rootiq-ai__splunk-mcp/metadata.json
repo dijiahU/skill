@@ -1,0 +1,87 @@
+{
+  "registry": "glama",
+  "id": "gu1asjbts8",
+  "namespace": "rootiq-ai",
+  "slug": "splunk-mcp",
+  "name": "Splunk MCP Server",
+  "description": "Enables AI assistants to interact with Splunk Enterprise and Splunk Cloud instances through standardized MCP interface. Supports executing SPL queries, managing indexes and saved searches, listing applications, and retrieving server information with flexible authentication options.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to interact with Splunk Enterprise and Splunk Cloud instances through standardized MCP interface. Supports executing SPL queries, managing indexes and saved searches, listing applications, and retrieving server information with flexible authentication options.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "Logging level",
+          "type": "string"
+        },
+        "SPLUNK_HOST": {
+          "description": "Splunk server connection host",
+          "type": "string"
+        },
+        "SPLUNK_PORT": {
+          "description": "Management port (default: 8089)",
+          "type": "string",
+          "default": "8089"
+        },
+        "SPLUNK_TOKEN": {
+          "description": "Your Splunk token for authentication",
+          "type": "string"
+        },
+        "SPLUNK_SCHEME": {
+          "description": "http or https (default: https)",
+          "type": "string",
+          "default": "https"
+        },
+        "SPLUNK_TIMEOUT": {
+          "description": "Request timeout (default: 30)",
+          "type": "string",
+          "default": "30"
+        },
+        "SPLUNK_PASSWORD": {
+          "description": "Your Splunk password for authentication",
+          "type": "string"
+        },
+        "SPLUNK_USERNAME": {
+          "description": "Your Splunk username for authentication",
+          "type": "string"
+        },
+        "SPLUNK_VERIFY_SSL": {
+          "description": "SSL verification (default: true)",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "SPLUNK_HOST",
+            "SPLUNK_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "SPLUNK_HOST",
+            "SPLUNK_USERNAME",
+            "SPLUNK_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "gu1asjbts8",
+    "name": "Splunk MCP Server",
+    "namespace": "rootiq-ai",
+    "repository": {
+      "url": "https://github.com/rootiq-ai/splunk-mcp"
+    },
+    "slug": "splunk-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gu1asjbts8"
+  }
+}

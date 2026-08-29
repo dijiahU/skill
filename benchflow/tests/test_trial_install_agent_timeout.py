@@ -1,0 +1,358 @@
+"""Tests for Rollout.install_agent timeout wiring."""
+
+import json
+from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock
+
+import pytest
+
+from benchflow.agents.install import effective_install_timeout, install_agent
+from benchflow.agents.registry import AGENT_INSTALLERS, AGENTS
+from benchflow.rollout import Rollout, RolloutConfig, _write_config
+from benchflow.skill_policy import (
+    SKILL_MODE_NO_SKILL,
+    SKILL_MODE_WITH_SKILL,
+    resolve_task_skill_policy,
+)
+
+
+def _make_trial(
+    tmp_path,
+    *,
+    agent: str,
+    sandbox_setup_timeout: int,
+    skip_agent_install: bool = False,
+) -> Rollout:
+    config = RolloutConfig.from_legacy(
+        task_path=tmp_path / "task",
+        agent=agent,
+        prompts=[None],
+        sandbox_user="agent",
+        sandbox_setup_timeout=sandbox_setup_timeout,
+        skip_agent_install=skip_agent_install,
+    )
+    trial = Rollout(config)
+    trial._env = MagicMock()
+    trial._env.exec = AsyncMock(return_value=MagicMock(stdout="/workspace\n"))
+    trial._rollout_dir = tmp_path / "trial"
+    trial._rollout_dir.mkdir()
+    trial._rollout_paths = MagicMock()
+    trial._task = MagicMock()
+    trial._effective_locked = []
+    return trial
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("agent", "expected_setup_return"),
+    [
+        ("claude-agent-acp", "/home/agent"),
+        ("oracle", None),
+    ],
+)
+async def test_install_agent_forwards_sandbox_setup_timeout(
+    tmp_path, monkeypatch, agent, expected_setup_return
+):
+    trial = _make_trial(tmp_path, agent=agent, sandbox_setup_timeout=41)
+
+    install_agent_mock = AsyncMock(return_value=MagicMock())
+    write_credential_files_mock = AsyncMock()
+    upload_subscription_auth_mock = AsyncMock()
+    snapshot_build_config_mock = AsyncMock()
+    seed_verifier_workspace_mock = AsyncMock()
+    deploy_skills_mock = AsyncMock()
+    lockdown_paths_mock = AsyncMock()
+    setup_sandbox_user_mock = AsyncMock(return_value=expected_setup_return)
+
+    monkeypatch.setattr(trial._planes, "install_agent", install_agent_mock)
+    monkeypatch.setattr(
+        trial._planes, "write_credential_files", write_credential_files_mock
+    )
+    monkeypatch.setattr(
+        trial._planes, "upload_subscription_auth", upload_subscription_auth_mock
+    )
+    monkeypatch.setattr(
+        trial._planes, "snapshot_build_config", snapshot_build_config_mock
+    )
+    monkeypatch.setattr(
+        trial._planes, "seed_verifier_workspace", seed_verifier_workspace_mock
+    )
+    monkeypatch.setattr(trial._planes, "deploy_skills", deploy_skills_mock)
+    monkeypatch.setattr(trial._planes, "lockdown_paths", lockdown_paths_mock)
+    monkeypatch.setattr(trial._planes, "setup_sandbox_user", setup_sandbox_user_mock)
+
+    await trial.install_agent()
+
+    setup_sandbox_user_mock.assert_awaited_once()
+    args, kwargs = setup_sandbox_user_mock.await_args
+    assert args[1] == "agent"
+    assert kwargs["timeout_sec"] == 41
+    assert kwargs["workspace"] == "/workspace"
+
+    if agent == "oracle":
+        install_agent_mock.assert_not_awaited()
+        write_credential_files_mock.assert_not_awaited()
+        deploy_skills_mock.assert_awaited_once()
+        assert trial._agent_cwd == "/workspace"
+    else:
+        install_agent_mock.assert_awaited_once()
+        assert install_agent_mock.await_args.kwargs["sandbox_setup_timeout"] == 41
+        write_credential_files_mock.assert_awaited_once()
+        deploy_skills_mock.assert_awaited_once()
+        assert trial._agent_cwd == "/home/agent"
+
+    snapshot_build_config_mock.assert_awaited_once()
+    seed_verifier_workspace_mock.assert_awaited_once()
+    lockdown_paths_mock.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_install_agent_honors_skip_agent_install(tmp_path, monkeypatch):
+    """Guards #588: skip_install skips installer but keeps setup/credentials."""
+    trial = _make_trial(
+        tmp_path,
+        agent="claude-agent-acp",
+        sandbox_setup_timeout=41,
+        skip_agent_install=True,
+    )
+
+    install_agent_mock = AsyncMock(return_value=MagicMock())
+    write_credential_files_mock = AsyncMock()
+    deploy_skills_mock = AsyncMock()
+    setup_sandbox_user_mock = AsyncMock(return_value="/home/agent")
+
+    monkeypatch.setattr(trial._planes, "install_agent", install_agent_mock)
+    monkeypatch.setattr(
+        trial._planes, "write_credential_files", write_credential_files_mock
+    )
+    monkeypatch.setattr(trial._planes, "upload_subscription_auth", AsyncMock())
+    monkeypatch.setattr(trial._planes, "snapshot_build_config", AsyncMock())
+    monkeypatch.setattr(trial._planes, "seed_verifier_workspace", AsyncMock())
+    monkeypatch.setattr(trial._planes, "deploy_skills", deploy_skills_mock)
+    monkeypatch.setattr(trial._planes, "lockdown_paths", AsyncMock())
+    monkeypatch.setattr(trial._planes, "setup_sandbox_user", setup_sandbox_user_mock)
+    monkeypatch.setattr(trial._planes, "apply_web_tool_policy", AsyncMock())
+
+    await trial.install_agent()
+
+    install_agent_mock.assert_not_awaited()
+    setup_sandbox_user_mock.assert_awaited_once()
+    write_credential_files_mock.assert_awaited_once()
+    assert write_credential_files_mock.await_args.args[3] is None
+    deploy_skills_mock.assert_awaited_once()
+    assert trial._agent_cfg is None
+    assert trial._agent_cwd == "/home/agent"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("agent", ["claude-agent-acp", "oracle"])
+async def test_install_agent_passes_effective_task_path_to_deploy_skills(
+    tmp_path, monkeypatch, agent
+):
+    """Guards the fix from PR #308 for issue #229: deploy_skills double-deploys
+    when skills_dir is set.
+
+    `_setup` copies the task to a temp dir and injects
+    `COPY _deps/skills /skills/` into that temp Dockerfile, recording the
+    copy as `_effective_task_path`. `deploy_skills` decides whether to skip
+    the runtime `/skills` upload by reading the Dockerfile at the path it is
+    given — so it must receive `_effective_task_path`, not the original
+    `cfg.task_path` (whose Dockerfile is never injected). Passing the
+    original path makes `already_injected` always False and triggers a
+    second `/skills` upload on top of the baked image, failing with
+    `cannot overwrite directory "/skills/..." with non-directory "/skills"`.
+    """
+    trial = _make_trial(tmp_path, agent=agent, sandbox_setup_timeout=41)
+    trial._config = trial._config.__class__.from_legacy(
+        task_path=tmp_path / "original-task",
+        agent=agent,
+        prompts=[None],
+        sandbox_user="agent",
+        sandbox_setup_timeout=41,
+        skill_mode=SKILL_MODE_WITH_SKILL,
+        skills_dir=tmp_path / "skills",
+    )
+    effective_task_path = tmp_path / "benchflow-task-tmp" / "task"
+    trial._effective_task_path = effective_task_path
+
+    deploy_skills_mock = AsyncMock()
+    monkeypatch.setattr(trial._planes, "install_agent", AsyncMock())
+    monkeypatch.setattr(trial._planes, "write_credential_files", AsyncMock())
+    monkeypatch.setattr(trial._planes, "upload_subscription_auth", AsyncMock())
+    monkeypatch.setattr(trial._planes, "snapshot_build_config", AsyncMock())
+    monkeypatch.setattr(trial._planes, "seed_verifier_workspace", AsyncMock())
+    monkeypatch.setattr(trial._planes, "deploy_skills", deploy_skills_mock)
+    monkeypatch.setattr(trial._planes, "lockdown_paths", AsyncMock())
+    monkeypatch.setattr(
+        trial._planes, "setup_sandbox_user", AsyncMock(return_value="/home/agent")
+    )
+    monkeypatch.setattr(trial._planes, "apply_web_tool_policy", AsyncMock())
+
+    await trial.install_agent()
+
+    deploy_skills_mock.assert_awaited_once()
+    passed_task_path = deploy_skills_mock.await_args.args[1]
+    assert passed_task_path == effective_task_path
+    assert passed_task_path != trial._config.task_path
+
+
+@pytest.mark.asyncio
+async def test_install_agent_applies_web_policy_after_sandbox_setup(
+    tmp_path, monkeypatch
+):
+    trial = _make_trial(tmp_path, agent="openhands", sandbox_setup_timeout=41)
+    trial._disallow_web_tools = True
+
+    order = []
+
+    async def setup_sandbox_user_mock(*args, **kwargs):
+        order.append("sandbox")
+        return "/home/agent"
+
+    async def apply_web_tool_policy_mock(*args, **kwargs):
+        order.append("web-policy")
+
+    async def write_credential_files_mock(*args, **kwargs):
+        order.append("credentials")
+
+    install_agent_mock = AsyncMock(return_value=MagicMock())
+
+    monkeypatch.setattr(trial._planes, "install_agent", install_agent_mock)
+    monkeypatch.setattr(
+        trial._planes, "write_credential_files", write_credential_files_mock
+    )
+    monkeypatch.setattr(trial._planes, "upload_subscription_auth", AsyncMock())
+    monkeypatch.setattr(trial._planes, "snapshot_build_config", AsyncMock())
+    monkeypatch.setattr(trial._planes, "seed_verifier_workspace", AsyncMock())
+    monkeypatch.setattr(trial._planes, "deploy_skills", AsyncMock())
+    monkeypatch.setattr(trial._planes, "lockdown_paths", AsyncMock())
+    monkeypatch.setattr(trial._planes, "setup_sandbox_user", setup_sandbox_user_mock)
+    monkeypatch.setattr(
+        trial._planes, "apply_web_tool_policy", apply_web_tool_policy_mock
+    )
+
+    await trial.install_agent()
+
+    assert order == ["sandbox", "credentials", "web-policy"]
+
+
+def _write_config_for(tmp_path, *, agent: str, sandbox_setup_timeout: int) -> dict:
+    rollout_dir = tmp_path / "rollout"
+    rollout_dir.mkdir(parents=True, exist_ok=True)
+    _write_config(
+        rollout_dir,
+        task_path=tmp_path / "task",
+        agent=agent,
+        model=None,
+        environment="daytona",
+        skill_policy=resolve_task_skill_policy(
+            task_path=tmp_path / "task",
+            skill_mode=SKILL_MODE_NO_SKILL,
+            runtime_skills_dir=None,
+            declared_sandbox_skills_dir=None,
+        ),
+        sandbox_user=None,
+        context_root=None,
+        sandbox_setup_timeout=sandbox_setup_timeout,
+        timeout=300,
+        started_at=datetime(2026, 1, 1),
+        agent_env={},
+    )
+    return json.loads((rollout_dir / "config.json").read_text())
+
+
+@pytest.mark.asyncio
+async def test_recorded_install_timeout_equals_enforced_timeout(tmp_path):
+    """Guards the 2026-06 dogfood finding: config.json said 120, runtime ran 900.
+
+    The recorded ``agent_install_timeout`` must be the per-agent override the
+    install step actually enforces, not the configured sandbox setup timeout.
+    """
+    config = _write_config_for(tmp_path, agent="openhands", sandbox_setup_timeout=120)
+
+    env = MagicMock()
+    env.exec = AsyncMock(return_value=MagicMock(return_code=0, stdout="", stderr=""))
+    await install_agent(env, "openhands", tmp_path / "rollout", 120)
+
+    enforced = env.exec.await_args_list[0].kwargs["timeout_sec"]
+    assert config["agent_install_timeout"] == enforced
+    assert enforced == AGENTS["openhands"].install_timeout
+    assert config["agent_install_timeout"] != config["sandbox_setup_timeout"]
+
+
+def test_recorded_install_timeout_is_none_without_installer(tmp_path):
+    config = _write_config_for(tmp_path, agent="oracle", sandbox_setup_timeout=120)
+
+    assert config["agent_install_timeout"] is None
+    assert config["sandbox_setup_timeout"] == 120
+
+
+def test_recorded_install_timeout_is_none_when_install_skipped(tmp_path):
+    rollout_dir = tmp_path / "rollout"
+    rollout_dir.mkdir(parents=True, exist_ok=True)
+    _write_config(
+        rollout_dir,
+        task_path=tmp_path / "task",
+        agent="claude-agent-acp",
+        model=None,
+        environment="daytona",
+        skill_policy=resolve_task_skill_policy(
+            task_path=tmp_path / "task",
+            skill_mode=SKILL_MODE_NO_SKILL,
+            runtime_skills_dir=None,
+            declared_sandbox_skills_dir=None,
+        ),
+        sandbox_user=None,
+        context_root=None,
+        sandbox_setup_timeout=41,
+        skip_agent_install=True,
+        timeout=300,
+        started_at=datetime(2026, 1, 1),
+        agent_env={},
+    )
+    config = json.loads((rollout_dir / "config.json").read_text())
+    assert config["skip_install"] is True
+    assert config["agent_install_timeout"] is None
+
+
+@pytest.mark.asyncio
+async def test_install_timeout_falls_back_to_config_without_registry_entry(
+    tmp_path, monkeypatch
+):
+    """Installers outside AGENTS get bounded by the recorded config value."""
+    monkeypatch.setitem(AGENT_INSTALLERS, "fake-agent", "echo install")
+    assert "fake-agent" not in AGENTS
+
+    env = MagicMock()
+    env.exec = AsyncMock(return_value=MagicMock(return_code=0, stdout="", stderr=""))
+    await install_agent(env, "fake-agent", tmp_path, 41)
+
+    assert env.exec.await_args_list[0].kwargs["timeout_sec"] == 41
+    assert effective_install_timeout("fake-agent", 41) == 41
+
+
+def test_effective_install_timeout_branches(monkeypatch):
+    """Direct coverage of every effective_install_timeout branch.
+
+    The three branches return three *distinct* values (None / per-agent override
+    / config fallback), so a revert of any one branch — including the
+    ``agent_cfg is None`` defensive guard the audit flagged — flips a concrete
+    assertion here rather than passing silently.
+    """
+    # 1. No installer registered at all → None, whatever the config timeout is.
+    assert "definitely-not-an-agent" not in AGENT_INSTALLERS
+    assert effective_install_timeout("definitely-not-an-agent", 41) is None
+
+    # 2. Real registry entry → the per-agent install_timeout overrides config.
+    override = AGENTS["openhands"].install_timeout
+    assert override != 41  # the override is genuinely distinct from the config value
+    assert effective_install_timeout("openhands", 41) == override
+
+    # 3. Installer in AGENT_INSTALLERS but absent from AGENTS (label/registry
+    #    drift) → defensive fallback to the configured sandbox setup timeout.
+    monkeypatch.setitem(AGENT_INSTALLERS, "fake-agent", "echo install")
+    assert "fake-agent" not in AGENTS
+    assert effective_install_timeout("fake-agent", 41) == 41
+    # agent_base is the first whitespace-delimited token, so specs with flags
+    # resolve through the same fallback.
+    assert effective_install_timeout("fake-agent --acp", 41) == 41

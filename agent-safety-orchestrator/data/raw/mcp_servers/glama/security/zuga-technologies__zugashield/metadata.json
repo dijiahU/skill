@@ -1,0 +1,82 @@
+{
+  "registry": "glama",
+  "id": "uw0465yecu",
+  "namespace": "Zuga-Technologies",
+  "slug": "ZugaShield",
+  "name": "ZugaShield",
+  "description": "A 7-layer security system for AI agents that detects and blocks prompt injection, data exfiltration, and malicious tool calls. It enables real-time scanning of inputs, outputs, and tool definitions to protect agentic workflows from emerging AI-specific threats.",
+  "discoveryQueries": [
+    "security",
+    "prompt injection"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "A 7-layer security system for AI agents that detects and blocks prompt injection, data exfiltration, and malicious tool calls. It enables real-time scanning of inputs, outputs, and tool definitions to protect agentic workflows from emerging AI-specific threats.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "ZUGASHIELD_ENABLED": {
+          "description": "Master on/off toggle",
+          "type": "string",
+          "default": "true"
+        },
+        "ZUGASHIELD_STRICT_MODE": {
+          "description": "Block on medium-confidence threats",
+          "type": "string",
+          "default": "false"
+        },
+        "ZUGASHIELD_SENSITIVE_PATHS": {
+          "description": "Comma-separated sensitive paths",
+          "type": "string",
+          "default": ".ssh,.env,..."
+        },
+        "ZUGASHIELD_LLM_JUDGE_ENABLED": {
+          "description": "LLM deep analysis (requires anthropic package)",
+          "type": "string",
+          "default": "false"
+        },
+        "ZUGASHIELD_TOOL_GUARD_ENABLED": {
+          "description": "Tool call validation",
+          "type": "string",
+          "default": "true"
+        },
+        "ZUGASHIELD_PROMPT_ARMOR_ENABLED": {
+          "description": "Prompt injection defense",
+          "type": "string",
+          "default": "true"
+        },
+        "ZUGASHIELD_MEMORY_SENTINEL_ENABLED": {
+          "description": "Memory write/read scanning",
+          "type": "string",
+          "default": "true"
+        },
+        "ZUGASHIELD_WALLET_FORTRESS_ENABLED": {
+          "description": "Crypto transaction checks",
+          "type": "string",
+          "default": "true"
+        },
+        "ZUGASHIELD_EXFILTRATION_GUARD_ENABLED": {
+          "description": "Output DLP",
+          "type": "string",
+          "default": "true"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "uw0465yecu",
+    "name": "ZugaShield",
+    "namespace": "Zuga-Technologies",
+    "repository": {
+      "url": "https://github.com/Zuga-Technologies/ZugaShield"
+    },
+    "slug": "ZugaShield",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/uw0465yecu"
+  }
+}

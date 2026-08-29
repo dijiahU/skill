@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "cqccg6ko1c",
+  "namespace": "199-mcp",
+  "slug": "mcp-google",
+  "name": "MCP Google Workspace",
+  "description": "Enables comprehensive management of Google Calendar, Contacts, and Gmail through AI systems. Supports full CRUD operations including creating/updating/deleting events, managing contacts, sending emails, organizing with labels, and batch operations with OAuth2 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables comprehensive management of Google Calendar, Contacts, and Gmail through AI systems. Supports full CRUD operations including creating/updating/deleting events, managing contacts, sending emails, organizing with labels, and batch operations with OAuth2 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "NODE_ENV": {
+          "description": "Set to 'production' for production use",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_ID": {
+          "description": "Your Google OAuth client ID from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_CLIENT_SECRET": {
+          "description": "Your Google OAuth client secret from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_OAUTH_CREDENTIALS": {
+          "description": "Path to OAuth credentials JSON file downloaded from Google Cloud Console",
+          "type": "string"
+        },
+        "GOOGLE_CALENDAR_MCP_TOKEN_PATH": {
+          "description": "Custom path for token storage (optional)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "GOOGLE_CLIENT_ID",
+            "GOOGLE_CLIENT_SECRET"
+          ]
+        },
+        {
+          "required": [
+            "GOOGLE_OAUTH_CREDENTIALS"
+          ]
+        }
+      ]
+    },
+    "id": "cqccg6ko1c",
+    "name": "MCP Google Workspace",
+    "namespace": "199-mcp",
+    "repository": {
+      "url": "https://github.com/199-mcp/mcp-google"
+    },
+    "slug": "mcp-google",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/cqccg6ko1c"
+  }
+}

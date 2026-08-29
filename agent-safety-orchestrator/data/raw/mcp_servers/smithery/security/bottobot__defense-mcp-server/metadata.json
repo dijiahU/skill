@@ -1,0 +1,3119 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "bottobot/defense-mcp-server",
+  "namespace": "bottobot",
+  "slug": "defense-mcp-server",
+  "displayName": "Defense MCP",
+  "description": "I thought about naming it ShieldsUP! or HardenSoft but I figure I'll just keep it simple at Defense MCP. \n\nI'm a total noob when it comes to serious system hardening. Every time I spun up a new Linux box I'd end up down the same rabbit hole — Googling iptables syntax, forgetting how to configure PAM, staring at endless Reddit tutorial posts. So I built this thing.\n\nDefense MCP Server packs 31 security tool modules with 250+ actions into one MCP server. Hook it up to Claude Desktop, Cursor, or any MCP client and just tell it what you want in plain English. It calls the right tool with the right flags so you don't have to. I mainly just ask it to do a full security audit. Takes a bit and then it'll spit out a huge report. Then you can pick and choose what you want it to harden or fix and get your LLM to do exactly that. \n\nWhat's in the box:\nFirewalls (iptables/nftables/UFW) · kernel & host hardening · CIS/HIPAA/SOC2 compliance checks · patch management · SSH & PAM access control · ClamAV",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "policy",
+    "trust",
+    "vulnerability",
+    "secret",
+    "compliance",
+    "sbom",
+    "ransomware",
+    "siem",
+    "firewall",
+    "waf",
+    "supply chain"
+  ],
+  "rawRecord": {
+    "id": "b3db352a-e91c-4b96-b9e3-eb230ed40b3c",
+    "qualifiedName": "bottobot/defense-mcp-server",
+    "namespace": "bottobot",
+    "slug": "defense-mcp-server",
+    "displayName": "Defense MCP",
+    "description": "I thought about naming it ShieldsUP! or HardenSoft but I figure I'll just keep it simple at Defense MCP. \n\nI'm a total noob when it comes to serious system hardening. Every time I spun up a new Linux box I'd end up down the same rabbit hole — Googling iptables syntax, forgetting how to configure PAM, staring at endless Reddit tutorial posts. So I built this thing.\n\nDefense MCP Server packs 31 security tool modules with 250+ actions into one MCP server. Hook it up to Claude Desktop, Cursor, or any MCP client and just tell it what you want in plain English. It calls the right tool with the right flags so you don't have to. I mainly just ask it to do a full security audit. Takes a bit and then it'll spit out a huge report. Then you can pick and choose what you want it to harden or fix and get your LLM to do exactly that. \n\nWhat's in the box:\nFirewalls (iptables/nftables/UFW) · kernel & host hardening · CIS/HIPAA/SOC2 compliance checks · patch management · SSH & PAM access control · ClamAV",
+    "iconUrl": "https://api.smithery.ai/servers/bottobot/defense-mcp-server/icon",
+    "verified": false,
+    "useCount": 25,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-30T12:49:31.400Z",
+    "homepage": "https://github.com/bottobot/defense-mcp-server",
+    "bySmithery": false,
+    "owner": "org_01KNBVZA406E0NTR3C80HTJY4G",
+    "score": 0.033566433566433566
+  },
+  "detail": {
+    "qualifiedName": "bottobot/defense-mcp-server",
+    "displayName": "Defense MCP",
+    "description": "I thought about naming it ShieldsUP! or HardenSoft but I figure I'll just keep it simple at Defense MCP. \n\nI'm a total noob when it comes to serious system hardening. Every time I spun up a new Linux box I'd end up down the same rabbit hole — Googling iptables syntax, forgetting how to configure PAM, staring at endless Reddit tutorial posts. So I built this thing.\n\nDefense MCP Server packs 31 security tool modules with 250+ actions into one MCP server. Hook it up to Claude Desktop, Cursor, or any MCP client and just tell it what you want in plain English. It calls the right tool with the right flags so you don't have to. I mainly just ask it to do a full security audit. Takes a bit and then it'll spit out a huge report. Then you can pick and choose what you want it to harden or fix and get your LLM to do exactly that. \n\nWhat's in the box:\nFirewalls (iptables/nftables/UFW) · kernel & host hardening · CIS/HIPAA/SOC2 compliance checks · patch management · SSH & PAM access control · ClamAV malware scanning · YARA rules · file integrity with AIDE · auditd & fail2ban logging · TLS/LUKS/GPG encryption · container security (AppArmor/seccomp) · network defense & packet capture · secrets scanning · incident response & forensics · eBPF/Falco · SBOM & supply chain verification · zero trust (WireGuard/mTLS) · DNS security · vuln scanning (nmap/nikto) · WAF management · threat intel feeds · cloud security (AWS/GCP/Azure) · API security · honeypots · wireless auditing.\n\nWon't blow up your box: Everything runs dry-run by default. There's a command allowlist (no shell interpreters ever touch your system), input sanitization against injection, automatic backups before any changes, and rate limiting. If a tool like ClamAV isn't installed yet, the server grabs it from your package manager automatically.\n\nBuilt by a noob, for fresh installs. If I can use it, you can too.\n\nRequires: Linux (Debian/Ubuntu/RHEL/Arch), Node.js 22+",
+    "iconUrl": "https://api.smithery.ai/servers/bottobot/defense-mcp-server/icon",
+    "remote": true,
+    "deploymentUrl": "https://defense-mcp-server--bottobot.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://defense-mcp-server--bottobot.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "sudo_session",
+        "description": "Sudo: elevate privileges, check/drop/extend session, preflight tool checks",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Tool names to pre-check for sudo/dependency requirements"
+            },
+            "action": {
+              "enum": [
+                "elevate",
+                "elevate_gui",
+                "status",
+                "drop",
+                "extend",
+                "preflight_check"
+              ],
+              "type": "string",
+              "description": "Sudo session action"
+            },
+            "minutes": {
+              "type": "number",
+              "default": 15,
+              "maximum": 480,
+              "minimum": 1,
+              "description": "Minutes to extend session by (max 480)"
+            },
+            "password": {
+              "type": "string",
+              "description": "Sudo password (required for elevate). Stored securely, never logged."
+            },
+            "timeout_minutes": {
+              "type": "number",
+              "default": 15,
+              "maximum": 480,
+              "minimum": 1,
+              "description": "Session timeout in minutes (max 480)"
+            }
+          }
+        }
+      },
+      {
+        "name": "firewall",
+        "description": "Firewall: iptables, UFW, nftables, persistence, policy audit",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ipv6": {
+              "type": "boolean",
+              "default": false,
+              "description": "Also apply to ip6tables"
+            },
+            "port": {
+              "type": "string",
+              "description": "Port or range, e.g. '80', '8080:8090'"
+            },
+            "chain": {
+              "type": "string",
+              "description": "Target chain (INPUT, OUTPUT, FORWARD, or custom)"
+            },
+            "table": {
+              "type": "string",
+              "default": "filter",
+              "description": "Iptables/nftables table name"
+            },
+            "action": {
+              "enum": [
+                "iptables_list",
+                "iptables_add",
+                "iptables_delete",
+                "iptables_set_policy",
+                "iptables_create_chain",
+                "ufw_status",
+                "ufw_add",
+                "ufw_delete",
+                "persist_save",
+                "persist_restore",
+                "persist_enable",
+                "persist_status",
+                "nftables_list",
+                "policy_audit"
+              ],
+              "type": "string",
+              "description": "Firewall action"
+            },
+            "family": {
+              "enum": [
+                "ip",
+                "ip6",
+                "inet",
+                "arp",
+                "bridge",
+                "netdev"
+              ],
+              "type": "string",
+              "description": "nftables address family"
+            },
+            "policy": {
+              "enum": [
+                "ACCEPT",
+                "DROP"
+              ],
+              "type": "string",
+              "description": "Default chain policy"
+            },
+            "source": {
+              "type": "string",
+              "description": "Source IP/CIDR"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview without applying"
+            },
+            "to_addr": {
+              "type": "string",
+              "description": "Destination address or 'any'"
+            },
+            "verbose": {
+              "type": "boolean",
+              "default": false,
+              "description": "Show verbose output"
+            },
+            "position": {
+              "type": "number",
+              "description": "Rule insert position"
+            },
+            "protocol": {
+              "enum": [
+                "tcp",
+                "udp",
+                "icmp",
+                "all",
+                "any"
+              ],
+              "type": "string",
+              "description": "Protocol to match"
+            },
+            "direction": {
+              "enum": [
+                "in",
+                "out"
+              ],
+              "type": "string",
+              "default": "in",
+              "description": "Traffic direction"
+            },
+            "from_addr": {
+              "type": "string",
+              "description": "Source address or 'any'"
+            },
+            "tcp_flags": {
+              "type": "string",
+              "description": "TCP flags, e.g. '--syn'"
+            },
+            "test_only": {
+              "type": "boolean",
+              "default": true,
+              "description": "Validate rules without applying"
+            },
+            "chain_name": {
+              "type": "string",
+              "description": "Custom chain name to create"
+            },
+            "input_path": {
+              "type": "string",
+              "description": "Rules file path to restore from"
+            },
+            "destination": {
+              "type": "string",
+              "description": "Destination IP/CIDR"
+            },
+            "output_path": {
+              "type": "string",
+              "default": "/etc/iptables/rules.v4",
+              "description": "Output file path for saved rules"
+            },
+            "rule_action": {
+              "enum": [
+                "allow",
+                "deny",
+                "reject",
+                "limit"
+              ],
+              "type": "string",
+              "description": "UFW rule action"
+            },
+            "rule_number": {
+              "type": "number",
+              "description": "Rule number to delete"
+            },
+            "custom_chain": {
+              "type": "string",
+              "description": "Custom chain for -j target, overrides target_action"
+            },
+            "match_module": {
+              "type": "string",
+              "description": "Match module, e.g. 'limit', 'conntrack'"
+            },
+            "match_options": {
+              "type": "string",
+              "description": "Match module options"
+            },
+            "target_action": {
+              "enum": [
+                "ACCEPT",
+                "DROP",
+                "REJECT",
+                "LOG"
+              ],
+              "type": "string",
+              "default": "DROP",
+              "description": "Rule target action"
+            }
+          }
+        }
+      },
+      {
+        "name": "harden_kernel",
+        "description": "Kernel hardening: sysctl, kernel security, bootloader, memory protections",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "all": {
+              "type": "boolean",
+              "default": false,
+              "description": "Return all sysctl values"
+            },
+            "key": {
+              "type": "string",
+              "description": "Sysctl key"
+            },
+            "value": {
+              "type": "string",
+              "description": "Value to set"
+            },
+            "action": {
+              "enum": [
+                "sysctl_get",
+                "sysctl_set",
+                "sysctl_audit",
+                "kernel_audit",
+                "kernel_modules",
+                "kernel_coredump",
+                "bootloader_audit",
+                "bootloader_configure",
+                "memory_audit",
+                "memory_enforce_aslr",
+                "memory_report"
+              ],
+              "type": "string",
+              "description": "Action to perform"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview changes"
+            },
+            "pattern": {
+              "type": "string",
+              "description": "Filter keys matching substring"
+            },
+            "binaries": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Binary paths to check"
+            },
+            "category": {
+              "enum": [
+                "network",
+                "kernel",
+                "fs",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Settings category to audit"
+            },
+            "check_type": {
+              "enum": [
+                "cpu_vulns",
+                "lsm",
+                "lockdown",
+                "features",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Kernel security check type"
+            },
+            "persistent": {
+              "type": "boolean",
+              "default": false,
+              "description": "Persist to /etc/sysctl.d/99-defense-mcp.conf"
+            },
+            "grub_password": {
+              "type": "string",
+              "description": "GRUB bootloader password"
+            },
+            "kernel_params": {
+              "type": "string",
+              "description": "Space-separated kernel parameters to add"
+            },
+            "grub_superuser": {
+              "type": "string",
+              "default": "grubadmin",
+              "description": "GRUB superuser name"
+            },
+            "configure_action": {
+              "enum": [
+                "add_kernel_params",
+                "status",
+                "set_password"
+              ],
+              "type": "string",
+              "description": "Bootloader configure sub-action"
+            },
+            "grub_unrestricted": {
+              "type": "boolean",
+              "default": true,
+              "description": "Allow normal boot without password, require for editing"
+            }
+          }
+        }
+      },
+      {
+        "name": "harden_host",
+        "description": "Host hardening: services, permissions, systemd, cron, umask, banners, USB control",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "description": "Octal permissions, e.g. '600'"
+            },
+            "path": {
+              "type": "string",
+              "description": "File or directory path"
+            },
+            "group": {
+              "type": "string",
+              "description": "File group, e.g. 'root'"
+            },
+            "owner": {
+              "type": "string",
+              "description": "File owner, e.g. 'root'"
+            },
+            "scope": {
+              "enum": [
+                "passwd",
+                "shadow",
+                "ssh",
+                "cron",
+                "critical",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Permissions audit scope"
+            },
+            "action": {
+              "enum": [
+                "service_manage",
+                "service_audit",
+                "permissions_check",
+                "permissions_fix",
+                "permissions_audit",
+                "systemd_audit",
+                "systemd_apply",
+                "cron_audit",
+                "umask_audit",
+                "umask_set",
+                "banner_audit",
+                "banner_set",
+                "usb_audit_devices",
+                "usb_block_storage",
+                "usb_whitelist",
+                "usb_monitor"
+              ],
+              "type": "string",
+              "description": "Action to perform"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview changes"
+            },
+            "service": {
+              "type": "string",
+              "description": "Service name"
+            },
+            "targets": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "login.defs",
+                  "profile",
+                  "bashrc"
+                ],
+                "type": "string"
+              },
+              "description": "Files to update for umask"
+            },
+            "show_all": {
+              "type": "boolean",
+              "default": false,
+              "description": "Show all services, not just flagged"
+            },
+            "device_id": {
+              "type": "string",
+              "description": "USB device ID in vendor:product format"
+            },
+            "recursive": {
+              "type": "boolean",
+              "default": false,
+              "description": "Apply recursively"
+            },
+            "threshold": {
+              "type": "number",
+              "default": 5,
+              "description": "Exposure score threshold 0-10"
+            },
+            "banner_text": {
+              "type": "string",
+              "description": "Custom banner text (CIS default if omitted)"
+            },
+            "umask_value": {
+              "enum": [
+                "027",
+                "077"
+              ],
+              "type": "string",
+              "description": "Umask value"
+            },
+            "block_method": {
+              "enum": [
+                "modprobe",
+                "udev"
+              ],
+              "type": "string",
+              "default": "modprobe",
+              "description": "USB storage block method"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            },
+            "banner_targets": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "issue",
+                  "issue.net",
+                  "motd"
+                ],
+                "type": "string"
+              },
+              "description": "Banner files to update"
+            },
+            "service_action": {
+              "enum": [
+                "enable",
+                "disable",
+                "stop",
+                "start",
+                "restart",
+                "mask",
+                "unmask",
+                "status"
+              ],
+              "type": "string",
+              "description": "Service management action"
+            },
+            "hardening_level": {
+              "enum": [
+                "basic",
+                "strict",
+                "custom"
+              ],
+              "type": "string",
+              "description": "Systemd hardening level"
+            },
+            "custom_directives": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Systemd directives for custom level"
+            }
+          }
+        }
+      },
+      {
+        "name": "integrity",
+        "description": "Integrity: AIDE, rootkit scanning, file hashing, drift baselines",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "default": "default",
+              "description": "Baseline name"
+            },
+            "paths": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "description": "File path(s) to check (string or array)"
+            },
+            "quick": {
+              "type": "boolean",
+              "default": true,
+              "description": "Quick scan, skip database updates"
+            },
+            "quiet": {
+              "type": "boolean",
+              "default": false,
+              "description": "Only show infected findings"
+            },
+            "action": {
+              "enum": [
+                "aide_init",
+                "aide_check",
+                "aide_update",
+                "aide_compare",
+                "rootkit_rkhunter",
+                "rootkit_chkrootkit",
+                "rootkit_all",
+                "file_integrity",
+                "baseline_create",
+                "baseline_compare",
+                "baseline_list"
+              ],
+              "type": "string",
+              "description": "Integrity monitoring action"
+            },
+            "config": {
+              "type": "string",
+              "description": "Custom AIDE config file path"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "expert": {
+              "type": "boolean",
+              "default": false,
+              "description": "Show additional diagnostic info"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview without executing"
+            },
+            "directories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "/etc"
+              ],
+              "description": "Directories to hash"
+            },
+            "update_first": {
+              "type": "boolean",
+              "default": true,
+              "description": "Update rkhunter database before scanning"
+            },
+            "baseline_path": {
+              "type": "string",
+              "description": "Baseline hash file for comparison"
+            },
+            "skip_keypress": {
+              "type": "boolean",
+              "default": true,
+              "description": "Skip keypress prompts"
+            },
+            "create_baseline": {
+              "type": "boolean",
+              "default": false,
+              "description": "Create new baseline hash file"
+            },
+            "report_warnings_only": {
+              "type": "boolean",
+              "default": false,
+              "description": "Only report warnings"
+            }
+          }
+        }
+      },
+      {
+        "name": "log_management",
+        "description": "Logging: auditd, journalctl, fail2ban, syslog, log rotation, SIEM integration",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ip": {
+              "type": "string",
+              "minLength": 1,
+              "description": "IP address to ban or unban"
+            },
+            "end": {
+              "type": "string",
+              "minLength": 1,
+              "description": "End time"
+            },
+            "key": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9._-]+$",
+              "minLength": 1,
+              "description": "Audit key to search for"
+            },
+            "uid": {
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "minLength": 1,
+              "description": "User ID to filter"
+            },
+            "grep": {
+              "type": "string",
+              "description": "Pattern to search for in log messages"
+            },
+            "jail": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9._-]+$",
+              "minLength": 1,
+              "description": "Fail2ban jail name"
+            },
+            "rule": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Audit rule string"
+            },
+            "unit": {
+              "type": "string",
+              "description": "Systemd unit name to filter"
+            },
+            "limit": {
+              "type": "number",
+              "default": 50,
+              "description": "Maximum lines to return"
+            },
+            "lines": {
+              "type": "number",
+              "description": "Number of log lines / max lines to return"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start time, e.g. '1 hour ago', 'today'"
+            },
+            "start": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Start time, e.g. 'today', '1 hour ago'"
+            },
+            "until": {
+              "type": "string",
+              "description": "End time"
+            },
+            "action": {
+              "enum": [
+                "auditd_rules",
+                "auditd_search",
+                "auditd_report",
+                "auditd_cis_rules",
+                "journalctl_query",
+                "fail2ban_status",
+                "fail2ban_ban",
+                "fail2ban_unban",
+                "fail2ban_reload",
+                "fail2ban_audit",
+                "syslog_analyze",
+                "rotation_audit",
+                "rotation_configure",
+                "siem_syslog_forward",
+                "siem_filebeat",
+                "siem_audit_forwarding",
+                "siem_test_connectivity"
+              ],
+              "type": "string",
+              "description": "Log management action"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview without executing"
+            },
+            "pattern": {
+              "enum": [
+                "auth_failures",
+                "ssh_brute",
+                "privilege_escalation",
+                "service_changes",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Security event pattern to search"
+            },
+            "success": {
+              "enum": [
+                "yes",
+                "no"
+              ],
+              "type": "string",
+              "description": "Filter by success/failure"
+            },
+            "syscall": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_]+$",
+              "minLength": 1,
+              "description": "System call name to filter"
+            },
+            "log_file": {
+              "type": "string",
+              "description": "Path to log file"
+            },
+            "priority": {
+              "enum": [
+                "emerg",
+                "alert",
+                "crit",
+                "err",
+                "warning",
+                "notice",
+                "info",
+                "debug"
+              ],
+              "type": "string",
+              "description": "Minimum priority level"
+            },
+            "protocol": {
+              "enum": [
+                "tcp",
+                "udp",
+                "tls"
+              ],
+              "type": "string",
+              "default": "tcp",
+              "description": "Transport protocol"
+            },
+            "siem_host": {
+              "type": "string",
+              "description": "SIEM server hostname or IP address"
+            },
+            "siem_port": {
+              "type": "number",
+              "description": "SIEM server port"
+            },
+            "cis_action": {
+              "enum": [
+                "check",
+                "generate"
+              ],
+              "type": "string",
+              "default": "check",
+              "description": "Check or generate CIS rules"
+            },
+            "log_sources": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Log sources to forward"
+            },
+            "report_type": {
+              "enum": [
+                "summary",
+                "auth",
+                "login",
+                "account",
+                "event",
+                "file",
+                "exec"
+              ],
+              "type": "string",
+              "default": "summary",
+              "description": "Audit report type"
+            },
+            "rotate_count": {
+              "type": "number",
+              "default": 7,
+              "description": "Number of rotated files to keep"
+            },
+            "rules_action": {
+              "enum": [
+                "list",
+                "add",
+                "delete"
+              ],
+              "type": "string",
+              "description": "Audit rule sub-action"
+            },
+            "compress_logs": {
+              "type": "boolean",
+              "default": true,
+              "description": "Compress rotated files"
+            },
+            "output_format": {
+              "type": "string",
+              "description": "Output format"
+            },
+            "logrotate_name": {
+              "type": "string",
+              "description": "Config filename under /etc/logrotate.d/"
+            },
+            "logrotate_path": {
+              "type": "string",
+              "description": "Log file path to configure rotation for"
+            },
+            "extra_directives": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Additional logrotate directives"
+            },
+            "rotate_frequency": {
+              "enum": [
+                "daily",
+                "weekly",
+                "monthly"
+              ],
+              "type": "string",
+              "default": "weekly"
+            }
+          }
+        }
+      },
+      {
+        "name": "network_defense",
+        "description": "Network: connections, traffic capture, port scan detection, IPv6 audit, self-scan, segmentation",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "number",
+              "default": 100,
+              "description": "Number of packets to capture"
+            },
+            "action": {
+              "enum": [
+                "connections_list",
+                "connections_audit",
+                "capture_custom",
+                "capture_dns",
+                "capture_arp",
+                "security_scan_detect",
+                "security_ipv6",
+                "security_self_scan",
+                "segmentation_map_zones",
+                "segmentation_verify_isolation",
+                "segmentation_test_paths",
+                "segmentation_audit_vlans"
+              ],
+              "type": "string",
+              "description": "Network defense action"
+            },
+            "filter": {
+              "type": "string",
+              "description": "BPF filter expression"
+            },
+            "target": {
+              "enum": [
+                "localhost",
+                "external"
+              ],
+              "type": "string",
+              "default": "localhost",
+              "description": "Scan target"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview without executing"
+            },
+            "process": {
+              "type": "boolean",
+              "default": true,
+              "description": "Show process information"
+            },
+            "duration": {
+              "type": "number",
+              "default": 30,
+              "description": "Capture duration in seconds"
+            },
+            "log_file": {
+              "type": "string",
+              "description": "Log file to analyze"
+            },
+            "protocol": {
+              "enum": [
+                "tcp",
+                "udp",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Protocol filter"
+            },
+            "dest_zone": {
+              "type": "string",
+              "description": "Destination network zone/subnet CIDR"
+            },
+            "interface": {
+              "type": "string",
+              "default": "any",
+              "minLength": 1,
+              "description": "Network interface to capture on"
+            },
+            "listening": {
+              "type": "boolean",
+              "default": false,
+              "description": "Show only listening sockets"
+            },
+            "scan_type": {
+              "enum": [
+                "quick",
+                "full",
+                "service"
+              ],
+              "type": "string",
+              "default": "quick",
+              "description": "Scan type"
+            },
+            "threshold": {
+              "type": "number",
+              "default": 10,
+              "description": "Connection attempts threshold"
+            },
+            "timeframe": {
+              "type": "number",
+              "default": 60,
+              "description": "Seconds to look back"
+            },
+            "output_file": {
+              "type": "string",
+              "description": "Path to save pcap file"
+            },
+            "source_zone": {
+              "type": "string",
+              "description": "Source network zone/subnet CIDR"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            },
+            "include_loopback": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include loopback services"
+            }
+          }
+        }
+      },
+      {
+        "name": "compliance",
+        "description": "Compliance: Lynis, OpenSCAP, CIS benchmarks, framework checks, policy, cron/tmp hardening",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "enum": [
+                "1",
+                "2"
+              ],
+              "type": "string",
+              "default": "1",
+              "description": "CIS benchmark level"
+            },
+            "quick": {
+              "type": "boolean",
+              "default": false,
+              "description": "Quick mode, skip long-running tests"
+            },
+            "action": {
+              "enum": [
+                "lynis_audit",
+                "oscap_scan",
+                "cis_check",
+                "framework_check",
+                "policy_evaluate",
+                "report",
+                "cron_restrict",
+                "cron_restrict_status",
+                "tmp_audit",
+                "tmp_harden"
+              ],
+              "type": "string",
+              "description": "Action to perform"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "format": {
+              "enum": [
+                "text",
+                "json",
+                "markdown"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Report output format"
+            },
+            "content": {
+              "type": "string",
+              "description": "Path to SCAP content DS file"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview without applying"
+            },
+            "pentest": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable pentest mode"
+            },
+            "profile": {
+              "type": "string",
+              "description": "Lynis profile file path"
+            },
+            "section": {
+              "enum": [
+                "filesystem",
+                "services",
+                "network",
+                "logging",
+                "access",
+                "system",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "CIS benchmark section"
+            },
+            "framework": {
+              "enum": [
+                "pci-dss-v4",
+                "hipaa",
+                "soc2",
+                "iso27001",
+                "gdpr"
+              ],
+              "type": "string",
+              "description": "Compliance framework"
+            },
+            "test_group": {
+              "type": "string",
+              "description": "Test group, e.g. 'firewall', 'ssh', 'kernel'"
+            },
+            "include_cis": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include CIS results"
+            },
+            "policy_name": {
+              "type": "string",
+              "description": "Built-in policy name"
+            },
+            "policy_path": {
+              "type": "string",
+              "description": "Path to custom policy JSON file"
+            },
+            "report_file": {
+              "type": "string",
+              "description": "Path to save HTML report"
+            },
+            "results_file": {
+              "type": "string",
+              "description": "Path to save XML results"
+            },
+            "allowed_users": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "root"
+              ],
+              "description": "Users for cron.allow and at.allow"
+            },
+            "include_lynis": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include Lynis results"
+            },
+            "mount_options": {
+              "type": "string",
+              "default": "nodev,nosuid,noexec",
+              "description": "Mount options for /tmp"
+            },
+            "oscap_profile": {
+              "type": "string",
+              "default": "xccdf_org.ssgproject.content_profile_standard",
+              "description": "XCCDF profile ID"
+            },
+            "include_policy": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include policy evaluation results"
+            },
+            "report_policy_name": {
+              "type": "string",
+              "description": "Policy name for report (required if include_policy=true)"
+            }
+          }
+        }
+      },
+      {
+        "name": "malware",
+        "description": "Malware: ClamAV scan/update, YARA rules, suspicious files, webshells, quarantine",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "number",
+              "default": 7,
+              "description": "Days for recently_modified check"
+            },
+            "path": {
+              "type": "string",
+              "description": "File or directory path to scan"
+            },
+            "action": {
+              "enum": [
+                "clamav_scan",
+                "clamav_update",
+                "yara_scan",
+                "file_scan_suspicious",
+                "file_scan_webshell",
+                "quarantine_list",
+                "quarantine_restore",
+                "quarantine_delete",
+                "quarantine_info"
+              ],
+              "type": "string",
+              "description": "Malware detection action"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview without executing"
+            },
+            "file_id": {
+              "type": "string",
+              "description": "Filename in quarantine directory"
+            },
+            "max_depth": {
+              "type": "number",
+              "default": 5,
+              "description": "Max directory depth"
+            },
+            "recursive": {
+              "type": "boolean",
+              "default": true,
+              "description": "Recursively scan directories"
+            },
+            "check_type": {
+              "enum": [
+                "suid",
+                "sgid",
+                "world_writable",
+                "hidden_executables",
+                "recently_modified",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Type of suspicious file check"
+            },
+            "rules_path": {
+              "type": "string",
+              "description": "Path to YARA rules file (.yar/.yara)"
+            },
+            "search_path": {
+              "type": "string",
+              "default": "/tmp",
+              "description": "Root path to search"
+            },
+            "target_path": {
+              "type": "string",
+              "description": "File or directory to scan with YARA"
+            },
+            "max_filesize": {
+              "type": "string",
+              "default": "100M",
+              "description": "Maximum file size to scan"
+            },
+            "remove_infected": {
+              "type": "boolean",
+              "default": false,
+              "description": "Remove infected files"
+            },
+            "timeout_per_file": {
+              "type": "number",
+              "default": 60,
+              "description": "Timeout in seconds per file"
+            },
+            "move_to_quarantine": {
+              "type": "boolean",
+              "default": false,
+              "description": "Move infected files to quarantine"
+            }
+          }
+        }
+      },
+      {
+        "name": "backup",
+        "description": "Backup: config files, system state snapshots, restore, verify integrity, list backups",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "description": "Tag for this backup set"
+            },
+            "files": {
+              "type": "string",
+              "description": "Comma-separated file paths to back up"
+            },
+            "limit": {
+              "type": "number",
+              "default": 50,
+              "description": "Maximum number of results"
+            },
+            "action": {
+              "enum": [
+                "config",
+                "state",
+                "restore",
+                "verify",
+                "list"
+              ],
+              "type": "string",
+              "description": "Backup management action"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Filter by filename pattern"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview without executing"
+            },
+            "sort_by": {
+              "enum": [
+                "date",
+                "name",
+                "size"
+              ],
+              "type": "string",
+              "default": "date",
+              "description": "Sort order"
+            },
+            "output_dir": {
+              "type": "string",
+              "description": "Directory to save snapshot files"
+            },
+            "backup_path": {
+              "type": "string",
+              "description": "Path to the backup file"
+            },
+            "include_users": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include user/group information"
+            },
+            "original_path": {
+              "type": "string",
+              "description": "Original file path to restore to"
+            },
+            "check_integrity": {
+              "type": "boolean",
+              "default": true,
+              "description": "Compute and verify SHA256 checksums"
+            },
+            "include_network": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include network configuration"
+            },
+            "include_firewall": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include firewall rules"
+            },
+            "include_packages": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include installed packages list"
+            },
+            "include_services": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include service states"
+            }
+          }
+        }
+      },
+      {
+        "name": "access_control",
+        "description": "Access control: SSH, PAM, sudo, user audit, password policy, shell restriction",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "force": {
+              "type": "boolean",
+              "default": false,
+              "description": "Force past critical sanity check findings (caution: may cause lockouts)"
+            },
+            "shell": {
+              "type": "string",
+              "default": "/usr/sbin/nologin",
+              "description": "Shell to set"
+            },
+            "action": {
+              "enum": [
+                "ssh_audit",
+                "ssh_harden",
+                "ssh_cipher_audit",
+                "pam_audit",
+                "pam_configure",
+                "sudo_audit",
+                "sudoers_manage",
+                "user_audit",
+                "password_policy_audit",
+                "password_policy_set",
+                "restrict_shell"
+              ],
+              "type": "string",
+              "description": "Action to perform"
+            },
+            "module": {
+              "enum": [
+                "pwquality",
+                "faillock"
+              ],
+              "type": "string",
+              "description": "PAM module to configure"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview changes without executing"
+            },
+            "service": {
+              "type": "string",
+              "description": "PAM service to audit, e.g. 'sshd', 'login', 'sudo'"
+            },
+            "max_days": {
+              "type": "number",
+              "description": "Maximum days before password change (PASS_MAX_DAYS)"
+            },
+            "min_days": {
+              "type": "number",
+              "description": "Minimum days between password changes (PASS_MIN_DAYS)"
+            },
+            "settings": {
+              "type": "string",
+              "description": "Comma-separated key=value pairs, e.g. 'PermitRootLogin=no,MaxAuthTries=4'"
+            },
+            "username": {
+              "type": "string",
+              "description": "Username to restrict"
+            },
+            "check_all": {
+              "type": "boolean",
+              "default": false,
+              "description": "Check common-auth, common-password, etc."
+            },
+            "warn_days": {
+              "type": "number",
+              "description": "Days before expiry to warn user (PASS_WARN_AGE)"
+            },
+            "check_type": {
+              "enum": [
+                "all",
+                "privileged",
+                "inactive",
+                "no_password",
+                "shell",
+                "locked"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Type of user audit"
+            },
+            "min_length": {
+              "type": "number",
+              "description": "Minimum password length (PASS_MIN_LEN)"
+            },
+            "config_path": {
+              "type": "string",
+              "default": "/etc/ssh/sshd_config",
+              "description": "Path to sshd_config file"
+            },
+            "target_user": {
+              "type": "string",
+              "description": "Apply to specific user via chage instead of system-wide"
+            },
+            "pam_settings": {
+              "type": "object",
+              "properties": {
+                "deny": {
+                  "type": "number"
+                },
+                "minlen": {
+                  "type": "number"
+                },
+                "dcredit": {
+                  "type": "number"
+                },
+                "lcredit": {
+                  "type": "number"
+                },
+                "ocredit": {
+                  "type": "number"
+                },
+                "ucredit": {
+                  "type": "number"
+                },
+                "minclass": {
+                  "type": "number"
+                },
+                "maxrepeat": {
+                  "type": "number"
+                },
+                "unlock_time": {
+                  "type": "number"
+                },
+                "fail_interval": {
+                  "type": "number"
+                },
+                "reject_username": {
+                  "type": "boolean"
+                }
+              },
+              "description": "PAM module-specific settings",
+              "additionalProperties": false
+            },
+            "restart_sshd": {
+              "type": "boolean",
+              "default": false,
+              "description": "Restart sshd after applying changes"
+            },
+            "inactive_days": {
+              "type": "number",
+              "description": "Days after expiry before account disabled"
+            },
+            "check_insecure": {
+              "type": "boolean",
+              "default": true,
+              "description": "Check for insecure sudoers configurations"
+            },
+            "check_nopasswd": {
+              "type": "boolean",
+              "default": true,
+              "description": "Check for NOPASSWD entries"
+            },
+            "encrypt_method": {
+              "enum": [
+                "SHA512",
+                "YESCRYPT"
+              ],
+              "type": "string",
+              "description": "Password hashing algorithm (ENCRYPT_METHOD)"
+            },
+            "sudoers_action": {
+              "enum": [
+                "write",
+                "remove",
+                "validate"
+              ],
+              "type": "string",
+              "description": "Sub-action for sudoers_manage"
+            },
+            "sudoers_content": {
+              "type": "string",
+              "description": "Content for the sudoers drop-in file (write sub-action)"
+            },
+            "sudoers_filename": {
+              "type": "string",
+              "description": "Drop-in filename under /etc/sudoers.d/ (no path separators)"
+            },
+            "apply_recommended": {
+              "type": "boolean",
+              "default": false,
+              "description": "Apply all recommended SSH hardening settings"
+            }
+          }
+        }
+      },
+      {
+        "name": "crypto",
+        "description": "Crypto: TLS/SSL audit, GPG, LUKS, file hashing, certificate lifecycle",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string",
+              "description": "Target hostname or IP"
+            },
+            "name": {
+              "type": "string",
+              "description": "LUKS mapper name"
+            },
+            "path": {
+              "type": "string",
+              "description": "File or directory path to hash"
+            },
+            "port": {
+              "type": "number",
+              "default": 443,
+              "description": "Target port"
+            },
+            "action": {
+              "enum": [
+                "tls_remote_audit",
+                "tls_cert_expiry",
+                "tls_config_audit",
+                "gpg_list",
+                "gpg_generate",
+                "gpg_export",
+                "gpg_import",
+                "gpg_verify",
+                "luks_status",
+                "luks_dump",
+                "luks_open",
+                "luks_close",
+                "luks_list",
+                "file_hash",
+                "cert_inventory",
+                "cert_auto_renew_check",
+                "cert_ca_audit",
+                "cert_ocsp_check",
+                "cert_ct_log_monitor"
+              ],
+              "type": "string",
+              "description": "Action to perform"
+            },
+            "device": {
+              "type": "string",
+              "description": "Block device path, e.g. /dev/sda2"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Domain name for certificate checks"
+            },
+            "key_id": {
+              "type": "string",
+              "description": "GPG key ID"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview without executing"
+            },
+            "service": {
+              "enum": [
+                "apache",
+                "nginx",
+                "system",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Service to audit TLS config for"
+            },
+            "algorithm": {
+              "enum": [
+                "sha256",
+                "sha512",
+                "sha1",
+                "md5"
+              ],
+              "type": "string",
+              "default": "sha256",
+              "description": "Hash algorithm"
+            },
+            "cert_path": {
+              "type": "string",
+              "description": "Local certificate file path"
+            },
+            "file_path": {
+              "type": "string",
+              "description": "File path for GPG import/verify"
+            },
+            "recursive": {
+              "type": "boolean",
+              "default": false,
+              "description": "Hash files recursively"
+            },
+            "warn_days": {
+              "type": "number",
+              "default": 30,
+              "description": "Days before expiry to warn"
+            },
+            "search_paths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Additional certificate search paths"
+            },
+            "check_ciphers": {
+              "type": "boolean",
+              "default": true,
+              "description": "Check for weak ciphers"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            },
+            "check_protocols": {
+              "type": "boolean",
+              "default": true,
+              "description": "Check for weak protocols"
+            },
+            "check_certificate": {
+              "type": "boolean",
+              "default": true,
+              "description": "Check certificate details"
+            }
+          }
+        }
+      },
+      {
+        "name": "container_docker",
+        "description": "Docker security: audit, CIS bench, seccomp, daemon config, image scan",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "type": "string",
+              "description": "Docker image to scan, e.g. 'nginx:latest'"
+            },
+            "action": {
+              "enum": [
+                "audit",
+                "bench",
+                "seccomp",
+                "daemon",
+                "image_scan"
+              ],
+              "type": "string",
+              "description": "Docker security action"
+            },
+            "checks": {
+              "type": "string",
+              "description": "Check sections, e.g. '1,2,4'"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview changes without executing"
+            },
+            "settings": {
+              "type": "object",
+              "properties": {
+                "ip": {
+                  "type": "string",
+                  "description": "Default bind address for published ports on default bridge (e.g. '127.0.0.1')"
+                },
+                "icc": {
+                  "type": "boolean"
+                },
+                "log_driver": {
+                  "enum": [
+                    "json-file",
+                    "journald"
+                  ],
+                  "type": "string"
+                },
+                "live_restore": {
+                  "type": "boolean"
+                },
+                "log_max_file": {
+                  "type": "string",
+                  "default": "3"
+                },
+                "log_max_size": {
+                  "type": "string",
+                  "default": "10m"
+                },
+                "userns_remap": {
+                  "type": "boolean"
+                },
+                "no_new_privileges": {
+                  "type": "boolean"
+                },
+                "default_bind_address": {
+                  "type": "string",
+                  "description": "Default bind address for user-defined bridge networks (e.g. '127.0.0.1')"
+                }
+              },
+              "description": "Daemon settings to apply",
+              "additionalProperties": false
+            },
+            "severity": {
+              "enum": [
+                "CRITICAL",
+                "HIGH",
+                "MEDIUM",
+                "LOW",
+                "ALL"
+              ],
+              "type": "string",
+              "default": "HIGH",
+              "description": "Minimum severity to report"
+            },
+            "log_level": {
+              "enum": [
+                "INFO",
+                "WARN",
+                "NOTE",
+                "PASS"
+              ],
+              "type": "string",
+              "default": "WARN",
+              "description": "Minimum log level"
+            },
+            "check_type": {
+              "enum": [
+                "daemon",
+                "images",
+                "containers",
+                "network",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Docker audit check type"
+            },
+            "daemon_action": {
+              "enum": [
+                "audit",
+                "apply"
+              ],
+              "type": "string",
+              "description": "Audit or apply daemon settings"
+            }
+          }
+        }
+      },
+      {
+        "name": "container_isolation",
+        "description": "Container isolation: AppArmor, SELinux, namespaces, seccomp, rootless setup",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pid": {
+              "type": "number",
+              "description": "Process ID to inspect"
+            },
+            "mode": {
+              "enum": [
+                "enforcing",
+                "permissive",
+                "disabled"
+              ],
+              "type": "string",
+              "description": "SELinux mode"
+            },
+            "action": {
+              "enum": [
+                "apparmor_status",
+                "apparmor_list",
+                "apparmor_enforce",
+                "apparmor_complain",
+                "apparmor_disable",
+                "apparmor_install",
+                "apparmor_apply_container",
+                "selinux_status",
+                "selinux_getenforce",
+                "selinux_setenforce",
+                "selinux_booleans",
+                "selinux_audit",
+                "namespace_check",
+                "seccomp_profile",
+                "rootless_setup"
+              ],
+              "type": "string",
+              "description": "Action to perform"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview changes without executing"
+            },
+            "profile": {
+              "type": "string",
+              "description": "AppArmor profile name"
+            },
+            "username": {
+              "type": "string",
+              "description": "Username to configure"
+            },
+            "allowWrite": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "description": "Writable paths"
+            },
+            "check_type": {
+              "enum": [
+                "user",
+                "network",
+                "pid",
+                "mount",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Namespace check type"
+            },
+            "outputPath": {
+              "type": "string",
+              "description": "Output path for profile"
+            },
+            "profileName": {
+              "type": "string",
+              "description": "Profile name for container/seccomp"
+            },
+            "subuidCount": {
+              "type": "number",
+              "default": 65536,
+              "description": "Subordinate UID count"
+            },
+            "allowNetwork": {
+              "type": "boolean",
+              "default": true,
+              "description": "Allow network access"
+            },
+            "boolean_name": {
+              "type": "string",
+              "description": "SELinux boolean name"
+            },
+            "boolean_value": {
+              "enum": [
+                "on",
+                "off"
+              ],
+              "type": "string",
+              "description": "SELinux boolean value"
+            },
+            "containerName": {
+              "type": "string",
+              "description": "Container name"
+            },
+            "defaultAction": {
+              "enum": [
+                "SCMP_ACT_ERRNO",
+                "SCMP_ACT_KILL",
+                "SCMP_ACT_LOG"
+              ],
+              "type": "string",
+              "default": "SCMP_ACT_ERRNO",
+              "description": "Default action for unlisted syscalls"
+            },
+            "allowedSyscalls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Syscall names to allow"
+            }
+          }
+        }
+      },
+      {
+        "name": "defense_mgmt",
+        "description": "Defense: tool checks, workflows, change history, posture, scheduled audits, remediation, reports",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "gate": {
+              "type": "boolean",
+              "default": false,
+              "description": "Audit gate mode: block if required tools missing"
+            },
+            "name": {
+              "type": "string",
+              "description": "Audit job name ([a-zA-Z0-9_-] only)"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Filter by tool name"
+            },
+            "force": {
+              "type": "boolean",
+              "default": false,
+              "description": "Force reinstall even if installed"
+            },
+            "limit": {
+              "type": "number",
+              "default": 20,
+              "description": "Maximum entries to return"
+            },
+            "lines": {
+              "type": "number",
+              "default": 100,
+              "description": "Number of recent log lines"
+            },
+            "since": {
+              "type": "string",
+              "description": "Filter by date, e.g. 'today', '2024-01-01'"
+            },
+            "action": {
+              "enum": [
+                "check_tools",
+                "workflow_suggest",
+                "workflow_run",
+                "change_history",
+                "posture_score",
+                "posture_trend",
+                "posture_dashboard",
+                "scheduled_create",
+                "scheduled_list",
+                "scheduled_remove",
+                "scheduled_history",
+                "remediate_plan",
+                "remediate_apply",
+                "remediate_rollback",
+                "remediate_status",
+                "report_generate",
+                "report_list",
+                "report_formats",
+                "check_optional_deps",
+                "install_optional_deps",
+                "self_audit"
+              ],
+              "type": "string",
+              "description": "Defense management action"
+            },
+            "format": {
+              "enum": [
+                "markdown",
+                "html",
+                "json",
+                "csv"
+              ],
+              "type": "string",
+              "default": "markdown",
+              "description": "Report output format"
+            },
+            "source": {
+              "enum": [
+                "compliance",
+                "hardening",
+                "access_control",
+                "firewall",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Source of findings to remediate"
+            },
+            "command": {
+              "enum": [
+                "lynis audit system",
+                "rkhunter --check --skip-keypress",
+                "aide --check",
+                "clamscan -r /home",
+                "chkrootkit",
+                "freshclam",
+                "tiger"
+              ],
+              "type": "string",
+              "description": "Audit command from approved allowlist"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview without executing"
+            },
+            "verbose": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include detailed findings in self-audit output"
+            },
+            "category": {
+              "type": "string",
+              "description": "Filter by tool category"
+            },
+            "schedule": {
+              "type": "string",
+              "description": "Cron format or systemd calendar schedule"
+            },
+            "workflow": {
+              "enum": [
+                "quick_harden",
+                "full_audit",
+                "incident_prep",
+                "backup_all",
+                "network_lockdown"
+              ],
+              "type": "string",
+              "description": "Workflow to execute"
+            },
+            "objective": {
+              "enum": [
+                "initial_hardening",
+                "incident_response",
+                "compliance_audit",
+                "malware_investigation",
+                "network_monitoring",
+                "full_assessment"
+              ],
+              "type": "string",
+              "description": "Security objective"
+            },
+            "tool_name": {
+              "type": "string",
+              "description": "Tool binary name to install (omit for all missing)"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Remediation session ID"
+            },
+            "useSystemd": {
+              "type": "boolean",
+              "default": true,
+              "description": "Use systemd timer vs cron"
+            },
+            "output_path": {
+              "type": "string",
+              "description": "File path to save report"
+            },
+            "report_type": {
+              "enum": [
+                "executive_summary",
+                "technical_detail",
+                "compliance_evidence",
+                "vulnerability_report",
+                "hardening_status"
+              ],
+              "type": "string",
+              "default": "technical_detail",
+              "description": "Report type"
+            },
+            "system_type": {
+              "enum": [
+                "server",
+                "desktop",
+                "container",
+                "cloud"
+              ],
+              "type": "string",
+              "default": "server",
+              "description": "System type"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            },
+            "install_missing": {
+              "type": "boolean",
+              "default": false,
+              "description": "Attempt to install missing tools"
+            },
+            "severity_filter": {
+              "enum": [
+                "critical",
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string",
+              "default": "medium",
+              "description": "Minimum severity to include"
+            },
+            "include_sections": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Section names to include"
+            }
+          }
+        }
+      },
+      {
+        "name": "patch",
+        "description": "Patches: pending updates, unattended upgrades, package integrity, kernel audit, CVE lookup",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cveId": {
+              "type": "string",
+              "description": "CVE ID e.g. CVE-2024-1234"
+            },
+            "action": {
+              "enum": [
+                "update_audit",
+                "unattended_audit",
+                "integrity_check",
+                "kernel_audit",
+                "vuln_lookup",
+                "vuln_scan",
+                "vuln_urgency"
+              ],
+              "type": "string",
+              "description": "Patch management action"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "maxPackages": {
+              "type": "number",
+              "default": 50,
+              "description": "Maximum packages to check"
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Package name to check urgency for"
+            },
+            "changed_only": {
+              "type": "boolean",
+              "default": true,
+              "description": "Only show changed files"
+            },
+            "package_name": {
+              "type": "string",
+              "description": "Specific package to check"
+            },
+            "security_only": {
+              "type": "boolean",
+              "default": false,
+              "description": "Only show security-relevant updates"
+            }
+          }
+        }
+      },
+      {
+        "name": "secrets",
+        "description": "Secrets: filesystem scan, env variable audit, SSH key sprawl, git history leak detection",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "default": "/home",
+              "description": "Root path to scan"
+            },
+            "action": {
+              "enum": [
+                "scan",
+                "env_audit",
+                "ssh_key_sprawl",
+                "git_history_scan"
+              ],
+              "type": "string",
+              "description": "Secrets scanning action"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "repoPath": {
+              "type": "string",
+              "description": "Path to git repository"
+            },
+            "check_env": {
+              "type": "boolean",
+              "default": true,
+              "description": "Check environment variables for sensitive names"
+            },
+            "max_depth": {
+              "type": "number",
+              "default": 5,
+              "description": "Maximum directory depth to search"
+            },
+            "scan_type": {
+              "enum": [
+                "all",
+                "api_keys",
+                "private_keys",
+                "passwords",
+                "tokens"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Type of secrets to scan for"
+            },
+            "check_files": {
+              "type": "boolean",
+              "default": true,
+              "description": "Check for exposed .env files on disk"
+            },
+            "search_path": {
+              "type": "string",
+              "default": "/home",
+              "description": "Root path to search for SSH keys"
+            },
+            "check_authorized_keys": {
+              "type": "boolean",
+              "default": true,
+              "description": "Also audit authorized_keys files"
+            }
+          }
+        }
+      },
+      {
+        "name": "incident_response",
+        "description": "Incident response: volatile data, IOC scan, timeline, forensics (memory/disk/network/evidence/custody)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "default": "/",
+              "description": "Root path to search"
+            },
+            "hours": {
+              "type": "number",
+              "default": 24,
+              "description": "Hours to look back for modifications"
+            },
+            "action": {
+              "enum": [
+                "collect",
+                "ioc_scan",
+                "timeline",
+                "forensics_memory_dump",
+                "forensics_disk_image",
+                "forensics_network_capture",
+                "forensics_evidence_bag",
+                "forensics_chain_of_custody"
+              ],
+              "type": "string",
+              "description": "Incident response action"
+            },
+            "device": {
+              "type": "string",
+              "description": "Device path, e.g. /dev/sda1"
+            },
+            "case_id": {
+              "type": "string",
+              "description": "Case identifier for custody tracking"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview without executing"
+            },
+            "duration": {
+              "type": "number",
+              "default": 60,
+              "description": "Capture duration in seconds (max 300)"
+            },
+            "examiner": {
+              "type": "string",
+              "description": "Name of the forensic examiner"
+            },
+            "interface": {
+              "type": "string",
+              "default": "any",
+              "description": "Network interface for capture"
+            },
+            "check_type": {
+              "enum": [
+                "processes",
+                "connections",
+                "persistence",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "IOC check type"
+            },
+            "file_types": {
+              "enum": [
+                "all",
+                "executables",
+                "configs",
+                "scripts"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "File types to include"
+            },
+            "output_dir": {
+              "type": "string",
+              "description": "Output directory for artifacts"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the evidence item"
+            },
+            "evidence_path": {
+              "type": "string",
+              "description": "Path to evidence file"
+            },
+            "exclude_paths": {
+              "type": "string",
+              "default": "/proc,/sys,/dev,/run",
+              "description": "Comma-separated paths to exclude"
+            },
+            "custody_action": {
+              "enum": [
+                "add",
+                "view",
+                "verify"
+              ],
+              "type": "string",
+              "default": "view",
+              "description": "Chain-of-custody sub-action"
+            }
+          }
+        }
+      },
+      {
+        "name": "supply_chain",
+        "description": "Supply chain: SBOM generation, cosign artifact signing, SLSA provenance verification",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "default": ".",
+              "description": "Directory to scan"
+            },
+            "action": {
+              "enum": [
+                "sbom",
+                "sign",
+                "verify_slsa"
+              ],
+              "type": "string",
+              "description": "Supply chain security action"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "format": {
+              "enum": [
+                "cyclonedx-json",
+                "spdx-json",
+                "table"
+              ],
+              "type": "string",
+              "default": "cyclonedx-json",
+              "description": "SBOM output format"
+            },
+            "source": {
+              "type": "string",
+              "description": "Expected source repository URI"
+            },
+            "keyPath": {
+              "type": "string",
+              "description": "Path to private key, omit for keyless"
+            },
+            "artifact": {
+              "type": "string",
+              "description": "Image reference or file path to sign/verify"
+            }
+          }
+        }
+      },
+      {
+        "name": "zero_trust",
+        "description": "Zero-trust: WireGuard VPN, peer management, mTLS certificates, microsegmentation",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "wireguard",
+                "wg_peers",
+                "mtls",
+                "microsegment"
+              ],
+              "type": "string",
+              "description": "Zero-trust networking action"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "address": {
+              "type": "string",
+              "description": "Interface address with CIDR e.g. 10.0.0.1/24"
+            },
+            "denyAll": {
+              "type": "boolean",
+              "default": true,
+              "description": "Add deny-all rule for other ports"
+            },
+            "service": {
+              "type": "string",
+              "description": "Service name e.g. nginx, postgres"
+            },
+            "clientCN": {
+              "type": "string",
+              "default": "client.local",
+              "description": "Client common name"
+            },
+            "endpoint": {
+              "type": "string",
+              "description": "Peer endpoint ip:port"
+            },
+            "serverCN": {
+              "type": "string",
+              "default": "server.local",
+              "description": "Server common name"
+            },
+            "outputDir": {
+              "type": "string",
+              "description": "Directory to write certificates"
+            },
+            "publicKey": {
+              "type": "string",
+              "description": "Peer public key"
+            },
+            "validDays": {
+              "type": "number",
+              "default": 365,
+              "description": "Certificate validity in days"
+            },
+            "allowPorts": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Ports to allow"
+            },
+            "allowedIps": {
+              "type": "string",
+              "description": "Allowed IPs for peer"
+            },
+            "commonName": {
+              "type": "string",
+              "default": "defense-mcp-ca",
+              "description": "CA common name"
+            },
+            "listenPort": {
+              "type": "number",
+              "default": 51820,
+              "description": "UDP listen port"
+            },
+            "peer_action": {
+              "enum": [
+                "add",
+                "remove",
+                "list"
+              ],
+              "type": "string",
+              "description": "Peer sub-action"
+            },
+            "allowSources": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "description": "Source IPs/CIDRs to allow"
+            },
+            "interfaceName": {
+              "type": "string",
+              "default": "wg0",
+              "description": "WireGuard interface name"
+            }
+          }
+        }
+      },
+      {
+        "name": "ebpf",
+        "description": "eBPF/Falco: list eBPF programs, Falco status, deploy rules, read events",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "lines": {
+              "type": "number",
+              "default": 50,
+              "description": "Number of recent events to return"
+            },
+            "action": {
+              "enum": [
+                "list_programs",
+                "falco_status",
+                "falco_deploy_rules",
+                "falco_events"
+              ],
+              "type": "string",
+              "description": "eBPF/Falco security action"
+            },
+            "dryRun": {
+              "type": "boolean",
+              "default": true,
+              "description": "Preview only"
+            },
+            "priority": {
+              "enum": [
+                "emergency",
+                "alert",
+                "critical",
+                "error",
+                "warning",
+                "notice",
+                "info",
+                "debug"
+              ],
+              "type": "string",
+              "description": "Filter by minimum priority"
+            },
+            "ruleName": {
+              "type": "string",
+              "description": "Rule file name without .yaml extension"
+            },
+            "ruleContent": {
+              "type": "string",
+              "description": "YAML rule content"
+            }
+          }
+        }
+      },
+      {
+        "name": "app_harden",
+        "description": "App hardening: audit running apps, recommendations, firewall rules, systemd sandboxing",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "audit",
+                "recommend",
+                "firewall",
+                "systemd"
+              ],
+              "type": "string",
+              "description": "Application hardening action"
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Preview changes without applying"
+            },
+            "app_name": {
+              "type": "string",
+              "description": "Application name. Available: qbittorrent, nginx, sshd, postgresql, mysql, redis, cups, avahi, mongodb, exim, samba"
+            },
+            "lan_cidr": {
+              "type": "string",
+              "default": "192.168.0.0/16",
+              "description": "LAN CIDR for localhost-only ports"
+            },
+            "service_name": {
+              "type": "string",
+              "description": "Override systemd service name"
+            }
+          }
+        }
+      },
+      {
+        "name": "api_security",
+        "description": "API security: local API discovery, auth audit, rate limiting, TLS verify, CORS check",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "scan_local_apis",
+                "audit_auth",
+                "check_rate_limiting",
+                "tls_verify",
+                "cors_check"
+              ],
+              "type": "string",
+              "description": "API security action"
+            },
+            "target": {
+              "type": "string",
+              "description": "URL or host:port to scan"
+            },
+            "port_range": {
+              "type": "string",
+              "default": "80,443,3000,4000,5000,8000,8080,8443,9000",
+              "description": "Comma-separated ports to scan for APIs"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            }
+          }
+        }
+      },
+      {
+        "name": "cloud_security",
+        "description": "Cloud: environment detection, metadata audit, IAM credentials, storage audit, IMDS security",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "detect_environment",
+                "audit_metadata",
+                "check_iam_creds",
+                "audit_storage",
+                "check_imds"
+              ],
+              "type": "string",
+              "description": "Cloud security action"
+            },
+            "provider": {
+              "enum": [
+                "aws",
+                "gcp",
+                "azure",
+                "auto"
+              ],
+              "type": "string",
+              "default": "auto",
+              "description": "Cloud provider to target"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            }
+          }
+        }
+      },
+      {
+        "name": "honeypot_manage",
+        "description": "Deception: canary tokens, honeyport listeners, trigger detection, canary management",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "number",
+              "description": "Port for honeyport listener"
+            },
+            "action": {
+              "enum": [
+                "deploy_canary",
+                "deploy_honeyport",
+                "check_triggers",
+                "remove",
+                "list"
+              ],
+              "type": "string",
+              "description": "Honeypot/deception action"
+            },
+            "canary_id": {
+              "type": "string",
+              "description": "ID of canary to remove"
+            },
+            "canary_path": {
+              "type": "string",
+              "description": "Path for canary deployment"
+            },
+            "canary_type": {
+              "enum": [
+                "file",
+                "credential",
+                "directory",
+                "ssh_key"
+              ],
+              "type": "string",
+              "description": "Type of canary to deploy"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            }
+          }
+        }
+      },
+      {
+        "name": "dns_security",
+        "description": "DNS: resolver audit, DNSSEC check, tunneling detection, domain blocklists, query log audit",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "audit_resolv",
+                "check_dnssec",
+                "detect_tunneling",
+                "block_domains",
+                "query_log_audit"
+              ],
+              "type": "string",
+              "description": "DNS security action"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Domain to check"
+            },
+            "duration": {
+              "type": "number",
+              "default": 30,
+              "description": "Capture duration in seconds (max 120)"
+            },
+            "log_path": {
+              "type": "string",
+              "description": "Path to DNS query log"
+            },
+            "interface": {
+              "type": "string",
+              "default": "any",
+              "minLength": 1,
+              "description": "Network interface for capture"
+            },
+            "threshold": {
+              "type": "number",
+              "default": 3.5,
+              "description": "Entropy threshold for tunneling detection"
+            },
+            "blocklist_path": {
+              "type": "string",
+              "description": "Path to blocklist file"
+            },
+            "domains_to_block": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Domains to add to blocklist"
+            }
+          }
+        }
+      },
+      {
+        "name": "process_security",
+        "description": "Processes: audit running, capabilities, namespaces, anomaly detection, cgroup limits",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pid": {
+              "type": "number",
+              "description": "Specific process ID to inspect"
+            },
+            "action": {
+              "enum": [
+                "audit_running",
+                "check_capabilities",
+                "check_namespaces",
+                "detect_anomalies",
+                "cgroup_audit"
+              ],
+              "type": "string",
+              "description": "Process security action"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Filter processes by name pattern (regex)"
+            },
+            "show_all": {
+              "type": "boolean",
+              "default": false,
+              "description": "Show all processes, not just suspicious"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            }
+          }
+        }
+      },
+      {
+        "name": "threat_intel",
+        "description": "Threat intel: IP/hash/domain reputation, feed management, blocklist application",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "check_ip",
+                "check_hash",
+                "check_domain",
+                "update_feeds",
+                "blocklist_apply"
+              ],
+              "type": "string",
+              "description": "Threat intelligence action"
+            },
+            "apply_to": {
+              "enum": [
+                "iptables",
+                "fail2ban",
+                "hosts"
+              ],
+              "type": "string",
+              "default": "iptables",
+              "description": "Target to apply blocklist to"
+            },
+            "feed_url": {
+              "type": "string",
+              "description": "URL of threat feed to download"
+            },
+            "feed_name": {
+              "type": "string",
+              "description": "Name of threat feed to update"
+            },
+            "indicator": {
+              "type": "string",
+              "description": "IP address, file hash, or domain to check"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            },
+            "blocklist_path": {
+              "type": "string",
+              "description": "Path to blocklist file"
+            }
+          }
+        }
+      },
+      {
+        "name": "vuln_manage",
+        "description": "Vulnerabilities: nmap scan, nikto web scan, tracking, risk prioritization, remediation plans",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "scan_system",
+                "scan_web",
+                "track",
+                "prioritize",
+                "remediation_plan"
+              ],
+              "type": "string",
+              "description": "Vulnerability management action"
+            },
+            "status": {
+              "enum": [
+                "open",
+                "mitigated",
+                "accepted",
+                "false_positive"
+              ],
+              "type": "string",
+              "description": "Vulnerability status"
+            },
+            "target": {
+              "type": "string",
+              "description": "IP, hostname, or URL to scan"
+            },
+            "vuln_id": {
+              "type": "string",
+              "description": "Vulnerability ID for tracking"
+            },
+            "severity": {
+              "type": "string",
+              "description": "Severity level for new vulnerability"
+            },
+            "scan_type": {
+              "enum": [
+                "quick",
+                "full",
+                "stealth"
+              ],
+              "type": "string",
+              "default": "quick",
+              "description": "Scan type"
+            },
+            "port_range": {
+              "type": "string",
+              "default": "1-1024",
+              "description": "Port range for scanning"
+            },
+            "description": {
+              "type": "string",
+              "description": "Vulnerability description"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            },
+            "severity_filter": {
+              "enum": [
+                "critical",
+                "high",
+                "medium",
+                "low",
+                "all"
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Severity filter for prioritization"
+            }
+          }
+        }
+      },
+      {
+        "name": "waf_manage",
+        "description": "WAF: ModSecurity audit, rule management, rate limiting, OWASP CRS, blocked request analysis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "modsec_audit",
+                "modsec_rules",
+                "rate_limit_config",
+                "owasp_crs_deploy",
+                "blocked_requests"
+              ],
+              "type": "string",
+              "description": "WAF management action"
+            },
+            "rule_id": {
+              "type": "string",
+              "description": "ModSecurity rule ID"
+            },
+            "log_path": {
+              "type": "string",
+              "description": "Path to WAF log file"
+            },
+            "rate_limit": {
+              "type": "number",
+              "description": "Requests per second for rate limiting"
+            },
+            "web_server": {
+              "enum": [
+                "nginx",
+                "apache"
+              ],
+              "type": "string",
+              "default": "nginx",
+              "description": "Web server type"
+            },
+            "rule_action": {
+              "enum": [
+                "enable",
+                "disable",
+                "list"
+              ],
+              "type": "string",
+              "default": "list",
+              "description": "Rule sub-action"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            },
+            "rate_limit_zone": {
+              "type": "string",
+              "description": "Zone name for rate limiting"
+            }
+          }
+        }
+      },
+      {
+        "name": "wireless_security",
+        "description": "Wireless: Bluetooth audit, WiFi assessment, rogue AP detection, disable unused interfaces",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "bt_audit",
+                "wifi_audit",
+                "rogue_ap_detect",
+                "disable_unused"
+              ],
+              "type": "string",
+              "description": "Wireless security action"
+            },
+            "interface": {
+              "type": "string",
+              "description": "Specific wireless interface to audit (e.g. wlan0)"
+            },
+            "output_format": {
+              "enum": [
+                "text",
+                "json"
+              ],
+              "type": "string",
+              "default": "text",
+              "description": "Output format"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

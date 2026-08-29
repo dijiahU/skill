@@ -1,0 +1,52 @@
+{
+  "registry": "glama",
+  "id": "lgk91q7qhe",
+  "namespace": "fborello",
+  "slug": "MCPSpotify",
+  "name": "MCP Spotify Server",
+  "description": "Enables interaction with Spotify through LLMs using OAuth2 authentication. Supports music search, playback control, playlist management, and device management through natural language commands.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables interaction with Spotify through LLMs using OAuth2 authentication. Supports music search, playback control, playlist management, and device management through natural language commands.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SPOTIFY_CLIENT_ID": {
+          "description": "Your Spotify Client ID from the Spotify Developer Dashboard",
+          "type": "string"
+        },
+        "SPOTIFY_REDIRECT_URI": {
+          "description": "The redirect URI configured in your Spotify app settings",
+          "type": "string",
+          "default": "http://localhost:3000/callback"
+        },
+        "SPOTIFY_CLIENT_SECRET": {
+          "description": "Your Spotify Client Secret from the Spotify Developer Dashboard",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "SPOTIFY_CLIENT_ID",
+        "SPOTIFY_CLIENT_SECRET"
+      ]
+    },
+    "id": "lgk91q7qhe",
+    "name": "MCP Spotify Server",
+    "namespace": "fborello",
+    "repository": {
+      "url": "https://github.com/fborello/MCPSpotify"
+    },
+    "slug": "MCPSpotify",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lgk91q7qhe"
+  }
+}

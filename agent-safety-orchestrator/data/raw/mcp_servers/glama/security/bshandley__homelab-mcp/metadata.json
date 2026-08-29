@@ -1,0 +1,69 @@
+{
+  "registry": "glama",
+  "id": "zhsy4v3s8r",
+  "namespace": "bshandley",
+  "slug": "homelab-mcp",
+  "name": "Homelab MCP Server",
+  "description": "Enables Claude to monitor and manage homelab infrastructure including Docker containers, OPNsense firewall, and TrueNAS storage with configurable capability levels from read-only monitoring to full management control.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to monitor and manage homelab infrastructure including Docker containers, OPNsense firewall, and TrueNAS storage with configurable capability levels from read-only monitoring to full management control.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "The port the server will listen on",
+          "type": "string",
+          "default": "3005"
+        },
+        "API_KEY": {
+          "description": "Your API key for authentication (generate with: openssl rand -hex 32)",
+          "type": "string"
+        },
+        "TRUENAS_HOST": {
+          "description": "The hostname or IP address of your TrueNAS server (optional)",
+          "type": "string"
+        },
+        "OPNSENSE_HOST": {
+          "description": "The hostname or IP address of your OPNsense firewall (optional)",
+          "type": "string"
+        },
+        "TRUENAS_API_KEY": {
+          "description": "Your TrueNAS API key (optional)",
+          "type": "string"
+        },
+        "CAPABILITY_LEVEL": {
+          "description": "The capability level for the server (1-4). Level 1: Monitor (read-only), Level 2: Operate (start/stop), Level 3: Configure (read configs), Level 4: Manage (full control)",
+          "type": "string",
+          "default": "1"
+        },
+        "OPNSENSE_API_KEY": {
+          "description": "Your OPNsense API key (optional)",
+          "type": "string"
+        },
+        "OPNSENSE_API_SECRET": {
+          "description": "Your OPNsense API secret (optional)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "API_KEY"
+      ]
+    },
+    "id": "zhsy4v3s8r",
+    "name": "Homelab MCP Server",
+    "namespace": "bshandley",
+    "repository": {
+      "url": "https://github.com/bshandley/homelab-mcp"
+    },
+    "slug": "homelab-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/zhsy4v3s8r"
+  }
+}

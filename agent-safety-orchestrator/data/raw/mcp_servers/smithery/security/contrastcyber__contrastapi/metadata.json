@@ -1,0 +1,2079 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "contrastcyber/contrastapi",
+  "namespace": "contrastcyber",
+  "slug": "contrastapi",
+  "displayName": "ContrastAPI",
+  "description": "Security intelligence MCP server for AI agents. 33 tools covering domain recon, CVE lookup (340K+ with EPSS+KEV+CWE), IP threat reports, bulk CVE/IOC lookups, full domain audit, IOC enrichment, dependency audit, code security scanning. Free tier: 100 credits/hour, no API key required.\n",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "vulnerability",
+    "secret",
+    "phishing",
+    "ransomware"
+  ],
+  "rawRecord": {
+    "id": "dd8a2753-a367-485e-9c31-c7ad3abcb9ca",
+    "qualifiedName": "contrastcyber/contrastapi",
+    "namespace": "contrastcyber",
+    "slug": "contrastapi",
+    "displayName": "ContrastAPI",
+    "description": "Security intelligence MCP server for AI agents. 33 tools covering domain recon, CVE lookup (340K+ with EPSS+KEV+CWE), IP threat reports, bulk CVE/IOC lookups, full domain audit, IOC enrichment, dependency audit, code security scanning. Free tier: 100 credits/hour, no API key required.\n",
+    "iconUrl": "https://api.smithery.ai/servers/contrastcyber/contrastapi/icon",
+    "verified": false,
+    "useCount": 4948,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-04T07:22:19.923Z",
+    "homepage": "https://api.contrastcyber.com",
+    "bySmithery": false,
+    "owner": "org_01KNBVXHVAN3X663Q8HA2J4GK9",
+    "score": 0.022967329894374847
+  },
+  "detail": {
+    "qualifiedName": "contrastcyber/contrastapi",
+    "displayName": "ContrastAPI",
+    "description": "Security intelligence MCP server for AI agents. 33 tools covering domain recon, CVE lookup (340K+ with EPSS+KEV+CWE), IP threat reports, bulk CVE/IOC lookups, full domain audit, IOC enrichment, dependency audit, code security scanning. Free tier: 100 credits/hour, no API key required.\n",
+    "iconUrl": "https://api.smithery.ai/servers/contrastcyber/contrastapi/icon",
+    "remote": true,
+    "deploymentUrl": "https://contrastapi--contrastcyber.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://contrastapi--contrastcyber.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-to": {
+                "header": "X-API-Key"
+              },
+              "x-from": {
+                "header": "apiKey"
+              },
+              "x-order": 0,
+              "description": "Optional API key for higher rate limits (1000/hr vs 100/hr free)"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "domain_report",
+        "description": "Query DNS, WHOIS, SSL, subdomains, and threat intel for a domain in one call. By default dns.txt is filtered to security-relevant entries (SPF, DMARC, DKIM, MTA-STS, TLS-RPT) and dns.total_txt_records reports the honest pre-filter count; pass include_all_txt=true for the raw TXT list. Use as a starting point for domain investigations; use audit_domain for live headers + tech stack. Response carries next_calls — chain with subdomain_enum (always emitted), ssl_check + tech_fingerprint (when an A record resolves) for the standard recon depth without re-prompting. Free: 100/hr, Pro: 1000/hr. Returns domain report with DNS records, WHOIS data, SSL cert, risk score, email config, threat status, recommendation, and next_calls.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Root domain to analyze, without protocol or path (e.g. 'example.com', 'shopify.com')"
+            },
+            "include_all_txt": {
+              "type": "boolean",
+              "title": "Include All Txt",
+              "default": false,
+              "description": "Return every TXT record (default: False, only SPF/DMARC/DKIM/MTA-STS/TLS-RPT kept). dns.total_txt_records is always emitted with the honest pre-filter count. Default filter strips vendor verification strings (google-site-verification, ms=, facebook-domain-verification, etc.) that bloat the response without security signal. Set True only when you need the raw TXT inventory."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/DomainReportResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "audit_domain",
+        "description": "Perform comprehensive domain audit: combines domain_report + live HTTP security headers + technology fingerprinting. By default report.dns.txt is filtered to security-relevant entries (SPF, DMARC, DKIM, MTA-STS, TLS-RPT) and report.dns.total_txt_records reports the honest pre-filter count; pass include_all_txt=true for the raw TXT list. Use when you need the full picture (recon + active checks); use domain_report for passive-only assessment. Response carries next_calls — chain with subdomain_enum (always emitted) and ssl_check (when an A record resolves) for the residual recon depth (tech_fingerprint already inline as `technologies`). Free: 100/hr (costs 4 credits), Pro: 1000/hr. Returns {domain, report, technologies, live_headers, summary, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Root domain to audit, without protocol or path (e.g. 'example.com', 'shopify.com')"
+            },
+            "include_all_txt": {
+              "type": "boolean",
+              "title": "Include All Txt",
+              "default": false,
+              "description": "Return every TXT record under report.dns.txt (default: False, only SPF/DMARC/DKIM/MTA-STS/TLS-RPT kept). report.dns.total_txt_records is always emitted with the honest pre-filter count. Default filter strips vendor verification strings (google-site-verification, ms=, facebook-domain-verification, etc.) that bloat the response without security signal. Set True only when you need the raw TXT inventory."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AuditResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "threat_report",
+        "description": "Query comprehensive threat profile for an IP: Shodan host data, AbuseIPDB reputation, ASN/geolocation, and open ports. Use for IP investigation and SOC alert triage; for domain data use domain_report. Note: nested asn block always returns at most 50 IPv4/IPv6 prefixes — call asn_lookup with include_full_prefixes=True for the full announced-prefixes list. enrichment.vulns is severity-aware list[VulnInfo] (cve_id + severity + cvss_v3) — Phase 2 v1.16.0 BREAKING; pre-1.16 it was list[str] of CVE IDs. Free: 100/hr (costs 4 credits), Pro: 1000/hr. Returns {ip, enrichment, abuseipdb, shodan, asn, threat_level}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ip": {
+              "type": "string",
+              "title": "Ip",
+              "description": "Public IPv4 or IPv6 address to investigate (e.g. '8.8.8.8', '1.1.1.1'). Private/reserved IPs are rejected."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ThreatReportResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "dns_lookup",
+        "description": "Query all DNS record types (A, AAAA, MX, NS, TXT, CNAME, SOA) for a domain. Use for mail routing inspection, nameserver verification, or SPF/DMARC checks; for full overview use domain_report. TXT records are returned raw (no filter) — `total_txt_records` always carries the honest count (use domain_report for the security-only filtered TXT view). Free: 100/hr, Pro: 1000/hr. Returns {domain, records: {a, aaaa, mx, ns, txt, total_txt_records, cname, soa}, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Root domain to query, without protocol or path (e.g. 'example.com', 'cloudflare.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/DnsResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "whois_lookup",
+        "description": "Retrieve WHOIS registration data: registrar, creation/expiry dates, nameservers, status. Use to verify domain ownership, age, expiration; for full audit use domain_report. Free: 100/hr, Pro: 1000/hr. Returns {domain, whois: {registrar, creation_date, expiry_date, updated_date, name_servers, status, raw_length, error}, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Root domain to query WHOIS for (e.g. 'example.com', 'github.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/WhoisResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "ssl_check",
+        "description": "Analyze SSL/TLS certificate: grade (A/B/C/D/F), protocol version, cipher suite, chain, expiry, Subject Alternative Names, and structured validation findings. Invalid certs (expired, self-signed, hostname mismatch, untrusted root) are reported as findings via valid=false + validation_errors[] rather than as endpoint failures, so an unreachable cert still returns useful intel. Grade D = cert readable but invalid; F = expired, legacy TLS, or probe failure. Use to audit certificate validity and detect expiring certs; for full domain audit use audit_domain. Free: 100/hr, Pro: 1000/hr. Returns {grade, valid, validation_errors, protocol, cipher, issuer, subject, not_before, not_after, days_remaining, chain, san, warnings}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Domain to check SSL/TLS certificate for (e.g. 'example.com', 'api.stripe.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/SslResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "subdomain_enum",
+        "description": "Discover subdomains using passive methods: Certificate Transparency logs + DNS brute-force (no active probing). Use to map organization's attack surface; non-intrusive. Response carries next_calls — capped at 5 ssl_check hints (one per first-five subdomain) so triage scales to large enumerations without token bloat; pull tail entries by name when needed. Free: 100/hr, Pro: 1000/hr. Returns {domain, count, subdomains, sources, found_via_wordlist, found_via_crtsh, crtsh_status, warnings, summary, next_calls}. Always check crtsh_status: 'ok' means the CT lookup completed (so a low count is real); 'timeout' / 'rate_limited' / 'unavailable' / 'error' means CT logs did not respond and the count is wordlist-only — the actual attack surface is likely larger, retry later or surface the limitation to the user.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Root domain to enumerate subdomains for (e.g. 'example.com', 'tesla.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/SubdomainsResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "tech_fingerprint",
+        "description": "Detect website technology stack: CMS, frameworks, CDN, analytics tools, web servers, languages (via HTTP headers + HTML analysis). Use for passive reconnaissance; for full audit use audit_domain. Free: 100/hr, Pro: 1000/hr. Returns {technologies: [{name, category, confidence%, version}]}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Domain to fingerprint (e.g. 'example.com', 'shopify.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/TechResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "threat_intel",
+        "description": "Check domain against abuse.ch URLhaus for known malware-distribution URLs (single source — for multi-feed correlation use ioc_lookup which adds ThreatFox and, for IPs, Feodo Tracker). Use for fast domain-level threat assessment; use phishing_check for specific URLs. Free: 100/hr, Pro: 1000/hr. Returns {malware_urls, threat_tags, threat_status, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Domain to check for threats (e.g. 'suspicious-site.com', 'example.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ThreatResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "wayback_lookup",
+        "description": "Retrieve Wayback Machine snapshots for a domain: first capture, latest, total count, snapshot list. Use to investigate domain history and age; for full audit use domain_report. Free: 100/hr, Pro: 1000/hr. status='ok' means the count is authoritative (even when 0 → confirmed no archives). status='unavailable' means CDX timed out/rate-limited/5xx — total_snapshots is OMITTED (unknown, NOT zero) and the agent should NOT report \"no snapshots\"; the warnings[] array carries the cdx_* error code (cdx_timeout/cdx_rate_limited/cdx_unavailable/cdx_error/cdx_parse_error/cdx_body_too_large). Heavy domains (kernel.org, microsoft.com, archive.org itself) frequently time out the CDX endpoint despite having millions of snapshots — fall back to archive_url for manual inspection. Returns {domain, status, total_snapshots, first_seen, last_seen, years_online, snapshots, archive_url, summary, warnings}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Domain to look up in web archives (e.g. 'example.com', 'archive.org')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/WaybackResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "scan_headers",
+        "description": "Perform live HTTP GET and analyze security headers: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Permissions-Policy, Referrer-Policy. Use to audit live website headers; use check_headers to validate headers you already have. Free: 100/hr, Pro: 1000/hr. By default header values are truncated to 500 chars (CSP can exceed 4 KB on large sites); pass include='full' for the full raw value. Returns {headers_present, headers_missing, findings, total_score}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Domain to scan live HTTP headers for (e.g. 'example.com', 'api.github.com')"
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default ('') returns slim findings — raw header values capped at 500 chars with total_value_length carrying the honest pre-truncation length. Pass 'full' to restore the full raw value (useful for inspecting full CSP directives on sites like GitHub where the CSP header exceeds 4 KB). Allowed: '' or 'full'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ScanHeadersResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "email_mx",
+        "description": "Analyze email security: MX records, SPF policy, DMARC policy, DKIM probe across common+date-based selectors, mail provider, grade. Use to verify email-auth setup and phishing risk; for full audit use domain_report. Free: 100/hr, Pro: 1000/hr. email_security.dkim_status reports honest evidence: 'verified' iff at least one selector responded, else 'unverifiable' (custom selectors cannot be discovered without prior knowledge). Grade: when DKIM verified, A=SPF+DMARC+DKIM/B=2of3/C=1of3; when DKIM unverifiable, A=SPF+DMARC/B=one/F=neither — DKIM absence is NOT penalized because it is unprovable in DNS. Returns {mx_records, mail_provider, email_security:{spf, dmarc, dkim_selectors, dkim_status, grade, issues}, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Domain to analyze email configuration for (e.g. 'example.com', 'google.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/EmailMxResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "email_disposable",
+        "description": "Check if email address uses a known disposable/temporary provider (Guerrilla Mail, Temp Mail, Mailinator, etc.). Use for input validation to detect throwaway signups; for domain reputation use threat_intel. Companion email-investigation tools: email_mx (deliverability + MX trust), domain_report on the email's domain (full recon), threat_intel (malware-distribution signal on the domain). Free: 100/hr, Pro: 1000/hr. Returns {disposable, domain, provider}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "title": "Email",
+              "description": "Full email address to check (e.g. 'user@tempmail.com', 'test@guerrillamail.com')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/DisposableResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "email_verify",
+        "description": "One-call email validation combining syntax + MX records + disposable check + role-address detection (admin@/info@/...) + free-provider classification (gmail/outlook/yahoo/...). Use BEFORE adding an email to a contact list, sending an outbound message, or auditing a lead-list dump — replaces 2-3 tool calls (email_mx + email_disposable + manual role parse) with one structured response. Deliberately does NOT do SMTP `RCPT TO` deliverability probing — Hunter.io / NeverBounce-style mailbox enumeration is an ethical grey area we declined; use those services if you need that specific signal. role_address=true on `admin@`, `info@`, `noreply@`, `support@`, etc. (Gmail-style `+tag` is stripped before classification). free_provider=true on consumer-mailbox domains (B2B detection signal — a 'work' email at `@gmail.com` likely isn't a corporate user). Free: 100/hr, Pro: 1000/hr. Returns {email, domain, syntax_valid, mx_records, disposable, disposable_provider, role_address, role_type, free_provider, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "title": "Email",
+              "description": "Full email address to verify (e.g. 'admin@example.com', 'user@gmail.com'). Must contain '@'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/EmailVerifyResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "robots_txt",
+        "description": "Fetch + parse the target domain's robots.txt — sitemaps, per-User-agent allow/disallow rules, crawl-delay, Host directive. Use BEFORE crawling/scraping a target site (seo_audit, brand_assets, redirect_chain) to honour the site's published rules. status_code=404 means no robots.txt exists = implicit allow-all per RFC 9309 §2.4. ContrastAPI fetches with `User-agent: ContrastAPI/<version> (+https://contrastcyber.com/bot)` so site operators can identify + opt out via robots.txt; we honour `Disallow: /` for our UA in seo_audit and brand_assets. Per-target eTLD+1 throttle (60 req/min) prevents weaponising this endpoint against a single site; subdomain rotation collapses to the same bucket. Free: 100/hr, Pro: 1000/hr. Returns {domain, fetched_url, status_code, sitemaps, user_agents:{ua:{allow,disallow,crawl_delay}}, host, truncated, summary}. Returns 502 ErrorResponse if the target rejected the connection (DNS/TCP/TLS failure); the agent should NOT assume \"no robots\" in that case — it's an upstream-failure signal.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Registrable domain to fetch robots.txt for (e.g. 'example.com', 'github.com'). No scheme, no path, no port. Subdomains accepted; the bot fetches https://<domain>/robots.txt with HTTP fallback."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/RobotsTxtResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "redirect_chain",
+        "description": "Walk an HTTP redirect chain hop-by-hop, returning per-hop {url, status_code, location, latency_ms}. Use to deobfuscate URL shorteners (bit.ly / t.co / lnkd.in), audit suspicious links from phishing investigations, or trace marketing tracking redirects. SSRF-guarded: each redirect target's resolved IP is re-validated before connecting (private IPs and non-HTTP schemes rejected). Up to 10 hops; loop_detected=true if a hop would revisit a previously-seen URL (we abort before the duplicate fetch); truncated=true if the chain still had a 30x at hop 10. Per-target eTLD+1 throttle (60 req/min) consumed once for the start host AND once per new host reached — a chain across 11 unrelated domains cannot bypass the cap. Free: 100/hr, Pro: 1000/hr. Returns {start_url, final_url, hops, hop_count, final_status, loop_detected, truncated, summary}. Returns 502 ErrorResponse on hard fetch failure (timeout / TLS / connect); 429 with Retry-After if a hop's eTLD+1 throttle is exceeded mid-chain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "title": "Url",
+              "description": "Full URL whose redirect chain to walk, e.g. 'https://bit.ly/3xyz' or 'http://example.com/old-path'. Must start with http:// or https://. Pass the URL exactly as you'd `curl -L` it; the server handles encoding."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/RedirectChainResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "brand_assets",
+        "description": "Scrape a domain's homepage `<head>` for public brand assets — favicon, og:image, theme-color, og:site_name, JSON-LD `Organization.logo`. Use to enrich CRM records, build company-card UIs, or correlate a lead's site to their visual identity (no manual screenshot required). Strictly homepage-only (path `/`); we do NOT crawl. Ethical floor: target's robots.txt is honoured — `Disallow: /` for ContrastAPI OR `*` returns 403 `error.code = robots_txt_disallow` and we DO NOT fetch. `Cache-Control: no-store` / `private` from the target is respected (response is built but NOT written to our cache; `cache_respected=false` flags this). Per-target eTLD+1 throttle (60 req/min) prevents weaponising via subdomain rotation. All URL fields are absolute and `_untrusted` (DO NOT execute or shell-out — the target controls these strings). Free: 100/hr, Pro: 1000/hr. Returns {domain, fetched_url, status_code, favicon_url_untrusted, og_image_url_untrusted, theme_color, site_name_untrusted, logo_url_untrusted, cache_respected, summary}. Returns 502 on DNS/TCP/TLS failure; 403 `robots_txt_disallow` when the target opted out.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Registrable domain to scrape brand assets for (e.g. 'github.com', 'stripe.com'). No scheme, no path, no port. The bot fetches https://<domain>/ with HTTP fallback."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/BrandAssetsResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "seo_audit",
+        "description": "One-shot SEO audit of a domain's homepage with a 0-100 composite score + a `missing_signals` list of concrete fixes. Use BEFORE pitching SEO work to a prospect, when triaging a lead's marketing maturity, or as a structured pre-flight before deeper auditing tools (Lighthouse / SEMrush). 10 audit rules each worth 10 pts: title present, title length 30-60 chars (Google SERP truncation window), meta description present, meta description length 50-160, exactly one H1, canonical link, ≥3 OG tags, JSON-LD present, image alt-text coverage (proportional), HTTPS. Strictly homepage-only — we do NOT crawl the site. Ethical floor: target's robots.txt is honoured — `Disallow: /` for ContrastAPI OR `*` returns 403 `error.code = robots_txt_disallow` and we DO NOT fetch. `Cache-Control: no-store`/`private` skips our cache write (`cache_respected=false` in the response). Per-target eTLD+1 throttle (60 req/min) prevents weaponising via subdomain rotation. All target-derived strings/lists are `_untrusted`. Free: 100/hr, Pro: 1000/hr. Returns {domain, fetched_url, status_code, title_untrusted, meta_description_untrusted, canonical_url, h1_untrusted, h1_count, h2_count, h3_count, images_total, images_missing_alt, internal_link_count, external_link_count, og_tags, json_ld_present, score, missing_signals, cache_respected, summary}. Returns 502 on DNS/TCP/TLS failure; 403 `robots_txt_disallow` when the target opted out.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "title": "Domain",
+              "description": "Registrable domain to audit SEO for (e.g. 'example.com', 'shopify.com'). No scheme, no path, no port. Strictly homepage-only — the bot fetches https://<domain>/ with HTTP fallback and audits that single page (we do NOT crawl)."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/SeoAuditResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "phone_lookup",
+        "description": "Validate and analyze phone number: country, region, carrier, line type (mobile/landline/VoIP), timezone, formatted versions. Use to verify phone legitimacy and detect fraud risks. Requires E.164 format (+1234567890). Companion OSINT identity-investigation tools: username_lookup (social-platform handle correlation), email_disposable (throwaway-mail signal on associated email). Free: 100/hr, Pro: 1000/hr. Returns {valid, country, region, carrier, carrier_status, line_type, timezone, formats}. carrier is omitted from the wire when libphonenumber has no mapping for the region (US/CA/GB and other MNP-restricted regions); always read carrier_status — 'known' means carrier is present, 'unsupported_region' means we cannot identify the carrier (do not infer the number lacks one).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "string",
+              "title": "Number",
+              "description": "Phone number in E.164 format: + followed by country code and number, no spaces or dashes. Examples: '+14155552671' (US), '+905551234567' (TR), '+442071234567' (UK). Wrong: '0555-123-4567', '(415) 555-2671'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PhoneLookupResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "ip_lookup",
+        "description": "Query comprehensive IP intelligence: reverse DNS, ASN + holder name + country inline (RIPE Stat, Phase 1), open ports, hostnames, vulnerabilities (Shodan InternetDB enriched with severity + cvss_v3 from local cve.db — Phase 2 v1.16.0 BREAKING; vulns is now list[VulnInfo] {cve_id, severity, cvss_v3} dicts, pre-1.16 it was list[str] of CVE IDs; unknown CVEs emit severity='UNKNOWN' / cvss_v3=null — do NOT infer benign), cloud provider, Tor exit status, and reputation. cloud_provider uses two-tier detection: published cloud CIDR ranges (AWS/GCP/Cloudflare) first, then an ASN-to-provider fallback map for anycast/public-service IPs outside published ranges (e.g. 8.8.8.8 → AS15169 → 'Google'). Reputation: FireHOL level1 blocklist on Free tier; +AbuseIPDB + Shodan on Pro (Phase 4). Use for IP investigation; for orchestrated IP+reputation use threat_report. Response is null-explicit: every field is always present (cloud_provider=null when neither tier matches; tor_exit=false when not listed or upstream fetch failed — check verdict.sources_unavailable to disambiguate fetch failure from genuine absence). Response carries next_calls (conditional) — asn_lookup when ASN is populated, ioc_lookup when reputation is FireHOL-listed or AbuseIPDB confidence>50, threat_report on Pro tier for orchestrated profile. Free: 100/hr, Pro: 1000/hr. Returns {ip, ptr, geo, asn, asn_name, country, ports, hostnames, vulns, cloud_provider, tor_exit, reputation, risk_score, verdict, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ip": {
+              "type": "string",
+              "title": "Ip",
+              "description": "IPv4 or IPv6 address to investigate (e.g. '8.8.8.8', '2606:4700::1111')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/IpLookupResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "asn_lookup",
+        "description": "Look up Autonomous System Number (ASN) for a domain or IP: AS number, organization, IPv4/IPv6 prefixes. Use to identify network operator and IP range ownership. Default returns first 50 prefixes per family — set include_full_prefixes=True for full list. Free: 100/hr, Pro: 1000/hr. Returns {asn, asn_name, ipv4_prefixes, ipv6_prefixes, ipv4_count, ipv6_count}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "title": "Target",
+              "description": "Domain or IP address to look up ASN for (e.g. 'cloudflare.com', '8.8.8.8')"
+            },
+            "include_full_prefixes": {
+              "type": "boolean",
+              "title": "Include Full Prefixes",
+              "default": false,
+              "description": "Return the full announced-prefixes list (default: False, returns first 50). ipv4_count and ipv6_count are always honest pre-truncation totals. Set True for network mapping or BGP route audits — Cloudflare AS13335 announces 2500+ prefixes."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AsnResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "cve_lookup",
+        "description": "Retrieve detailed CVE data by ID: description, CVSS v3.1 + vector, EPSS score + percentile, CISA KEV status, affected products (CPE), references, patch availability, related CVEs. By default affected_products is truncated to the first 20 entries (total_products reports the honest count) and references to the first 10 (total_references reports the honest count). Pass include_affected_products=true and/or include_full_references=true for the complete lists (needed for bulk audits / dependency scanners; Log4j-class CVEs can carry 50+ products and 30+ refs). Use for single-CVE details; use cve_search for queries by product/severity. Response carries next_calls — chain with kev_detail when kev.in_kev=true for the CISA federal patch deadline + required action, with cwe_lookup on each CWE in cwes (up to 3 pivots) for the weakness category, and with exploit_lookup for public PoC availability. Free: 100/hr, Pro: 1000/hr. Returns {cve_id, summary, description, severity, cvss_v3, cvss_breakdown, cwe_id, cwes, published, modified, sources, first_seen_source, first_seen_at, epss, kev, affected_products (first 20 by default), total_products, references (first 10 by default), total_references, patch_available, related_cves, verdict, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cve_id": {
+              "type": "string",
+              "title": "Cve Id",
+              "description": "CVE identifier in format CVE-YYYY-NNNNN (e.g. 'CVE-2024-3094', 'CVE-2023-44487')"
+            },
+            "include_full_references": {
+              "type": "boolean",
+              "title": "Include Full References",
+              "default": false,
+              "description": "Return the full references list (default: False, returns first 10). total_references is always emitted with the honest count; patch URL detection always runs against the full list, so patch_url/patch_available are unaffected by the cap. Set True only when you need the complete advisory URL set (older + high-profile CVEs accumulate 30-60+)."
+            },
+            "include_affected_products": {
+              "type": "boolean",
+              "title": "Include Affected Products",
+              "default": false,
+              "description": "Return the full affected_products list (default: False, returns first 20). Set True for bulk audits or dependency scanning of Log4j-class CVEs with 50+ products."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CveResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "cve_search",
+        "description": "Search CVE database with filters: product/vendor, severity, published date range, EPSS score, CWE, CVSS range, CISA KEV status. Default response is SLIM per-result (cve_id, summary, severity, cvss_v3, cwe_id, epss, kev, total_products, published, modified, sources) — pass include='full' for description, cvss_breakdown, affected_products, references, first_seen_*. Verdict (sources_queried, falsifiable_fields, completeness, data_age) is at the response root — applies to the whole batch, not per-row. Use for vulnerability discovery by criteria; pass cwe_id (e.g. CWE-79) to enumerate every CVE in our database mapped to a weakness — pair with cwe_lookup for the category description and mitigations. Use cve_lookup for single CVE by ID, kev_detail when kev=true filtering and the agent needs federal patch deadlines per result. Response carries a global hint pointing at cve_lookup — drill into any returned cve_id for full detail and chained pivots (exploit_lookup, kev_detail, cwe_lookup). Free: 100/hr, Pro: 1000/hr. Returns {count, total, truncated, offset, summary, results, query_echo, next_offset, verdict, hint}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "kev": {
+              "type": "boolean",
+              "title": "Kev",
+              "default": false,
+              "description": "If true, return only CVEs in the CISA Known Exploited Vulnerabilities (KEV) catalog — these are actively exploited in the wild."
+            },
+            "sort": {
+              "enum": [
+                "",
+                "published_desc",
+                "epss_desc",
+                "cvss_desc"
+              ],
+              "type": "string",
+              "title": "Sort",
+              "default": "",
+              "description": "Sort order for results. Must be one of: published_desc (newest first), epss_desc (most exploitable first), cvss_desc (most severe first). Omit for newest first (default=published_desc)."
+            },
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Maximum results to return. Range: 1-200."
+            },
+            "cwe_id": {
+              "type": "string",
+              "title": "Cwe Id",
+              "default": "",
+              "description": "Filter by CWE weakness ID. Exact match, case-insensitive. Common values: CWE-79 (XSS), CWE-89 (SQL injection), CWE-120 (buffer overflow), CWE-78 (command injection). Format: CWE-<number>. Omit to not filter by CWE."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "maximum": 5000,
+              "minimum": 0,
+              "description": "Skip N results for pagination. Use with limit to page through results."
+            },
+            "vendor": {
+              "type": "string",
+              "title": "Vendor",
+              "default": "",
+              "description": "Filter by vendor name (case-insensitive). When combined with product, both must match the same CPE row — prevents cross-row false matches. Example: vendor=apache, product=struts."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Per-result detail level. Default (omit) returns slim list items (cve_id, summary, severity, cvss_v3, cwe_id, epss, kev, total_products, published, modified, sources). Pass 'full' to also return description, cvss_breakdown, affected_products, references, first_seen_source, first_seen_at — only do this when the user explicitly wants drill-down on every result. For single-CVE detail prefer cve_lookup; slim default keeps token cost ~70% lower on Log4j-class queries. Note: verdict is at the response root, not per-row (was deduplicated to save ~40% payload)."
+            },
+            "product": {
+              "type": "string",
+              "title": "Product",
+              "default": "",
+              "description": "Product or vendor name to filter by. EXACT match (case-insensitive) against the canonical product/vendor token stored in NVD CPE data — not a substring or fuzzy search. Use the short canonical name exactly as vendors publish it: 'nginx' (not 'nginx web server'), 'apache' (not 'Apache HTTP Server'), 'linux_kernel' (not 'Linux Kernel'), 'microsoft' (vendor). If unsure of the exact token, try the lowercase project name first; if 0 results, try the vendor name. Omit to search all products."
+            },
+            "cvss_max": {
+              "type": "number",
+              "title": "Cvss Max",
+              "default": 10,
+              "maximum": 10,
+              "minimum": 0,
+              "description": "Maximum CVSS v3 base score (0.0-10.0). Default 10.0 = no filter (sentinel, not applied). Set < 10.0 to filter — CVEs with null CVSS are excluded when active. Combine with cvss_min for a range."
+            },
+            "cvss_min": {
+              "type": "number",
+              "title": "Cvss Min",
+              "default": 0,
+              "maximum": 10,
+              "minimum": 0,
+              "description": "Minimum CVSS v3 base score (0.0-10.0). Default 0.0 = no filter (sentinel, not applied). Set > 0 to filter — CVEs with null CVSS are excluded when active. Use 7.0 for high+critical, 9.0 for critical only."
+            },
+            "epss_min": {
+              "type": "number",
+              "title": "Epss Min",
+              "default": 0,
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Minimum EPSS score filter (0.0-1.0). EPSS predicts exploitation probability. 0.5 = top ~5% most likely to be exploited. 0.0 = no filter."
+            },
+            "severity": {
+              "enum": [
+                "",
+                "CRITICAL",
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ],
+              "type": "string",
+              "title": "Severity",
+              "default": "",
+              "description": "CVSS severity level. Must be one of: CRITICAL, HIGH, MEDIUM, LOW. Omit for all severities."
+            },
+            "published_after": {
+              "type": "string",
+              "title": "Published After",
+              "default": "",
+              "description": "Inclusive lower bound on publish date as YYYY-MM-DD (UTC). Pick this when the user names a starting point, e.g. 'since 2015' → '2015-01-01', 'after March 2024' → '2024-03-01'. Omit to not bound the lower edge. Combine with published_before for ranges."
+            },
+            "published_before": {
+              "type": "string",
+              "title": "Published Before",
+              "default": "",
+              "description": "Inclusive upper bound on publish date as YYYY-MM-DD (UTC). Pick this when the user names an ending point, e.g. 'before 2020' → '2019-12-31', 'up to 2023' → '2023-12-31'. Omit to not bound the upper edge. Combine with published_after for ranges."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CveSearchResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "cve_leading",
+        "description": "List CVEs indexed from MITRE/GHSA BEFORE NVD publication (early-warning, freshest data). By default each result is slim (no description, no cvss_breakdown, no affected_products list, no references) — pass include='full' for the same payload shape as cve_lookup; for drill-down on a single CVE prefer cve_lookup. Use for threat intelligence on emerging CVEs; use cve_search for published NVD data. Verdict (sources_queried, falsifiable_fields, completeness, data_age) is at the response root — applies to the whole batch, not per-row. Response carries a global hint pointing at cve_lookup — drill into any returned cve_id for full detail and chained pivots (exploit_lookup, kev_detail, cwe_lookup). Free: 100/hr, Pro: 1000/hr. Returns {count, total, truncated, offset, summary, results, next_offset, verdict, hint}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Maximum results to return. Range: 1-200."
+            },
+            "offset": {
+              "type": "integer",
+              "title": "Offset",
+              "default": 0,
+              "maximum": 5000,
+              "minimum": 0,
+              "description": "Skip N results for pagination."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Per-result detail level. Default ('') returns slim list items (cve_id, summary, severity, cvss_v3, cwe_id, epss, kev, total_products, published, modified, sources). Pass 'full' to also return description, cvss_breakdown, affected_products, references, first_seen_source, first_seen_at. Slim default avoids description/summary duplication that bloats 50-item leading lists. Verdict is at the response root, not per-row (deduplicated for ~40% payload savings). Allowed: '' or 'full'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CveSearchResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "exploit_lookup",
+        "description": "Search public exploits/PoC for a specific CVE across three sources: (1) GitHub Advisory Database (sources.github.advisories[]), (2) Shodan CVEDB references (sources.shodan_refs.results[] — packetstorm/seclists/vendor URLs cited by Shodan; results capped at SHODAN_REFS_LIMIT default 200, truncated=true when capped, count is the honest upstream total), (3) ExploitDB CSV mirror (exploits[] array, with edb_id + author + verified flag — these are the actual ExploitDB entries). Use to assess if a vulnerability has weaponized exploits in the wild; run after cve_lookup to evaluate real-world risk. When the CVE is also in CISA KEV (kev.in_kev=true on cve_lookup), pair with kev_detail for federal patch deadline; pair with cwe_lookup on cwe_id for the underlying weakness category and mitigations. Response carries next_calls — single cve_lookup pivot for full context (KEV status, CWE chain, CVSS, EPSS); cve_lookup's own next_calls then surface kev_detail and cwe_lookup automatically (this endpoint has no in_kev/cwe_id schema, so blind emission of those pivots is intentionally avoided). Free: 100/hr, Pro: 1000/hr. Returns {cve_id, exploits_found, has_public_exploit, sources: {github, shodan_refs: {found, count, truncated, results}}, exploits: [{edb_id, cve_id, date_published, author, type, platform, url, verified, description}], summary, verdict, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cve_id": {
+              "type": "string",
+              "title": "Cve Id",
+              "description": "CVE identifier in format CVE-YYYY-NNNNN (e.g. 'CVE-2024-3094', 'CVE-2023-44487')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ExploitResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "bulk_cve_lookup",
+        "description": "Batch query multiple CVEs (up to 10 free/50 pro): retrieve full CVE details for all in 1 request instead of N. By default each CVE's affected_products is truncated to the first 20 entries (total_products reports honest count) and references to the first 10 (total_references reports honest count); pass include_affected_products=true / include_full_references=true to return full lists. Use for dependency audits or bulk vulnerability enrichment; use cve_lookup for single CVE. Each successful item carries next_calls — chain with kev_detail (when kev.in_kev=true), cwe_lookup (when cwe_id is present), or exploit_lookup. Free: 100/hr (1 per item), Pro: 1000/hr. Returns {results, total, successful, failed, timed_out, partial, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cve_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Cve Ids",
+              "description": "List of CVE identifiers in format CVE-YYYY-NNNNN (e.g. ['CVE-2024-3094', 'CVE-2021-44228', 'CVE-2023-44487']). Maximum 10 per request for free tier, 50 for Pro."
+            },
+            "include_full_references": {
+              "type": "boolean",
+              "title": "Include Full References",
+              "default": false,
+              "description": "Return the full references list for each CVE in the batch (default: False, each CVE returns first 10). total_references is always emitted. Set True only when you need every advisory URL for every CVE in the batch."
+            },
+            "include_affected_products": {
+              "type": "boolean",
+              "title": "Include Affected Products",
+              "default": false,
+              "description": "Return the full affected_products list for each CVE in the batch (default: False, each CVE returns first 20). Set True for bulk dependency audits."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/BulkCveResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "kev_detail",
+        "description": "Look up CISA KEV (Known Exploited Vulnerabilities) full record for a CVE. Returns federal patch deadline (due_date), CISA-specified required_action remediation, known ransomware association, vendor/product, the CISA-given common name (e.g. 'Log4Shell'), and CISA-reported CWE list. Returns 404 when the CVE is not in the KEV catalog — use cve_lookup for non-KEV CVEs. Best follow-up after cve_lookup or cve_search(kev=true) when an in_kev=true CVE is identified; chain with cwe_lookup on each returned CWE to investigate the weakness category. Free: 100/hr, Pro: 1000/hr. Returns {cve_id, vendor_project, product, vulnerability_name, date_added, due_date, required_action, known_ransomware_use, notes, cwes, verdict, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cve_id": {
+              "type": "string",
+              "title": "Cve Id",
+              "description": "CVE identifier in format CVE-YYYY-NNNNN (e.g. 'CVE-2021-44228', 'CVE-2024-3094')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/KevDetailResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "cwe_lookup",
+        "description": "Look up MITRE CWE (Common Weakness Enumeration) catalog record from research view 1000. Default response is SLIM (first 3 mitigations, first 3 examples; extended_description is null) — pass include='full' for the verbose record (full mitigations + examples lists, populated extended_description). Returns description, abstract type (Pillar/Class/Base/Variant/Compound), status (Stable/Draft/Incomplete/Deprecated), exploit likelihood, recommended mitigations, observed example CVEs, parent_cwe (walk up the hierarchy), child_cwes (drill down to more specific weaknesses), and cve_count (LOWER BOUND — counts only CVEs whose primary CWE matches; CVEs with multiple CWEs may not be counted). Use after cve_lookup or kev_detail to understand the underlying weakness category; chain with cve_search(cwe_id=...) to enumerate all matching CVEs. Returns 404 when the CWE is not in research view 1000. Free: 100/hr, Pro: 1000/hr. Returns {cwe_id, name, description, extended_description (null on slim, populated on include='full'), abstract_type, status, likelihood, mitigations (first 3 by default), total_mitigations, examples (first 3 by default), total_examples, parent_cwe, child_cwes, cve_count, updated_at, verdict, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cwe_id": {
+              "type": "string",
+              "title": "Cwe Id",
+              "description": "CWE identifier — accepts 'CWE-79', 'cwe-79', or bare '79'. Common values: CWE-79 (XSS), CWE-89 (SQL injection), CWE-78 (command injection), CWE-502 (deserialization), CWE-22 (path traversal), CWE-120 (buffer overflow)."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default ('') returns slim record (first 3 mitigations, first 3 examples; extended_description is null). total_mitigations / total_examples are always honest pre-truncation counts. Pass 'full' to populate extended_description and return the full mitigations + examples lists."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CweLookupResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "atlas_technique_lookup",
+        "description": "Look up a MITRE ATLAS technique — the AI/ML adversarial attack catalog. ATLAS catalogues TTPs targeting machine learning systems: prompt injection, model evasion, training data poisoning, model theft, etc. Roughly 80% of ATLAS techniques are AI/ML-specific (no ATT&CK bridge); 20% mirror an enterprise ATT&CK technique via attack_reference_id — use that to pivot to D3FEND defenses (d3fend_defense_for_attack) and CVE search. Sub-techniques inherit `tactics` from the parent (inherited_tactics=true flag) when ATLAS upstream leaves them empty. Use this tool when the user asks about AI/ML threats, LLM red-teaming, or adversarial ML; for multiple techniques in one call (e.g. drilling into a case study's techniques_used), prefer bulk_atlas_technique_lookup. Returns 404 when the id is not in the synced ATLAS catalog. Free: 100/hr, Pro: 1000/hr. Returns {technique_id, name, description, tactics, inherited_tactics, maturity (demonstrated|feasible|realized), attack_reference_id, attack_reference_url, subtechnique_of, created_date, modified_date, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "technique_id": {
+              "type": "string",
+              "title": "Technique Id",
+              "description": "MITRE ATLAS technique id, format 'AML.T####' or 'AML.T####.###' for sub-techniques (e.g. 'AML.T0000', 'AML.T0051' LLM Prompt Injection, 'AML.T0000.000')."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AtlasTechniqueResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "bulk_atlas_technique_lookup",
+        "description": "Bulk ATLAS technique lookup — retrieve full records for up to 50 techniques in a single request instead of N separate atlas_technique_lookup calls. Designed as the natural follow-up to atlas_case_study_lookup, whose techniques_used array can be passed directly. Each item is the same shape as atlas_technique_lookup, including parent-tactics inheritance for sub-techniques (inherited_tactics=true flag) and per-item next_calls (D3FEND bridge when attack_reference_id present, sibling-technique search by tactic, parent lookup for sub-techniques). Free: 100/hr (1 per item), Pro: 1000/hr. Returns {results [{technique_id, status (ok|not_found|invalid_format), technique, error}], total, successful, failed, partial, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "technique_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Technique Ids",
+              "maxItems": 50,
+              "description": "List of MITRE ATLAS technique ids in format 'AML.T####' or 'AML.T####.###' (e.g. ['AML.T0051', 'AML.T0043', 'AML.T0000.000']). Up to 50 per call. Case-insensitive; normalized + de-duplicated server-side. Each id counts as 1 request toward the rate limit."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/BulkAtlasTechniqueResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "atlas_technique_search",
+        "description": "Search the MITRE ATLAS catalog of AI/ML attack techniques by keyword, tactic, or maturity. Default response is SLIM (description truncated to 240 chars per row); pass include='full' for the verbose record. Pass exclude_id when chaining from atlas_technique_lookup to skip self in sibling-tactic searches. Use this to discover techniques matching a threat-model question, e.g. 'what techniques target LLM serving infrastructure?'. Drill into atlas_technique_lookup with any returned technique_id for the full description, ATT&CK bridge, and pivot hints. For broader cross-referencing: when a result has attack_reference_id, that bridges to D3FEND mitigations via d3fend_defense_for_attack. Free: 100/hr, Pro: 1000/hr. Returns {query (echoed filters), total, results [{technique_id, name, description (truncated by default), tactics, inherited_tactics, maturity, attack_reference_id, subtechnique_of}], next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max results to return. Range: 1-200."
+            },
+            "tactic": {
+              "type": "string",
+              "title": "Tactic",
+              "default": "",
+              "description": "Filter by ATLAS tactic id, format 'AML.TA####'. Examples: 'AML.TA0002' (Reconnaissance), 'AML.TA0007' (ML Attack Staging). Omit for all tactics."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default ('') returns slim records (description truncated to 240 chars; drill via atlas_technique_lookup for full text). Pass 'full' for full description on every row — large catalogs (167 techniques) can return ~100KB at full."
+            },
+            "keyword": {
+              "type": "string",
+              "title": "Keyword",
+              "default": "",
+              "description": "Substring match against technique name + description (case-insensitive). Min 2 chars. Example: 'prompt injection', 'model evasion', 'poisoning'. Omit to list all."
+            },
+            "maturity": {
+              "enum": [
+                "",
+                "demonstrated",
+                "feasible",
+                "realized"
+              ],
+              "type": "string",
+              "title": "Maturity",
+              "default": "",
+              "description": "Filter by maturity: 'demonstrated' (observed in real attacks), 'feasible' (theoretical), or 'realized' (newer ATLAS classification, treat similar to demonstrated). Omit for all."
+            },
+            "exclude_id": {
+              "type": "string",
+              "title": "Exclude Id",
+              "default": "",
+              "description": "Optional ATLAS technique id to exclude from results, format 'AML.T####' or 'AML.T####.###'. Useful when chaining from atlas_technique_lookup to fetch siblings without echoing self in the same-tactic search."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AtlasTechniqueSearchResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "atlas_case_study_lookup",
+        "description": "Look up a MITRE ATLAS case study — a documented real-world AI/ML attack incident. Each case study links a sequence of ATLAS techniques (techniques_used) to the incident. Default response is SLIM (description truncated to 240 chars); pass include='full' for the verbose narrative. Use this after atlas_technique_search to find which incidents have exercised a given technique. Drill into the full techniques_used array via bulk_atlas_technique_lookup in a single call (next_calls emits exactly that hint). Returns 404 when the id is not in the synced catalog. Free: 100/hr, Pro: 1000/hr. Returns {case_study_id, name, description, techniques_used, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default (omit/empty) returns slim (description truncated to 240 chars). Pass 'full' for the verbose narrative — case-study descriptions can run 1-3KB."
+            },
+            "case_study_id": {
+              "type": "string",
+              "title": "Case Study Id",
+              "description": "MITRE ATLAS case study id, format 'AML.CS####' (e.g. 'AML.CS0000', 'AML.CS0014')."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AtlasCaseStudyResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "atlas_case_study_search",
+        "description": "Search ATLAS case studies (real-world AI/ML attack incidents) by keyword or referenced technique. Default response is SLIM (description truncated to 240 chars per row); pass include='full' for the verbose summary. Useful when the user has a technique in hand and wants to see incidents that exercised it. Drill via atlas_case_study_lookup for the full procedure list. Free: 100/hr, Pro: 1000/hr. Returns {query, total, results [{case_study_id, name, description (truncated by default), techniques_used}], next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max results to return. Range: 1-200."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default ('') returns slim records (description truncated to 240 chars). Pass 'full' for full description on every row."
+            },
+            "keyword": {
+              "type": "string",
+              "title": "Keyword",
+              "default": "",
+              "description": "Substring match against case study name + description (case-insensitive). Min 2 chars. Example: 'evasion', 'data poisoning'. Omit to list all."
+            },
+            "technique_id": {
+              "type": "string",
+              "title": "Technique Id",
+              "default": "",
+              "description": "Filter to case studies that include this ATLAS technique id, format 'AML.T####' or 'AML.T####.###' (e.g. 'AML.T0051'). Omit for any technique."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AtlasCaseStudySearchResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "d3fend_defense_lookup",
+        "description": "Look up a MITRE D3FEND defense technique. D3FEND is the canonical defensive counterpart to ATT&CK — each defense is classified into one of 7 tactics (Model/Harden/Detect/Isolate/Deceive/Evict/Restore) and may target a specific digital artifact (e.g. 'Access Token'). Response includes attack_techniques: the list of ATT&CK T-codes this defense mitigates. Use after d3fend_defense_search for the full record + ATT&CK chain. Returns 404 when the slug is not in the synced D3FEND catalog. Free: 100/hr, Pro: 1000/hr. Returns {defense_id, label, uri, parent_label, description, tactic, artifact, attack_techniques, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "defense_id": {
+              "type": "string",
+              "title": "Defense Id",
+              "description": "D3FEND defense slug from the ontology URI fragment (CamelCase), e.g. 'TokenBinding', 'FileHashing', 'CertificatePinning'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/D3fendDefenseResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "d3fend_defense_search",
+        "description": "Search the MITRE D3FEND catalog of defensive techniques by keyword, tactic, or targeted artifact. Default response is SLIM (drops `uri` from each row — saves ~60 chars/row, ~30% on popular drills); pass include='full' for the verbose record. Pass exclude_id when chaining from d3fend_defense_lookup to skip self in sibling-artifact searches. Use to discover defenses applicable to a given threat model — e.g. 'what defenses harden access tokens?' (tactic=Harden + artifact='Access Token'). Drill into d3fend_defense_lookup with any returned defense_id for the ATT&CK technique mappings. Free: 100/hr, Pro: 1000/hr. Returns {query, total, results [{defense_id, label, uri (only when include=full), parent_label, tactic, artifact}], next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max results to return. Range: 1-200."
+            },
+            "tactic": {
+              "enum": [
+                "",
+                "Model",
+                "Harden",
+                "Detect",
+                "Isolate",
+                "Deceive",
+                "Evict",
+                "Restore"
+              ],
+              "type": "string",
+              "title": "Tactic",
+              "default": "",
+              "description": "Filter by D3FEND tactic. One of: Model, Harden, Detect, Isolate, Deceive, Evict, Restore. Omit for all tactics."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default (omit/empty) returns slim rows (drops the deterministic ontology `uri` field, ~60 chars/row saved). Pass 'full' to get `uri` back on every row. The slug `defense_id` is always returned and uniquely identifies the defense."
+            },
+            "keyword": {
+              "type": "string",
+              "title": "Keyword",
+              "default": "",
+              "description": "Substring match against defense label, description, or parent_label (case-insensitive). Min 2 chars. Example: 'token', 'hashing', 'sandbox'. Omit to list all."
+            },
+            "artifact": {
+              "type": "string",
+              "title": "Artifact",
+              "default": "",
+              "description": "Filter by exact targeted digital artifact (case-insensitive), e.g. 'Access Token', 'File', 'Process'. Omit for any artifact."
+            },
+            "exclude_id": {
+              "type": "string",
+              "title": "Exclude Id",
+              "default": "",
+              "description": "Optional D3FEND defense slug (CamelCase, e.g. 'TokenBinding') to omit from results. Useful when chaining from d3fend_defense_lookup so the originating defense is not echoed back in its own siblings list. Omit when not needed."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/D3fendDefenseSearchResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "d3fend_defense_for_attack",
+        "description": "Reverse lookup: given an ATT&CK T-code, return D3FEND defenses that mitigate it. This is the bridge from offensive intelligence (ATT&CK / ATLAS / CVE) to defensive playbook. Pair with cve_lookup or atlas_technique_lookup output — when those carry an ATT&CK id, call this tool to surface the mitigations. `defenses` is capped at `limit` (default 30) for token efficiency; `total` is the honest pre-truncation count and `truncated=true` flags when the cap was hit. `coverage_by_tactic` always aggregates the FULL set, not the slice. Default response is SLIM (drops `uri` from each row); pass include='full' for the verbose record. Pass exclude_id when drilling from d3fend_defense_lookup to skip self in the 'see also' list. Returns 200 with empty defenses list when the T-code has no D3FEND mapping (the gap is itself a signal). Free: 100/hr, Pro: 1000/hr. Returns {attack_technique_id, total, truncated, defenses [{defense_id, label, uri (only when include=full), parent_label, tactic, artifact, attack_label, attack_tactic}], coverage_by_tactic, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "title": "Limit",
+              "default": 30,
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Cap on `defenses` array length. Default 30; popular T-codes (T1059, T1078) map to 30-50+ defenses. `total` and `coverage_by_tactic` always reflect the honest pre-truncation count."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default (omit/empty) returns slim rows (drops the deterministic ontology `uri` — popular T-codes with 15+ defenses save ~900 chars). Pass 'full' to get `uri` back on every row."
+            },
+            "exclude_id": {
+              "type": "string",
+              "title": "Exclude Id",
+              "default": "",
+              "description": "Optional D3FEND defense slug to omit from the defenses list. Used when chaining from d3fend_defense_lookup so the originating defense is not echoed back in its own 'see also' results."
+            },
+            "attack_technique_id": {
+              "type": "string",
+              "title": "Attack Technique Id",
+              "description": "ATT&CK technique id matching 'T####' or 'T####.###' (e.g. 'T1059', 'T1550.001'). Use this to bridge from CVE/ATLAS findings to D3FEND mitigations."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/D3fendForAttackResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "d3fend_attack_coverage",
+        "description": "Batch coverage breakdown: given a list of ATT&CK T-codes, return distinct defense counts per D3FEND tactic + identify which techniques have NO D3FEND mapping (undefended_techniques). Use to assess the defensive posture of an entire attack campaign or threat model in one call. defended_techniques is the subset with at least one D3FEND defense; undefended_techniques are gaps worth flagging. Pair with cve_search per gap to identify exploit availability. Free: 100/hr, Pro: 1000/hr. Returns {queried_techniques, coverage_by_tactic, defended_techniques, undefended_techniques, next_calls}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "attack_technique_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Attack Technique Ids",
+              "maxItems": 500,
+              "description": "List of ATT&CK technique ids (T#### or T####.###) to assess. Capped at 500 — extra entries are dropped server-side. Example: ['T1059', 'T1550.001', 'T1190', 'T9999']."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/D3fendCoverageResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "ioc_lookup",
+        "description": "Enrich Indicator of Compromise (IP/domain/URL/hash) by auto-detecting type and querying abuse.ch feeds. Per-type source coverage: hash → ThreatFox only (Feodo and URLhaus do not index hashes); IP → ThreatFox + Feodo Tracker + URLhaus; domain / URL → ThreatFox + URLhaus. verdict.sources_queried lists what actually ran; verdict.sources_unavailable lists what failed (timeout / upstream error). Use as primary IOC triage tool when type unknown; use threat_intel for domain-only, hash_lookup for richer MalwareBazaar hash data. Free: 100/hr, Pro: 1000/hr. Returns {indicator, type, threat_level, sources, summary, verdict}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "indicator": {
+              "type": "string",
+              "title": "Indicator",
+              "description": "Indicator of Compromise: IP address, domain, full URL, or file hash in MD5/SHA1/SHA256 format (e.g. '8.8.8.8', 'evil.com', 'https://evil.com/malware.exe', 'd41d8cd98f00b204e9800998ecf8427e')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/IocResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "hash_lookup",
+        "description": "Query MalwareBazaar for file hash (MD5/SHA1/SHA256): malware family, file type, size, tags, first/last seen, download count. Use to check if file hash is known malware; use ioc_lookup for auto-detection of all IOC types. Companion malware-investigation tools: ioc_lookup (multi-source: ThreatFox + Feodo Tracker + URLhaus), threat_intel (domain-level URLhaus check), exploit_lookup (link a known CVE to PoC code if the hash maps to an exploit binary). Free: 100/hr, Pro: 1000/hr. Returns {found, malware_family, file_type, file_size, tags, first_seen, last_seen, signature}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "file_hash": {
+              "type": "string",
+              "title": "File Hash",
+              "description": "File hash to look up. Accepts MD5 (32 chars), SHA-1 (40 chars), or SHA-256 (64 chars). Lowercase hex only, no spaces. Example: 'd41d8cd98f00b204e9800998ecf8427e'"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/HashResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "password_check",
+        "description": "Check if SHA-1 hash appears in Have I Been Pwned (HIBP) breach dataset using k-anonymity (5-char prefix only, full hash never leaves tool). Use for password breach audits; read-only, no data stored. Companion OSINT investigation tools: hash_lookup (file-hash malware family lookup, different namespace), email_disposable (throwaway-mail signal on associated accounts), username_lookup (social-platform exposure on associated handles). Free: 100/hr, Pro: 1000/hr. Returns {found, count}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sha1_hash": {
+              "type": "string",
+              "title": "Sha1 Hash",
+              "description": "Full SHA-1 hash of the password as 40 lowercase hexadecimal characters (e.g. '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8' for 'password')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PasswordResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "phishing_check",
+        "description": "Query URLhaus for a specific URL and its host. is_malicious is True only when there is ACTIVE evidence — exact URL match with url_status='online' (or unknown) OR host has urls_online > 0. URLhaus retains historical records forever, so a host can have url_count > 0 with urls_online == 0; in that case is_malicious=False, is_stale=True, threat_level='low'. Use for URL-level threat assessment; use threat_intel for domain-level checks. Companion threat-investigation tools: ioc_lookup (multi-source IOC: ThreatFox + URLhaus + Feodo Tracker, auto-detect type), hash_lookup (file-hash malware family, MalwareBazaar), threat_intel (domain-level URLhaus only). Free: 100/hr, Pro: 1000/hr. Returns {url, host, is_malicious, is_stale, urlhaus_host:{found,urls_online,url_count}, urlhaus_url:{found,threat,tags,status}, threat_level, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "title": "Url",
+              "description": "Full URL to check, including protocol (e.g. 'https://suspicious-login.com/verify', 'http://evil.com/payload.exe')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PhishingResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "bulk_ioc_lookup",
+        "description": "Batch query multiple IOCs (IP/domain/URL/hash, up to 10 free/50 pro) in 1 request: auto-detects type + queries abuse.ch feeds per-indicator. Per-type source coverage matches ioc_lookup: hash → ThreatFox only; IP → ThreatFox + Feodo + URLhaus; domain / URL → ThreatFox + URLhaus. Each result item carries its own verdict.sources_queried / sources_unavailable so partial failures are visible per indicator. Use for SOC alert triage or batch enrichment; use ioc_lookup for single indicator. Free: 100/hr (1 per item), Pro: 1000/hr. Returns {results, total, successful, failed, timed_out, partial, summary}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "indicators": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Indicators",
+              "description": "List of indicators of compromise: IP addresses, domains, URLs, or file hashes (e.g. ['8.8.8.8', 'evil.com', 'd41d8cd98f00b204e9800998ecf8427e']). Maximum 10 per request for free tier, 50 for Pro. Each indicator type is auto-detected."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/BulkIocResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check_secrets",
+        "description": "Scan source code (or snippet) for hardcoded secrets — cloud provider keys, API tokens, connection strings, private keys, passwords. Supports Python, JavaScript, TypeScript, Java, Go, Ruby, Shell, Bash. Use to detect leaked credentials before commit; for injection detection use check_injection. Free: 100/hr, Pro: 1000/hr. Returns {total, by_severity, findings}. No data stored. The generic password-assignment rule is suppressed when a more-specific credential rule fires on the same line — one targeted finding per leaked secret, not two.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "title": "Code",
+              "description": "Source code string to scan for secrets (can be a single file or code snippet)"
+            },
+            "language": {
+              "enum": [
+                "python",
+                "javascript",
+                "typescript",
+                "java",
+                "go",
+                "ruby",
+                "shell",
+                "bash",
+                "generic"
+              ],
+              "type": "string",
+              "title": "Language",
+              "default": "generic",
+              "description": "Programming language of the code. Must be one of: python, javascript, typescript, java, go, ruby, shell, bash, generic. Use 'generic' if unsure."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CodeCheckResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check_injection",
+        "description": "Scan source code for injection vulnerabilities: SQL injection, command injection, path traversal via unsafe string concatenation/unsanitized input. Supports Python, JavaScript, TypeScript, Java, Go, Ruby, Shell, Bash. Use to detect input-handling bugs; for secrets use check_secrets. Companion code-security tools: check_secrets (hard-coded credential detection), check_dependencies (known-CVE vulnerability audit), check_headers (live HTTP security-header validation), scan_headers (live HTTP scan via domain). Free: 100/hr, Pro: 1000/hr. Returns {total, by_severity, findings}. No data stored.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "title": "Code",
+              "description": "Source code string to scan for injection vulnerabilities (can be a single file or code snippet)"
+            },
+            "language": {
+              "enum": [
+                "python",
+                "javascript",
+                "typescript",
+                "java",
+                "go",
+                "ruby",
+                "shell",
+                "bash",
+                "generic"
+              ],
+              "type": "string",
+              "title": "Language",
+              "default": "generic",
+              "description": "Programming language of the code. Must be one of: python, javascript, typescript, java, go, ruby, shell, bash, generic. Use 'generic' if unsure."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CodeCheckResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check_dependencies",
+        "description": "Audit project dependencies (npm/PyPI/Maven/RubyGems/etc.) against CVE database: find known vulnerabilities in your package list. Bulk query up to 10 free/50 pro packages. Use for dependency security scanning; use cve_lookup for single CVE. Free: 100/hr (1 per package), Pro: 1000/hr. Returns {findings, total, by_severity, summary}. Each finding includes fixed_in (first patched version per NVD/MITRE version range) when a version range matched — omitted from wire when the range is open-ended or no input version was supplied; remediation copy then says 'Check if ... is affected ... and upgrade if so' instead of 'Upgrade to X.Y.Z or later'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "packages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "title": "Packages",
+              "description": "List of dependency packages to audit. Each item is an object with 'name' (required, max 200 chars, e.g. 'lodash', 'django', 'log4j-core') and optional 'version' (max 100 chars, e.g. '4.17.0', '2.14.1'). Only 'name' and 'version' fields are used; extra fields are ignored. Example: [{\"name\": \"lodash\", \"version\": \"4.17.0\"}, {\"name\": \"django\"}]. Maximum 10 per request for free tier, 50 for Pro."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/DependenciesResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "username_lookup",
+        "description": "Search for username across 15+ social/dev platforms (GitHub, Reddit, X/Twitter, LinkedIn, Instagram, TikTok, Discord, YouTube, Keybase, HackerOne, etc.). Use for OSINT investigations and identity verification. Free: 100/hr, Pro: 1000/hr. Returns {username, total_found, platforms: [{name, exists, url, status_code}]}.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "title": "Username",
+              "description": "Username string to search across platforms, without @ prefix (e.g. 'torvalds', 'johndoe', 'elonmusk')"
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/UsernameLookupResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      {
+        "name": "check_headers",
+        "description": "Validate HTTP security headers you provide (JSON): CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Permissions-Policy, Referrer-Policy against best practices. Use to test header config before deployment or validate non-public servers; use scan_headers to fetch live. Free: 100/hr, Pro: 1000/hr. By default header values are truncated to 500 chars; pass include='full' for the full raw value. Returns {total, by_severity, findings}. No external requests.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "headers": {
+              "type": "string",
+              "title": "Headers",
+              "description": "JSON string of HTTP header name-value pairs to validate. Example: '{\"Strict-Transport-Security\": \"max-age=31536000\", \"X-Frame-Options\": \"DENY\"}'. Include only security-relevant headers you want to analyze."
+            },
+            "include": {
+              "enum": [
+                "",
+                "full"
+              ],
+              "type": "string",
+              "title": "Include",
+              "default": "",
+              "description": "Detail level. Default ('') returns slim findings — raw header values capped at 500 chars with total_value_length carrying the honest pre-truncation length. Pass 'full' to restore the full raw value. Allowed: '' or 'full'."
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CheckHeadersResponse"
+                },
+                {
+                  "$ref": "#/$defs/ErrorResponse"
+                }
+              ],
+              "title": "Result"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "atlas_catalog",
+        "uri": "atlas://catalog",
+        "description": "ATLAS catalog summary: all techniques (id+name+tactics) and case studies (id+name).",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "d3fend_catalog",
+        "uri": "d3fend://catalog",
+        "description": "D3FEND catalog summary: all defenses (id+label+tactic+artifact).",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "cwe_catalog",
+        "uri": "cwe://catalog",
+        "description": "CWE catalog summary: all weaknesses (id+name+abstract_type). Slim by design — fetch cwe://weakness/{id} for full description+mitigations.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "security_audit",
+        "description": "Run a full security audit on a domain — combines domain report, SSL, headers, and threat intel.",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Target domain to audit",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "vulnerability_check",
+        "description": "Check recent vulnerabilities and exploits for a product.",
+        "arguments": [
+          {
+            "name": "product",
+            "description": "Product name to check (e.g. nginx, apache)",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "contrast_triage",
+        "description": "Security triage workflow with explicit perspective. perspective='red' produces an offensive recon chain; 'blue' produces a defensive triage chain. Target type (CVE / ATLAS / ATT&CK / CWE / hash / IP / domain) is auto-detected.",
+        "arguments": [
+          {
+            "name": "target",
+            "description": "Target to triage. Accepted: IP (1.2.3.4 or IPv6), domain (example.com), CVE-YYYY-NNNN, hash (md5/sha1/sha256), ATLAS technique (AML.T#### or AML.T####.###), ATT&CK T-code (T#### / T####.###), CWE id (CWE-79).",
+            "required": true
+          },
+          {
+            "name": "perspective",
+            "description": "'red' = offensive recon (attack surface). 'blue' = defensive triage (incident response).",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

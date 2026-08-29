@@ -1,0 +1,75 @@
+{
+  "registry": "glama",
+  "id": "jqgnskg6x0",
+  "namespace": "wudidada",
+  "slug": "zentao-mcp-server",
+  "name": "ZenTao MCP Server",
+  "description": "Enables interaction with ZenTao project management software through its REST API. Supports bug tracking, product management, and issue resolution with secure authentication for streamlined development workflows.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables interaction with ZenTao project management software through its REST API. Supports bug tracking, product management, and issue resolution with secure authentication for streamlined development workflows.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "LOG_LEVEL": {
+          "description": "日志级别，例如 info",
+          "type": "string"
+        },
+        "ZENTAO_TOKEN": {
+          "description": "自动登录用的 token",
+          "type": "string"
+        },
+        "ZENTAO_ACCOUNT": {
+          "description": "自动登录用的账号",
+          "type": "string"
+        },
+        "ZENTAO_BASE_URL": {
+          "description": "禅道 API V1 根地址，如 http://host/zentao/api.php/v1",
+          "type": "string"
+        },
+        "ZENTAO_PASSWORD": {
+          "description": "自动登录用的密码",
+          "type": "string"
+        },
+        "ZENTAO_HTTP_BACKEND": {
+          "description": "HTTP 后端，axios 或 curl；未设置时 Linux/macOS 默认 curl，Windows 默认 axios",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "ZENTAO_BASE_URL",
+            "ZENTAO_ACCOUNT",
+            "ZENTAO_PASSWORD"
+          ]
+        },
+        {
+          "required": [
+            "ZENTAO_BASE_URL",
+            "ZENTAO_ACCOUNT",
+            "ZENTAO_TOKEN"
+          ]
+        }
+      ]
+    },
+    "id": "jqgnskg6x0",
+    "name": "ZenTao MCP Server",
+    "namespace": "wudidada",
+    "repository": {
+      "url": "https://github.com/wudidada/zentao-mcp-server"
+    },
+    "slug": "zentao-mcp-server",
+    "spdxLicense": {
+      "name": "ISC License",
+      "url": "https://spdx.org/licenses/ISC.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/jqgnskg6x0"
+  }
+}

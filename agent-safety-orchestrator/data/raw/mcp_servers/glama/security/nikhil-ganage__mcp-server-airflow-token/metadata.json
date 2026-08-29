@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "gcgwcxd1zy",
+  "namespace": "nikhil-ganage",
+  "slug": "mcp-server-airflow-token",
+  "name": "MCP Server Airflow Token",
+  "description": "A Model Context Protocol server that wraps Apache Airflow's REST API with Bearer token authentication support, enabling AI assistants to interact with Airflow deployments including Astronomer Cloud.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [],
+    "description": "A Model Context Protocol server that wraps Apache Airflow's REST API with Bearer token authentication support, enabling AI assistants to interact with Airflow deployments including Astronomer Cloud.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AIRFLOW_HOST": {
+          "description": "Your Airflow host URL",
+          "type": "string",
+          "default": "http://localhost:8080"
+        },
+        "AIRFLOW_TOKEN": {
+          "description": "Your Airflow API token for token-based authentication",
+          "type": "string"
+        },
+        "AIRFLOW_PASSWORD": {
+          "description": "Your Airflow password for basic authentication",
+          "type": "string"
+        },
+        "AIRFLOW_USERNAME": {
+          "description": "Your Airflow username for basic authentication",
+          "type": "string"
+        },
+        "AIRFLOW_API_VERSION": {
+          "description": "Airflow API version",
+          "type": "string",
+          "default": "v1"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "AIRFLOW_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "AIRFLOW_USERNAME",
+            "AIRFLOW_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "gcgwcxd1zy",
+    "name": "MCP Server Airflow Token",
+    "namespace": "nikhil-ganage",
+    "repository": {
+      "url": "https://github.com/nikhil-ganage/mcp-server-airflow-token"
+    },
+    "slug": "mcp-server-airflow-token",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/gcgwcxd1zy"
+  }
+}

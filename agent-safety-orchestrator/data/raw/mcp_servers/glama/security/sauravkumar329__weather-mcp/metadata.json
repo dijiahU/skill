@@ -1,0 +1,60 @@
+{
+  "registry": "glama",
+  "id": "txxsyk8tpk",
+  "namespace": "sauravkumar329",
+  "slug": "weather-mcp",
+  "name": "Weather MCP Server",
+  "description": "Enables secure retrieval of real-time weather data for any location via Open-Meteo using AWS Cognito OAuth 2.1 Bearer token authentication. Implements full MCP Authorization Specification with dynamic client registration and protected resource metadata discovery.",
+  "discoveryQueries": [
+    "authentication",
+    "authorization"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure retrieval of real-time weather data for any location via Open-Meteo using AWS Cognito OAuth 2.1 Bearer token authentication. Implements full MCP Authorization Specification with dynamic client registration and protected resource metadata discovery.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "SERVER_URL": {
+          "description": "Public URL of this server",
+          "type": "string",
+          "default": "http://localhost:8000"
+        },
+        "COGNITO_REGION": {
+          "description": "AWS region (e.g. `us-east-1`)",
+          "type": "string"
+        },
+        "COGNITO_USER_POOL_ID": {
+          "description": "Cognito User Pool ID",
+          "type": "string"
+        },
+        "COGNITO_APP_CLIENT_ID": {
+          "description": "App Client ID for token audience validation",
+          "type": "string"
+        },
+        "COGNITO_DOMAIN_PREFIX": {
+          "description": "Hosted-UI domain prefix",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "COGNITO_REGION",
+        "COGNITO_USER_POOL_ID",
+        "COGNITO_APP_CLIENT_ID",
+        "COGNITO_DOMAIN_PREFIX"
+      ]
+    },
+    "id": "txxsyk8tpk",
+    "name": "Weather MCP Server",
+    "namespace": "sauravkumar329",
+    "repository": {
+      "url": "https://github.com/sauravkumar329/weather-mcp"
+    },
+    "slug": "weather-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/txxsyk8tpk"
+  }
+}

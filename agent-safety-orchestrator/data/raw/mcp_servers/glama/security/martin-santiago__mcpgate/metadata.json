@@ -1,0 +1,58 @@
+{
+  "registry": "glama",
+  "id": "j4q48bg7mm",
+  "namespace": "martin-santiago",
+  "slug": "mcpgate",
+  "name": "MCPGate",
+  "description": "MCPGate aggregates multiple MCP servers into a single unified endpoint, enabling centralized tool management with granular filtering, automatic namespacing, and observability. Features a real-time web dashboard and optional PostgreSQL-backed audit trails for monitoring and controlling AI tool access across local and remote deployments.",
+  "discoveryQueries": [
+    "audit"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:hybrid"
+    ],
+    "description": "MCPGate aggregates multiple MCP servers into a single unified endpoint, enabling centralized tool management with granular filtering, automatic namespacing, and observability. Features a real-time web dashboard and optional PostgreSQL-backed audit trails for monitoring and controlling AI tool access across local and remote deployments.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "PORT": {
+          "description": "HTTP port (Railway sets this automatically)",
+          "type": "string",
+          "default": "3000"
+        },
+        "LOG_LEVEL": {
+          "description": "debug / info / warn / error",
+          "type": "string",
+          "default": "info"
+        },
+        "DATABASE_URL": {
+          "description": "PostgreSQL connection string (enables persistent audit trail)",
+          "type": "string"
+        },
+        "MCPGATE_CONFIG": {
+          "description": "Base64-encoded YAML config (for Railway/Docker)",
+          "type": "string"
+        },
+        "MCPGATE_AUTH_TOKEN": {
+          "description": "Bearer token for HTTP auth (reference in YAML via ${MCPGATE_AUTH_TOKEN})",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "j4q48bg7mm",
+    "name": "MCPGate",
+    "namespace": "martin-santiago",
+    "repository": {
+      "url": "https://github.com/martin-santiago/mcpgate"
+    },
+    "slug": "mcpgate",
+    "spdxLicense": {
+      "name": "Apache 2.0",
+      "url": "https://spdx.org/licenses/Apache-2.0.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/j4q48bg7mm"
+  }
+}

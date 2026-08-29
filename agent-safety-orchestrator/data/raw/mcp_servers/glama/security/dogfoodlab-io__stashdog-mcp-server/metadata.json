@@ -1,0 +1,62 @@
+{
+  "registry": "glama",
+  "id": "fzh6fdn4s9",
+  "namespace": "dogfoodlab-io",
+  "slug": "stashdog-mcp-server",
+  "name": "StashDog MCP Server",
+  "description": "Enables AI assistants to manage StashDog inventory through natural language commands, supporting item management, collections, tags, smart search, and URL imports with secure authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables AI assistants to manage StashDog inventory through natural language commands, supporting item management, collections, tags, smart search, and URL imports with secure authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "STASHDOG_EMAIL": {
+          "description": "Your StashDog email address for automatic authentication",
+          "type": "string"
+        },
+        "STASHDOG_API_URL": {
+          "description": "The URL of the StashDog GraphQL API",
+          "type": "string",
+          "default": "http://localhost:3000/graphql"
+        },
+        "STASHDOG_PASSWORD": {
+          "description": "Your StashDog password for automatic authentication",
+          "type": "string"
+        },
+        "STASHDOG_AUTH_TOKEN": {
+          "description": "Your StashDog authentication token",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "STASHDOG_AUTH_TOKEN"
+          ]
+        },
+        {
+          "required": [
+            "STASHDOG_EMAIL",
+            "STASHDOG_PASSWORD"
+          ]
+        }
+      ]
+    },
+    "id": "fzh6fdn4s9",
+    "name": "StashDog MCP Server",
+    "namespace": "dogfoodlab-io",
+    "repository": {
+      "url": "https://github.com/dogfoodlab-io/stashdog-mcp-server"
+    },
+    "slug": "stashdog-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/fzh6fdn4s9"
+  }
+}

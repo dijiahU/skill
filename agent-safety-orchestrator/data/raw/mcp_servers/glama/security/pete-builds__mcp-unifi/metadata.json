@@ -1,0 +1,112 @@
+{
+  "registry": "glama",
+  "id": "qw9sip6lgn",
+  "namespace": "pete-builds",
+  "slug": "mcp-unifi",
+  "name": "mcp-unifi",
+  "description": "An MCP server for self-hosted UniFi gateway management, providing tools for devices, networks, WiFi, firewall rules, switch port profiles, connected clients, and a one-shot IoT network creation with rollback.",
+  "discoveryQueries": [
+    "firewall"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "An MCP server for self-hosted UniFi gateway management, providing tools for devices, networks, WiFi, firewall rules, switch port profiles, connected clients, and a one-shot IoT network creation with rollback.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MCP_HOST": {
+          "description": "Bind address.",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "MCP_PORT": {
+          "description": "Listen port.",
+          "type": "string",
+          "default": "3714"
+        },
+        "LOG_LEVEL": {
+          "description": "One of DEBUG, INFO, WARNING, ERROR, CRITICAL.",
+          "type": "string",
+          "default": "INFO"
+        },
+        "STUB_MODE": {
+          "description": "When false, real-mode credentials are required.",
+          "type": "string",
+          "default": "true"
+        },
+        "LOG_FORMAT": {
+          "description": "json for production, text for local dev.",
+          "type": "string",
+          "default": "json"
+        },
+        "UNIFI_HOST": {
+          "description": "Gateway IP or hostname (no scheme). Required in real mode.",
+          "type": "string"
+        },
+        "UNIFI_PORT": {
+          "description": "HTTPS port for the gateway.",
+          "type": "string",
+          "default": "443"
+        },
+        "UNIFI_SITE": {
+          "description": "Controller site identifier.",
+          "type": "string",
+          "default": "default"
+        },
+        "UNIFI_API_KEY": {
+          "description": "Local API key from Settings -> Control Plane -> Integrations. Required in real mode.",
+          "type": "string"
+        },
+        "UNIFI_VERIFY_SSL": {
+          "description": "Set true if you have installed a real cert on the gateway.",
+          "type": "string",
+          "default": "false"
+        },
+        "IOT_SUBNET_TEMPLATE": {
+          "description": "Must contain the literal {vlan_id} placeholder.",
+          "type": "string",
+          "default": "10.0.{vlan_id}.0/24"
+        },
+        "IOT_DHCP_STOP_OFFSET": {
+          "description": "Last DHCP lease offset within the IoT /24.",
+          "type": "string",
+          "default": "200"
+        },
+        "IOT_DHCP_START_OFFSET": {
+          "description": "First DHCP lease offset within the IoT /24.",
+          "type": "string",
+          "default": "100"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "STUB_MODE"
+          ]
+        },
+        {
+          "required": [
+            "STUB_MODE",
+            "UNIFI_HOST",
+            "UNIFI_API_KEY"
+          ]
+        }
+      ]
+    },
+    "id": "qw9sip6lgn",
+    "name": "mcp-unifi",
+    "namespace": "pete-builds",
+    "repository": {
+      "url": "https://github.com/pete-builds/mcp-unifi"
+    },
+    "slug": "mcp-unifi",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/qw9sip6lgn"
+  }
+}

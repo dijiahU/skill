@@ -1,0 +1,53 @@
+{
+  "registry": "glama",
+  "id": "lqq20r8xj3",
+  "namespace": "eliu243",
+  "slug": "oura-mcp-server",
+  "name": "Oura Ring OAuth2 MCP Server",
+  "description": "Enables access to Oura Ring sleep data through OAuth2 authentication. Supports querying sleep scores and data from last night, past week, or specific dates.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables access to Oura Ring sleep data through OAuth2 authentication. Supports querying sleep scores and data from last night, past week, or specific dates.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "client_id": {
+          "description": "Oura API client ID (required)",
+          "type": "string"
+        },
+        "access_token": {
+          "description": "Auto-populated after OAuth2 authentication",
+          "type": "string"
+        },
+        "redirect_uri": {
+          "description": "OAuth2 redirect URI",
+          "type": "string",
+          "default": "http://localhost:8080/callback"
+        },
+        "client_secret": {
+          "description": "Oura API client secret (required)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "client_id",
+        "client_secret"
+      ]
+    },
+    "id": "lqq20r8xj3",
+    "name": "Oura Ring OAuth2 MCP Server",
+    "namespace": "eliu243",
+    "repository": {
+      "url": "https://github.com/eliu243/oura-mcp-server"
+    },
+    "slug": "oura-mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/lqq20r8xj3"
+  }
+}

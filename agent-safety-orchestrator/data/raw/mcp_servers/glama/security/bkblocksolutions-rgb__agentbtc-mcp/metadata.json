@@ -1,0 +1,56 @@
+{
+  "registry": "glama",
+  "id": "q8zvzsueh7",
+  "namespace": "bkblocksolutions-rgb",
+  "slug": "agentbtc-mcp",
+  "name": "AgentBTC MCP Server",
+  "description": "Enables AI agents to perform Bitcoin and Lightning Network payments using a non-custodial, zero-trust architecture. It provides 13 tools for wallet management, invoice creation, and payment processing while keeping node credentials local to the user's machine.",
+  "discoveryQueries": [
+    "trust"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "Enables AI agents to perform Bitcoin and Lightning Network payments using a non-custodial, zero-trust architecture. It provides 13 tools for wallet management, invoice creation, and payment processing while keeping node credentials local to the user's machine.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AGENTBTC_API_KEY": {
+          "description": "Your owner API key for wallet management",
+          "type": "string"
+        },
+        "AGENTBTC_API_URL": {
+          "description": "AgentBTC server URL (default: http://localhost:8000)",
+          "type": "string",
+          "default": "http://localhost:8000"
+        },
+        "AGENTBTC_LND_HOST": {
+          "description": "LND REST API endpoint (e.g., localhost:8080)",
+          "type": "string"
+        },
+        "AGENTBTC_LND_MACAROON": {
+          "description": "Path to LND macaroon file",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "AGENTBTC_LND_HOST",
+        "AGENTBTC_LND_MACAROON"
+      ]
+    },
+    "id": "q8zvzsueh7",
+    "name": "AgentBTC MCP Server",
+    "namespace": "bkblocksolutions-rgb",
+    "repository": {
+      "url": "https://github.com/bkblocksolutions-rgb/agentbtc-mcp"
+    },
+    "slug": "agentbtc-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/q8zvzsueh7"
+  }
+}

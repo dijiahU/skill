@@ -1,0 +1,261 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "scamverify/scamverify",
+  "namespace": "scamverify",
+  "slug": "scamverify",
+  "displayName": "ScamVerify",
+  "description": "AI-powered scam and threat verification MCP server. Check phone numbers, URLs, text messages, and emails against aggregated threat intelligence from government complaint databases, malicious URL feeds, threat indicator databases, and carrier analysis. Returns risk scores, verdicts, confidence levels, and detailed signals. 8 tools, OAuth 2.1 + API key auth.        ",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "vulnerability",
+    "authentication",
+    "phishing"
+  ],
+  "rawRecord": {
+    "id": "19f6c264-094c-4fb0-9b68-9b994aa1c730",
+    "qualifiedName": "scamverify/scamverify",
+    "namespace": "scamverify",
+    "slug": "scamverify",
+    "displayName": "ScamVerify",
+    "description": "AI-powered scam and threat verification MCP server. Check phone numbers, URLs, text messages, and emails against aggregated threat intelligence from government complaint databases, malicious URL feeds, threat indicator databases, and carrier analysis. Returns risk scores, verdicts, confidence levels, and detailed signals. 8 tools, OAuth 2.1 + API key auth.        ",
+    "iconUrl": "https://api.smithery.ai/servers/scamverify/scamverify/icon",
+    "verified": false,
+    "useCount": 0,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-03-15T18:09:24.067Z",
+    "homepage": "https://docs.scamverify.ai",
+    "bySmithery": false,
+    "owner": "org_01KNBVQ868AH34MSB5C2TPYWFC",
+    "score": 0.02631578947368421
+  },
+  "detail": {
+    "qualifiedName": "scamverify/scamverify",
+    "displayName": "ScamVerify",
+    "description": "AI-powered scam and threat verification MCP server. Check phone numbers, URLs, text messages, and emails against aggregated threat intelligence from government complaint databases, malicious URL feeds, threat indicator databases, and carrier analysis. Returns risk scores, verdicts, confidence levels, and detailed signals. 8 tools, OAuth 2.1 + API key auth.        ",
+    "iconUrl": "https://api.smithery.ai/servers/scamverify/scamverify/icon",
+    "remote": true,
+    "deploymentUrl": "https://scamverify.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://scamverify.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "x-from": {
+                "query": "apiKey"
+              },
+              "x-order": 0,
+              "description": "ScamVerify API key. If not provided, OAuth authentication will be used instead."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "check_phone",
+        "description": "Look up a US phone number to check for scam reports, carrier info, robocall flags, and community reports. Returns a risk score (0-100), verdict, and detailed signals from FTC, FCC, carrier, and community data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "phone_number": {
+              "type": "string",
+              "description": "US phone number to look up (any format: +1XXXXXXXXXX, (XXX) XXX-XXXX, etc.)"
+            },
+            "force_refresh": {
+              "type": "boolean",
+              "description": "Force a fresh lookup, bypassing cache (default: false)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_url",
+        "description": "Check a website URL for safety. Analyzes domain age, SSL certificate, redirect chains, brand impersonation, Google Web Risk, URLhaus, ThreatFox, and community reports. Returns risk score and detailed signals.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL to check (must include protocol, e.g. https://example.com)"
+            },
+            "force_refresh": {
+              "type": "boolean",
+              "description": "Force a fresh lookup, bypassing cache (default: false)"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_text",
+        "description": "Analyze a text/SMS message for scam indicators. Extracts and cross-references embedded phone numbers and URLs. AI analysis identifies scam type, red flags, and risk level. Returns unified risk score combining AI and sub-lookup signals.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Text message content to analyze (max 5000 characters)"
+            },
+            "from_number": {
+              "type": "string",
+              "description": "Sender phone number, if known"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_email",
+        "description": "Analyze an email for phishing indicators. Checks sender domain, email headers (SPF/DKIM/DMARC), brand impersonation, embedded URLs and phone numbers. Returns unified risk score with detailed header and sender analysis.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "string",
+              "description": "Email subject line"
+            },
+            "email_body": {
+              "type": "string",
+              "description": "Email body content to analyze (max 20000 characters)"
+            },
+            "raw_headers": {
+              "type": "string",
+              "description": "Raw email headers for SPF/DKIM/DMARC analysis"
+            },
+            "sender_email": {
+              "type": "string",
+              "description": "Sender email address"
+            }
+          }
+        }
+      },
+      {
+        "name": "batch_phone",
+        "description": "Look up multiple phone numbers in a single request (max 100). Each number is checked individually with the same analysis as check_phone. Returns results array with per-item risk scores and a summary.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "force_refresh": {
+              "type": "boolean",
+              "description": "Force fresh lookups, bypassing cache (default: false)"
+            },
+            "phone_numbers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Array of US phone numbers (1-100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "batch_url",
+        "description": "Check multiple URLs in a single request (max 100). Each URL is analyzed individually with the same checks as check_url. Returns results array with per-item risk scores and a summary.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100,
+              "minItems": 1,
+              "description": "Array of URLs to check (1-100)"
+            },
+            "force_refresh": {
+              "type": "boolean",
+              "description": "Force fresh lookups, bypassing cache (default: false)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_usage",
+        "description": "Check your current API usage quota and rate limits for the billing period. Shows per-channel usage (phone, URL, text, email) with limits and remaining counts.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_status",
+        "description": "Check the operational status of ScamVerify API services. Returns health status for each component (phone, URL, text, email lookups, database, AI inference). No authentication required.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": [
+      {
+        "name": "investigate_phone",
+        "description": "Investigate a suspicious phone number for scam indicators and provide a safety recommendation.",
+        "arguments": [
+          {
+            "name": "phone_number",
+            "description": "The phone number to investigate",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "verify_url",
+        "description": "Check if a website URL is safe to visit and provide a detailed safety assessment.",
+        "arguments": [
+          {
+            "name": "url",
+            "description": "The URL to verify",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "analyze_text",
+        "description": "Analyze a suspicious text message for scam indicators and explain the findings.",
+        "arguments": [
+          {
+            "name": "message",
+            "description": "The text message content",
+            "required": true
+          },
+          {
+            "name": "from_number",
+            "description": "The sender phone number, if known",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "check_email",
+        "description": "Analyze a suspicious email for phishing indicators and provide a safety assessment.",
+        "arguments": [
+          {
+            "name": "email_body",
+            "description": "The email body content",
+            "required": true
+          },
+          {
+            "name": "sender_email",
+            "description": "The sender email address",
+            "required": false
+          },
+          {
+            "name": "subject",
+            "description": "The email subject line",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+}

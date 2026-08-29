@@ -1,0 +1,354 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "dynamycsound/domain-lookup",
+  "namespace": "dynamycsound",
+  "slug": "domain-lookup",
+  "displayName": "Domain Insights",
+  "description": "Analyze domain infrastructure by performing comprehensive DNS, WHOIS, and security audits. Identify technology stacks, track SSL validity, and verify email security configurations to ensure optimal web presence. Monitor global DNS propagation and discover subdomains to gain a complete picture of any domain's health and history.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit"
+  ],
+  "rawRecord": {
+    "id": "19fe06e0-3abb-468c-9735-c0472079afe1",
+    "qualifiedName": "dynamycsound/domain-lookup",
+    "namespace": "dynamycsound",
+    "slug": "domain-lookup",
+    "displayName": "Domain Insights",
+    "description": "Analyze domain infrastructure by performing comprehensive DNS, WHOIS, and security audits. Identify technology stacks, track SSL validity, and verify email security configurations to ensure optimal web presence. Monitor global DNS propagation and discover subdomains to gain a complete picture of any domain's health and history.",
+    "iconUrl": "https://api.smithery.ai/servers/dynamycsound/domain-lookup/icon",
+    "verified": false,
+    "useCount": 306,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-16T17:32:46.437Z",
+    "homepage": "https://mcpdns.onrender.com/about",
+    "bySmithery": false,
+    "owner": "org_01KNBV9PV4H5A8172S437BGEFC",
+    "score": 0.015873015873015872
+  },
+  "detail": {
+    "qualifiedName": "dynamycsound/domain-lookup",
+    "displayName": "Domain Insights",
+    "description": "Analyze domain infrastructure by performing comprehensive DNS, WHOIS, and security audits. Identify technology stacks, track SSL validity, and verify email security configurations to ensure optimal web presence. Monitor global DNS propagation and discover subdomains to gain a complete picture of any domain's health and history.",
+    "iconUrl": "https://api.smithery.ai/servers/dynamycsound/domain-lookup/icon",
+    "remote": true,
+    "deploymentUrl": "https://domain-lookup--dynamycsound.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://domain-lookup--dynamycsound.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "timeout": {
+              "type": "number",
+              "x-from": {
+                "query": "timeout"
+              },
+              "default": 30000,
+              "description": "Maximum time in milliseconds for each tool request. Default is 30000 (30 seconds)."
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "domain_report",
+        "description": "Get a complete domain intelligence report. Runs ALL checks at once: DNS, WHOIS, email security, SSL, HTTP headers, tech stack detection, and domain age. This is the recommended starting tool.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to analyze (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "dns_lookup",
+        "description": "Look up DNS records (A, AAAA, MX, TXT, NS, CNAME, or ALL) for any domain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name to look up (e.g. example.com)"
+            },
+            "record_type": {
+              "enum": [
+                "A",
+                "AAAA",
+                "MX",
+                "TXT",
+                "NS",
+                "CNAME",
+                "ALL"
+              ],
+              "type": "string",
+              "default": "ALL",
+              "description": "DNS record type to query. Use ALL to fetch every type."
+            }
+          }
+        }
+      },
+      {
+        "name": "whois_lookup",
+        "description": "Get WHOIS registration data for a domain including registrar, creation/expiry dates, and days remaining.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name to look up (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "domain_available",
+        "description": "Check whether a domain is available for registration. Suggests alternative TLDs if the domain is taken.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name to check (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "email_config_check",
+        "description": "Audit email security configuration: MX, SPF, DKIM (common selectors), and DMARC records. Returns a letter grade A–F.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain name to audit (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "ssl_check",
+        "description": "Check SSL/TLS certificate details for a domain: issuer, validity dates, days remaining, protocol, and fingerprint.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain or hostname to check (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "reverse_dns",
+        "description": "Reverse DNS lookup — convert an IP address to its hostname(s), or find the IP behind a domain and do reverse lookup.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "IP address or domain name (e.g. 8.8.8.8 or example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "dns_propagation",
+        "description": "Check if DNS has propagated by querying 8 public resolvers worldwide (Google, Cloudflare, OpenDNS, Quad9, etc.).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to check (e.g. example.com)"
+            },
+            "record_type": {
+              "type": "string",
+              "default": "A",
+              "description": "Record type to check (default A)"
+            }
+          }
+        }
+      },
+      {
+        "name": "subdomain_finder",
+        "description": "Discover common subdomains for a domain by checking ~80 common subdomain prefixes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to scan for subdomains (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "http_headers_check",
+        "description": "Audit HTTP security headers (HSTS, CSP, X-Frame-Options, etc.) and give a letter grade A–F.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain or URL to check (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "redirect_chain",
+        "description": "Trace the full redirect chain for a URL. Shows every redirect hop, status code, and final destination.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL to trace (e.g. http://example.com)"
+            },
+            "max_redirects": {
+              "type": "number",
+              "default": 10,
+              "description": "Maximum redirects to follow (default 10)"
+            }
+          }
+        }
+      },
+      {
+        "name": "tech_stack_detect",
+        "description": "Detect the technology stack of a website: web server, CDN, framework, CMS, analytics, and more.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to analyze (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "domain_age",
+        "description": "Calculate the exact age of a domain and show its registration timeline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain to check age of (e.g. example.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "dns_compare",
+        "description": "Compare DNS records of two domains side by side. Useful for comparing setups or verifying migration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain1": {
+              "type": "string",
+              "description": "First domain (e.g. google.com)"
+            },
+            "domain2": {
+              "type": "string",
+              "description": "Second domain (e.g. bing.com)"
+            }
+          }
+        }
+      },
+      {
+        "name": "port_check",
+        "description": "Check if common network ports are open on a domain. Useful for verifying services are running.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ports": {
+              "type": "string",
+              "default": "common",
+              "description": "Comma-separated port numbers or 'common' for standard web/mail/ssh ports"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Domain or IP to scan (e.g. example.com)"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "tool-catalog",
+        "uri": "info://tools",
+        "description": "Complete list of all 15 domain intelligence tools with descriptions and parameters",
+        "mimeType": "application/json"
+      },
+      {
+        "name": "server-info",
+        "uri": "info://server",
+        "description": "MCP Domain Lookup server metadata, version, and capabilities",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "domain-check",
+        "description": "Run a full domain intelligence report with analysis and recommendations",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to analyze",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "security-audit",
+        "description": "Audit the security posture of a domain",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to audit",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "compare-domains",
+        "description": "Compare two domains side by side",
+        "arguments": [
+          {
+            "name": "domain1",
+            "description": "First domain",
+            "required": true
+          },
+          {
+            "name": "domain2",
+            "description": "Second domain",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "find-subdomains",
+        "description": "Discover and analyze subdomains of a domain",
+        "arguments": [
+          {
+            "name": "domain",
+            "description": "Domain to scan",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.OjasKord/data-compliance-mcp",
+  "slug": "OjasKord__data-compliance-mcp",
+  "title": "Data Compliance Classifier MCP",
+  "description": "Classify data safety before storing or sharing. GDPR, HIPAA, PCI-DSS, CCPA. AI-powered.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.OjasKord/data-compliance-mcp",
+      "description": "Classify data safety before storing or sharing. GDPR, HIPAA, PCI-DSS, CCPA. AI-powered.",
+      "title": "Data Compliance Classifier MCP",
+      "repository": {
+        "url": "https://github.com/OjasKord/data-compliance-mcp",
+        "source": "github"
+      },
+      "version": "1.0.0",
+      "websiteUrl": "https://kordagencies.com",
+      "packages": [
+        {
+          "registryType": "npm",
+          "registryBaseUrl": "https://registry.npmjs.org",
+          "identifier": "data-compliance-mcp",
+          "version": "1.0.0",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Anthropic API key for AI classification",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "ANTHROPIC_API_KEY"
+            },
+            {
+              "description": "AbuseIPDB API key for threat intelligence (optional - disables IP threat checks if not set)",
+              "isSecret": true,
+              "name": "ABUSEIPDB_API_KEY"
+            }
+          ]
+        }
+      ],
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://data-compliance-mcp-production.up.railway.app"
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-21T10:08:19.55213Z",
+        "publishedAt": "2026-04-21T10:08:19.55213Z",
+        "updatedAt": "2026-04-21T10:08:19.55213Z",
+        "isLatest": false
+      }
+    }
+  }
+}

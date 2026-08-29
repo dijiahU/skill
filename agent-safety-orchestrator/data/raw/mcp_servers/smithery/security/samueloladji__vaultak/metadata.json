@@ -1,0 +1,117 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "samueloladji/Vaultak",
+  "namespace": "samueloladji",
+  "slug": "Vaultak",
+  "displayName": "Vaultak",
+  "description": "Runtime security for AI agents. Score your agent's risk level across 5 dimensions, check if actions should be allowed or blocked, and get ready-to-use security policies. Zero configuration required.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "policy",
+    "authorization"
+  ],
+  "rawRecord": {
+    "id": "1f61dd63-6fb2-4106-83d8-12627aebb34f",
+    "qualifiedName": "samueloladji/Vaultak",
+    "namespace": "samueloladji",
+    "slug": "Vaultak",
+    "displayName": "Vaultak",
+    "description": "Runtime security for AI agents. Score your agent's risk level across 5 dimensions, check if actions should be allowed or blocked, and get ready-to-use security policies. Zero configuration required.",
+    "iconUrl": "https://api.smithery.ai/servers/samueloladji/Vaultak/icon",
+    "verified": false,
+    "useCount": 274,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-12T07:15:37.312Z",
+    "homepage": "https://smithery.ai/servers/samueloladji/Vaultak",
+    "bySmithery": false,
+    "owner": "org_01KP082WPGNEAXR0MAS10GTMPE",
+    "score": 0.014925373134328358
+  },
+  "detail": {
+    "qualifiedName": "samueloladji/Vaultak",
+    "displayName": "Vaultak",
+    "description": "Runtime security for AI agents. Score your agent's risk level across 5 dimensions, check if actions should be allowed or blocked, and get ready-to-use security policies. Zero configuration required.",
+    "iconUrl": "https://api.smithery.ai/servers/samueloladji/Vaultak/icon",
+    "remote": true,
+    "deploymentUrl": "https://vaultak--samueloladji.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://vaultak--samueloladji.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "vaultak_risk_score",
+        "description": "Score an AI agent's risk level across 5 security dimensions: action type, resource sensitivity, blast radius, behavioral deviation, and time pattern. Returns a 0-100 composite score, risk tier (LOW/MODERATE/HIGH/CRITICAL), per-dimension breakdown, and Vaultak policy recommendations.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of tools/capabilities the agent has access to."
+            },
+            "agent_description": {
+              "type": "string",
+              "description": "What the agent does — its purpose, workflow, and behaviors."
+            }
+          }
+        }
+      },
+      {
+        "name": "vaultak_policy_check",
+        "description": "Check whether a specific agent action should be ALLOWED or BLOCKED based on Vaultak's policy engine. Evaluates action/resource pairs against policies using priority-based matching.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "The action the agent wants to perform (delete, write, execute, send_email...)."
+            },
+            "policies": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "default": [],
+              "description": "List of Vaultak policy objects to evaluate against."
+            },
+            "resource": {
+              "type": "string",
+              "description": "The resource being acted upon (production_db, s3://bucket/, smtp_server...)."
+            }
+          }
+        }
+      },
+      {
+        "name": "vaultak_get_policy_templates",
+        "description": "Get ready-to-use Vaultak policy templates for common AI agent security scenarios: database protection, file system limits, API rate limiting, PII protection, production safeguards.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scenario": {
+              "enum": [
+                "database_protection",
+                "file_system_limits",
+                "api_rate_limiting",
+                "pii_protection",
+                "production_safeguards",
+                "all"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "registry": "glama",
+  "id": "ople4xroos",
+  "namespace": "ampcome-mcps",
+  "slug": "trello-mcp",
+  "name": "Trello MCP Server",
+  "description": "Enables Claude to interact with Trello boards, lists, cards, comments, and attachments through natural language commands. Uses Nango OAuth authentication to provide complete Trello API coverage including creation, updates, search, and project management operations.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables Claude to interact with Trello boards, lists, cards, comments, and attachments through natural language commands. Uses Nango OAuth authentication to provide complete Trello API coverage including creation, updates, search, and project management operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "DEBUG": {
+          "description": "Enable debug mode for detailed operation logs",
+          "type": "string",
+          "default": "false"
+        },
+        "NANGO_BASE_URL": {
+          "description": "The base URL for Nango API",
+          "type": "string",
+          "default": "https://api.nango.dev"
+        },
+        "NANGO_SECRET_KEY": {
+          "description": "Your Nango secret key from the dashboard",
+          "type": "string"
+        },
+        "TRELLO_CLIENT_ID": {
+          "description": "Your Trello API key from the Trello Developer Portal",
+          "type": "string"
+        },
+        "NANGO_CONNECTION_ID": {
+          "description": "Your user connection ID from Nango",
+          "type": "string"
+        },
+        "NANGO_INTEGRATION_ID": {
+          "description": "The Nango integration ID for Trello",
+          "type": "string",
+          "default": "trello"
+        }
+      },
+      "type": "object",
+      "required": [
+        "NANGO_SECRET_KEY",
+        "NANGO_CONNECTION_ID",
+        "TRELLO_CLIENT_ID"
+      ]
+    },
+    "id": "ople4xroos",
+    "name": "Trello MCP Server",
+    "namespace": "ampcome-mcps",
+    "repository": {
+      "url": "https://github.com/ampcome-mcps/trello-mcp"
+    },
+    "slug": "trello-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/ople4xroos"
+  }
+}

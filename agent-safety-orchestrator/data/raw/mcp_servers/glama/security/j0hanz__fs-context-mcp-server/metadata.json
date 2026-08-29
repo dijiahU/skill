@@ -1,0 +1,56 @@
+{
+  "registry": "glama",
+  "id": "e2zq5pne0z",
+  "namespace": "j0hanz",
+  "slug": "fs-context-mcp-server",
+  "name": "FS Context MCP Server",
+  "description": "A secure, read-only MCP server that enables filesystem scanning, searching with glob patterns and regex, file reading, and batch operations with comprehensive path validation and security protections.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:local-only"
+    ],
+    "description": "A secure, read-only MCP server that enables filesystem scanning, searching with glob patterns and regex, file reading, and batch operations with comprehensive path validation and security protections.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "MAX_FILE_SIZE": {
+          "description": "Max file size for read operations in bytes (range: 1MB-100MB)",
+          "type": "string",
+          "default": "10485760"
+        },
+        "MAX_SEARCH_SIZE": {
+          "description": "Max file size for content search in bytes (range: 100KB-10MB)",
+          "type": "string",
+          "default": "1048576"
+        },
+        "DEFAULT_SEARCH_TIMEOUT": {
+          "description": "Timeout for search/list operations in milliseconds (range: 100-3600000ms)",
+          "type": "string",
+          "default": "30000"
+        },
+        "FS_CONTEXT_SEARCH_WORKERS": {
+          "description": "Search worker threads (range: 1-16)",
+          "type": "string",
+          "default": "min(cpu cores, 8)"
+        }
+      },
+      "type": "object",
+      "required": []
+    },
+    "id": "e2zq5pne0z",
+    "name": "FS Context MCP Server",
+    "namespace": "j0hanz",
+    "repository": {
+      "url": "https://github.com/j0hanz/filesystem-mcp"
+    },
+    "slug": "fs-context-mcp-server",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/e2zq5pne0z"
+  }
+}

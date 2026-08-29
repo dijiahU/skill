@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD Test Solution Report - {REPO_NAME}</title>
+    <style>
+        :root {
+            --color-bg: #0f172a;
+            --color-card: #1e293b;
+            --color-border: #334155;
+            --color-text: #f8fafc;
+            --color-text-muted: #94a3b8;
+            --color-excellent: #22c55e;
+            --color-good: #84cc16;
+            --color-warning: #eab308;
+            --color-critical: #ef4444;
+            --color-info: #3b82f6;
+            --color-accent: #8b5cf6;
+            --radius: 8px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .dashboard { max-width: 1400px; margin: 0 auto; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .header h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .header .meta { color: var(--color-text-muted); font-size: 0.875rem; }
+        .header .meta code {
+            background: var(--color-card);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+        .timestamp { text-align: right; color: var(--color-text-muted); font-size: 0.875rem; }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: var(--color-card);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .card-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .card-value { display: block; font-size: 2rem; font-weight: 700; }
+        .card-delta { display: block; font-size: 0.875rem; margin-top: 0.25rem; }
+
+        .delta-up { color: var(--color-excellent); }
+        .delta-down { color: var(--color-critical); }
+        .delta-same { color: var(--color-text-muted); }
+
+        .grade-A { color: var(--color-excellent); }
+        .grade-B { color: var(--color-good); }
+        .grade-C { color: var(--color-warning); }
+        .grade-D, .grade-F { color: var(--color-critical); }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+        .chart-card {
+            background: var(--color-card);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .chart-card h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-text-muted);
+        }
+
+        .radar-chart { width: 100%; max-width: 400px; margin: 0 auto; }
+        .radar-chart svg { width: 100%; height: auto; }
+        .radar-grid { stroke: var(--color-border); stroke-width: 1; fill: none; }
+        .radar-axis { stroke: var(--color-border); stroke-width: 1; }
+        .radar-area { fill: var(--color-accent); fill-opacity: 0.3; stroke: var(--color-accent); stroke-width: 2; }
+        .radar-point { fill: var(--color-accent); }
+        .radar-label { fill: var(--color-text-muted); font-size: 11px; text-anchor: middle; }
+
+        .history-chart svg { width: 100%; height: 200px; }
+        .history-line { stroke: var(--color-accent); stroke-width: 2; fill: none; }
+        .history-area { fill: var(--color-accent); fill-opacity: 0.1; }
+        .history-point { fill: var(--color-accent); }
+        .history-grid { stroke: var(--color-border); stroke-width: 1; }
+        .history-label { fill: var(--color-text-muted); font-size: 10px; }
+
+        .aspects-section { margin-bottom: 2rem; }
+        .aspects-section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+        .aspect-item {
+            background: var(--color-card);
+            border-radius: var(--radius);
+            margin-bottom: 0.5rem;
+            padding: 1rem 1.25rem;
+            box-shadow: var(--shadow);
+        }
+        .aspect-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .aspect-name { font-weight: 600; }
+        .aspect-score { color: var(--color-text-muted); font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; }
+        .progress {
+            height: 10px;
+            background: #0b1220;
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+        .progress > div { height: 100%; width: 0%; background: var(--color-accent); }
+
+        .issues-section { margin-bottom: 2rem; }
+        .issues-section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+        .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .filter-btn {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            padding: 0.5rem 0.75rem;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        .filter-btn.active { border-color: var(--color-accent); }
+
+        .issues-table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: var(--radius); }
+        .issues-table th, .issues-table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+        .issues-table th { color: var(--color-text-muted); font-weight: 600; font-size: 0.875rem; background: rgba(255,255,255,0.02); }
+        .sev-critical { color: var(--color-critical); font-weight: 700; }
+        .sev-warning { color: var(--color-warning); font-weight: 700; }
+        .sev-info { color: var(--color-info); font-weight: 700; }
+
+        .footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+        .footer a { color: var(--color-accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="header">
+        <div>
+            <h1>BDD Test Solution Report</h1>
+            <div class="meta">
+                Repository: <strong>{REPO_NAME}</strong> |
+                Branch: <code>{BRANCH}</code> |
+                Commit: <code>{COMMIT_HASH}</code>
+            </div>
+        </div>
+        <div class="timestamp">
+            <div>Generated: {DATE}</div>
+            <div>Report ID: {REPORT_ID}</div>
+        </div>
+    </div>
+
+    <div class="summary-cards">
+        <div class="card">
+            <span class="card-label">Grade</span>
+            <span class="card-value grade-{GRADE}">{GRADE}</span>
+            <span class="card-delta delta-{DELTA_DIR}">{DELTA}</span>
+        </div>
+        <div class="card">
+            <span class="card-label">Score</span>
+            <span class="card-value">{SCORE}/100</span>
+            <span class="card-delta delta-{DELTA_DIR}">{SCORE_DELTA}</span>
+        </div>
+        <div class="card">
+            <span class="card-label">Critical</span>
+            <span class="card-value" style="color: var(--color-critical)">{CRITICAL_COUNT}</span>
+            <span class="card-delta">{CRITICAL_DELTA}</span>
+        </div>
+        <div class="card">
+            <span class="card-label">Warning</span>
+            <span class="card-value" style="color: var(--color-warning)">{WARNING_COUNT}</span>
+            <span class="card-delta">{WARNING_DELTA}</span>
+        </div>
+        <div class="card">
+            <span class="card-label">Info</span>
+            <span class="card-value" style="color: var(--color-info)">{INFO_COUNT}</span>
+            <span class="card-delta">{INFO_DELTA}</span>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h2>Aspect Radar</h2>
+            <div class="radar-chart">
+                <svg viewBox="0 0 400 400" aria-label="Radar chart">
+                    <circle class="radar-grid" cx="200" cy="200" r="150"></circle>
+                    <circle class="radar-grid" cx="200" cy="200" r="100"></circle>
+                    <circle class="radar-grid" cx="200" cy="200" r="50"></circle>
+                    <line class="radar-axis" x1="200" y1="200" x2="200" y2="50"></line>
+                    <line class="radar-axis" x1="200" y1="200" x2="350" y2="200"></line>
+                    <line class="radar-axis" x1="200" y1="200" x2="200" y2="350"></line>
+                    <line class="radar-axis" x1="200" y1="200" x2="50" y2="200"></line>
+                    <polygon class="radar-area" points="{RADAR_POINTS}"></polygon>
+                    <!-- {RADAR_POINT_CIRCLES} -->
+                    <!-- {RADAR_LABELS} -->
+                </svg>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h2>Progress Over Time</h2>
+            <div class="history-chart">
+                <svg viewBox="0 0 600 200" aria-label="History chart">
+                    <line class="history-grid" x1="50" y1="20" x2="50" y2="170"></line>
+                    <line class="history-grid" x1="50" y1="170" x2="580" y2="170"></line>
+                    <polygon class="history-area" points="{HISTORY_AREA_POINTS}"></polygon>
+                    <polyline class="history-line" points="{HISTORY_LINE_POINTS}"></polyline>
+                    <!-- {HISTORY_POINT_CIRCLES} -->
+                    <!-- {HISTORY_X_LABELS} -->
+                </svg>
+            </div>
+            <div class="meta" style="margin-top: 0.75rem;">
+                Trend: <span style="color: var(--color-{TREND_COLOR})">{TREND_TEXT}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="aspects-section">
+        <h2>Aspect Breakdown</h2>
+        <!-- {ASPECT_ITEMS} -->
+    </div>
+
+    <div class="issues-section">
+        <h2>Issues</h2>
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterIssues('all')">All ({TOTAL_ISSUES})</button>
+            <button class="filter-btn" onclick="filterIssues('critical')">Critical ({CRITICAL_COUNT})</button>
+            <button class="filter-btn" onclick="filterIssues('warning')">Warning ({WARNING_COUNT})</button>
+            <button class="filter-btn" onclick="filterIssues('info')">Info ({INFO_COUNT})</button>
+        </div>
+        <table class="issues-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Severity</th>
+                <th>Aspect</th>
+                <th>Issue</th>
+                <th>Effort</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- {ISSUE_ROWS} -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>Generated by <strong>auditing-bdd-tests</strong> skill v{VERSION}</p>
+        <p>View markdown report: <a href="./{REPORT_ID}.md">{REPORT_ID}.md</a></p>
+    </div>
+</div>
+
+<script>
+    function filterIssues(filter) {
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(b => b.classList.remove('active'));
+        const active = Array.from(buttons).find(b => b.textContent.toLowerCase().includes(filter));
+        if (filter === 'all') buttons[0].classList.add('active');
+        else if (active) active.classList.add('active');
+
+        const rows = document.querySelectorAll('tr[data-sev]');
+        rows.forEach(row => {
+            if (filter === 'all') row.style.display = '';
+            else row.style.display = row.getAttribute('data-sev') === filter ? '' : 'none';
+        });
+    }
+</script>
+</body>
+</html>

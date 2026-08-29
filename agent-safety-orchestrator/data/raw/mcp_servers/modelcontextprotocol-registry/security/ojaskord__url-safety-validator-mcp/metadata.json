@@ -1,0 +1,65 @@
+{
+  "registry": "modelcontextprotocol-registry",
+  "name": "io.github.OjasKord/url-safety-validator-mcp",
+  "slug": "OjasKord__url-safety-validator-mcp",
+  "title": "URL Safety Validator",
+  "description": "AI URL safety validator: SAFE/SUSPICIOUS/DANGEROUS verdict, trust score, threat intel.",
+  "rawRecord": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.OjasKord/url-safety-validator-mcp",
+      "description": "AI URL safety validator: SAFE/SUSPICIOUS/DANGEROUS verdict, trust score, threat intel.",
+      "title": "URL Safety Validator",
+      "repository": {
+        "url": "https://github.com/OjasKord/url-safety-validator-mcp",
+        "source": "github"
+      },
+      "version": "1.1.0",
+      "websiteUrl": "https://kordagencies.com",
+      "packages": [
+        {
+          "registryType": "npm",
+          "registryBaseUrl": "https://registry.npmjs.org",
+          "identifier": "url-safety-validator-mcp",
+          "version": "1.1.0",
+          "transport": {
+            "type": "stdio"
+          },
+          "environmentVariables": [
+            {
+              "description": "Anthropic API key for AI trust scoring",
+              "isRequired": true,
+              "isSecret": true,
+              "name": "ANTHROPIC_API_KEY"
+            },
+            {
+              "description": "Google Web Risk API key (commercial). Server degrades gracefully without it.",
+              "isSecret": true,
+              "name": "GOOGLE_WEB_RISK_API_KEY"
+            },
+            {
+              "description": "Google Safe Browsing API key (free tier available).",
+              "isSecret": true,
+              "name": "GOOGLE_SAFE_BROWSING_API_KEY"
+            }
+          ]
+        }
+      ],
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://url-safety-validator-mcp-production.up.railway.app"
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol.registry/official": {
+        "status": "active",
+        "statusChangedAt": "2026-04-22T07:54:34.291403Z",
+        "publishedAt": "2026-04-22T07:54:34.291403Z",
+        "updatedAt": "2026-04-22T07:54:34.291403Z",
+        "isLatest": false
+      }
+    }
+  }
+}

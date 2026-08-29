@@ -1,0 +1,49 @@
+{
+  "skill_name": "authentication-setup",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add JWT authentication with refresh tokens to this Express + PostgreSQL API, including login, logout, /me, and admin-only routes.",
+      "expected_output": "A plan or implementation approach that chooses JWT deliberately, includes revocable refresh-token storage, and separates authentication from authorization.",
+      "assertions": [
+        "Output states or implies why JWT plus refresh is appropriate for the product shape",
+        "Output includes password hashing and secret management outside source code",
+        "Output includes login, logout, refresh, and current-user or equivalent auth flows",
+        "Output includes admin-role or permission checks separate from identity verification"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Build secure auth for a server-rendered internal admin dashboard with Redis available.",
+      "expected_output": "A session-first answer that prefers cookie-backed sessions over JWTs and includes browser-specific protections.",
+      "assertions": [
+        "Output prefers sessions or cookies over JWTs for this same-origin admin app",
+        "Output includes secure cookie flags such as HttpOnly or Secure",
+        "Output includes CSRF protection or equivalent browser-flow defense",
+        "Output mentions shared session storage such as Redis"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add Google sign-in without breaking the existing email/password accounts in this app.",
+      "expected_output": "A hybrid-auth answer that covers callback validation, account linking, and privilege consistency.",
+      "assertions": [
+        "Output includes OAuth callback or redirect validation",
+        "Output includes an account-linking rule for existing local accounts",
+        "Output avoids treating external identity proof as automatic authorization",
+        "Output mentions what provider identity data should be stored or mapped locally"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Audit this auth setup: refresh-token secrets are hardcoded, tokens never rotate, and failed logins are unbounded.",
+      "expected_output": "A review-focused answer that flags the specific security defects and prioritizes concrete remediation.",
+      "assertions": [
+        "Output flags hardcoded secrets as a defect",
+        "Output flags missing refresh-token rotation or revocation as a defect",
+        "Output flags missing rate limiting or brute-force protection as a defect",
+        "Output recommends environment-based secret management or a secret store"
+      ]
+    }
+  ]
+}

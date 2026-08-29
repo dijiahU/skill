@@ -1,0 +1,56 @@
+{
+  "registry": "glama",
+  "id": "q77rzw7ezk",
+  "namespace": "elena-kuznetsova-wh",
+  "slug": "warehouse-athena-mcp",
+  "name": "MCP Athena Analytics Server",
+  "description": "Enables secure querying of analytics data stored in AWS Athena/S3 through natural language, with multiple security layers including query validation, resource limits, and automatic PII redaction to prevent data breaches and destructive operations.",
+  "discoveryQueries": [
+    "security"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables secure querying of analytics data stored in AWS Athena/S3 through natural language, with multiple security layers including query validation, resource limits, and automatic PII redaction to prevent data breaches and destructive operations.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "AWS_REGION": {
+          "description": "AWS region for Athena service",
+          "type": "string"
+        },
+        "AWS_PROFILE": {
+          "description": "AWS credentials profile name for Athena access",
+          "type": "string",
+          "default": "ATHENA_ANALYTICS_INTERNAL"
+        },
+        "MCP_AUTH_TOKEN": {
+          "description": "Bearer token for authentication between containers. Generate with: openssl rand -hex 32",
+          "type": "string"
+        },
+        "ATHENA_DATABASE": {
+          "description": "Default Athena database name",
+          "type": "string"
+        },
+        "ATHENA_OUTPUT_LOCATION": {
+          "description": "S3 bucket path for Athena query results (e.g., s3://bucket-name/path/)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "MCP_AUTH_TOKEN"
+      ]
+    },
+    "id": "q77rzw7ezk",
+    "name": "MCP Athena Analytics Server",
+    "namespace": "elena-kuznetsova-wh",
+    "repository": {
+      "url": "https://github.com/elena-kuznetsova-wh/warehouse-athena-mcp"
+    },
+    "slug": "warehouse-athena-mcp",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/q77rzw7ezk"
+  }
+}

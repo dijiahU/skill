@@ -1,0 +1,68 @@
+{
+  "registry": "glama",
+  "id": "n6zdmxhgek",
+  "namespace": "SilasReinagel",
+  "slug": "slack-notify-mcp",
+  "name": "Slack Notify MCP",
+  "description": "MCP server for posting messages to Slack channels via webhooks or bot API. Supports configurable usernames, emojis, and both webhook and bot token authentication modes.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "MCP server for posting messages to Slack channels via webhooks or bot API. Supports configurable usernames, emojis, and both webhook and bot token authentication modes.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "CHANNEL": {
+          "description": "Default channel (name for webhook mode like '#general', ID for bot mode like 'CXXXXXXXXXX')",
+          "type": "string"
+        },
+        "USERNAME": {
+          "description": "Default bot username",
+          "type": "string"
+        },
+        "BOT_TOKEN": {
+          "description": "Slack bot token (required for bot mode, starts with xoxb-)",
+          "type": "string"
+        },
+        "ICON_EMOJI": {
+          "description": "Default bot emoji (e.g., ':robot_face:')",
+          "type": "string"
+        },
+        "WEBHOOK_URL": {
+          "description": "Slack webhook URL (required for webhook mode)",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "WEBHOOK_URL"
+          ]
+        },
+        {
+          "required": [
+            "BOT_TOKEN",
+            "CHANNEL"
+          ]
+        }
+      ]
+    },
+    "id": "n6zdmxhgek",
+    "name": "Slack Notify MCP",
+    "namespace": "SilasReinagel",
+    "repository": {
+      "url": "https://github.com/SilasReinagel/slack-notify-mcp"
+    },
+    "slug": "slack-notify-mcp",
+    "spdxLicense": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.json"
+    },
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/n6zdmxhgek"
+  }
+}

@@ -1,0 +1,926 @@
+"""Tests for SDK private methods extracted from run().
+
+Step 5 of the sdk-refactor plan: TDD decomposition of run() into
+independently testable private methods.
+"""
+
+import json
+from datetime import datetime
+from pathlib import Path
+from unittest.mock import AsyncMock
+
+import pytest
+
+from benchflow.skill_policy import SKILL_MODE_NO_SKILL, resolve_task_skill_policy
+
+# _resolve_agent_env
+
+
+class TestResolveAgentEnv:
+    """Tests for SDK._resolve_agent_env — env var resolution logic."""
+
+    def _resolve(self, agent="claude-agent-acp", model=None, agent_env=None):
+        from benchflow.agents.env import resolve_agent_env
+
+        return resolve_agent_env(agent, model, agent_env)
+
+    def _patch_expanduser(self, monkeypatch, tmp_path):
+        orig_expanduser = Path.expanduser
+
+        def fake_expanduser(self):
+            s = str(self)
+            if s.startswith("~"):
+                return tmp_path / s[2:]
+            return orig_expanduser(self)
+
+        monkeypatch.setattr(Path, "expanduser", fake_expanduser)
+
+    def test_env_mapping_applied_after_provider(self, monkeypatch):
+        """env_mapping translates BENCHFLOW_PROVIDER_* → agent-native vars."""
+        for key in (
+            "ZAI_API_KEY",
+            "ANTHROPIC_API_KEY",
+            "ANTHROPIC_AUTH_TOKEN",
+            "CLAUDE_CODE_OAUTH_TOKEN",
+            "CLAUDE_OAUTH_TOKEN",
+        ):
+            monkeypatch.delenv(key, raising=False)
+        result = self._resolve(
+            agent="claude-agent-acp",
+            model="zai/glm-5",
+            agent_env={"ZAI_API_KEY": "zk-test"},
+        )
+        # claude-agent-acp maps BENCHFLOW_PROVIDER_BASE_URL → ANTHROPIC_BASE_URL
+        assert "ANTHROPIC_BASE_URL" in result
+        assert "ANTHROPIC_AUTH_TOKEN" in result
+        assert result["ANTHROPIC_AUTH_TOKEN"] == "zk-test"
+
+    def test_agent_native_api_key_satisfies_model_check(self, monkeypatch):
+        """Agent-native mapped key (LLM_API_KEY) can satisfy provider auth check."""
+        for key in ("OPENAI_API_KEY", "LLM_API_KEY"):
+            monkeypatch.delenv(key, raising=False)
+        result = self._resolve(
+            agent="openhands",
+            model="openai/gpt-4.1-mini",
+            agent_env={"LLM_API_KEY": "test-llm-key"},
+        )
+        assert result["LLM_API_KEY"] == "test-llm-key"
+        assert result["BENCHFLOW_PROVIDER_API_KEY"] == "test-llm-key"
+
+    def test_vllm_openai_key_propagates_to_agent_native_key(self, monkeypatch):
+        """vLLM's OpenAI-compatible auth reaches OpenHands through env_mapping."""
+        for key in ("OPENAI_API_KEY", "LLM_API_KEY"):
+            monkeypatch.delenv(key, raising=False)
+        result = self._resolve(
+            agent="openhands",
+            model="vllm/Qwen/Qwen3-Coder",
+            agent_env={
+                "OPENAI_API_KEY": "test-openai-key",
+                "BENCHFLOW_PROVIDER_BASE_URL": "http://localhost:8000/v1",
+            },
+        )
+        assert result["BENCHFLOW_PROVIDER_API_KEY"] == "test-openai-key"
+        assert result["LLM_API_KEY"] == "test-openai-key"
+        assert result["LLM_BASE_URL"] == "http://localhost:8000/v1"
+
+    def test_same_provider_native_alias_satisfies_model_check(self, monkeypatch):
+        """Provider-native aliases remain valid for the same auth context."""
+        for key in ("GEMINI_API_KEY", "GOOGLE_API_KEY"):
+            monkeypatch.delenv(key, raising=False)
+        result = self._resolve(
+            agent="gemini",
+            model="gemini-2.5-flash",
+            agent_env={"GOOGLE_API_KEY": "test-google-key"},
+        )
+        assert result["GOOGLE_API_KEY"] == "test-google-key"
+        assert result["BENCHFLOW_PROVIDER_API_KEY"] == "test-google-key"
+
+    @pytest.mark.parametrize(
+        ("agent", "host_key"),
+        [
+            pytest.param("codex-acp", "OPENAI_API_KEY", id="codex-openai-key"),
+            pytest.param(
+                "claude-agent-acp",
+                "ANTHROPIC_AUTH_TOKEN",
+                id="claude-auth-token",
+            ),
+            pytest.param("gemini", "GOOGLE_API_KEY", id="gemini-google-key"),
+        ],
+    )
+    def test_cross_provider_host_native_key_does_not_bypass_required_key(
+        self, monkeypatch, tmp_path, agent, host_key
+    ):
+        """Host-native keys for another provider must not satisfy zai auth."""
+        for key in (
+            "ZAI_API_KEY",
+            "OPENAI_API_KEY",
+            "ANTHROPIC_API_KEY",
+            "ANTHROPIC_AUTH_TOKEN",
+            "CLAUDE_CODE_OAUTH_TOKEN",
+            "CLAUDE_OAUTH_TOKEN",
+            "GOOGLE_API_KEY",
+            "GEMINI_API_KEY",
+        ):
+            monkeypatch.delenv(key, raising=False)
+        monkeypatch.setenv(host_key, "host-native-key")
+        self._patch_expanduser(monkeypatch, tmp_path)
+
+        with pytest.raises(ValueError, match="ZAI_API_KEY required"):
+            self._resolve(agent=agent, model="zai/glm-5", agent_env={})
+
+    def test_auto_inherited_generic_bridge_key_does_not_bypass_required_key(
+        self, monkeypatch, tmp_path
+    ):
+        """Generic agent-native keys must be passed explicitly to bridge auth."""
+        for key in ("ZAI_API_KEY", "LLM_API_KEY"):
+            monkeypatch.delenv(key, raising=False)
+        monkeypatch.setenv("LLM_API_KEY", "host-llm-key")
+        self._patch_expanduser(monkeypatch, tmp_path)
+
+        with pytest.raises(ValueError, match="ZAI_API_KEY required"):
+            self._resolve(agent="openhands", model="zai/glm-5", agent_env={})
+
+    def test_openhands_gemini_model_is_prefixed_for_google_ai_studio(self, monkeypatch):
+        """OpenHands expects Gemini models in gemini/<model> format."""
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+        result = self._resolve(
+            agent="openhands",
+            model="gemini-3.1-flash-lite-preview",
+            agent_env={"GEMINI_API_KEY": "test-gemini-key"},
+        )
+        assert result["LLM_MODEL"] == "gemini/gemini-3.1-flash-lite-preview"
+        assert result["LLM_API_KEY"] == "test-gemini-key"
+
+    def test_openhands_google_gemini_model_strips_models_dev_provider(
+        self, monkeypatch
+    ):
+        """Guards the v0.5 stress failure where OpenHands received
+        gemini/google/gemini-* and LiteLLM queried models/google/gemini-*.
+        """
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+        result = self._resolve(
+            agent="openhands",
+            model="google/gemini-3.1-flash-lite-preview",
+            agent_env={"GEMINI_API_KEY": "test-gemini-key"},
+        )
+        assert result["LLM_MODEL"] == "gemini/gemini-3.1-flash-lite-preview"
+        assert result["LLM_API_KEY"] == "test-gemini-key"
+
+    def test_openhands_explicit_llm_model_is_preserved(self, monkeypatch):
+        """User-provided LLM_MODEL must win over derived normalization."""
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+        result = self._resolve(
+            agent="openhands",
+            model="gemini-3.1-flash-lite-preview",
+            agent_env={
+                "GEMINI_API_KEY": "test-gemini-key",
+                "LLM_MODEL": "litellm/custom-format",
+            },
+        )
+        assert result["LLM_MODEL"] == "litellm/custom-format"
+
+    def test_openhands_vertex_model_is_prefixed_for_vertex(self, monkeypatch, tmp_path):
+        """OpenHands expects Vertex Gemini models in vertex_ai/<model> format."""
+        adc_dir = tmp_path / ".config" / "gcloud"
+        adc_dir.mkdir(parents=True)
+        (adc_dir / "application_default_credentials.json").write_text("{}")
+        monkeypatch.setattr("pathlib.Path.home", staticmethod(lambda: tmp_path))
+        result = self._resolve(
+            agent="openhands",
+            model="google-vertex/gemini-2.5-flash",
+            agent_env={"GOOGLE_CLOUD_PROJECT": "my-proj"},
+        )
+        assert result["LLM_MODEL"] == "vertex_ai/gemini-2.5-flash"
+
+    def test_provider_bridge_key_alone_does_not_bypass_required_model_key(
+        self, monkeypatch
+    ):
+        """Only mapped agent-native keys can bypass provider-specific key checks."""
+        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+        with pytest.raises(ValueError, match="OPENAI_API_KEY required"):
+            self._resolve(
+                agent="openclaw",
+                model="openai/gpt-4.1-mini",
+                agent_env={"BENCHFLOW_PROVIDER_API_KEY": "x"},
+            )
+
+    def test_required_key_missing_raises(self, monkeypatch, tmp_path):
+        """Missing required API key raises ValueError when no subscription auth."""
+        # Clear any auto-inherited keys from the environment
+        for key in (
+            "ANTHROPIC_API_KEY",
+            "ANTHROPIC_AUTH_TOKEN",
+            "CLAUDE_CODE_OAUTH_TOKEN",
+            "CLAUDE_OAUTH_TOKEN",
+            "CODEX_ACCESS_TOKEN",
+            "CODEX_API_KEY",
+            "ZAI_API_KEY",
+            "OPENAI_API_KEY",
+        ):
+            monkeypatch.delenv(key, raising=False)
+        # Ensure no host subscription auth files are found
+        self._patch_expanduser(monkeypatch, tmp_path)
+        # Anthropic model
+        with pytest.raises(ValueError, match="ANTHROPIC_API_KEY required"):
+            self._resolve(
+                model="claude-haiku-4-5-20251001",
+                agent_env={},
+            )
+        # Custom provider (zai)
+        with pytest.raises(ValueError, match="ZAI_API_KEY required"):
+            self._resolve(
+                model="zai/glm-5",
+                agent_env={},
+            )
+        # OpenAI model
+        with pytest.raises(ValueError, match="OPENAI_API_KEY required"):
+            self._resolve(
+                agent="codex-acp",
+                model="gpt-4o",
+                agent_env={},
+            )
+
+    def test_vertex_model_requires_adc(self, monkeypatch, tmp_path):
+        """Vertex model without ADC raises ValueError."""
+        monkeypatch.setattr("pathlib.Path.home", staticmethod(lambda: tmp_path))
+        with pytest.raises(ValueError, match="requires ADC credentials"):
+            self._resolve(
+                model="google-vertex/gemini-3-flash",
+                agent_env={"GOOGLE_CLOUD_PROJECT": "my-proj"},
+            )
+
+    def test_vertex_model_requires_project(self, monkeypatch, tmp_path):
+        """Vertex model without GOOGLE_CLOUD_PROJECT raises ValueError."""
+        adc_dir = tmp_path / ".config" / "gcloud"
+        adc_dir.mkdir(parents=True)
+        (adc_dir / "application_default_credentials.json").write_text("{}")
+        monkeypatch.setattr("pathlib.Path.home", staticmethod(lambda: tmp_path))
+        monkeypatch.delenv("GOOGLE_CLOUD_PROJECT", raising=False)
+        with pytest.raises(ValueError, match="GOOGLE_CLOUD_PROJECT required"):
+            self._resolve(
+                model="google-vertex/gemini-3-flash",
+                agent_env={},
+            )
+
+
+# _resolve_prompts
+
+
+class TestResolvePrompts:
+    """Tests for SDK._resolve_prompts — prompt list resolution from instruction.md."""
+
+    def _resolve(self, task_path, prompts):
+        from benchflow.sdk import SDK
+
+        return SDK._resolve_prompts(task_path, prompts)
+
+    def test_none_prompts_returns_instruction(self, tmp_path):
+        (tmp_path / "instruction.md").write_text("Do the thing.")
+        result = self._resolve(tmp_path, prompts=None)
+        assert result == ["Do the thing."]
+
+    def test_mixed_list_replaces_nones(self, tmp_path):
+        (tmp_path / "instruction.md").write_text("Do the thing.")
+        result = self._resolve(tmp_path, prompts=[None, "custom", None])
+        assert result == ["Do the thing.", "custom", "Do the thing."]
+
+    def test_all_explicit_preserves_prompts(self, tmp_path):
+        (tmp_path / "instruction.md").write_text("Do the thing.")
+        result = self._resolve(tmp_path, prompts=["a", "b"])
+        assert result == ["a", "b"]
+
+    def test_missing_instruction_raises(self, tmp_path):
+        with pytest.raises(FileNotFoundError):
+            self._resolve(tmp_path, prompts=None)
+
+    def test_whitespace_stripped(self, tmp_path):
+        (tmp_path / "instruction.md").write_text("  hello  \n")
+        result = self._resolve(tmp_path, prompts=None)
+        assert result == ["hello"]
+
+    def test_resolve_prompts_does_not_add_no_web_text(self, tmp_path):
+        from benchflow.sdk import SDK
+
+        (tmp_path / "instruction.md").write_text("Do the thing.")
+        result = SDK._resolve_prompts(tmp_path, prompts=None)
+
+        assert result == ["Do the thing."]
+        assert "Internet access is disabled" not in result[0]
+
+
+class TestPromptPrefix:
+    def test_prefix_is_prepended_to_every_resolved_prompt(self):
+        from benchflow.rollout._setup import _apply_prompt_prefix
+
+        assert _apply_prompt_prefix(
+            ["First task prompt", "Second task prompt"],
+            "Do not inspect hidden evaluator assets.",
+        ) == [
+            "Do not inspect hidden evaluator assets.\n\nFirst task prompt",
+            "Do not inspect hidden evaluator assets.\n\nSecond task prompt",
+        ]
+
+    def test_none_preserves_prompt_list_identity(self):
+        from benchflow.rollout._setup import _apply_prompt_prefix
+
+        prompts = ["Task prompt"]
+        assert _apply_prompt_prefix(prompts, None) is prompts
+
+
+# _init_trial
+
+
+class TestInitTrial:
+    """Tests for SDK._init_trial — trial directory setup."""
+
+    def _init(self, task_path, job_name=None, rollout_name=None, jobs_dir="jobs"):
+        from benchflow.sdk import SDK
+
+        return SDK._init_trial(task_path, job_name, rollout_name, jobs_dir)
+
+    @pytest.fixture()
+    def task_dir(self, tmp_path):
+        """Minimal task directory."""
+        td = tmp_path / "my-task"
+        td.mkdir()
+        (td / "task.toml").write_text(
+            'version = "1.0"\n\n[verifier]\ntimeout_sec = 900.0\n\n'
+            "[agent]\ntimeout_sec = 900.0\n\n[environment]\n"
+        )
+        (td / "instruction.md").write_text("Do the thing.")
+        return td
+
+    def test_rollout_dir_created(self, task_dir, tmp_path):
+        _, rollout_dir, _, _, _, _ = self._init(task_dir, jobs_dir=tmp_path / "jobs")
+        assert rollout_dir.exists()
+        for subdir in ("agent", "verifier", "artifacts", "trajectory"):
+            assert (rollout_dir / subdir).is_dir()
+
+    def test_default_job_name_format(self, task_dir, tmp_path):
+        _, _, _, _, job_name, _ = self._init(task_dir, jobs_dir=tmp_path / "jobs")
+        # Default: date-based like 2026-04-08__12-30-45
+        assert "__" in job_name
+        assert job_name[:4].isdigit()
+
+    def test_custom_job_name(self, task_dir, tmp_path):
+        _, _, _, _, job_name, _ = self._init(
+            task_dir,
+            job_name="my-job",
+            jobs_dir=tmp_path / "jobs",
+        )
+        assert job_name == "my-job"
+
+    def test_rollout_name_includes_task(self, task_dir, tmp_path):
+        _, _, _, _, _, rollout_name = self._init(task_dir, jobs_dir=tmp_path / "jobs")
+        assert "my-task" in rollout_name
+
+    def test_custom_rollout_name(self, task_dir, tmp_path):
+        _, _, _, _, _, rollout_name = self._init(
+            task_dir,
+            rollout_name="custom-trial",
+            jobs_dir=tmp_path / "jobs",
+        )
+        assert rollout_name == "custom-trial"
+
+    def test_started_at_is_datetime(self, task_dir, tmp_path):
+        _, _, _, started_at, _, _ = self._init(task_dir, jobs_dir=tmp_path / "jobs")
+        assert isinstance(started_at, datetime)
+
+
+# _write_config
+
+
+class TestWriteConfig:
+    """Tests for SDK._write_config — writes config.json to rollout_dir."""
+
+    def _write(self, rollout_dir, **kwargs):
+        from benchflow.sdk import SDK
+
+        kwargs.setdefault(
+            "skill_policy",
+            resolve_task_skill_policy(
+                task_path=kwargs["task_path"],
+                skill_mode=SKILL_MODE_NO_SKILL,
+                runtime_skills_dir=None,
+                declared_sandbox_skills_dir=None,
+            ),
+        )
+        return SDK._write_config(rollout_dir, **kwargs)
+
+    def test_config_json_written(self, tmp_path):
+        self._write(
+            tmp_path,
+            task_path=Path("/tasks/foo"),
+            agent="claude-agent-acp",
+            model="claude-haiku-4-5-20251001",
+            environment="docker",
+            sandbox_user=None,
+            context_root=None,
+            sandbox_setup_timeout=33,
+            timeout=300,
+            started_at=datetime(2026, 4, 8, 12, 0),
+            agent_env={"ANTHROPIC_API_KEY": "sk-secret", "SOME_VAR": "visible"},
+        )
+        data = json.loads((tmp_path / "config.json").read_text())
+        expected_keys = {
+            "task_path",
+            "agent",
+            "model",
+            "environment",
+            "acp_transport",
+            "skill_mode",
+            "skill_source",
+            "requested_skills_dir",
+            "effective_skills_dir",
+            "skills_sandbox_dir",
+            "include_task_skills",
+            "sandbox_user",
+            "sandbox_locked_paths",
+            "sandbox_setup_timeout",
+            "context_root",
+            "timeout_sec",
+            "started_at",
+            "agent_env",
+            "scenes",
+        }
+        assert expected_keys.issubset(data.keys()), (
+            f"missing keys: {expected_keys - data.keys()}"
+        )
+        assert data["agent"] == "claude-agent-acp"
+        assert data["task_path"] == "foo"
+        assert data["model"] == "claude-haiku-4-5-20251001"
+        assert data["environment"] == "docker"
+        assert data["acp_transport"] == "docker-stdio"
+        assert data["skill_mode"] == "no-skill"
+        assert data["include_task_skills"] is False
+        assert data["effective_skills_dir"] is None
+        assert data["sandbox_setup_timeout"] == 33
+        assert data["timeout_sec"] == 300
+        assert data["scenes"] == []
+
+    def test_config_json_records_daytona_ssh_transport(self, tmp_path, monkeypatch):
+        """Guards PR #921 so audits can prove the selected Daytona transport."""
+        monkeypatch.setenv("BENCHFLOW_DAYTONA_ACP_TRANSPORT", "ssh")
+
+        self._write(
+            tmp_path,
+            task_path=Path("/tasks/foo"),
+            agent="openhands",
+            model="azure-foundry-openai/gpt-5.6-sol",
+            environment="daytona",
+            sandbox_user="agent",
+            context_root=None,
+            timeout=115200,
+            started_at=datetime(2026, 7, 13, 17, 0),
+            agent_env={},
+        )
+
+        data = json.loads((tmp_path / "config.json").read_text())
+        assert data["acp_transport"] == "ssh"
+
+    def test_config_json_includes_scene_role_metadata(self, tmp_path):
+        """Multi-role scene metadata is recorded without leaking env values."""
+        from benchflow import Role, Scene, Turn
+
+        scene = Scene(
+            name="code-review",
+            roles=[
+                Role(
+                    "coder",
+                    "gemini",
+                    "flash",
+                    env={"ROLE_TOKEN": "role-secret-value"},
+                    timeout_sec=12,
+                    idle_timeout_sec=3,
+                    skills_dir="/role-skills",
+                    capabilities=["tool-use"],
+                )
+            ],
+            turns=[Turn("coder", "solve it")],
+            skills_dir="/scene-skills",
+        )
+        self._write(
+            tmp_path,
+            task_path=Path("/tasks/foo"),
+            agent="gemini",
+            model="flash",
+            environment="docker",
+            sandbox_user="agent",
+            context_root=None,
+            timeout=300,
+            started_at=datetime(2026, 4, 8, 12, 0),
+            agent_env={},
+            scenes=[scene],
+        )
+
+        text = (tmp_path / "config.json").read_text()
+        data = json.loads(text)
+
+        assert data["scenes"] == [
+            {
+                "name": "code-review",
+                "skills_dir": "/scene-skills",
+                "roles": [
+                    {
+                        "name": "coder",
+                        "agent": "gemini",
+                        "model": "flash",
+                        "reasoning_effort": None,
+                        "timeout_sec": 12,
+                        "idle_timeout_sec": 3,
+                        "skills_dir": "/role-skills",
+                        "capabilities": ["tool-use"],
+                        "env_keys": ["ROLE_TOKEN"],
+                    }
+                ],
+                "turns": [{"role": "coder", "has_prompt": True}],
+            }
+        ]
+        assert "role-secret-value" not in text
+
+    def test_secrets_filtered(self, tmp_path):
+        """Keys containing KEY/TOKEN/SECRET not in config.json agent_env."""
+        self._write(
+            tmp_path,
+            task_path=Path("/tasks/foo"),
+            agent="test",
+            model=None,
+            environment="docker",
+            sandbox_user=None,
+            context_root=None,
+            timeout=300,
+            started_at=datetime(2026, 4, 8),
+            agent_env={
+                "ANTHROPIC_API_KEY": "secret",
+                "OPENAI_API_KEY": "secret",
+                "MY_TOKEN": "secret",
+                "DB_PASSWORD": "pass123",
+                "MY_CREDENTIALS": "creds",
+                "SAFE_VAR": "visible",
+            },
+        )
+        data = json.loads((tmp_path / "config.json").read_text())
+        recorded = data["agent_env"]
+        assert "ANTHROPIC_API_KEY" not in recorded
+        assert "OPENAI_API_KEY" not in recorded
+        assert "MY_TOKEN" not in recorded
+        assert "DB_PASSWORD" not in recorded
+        assert "MY_CREDENTIALS" not in recorded
+        assert recorded["SAFE_VAR"] == "visible"
+
+    def test_config_json_includes_source_provenance(self, tmp_path):
+        """Guards PR #779: config artifacts keep portable source provenance."""
+        source = {
+            "type": "github",
+            "repo": "acme/benchmarks",
+            "requested_ref": "main",
+            "resolved_sha": "0123456789abcdef0123456789abcdef01234567",
+            "path": "datasets/programbench/tasks/task-a",
+            "local_path": "/cache/acme/benchmarks/datasets/programbench/tasks/task-a",
+            "dirty": False,
+            "file_hashes": {
+                "instruction.md": "sha256:abc",
+                "task.toml": "sha256:def",
+                "tests/test.sh": "sha256:123",
+            },
+        }
+        self._write(
+            tmp_path,
+            task_path=Path("/tasks/foo"),
+            agent="gemini",
+            model="gemini-3.1-flash-lite-preview",
+            environment="daytona",
+            sandbox_user="agent",
+            context_root=None,
+            timeout=300,
+            started_at=datetime(2026, 4, 8),
+            agent_env={},
+            source_provenance=source,
+        )
+
+        data = json.loads((tmp_path / "config.json").read_text())
+        assert data["task_path"] == "datasets/programbench/tasks/task-a"
+        assert data["source"] == {
+            key: value for key, value in source.items() if key != "local_path"
+        }
+        assert "/cache/acme" not in (tmp_path / "config.json").read_text()
+
+    def test_config_json_records_agent_idle_timeout(self, tmp_path):
+        """Guards v0.5-integration@219906c against unaudited ACP hang budgets."""
+        self._write(
+            tmp_path,
+            task_path=Path("/tasks/foo"),
+            agent="gemini",
+            model="gemini-3.1-flash-lite-preview",
+            environment="daytona",
+            sandbox_user="agent",
+            context_root=None,
+            timeout=3600,
+            agent_idle_timeout=45,
+            started_at=datetime(2026, 4, 8),
+            agent_env={},
+        )
+
+        data = json.loads((tmp_path / "config.json").read_text())
+        assert data["agent_idle_timeout_sec"] == 45
+
+    def test_config_json_records_reasoning_effort(self, tmp_path):
+        """Guards SkillsBench PR #825 against unaudited Claude ACP effort selection."""
+        self._write(
+            tmp_path,
+            task_path=Path("/tasks/foo"),
+            agent="claude-agent-acp",
+            model="claude-opus-4-8",
+            environment="daytona",
+            sandbox_user="agent",
+            context_root=None,
+            timeout=3600,
+            started_at=datetime(2026, 4, 8),
+            agent_env={},
+            reasoning_effort="max",
+        )
+
+        data = json.loads((tmp_path / "config.json").read_text())
+        assert data["reasoning_effort"] == "max"
+
+
+def test_rollout_result_json_preserves_null_model(tmp_path):
+    """Guards v0.5-integration@c30e130 against oracle result/config model drift."""
+    from benchflow.rollout import Rollout, RolloutConfig
+
+    rollout = Rollout(
+        RolloutConfig(task_path=tmp_path / "task-a", agent="oracle", model=None)
+    )
+    rollout._rollout_dir = tmp_path
+    rollout._rollout_name = "task-a__trial"
+    rollout._agent_name = "oracle"
+    rollout._resolved_prompts = []
+    rollout._n_tool_calls = 0
+    rollout._error = None
+    rollout._verifier_error = None
+    rollout._trajectory = []
+    rollout._partial_trajectory = False
+    rollout._trajectory_source = None
+    rollout._rewards = {"reward": 0.0}
+    rollout._started_at = datetime(2026, 4, 8)
+    rollout._timing = {}
+
+    rollout._build_result()
+
+    data = json.loads((tmp_path / "result.json").read_text())
+    assert data["model"] is None
+
+
+# run wiring
+
+
+class TestRunWiring:
+    """Tests for SDK.run() argument forwarding into TrialConfig."""
+
+    @pytest.mark.asyncio
+    async def test_run_forwards_sandbox_setup_timeout_to_trial_config(
+        self, monkeypatch, tmp_path
+    ):
+        from benchflow.models import RunResult
+        from benchflow.sdk import SDK
+
+        seen = {}
+
+        async def fake_create(config):
+            seen["config"] = config
+            trial = AsyncMock()
+            trial.run = AsyncMock(
+                return_value=RunResult(task_name="task-1", rewards={"reward": 1.0})
+            )
+            return trial
+
+        monkeypatch.setattr("benchflow.rollout.Rollout.create", fake_create)
+
+        result = await SDK().run(
+            task_path=tmp_path,
+            sandbox_setup_timeout=77,
+        )
+
+        assert result.rewards == {"reward": 1.0}
+        assert seen["config"].sandbox_setup_timeout == 77
+        assert seen["config"].task_path == tmp_path
+
+    @pytest.mark.asyncio
+    async def test_run_forwards_source_provenance_to_rollout_config(
+        self, monkeypatch, tmp_path
+    ):
+        """Guards v0.5-integration@cb8759e against dropping CLI source evidence."""
+        from benchflow.models import RunResult
+        from benchflow.sdk import SDK
+
+        seen = {}
+        source = {
+            "type": "github",
+            "repo": "acme/benchmarks",
+            "requested_ref": "main",
+            "resolved_sha": "0123456789abcdef0123456789abcdef01234567",
+            "path": "tasks/task-a",
+            "local_path": str(tmp_path),
+            "dirty": False,
+            "file_hashes": {},
+        }
+
+        async def fake_create(config):
+            seen["config"] = config
+            trial = AsyncMock()
+            trial.run = AsyncMock(
+                return_value=RunResult(task_name="task-1", rewards={"reward": 1.0})
+            )
+            return trial
+
+        monkeypatch.setattr("benchflow.rollout.Rollout.create", fake_create)
+
+        await SDK().run(
+            task_path=tmp_path,
+            source_provenance=source,
+        )
+
+        assert seen["config"].source_provenance == source
+
+    @pytest.mark.asyncio
+    async def test_run_forwards_concurrency_to_rollout_config(
+        self, monkeypatch, tmp_path
+    ):
+        """Guards v0.5-integration@c30e130 against single-task config concurrency drift."""
+        from benchflow.models import RunResult
+        from benchflow.sdk import SDK
+
+        seen = {}
+
+        async def fake_create(config):
+            seen["config"] = config
+            trial = AsyncMock()
+            trial.run = AsyncMock(
+                return_value=RunResult(task_name="task-1", rewards={"reward": 1.0})
+            )
+            return trial
+
+        monkeypatch.setattr("benchflow.rollout.Rollout.create", fake_create)
+
+        await SDK().run(task_path=tmp_path, concurrency=64)
+
+        assert seen["config"].concurrency == 64
+
+    @pytest.mark.asyncio
+    async def test_run_forwards_agent_idle_timeout_to_rollout_config(
+        self, monkeypatch, tmp_path
+    ):
+        """Guards v0.5-integration@219906c against unbounded ACP hang follow-ups."""
+        from benchflow.models import RunResult
+        from benchflow.sdk import SDK
+
+        seen = {}
+
+        async def fake_create(config):
+            seen["config"] = config
+            trial = AsyncMock()
+            trial.run = AsyncMock(
+                return_value=RunResult(task_name="task-1", rewards={"reward": 1.0})
+            )
+            return trial
+
+        monkeypatch.setattr("benchflow.rollout.Rollout.create", fake_create)
+
+        await SDK().run(task_path=tmp_path, agent_idle_timeout=45)
+
+        assert seen["config"].agent_idle_timeout == 45
+
+
+# _build_result
+
+
+class TestBuildResult:
+    """Tests for SDK._build_result — builds RunResult and writes output files."""
+
+    def _build(self, rollout_dir, **kwargs):
+        from benchflow.sdk import SDK
+
+        defaults = dict(
+            task_name="my-task",
+            rollout_name="my-trial",
+            agent="claude-agent-acp",
+            agent_name="Claude",
+            model="claude-haiku-4-5-20251001",
+            n_tool_calls=5,
+            prompts=["solve it"],
+            error=None,
+            verifier_error=None,
+            trajectory=[{"type": "message", "text": "hello"}],
+            partial_trajectory=False,
+            rewards={"score": 1.0},
+            started_at=datetime(2026, 4, 8, 12, 0),
+            timing={"agent_setup": 1.5, "agent_execution": 10.2},
+        )
+        defaults.update(kwargs)
+        return SDK._build_result(rollout_dir, **defaults)
+
+    def test_result_json_written(self, tmp_path):
+        self._build(tmp_path)
+        assert (tmp_path / "result.json").exists()
+        data = json.loads((tmp_path / "result.json").read_text())
+        assert data["task_name"] == "my-task"
+        assert data["rewards"] == {"score": 1.0}
+        assert data["error"] is None
+        assert data["agent"] == "claude-agent-acp"
+        assert data["model"] == "claude-haiku-4-5-20251001"
+        assert data["n_tool_calls"] == 5
+        assert data["n_prompts"] == 1
+        assert "started_at" in data
+        assert "finished_at" in data
+        assert data["partial_trajectory"] is False
+        assert data["scenes"] == []
+
+    def test_result_json_includes_scene_role_metadata(self, tmp_path):
+        """Result artifacts retain scene/role metadata for trajectory review."""
+        from benchflow import Role, Scene, Turn
+
+        scene = Scene(
+            name="review",
+            roles=[
+                Role(
+                    "reviewer",
+                    "claude-agent-acp",
+                    "haiku",
+                    env={"ANTHROPIC_API_KEY": "role-secret-value"},
+                    timeout_sec=45,
+                    idle_timeout_sec=6,
+                )
+            ],
+            turns=[Turn("reviewer")],
+        )
+
+        self._build(tmp_path, scenes=[scene])
+        text = (tmp_path / "result.json").read_text()
+        data = json.loads(text)
+
+        assert data["scenes"][0]["name"] == "review"
+        assert data["scenes"][0]["roles"][0]["name"] == "reviewer"
+        assert data["scenes"][0]["roles"][0]["timeout_sec"] == 45
+        assert data["scenes"][0]["roles"][0]["idle_timeout_sec"] == 6
+        assert data["scenes"][0]["roles"][0]["env_keys"] == ["ANTHROPIC_API_KEY"]
+        assert data["scenes"][0]["turns"] == [{"role": "reviewer", "has_prompt": False}]
+        assert "role-secret-value" not in text
+
+    def test_result_json_includes_source_provenance(self, tmp_path):
+        """Guards PR #779: result artifacts keep portable source provenance."""
+        source = {
+            "type": "github",
+            "repo": "acme/benchmarks",
+            "requested_ref": "main",
+            "resolved_sha": "0123456789abcdef0123456789abcdef01234567",
+            "path": "datasets/programbench/tasks/task-a",
+            "local_path": "/cache/acme/benchmarks/datasets/programbench/tasks/task-a",
+            "dirty": False,
+            "file_hashes": {
+                "instruction.md": "sha256:abc",
+                "task.toml": "sha256:def",
+                "tests/test.sh": "sha256:123",
+            },
+        }
+
+        result = self._build(tmp_path, source_provenance=source)
+
+        data = json.loads((tmp_path / "result.json").read_text())
+        assert data["source"] == {
+            key: value for key, value in source.items() if key != "local_path"
+        }
+        assert "/cache/acme" not in (tmp_path / "result.json").read_text()
+        assert result.source_provenance == source
+
+    def test_timing_json_written(self, tmp_path):
+        self._build(tmp_path)
+        assert (tmp_path / "timing.json").exists()
+        data = json.loads((tmp_path / "timing.json").read_text())
+        assert "total" in data
+        assert "agent_setup" in data
+        for k, v in data.items():
+            assert v >= 0, f"negative timing: {k}={v}"
+            assert v == round(v, 1), f"not rounded: {k}={v}"
+
+    def test_prompts_json_written(self, tmp_path):
+        self._build(tmp_path)
+        assert (tmp_path / "prompts.json").exists()
+        data = json.loads((tmp_path / "prompts.json").read_text())
+        assert data == ["solve it"]
+
+    def test_trajectory_saved(self, tmp_path):
+        traj_dir = tmp_path / "trajectory"
+        traj_dir.mkdir()
+        self._build(tmp_path)
+        traj_file = traj_dir / "acp_trajectory.jsonl"
+        assert traj_file.exists()
+
+    def test_timing_values_rounded(self, tmp_path):
+        self._build(tmp_path, timing={"agent_setup": 1.5678})
+        data = json.loads((tmp_path / "timing.json").read_text())
+        assert data["agent_setup"] == 1.6
+
+    def test_error_in_result(self, tmp_path):
+        result = self._build(tmp_path, error="timeout")
+        assert result.error == "timeout"
+        assert not result.success

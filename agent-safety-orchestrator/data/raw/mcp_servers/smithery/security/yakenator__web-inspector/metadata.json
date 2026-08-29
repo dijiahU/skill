@@ -1,0 +1,230 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "yakenator/web-inspector",
+  "namespace": "yakenator",
+  "slug": "web-inspector",
+  "displayName": "Web Auditor",
+  "description": "Analyze web pages and entire sites for SEO, accessibility, performance, and security compliance. Generate detailed reports and actionable issue lists to improve site quality and user experience. Track historical audit data to monitor improvements across multiple crawl sessions.",
+  "discoveryQueries": [
+    "security",
+    "secure",
+    "audit",
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "e97d0422-3458-4385-9123-05341d8c398e",
+    "qualifiedName": "yakenator/web-inspector",
+    "namespace": "yakenator",
+    "slug": "web-inspector",
+    "displayName": "Web Auditor",
+    "description": "Analyze web pages and entire sites for SEO, accessibility, performance, and security compliance. Generate detailed reports and actionable issue lists to improve site quality and user experience. Track historical audit data to monitor improvements across multiple crawl sessions.",
+    "iconUrl": "https://web-inspector.yakenator.io/icon.svg",
+    "verified": false,
+    "useCount": 2033,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-02-15T00:16:48.370Z",
+    "homepage": "https://smithery.ai/servers/yakenator/web-inspector",
+    "bySmithery": false,
+    "owner": "org_01KNBM3X3HR5M2W4KP8P6YY2EX",
+    "score": 0.01282051282051282
+  },
+  "detail": {
+    "qualifiedName": "yakenator/web-inspector",
+    "displayName": "Web Auditor",
+    "description": "Analyze web pages and entire sites for SEO, accessibility, performance, and security compliance. Generate detailed reports and actionable issue lists to improve site quality and user experience. Track historical audit data to monitor improvements across multiple crawl sessions.",
+    "iconUrl": "https://web-inspector.yakenator.io/icon.svg",
+    "remote": true,
+    "deploymentUrl": "https://web-inspector--yakenator.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://web-inspector--yakenator.run.tools",
+        "configSchema": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "enum": [
+                "en",
+                "ko"
+              ],
+              "type": "string",
+              "default": "en",
+              "description": "Default response language"
+            }
+          }
+        }
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "inspect_page",
+        "description": "Inspect a single web page for HTML/CSS quality, accessibility (WCAG/KWCAG), SEO, and performance/security. Returns scores, grades, and top issues. Takes 10-30 seconds.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL of the web page to inspect (must start with http:// or https://)"
+            },
+            "language": {
+              "enum": [
+                "en",
+                "ko"
+              ],
+              "type": "string",
+              "description": "Response language: 'en' for English, 'ko' for Korean"
+            },
+            "accessibility_standard": {
+              "enum": [
+                "wcag_2.0_a",
+                "wcag_2.0_aa",
+                "wcag_2.1_aa",
+                "wcag_2.2_aa",
+                "kwcag_2.1",
+                "kwcag_2.2"
+              ],
+              "type": "string",
+              "description": "Accessibility standard to check against (default: wcag_2.1_aa)"
+            }
+          }
+        }
+      },
+      {
+        "name": "inspect_site",
+        "description": "Start a site-wide crawl and inspection. Crawls links from the root URL and inspects each page. Returns a site_inspection_id for tracking. Use get_inspection to check results later.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Root URL of the site to crawl and inspect"
+            },
+            "language": {
+              "enum": [
+                "en",
+                "ko"
+              ],
+              "type": "string",
+              "description": "Response language: 'en' for English, 'ko' for Korean"
+            },
+            "max_depth": {
+              "type": "number",
+              "description": "Maximum link depth to crawl (default: 2, max: 3)"
+            },
+            "max_pages": {
+              "type": "number",
+              "description": "Maximum number of pages to crawl (default: 20, max: 500, 0: unlimited)"
+            },
+            "accessibility_standard": {
+              "enum": [
+                "wcag_2.0_a",
+                "wcag_2.0_aa",
+                "wcag_2.1_aa",
+                "wcag_2.2_aa",
+                "kwcag_2.1",
+                "kwcag_2.2"
+              ],
+              "type": "string",
+              "description": "Accessibility standard to check against (default: wcag_2.1_aa)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_inspection",
+        "description": "Get detailed inspection results by inspection ID. Works for both single-page and site inspections.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The inspection_id or site_inspection_id to retrieve"
+            },
+            "language": {
+              "enum": [
+                "en",
+                "ko"
+              ],
+              "type": "string",
+              "description": "Response language: 'en' for English, 'ko' for Korean"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_issues",
+        "description": "Get a filtered list of issues found during an inspection. Works with both single-page inspection_id and site_inspection_id. For site inspections, aggregates issues from all pages.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The inspection_id or site_inspection_id to get issues for"
+            },
+            "category": {
+              "enum": [
+                "html_css",
+                "accessibility",
+                "seo",
+                "performance_security"
+              ],
+              "type": "string",
+              "description": "Filter by category"
+            },
+            "language": {
+              "enum": [
+                "en",
+                "ko"
+              ],
+              "type": "string",
+              "description": "Response language: 'en' for English, 'ko' for Korean"
+            },
+            "page_url": {
+              "type": "string",
+              "description": "For site inspections: filter issues by page URL substring"
+            },
+            "severity": {
+              "enum": [
+                "critical",
+                "major",
+                "minor",
+                "info"
+              ],
+              "type": "string",
+              "description": "Filter by severity"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_history",
+        "description": "List recent inspection history. Optionally filter by URL substring.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Optional URL substring to filter results"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Number of results to return (default: 10)"
+            },
+            "language": {
+              "enum": [
+                "en",
+                "ko"
+              ],
+              "type": "string",
+              "description": "Response language: 'en' for English, 'ko' for Korean"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "registry": "glama",
+  "id": "neb21lnudx",
+  "namespace": "refmdio",
+  "slug": "mcp-server",
+  "name": "RefMD MCP Server",
+  "description": "Enables chatbots to browse, search, create, and edit Markdown documents stored in RefMD through a hosted SSE endpoint with OAuth 2.1 authentication.",
+  "discoveryQueries": [
+    "authentication"
+  ],
+  "rawRecord": {
+    "attributes": [
+      "hosting:remote-capable"
+    ],
+    "description": "Enables chatbots to browse, search, create, and edit Markdown documents stored in RefMD through a hosted SSE endpoint with OAuth 2.1 authentication.",
+    "environmentVariablesJsonSchema": {
+      "properties": {
+        "HOST": {
+          "description": "Optional listen host",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        "PORT": {
+          "description": "Optional listen port",
+          "type": "string",
+          "default": "3334"
+        },
+        "MCP_DB_URL": {
+          "description": "Optional connection string for the configured driver (e.g. postgres://user:pass@host/db). For SQLite you may omit this and use MCP_DB_SQLITE_PATH.",
+          "type": "string"
+        },
+        "OAUTH_ISSUER": {
+          "description": "Optional public issuer URL (defaults to the current request origin)",
+          "type": "string"
+        },
+        "MCP_DB_DRIVER": {
+          "description": "Optional. Set to sqlite, postgres, or mysql to persist OAuth tokens. Defaults to in-memory storage.",
+          "type": "string"
+        },
+        "REFMD_API_BASE": {
+          "description": "Base URL of your RefMD API (e.g. https://refmd.example.com)",
+          "type": "string"
+        },
+        "OAUTH_CLIENT_IDS": {
+          "description": "Comma-separated list of allowed client_id values. Leave empty to allow any.",
+          "type": "string"
+        },
+        "MCP_DB_SQLITE_PATH": {
+          "description": "Optional filesystem path for SQLite storage. Accepts plain paths or file:/// URLs; ensure the path resolves to persistent storage when using SQLite.",
+          "type": "string",
+          "default": "./data/refmd-mcp.sqlite"
+        },
+        "OAUTH_ALLOWED_REDIRECTS": {
+          "description": "Comma-separated list of allowed redirect URIs. Defaults to allowing HTTPS URLs and http://localhost. Include ChatGPT's callback URL.",
+          "type": "string",
+          "default": "https://chat.openai.com/aip/mcp/oauth/callback"
+        },
+        "ACCESS_TOKEN_TTL_SECONDS": {
+          "description": "Optional access-token lifetime",
+          "type": "string",
+          "default": "3600"
+        },
+        "REFRESH_TOKEN_TTL_SECONDS": {
+          "description": "Optional refresh-token lifetime (default 30 days)",
+          "type": "string",
+          "default": "2592000"
+        }
+      },
+      "type": "object",
+      "required": [
+        "REFMD_API_BASE"
+      ]
+    },
+    "id": "neb21lnudx",
+    "name": "RefMD MCP Server",
+    "namespace": "refmdio",
+    "repository": {
+      "url": "https://github.com/refmdio/mcp-server"
+    },
+    "slug": "mcp-server",
+    "spdxLicense": null,
+    "tools": [],
+    "url": "https://glama.ai/mcp/servers/neb21lnudx"
+  }
+}

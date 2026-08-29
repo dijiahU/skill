@@ -1,0 +1,106 @@
+{
+  "registry": "smithery",
+  "qualifiedName": "janmacher02-xl8y/czech-vat-mcp",
+  "namespace": "janmacher02-xl8y",
+  "slug": "czech-vat-mcp",
+  "displayName": "czech-vat-mcp",
+  "description": "Czech VAT compliance tools. Check unreliable VAT payers (nespolehlivý plátce DPH), registered bank accounts, company lookup via ARES, and EU VAT validation via VIES. Essential for Czech/Slovak businesses to avoid VAT liability under §109 ZDPH.\n",
+  "discoveryQueries": [
+    "compliance"
+  ],
+  "rawRecord": {
+    "id": "97deb48c-b9be-468a-b0f9-2c06a2743e9c",
+    "qualifiedName": "janmacher02-xl8y/czech-vat-mcp",
+    "namespace": "janmacher02-xl8y",
+    "slug": "czech-vat-mcp",
+    "displayName": "czech-vat-mcp",
+    "description": "Czech VAT compliance tools. Check unreliable VAT payers (nespolehlivý plátce DPH), registered bank accounts, company lookup via ARES, and EU VAT validation via VIES. Essential for Czech/Slovak businesses to avoid VAT liability under §109 ZDPH.\n",
+    "verified": false,
+    "useCount": 6984,
+    "remote": true,
+    "isDeployed": true,
+    "createdAt": "2026-04-11T19:07:21.615Z",
+    "homepage": "https://smithery.ai/servers/janmacher02-xl8y/czech-vat-mcp",
+    "bySmithery": false,
+    "owner": "org_01KNYVZAYE4QSSYVHYR8JF7NF7",
+    "score": 0.023088023088023088
+  },
+  "detail": {
+    "qualifiedName": "janmacher02-xl8y/czech-vat-mcp",
+    "displayName": "czech-vat-mcp",
+    "description": "Czech VAT compliance tools. Check unreliable VAT payers (nespolehlivý plátce DPH), registered bank accounts, company lookup via ARES, and EU VAT validation via VIES. Essential for Czech/Slovak businesses to avoid VAT liability under §109 ZDPH.\n",
+    "iconUrl": null,
+    "remote": true,
+    "deploymentUrl": "https://czech-vat-mcp--janmacher02-xl8y.run.tools",
+    "connections": [
+      {
+        "type": "http",
+        "deploymentUrl": "https://czech-vat-mcp--janmacher02-xl8y.run.tools",
+        "configSchema": {}
+      }
+    ],
+    "security": null,
+    "tools": [
+      {
+        "name": "lookup_company",
+        "description": "Look up a Czech company in the ARES registry by IČO (company ID). Returns name, address, VAT number, legal form and status.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ico": {
+              "type": "string",
+              "description": "IČO (8-digit company ID), e.g. '27082440'"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_unreliable_vat_payer",
+        "description": "Check if a Czech company is listed as an 'unreliable VAT payer' (nespolehlivý plátce DPH). If you pay such a supplier, you become jointly liable for their unpaid VAT under §109 ZDPH.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dic": {
+              "type": "string",
+              "description": "Czech VAT number including CZ prefix, e.g. 'CZ27082440'"
+            }
+          }
+        }
+      },
+      {
+        "name": "check_bank_accounts",
+        "description": "Get the registered bank accounts of a Czech VAT payer. Payments to unregistered accounts create VAT liability under §109 ZDPH.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dic": {
+              "type": "string",
+              "description": "Czech VAT number including CZ prefix, e.g. 'CZ27082440'"
+            }
+          }
+        }
+      },
+      {
+        "name": "validate_vat_eu",
+        "description": "Validate any EU VAT number via the official VIES system. Works for all EU member states: CZ, SK, DE, PL, AT, etc.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "vat_number": {
+              "type": "string",
+              "description": "VAT number WITHOUT country prefix, e.g. '27082440' (not 'CZ27082440')"
+            },
+            "country_code": {
+              "type": "string",
+              "maxLength": 2,
+              "minLength": 2,
+              "description": "2-letter country code, e.g. 'CZ', 'SK', 'DE', 'PL'"
+            }
+          }
+        }
+      }
+    ],
+    "resources": [],
+    "prompts": []
+  }
+}
