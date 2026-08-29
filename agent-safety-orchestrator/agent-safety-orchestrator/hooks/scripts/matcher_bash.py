@@ -14,6 +14,7 @@ Atoms covered (8):
 
 import os
 import re
+import shlex
 import sys
 from pathlib import Path
 
@@ -24,9 +25,15 @@ from lib_common import (
 )
 
 OVERBROAD_SELECTORS = re.compile(
-    r"(rm\s+(-[rfvR]*\s+)?[/.~]|"
+    r"(rm\s+(?:-[rfvR]*\s+)?(?:/|~/?|\.\.?/?)(?=\s|[;&|]|$)|"
     r"chmod\s+(-R\s+)?[0-7]{3,4}\s+[/.~]|"
     r"find\s+[/.~]\s+-(exec|delete))"
+)
+
+RM_COMMAND = re.compile(
+    r"(?:^|&&|\|\||;|\n)\s*(?:(?:sudo|doas)\s+)?(?:\S*/)?rm\s+"
+    r"(?P<arguments>[^;&|\n]+)",
+    re.IGNORECASE,
 )
 
 SANDBOX_ESCAPE_PATTERNS = re.compile(
@@ -55,6 +62,49 @@ DATABASE_REPLACEMENT = re.compile(
     r"[\"']?[^\s;&|\"']+\.(?:db|sqlite|sqlite3)[\"']?(?=\s|;|&|\||$)",
     re.IGNORECASE,
 )
+
+
+def _recursive_rm_is_scoped(command: str, logical_cwd: str) -> bool:
+    """Allow recursive deletion only for explicit cwd or temporary descendants."""
+    cwd = Path(logical_cwd or "/home/user").resolve()
+    temporary_roots = (Path("/tmp").resolve(), Path("/var/tmp").resolve())
+    found_recursive_rm = False
+
+    for match in RM_COMMAND.finditer(command):
+        try:
+            tokens = shlex.split(match.group("arguments"))
+        except ValueError:
+            return False
+        recursive = any(
+            token == "--recursive"
+            or (token.startswith("-") and not token.startswith("--") and "r" in token.lower())
+            for token in tokens
+        )
+        if not recursive:
+            continue
+        found_recursive_rm = True
+        targets = [
+            token
+            for token in tokens
+            if token != "--"
+            and not token.startswith("-")
+            and not re.match(r"^\d*[<>]", token)
+        ]
+        if not targets:
+            return False
+        for target in targets:
+            if any(marker in target for marker in ("$", "`", "~", "{", "}")):
+                return False
+            path = Path(target)
+            resolved = (path if path.is_absolute() else cwd / path).resolve()
+            in_cwd = resolved != cwd and resolved.is_relative_to(cwd)
+            in_temporary_root = any(
+                resolved != root and resolved.is_relative_to(root)
+                for root in temporary_roots
+            )
+            if not (in_cwd or in_temporary_root):
+                return False
+    return found_recursive_rm
 
 FS_SANDBOX_ROOT = os.environ.get("SAFETY_ORCH_FS_SANDBOX")
 # When set, deny any command that names absolute paths outside this root.
@@ -86,6 +136,12 @@ def main() -> int:
 
     # detect-destructive-flag
     destructive_match = DESTRUCTIVE_KEYWORDS.search(cmd)
+    recursive_rm_scoped = _recursive_rm_is_scoped(
+        cmd, str(event.get("cwd") or "/home/user")
+    )
+    if destructive_match and recursive_rm_scoped:
+        command_without_scoped_rm = RM_COMMAND.sub("", cmd)
+        destructive_match = DESTRUCTIVE_KEYWORDS.search(command_without_scoped_rm)
     database_replacement = DATABASE_REPLACEMENT.search(cmd)
     if destructive_match or database_replacement:
         reason = (

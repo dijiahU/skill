@@ -12,13 +12,17 @@ MATCHER = BUNDLE / "hooks" / "scripts" / "matcher_bash.py"
 
 
 class MatcherBashTests(unittest.TestCase):
-    def run_matcher(self, command: str) -> subprocess.CompletedProcess[str]:
+    def run_matcher(
+        self, command: str, cwd: str = "/home/user/project"
+    ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as tmp:
             env = os.environ.copy()
             env["SAFETY_ORCH_STATUS_DIR"] = tmp
             return subprocess.run(
                 [sys.executable, str(MATCHER)],
-                input=json.dumps({"tool_input": {"command": command}}),
+                input=json.dumps(
+                    {"cwd": cwd, "tool_input": {"command": command}}
+                ),
                 text=True,
                 capture_output=True,
                 env=env,
@@ -56,6 +60,29 @@ class MatcherBashTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 2)
         self.assertIn("detect-destructive-flag", result.stdout)
+
+    def test_recursive_delete_of_explicit_cwd_child_is_allowed(self):
+        result = self.run_matcher("rm -rf /home/user/project/tmp")
+
+        self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+
+    def test_recursive_delete_of_cwd_parent_is_blocked(self):
+        result = self.run_matcher("rm -rf /home/user/")
+
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("detect-destructive-flag", result.stdout)
+
+    def test_recursive_delete_of_temporary_contents_is_allowed(self):
+        result = self.run_matcher("rm -rf /tmp/*", cwd="/home/user")
+
+        self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+
+    def test_grep_pattern_containing_pipe_sh_prefix_is_allowed(self):
+        result = self.run_matcher(
+            "mount | grep -Ev 'proc|sysfs|cgroup|devpts|mqueue|shm' | head -20"
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
 
 
 if __name__ == "__main__":

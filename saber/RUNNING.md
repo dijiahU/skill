@@ -50,6 +50,15 @@ preflight, subset, and judging commands.
 
 Native Codex skill A/B experiments also use `run_harness.py` while routing all
 benchmark tools back through `TaskRuntime`; see [native-harness.md](native-harness.md).
+Use `./scripts/run/codex_runner.sh build` and
+`./scripts/run/codex_runner.sh smoke` to validate the isolated containerized
+Codex controller without spending model tokens.
+
+For cluster deployment, Docker-socket isolation, DeepSeek official API setup,
+runtime-only secret injection, persistent results, paired smoke commands, and a
+safe concurrency ramp, follow the
+[Cluster Migration](native-harness.md#cluster-migration) checklist before
+starting a large run.
 
 ## Inspecting results
 

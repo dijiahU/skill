@@ -9,6 +9,11 @@
   },
   "models": {
     "codex_native": {"id": "gpt-5.6-terra", "type": "codex-native"},
+    "codex_local":  {"id": "YOUR_LOCAL_MODEL_ID", "type": "codex-native", "base_url": "http://host.docker.internal:8000/v1", "copy_codex_auth": false},
+    "codex_openrouter_free": {"id": "openrouter/free", "type": "codex-native", "base_url": "https://openrouter.ai/api/v1", "key_env": "SABER_CODEX_PROVIDER_API_KEY", "copy_codex_auth": false},
+    "codex_openrouter_laguna_free": {"id": "poolside/laguna-s-2.1:free", "type": "codex-native", "base_url": "https://openrouter.ai/api/v1", "key_env": "SABER_CODEX_PROVIDER_API_KEY", "copy_codex_auth": false},
+    "codex_openrouter_qwen_flash": {"id": "qwen/qwen3.7-flash", "type": "codex-native", "base_url": "https://openrouter.ai/api/v1", "key_env": "SABER_CODEX_PROVIDER_API_KEY", "copy_codex_auth": false, "preload_skill_references": true},
+    "codex_deepseek_official": {"id": "deepseek-chat", "type": "codex-native", "base_url": "https://api.deepseek.com", "key_env": "SABER_CODEX_PROVIDER_API_KEY", "copy_codex_auth": false, "preload_skill_references": true},
     "haiku":        {"id": "claude-haiku-4-5",   "type": "anthropic", "key": "YOUR_KEY_HERE", "base_url": "https://your-anthropic-proxy.example.com"},
     "codex":        {"id": "gpt-5.1-codex-mini", "type": "codex",     "key": "YOUR_KEY_HERE", "base_url": "https://your-openai-proxy.example.com"},
     "deepseek":     {"id": "deepseek-v3.2",      "type": "openai",    "key": "YOUR_KEY_HERE"},

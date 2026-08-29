@@ -1,0 +1,66 @@
+FROM ubuntu:22.04
+
+ARG CODEX_VERSION=0.149.1
+ARG NODE_VERSION=22.22.0
+ARG TARGETARCH
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    HOME=/home/saber \
+    CODEX_HOME=/home/saber/.codex \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+RUN sed -i 's|http://archive.ubuntu.com|http://mirrors.aliyun.com|g' \
+        /etc/apt/sources.list \
+    && sed -i 's|http://security.ubuntu.com|http://mirrors.aliyun.com|g' \
+        /etc/apt/sources.list
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        bash \
+        ca-certificates \
+        curl \
+        docker.io \
+        git \
+        jq \
+        python3 \
+        python3-venv \
+        ripgrep \
+        xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN case "${TARGETARCH}" in \
+        arm64) node_arch="arm64" ;; \
+        amd64) node_arch="x64" ;; \
+        *) echo "Unsupported Runner architecture: ${TARGETARCH}" >&2; exit 2 ;; \
+    esac \
+    && curl -fsSL \
+        "https://npmmirror.com/mirrors/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${node_arch}.tar.xz" \
+        -o /tmp/node.tar.xz \
+    && tar -xJf /tmp/node.tar.xz --strip-components=1 -C /usr/local \
+    && rm /tmp/node.tar.xz \
+    && node --version \
+    && npm --version
+
+RUN npm config set registry https://registry.npmmirror.com \
+    && npm install --global "@openai/codex@${CODEX_VERSION}" \
+    && codex --version
+
+RUN mkdir -p \
+        /home/saber/.codex \
+        /workspace/saber/results \
+        /workspace/agent-safety-orchestrator
+
+COPY saber/ /workspace/saber/
+COPY agent-safety-orchestrator/agent-safety-orchestrator/ \
+    /workspace/agent-safety-orchestrator/agent-safety-orchestrator/
+
+RUN chmod +x \
+    /workspace/saber/scripts/run/codex_runner_entrypoint.sh \
+    /workspace/saber/scripts/run/codex_runner.sh \
+    /workspace/saber/scripts/codex_runner_smoke.py
+
+WORKDIR /workspace/saber
+
+ENTRYPOINT ["/workspace/saber/scripts/run/codex_runner_entrypoint.sh"]
+CMD ["bash"]

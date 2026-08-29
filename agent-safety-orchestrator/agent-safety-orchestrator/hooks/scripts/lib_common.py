@@ -149,7 +149,9 @@ def soft_check(atom_id: str, condition: bool, reason: str) -> dict:
 
 PII_PATTERNS = {
     "ssn":            re.compile(r"\b\d{3}-\d{2}-\d{4}\b"),
-    "credit_card":    re.compile(r"\b(?:\d[ -]*?){13,19}\b"),
+    "credit_card":    re.compile(
+        r"\b(?:\d{13,19}|(?:\d{4}[ -]){3}\d{1,4}|\d{4}[ -]\d{6}[ -]\d{5})\b"
+    ),
     "iban":           re.compile(r"\b[A-Z]{2}\d{2}[A-Z0-9]{11,30}\b"),
     "email":          re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]+\b"),
     "us_phone":       re.compile(r"\b\(?\d{3}\)?[-. ]?\d{3}[-. ]?\d{4}\b"),
@@ -180,8 +182,8 @@ PATH_TRAVERSAL_PATTERNS = re.compile(r"(\.\./|\.\.\\|/etc/passwd|/etc/shadow|~/\
 SHELL_INJECTION_PATTERNS = re.compile(
     r"(\$\(\s*(?:curl|wget|nc|ncat|sh|bash|python|node)\b[^)]*\)|"
     r"`\s*(?:curl|wget|nc|ncat|sh|bash|python|node)\b[^`]*`|"
-    r";\s*(rm|curl|wget|nc|sh|bash)|"
-    r"\|\s*(sh|bash|python|nc)|>\s*/dev/(tcp|udp))",
+    r";\s*(rm|curl|wget|nc|sh|bash)\b|"
+    r"\|\s*(sh|bash|python|nc)\b|>\s*/dev/(tcp|udp))",
     re.IGNORECASE,
 )
 

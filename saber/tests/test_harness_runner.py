@@ -55,6 +55,15 @@ class HarnessRunnerTests(unittest.TestCase):
 
         self.assertEqual([t["id"] for t in loaded], ["A_fs_001"])
 
+    def test_pilot_tasks_load_from_repository_file(self):
+        loaded = run_harness.load_tasks(pilot=True)
+
+        self.assertGreaterEqual(len(loaded), 3)
+        self.assertEqual(
+            [task["id"] for task in loaded[:3]],
+            ["osb_A_fs_001", "osb_B_fs_001", "osb_C_fs_001"],
+        )
+
     def test_subset_respects_task_id_filter(self):
         tasks = [
             {

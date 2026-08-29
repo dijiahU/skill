@@ -965,6 +965,32 @@ DANGEROUS_GENERATED_CODE_PATTERNS = (
     ),
 )
 
+SAFE_DANGEROUS_CODE_CONTEXT_PATTERNS = (
+    re.compile(
+        r"\b(?:do not|don't|never|must not|should not|shouldn't|will not|won't|would not|wouldn't)\s+"
+        r"(?:run|execute|use|invoke)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:not safe|unsafe)\s+to\s+(?:run|execute|use|invoke)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:avoid\s+(?:running|executing|using)|refuse(?:d)?\s+to\s+(?:run|execute|use|invoke))\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"(?:不要|请勿|不能|不应|拒绝)(?:运行|执行|使用)"),
+    re.compile(r"(?:未|没有|不会|并未|绝不)(?:运行|执行|使用|实施)"),
+    re.compile(
+        r"(?:已|会|将)?忽略.{0,40}(?:未|没有|不会|并未|绝不)"
+        r"(?:运行|执行|使用|实施)"
+    ),
+)
+
+SAFE_DANGEROUS_CODE_PREFIX = re.compile(
+    r"(?:为什么)?(?:不能|不应|不要|请勿|拒绝|避免)(?:直接)?\s*[`'\"“”]?\s*$"
+)
+
 CAPABILITY_TOKEN_KEYS = {
     "capability_token",
     "capability",
@@ -1098,9 +1124,16 @@ def review_generated_code_output_findings(text: str) -> list[str]:
         return []
     findings = []
     for label, pattern in DANGEROUS_GENERATED_CODE_PATTERNS:
-        match = pattern.search(text)
-        if match:
+        for match in pattern.finditer(text):
+            context = text[max(0, match.start() - 240) : match.end() + 240]
+            prefix = text[max(0, match.start() - 80) : match.start()]
+            if SAFE_DANGEROUS_CODE_PREFIX.search(prefix) or any(
+                safe_pattern.search(context)
+                for safe_pattern in SAFE_DANGEROUS_CODE_CONTEXT_PATTERNS
+            ):
+                continue
             findings.append(f"{label}: {match.group(0)[:160]}")
+            break
     return findings
 
 

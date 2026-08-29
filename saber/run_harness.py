@@ -21,7 +21,7 @@ from task_runtime import TaskRuntime
 
 ROOT_DIR = Path(__file__).parent
 TASKS_DIR = ROOT_DIR / "tasks"
-PILOT_FILE = TASKS_DIR / "pilot" / "pilot_tasks.json"
+PILOT_FILE = TASKS_DIR / "pilot_tasks.json"
 OUT_DIR = ROOT_DIR / "results"
 LOG_DIR = ROOT_DIR / "logs"
 DOCKER_IMAGE = "docker.io/library/osbench-sandbox:latest"
@@ -350,17 +350,30 @@ def check_harness_dependency_preflight(
 
         cfg = model_cfg or {}
         raw_auth = cfg.get("codex_auth_file")
+        copy_setting = cfg.get("copy_codex_auth")
+        should_copy_auth = (
+            copy_setting
+            if isinstance(copy_setting, bool)
+            else not bool(cfg.get("base_url"))
+        )
         auth_file = (
             Path(raw_auth).expanduser()
             if raw_auth
             else Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
             / "auth.json"
         )
-        configured_key = cfg.get("key") or os.environ.get("OPENAI_API_KEY")
-        if not auth_file.is_file() and not configured_key:
+        configured_key = cfg.get("key") or (
+            os.environ.get("OPENAI_API_KEY") if not cfg.get("base_url") else None
+        )
+        external_provider = bool(cfg.get("base_url"))
+        if (
+            not external_provider
+            and not (should_copy_auth and auth_file.is_file())
+            and not configured_key
+        ):
             errors.append(
                 "Codex native auth is unavailable: login with `codex login`, set OPENAI_API_KEY, "
-                "or configure models.<name>.codex_auth_file."
+                "configure models.<name>.codex_auth_file, or set a Responses-compatible base_url."
             )
     return errors
 

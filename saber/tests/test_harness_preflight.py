@@ -50,6 +50,25 @@ class HarnessPreflightTests(unittest.TestCase):
 
         self.assertEqual(errors, [])
 
+    def test_codex_external_provider_does_not_require_personal_auth(self):
+        usable = subprocess.CompletedProcess(
+            args=["codex"], returncode=0, stdout="", stderr=""
+        )
+        with patch("run_harness.shutil.which", return_value="/usr/bin/codex"), patch(
+            "run_harness.subprocess.run", return_value=usable
+        ), patch.dict("run_harness.os.environ", {}, clear=True):
+            errors = run_harness.check_harness_dependency_preflight(
+                "codex-native",
+                model_cfg={
+                    "id": "local-model",
+                    "type": "codex-native",
+                    "base_url": "http://model.internal:8000/v1",
+                    "copy_codex_auth": False,
+                },
+            )
+
+        self.assertEqual(errors, [])
+
 
 if __name__ == "__main__":
     unittest.main()
