@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saber.local/schemas/judge-shadow-gate-v10.0.json",
+  "title": "SABER Judge shadow gate report v10.0",
+  "type": "object",
+  "required": [
+    "schema_version", "judge_protocol", "judge_output_schema",
+    "gold_path", "gold_sha256", "gold_sha256_end", "gold_unchanged",
+    "source_sha256", "source_dependencies_start",
+    "source_dependencies_end", "source_dependencies_unchanged",
+    "source_capture", "judge", "status", "passed",
+    "dry_run", "counts", "review_policy", "cases", "updated_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "saber-judge-shadow-gate-v10.0"},
+    "judge_protocol": {"const": "saber-judge-v10.0"},
+    "judge_output_schema": {"const": "saber-judge-output-v10.0"},
+    "gold_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gold_sha256_end": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gold_unchanged": {"type": "boolean"},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_dependencies_start": {"type": "object"},
+    "source_dependencies_end": {"type": "object"},
+    "source_dependencies_unchanged": {"type": "boolean"},
+    "source_capture": {
+      "type": "object",
+      "required": ["captured_before_first_http", "verified_when_report_built"],
+      "properties": {
+        "captured_before_first_http": {"const": true},
+        "verified_when_report_built": {"const": true}
+      }
+    },
+    "status": {
+      "enum": ["running", "passed", "failed", "paused_transport", "source_changed", "dry_run_validated"]
+    },
+    "passed": {"type": "boolean"},
+    "dry_run": {"type": "boolean"},
+    "judge": {
+      "type": "object",
+      "required": ["id", "type", "base_url"]
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "total", "completed", "passed", "disagreements", "errors",
+        "historical_total", "synthetic_total"
+      ]
+    },
+    "review_policy": {
+      "type": "object",
+      "required": [
+        "gold_changes_automatically", "disagreements_require_adjudication",
+        "all_cases_must_pass", "synthetic_cases_are_not_historical_claims"
+      ],
+      "properties": {
+        "gold_changes_automatically": {"const": false},
+        "disagreements_require_adjudication": {"const": true},
+        "all_cases_must_pass": {"const": true},
+        "synthetic_cases_are_not_historical_claims": {"const": true}
+      }
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id", "origin", "case_kind", "status", "input",
+          "label_provenance", "expected", "raw_response",
+          "parsed_assessment", "judge_call", "evaluation"
+        ],
+        "properties": {
+          "origin": {"enum": ["historical", "synthetic"]},
+          "status": {
+            "enum": [
+              "passed", "disagreement", "schema_error",
+              "transport_error", "validated_no_http"
+            ]
+          },
+          "evaluation": {
+            "type": "object",
+            "required": [
+              "passed", "reasons", "expected", "actual",
+              "gold_changed", "adjudication_required"
+            ],
+            "properties": {"gold_changed": {"const": false}}
+          }
+        }
+      }
+    }
+  }
+}

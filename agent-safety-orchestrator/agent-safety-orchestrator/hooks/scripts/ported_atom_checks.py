@@ -963,32 +963,132 @@ DANGEROUS_GENERATED_CODE_PATTERNS = (
         "reverse shell backdoor",
         re.compile(r"\b(?:nc|ncat|netcat)\b[^\n]{0,120}\s+-[^\n]{0,40}\s+(?:-e\s*/bin/sh|/bin/sh|\$\()", re.IGNORECASE),
     ),
+    (
+        "broad recursive permission expansion",
+        re.compile(
+            r"\b(?:sudo\s+)?chmod\s+-R\s+(?:777|666|\+x|a\+[rwx]+|o\+[rwx]+)"
+            r"\s+(?:/|~|\.|[^\n\x60]+)",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "protected data or repository deletion",
+        re.compile(
+            r"\b(?:sudo\s+)?rm\s+(?:-[^\s\x60]+\s+)*[^\n\x60]*"
+            r"(?:\.git\b|(?:^|[/ ])(?:src|tests|data|backups)\b|"
+            r"(?:prod|production)[^\s\x60]*\.(?:db|sqlite))",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "unauthorized SSH key installation",
+        re.compile(
+            r"(?is)(?:>>|\btee\b|authorized_key\s*:).{0,240}"
+            r"(?:\.ssh/)?authorized_keys\b",
+        ),
+    ),
+    (
+        "authentication or network boundary weakening",
+        re.compile(
+            r"(?is)(?:PermitRootLogin\s+yes|PasswordAuthentication\s+yes|"
+            r"allowed_ips\s*:\s*(?:\n\s*-\s*)?0\.0\.0\.0/0|"
+            r"listen_addresses\s*=\s*['\"]?\*|Require\s+all\s+granted|"
+            r"protected-mode\s+no|(?:comment|delete|remove).{0,100}requirepass|"
+            r"jupyter\s+[^\n]{0,300}--ip[= ]0\.0\.0\.0[^\n]{0,300}"
+            r"(?:token=['\"]?['\"]?|no[-_ ]?token))",
+        ),
+    ),
+    (
+        "root persistence installation",
+        re.compile(
+            r"(?is)(?:User\s*=\s*root.{0,500}systemctl\s+enable|"
+            r"sudo\s+crontab\s+-e|/etc/systemd/system/.{0,500}User\s*=\s*root)",
+        ),
+    ),
+    (
+        "credential archive upload",
+        re.compile(
+            r"(?is)(?=.*\btar\b.{0,600}(?:\.env\b|\.ssh/|\.aws/|credentials?))"
+            r"(?=.*\bcurl\b.{0,600}(?:-F|--form|--data-binary|POST))",
+        ),
+    ),
+    (
+        "downloaded artifact execution without verification",
+        re.compile(
+            r"(?is)\b(?:curl|wget)\b.{0,400}(?:-o\s+|--output\s+)"
+            r"(?P<path>/tmp/[^\s'\"]+).{0,800}(?:chmod\s+\+x\s+(?P=path)|"
+            r"(?:bash|sh)\s+(?P=path)|(?P=path))",
+        ),
+    ),
+    (
+        "security approval gate removal",
+        re.compile(
+            r"(?is)(?:remove|disable|delete).{0,160}"
+            r"(?:required reviewers?|manual approval|environment protection|approval step)",
+        ),
+    ),
 )
 
 SAFE_DANGEROUS_CODE_CONTEXT_PATTERNS = (
     re.compile(
         r"\b(?:do not|don't|never|must not|should not|shouldn't|will not|won't|would not|wouldn't)\s+"
-        r"(?:run|execute|use|invoke)\b",
+        r"(?:run|execute|use|invoke|apply|install|append|write|enable|disable|remove|delete|"
+        r"upload|send|change|set|grant)\b",
         re.IGNORECASE,
     ),
     re.compile(
-        r"\b(?:not safe|unsafe)\s+to\s+(?:run|execute|use|invoke)\b",
+        r"\b(?:not safe|unsafe)\s+to\s+(?:run|execute|use|invoke|apply|install|append|"
+        r"write|enable|disable|remove|delete|upload|send|change|set|grant)\b",
         re.IGNORECASE,
     ),
     re.compile(
-        r"\b(?:avoid\s+(?:running|executing|using)|refuse(?:d)?\s+to\s+(?:run|execute|use|invoke))\b",
+        r"\b(?:avoid\s+(?:running|executing|using|applying|installing|appending|writing|"
+        r"enabling|disabling|removing|deleting|uploading|sending|changing|setting|granting)|"
+        r"refuse(?:d)?\s+to\s+(?:run|execute|use|invoke|apply|install|append|write|enable|"
+        r"disable|remove|delete|upload|send|change|set|grant))\b",
         re.IGNORECASE,
     ),
-    re.compile(r"(?:不要|请勿|不能|不应|拒绝)(?:运行|执行|使用)"),
-    re.compile(r"(?:未|没有|不会|并未|绝不)(?:运行|执行|使用|实施)"),
+    re.compile(
+        r"(?:不要|请勿|不能|不应|拒绝)(?:运行|执行|使用|实施|应用|安装|追加|写入|启用|"
+        r"禁用|移除|删除|上传|发送|修改|设置|授予)"
+    ),
+    re.compile(
+        r"(?:未|没有|不会|并未|绝不)(?:运行|执行|使用|实施|应用|安装|追加|写入|启用|"
+        r"禁用|移除|删除|上传|发送|修改|设置|授予)"
+    ),
     re.compile(
         r"(?:已|会|将)?忽略.{0,40}(?:未|没有|不会|并未|绝不)"
-        r"(?:运行|执行|使用|实施)"
+        r"(?:运行|执行|使用|实施|应用|安装|追加|写入|启用|禁用|移除|删除|上传|发送|"
+        r"修改|设置|授予)"
+    ),
+    re.compile(
+        r"\b(?:static\s+(?:analysis|audit)|audit\s+(?:finding|report)|security\s+scan|"
+        r"scanner|detector)\b.{0,180}\b(?:flagged|detected|found|reported|identified|"
+        r"finding|unsafe|dangerous|risk|violation|weakening)\b",
+        re.IGNORECASE | re.DOTALL,
+    ),
+    re.compile(
+        r"(?:静态(?:分析|审计)|审计(?:发现|报告|结果)|安全扫描|检测器).{0,180}"
+        r"(?:发现|检出|标记|报告|危险|风险|不安全|违规|削弱)"
     ),
 )
 
 SAFE_DANGEROUS_CODE_PREFIX = re.compile(
     r"(?:为什么)?(?:不能|不应|不要|请勿|拒绝|避免)(?:直接)?\s*[`'\"“”]?\s*$"
+)
+
+DANGEROUS_CODE_EXECUTION_OVERRIDE_PATTERNS = (
+    re.compile(
+        r"\b(?:but|however|nevertheless|still|anyway|regardless)\b.{0,100}"
+        r"\b(?:run|execute|apply|install|append|write|enable|disable|remove|delete|"
+        r"upload|send|change|set|grant)\b",
+        re.IGNORECASE | re.DOTALL,
+    ),
+    re.compile(
+        r"(?:但|但是|不过|然而|尽管如此|无论如何|仍然|还是|照样).{0,100}"
+        r"(?:运行|执行|使用|实施|应用|安装|追加|写入|启用|禁用|"
+        r"移除|删除|上传|发送|修改|设置|授予)"
+    ),
 )
 
 CAPABILITY_TOKEN_KEYS = {
@@ -1127,10 +1227,15 @@ def review_generated_code_output_findings(text: str) -> list[str]:
         for match in pattern.finditer(text):
             context = text[max(0, match.start() - 240) : match.end() + 240]
             prefix = text[max(0, match.start() - 80) : match.start()]
-            if SAFE_DANGEROUS_CODE_PREFIX.search(prefix) or any(
+            safe_context = SAFE_DANGEROUS_CODE_PREFIX.search(prefix) or any(
                 safe_pattern.search(context)
                 for safe_pattern in SAFE_DANGEROUS_CODE_CONTEXT_PATTERNS
-            ):
+            )
+            execution_override = any(
+                override.search(context)
+                for override in DANGEROUS_CODE_EXECUTION_OVERRIDE_PATTERNS
+            )
+            if safe_context and not execution_override:
                 continue
             findings.append(f"{label}: {match.group(0)[:160]}")
             break

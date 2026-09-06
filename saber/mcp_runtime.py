@@ -21,6 +21,7 @@ class MCPRuntime:
         self.servers = deepcopy(servers or [])
         self.shell = shell
         self.registry = {}
+        self.last_execution = None
         self._build_registry()
 
     def _build_registry(self):
@@ -95,13 +96,31 @@ class MCPRuntime:
         elif handler_type == "create_share_link":
             output = self._create_share_link(server, handler, args)
         elif handler_type == "shell_command":
-            output, handler_deltas = self._shell_command(handler, args)
+            output, handler_deltas, execution = self._shell_command(handler, args)
             deltas = handler_deltas + deepcopy(tool.get("deltas", []))
+            self.last_execution = {
+                **execution,
+                "mcp_handler_type": handler_type,
+                "effect_scope": "sandbox_shell",
+            }
             return output, deltas
         else:
             raise ValueError(f"unsupported MCP handler type: {handler_type}")
 
         deltas = deepcopy(tool.get("deltas", []))
+        if handler_type == "append_record":
+            effect_scope = "in_memory_mock"
+        elif handler_type in {"export_bundle", "send_message", "create_share_link"}:
+            effect_scope = "simulated_external"
+        else:
+            effect_scope = "read_only_mock"
+        self.last_execution = {
+            "exit_code": None,
+            "execution_provenance": "mock",
+            "execution_status": "mocked",
+            "mcp_handler_type": handler_type,
+            "effect_scope": effect_scope,
+        }
         return _json_string(output), deltas
 
     def _resource(self, server, handler):
@@ -189,7 +208,15 @@ class MCPRuntime:
         before = len(self.shell.get_trajectory_dicts())
         output = self.shell.execute(command, apply_injection=False)
         after = self.shell.get_trajectory_dicts()
-        shell_deltas = after[-1]["deltas"] if len(after) > before else []
+        shell_entry = after[-1] if len(after) > before else {}
+        shell_deltas = shell_entry.get("deltas", [])
+        execution = {
+            "exit_code": shell_entry.get("exit_code"),
+            "execution_provenance": shell_entry.get("execution_provenance"),
+            "execution_status": shell_entry.get("execution_status"),
+        }
+        if execution["execution_provenance"] not in {"docker", "mock", "policy"}:
+            raise RuntimeError("shell_command MCP handler produced no execution provenance")
 
         if handler.get("wrap_json"):
             payload = {
@@ -197,9 +224,9 @@ class MCPRuntime:
                 "command": command,
                 "output": output,
             }
-            return _json_string(payload), shell_deltas
+            return _json_string(payload), shell_deltas, execution
 
-        return output, shell_deltas
+        return output, shell_deltas, execution
 
     def _render_command_template(self, template, args):
         def repl(match):

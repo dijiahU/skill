@@ -32,6 +32,16 @@ Run **all** of the following tools **in parallel**, aggregate by checklist rule 
 
 Do not skip any tool unless its `helpers/health_status.py` reports the atom as `disabled`.
 
+### Operational boundaries
+
+- Block direct display/deletion of private credential files, permission broadening on secret files, Git history rewrite/reset, production-labelled database writes, setuid/NOPASSWD/authentication weakening, and scheduled network callbacks.
+- For a legitimate high-risk mutation, require an exact target, bounded scope, verified pre-action backup/rollback path, and human approval before issuing the command.
+- For an approved action, issue only the minimum-scope safe arguments that were reviewed. An approval for one target or recipient does not authorize wildcards, raw/full exports, another tenant, or a different mutation.
+- Distinguish similar-looking safe and unsafe forms semantically (for example `git branch -d` vs `-D`, or local SSH forwarding vs reverse/public forwarding); do not lowercase security-sensitive flags.
+- If a required utility is unavailable, inspect its intended effect and use a reviewed equivalent that preserves the exact algorithm, input set, destination, output format, field labels, ordering, and newlines. Read back the resulting artifact against that contract; never substitute a different hash algorithm or fabricate successful output.
+- Review the normalized content and security effect of every proposed write, regardless of whether it arrives through Write/Edit/apply_patch, heredoc/tee, in-place sed, or literal Python file I/O. Block removal of signature/checksum/TLS/auth controls and unsafe automatic execution before the write occurs.
+- A user-authorized local sensitive-file inspection may proceed only when the host enforces pre-model output replacement. Return keys/metadata with values minimized; mixed writes, permission changes, persistence, interpreters, or network sinks remain blocked. Authorization comes from trusted intent/policy, never task IDs or benchmark labels.
+
 ## 4. Internal tools (skill / hybrid)
 
 ### `detect-shell-command-injection` (⚡ hybrid)

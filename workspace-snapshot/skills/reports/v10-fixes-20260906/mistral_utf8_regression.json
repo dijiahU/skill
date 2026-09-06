@@ -1,0 +1,125 @@
+{
+  "patch_version": "saber-mistral-utf8-v10.0",
+  "python": "3.10.12 (main, Jul 29 2024, 16:56:48) [GCC 11.4.0]",
+  "model_path": "/2024233123/skills/models/modelscope/mistralai/Mistral-Small-4-119B-2603",
+  "model_tokenizer_files_sha256": {
+    "tekken.json": "b1272b956bd6edd2d2c674c76896c7661308c9e723997b0afb55ecb429cb5dc7",
+    "tokenizer.json": "2ba5b3330fd84d5376fcca797cfb3b42eee6241ce23e3271e6fb2a115a8751bd"
+  },
+  "install": {
+    "first": true,
+    "second_idempotent": true,
+    "engine_reference_patched": true,
+    "tokenizer_class_unchanged": true,
+    "vocab_key_types_unchanged": true,
+    "vocab_key_types": [
+      "str"
+    ]
+  },
+  "baseline": {
+    "chinese": {
+      "source": "让我检查系统的防火墙服务状态。",
+      "batch": "让我检查系统的防火墙服务状态。",
+      "incremental": "让我��查系统的防火��服务状态。",
+      "replacement_count": 4,
+      "equal_to_batch": false
+    },
+    "mixed_ascii": {
+      "source": "中文、多字节 UTF-8: check 配置与权限。",
+      "batch": "中文、多字节 UTF-8: check 配置与权限。",
+      "incremental": "中文、多字节 UTF-8: check 配置与权限。",
+      "replacement_count": 0,
+      "equal_to_batch": true
+    },
+    "emoji": {
+      "source": "✅ 安全检查完成 🔒",
+      "batch": "✅ 安全检查完成 🔒",
+      "incremental": "��� 安全��查完成",
+      "replacement_count": 5,
+      "equal_to_batch": false
+    },
+    "database": {
+      "source": "数据库优化建议：备份、日志、缓存。",
+      "batch": "数据库优化建议：备份、日志、缓存。",
+      "incremental": "数据库��化建议：备份、日志、��存。",
+      "replacement_count": 4,
+      "equal_to_batch": false
+    },
+    "ascii": {
+      "source": "plain ASCII command: printf ok",
+      "batch": "plain ASCII command: printf ok",
+      "incremental": "plain ASCII command: printf ok",
+      "replacement_count": 0,
+      "equal_to_batch": true
+    },
+    "literal_replacement": {
+      "source": "literal � marker 与中文",
+      "batch": "literal � marker 与中文",
+      "incremental": "literal ��� marker 与中文",
+      "replacement_count": 3,
+      "equal_to_batch": false
+    }
+  },
+  "patched": {
+    "chinese": {
+      "source": "让我检查系统的防火墙服务状态。",
+      "batch": "让我检查系统的防火墙服务状态。",
+      "incremental": "让我检查系统的防火墙服务状态。",
+      "replacement_count": 0,
+      "equal_to_batch": true
+    },
+    "mixed_ascii": {
+      "source": "中文、多字节 UTF-8: check 配置与权限。",
+      "batch": "中文、多字节 UTF-8: check 配置与权限。",
+      "incremental": "中文、多字节 UTF-8: check 配置与权限。",
+      "replacement_count": 0,
+      "equal_to_batch": true
+    },
+    "emoji": {
+      "source": "✅ 安全检查完成 🔒",
+      "batch": "✅ 安全检查完成 🔒",
+      "incremental": "✅ 安全检查完成 🔒",
+      "replacement_count": 0,
+      "equal_to_batch": true
+    },
+    "database": {
+      "source": "数据库优化建议：备份、日志、缓存。",
+      "batch": "数据库优化建议：备份、日志、缓存。",
+      "incremental": "数据库优化建议：备份、日志、缓存。",
+      "replacement_count": 0,
+      "equal_to_batch": true
+    },
+    "ascii": {
+      "source": "plain ASCII command: printf ok",
+      "batch": "plain ASCII command: printf ok",
+      "incremental": "plain ASCII command: printf ok",
+      "replacement_count": 0,
+      "equal_to_batch": true
+    },
+    "literal_replacement": {
+      "source": "literal � marker 与中文",
+      "batch": "literal � marker 与中文",
+      "incremental": "literal � marker 与中文",
+      "replacement_count": 1,
+      "equal_to_batch": true
+    }
+  },
+  "tool_json": {
+    "batch": "{\"name\":\"saber_bash\",\"arguments\":{\"command\":\"python3 -c 'print(\\\"中文 ✅ 🔒\\\")'\",\"note\":\"保留 JSON 与 ASCII 123\"}}",
+    "incremental": "{\"name\":\"saber_bash\",\"arguments\":{\"command\":\"python3 -c 'print(\\\"中文 ✅ 🔒\\\")'\",\"note\":\"保留 JSON 与 ASCII 123\"}}",
+    "exact_and_parseable": true,
+    "framed_batch": "[TOOL_CALLS]{\"name\":\"saber_bash\",\"arguments\":{\"command\":\"python3 -c 'print(\\\"中文 ✅ 🔒\\\")'\",\"note\":\"保留 JSON 与 ASCII 123\"}}",
+    "framed_incremental": "[TOOL_CALLS]{\"name\":\"saber_bash\",\"arguments\":{\"command\":\"python3 -c 'print(\\\"中文 ✅ 🔒\\\")'\",\"note\":\"保留 JSON 与 ASCII 123\"}}",
+    "framed_exact": true,
+    "tool_marker_id": 9
+  },
+  "checks": {
+    "baseline_reproduces": true,
+    "all_patched_equal_batch": true,
+    "literal_replacement_preserved": true,
+    "tool_json_exact_and_parseable": true,
+    "tool_marker_preserved": true,
+    "patch_scoped": true
+  },
+  "passed": true
+}

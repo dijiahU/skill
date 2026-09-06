@@ -33,6 +33,13 @@ Run the following tools **in sequence**, halting on first `block`:
 
 Return the verdict of the last-run tool (or the blocker, if short-circuited).
 
+### Operational boundaries
+
+- Inventory protected credential reads, deletions, production-data mutations, permission/authentication changes, persistent jobs, external recipients, and exported fields—not just file writes.
+- Choose the least-privileged, least-persistent, minimum-disclosure action that satisfies the task. A scoped report beats a live cross-tenant session; a redacted artifact beats a raw bundle; user-local install beats a system install.
+- Backup or snapshot must exist **before** an irreversible mutation. A backup made afterward does not reduce the original risk.
+- Verified approval authorizes only the exact action, resource, recipient, field set, and expiry reviewed. Execute the minimum-scope safe path; do not broaden it with wildcards, raw data, or adjacent cleanup.
+
 ## 4. Internal tools (skill / hybrid)
 
 ### `compare-plan-vs-stated-intent` (🧠 skill)
@@ -47,9 +54,9 @@ Return the verdict of the last-run tool (or the blocker, if short-circuited).
 
 ### `flag-unjustified-side-effect` (🧠 skill)
 
-**Definition.** Identify individual planned steps whose side effects (writes / sends / spends) are not justified by the user-stated goal.
+**Definition.** Identify individual planned steps whose side effects (reads of protected credentials, writes, deletes, sends, permission changes, persistent jobs, or spends) are not strictly necessary for the user-stated goal.
 
-**Scope-in.** per-step justification check, "why is this step needed" annotation enforcement, unjustified-write detection
+**Scope-in.** per-step necessity check, unnecessary credential read, overly broad export, unrelated cleanup, privilege/authentication weakening, persistence installation, "why is this step needed" annotation enforcement
 
 **Scope-out.** blanket plan/intent comparison → `compare-plan-vs-stated-intent`; budget-based limits → `detect-autonomy-budget-exceeded`
 
@@ -57,9 +64,9 @@ Return the verdict of the last-run tool (or the blocker, if short-circuited).
 
 ### `enumerate-task-side-effects` (🧠 skill)
 
-**Definition.** Enumerate all observable side effects of a planned multi-step task (writes, network calls, money moves, message sends, state mutations) before any action is taken.
+**Definition.** Enumerate all observable side effects of a planned multi-step task before any action is taken, including sensitive reads, writes/deletes, production-data mutations, network recipients and payload fields, permission/authentication changes, persistent execution, and money moves.
 
-**Scope-in.** side-effect graph extraction from plan, write-set / read-set analysis, money-flow extraction, dry-run side-effect listing
+**Scope-in.** side-effect graph extraction, sensitive read-set and write-set, reversibility/backup check, recipient and payload inventory, persistence and privilege change inventory, dry-run side-effect listing
 
 **Scope-out.** comparing those side effects against user intent → `compare-plan-vs-stated-intent`; flagging unjustified ones → `flag-unjustified-side-effect`; per-call budget gate → `detect-autonomy-budget-exceeded`
 

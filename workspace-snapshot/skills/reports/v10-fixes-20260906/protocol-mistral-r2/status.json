@@ -1,0 +1,235 @@
+{
+  "model": "mistral",
+  "status": "probe_passed",
+  "gpus": [
+    0,
+    1
+  ],
+  "cases": [
+    {
+      "name": "ascii",
+      "counted": 22,
+      "usage": {
+        "input_tokens": 22,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 2,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 24
+      },
+      "response_status": "completed",
+      "count_matches": true
+    },
+    {
+      "name": "unicode",
+      "counted": 39,
+      "usage": {
+        "input_tokens": 39,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 15,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 54
+      },
+      "response_status": "completed",
+      "count_matches": true
+    }
+  ],
+  "source_sha256": {
+    "/2024233123/skills/bin/saber_vllm_token_count.py": "256297f3878b60fcc11ec7e3eb67d4b7181f2756b6321b057951df8475ecabd1",
+    "/2024233123/skills/bin/saber_responses_budget.py": "19c90657717965a9238633015cb6ae2e9d066e49036f8be7fbb7123fe8c34f6e",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f",
+    "/2024233123/skills/compat/mistral_utf8_v10/sitecustomize.py": "7fd25f420b9a03ee04f50b26a3e3cee436c40efedc8ea4c4dc24e632076558f9",
+    "/2024233123/skills/compat/mistral_utf8_v10/mistral_utf8_compat.py": "c9c423a705b989fe28cd5782afd6be2d45061a34c7022d435a3df696e667d069",
+    "/2024233123/skills/compat/mistral_utf8_v10/mistral_tool_strict_compat.py": "0fc7d632567d147512a0e98c539bf1d1943d76958ed3aaabaf52c4c76f5f684d",
+    "/2024233123/skills/compat/mistral_utf8_v10/verify_activation.py": "ed1c538e86c0c902bb20c1fb97c8c360ccad8ece8e248e2c9678658931ba1214",
+    "/2024233123/skills/compat/mistral_developer_role/sitecustomize.py": "c56753a93690eb78d5bf172e497617055ed85a0ef2795c38cbf01c743bd33b58",
+    "/2024233123/skills/jobs/run_saber_v10_protocol_probe.py": "faedec03e6155ba51604ea2721545eae34ffbbadd42c4342bffff931a9d0046d",
+    "/2024233123/skills/jobs/saber_v10_protocol_cases.py": "2c849d88857a9803da18c0455848bfafce93379a33282bc1ab9e98e12f76cbf8",
+    "/2024233123/skills/jobs/saber_v10_model_specs.py": "d361de1e1a3ee6bd8677c3bb2778c80ed87590a14810e0ca374890e9bdaea92a",
+    "/2024233123/skills/jobs/saber_v10_stream_probe.py": "e3d1df4c2abd5a06df68c1a5da93cb4e36b0bb6aede3467374f97f225dc9e4f1"
+  },
+  "service_spec": {
+    "key": "mistral",
+    "label": "Mistral-Small-4-119B-2603",
+    "old_config": "/2024233123/skills/jobs/saber_mistral_small4_119b_treatment_716.json",
+    "old_slug": "codex_mistral_small4_119b_treatment_716",
+    "gpus": [
+      0,
+      1
+    ],
+    "workers": 8,
+    "endpoints": [
+      {
+        "config_key": 0,
+        "base_url": "http://172.24.29.43:18031/v1",
+        "worker_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "mistral-vllm",
+        "argv": [
+          "/2024233123/skills/envs/deepseekv4-vllm/bin/vllm",
+          "serve",
+          "/2024233123/skills/models/modelscope/mistralai/Mistral-Small-4-119B-2603",
+          "--served-model-name",
+          "mistralai/Mistral-Small-4-119B-2603",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18030",
+          "--trust-remote-code",
+          "--tokenizer-mode",
+          "mistral",
+          "--config-format",
+          "mistral",
+          "--load-format",
+          "mistral",
+          "--tensor-parallel-size",
+          "2",
+          "--dtype",
+          "bfloat16",
+          "--max-model-len",
+          "32768",
+          "--max-num-seqs",
+          "8",
+          "--max-num-batched-tokens",
+          "8192",
+          "--gpu-memory-utilization",
+          "0.90",
+          "--attention-backend",
+          "FLASH_ATTN_MLA",
+          "--enable-auto-tool-choice",
+          "--tool-call-parser",
+          "mistral",
+          "--reasoning-parser",
+          "mistral",
+          "--language-model-only",
+          "--middleware",
+          "saber_vllm_token_count.TokenCountMiddleware"
+        ],
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "CUDA_HOME": "/2024233123/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9",
+          "CUDACXX": "/2024233123/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/bin/nvcc",
+          "PATH": "/2024233123/skills/envs/deepseekv4-vllm/bin:/2024233123/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/bin:/2024233123/skills/bin:/2024233123/skills/bin:/2024233123/skills/envs/skills/bin:/2024233123/skills/bin:/2024233123/skills/bin:/2024233123/skills/envs/skills/bin:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.codex/tmp/arg0/codex-arg014ESNO:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.nvm/versions/node/v24.20.0/bin:/2024233123/skills/bin:/2024233123/skills/bin:/2024233123/skills/envs/skills/bin:/root/.vscode-server/cli/servers/Stable-e4c7e7b1d6d060162f4aa7f8225271b67ce1df75/server/bin/remote-cli:/root/.nvm/versions/node/v24.20.0/bin:/root/.nvm/versions/node/v24.20.0/bin:/2024233123/skills/bin:/2024233123/skills/bin:/2024233123/skills/envs/skills/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "CPATH": "/2024233123/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/include",
+          "LIBRARY_PATH": "/2024233123/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/lib64",
+          "LD_LIBRARY_PATH": "/2024233123/skills/envs/cuda-compat-12-9/usr/local/cuda-12.9/compat:/2024233123/skills/envs/deepseekv4-vllm/lib/python3.10/site-packages/nvidia/nvjitlink/lib:/2024233123/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/lib64",
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "VLLM_NO_USAGE_STATS": "1",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+          "FLASHINFER_WORKSPACE_BASE": "/2024233123/skills/cache/flashinfer-mistral-small4",
+          "VLLM_CACHE_ROOT": "/2024233123/skills/cache/vllm-mistral-small4",
+          "TORCHINDUCTOR_CACHE_DIR": "/2024233123/skills/cache/torchinductor-mistral-small4",
+          "OMP_NUM_THREADS": "8",
+          "PYTHONPATH": "/2024233123/skills/compat/mistral_utf8_v10:/2024233123/skills/bin:/2024233123/skills/compat/mistral_developer_role",
+          "SABER_MISTRAL_DEVELOPER_ROLE_COMPAT": "1",
+          "SABER_MISTRAL_UTF8_COMPAT_V10": "1",
+          "SABER_MISTRAL_TOOL_STRICT_COMPAT_V10": "1"
+        },
+        "health_url": "http://127.0.0.1:18030/health",
+        "ready_timeout": 3000,
+        "prestart_argv": [
+          "/2024233123/skills/envs/deepseekv4-vllm/bin/python",
+          "/2024233123/skills/compat/mistral_utf8_v10/verify_activation.py"
+        ]
+      },
+      {
+        "name": "mistral-budget-proxy",
+        "argv": [
+          "/2024233123/skills/envs/qwen35-vllm/bin/python",
+          "/2024233123/skills/bin/vllm_responses_compat_proxy.py",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18031",
+          "--upstream",
+          "http://127.0.0.1:18030"
+        ],
+        "env": {
+          "SABER_RESPONSES_CONTEXT_GUARD": "1"
+        },
+        "health_url": "http://127.0.0.1:18031/v1/models",
+        "ready_timeout": 60
+      }
+    ],
+    "protocol_version": "saber-v10-responses-budget-v1"
+  },
+  "service": "mistral-budget-proxy",
+  "pid": 2353660,
+  "last_case": "unicode",
+  "extended_cases": [
+    {
+      "name": "multibyte_tool_roundtrip",
+      "passed": true,
+      "first_input_tokens": 130,
+      "second_input_tokens": 175
+    },
+    {
+      "name": "long_context_budget",
+      "passed": true,
+      "input_tokens": 28704,
+      "allocated_output_tokens": 3936,
+      "context_limit": 32768,
+      "response_status": "completed"
+    },
+    {
+      "name": "unicode_sse",
+      "event_count": 17,
+      "sha256": "de90b2dcf7cce82cf3730750c5d24af61f9f65f2202e40e075f1bf040a0c0fc6",
+      "byte_count": 5870,
+      "delta_matches_final": true,
+      "replacement_count": 0,
+      "expected_text_present": true,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 46,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 23,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 69
+      },
+      "passed": true
+    }
+  ],
+  "cleanup_safe": true
+}

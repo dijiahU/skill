@@ -1,0 +1,13 @@
+{
+  "source": "/2024233123/skills/envs/deepseekv4-vllm/lib/python3.10/site-packages/vllm/tokenizers/deepseek_v4.py",
+  "sha256": "f1ebaaa58fc7f453ebb38c07234591abe35780641822f872558c964cf702fcf3",
+  "finding": "Tokenizer defaults thinking=False and enable_thinking=False. The chat request layer can map an explicit reasoning_effort to enable_thinking when not supplied by user kwargs. Current r7 Judge sends neither; explicit enable_thinking=true is the chosen r8 opt-in.",
+  "next_action": "After r7 terminal, verify explicit enable_thinking request routing and run single-variable full-gate comparison with unchanged prompt/schema/gold; budget must include reasoning and final output.",
+  "current_run_changed": false,
+  "supersedes": "judge_deepseek_thinking_default_root_audit.json",
+  "request_route_source": {
+    "path": "/2024233123/skills/envs/deepseekv4-vllm/lib/python3.10/site-packages/vllm/entrypoints/openai/chat_completion/protocol.py",
+    "sha256": "ce7d0f91bbbe883c94e9a9257704365e943d0088d6c9fddd67e2fdecf9effbe7",
+    "line": 527
+  }
+}

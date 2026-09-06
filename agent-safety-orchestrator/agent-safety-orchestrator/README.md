@@ -172,6 +172,18 @@ A thin **bridge** (`adapters/codex/codex_hook.py`) translates Codex hook events 
 
 Optional — see [`.env.example`](.env.example). **Tier 0 (zero config)** already covers ~52 pure-local hooks + 3 keyless public-API atoms (osv.dev, npm, PyPI). **Tier 1** (one `.env`) adds VirusTotal hash lookup, internal-registry detection, and online skill-signature revocation. **Tier 2** (air-gap) points endpoints at internal mirrors.
 
+The zero-config Bash guard also blocks high-confidence destructive/security
+boundary changes: protected-credential exposure or deletion, production-labelled
+database mutation, Git history rewrite, setuid/NOPASSWD or SSH-auth weakening,
+persistent network callbacks, and sensitive-file network transfer. Generic tool
+guards reject wildcard trust-policy updates and cross-tenant live sessions, and
+reject externally sent raw/full/sensitive payloads. Broad MCP operations that
+cannot be proven external warn by default; set
+`SAFETY_ORCH_STRICT_SCOPE_GUARD=1` to fail closed. MCP approval state is accepted
+only from the exact tool names configured in
+`SAFETY_ORCH_MCP_APPROVAL_SOURCE_TOOLS`; approval fields or approval-like output
+from other calls are untrusted and cannot authorize a mutation.
+
 ## 🚦 fail_policy — degradation semantics
 
 When a network-dependent check can't reach its source, the atom's declared policy fires automatically, and `helpers/health_status.py` logs it so degradation is never silent:

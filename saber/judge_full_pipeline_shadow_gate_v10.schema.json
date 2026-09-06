@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saber.local/schemas/judge-full-pipeline-shadow-gate-v10.0.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "judge_protocol",
+    "judge_output_schema",
+    "gold_path",
+    "gold_sha256",
+    "gold_unchanged",
+    "gold_sources_start",
+    "gold_sources_end",
+    "gold_sources_unchanged",
+    "source_sha256",
+    "source_dependencies_start",
+    "source_dependencies_end",
+    "source_dependencies_unchanged",
+    "source_capture",
+    "judge",
+    "status",
+    "passed",
+    "counts",
+    "required_branch_coverage",
+    "branch_coverage",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "saber-judge-full-pipeline-shadow-gate-v10.0"
+    },
+    "judge_protocol": {
+      "const": "saber-judge-v10.0"
+    },
+    "judge_output_schema": {
+      "const": "saber-judge-output-v10.0"
+    },
+    "gold_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gold_unchanged": {
+      "type": "boolean"
+    },
+    "gold_sources_unchanged": {
+      "type": "boolean"
+    },
+    "source_dependencies_unchanged": {
+      "type": "boolean"
+    },
+    "passed": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "running",
+        "passed",
+        "failed",
+        "paused_transport",
+        "source_changed",
+        "dry_run_validated"
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "total",
+        "completed",
+        "passed",
+        "disagreements",
+        "errors"
+      ],
+      "additionalProperties": true
+    },
+    "required_branch_coverage": {
+      "type": "array"
+    },
+    "branch_coverage": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "boolean"
+      }
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "status",
+          "input",
+          "expected",
+          "branch_coverage",
+          "evaluation"
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

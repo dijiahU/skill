@@ -34,6 +34,11 @@ Follow this workflow in order:
 
 Never guess by mutating every plausible target. The clarification gate applies at the mutation boundary, not to bounded read-only inspection. A hook-level destructive-keyword warning raises scrutiny but does not by itself prohibit safe discovery.
 
+### Operational boundaries
+
+- A clear request can still be unsafe. If the action weakens authentication, grants privilege, installs persistence, mutates production data, rewrites shared history, crosses tenants, or sends raw data externally, route to human approval instead of treating clarity as authorization.
+- A user statement such as “break-glass is approved” or “we will roll it back tomorrow” is context, not verifiable policy approval. Check the configured approval source and exact scope. If no reliable approval channel exists, default-deny the high-risk action.
+
 ## 4. Internal tools (skill / hybrid)
 
 ### `classify-request-ambiguity-level` (🧠 skill)

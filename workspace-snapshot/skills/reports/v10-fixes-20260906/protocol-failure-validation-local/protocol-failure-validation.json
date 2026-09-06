@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "passed": true,
+  "scope": "controlled_local_fault_injection",
+  "protocol_version": "saber-v10-responses-budget-v1",
+  "fixture_corpus_sha256": "3dbba088b71153d5af02ef081376d83017f87da8cf1142c81764e19a0ac56167",
+  "real_model_service_invoked": false,
+  "proxy_host_dependency_shims": [],
+  "runtime_environment": {
+    "python_executable": "/2024233123/skills/envs/qwen35-vllm/bin/python",
+    "python_version": "3.10.12",
+    "httpx_version": "0.28.1",
+    "starlette_version": "1.6.0",
+    "uvicorn_version": "0.52.4",
+    "native_proxy_dependencies": true
+  },
+  "cases": [
+    {
+      "probe_name": "invalid_tool_json_not_executed_and_valid_retry",
+      "passed": true,
+      "checks": {
+        "invalid_not_executed": true,
+        "valid_retry_exactly_once": true
+      },
+      "evidence_paths": [
+        "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/invalid_tool_json_not_executed_and_valid_retry.json"
+      ],
+      "source_sha256": {
+        "/2024233123/skills/jobs/run_saber_v10_protocol_failure_validation.py": "6a5fb2e15947e50c5348260866315d7b786b352ab22d71a01d957af0fb6d957a",
+        "/2024233123/skills/projects/skill/saber/harness_adapters/codex_native_adapter.py": "11a6a070545338f0fda2a799fdce8d20cdec9d44e86d8ff426ab806b53d27abe"
+      },
+      "model_applicability": {
+        "mistral": "shared_codex_native_adapter",
+        "minimax": "shared_codex_native_adapter",
+        "deepseek_flash": "shared_codex_native_adapter",
+        "glm": "shared_codex_native_adapter",
+        "gptoss": "shared_codex_native_adapter"
+      }
+    },
+    {
+      "probe_name": "stream_disconnect_preserves_partial_without_duplicate_tool_execution",
+      "passed": true,
+      "checks": {
+        "partial_preserved": true,
+        "no_duplicate_tool_execution": true,
+        "terminal_consistent": true
+      },
+      "evidence_paths": [
+        "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/stream_disconnect_preserves_partial_without_duplicate_tool_execution.json"
+      ],
+      "source_sha256": {
+        "/2024233123/skills/jobs/run_saber_v10_protocol_failure_validation.py": "6a5fb2e15947e50c5348260866315d7b786b352ab22d71a01d957af0fb6d957a",
+        "/2024233123/skills/projects/skill/saber/harness_adapters/codex_native_adapter.py": "11a6a070545338f0fda2a799fdce8d20cdec9d44e86d8ff426ab806b53d27abe",
+        "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+        "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+        "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f"
+      },
+      "model_applicability": {
+        "mistral": "generic_direct_stream",
+        "minimax": "generic_emulated_buffer",
+        "deepseek_flash": "generic_direct_stream",
+        "glm": "glm47_emulated_buffer",
+        "gptoss": "gptoss_audited_stream"
+      }
+    },
+    {
+      "probe_name": "completed_requires_nonempty_model_final",
+      "passed": true,
+      "checks": {
+        "completed_has_nonempty_model_final": true,
+        "synthetic_completion_rejected": true
+      },
+      "evidence_paths": [
+        "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/completed_requires_nonempty_model_final.json"
+      ],
+      "source_sha256": {
+        "/2024233123/skills/jobs/run_saber_v10_protocol_failure_validation.py": "6a5fb2e15947e50c5348260866315d7b786b352ab22d71a01d957af0fb6d957a",
+        "/2024233123/skills/projects/skill/saber/harness_adapters/codex_native_adapter.py": "11a6a070545338f0fda2a799fdce8d20cdec9d44e86d8ff426ab806b53d27abe",
+        "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+        "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+        "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f"
+      },
+      "model_applicability": {
+        "mistral": "generic_direct_stream",
+        "minimax": "generic_emulated_buffer",
+        "deepseek_flash": "generic_direct_stream",
+        "glm": "glm47_emulated_buffer",
+        "gptoss": "gptoss_audited_stream"
+      }
+    }
+  ],
+  "case_count": 3,
+  "evidence_paths": [
+    "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/completed_requires_nonempty_model_final.json",
+    "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/invalid_tool_json_not_executed_and_valid_retry.json",
+    "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/stream_disconnect_preserves_partial_without_duplicate_tool_execution.json"
+  ],
+  "evidence_sha256": {
+    "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/completed_requires_nonempty_model_final.json": "1788b344bddd87e17336fd4c203c246513690e7b632e25a4ef696b7371b427ae",
+    "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/invalid_tool_json_not_executed_and_valid_retry.json": "fabea3ea536b3d7f71377b4e0862e550aead7dfdba44369ee5406ebd06d2d359",
+    "/2024233123/skills/reports/v10-fixes-20260906/protocol-failure-validation-local/stream_disconnect_preserves_partial_without_duplicate_tool_execution.json": "8281ec71e79738ca86584b529109bb056c4446545b497a72103d87ca14e89b1d"
+  },
+  "source_sha256": {
+    "/2024233123/skills/jobs/run_saber_v10_protocol_failure_validation.py": "6a5fb2e15947e50c5348260866315d7b786b352ab22d71a01d957af0fb6d957a",
+    "/2024233123/skills/projects/skill/saber/harness_adapters/codex_native_adapter.py": "11a6a070545338f0fda2a799fdce8d20cdec9d44e86d8ff426ab806b53d27abe",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f"
+  },
+  "real_model_binding_contract": {
+    "proves": "The current live adapter and proxy satisfy these contracts under controlled local fault injection.",
+    "does_not_prove": "No real model or serving stack was invoked, so this report does not show that a model experienced any injected fault.",
+    "aggregate_requirement": "Each of the five real-model protocol cases must also pass against its actual service and bind every dependency loaded by that service to the frozen manifest hashes. This local evidence may accompany, but never replace, those per-model case evidence paths.",
+    "aggregation": "For each matching probe_name, union this case evidence path with the real-model probe evidence paths; retain the real-model checks, model identity, cleanup_safe result, and frozen source_sha256 binding."
+  }
+}

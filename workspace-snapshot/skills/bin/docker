@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# The AIStation host daemon is reached over an internal TCP endpoint. Docker
+# 24.0.9 can panic while initializing that endpoint when Clash proxy variables
+# are present, so isolate only Docker from those proxies.
+unset HTTP_PROXY HTTPS_PROXY ALL_PROXY http_proxy https_proxy all_proxy
+
+docker_bin_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "${docker_bin_dir}/docker-24.0.9" "$@"

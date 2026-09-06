@@ -1,0 +1,957 @@
+对。你现在把第一个大坑基本补上了：
+
+> **为什么要蒸馏？** 因为公开 Safety Skills 数量很多，但底层 capability 高度重复。
+> **为什么是这 95 个？** 用 embedding geometry、kNN consistency、blind clustering、saturation、held-out source 去证明这套原子空间和生态自身结构一致。
+
+但如果我是 reviewer，接下来我不会再追着“95 怎么来的”问，而会依次问下面这些问题。其中前两个我认为尤其重要。
+
+---
+
+# 1. 最大的新问题：拆成 95 个 atom 以后，会不会把原 Skill 的信息拆丢了？
+
+这是我觉得你接下来**最需要防的质疑**。
+
+你现在的核心思想是：
+
+```text
+Skill A ─┐
+Skill B ─┼→ 95 atoms → 重新组合
+Skill C ─┘
+```
+
+但 reviewer 会问：
+
+> 你证明了每个 Skill 都能“映射到”几个 atom，
+> 可这不代表这些 atoms 能完整表达原 Skill。
+
+比如原 Skill 可能是：
+
+```text
+如果准备向外部发送用户数据：
+1. 先判断是否含敏感信息；
+2. 如果含敏感信息，再检查用户是否明确授权；
+3. 如果没有明确授权，要求确认；
+4. 但如果目标是组织内部受信任系统，则使用另一套规则。
+```
+
+你拆成：
+
+```text
+detect-sensitive-data
+verify-user-authorization
+detect-external-transfer
+escalate-to-human
+```
+
+表面上都覆盖了。
+
+但是原来的：
+
+* 顺序；
+* 条件；
+* exception；
+* scope；
+* “什么时候触发”；
+
+可能没了。
+
+也就是说：
+
+$$
+\text{Atom Coverage}
+\neq
+\text{Semantic Fidelity}
+$$
+
+### Reviewer 可能会说
+
+> “Your atoms cover the vocabulary of the original skills, but do they preserve their procedural semantics?”
+
+这个问题非常合理。
+
+---
+
+## 怎么回答？
+
+加一个 **Composition / Reconstruction Fidelity** 实验。
+
+不用改方法。
+
+随机抽比如 100–200 个原始 Safety Skills。
+
+对于每个：
+
+```text
+Original Skill
+      ↓
+mapped atoms
+      ↓
+你现有的 archetype / composition
+```
+
+然后让**看不到原始 mapping 过程的 reviewer/annotator**比较：
+
+> atoms 重新组合后的表示，是否保留了原 Skill 的核心安全要求？
+
+可以评几个维度：
+
+| 内容                  | 是否保留 |
+| ------------------- | ---- |
+| Trigger：什么时候检查      | ✓/✗  |
+| Risk：检查什么风险         | ✓/✗  |
+| Required context    | ✓/✗  |
+| Required action     | ✓/✗  |
+| Exception           | ✓/✗  |
+| Escalation behavior | ✓/✗  |
+
+最后报告：
+
+```text
+Full fidelity      81%
+Minor loss         14%
+Major loss          4%
+Wrong composition   1%
+```
+
+数字只是举例。
+
+你原 plan 已经有一个 Mapping Fidelity，准备做人审 `Full / Partial / Miss / Wrong`。
+
+我建议把它强化成：
+
+> **不是只检查 artifact 有没有对应 atom，而是检查 atom composition 能不能保留 artifact 的安全语义。**
+
+这个区别非常重要。
+
+---
+
+# 2. 第二个很危险的问题：为什么一定要 95 个？19 个 archetype 不就够了吗？
+
+你刚证明：
+
+> 95 个不是随便来的。
+
+Reviewer 下一句话很可能就是：
+
+> Fine. But why do you need this fine-grained atomic representation at all?
+
+因为你自己已经有 **19 个 archetype**。
+
+那为什么不直接：
+
+```text
+10K Skills
+   ↓
+19 safety categories
+```
+
+简单得多。
+
+这是一个非常好的 reviewer question。
+
+---
+
+## 你要证明 atom 的“细粒度”有用
+
+最便宜的方法就是做：
+
+### Archetype vs Atom granularity ablation
+
+比较：
+
+```text
+19 Archetypes
+vs
+95 Atoms
+```
+
+看看谁更能：
+
+1. 精确重构原始 Safety Skill；
+2. 判断不同 enforcement mode；
+3. 组合不同领域的 safety capability。
+
+比如：
+
+```text
+Data Exfiltration
+```
+
+只是一个 archetype。
+
+但里面可能实际包含：
+
+```text
+detect-sensitive-payload
+check-destination-trust
+verify-user-authorization
+redact-secret
+prevent-cross-boundary-transfer
+```
+
+其中：
+
+```text
+secret regex
+→ Hook
+```
+
+而：
+
+```text
+user authorization
+→ Semantic
+```
+
+如果只保留：
+
+```text
+Data Exfiltration
+```
+
+这个大类，
+
+你根本没法决定：
+
+$$
+Hook / Hybrid / Skill
+$$
+
+所以你真正的回答应该是：
+
+> **Archetypes are useful for organization, but atoms are the minimum granularity at which capabilities can be independently reused, composed, and lowered to different enforcement mechanisms.**
+
+这个特别适合你的工作。
+
+---
+
+# 3. Reviewer 会问：这些 atom 真的是“atomic”的吗？
+
+这和前面不一样。
+
+前面问：
+
+> 为什么不是 19 个？
+
+这里问：
+
+> 95 个里面是不是还有重复？
+
+比如：
+
+```text
+detect-sensitive-output
+detect-secret-exfiltration
+redact-sensitive-output
+```
+
+边界在哪里？
+
+会不会其实本质是一个东西？
+
+---
+
+## 怎么回答？
+
+你刚才准备做的实验已经能回答一半：
+
+* embedding；
+* blind clustering；
+* kNN consistency。
+
+再加一个很轻的：
+
+### Atom overlap / confusion analysis
+
+拿 artifact → atom mapping，看哪些 atom 经常一起出现。
+
+例如：
+
+$$
+P(A_i,A_j)
+$$
+
+如果两个 atom：
+
+```text
+A 和 B
+```
+
+95% 情况都同时出现，而且 embedding description 又极其相似，
+
+reviewer 会问：
+
+> 为什么不 merge？
+
+反过来，如果它们虽然经常一起出现，但是：
+
+```text
+一个 → Hook
+一个 → Semantic
+```
+
+或者 trigger / output 不一样，
+
+你就有理由保持分离。
+
+可以专门给一个：
+
+> **Most confusable atom pairs**
+
+放 appendix。
+
+这会让 taxonomy 显得经过认真审计，而不是“95 个名字列出来”。
+
+---
+
+# 4. Reviewer 会问：60 Hook / 21 Hybrid / 14 Skill 是不是也是你们拍脑袋分的？
+
+这是另一个非常直接的问题。
+
+你的当前系统里，这个划分其实非常重要：
+
+$$
+60/21/14
+$$
+
+
+
+如果 95 atoms 的划分很严谨，但下一步：
+
+> “这个我们觉得适合 hook，这个我们觉得适合 LLM。”
+
+那 reviewer 还是会说：
+
+> subjective engineering choice。
+
+---
+
+## 好消息：你原 plan 已经基本解决了
+
+你已经计划：
+
+> 2–3 名 annotator 独立判断 fully deterministic / partially deterministic / necessarily semantic，并计算 agreement。
+
+这个我会保留，而且把问题说得更漂亮一点：
+
+> **Does the nature of a safety capability predict its enforcement substrate?**
+
+然后让 annotator 不知道你当前实际实现方式。
+
+给他们 atom 定义，让他们独立判断：
+
+```text
+Deterministic
+Hybrid
+Semantic
+```
+
+最后比较：
+
+$$
+\text{Human Consensus}
+vs
+\text{Our Placement}
+$$
+
+如果 agreement 高，
+
+就能回答：
+
+> 不是为了工程方便随便拆的，而是 capability 本身存在不同的 enforceability characteristics。
+
+---
+
+# 5. Reviewer 会质疑：你的 mapping 是 LLM 做的，那不是 LLM 自己证明自己？
+
+这个风险也很现实。
+
+现在 1390 artifacts 的 atom mapping 是 LLM audit。
+
+如果你之后 coverage 又继续用同一个 LLM 判断：
+
+> “这个 artifact 被 95 atoms 覆盖了吗？”
+
+容易形成：
+
+```text
+LLM 构建
+  ↓
+LLM mapping
+  ↓
+LLM judge
+  ↓
+95 atoms 很好
+```
+
+reviewer：
+
+> Of course.
+
+---
+
+## 怎么防？
+
+不需要全部人工。
+
+做一个小规模 **independent validation subset**。
+
+例如：
+
+```text
+200 artifacts
+```
+
+让：
+
+* Human annotator；
+* Model A；
+* Model B；
+
+分别做 atom mapping。
+
+然后测：
+
+```text
+Human ↔ Model A
+Human ↔ Model B
+Model A ↔ Model B
+```
+
+至少证明：
+
+> mapping 不是某一个 judge model 的 artifact。
+
+你原 plan 里本来已经有人审 mapping fidelity，所以只需要稍微强化 independent judge 设计。
+
+---
+
+# 6. Reviewer 会问：MCP server 跟 Safety Skill 真的是一种东西吗？
+
+这个我觉得也要特别小心。
+
+你的 10,223 candidates 里面：
+
+* 4798 SKILL 类；
+* 5425 MCP server metadata。
+
+但 MCP server：
+
+> 可能只是提供某种安全工具。
+
+例如：
+
+```text
+secret scanner MCP
+```
+
+而 Skill：
+
+> 是一套 Agent 应该怎么 reasoning / acting 的 procedural instruction。
+
+它们不是完全相同的数据类型。
+
+reviewer 可能会问：
+
+> Why are executable services and textual safety skills treated as interchangeable artifacts?
+
+---
+
+## 怎么回答？
+
+不要硬说完全一样。
+
+你的 framing 应该是：
+
+> 我们收集的不是“Safety Skill 文件”，而是 **public safety capability artifacts**。
+
+包括：
+
+```text
+instructional artifact
+→ Skill
+
+tool-backed capability
+→ MCP
+
+reference knowledge
+→ taxonomy evidence
+```
+
+然后统一的是：
+
+> **它们表达/实现了什么 safety capability**
+
+而不是文件格式。
+
+另外我强烈建议所有生态分析都报告一次：
+
+```text
+All sources
+vs
+Skill-only
+vs
+MCP-only
+```
+
+如果：
+
+$$
+95\text{-atom coverage}
+$$
+
+在 Skill-only 和 MCP-only 都不错，
+
+这反而会成为优势：
+
+> canonical capability space spans heterogeneous implementation forms.
+
+---
+
+# 7. Reviewer 会问：你只看 MCP metadata，会不会信息太浅？
+
+这个是上一个问题进一步的版本。
+
+你 README 明确说 MCP 主要抓 registry 的：
+
+```text
+metadata.json
+name / description / repo URL / license...
+```
+
+
+
+那么 reviewer 可能说：
+
+> Description says “security”, but does the server actually provide the claimed capability?
+
+---
+
+## 怎么答？
+
+最简单：
+
+从 MCP 中抽一个子样本，例如：
+
+```text
+100 MCP servers
+```
+
+真正去看：
+
+* README；
+* tool schema；
+* repo；
+* implemented function。
+
+然后检查：
+
+$$
+\text{metadata-inferred capability}
+$$
+
+和：
+
+$$
+\text{implementation-supported capability}
+$$
+
+一致率。
+
+这叫：
+
+> **MCP metadata fidelity audit**
+
+不用全跑。
+
+做个 sanity check 就够。
+
+---
+
+# 8. Reviewer 会问：为什么是按 phase 路由？phase 本身够吗？
+
+你现在：
+
+```text
+input
+planning
+tool
+output
+cross-cutting
+```
+
+五个 phase。
+
+这个非常直观。
+
+但 reviewer 可以问：
+
+> Data exfiltration 既可能发生在 tool invocation，也可能发生在 output。
+> Prompt injection 可能从 input 进入，但后面 planning 才产生影响。
+
+所以 phase 并不完全等于 risk。
+
+---
+
+## 你不一定要改 Router
+
+因为你已经提交方法。
+
+那就通过实验回答：
+
+### Router Recall
+
+对于每一个真正应该触发的 safety capability：
+
+> Router 有没有把它加载出来？
+
+你原计划本来就有：
+
+* Routing Recall；
+* Critical Miss；
+* Docs Loaded；
+* long-context / goal-pressure / injection robustness。
+
+这正好。
+
+我只会再加：
+
+> **按 atom / archetype breakdown routing recall**
+
+看看是不是某些跨 phase capability 特别容易漏。
+
+这能告诉 reviewer：
+
+> 我们知道 phase abstraction 不完美，但实证上覆盖情况如何。
+
+---
+
+# 9. Reviewer 会问：Main Agent 自己读 Safety Skill，真的靠谱吗？
+
+这就是我们之前讨论 monitor agent 时的问题。
+
+Reviewer 会说：
+
+> 如果 Main Agent 本身因为 utility pressure 想完成任务，它为什么不会忽略 safety skill？
+
+这个你不能回答：
+
+> 不会。
+
+因为你证明不了。
+
+---
+
+## 正确回答是承认边界
+
+你现在的系统其实天然有两层：
+
+```text
+Hook
+→ hard enforcement
+
+Semantic Skill
+→ soft semantic elicitation
+```
+
+你原 plan 里已经写得非常好：
+
+> semantic router 可能被干扰，但关键 hard invariant 已下沉到 hooks，因此 “agent 可以忽略建议，但不能忽略 enforcement”。
+
+论文一定保留这句话的精神。
+
+然后 External Guard baseline 回答：
+
+> 如果要更强 independent oversight，代价是多少？
+
+你的原 plan 也已经计划让 External Guard 和 Ours 使用**相同 safety knowledge**，只改变 orchestration/enforcement substrate。
+
+这就非常公平。
+
+你最后 claim：
+
+> 我们不是替代 independent guard，而是在很多 semantic cases 上提供更低 overhead 的 operating point。
+
+而不是：
+
+> monitor agent 没必要。
+
+---
+
+# 10. Reviewer 会问：所谓“更安全”是不是因为 Agent 什么都不敢做了？
+
+这是所有 safety work 必问。
+
+例如：
+
+```text
+Native:
+完成率 80%
+unsafe 20%
+
+Ours:
+完成率 20%
+unsafe 1%
+```
+
+显然不能叫成功。
+
+---
+
+## 这个你 plan 其实已经考虑得很好
+
+OpenAgentSafety 里要同时报告：
+
+* task utility；
+* false positive；
+* benign/ambiguous；
+* malicious；
+* conditional violation rate。
+
+而且你已经明确写：
+
+> 避免 incapability = safety，小模型低 harm 可能只是根本没做到 risky state。
+
+我会再特别突出两个指标：
+
+### Benign Task Success
+
+$$
+U_{\text{benign}}
+$$
+
+### Unnecessary Intervention Rate
+
+$$
+P(\text{block/warn}\mid\text{benign})
+$$
+
+这两个是你的 safety claim 必须绑定报告的。
+
+---
+
+# 11. Reviewer 会问：SABER/OAS 会不会反过来影响了你们 taxonomy？
+
+这是一个数据泄漏 / benchmark tailoring 问题。
+
+如果：
+
+```text
+先看 SABER 有哪些风险
+↓
+设计 atoms
+↓
+再 SABER 测
+```
+
+结果当然会很好。
+
+---
+
+## 这点一定要写清楚时间线
+
+你的 95 atoms：
+
+```text
+community artifacts + references
+↓
+freeze
+```
+
+之后才：
+
+```text
+map SABER/OAS risk taxonomy
+↓
+evaluate
+```
+
+你的实验 plan 已经准备做 external taxonomy coverage，而且强调 benchmark revision lock。
+
+最好明确写：
+
+> **Neither SABER nor OpenAgentSafety is used to construct or refine the atom vocabulary.**
+
+如果事实确实如此。
+
+这是很重要的 credibility point。
+
+---
+
+# 12. Reviewer 会问：跨 Claude / Codex / DSH 真的是 portability，还是三份手写插件？
+
+这也是 systems paper 常见攻击。
+
+如果你说：
+
+> portable core
+
+但最后：
+
+```text
+Claude adapter 2000 LOC
+Codex adapter 1800 LOC
+DSH adapter 2500 LOC
+```
+
+reviewer：
+
+> 那哪 portable？
+
+---
+
+## 你原计划已经有正确指标
+
+* Adapter LOC；
+* Core reuse；
+* atom coverage；
+* behavior consistency。
+
+这个非常好。
+
+核心要证明：
+
+```text
+95 atoms
+14 docs
+hook semantics
+router logic
+```
+
+绝大部分保持不变，
+
+只有：
+
+```text
+hook lifecycle API
+tool schema
+install path
+```
+
+需要 adapter。
+
+所以 portability 不应该只展示：
+
+> 三个都能跑。
+
+而应该量：
+
+$$
+\text{Core Reuse Ratio}
+$$
+
+这会更有说服力。
+
+---
+
+# 如果我是 reviewer，我会按危险程度这样排
+
+| 优先级    | Reviewer 质疑                      | 你该补什么                                                            |
+| ------ | -------------------------------- | ---------------------------------------------------------------- |
+| **P0** | 95 atoms 拆完会不会丢原 Skill 的程序语义？    | **Composition Fidelity**                                         |
+| **P0** | 为什么非要 95，19 archetype 不够吗？       | **Granularity ablation: 19 vs 95**                               |
+| **P0** | 95 真的不是人为 taxonomy 吗？            | 你已决定的 embedding + kNN + blind clustering + saturation + held-out |
+| **P1** | 60/21/14 为什么这样分？                 | human placement agreement + conformance                          |
+| **P1** | LLM mapping 会不会自证循环？             | human / cross-model validation subset                            |
+| **P1** | 安全是不是来自过度拒绝？                     | benign utility + unnecessary intervention                        |
+| **P1** | Router 会不会漏？                     | routing recall + critical miss                                   |
+| **P2** | MCP metadata 能代表真实 capability 吗？ | MCP fidelity audit                                               |
+| **P2** | Main Agent self-policing 靠谱吗？    | honest scope + External Guard baseline                           |
+| **P2** | portability 是不是复制代码？             | adapter LOC + core reuse                                         |
+| **P2** | benchmark tailoring？             | freeze-before-eval + held-out taxonomy mapping                   |
+
+---
+
+# 如果时间很有限，我只会再补两个真正新的实验
+
+因为你现有 plan 已经覆盖很多东西。
+
+### 第一：Composition Fidelity
+
+这个我觉得现在甚至比 embedding 图更值得加。
+
+因为它证明：
+
+$$
+\boxed{
+\text{Distillation compresses redundancy without destroying safety semantics}
+}
+$$
+
+这是你整个“蒸馏 Safety Skills”最核心的问题。
+
+---
+
+### 第二：19 Archetypes vs 95 Atoms
+
+这个证明：
+
+$$
+\boxed{
+\text{为什么需要 atomic capability representation}
+}
+$$
+
+而不是普通 taxonomy。
+
+---
+
+这样整个论文的逻辑就非常完整了：
+
+$$
+\boxed{
+\text{大量 artifacts 是重复的}
+}
+$$
+
+↓ 由 embedding / clustering / saturation 证明
+
+$$
+\boxed{
+\text{底层存在稳定的 capability space}
+}
+$$
+
+↓ held-out / blind clustering
+
+$$
+\boxed{
+\text{95 atoms 提供了有意义的细粒度}
+}
+$$
+
+↓ 19 vs 95
+
+$$
+\boxed{
+\text{原子化没有把原 Skill 的安全语义拆丢}
+}
+$$
+
+↓ composition fidelity
+
+$$
+\boxed{
+\text{不同 atom 具有不同 enforceability}
+}
+$$
+
+↓ 60/21/14 placement validation
+
+$$
+\boxed{
+\text{这些 atoms 可以被重新组合成一个 portable Safety Plane}
+}
+$$
+
+↓ SABER/OAS + Router + adapters
+
+我觉得到了这里，你这篇就不再只是：
+
+> “爬了很多 Skill，然后 embedding 去重了一下。”
+
+而会变成一个很清晰的 empirical finding：
+
+> **Agent-safety artifacts are highly redundant; their functionality can be represented by a compact, compositional atomic capability space, without materially losing the semantics of the source artifacts, and these capabilities can be lowered into heterogeneous runtime enforcement mechanisms.**
+
+这个就是我作为 reviewer 最希望看到你证明的完整链条。

@@ -1,0 +1,230 @@
+{
+  "scope_source": "../v9-root-cause-20260906/NEXT_RUN_PLAN.md",
+  "goal_complete": false,
+  "requirements": [
+    {
+      "id": "fixture_contracts",
+      "requirement": "新版716题初始化、文件/DB/应用契约和随机seed验证",
+      "state": "offline_only",
+      "evidence": [
+        "technical_progress.md",
+        "fixture_static_preflight_r2.json"
+      ],
+      "remaining": "754次动态检查尚未启动；生命周期授权待答",
+      "achieved": false
+    },
+    {
+      "id": "response_completion",
+      "requirement": "failed/incomplete不能伪装completed，空final分离技术失败",
+      "state": "runtime_and_controlled_faults",
+      "evidence": [
+        "root_progress.md",
+        "protocol-glm-r2/status.json",
+        "protocol-gptoss-r2/status.json",
+        "protocol_probe_report.json",
+        "protocol-failure-validation-local/protocol-failure-validation.json"
+      ],
+      "remaining": "五模型真实协议与受控故障验证已通过；受控故障不冒称真实模型异常。最终冻结绑定和正式pilot待验。",
+      "achieved": false
+    },
+    {
+      "id": "context_budget",
+      "requirement": "同Responses渲染精确计数并满足输入+输出+余量<=窗口",
+      "state": "five_models_runtime",
+      "evidence": [
+        "protocol-glm-r2/status.json",
+        "protocol-gptoss-r2/status.json",
+        "protocol-minimax-r1/status.json",
+        "protocol-mistral-r2/status.json",
+        "protocol-deepseek-flash-r1/status.json",
+        "protocol-glm-r3/status.json",
+        "protocol-gptoss-r3/status.json",
+        "protocol_probe_report.json"
+      ],
+      "remaining": "五模型实机边界与聚合证据已通过；最终冻结绑定待验。",
+      "achieved": false
+    },
+    {
+      "id": "tool_json",
+      "requirement": "非法JSON不执行，原始错误/阶段保留且有效重试",
+      "state": "runtime_and_controlled_faults",
+      "evidence": [
+        "root_progress.md",
+        "protocol_probe_report.json",
+        "protocol-failure-validation-local/protocol-failure-validation.json"
+      ],
+      "remaining": "真实工具调用协议与非法JSON受控故障验证通过；最终冻结和正式pilot待验。",
+      "achieved": false
+    },
+    {
+      "id": "judge_provenance",
+      "requirement": "执行/被拦/不可信输出/model/harness/模拟来源分列",
+      "state": "r9_full_pipeline_running",
+      "evidence": [
+        "judge_progress.md",
+        "judge_offline_replay_validation.json",
+        "judge-shadow-deepseek-r1/shadow-report.json",
+        "judge-shadow-deepseek-r2/shadow-report.json",
+        "judge-shadow-deepseek-r3/shadow-report.json",
+        "judge-shadow-deepseek-r4/shadow-report.json",
+        "judge-shadow-deepseek-r5/shadow-report.json",
+        "judge-shadow-deepseek-r5/status.json",
+        "historical_c_info_026_legacy_gold_adjudication.json",
+        "judge-shadow-deepseek-r6/shadow-report.json",
+        "judge-shadow-deepseek-r6/status.json",
+        "judge_r7_decision_structure.md",
+        "judge-shadow-deepseek-r7/shadow-report.json",
+        "judge-shadow-deepseek-r7/status.json",
+        "judge_deepseek_thinking_default_root_audit.json",
+        "judge_r8_limited_diff_audit.json",
+        "judge_full_pipeline_shadow_dry_run_r8.json",
+        "judge_deepseek_thinking_default_root_audit_r2.json",
+        "judge-shadow-deepseek-r8/shadow-report.json",
+        "judge-shadow-deepseek-r8/status.json",
+        "judge_validator_boundary_r9_review.json",
+        "judge_r9_timeout_arithmetic_root_review.json",
+        "judge_r9_timeout_invalid_config_root_review.json",
+        "judge_r9_prompt_gold_root_review.json",
+        "judge_full_pipeline_shadow_dry_run_r9.json"
+      ],
+      "remaining": "r9实机exec76752已启动，53tests+24dry通过；动态timeout/多错误反馈/失败记录修复，完整24例实机结果待验。",
+      "achieved": false
+    },
+    {
+      "id": "judge_transport",
+      "requirement": "直连、全局暂停、分层重试、finish_reason/usage与预算记录",
+      "state": "r9_full_pipeline_running",
+      "evidence": [
+        "judge_progress.md",
+        "judge-shadow-deepseek-r1/shadow-report.json",
+        "judge-shadow-deepseek-r2/shadow-report.json",
+        "judge-shadow-deepseek-r3/shadow-report.json",
+        "judge-shadow-deepseek-r5/shadow-report.json",
+        "judge-shadow-deepseek-r5/status.json",
+        "historical_c_info_026_legacy_gold_adjudication.json",
+        "judge-shadow-deepseek-r6/shadow-report.json",
+        "judge-shadow-deepseek-r6/status.json",
+        "judge_r7_decision_structure.md",
+        "judge-shadow-deepseek-r7/shadow-report.json",
+        "judge-shadow-deepseek-r7/status.json",
+        "judge_deepseek_thinking_default_root_audit.json",
+        "judge_r8_limited_diff_audit.json",
+        "judge_full_pipeline_shadow_dry_run_r8.json",
+        "judge_deepseek_thinking_default_root_audit_r2.json",
+        "judge-shadow-deepseek-r8/shadow-report.json",
+        "judge-shadow-deepseek-r8/status.json",
+        "judge_validator_boundary_r9_review.json",
+        "judge_r9_timeout_arithmetic_root_review.json",
+        "judge_r9_timeout_invalid_config_root_review.json",
+        "judge_r9_prompt_gold_root_review.json",
+        "judge_full_pipeline_shadow_dry_run_r9.json"
+      ],
+      "remaining": "r9实机exec76752已启动，53tests+24dry通过；动态timeout/多错误反馈/失败记录修复，完整24例实机结果待验。",
+      "achieved": false
+    },
+    {
+      "id": "snapshot",
+      "requirement": "大二进制/内部链接支持且陈旧快照不可使用，具体诊断持久化",
+      "state": "offline_only",
+      "evidence": [
+        "technical_progress.md",
+        "root_progress.md"
+      ],
+      "remaining": "真实沙箱动态检查待执行",
+      "achieved": false
+    },
+    {
+      "id": "risk_recovery",
+      "requirement": "限定低风险恢复且跨危险变体总预算保留",
+      "state": "offline_end_to_end",
+      "evidence": [
+        "hooks_progress.md",
+        "root_progress.md"
+      ],
+      "remaining": "真实bundle-adapter FakeRuntime已通过，模型pilot语义验证仍待执行",
+      "achieved": false
+    },
+    {
+      "id": "write_effects",
+      "requirement": "Bash与Write/Edit共享写入效果检查及正反例",
+      "state": "offline_only",
+      "evidence": [
+        "hooks_progress.md"
+      ],
+      "remaining": "52题pilot语义验收待执行",
+      "achieved": false
+    },
+    {
+      "id": "secret_dataflow",
+      "requirement": "敏感源/授权/外发/模型可见最小化与跨调用检查",
+      "state": "offline_end_to_end",
+      "evidence": [
+        "hooks_progress.md"
+      ],
+      "remaining": "真实bundle-adapter FakeRuntime已通过，模型pilot语义验证仍待执行",
+      "achieved": false
+    },
+    {
+      "id": "filtered_views",
+      "requirement": "Post删节带hash/隔离位置/风险来源，原控制脚本仍检查",
+      "state": "offline_end_to_end",
+      "evidence": [
+        "hooks_progress.md"
+      ],
+      "remaining": "真实bundle-adapter FakeRuntime已通过，模型pilot语义验证仍待执行",
+      "achieved": false
+    },
+    {
+      "id": "tool_writable_contract",
+      "requirement": "宿主readonly与独立可写任务工具明确，保持宿主隔离",
+      "state": "offline_only",
+      "evidence": [
+        "root_progress.md"
+      ],
+      "remaining": "五模型首调/零event/只读声明与产物对照待pilot",
+      "achieved": false
+    },
+    {
+      "id": "no_progress",
+      "requirement": "重复失败目标且无状态变化有界收束，不提高30步",
+      "state": "offline_only",
+      "evidence": [
+        "root_progress.md"
+      ],
+      "remaining": "真实失败退出码接线后的模型pilot待验",
+      "achieved": false
+    },
+    {
+      "id": "mistral_unicode",
+      "requirement": "定位首个乱码层，修复后增量/批量/生成工具JSON一致",
+      "state": "runtime_passed",
+      "evidence": [
+        "mistral_utf8_regression.json",
+        "protocol-mistral-r1/mistral-vllm-prestart.json",
+        "protocol-mistral-r1/status.json",
+        "protocol-mistral-r2/status.json",
+        "protocol_probe_report.json"
+      ],
+      "remaining": "实机UTF8/strict=None复测通过；最终冻结后的正式pilot待验。",
+      "achieved": false
+    },
+    {
+      "id": "paired_pilot",
+      "requirement": "保留原12题并扩大到故障/正反例，五模型配对同版本",
+      "state": "planned",
+      "evidence": [
+        "../../jobs/saber_v10_expanded_pilot_plan.json"
+      ],
+      "remaining": "52题x5模型x2条件尚未启动",
+      "achieved": false
+    },
+    {
+      "id": "freeze_and_full_rerun",
+      "requirement": "固定代码任务模型采样预算Judge，全部门禁后开始全量重跑",
+      "state": "incomplete",
+      "evidence": [],
+      "remaining": "controller开发中，未冻结/未运行全量；旧raw与scores保持原样",
+      "achieved": false
+    }
+  ]
+}

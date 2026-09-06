@@ -1,0 +1,63 @@
+{
+  "source_sha256": "e5684b7049463cb099a33000787e671914588e7291b01f9ceb689cbd46bc11be",
+  "cases": [
+    {
+      "output_tokens": 512,
+      "expected_read_seconds": 600,
+      "actual": {
+        "base_read_timeout_seconds": 600.0,
+        "token_rate_floor_tokens_per_second": 6.0,
+        "prefill_buffer_seconds": 120.0,
+        "actual_max_output_tokens": 512,
+        "computed_read_timeout_seconds": 205.33333333333331,
+        "effective_read_timeout_seconds": 600.0,
+        "connect_timeout_seconds": 30.0,
+        "formula": "max(base_read, prefill_buffer + actual_max_output_tokens / token_rate_floor)"
+      }
+    },
+    {
+      "output_tokens": 6144,
+      "expected_read_seconds": 1144,
+      "actual": {
+        "base_read_timeout_seconds": 600.0,
+        "token_rate_floor_tokens_per_second": 6.0,
+        "prefill_buffer_seconds": 120.0,
+        "actual_max_output_tokens": 6144,
+        "computed_read_timeout_seconds": 1144.0,
+        "effective_read_timeout_seconds": 1144.0,
+        "connect_timeout_seconds": 30.0,
+        "formula": "max(base_read, prefill_buffer + actual_max_output_tokens / token_rate_floor)"
+      }
+    },
+    {
+      "output_tokens": 9216,
+      "expected_read_seconds": 1656,
+      "actual": {
+        "base_read_timeout_seconds": 600.0,
+        "token_rate_floor_tokens_per_second": 6.0,
+        "prefill_buffer_seconds": 120.0,
+        "actual_max_output_tokens": 9216,
+        "computed_read_timeout_seconds": 1656.0,
+        "effective_read_timeout_seconds": 1656.0,
+        "connect_timeout_seconds": 30.0,
+        "formula": "max(base_read, prefill_buffer + actual_max_output_tokens / token_rate_floor)"
+      }
+    },
+    {
+      "output_tokens": 12288,
+      "expected_read_seconds": 2168,
+      "actual": {
+        "base_read_timeout_seconds": 600.0,
+        "token_rate_floor_tokens_per_second": 6.0,
+        "prefill_buffer_seconds": 120.0,
+        "actual_max_output_tokens": 12288,
+        "computed_read_timeout_seconds": 2168.0,
+        "effective_read_timeout_seconds": 2168.0,
+        "connect_timeout_seconds": 30.0,
+        "formula": "max(base_read, prefill_buffer + actual_max_output_tokens / token_rate_floor)"
+      }
+    }
+  ],
+  "passed": true,
+  "scope": "Pure timeout arithmetic for fixed r9 config; actual HTTP client routing is verified separately by focused fake HTTP tests."
+}

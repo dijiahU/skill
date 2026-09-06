@@ -1,0 +1,203 @@
+{
+  "model": "glm",
+  "status": "probe_passed",
+  "gpus": [
+    1
+  ],
+  "cases": [
+    {
+      "name": "ascii",
+      "counted": 12,
+      "usage": {
+        "input_tokens": 12,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 132,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 144
+      },
+      "response_status": "completed",
+      "count_matches": true
+    },
+    {
+      "name": "unicode",
+      "counted": 21,
+      "usage": {
+        "input_tokens": 21,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 140,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 161
+      },
+      "response_status": "completed",
+      "count_matches": true
+    }
+  ],
+  "source_sha256": {
+    "/2024233123/skills/bin/saber_vllm_token_count.py": "256297f3878b60fcc11ec7e3eb67d4b7181f2756b6321b057951df8475ecabd1",
+    "/2024233123/skills/bin/saber_responses_budget.py": "19c90657717965a9238633015cb6ae2e9d066e49036f8be7fbb7123fe8c34f6e",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f",
+    "/2024233123/skills/compat/mistral_utf8_v10/sitecustomize.py": "7fd25f420b9a03ee04f50b26a3e3cee436c40efedc8ea4c4dc24e632076558f9",
+    "/2024233123/skills/compat/mistral_utf8_v10/mistral_utf8_compat.py": "c9c423a705b989fe28cd5782afd6be2d45061a34c7022d435a3df696e667d069",
+    "/2024233123/skills/compat/mistral_utf8_v10/mistral_tool_strict_compat.py": "0fc7d632567d147512a0e98c539bf1d1943d76958ed3aaabaf52c4c76f5f684d",
+    "/2024233123/skills/compat/mistral_utf8_v10/verify_activation.py": "ed1c538e86c0c902bb20c1fb97c8c360ccad8ece8e248e2c9678658931ba1214",
+    "/2024233123/skills/compat/mistral_developer_role/sitecustomize.py": "c56753a93690eb78d5bf172e497617055ed85a0ef2795c38cbf01c743bd33b58",
+    "/2024233123/skills/jobs/run_saber_v10_protocol_probe.py": "faedec03e6155ba51604ea2721545eae34ffbbadd42c4342bffff931a9d0046d",
+    "/2024233123/skills/jobs/saber_v10_protocol_cases.py": "2c849d88857a9803da18c0455848bfafce93379a33282bc1ab9e98e12f76cbf8",
+    "/2024233123/skills/jobs/saber_v10_model_specs.py": "d361de1e1a3ee6bd8677c3bb2778c80ed87590a14810e0ca374890e9bdaea92a",
+    "/2024233123/skills/jobs/saber_v10_stream_probe.py": "e3d1df4c2abd5a06df68c1a5da93cb4e36b0bb6aede3467374f97f225dc9e4f1"
+  },
+  "service_spec": {
+    "key": "glm",
+    "label": "GLM-4.7-Flash",
+    "old_config": "/2024233123/skills/jobs/saber_glm47_treatment_716.json",
+    "old_slug": "codex_glm47_flash_treatment_716",
+    "gpus": [
+      1
+    ],
+    "workers": 8,
+    "endpoints": [
+      {
+        "config_key": 0,
+        "base_url": "http://172.24.29.43:18003/v1",
+        "worker_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "glm-vllm",
+        "argv": [
+          "/2024233123/skills/envs/qwen35-vllm/bin/vllm",
+          "serve",
+          "/2024233123/skills/models/modelscope/ZhipuAI/GLM-4.7-Flash",
+          "--served-model-name",
+          "ZhipuAI/GLM-4.7-Flash",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18002",
+          "--tensor-parallel-size",
+          "1",
+          "--dtype",
+          "bfloat16",
+          "--max-model-len",
+          "32768",
+          "--max-num-seqs",
+          "8",
+          "--gpu-memory-utilization",
+          "0.80",
+          "--enable-auto-tool-choice",
+          "--tool-call-parser",
+          "glm47",
+          "--reasoning-parser",
+          "glm45",
+          "--language-model-only",
+          "--middleware",
+          "saber_vllm_token_count.TokenCountMiddleware"
+        ],
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "PYTHONPATH": "/2024233123/skills/bin:/2024233123/skills/envs/glm47-transformers-main",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+          "VLLM_USE_EXPERIMENTAL_PARSER_CONTEXT": "1"
+        },
+        "health_url": "http://127.0.0.1:18002/health",
+        "ready_timeout": 900
+      },
+      {
+        "name": "glm-proxy",
+        "argv": [
+          "/2024233123/skills/envs/qwen35-vllm/bin/python",
+          "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18003",
+          "--upstream",
+          "http://127.0.0.1:18002"
+        ],
+        "env": {
+          "SABER_RESPONSES_CONTEXT_GUARD": "1"
+        },
+        "health_url": "http://127.0.0.1:18003/v1/models",
+        "ready_timeout": 60
+      }
+    ],
+    "protocol_version": "saber-v10-responses-budget-v1"
+  },
+  "service": "glm-proxy",
+  "pid": 2362451,
+  "last_case": "unicode",
+  "extended_cases": [
+    {
+      "name": "multibyte_tool_roundtrip",
+      "passed": true,
+      "first_input_tokens": 216,
+      "second_input_tokens": 303
+    },
+    {
+      "name": "long_context_budget",
+      "passed": true,
+      "input_tokens": 28704,
+      "allocated_output_tokens": 3936,
+      "context_limit": 32768,
+      "response_status": "completed"
+    },
+    {
+      "name": "unicode_sse",
+      "event_count": 11,
+      "sha256": "421aab1ae65f651e23a432a1ed5e49d2b81ecbbba58bea209fd3c84a30d5ee31",
+      "byte_count": 7235,
+      "delta_matches_final": true,
+      "replacement_count": 0,
+      "expected_text_present": true,
+      "response_status": "completed",
+      "usage": {
+        "input_tokens": 24,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 209,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 233
+      },
+      "passed": true
+    }
+  ],
+  "cleanup_safe": true
+}

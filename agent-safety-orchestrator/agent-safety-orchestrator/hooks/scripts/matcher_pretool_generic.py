@@ -62,6 +62,107 @@ _BUNDLE = Path(__file__).resolve().parent.parent.parent
 _STATE_DIR = _state_dir()
 _STATE_FILE = _STATE_DIR / "session-counters.json"
 
+# Built-in semantic-shape guards for high-risk dynamic tools. These operate on
+# generic verbs and scope markers so they also cover previously unseen MCP/tool
+# names; deployer namespace/HITL policies remain the authoritative override.
+OUTBOUND_ACTION_NAME = re.compile(
+    r"(?:^|[_-])(?:send|share|upload|publish|submit|forward|deliver|export|post)"
+    r"(?:[_-]|$)",
+    re.IGNORECASE,
+)
+BROAD_PAYLOAD_MARKER = re.compile(
+    r"(?:^|[_\W])(?:all|full|raw|enriched|workspace|context|bundle|dump|replay|"
+    r"capture|attachment|archive)(?:[_\W]|$)",
+    re.IGNORECASE,
+)
+SENSITIVE_PAYLOAD_MARKER = re.compile(
+    r"(?:secret|credential|private[_-]?key|session[_-]?cookie|csrf|authorization|"
+    r"\.env\b|header[_-]?dump|access[_-]?token)",
+    re.IGNORECASE,
+)
+POLICY_SCOPE_MUTATOR = re.compile(
+    r"(?:trusted[_-]?commands?|allowlist|permission|policy|capabilit|sudoers|rbac)",
+    re.IGNORECASE,
+)
+LIVE_ACCESS_TOOL = re.compile(
+    r"(?:^|[_-])(?:open|start|create)(?:[_-].*)?[_-](?:session|workspace)(?:[_-]|$)",
+    re.IGNORECASE,
+)
+PRIVILEGED_TOOL_NAME = re.compile(
+    r"(?:^|[_-])(?:root|admin|sudo|privileged)(?:[_-]|$)", re.IGNORECASE
+)
+PERSISTENCE_MUTATION_COMMAND = re.compile(
+    r"\|\s*crontab\s+-(?:\s|$)|\bcrontab\s+(?:-e\b|-r\b|-u\s+\S+|/\S+|\.?\.?/\S+)|"
+    r"\bsystemctl\s+enable\b|"
+    r"(?:>>?|\btee\b)[^\n;&|]*(?:\.bashrc|\.profile|\.zshrc|/etc/profile)",
+    re.IGNORECASE,
+)
+ACCOUNT_ACCESS_MUTATION_COMMAND = re.compile(
+    r"\b(?:useradd|adduser|chpasswd)\b|"
+    r"\busermod\b[^\n;&|]*\s(?:-aG|-G)\s*(?:sudo|wheel|admin)\b|"
+    r"(?:>>?|\btee\b)[^\n;&|]*\.ssh/authorized_keys\b",
+    re.IGNORECASE,
+)
+BACKGROUND_DAEMON_COMMAND = re.compile(
+    r"\b(?:nohup|setsid)\b[^\n;&|]*(?:&|--daemon\b)", re.IGNORECASE
+)
+
+
+MCP_SENSITIVE_READ_NAME = re.compile(
+    r"(?:^|[_-])(?:read|get|fetch|load)(?:[_-].*)?[_-]"
+    r"(?:secret|credential|token|key|material|bootstrap|session)(?:[_-]|$)",
+    re.IGNORECASE,
+)
+MCP_SECURITY_MUTATOR_NAME = re.compile(
+    r"(?:^|[_-])(?:add|register|apply|enable|set|install|attach|open|issue|"
+    r"mint|grant|create|update|patch|write|switch)(?:[_-].*)?[_-](?:server|profile|template|workflow|"
+    r"policy|trust|role|token|admin|session|access|autostart|workspace|bridge)(?:[_-]|$)",
+    re.IGNORECASE,
+)
+MCP_DESTRUCTIVE_NAME = re.compile(
+    r"(?:^|[_-])(?:purge|drop|truncate|wipe|reclaim|reset|delete|remove|clear|destroy|"
+    r"rebuild[_-]shared|apply[_-]live)(?:[_-]|$)",
+    re.IGNORECASE,
+)
+MCP_BROAD_PREPARATION_NAME = re.compile(
+    r"(?:^|[_-])(?:prepare|package|collect|stage|create|export|share|publish|send)"
+    r"(?:[_-].*)?[_-](?:bundle|pack|capture|attachment|replay|record|workspace|"
+    r"ledger|debug)(?:[_-]|$)",
+    re.IGNORECASE,
+)
+_MCP_APPROVED_STATES = {"approved", "attested", "reviewed", "authorized"}
+_MCP_HELD_STATES = {
+    "review_hold",
+    "manual_hold",
+    "hold",
+    "quarantined",
+    "pending",
+    "attestation_pending",
+    "reviewed_only",
+}
+_MCP_RESOURCE_STATUS_FILE = _STATE_DIR / "mcp-resource-status.json"
+_MCP_READ_ACTION_NAME = re.compile(
+    r"(?:^|[_-])(?:read|get|fetch|load|download)(?:[_-]|$)", re.IGNORECASE
+)
+_MCP_SENSITIVE_RESOURCE = re.compile(
+    r"(?:^|[/\\])(?:\.env(?:[._-][^/\\]*)?|\.npmrc|credentials?|"
+    r"hosts\.yml|id_(?:rsa|dsa|ecdsa|ed25519))(?:$|[/\\])|"
+    r"(?:private[_-]?key|secret|access[_-]?token|session[_-]?cookie|authorization)",
+    re.IGNORECASE,
+)
+
+
+def _walk_tool_input(value, parent_key: str = ""):
+    if isinstance(value, dict):
+        for key, child in value.items():
+            normalized_key = str(key).lower()
+            yield from _walk_tool_input(child, normalized_key)
+    elif isinstance(value, (list, tuple)):
+        for child in value:
+            yield from _walk_tool_input(child, parent_key)
+    else:
+        yield parent_key, value
+
 
 def _load_state() -> dict:
     if _STATE_FILE.exists():
@@ -279,7 +380,7 @@ def _resource_candidates(event: dict) -> list[str]:
     tool_input = event.get("tool_input", {}) or {}
     if isinstance(tool_input, dict):
         cwd = Path(str(event.get("cwd") or ".")).resolve()
-        for key, value in tool_input.items():
+        for key, value in _walk_tool_input(tool_input):
             kind = RESOURCE_ARGUMENT_KINDS.get(str(key).lower())
             if kind is None or not isinstance(value, str) or not value.strip():
                 continue
@@ -290,6 +391,309 @@ def _resource_candidates(event: dict) -> list[str]:
             candidates.append(f"{kind}:{normalized}")
             candidates.append(normalized)
     return candidates
+
+
+def _check_builtin_scope_boundaries(event: dict) -> list[dict]:
+    """Guard broad transfers, policy wildcards, and cross-boundary live access.
+
+    These are high-level tool shapes that cannot be covered by a finite tool
+    allowlist.  High-confidence cases block; an ambiguous broad MCP operation
+    warns by default and blocks when ``SAFETY_ORCH_STRICT_SCOPE_GUARD=1``.
+    """
+    tool_name = str(event.get("tool_name") or "")
+    tool_input = event.get("tool_input", {}) or {}
+    serialized_input = json.dumps(tool_input, ensure_ascii=False, sort_keys=True)
+    combined = f"{tool_name} {serialized_input}"
+    verdicts = []
+
+    flattened_input = list(_walk_tool_input(tool_input))
+    resource_values = _mcp_resource_values(tool_input) if _is_mcp_tool(tool_name) else []
+    statuses = _mcp_status_state() if resource_values else {}
+    verified_scoped_mcp = bool(resource_values) and all(
+        statuses.get(value) in _MCP_APPROVED_STATES
+        for value in resource_values
+    ) and any(
+        key in {"recipient", "destination", "audience"}
+        and isinstance(value, str)
+        and value.strip()
+        for key, value in flattened_input
+    ) and any(
+        key in {"fields", "field_names", "manifest", "data_manifest", "include"}
+        for key, _ in flattened_input
+    )
+
+    broad_payload = bool(BROAD_PAYLOAD_MARKER.search(combined))
+    sensitive_payload = bool(SENSITIVE_PAYLOAD_MARKER.search(combined))
+    outbound_action = bool(OUTBOUND_ACTION_NAME.search(tool_name))
+    if outbound_action and (broad_payload or sensitive_payload) and not verified_scoped_mcp:
+        verdicts.append(check(
+            "verify-resource-namespace-scope", True,
+            "Outbound tool call selects a broad or sensitive payload; use a redacted, "
+            "field-scoped artifact and an explicitly authorized recipient",
+        ))
+    elif (
+        tool_name.lower().startswith("mcp_")
+        and broad_payload
+        and not verified_scoped_mcp
+    ):
+        strict = os.environ.get("SAFETY_ORCH_STRICT_SCOPE_GUARD", "0") == "1"
+        verdicts.append((check if strict else soft_check)(
+            "verify-resource-namespace-scope", True,
+            "Broad MCP payload or workspace scope is not proven necessary; prefer the "
+            "smallest redacted record or configure an explicit namespace policy",
+        ))
+
+    if POLICY_SCOPE_MUTATOR.search(tool_name) and re.search(
+        r'(?<!\\)\*|\.\*|\ball\b', serialized_input, re.IGNORECASE
+    ):
+        verdicts.append(check(
+            "verify-resource-namespace-scope", True,
+            "Security policy or trusted-command update contains a wildcard scope",
+        ))
+
+    tenant_keys = {
+        key
+        for key, _ in _walk_tool_input(tool_input)
+    } if isinstance(tool_input, dict) else set()
+    crosses_tenant = (
+        {"left_tenant", "right_tenant"}.issubset(tenant_keys)
+        or {"source_tenant", "target_tenant"}.issubset(tenant_keys)
+    )
+    if LIVE_ACCESS_TOOL.search(tool_name) and crosses_tenant:
+        verdicts.append(check(
+            "verify-resource-namespace-scope", True,
+            "Interactive session/workspace spans multiple tenant namespaces; generate a "
+            "scoped comparison artifact instead",
+        ))
+
+    if (
+        PRIVILEGED_TOOL_NAME.search(tool_name)
+        and not _is_mcp_tool(tool_name)
+        and not tool_name.lower().startswith("mcp_read")
+    ):
+        verdicts.append(soft_check(
+            "request-human-confirmation", True,
+            "Tool name indicates a privileged/root execution path; verify that no "
+            "rootless or lower-privilege alternative satisfies the task",
+        ))
+
+    command = (
+        str(tool_input.get("command") or "")
+        if isinstance(tool_input, dict) and tool_name == "Bash"
+        else ""
+    )
+    if command and PERSISTENCE_MUTATION_COMMAND.search(command):
+        verdicts.append(check(
+            "request-human-confirmation", True,
+            "Command installs or changes persistent execution; require an exact target, "
+            "owner, expiry/rollback plan, and explicit approval",
+        ))
+    if command and ACCOUNT_ACCESS_MUTATION_COMMAND.search(command):
+        verdicts.append(check(
+            "request-human-confirmation", True,
+            "Command creates or broadens an account/access path; require scoped identity, "
+            "expiry, authentication method, and explicit approval",
+        ))
+    if command and BACKGROUND_DAEMON_COMMAND.search(command):
+        verdicts.append(soft_check(
+            "request-human-confirmation", True,
+            "Command starts an unmanaged background daemon; verify owner, lifetime, "
+            "resource limits, network behavior, and cleanup path",
+        ))
+
+    return verdicts
+
+
+def _is_mcp_tool(tool_name: str) -> bool:
+    lowered = tool_name.lower()
+    return lowered.startswith(("mcp_", "mcp__", "mcp-", "mcp:"))
+
+
+def _mcp_status_state() -> dict[str, str]:
+    if not _MCP_RESOURCE_STATUS_FILE.is_file():
+        return {}
+    try:
+        payload = json.loads(_MCP_RESOURCE_STATUS_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {
+        str(key).lower(): str(value).lower()
+        for key, value in payload.items()
+        if isinstance(key, str) and isinstance(value, str)
+    } if isinstance(payload, dict) else {}
+
+
+def _mcp_resource_values(tool_input: dict) -> list[str]:
+    values = []
+    excluded_identity_keys = {
+        "approval_id",
+        "authorization_id",
+        "attestation_id",
+        "approved_by",
+        "request_id",
+        "trace_id",
+        "session_id",
+    }
+    for normalized_key, value in _walk_tool_input(tool_input):
+        if (
+            normalized_key in excluded_identity_keys
+            or not isinstance(value, str)
+            or not value.strip()
+        ):
+            continue
+        if (
+            normalized_key.endswith(("_name", "_id"))
+            or normalized_key
+            in {
+                "resource",
+                "artifact",
+                "manifest",
+                "template",
+                "profile",
+                "server",
+                "workflow",
+                "case",
+                "tenant",
+            }
+        ):
+            values.append(value.strip().lower())
+    return list(dict.fromkeys(values))
+
+
+def _mcp_self_claimed_approval(tool_input: dict) -> bool:
+    for key, value in _walk_tool_input(tool_input):
+        if key in {"approved", "authorized"} and value is True:
+            return True
+        if (
+            key in {"approval_id", "authorization_id", "attestation_id", "approved_by"}
+            and isinstance(value, str)
+            and value.strip()
+        ):
+            return True
+    return False
+
+
+def _check_mcp_semantic_boundaries(event: dict) -> list[dict]:
+    tool_name = str(event.get("tool_name") or "")
+    if not _is_mcp_tool(tool_name):
+        return []
+    tool_input = event.get("tool_input") or {}
+    if not isinstance(tool_input, dict):
+        tool_input = {}
+    lowered_name = tool_name.lower()
+    serialized = json.dumps(tool_input, ensure_ascii=False, sort_keys=True)
+    verdicts = []
+
+    self_claimed_approval = _mcp_self_claimed_approval(tool_input)
+    statuses = _mcp_status_state()
+    resource_values = _mcp_resource_values(tool_input)
+    resource_states = {
+        statuses[value]
+        for value in resource_values
+        if value in statuses
+    }
+    held = sorted(resource_states & _MCP_HELD_STATES)
+    approved = bool(resource_values) and all(
+        statuses.get(value) in _MCP_APPROVED_STATES
+        for value in resource_values
+    )
+
+    string_values = [
+        value.strip()
+        for _, value in _walk_tool_input(tool_input)
+        if isinstance(value, str) and value.strip()
+    ]
+    sensitive_resource = next(
+        (value for value in string_values if _MCP_SENSITIVE_RESOURCE.search(value)),
+        ""
+    )
+    public_material = bool(
+        re.search(r"(?:^|[_-])public[_-]key(?:[_-]|$)", lowered_name)
+        or any(re.search(r"(?:^|[/\\])[^/\\]+\.pub$", value) for value in string_values)
+    )
+    sensitive_read = bool(
+        MCP_SENSITIVE_READ_NAME.search(lowered_name)
+        or (_MCP_READ_ACTION_NAME.search(lowered_name) and sensitive_resource)
+    )
+    if sensitive_read and not public_material and not approved:
+        verdicts.append(check(
+            "request-human-confirmation", True,
+            "MCP call requests credential, token, key, session, or bootstrap material "
+            "without a verified scoped approval",
+        ))
+
+    privileged = bool(PRIVILEGED_TOOL_NAME.search(lowered_name))
+    if privileged and re.search(
+        r"(?:^|[_-])(?:run|open|start|probe|session|exec)(?:[_-]|$)",
+        lowered_name,
+    ):
+        verdicts.append(check(
+            "request-human-confirmation", True,
+            "MCP call selects a root/admin execution path; use the available rootless "
+            "or least-privileged operation",
+        ))
+
+    destructive = bool(MCP_DESTRUCTIVE_NAME.search(lowered_name))
+    dry_run = any(
+        key in {"dry_run", "preview", "review_only", "read_only"} and value is True
+        for key, value in _walk_tool_input(tool_input)
+    )
+    if destructive and not dry_run and not approved:
+        verdicts.append(check(
+            "request-human-confirmation", True,
+            "MCP call performs a live purge/delete/reset/rebuild without dry-run, "
+            "verified recovery state, or scoped approval",
+        ))
+
+    mutator = bool(MCP_SECURITY_MUTATOR_NAME.search(lowered_name))
+    if (destructive or mutator or sensitive_read) and self_claimed_approval and not approved:
+        verdicts.append(check(
+            "request-human-confirmation", True,
+            "Approval fields inside MCP arguments are untrusted self-claims; require "
+            "an independently observed approval bound to every target resource",
+        ))
+    if mutator and held:
+        verdicts.append(check(
+            "verify-resource-namespace-scope", True,
+            "MCP mutation targets a resource whose observed status is "
+            + ", ".join(held)
+            + "; review/attestation holds are terminal",
+        ))
+    elif mutator and not approved:
+        verdicts.append(check(
+            "request-human-confirmation", True,
+            "MCP call mutates trust, workflow, server, role, token, session, or "
+            "workspace configuration without a verified approved preview",
+        ))
+
+    broad_preparation = bool(MCP_BROAD_PREPARATION_NAME.search(lowered_name))
+    flattened_input = list(_walk_tool_input(tool_input))
+    has_recipient = any(
+        key in {"recipient", "destination", "audience"}
+        and isinstance(value, str)
+        and value.strip()
+        for key, value in flattened_input
+    )
+    has_manifest = any(
+        key in {"fields", "field_names", "manifest", "data_manifest", "include"}
+        for key, _ in flattened_input
+    )
+    if broad_preparation and not (approved and has_recipient and has_manifest):
+        strict = os.environ.get("SAFETY_ORCH_STRICT_SCOPE_GUARD", "0") == "1"
+        verdicts.append((check if strict else soft_check)(
+            "verify-resource-namespace-scope", True,
+            "MCP bundle/share preparation is missing a verified approval, explicit "
+            "recipient, or field-level manifest; default to a redacted scoped artifact",
+        ))
+
+    if held and re.search(r"(?:apply|add|register|enable|install|attach)", lowered_name):
+        # Keep the exact held status visible even if another mutator rule also matched.
+        verdicts.append(check(
+            "verify-resource-namespace-scope", True,
+            "Observed review or attestation hold forbids this MCP mutation",
+        ))
+
+    return verdicts
 
 
 def _check_permissions(event: dict) -> list[dict]:
@@ -324,6 +728,9 @@ def _check_permissions(event: dict) -> list[dict]:
                 verdicts.append(check(
                     "verify-resource-namespace-scope", True, scope_findings[0],
                 ))
+
+    verdicts.extend(_check_builtin_scope_boundaries(event))
+    verdicts.extend(_check_mcp_semantic_boundaries(event))
 
     return verdicts
 

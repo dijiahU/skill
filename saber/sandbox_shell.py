@@ -30,6 +30,9 @@ class TrajectoryEntry:
     command: str
     output: str
     deltas: list[StateDelta] = field(default_factory=list)
+    exit_code: Optional[int] = None
+    execution_provenance: str = "docker"
+    execution_status: str = "completed"
 
 
 SENSITIVE_PATTERNS = [
@@ -47,12 +50,14 @@ NETWORK_SUBCOMMANDS = {
     "docker-compose": {"pull", "up"},
 }
 BLOCKED_COMMANDS = {"reboot", "shutdown", "halt", "poweroff", "init", "apt-get", "apt", "yum", "dnf"}
-DOCKER_IMAGE = "docker.io/library/osbench-sandbox:latest"
+DOCKER_IMAGE = os.environ.get(
+    "SABER_DOCKER_IMAGE", "docker.io/library/osbench-sandbox:latest"
+)
 SANDBOX_MAX_SIZE_MB = 256
 
 DB_INITIALIZER_PATTERN = re.compile(
     r"\bCREATE\s+TABLE\b|sqlite3\.connect\s*\(|\bexecutescript\s*\(|"
-    r"\bdd\b[^\n]*\bof=|\b(?:cp|mv)\b",
+    r"\bsqlite3\b[^\n]*<|\bdd\b[^\n]*\bof=|\b(?:cp|mv)\b",
     re.IGNORECASE,
 )
 
@@ -67,13 +72,18 @@ def _has_custom_database_initializer(
     schema, otherwise those CREATE TABLE commands collide with the fixture and
     can fail silently.
     """
-    aliases = {database_path, os.path.basename(database_path)}
+    aliases = {os.path.normpath(database_path)}
     try:
-        relative = os.path.relpath(database_path, cwd)
+        relative = os.path.normpath(os.path.relpath(database_path, cwd))
     except ValueError:
         relative = ""
-    if relative and not relative.startswith("../"):
+    if relative and relative != "." and not relative.startswith("../"):
         aliases.add(relative)
+        # A bare basename is unambiguous only for a database directly in cwd.
+        # For nested paths, matching the basename alone confuses data/app.db
+        # with a separate project-root app.db.
+        if "/" not in relative:
+            aliases.add(os.path.basename(database_path))
 
     return any(
         DB_INITIALIZER_PATTERN.search(command)
@@ -100,29 +110,438 @@ def _detect_docker_host():
 DOCKER_HOST = _detect_docker_host()
 
 
+def _docker_runtime_args(runtime: str | None = None) -> list[str]:
+    """Return a validated Docker runtime argument from cluster configuration."""
+    value = (
+        os.environ.get("SABER_DOCKER_RUNTIME", "")
+        if runtime is None
+        else runtime
+    ).strip()
+    if not value:
+        return []
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", value):
+        raise ValueError(f"Invalid SABER_DOCKER_RUNTIME: {value!r}")
+    return ["--runtime", value]
+
+
+ALLOWED_SANDBOX_CAPABILITIES = frozenset({"NET_ADMIN"})
+
+
+def _docker_capability_args(capabilities: list[str] | None) -> list[str]:
+    """Map a task's explicit capability declaration through a closed allowlist."""
+    if capabilities is None:
+        return []
+    if not isinstance(capabilities, list) or any(
+        not isinstance(item, str) for item in capabilities
+    ):
+        raise ValueError("sandbox_capabilities must be a list of strings")
+    if len(capabilities) != len(set(capabilities)):
+        raise ValueError("sandbox_capabilities must not contain duplicates")
+    unknown = sorted(set(capabilities) - ALLOWED_SANDBOX_CAPABILITIES)
+    if unknown:
+        raise ValueError(
+            "Unsupported sandbox capability declaration: " + ", ".join(unknown)
+        )
+    args: list[str] = []
+    for capability in sorted(capabilities):
+        args.extend(["--cap-add", capability])
+    return args
+
+
+def _docker_batch_identity() -> tuple[str, list[str]]:
+    """Return an opt-in project prefix and labels for attributable batch cleanup."""
+    batch = os.environ.get("SABER_RESOURCE_SCOPE", "").strip()
+    if not batch:
+        return "osbench-", ["--label", "skilldistill.saber.role=sandbox"]
+    if len(batch) > 48 or not re.fullmatch(r"[a-z0-9][a-z0-9_.-]*", batch):
+        raise ValueError(f"Invalid SABER_RESOURCE_SCOPE: {batch!r}")
+    return (
+        f"rick-saber-{batch}-",
+        [
+            "--label", "skilldistill.saber.role=sandbox",
+            "--label", f"skilldistill.saber.batch={batch}",
+        ],
+    )
+
+
+# Fixed observer code: model-provided paths are JSON data, never Python or shell.
+# -I/-S keep workspace/site initialization out of this trusted read-only process.
+_WORKSPACE_SNAPSHOT_OBSERVER = r"""
+import hashlib
+import json
+import os
+import stat
+import sys
+
+MAX_FILES = 512
+MAX_ENTRIES = 2048
+MAX_DEPTH = 16
+MAX_FILE_BYTES = 1000000
+MAX_TOTAL_BYTES = 8000000
+SAMPLE_BYTES = 65536
+SKIP_DIRECTORIES = {".git", ".npm", ".cache", "node_modules", ".venv", "venv", "__pycache__"}
+BINARY_SUFFIXES = (
+    ".db", ".sqlite", ".sqlite3", ".bin", ".o", ".so", ".a", ".png", ".jpg",
+    ".jpeg", ".pdf", ".tar.gz", ".zip", ".pkl", ".xlsx", ".xls", ".gz",
+)
+REQUIRED_TEXT_SUFFIXES = (
+    ".sh", ".bash", ".py", ".js", ".ts", ".tsx", ".jsx", ".json", ".yaml",
+    ".yml", ".toml", ".ini", ".cfg", ".conf", ".rules", ".sql", ".md", ".txt",
+)
+REQUIRED_TEXT_NAMES = {
+    "Dockerfile", "Makefile", "Justfile", ".env", ".env.example",
+}
+BINARY_MAGICS = (
+    (b"SQLite format 3\x00", "sqlite"),
+    (b"\x7fELF", "elf"),
+    (b"PK\x03\x04", "zip"),
+    (b"PK\x05\x06", "zip"),
+    (b"\x89PNG\r\n\x1a\n", "png"),
+    (b"\xff\xd8\xff", "jpeg"),
+    (b"%PDF-", "pdf"),
+    (b"\x1f\x8b", "gzip"),
+)
+DIRECTORY_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC
+FILE_FLAGS = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC
+
+request = json.load(sys.stdin)
+root = request.get("cwd")
+paths = request.get("paths")
+result = {
+    "file_contents": {},
+    "deleted_paths": [],
+    "excluded_files": {},
+    "excluded_file_details": {},
+    "symlinks": {},
+    "errors": {},
+    "error_details": {},
+}
+total_bytes = 0
+entries_seen = 0
+observed = set()
+pending_symlinks = {}
+
+def add_error(path, reason, **details):
+    result["errors"][path] = reason
+    result["error_details"][path] = {"reason": reason, **details}
+
+def add_excluded(path, reason, **details):
+    result["excluded_files"][path] = reason
+    result["excluded_file_details"][path] = {"reason": reason, **details}
+
+def valid_path(path):
+    return (
+        isinstance(path, str) and path.startswith("/") and path != "/"
+        and "\x00" not in path and len(path) <= 4096
+        and all(part not in {"", ".", ".."} for part in path.split("/")[1:])
+        and path.split("/")[1] not in {"proc", "sys", "dev"}
+    )
+
+def within_root(path):
+    normalized_root = os.path.normpath(root)
+    normalized = os.path.normpath(path)
+    return normalized == normalized_root or normalized.startswith(normalized_root + "/")
+
+def open_directory(path):
+    descriptor = os.open("/", DIRECTORY_FLAGS)
+    try:
+        for component in filter(None, path.split("/")[1:]):
+            child = os.open(component, DIRECTORY_FLAGS, dir_fd=descriptor)
+            os.close(descriptor)
+            descriptor = child
+        return descriptor
+    except Exception:
+        os.close(descriptor)
+        raise
+
+def binary_kind(path, mode, sample):
+    lower = path.lower()
+    name = os.path.basename(path)
+    if name in REQUIRED_TEXT_NAMES or lower.endswith(REQUIRED_TEXT_SUFFIXES) or sample.startswith(b"#!"):
+        return None
+    for magic, kind in BINARY_MAGICS:
+        if sample.startswith(magic):
+            return "magic:" + kind
+    if mode & 0o111:
+        return None
+    if b"\x00" in sample:
+        return "sample:nul"
+    try:
+        sample.decode("utf-8")
+    except UnicodeError:
+        return "sample:invalid_utf8"
+    if sample:
+        controls = sum(byte < 9 or 13 < byte < 32 for byte in sample)
+        if controls / len(sample) > 0.10:
+            return "sample:control_bytes"
+    if lower.endswith(BINARY_SUFFIXES):
+        return "suffix"
+    return None
+
+def record_symlink(parent, name, path, before):
+    if path in observed:
+        return
+    observed.add(path)
+    if len(observed) > MAX_FILES:
+        add_error(path, "file_count_limit")
+        return
+    try:
+        target = os.readlink(name, dir_fd=parent)
+    except OSError as exc:
+        add_error(path, "symlink_read_error", errno=exc.errno)
+        return
+    resolved = os.path.normpath(
+        target if os.path.isabs(target) else os.path.join(os.path.dirname(path), target)
+    )
+    pending_symlinks[path] = {
+        "target": target,
+        "resolved_target": resolved,
+        "size": before.st_size,
+    }
+
+def read_regular(parent, name, path, before=None):
+    global total_bytes
+    if path in observed:
+        return
+    observed.add(path)
+    if len(observed) > MAX_FILES:
+        add_error(path, "file_count_limit")
+        return
+    descriptor = None
+    try:
+        if before is None:
+            before = os.stat(name, dir_fd=parent, follow_symlinks=False)
+        if not stat.S_ISREG(before.st_mode):
+            add_error(path, "not_regular_file", mode=stat.S_IFMT(before.st_mode))
+            return
+        descriptor = os.open(name, FILE_FLAGS, dir_fd=parent)
+        opened = os.fstat(descriptor)
+        if not stat.S_ISREG(opened.st_mode) or (opened.st_dev, opened.st_ino) != (before.st_dev, before.st_ino):
+            add_error(path, "file_changed_during_open")
+            return
+        if before.st_size > MAX_FILE_BYTES:
+            sample = os.read(descriptor, SAMPLE_BYTES)
+            after = os.fstat(descriptor)
+            if (opened.st_size, opened.st_mtime_ns, opened.st_ctime_ns) != (
+                after.st_size, after.st_mtime_ns, after.st_ctime_ns
+            ):
+                add_error(path, "file_changed_during_read")
+                return
+            detection = binary_kind(path, opened.st_mode, sample)
+            if detection is None:
+                add_error(
+                    path, "file_size_limit", size=before.st_size,
+                    sample_sha256=hashlib.sha256(sample).hexdigest(),
+                )
+            else:
+                add_excluded(
+                    path, "oversized_binary", size=before.st_size,
+                    detection=detection,
+                    sample_bytes=len(sample),
+                    sample_sha256=hashlib.sha256(sample).hexdigest(),
+                )
+            return
+        chunks = []
+        size = 0
+        while size <= MAX_FILE_BYTES:
+            chunk = os.read(descriptor, min(65536, MAX_FILE_BYTES + 1 - size))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            size += len(chunk)
+        after = os.fstat(descriptor)
+        if size > MAX_FILE_BYTES or (
+            opened.st_size, opened.st_mtime_ns, opened.st_ctime_ns
+        ) != (after.st_size, after.st_mtime_ns, after.st_ctime_ns):
+            add_error(path, "file_changed_during_read")
+            return
+        raw = b"".join(chunks)
+        try:
+            if b"\x00" in raw:
+                raise UnicodeError()
+            text = raw.decode("utf-8")
+        except UnicodeError:
+            add_excluded(
+                path, "binary", size=size,
+                detection=binary_kind(path, opened.st_mode, raw[:SAMPLE_BYTES]) or "content",
+                sample_sha256=hashlib.sha256(raw[:SAMPLE_BYTES]).hexdigest(),
+            )
+            return
+        if total_bytes + size > MAX_TOTAL_BYTES:
+            add_error(path, "total_size_limit", size=size, total_before=total_bytes)
+            return
+        total_bytes += size
+        result["file_contents"][path] = text
+    except FileNotFoundError:
+        result["deleted_paths"].append(path)
+    except OSError as exc:
+        add_error(path, "read_error", errno=exc.errno)
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+
+def read_entry(parent, name, path):
+    try:
+        info = os.stat(name, dir_fd=parent, follow_symlinks=False)
+        if stat.S_ISLNK(info.st_mode):
+            record_symlink(parent, name, path, info)
+        elif stat.S_ISREG(info.st_mode):
+            read_regular(parent, name, path, info)
+        else:
+            add_error(path, "not_regular_file", mode=stat.S_IFMT(info.st_mode))
+    except FileNotFoundError:
+        result["deleted_paths"].append(path)
+    except OSError as exc:
+        add_error(path, "read_error", errno=exc.errno)
+
+def visit(directory, path, depth):
+    global entries_seen
+    if depth > MAX_DEPTH:
+        add_error(path, "directory_depth_limit")
+        return
+    try:
+        with os.scandir(directory) as entries:
+            for entry in entries:
+                entries_seen += 1
+                if entries_seen > MAX_ENTRIES or len(observed) > MAX_FILES:
+                    add_error(path, "directory_entry_limit", entries_seen=entries_seen)
+                    break
+                name = entry.name
+                child_path = path + "/" + name
+                try:
+                    info = os.stat(name, dir_fd=directory, follow_symlinks=False)
+                    if stat.S_ISDIR(info.st_mode):
+                        if name in SKIP_DIRECTORIES:
+                            add_excluded(child_path, "excluded_directory")
+                            continue
+                        child = os.open(name, DIRECTORY_FLAGS, dir_fd=directory)
+                        try:
+                            visit(child, child_path, depth + 1)
+                        finally:
+                            os.close(child)
+                    elif stat.S_ISLNK(info.st_mode):
+                        record_symlink(directory, name, child_path, info)
+                    elif stat.S_ISREG(info.st_mode):
+                        read_regular(directory, name, child_path, info)
+                    else:
+                        add_error(child_path, "not_regular_file", mode=stat.S_IFMT(info.st_mode))
+                except OSError as exc:
+                    add_error(child_path, "directory_read_error", errno=exc.errno)
+    except OSError as exc:
+        add_error(path, "directory_read_error", errno=exc.errno)
+
+def resolve_symlinks():
+    for path, details in pending_symlinks.items():
+        resolved = details["resolved_target"]
+        if not valid_path(resolved) or not within_root(resolved):
+            add_error(path, "symlink_target_out_of_scope", **details)
+            continue
+        parent = None
+        try:
+            directory, name = resolved.rsplit("/", 1)
+            parent = open_directory(directory or "/")
+            info = os.stat(name, dir_fd=parent, follow_symlinks=False)
+            if not stat.S_ISREG(info.st_mode):
+                add_error(path, "symlink_target_not_regular", **details)
+                continue
+            read_regular(parent, name, resolved, info)
+            if resolved not in result["file_contents"] and resolved not in result["excluded_files"]:
+                add_error(path, "symlink_target_unobserved", **details)
+                continue
+            add_excluded(path, "internal_symlink", **details)
+            result["symlinks"][path] = {
+                **details,
+                "target_kind": (
+                    "text" if resolved in result["file_contents"] else "excluded_binary"
+                ),
+            }
+        except FileNotFoundError:
+            add_error(path, "symlink_target_missing", **details)
+        except OSError as exc:
+            add_error(path, "symlink_target_open_error", errno=exc.errno, **details)
+        finally:
+            if parent is not None:
+                os.close(parent)
+
+if not valid_path(root) or not isinstance(paths, list) or len(paths) > MAX_FILES or not all(valid_path(path) for path in paths):
+    add_error("request", "invalid_snapshot_scope")
+else:
+    for path in paths:
+        parent = None
+        try:
+            directory, name = path.rsplit("/", 1)
+            parent = open_directory(directory or "/")
+            read_entry(parent, name, path)
+        except FileNotFoundError:
+            result["deleted_paths"].append(path)
+        except OSError as exc:
+            add_error(path, "path_open_error", errno=exc.errno)
+        finally:
+            if parent is not None:
+                os.close(parent)
+    directory = None
+    try:
+        directory = open_directory(root)
+        visit(directory, root, 0)
+    except OSError as exc:
+        add_error(root, "root_open_error", errno=exc.errno)
+    finally:
+        if directory is not None:
+            os.close(directory)
+    resolve_symlinks()
+result["complete"] = not result["errors"]
+result["observed_bytes"] = total_bytes
+print(json.dumps(result, ensure_ascii=False))
+"""
+
+
 class SandboxShell:
     def __init__(self, mock_fs: dict, file_contents: dict = None,
                  injection: dict = None, cwd: str = "/home/user",
-                 init_commands: list = None, file_permissions: dict = None):
+                 init_commands: list = None, file_permissions: dict = None,
+                 sandbox_capabilities: list[str] | None = None):
         self.injection = injection or {}
         self.file_contents = file_contents or {}
         self.init_commands = init_commands or []
         self.file_permissions = file_permissions or {}
+        self.sandbox_capabilities = list(sandbox_capabilities or [])
         self.trajectory: list[TrajectoryEntry] = []
         self.step = 0
         self.cwd = cwd
         self.container_id = None
 
-        self._start_container(mock_fs)
+        # Validate before any Docker call so an untrusted task cannot request an
+        # arbitrary host capability.
+        self._capability_args = _docker_capability_args(sandbox_capabilities)
+        try:
+            self._start_container(mock_fs)
+        except BaseException:
+            # __init__ failures do not return an object to TaskRuntime, so release
+            # this exact container here instead of relying on garbage collection.
+            self.cleanup()
+            raise
 
     def _start_container(self, mock_fs: dict):
         """Start a Docker container and populate it with mock filesystem."""
-        name = f"osbench-{uuid.uuid4().hex[:8]}"
+        prefix, batch_labels = _docker_batch_identity()
+        name = f"{prefix}{uuid.uuid4().hex[:8]}"
+        idle_session = os.environ.get("SABER_IDLE_SESSION", "")
+        idle_args = []
+        if idle_session:
+            if not re.fullmatch(r"[a-f0-9]{12}-g[01]", idle_session):
+                raise ValueError("Invalid SABER_IDLE_SESSION")
+            name = f"rick-saber-idle-{idle_session}-{uuid.uuid4().hex[:8]}"
+            idle_args = ["--label", f"skilldistill.idle.session={idle_session}",
+                         "--label", "skilldistill.idle.role=sandbox"]
         try:
             result = subprocess.run(
                 ["docker", "run", "-d", "--rm", "--name", name,
+                 *batch_labels,
+                 *idle_args,
                  "--network=none",
+                 *self._capability_args,
                  "--memory=256m", "--pids-limit=256",
+                 *_docker_runtime_args(),
                  DOCKER_IMAGE],
                 capture_output=True, text=True, timeout=10,
             )
@@ -260,10 +679,43 @@ class SandboxShell:
                     f"Custom database initializer left an empty file: {database_path}"
                 )
 
-    def _docker_exec(
+    def snapshot_workspace(self, cwd: str, paths: list[str]) -> dict:
+        """Observe current sandbox files without runtime events or injection."""
+        if not self.container_id:
+            raise RuntimeError("workspace observation requires a live sandbox")
+        result = subprocess.run(
+            [
+                "docker", "exec", "-i", self.container_id,
+                "/usr/bin/python3", "-I", "-S", "-c", _WORKSPACE_SNAPSHOT_OBSERVER,
+            ],
+            input=json.dumps({"cwd": cwd, "paths": paths}),
+            capture_output=True,
+            text=True,
+            timeout=15,
+            env={
+                "PATH": "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+                "HOME": "/home/user",
+                **({"DOCKER_HOST": DOCKER_HOST} if DOCKER_HOST else {}),
+                **({"DOCKER_API_VERSION": os.environ["DOCKER_API_VERSION"]}
+                   if os.environ.get("DOCKER_API_VERSION") else {}),
+            },
+        )
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"workspace observation failed (exit {result.returncode})"
+            )
+        try:
+            payload = json.loads(result.stdout)
+        except (TypeError, json.JSONDecodeError) as exc:
+            raise RuntimeError("workspace observation returned invalid JSON") from exc
+        if not isinstance(payload, dict):
+            raise RuntimeError("workspace observation returned an invalid report")
+        return payload
+
+    def _docker_exec_result(
         self, command: str, silent: bool = False, check: bool = False
-    ) -> str:
-        """Execute a command inside the container."""
+    ) -> tuple[str, Optional[int], str]:
+        """Execute in Docker and return output, the real exit code, and status."""
         try:
             result = subprocess.run(
                 ["docker", "exec", self.container_id, "bash", "-c",
@@ -282,17 +734,25 @@ class SandboxShell:
                     f"Docker setup command failed ({result.returncode}): "
                     f"{command}\n{detail}"
                 )
-            return output.rstrip("\n") if output else ""
+            rendered = output.rstrip("\n") if output else ""
+            return rendered, result.returncode, "completed"
         except subprocess.TimeoutExpired as exc:
             if check:
                 raise RuntimeError(
                     f"Docker setup command timed out after 15s: {command}"
                 ) from exc
-            return "(command timed out after 15s)"
-        except Exception as e:
+            return "(command timed out after 15s)", None, "timeout"
+        except Exception as exc:
             if check:
                 raise
-            return f"(execution error: {e})"
+            return f"(execution error: {exc})", None, "execution_error"
+
+    def _docker_exec(
+        self, command: str, silent: bool = False, check: bool = False
+    ) -> str:
+        """Compatibility wrapper returning the historical output string."""
+        output, _, _ = self._docker_exec_result(command, silent=silent, check=check)
+        return output
 
     def _docker_cp_content(self, container_path: str, content: str):
         """Write content to a file inside the container using a temp file + docker cp."""
@@ -318,17 +778,34 @@ class SandboxShell:
 
         if base_cmd in BLOCKED_COMMANDS or self._is_dangerous(cmd):
             output = f"(blocked: {base_cmd} is not allowed in this environment)"
+            exit_code = None
+            provenance = "policy"
+            execution_status = "blocked"
         elif self._has_network_cmd(cmd):
             output = self._mock_network(cmd)
+            # A network mock has no subprocess exit code. Do not present its
+            # realistic-looking output as evidence that a command ran.
+            exit_code = None
+            provenance = "mock"
+            execution_status = "mocked"
         else:
-            output = self._docker_exec(cmd)
+            output, exit_code, execution_status = self._docker_exec_result(cmd)
+            provenance = "docker"
 
         # Apply injection based on method
         if apply_injection:
             output = self._apply_injection(command, output)
 
         deltas = self._extract_deltas(command)
-        entry = TrajectoryEntry(step=self.step, command=command, output=output, deltas=deltas)
+        entry = TrajectoryEntry(
+            step=self.step,
+            command=command,
+            output=output,
+            deltas=deltas,
+            exit_code=exit_code,
+            execution_provenance=provenance,
+            execution_status=execution_status,
+        )
         self.trajectory.append(entry)
         return output
 
@@ -619,7 +1096,10 @@ class SandboxShell:
     def get_trajectory_dicts(self) -> list[dict]:
         return [
             {"step": e.step, "command": e.command, "output": e.output,
-             "deltas": [asdict(d) for d in e.deltas]}
+             "deltas": [asdict(d) for d in e.deltas],
+             "exit_code": e.exit_code,
+             "execution_provenance": e.execution_provenance,
+             "execution_status": e.execution_status}
             for e in self.trajectory
         ]
 

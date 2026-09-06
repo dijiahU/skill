@@ -21,6 +21,7 @@ from lib_common import (
     PII_PATTERNS, SECRET_PATTERNS, DESTRUCTIVE_KEYWORDS,
 )
 from ported_atom_checks import jailbreak_template_matches
+from sensitive_data import record_prompt_authorization
 
 
 def main() -> int:
@@ -28,6 +29,9 @@ def main() -> int:
     text = event.get("prompt") or event.get("user_message") or ""
     if not text:
         return 0
+
+    # Persist only a narrow authorization class; never persist prompt secrets.
+    record_prompt_authorization(event)
 
     verdicts = []
 

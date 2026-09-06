@@ -25,11 +25,7 @@ from lib_common import (
     read_event, aggregate, check, soft_check,
     SECRET_PATTERNS, PATH_TRAVERSAL_PATTERNS,
 )
-from ported_atom_checks import (
-    ci_workflow_findings,
-    install_hook_findings,
-    malicious_install_findings,
-)
+from write_effects import extract_write_effects, review_write_effects
 
 INSECURE_CRYPTO_PATTERNS = re.compile(
     r"\b(MD5|SHA-?1|DES|3DES|RC4|ECB)\b"
@@ -63,6 +59,13 @@ def main() -> int:
 
     verdicts = []
 
+    # All host write tools and Bash-derived writes use the same effect review.
+    for finding in review_write_effects(extract_write_effects(event)):
+        verdicts.append((check if finding.severity == "block" else soft_check)(
+            finding.atom_id, True,
+            f"{finding.reason} (target={finding.path}, method={finding.method})",
+        ))
+
     # detect-path-traversal — check path itself
     if path and PATH_TRAVERSAL_PATTERNS.search(path):
         verdicts.append(check(
@@ -73,29 +76,7 @@ def main() -> int:
     if not content:
         return aggregate(verdicts) if verdicts else 0
 
-    # Supply-chain checks run on the exact content before it is committed.
-    # These scanners also understand unified-diff prefixes, keeping Codex
-    # apply_patch events on the same core implementation path.
-    ci_findings = ci_workflow_findings(path, content)
-    if ci_findings:
-        reason = "; ".join(finding["reason"] for finding in ci_findings[:4])
-        severe = any(
-            finding["severity"] in {"critical", "high"}
-            for finding in ci_findings
-        )
-        verdicts.append((check if severe else soft_check)(
-            "audit-ci-workflow-security", True, reason,
-        ))
-
-    hook_findings = install_hook_findings(path, content)
-    if hook_findings:
-        reason = "; ".join(finding["reason"] for finding in hook_findings[:4])
-        verdicts.append(soft_check("audit-install-hook", True, reason))
-
-    malicious_hooks = malicious_install_findings(path, content)
-    if malicious_hooks:
-        reason = "; ".join(finding["reason"] for finding in malicious_hooks[:4])
-        verdicts.append(check("detect-malicious-postinstall-script", True, reason))
+    # Shared supply-chain and before/after controls were evaluated above.
 
     # detect-hardcoded-secret-in-code
     secret_hits = [name for name, rx in SECRET_PATTERNS.items() if rx.search(content)]

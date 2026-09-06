@@ -20,8 +20,8 @@
     "parent_archetype": "detect-prompt-injection",
     "phase": "tool-invocation",
     "attack_surface": "OWASP LLM01.indirect",
-    "definition": "Detect injection instructions hidden in **content fetched from external sources** (web pages, file contents, MCP responses, API JSON, RAG documents) that target the LLM rather than the user.",
-    "scope_in": "HTML/markdown content with hidden instructions, instructions in fetched email/PR/issue bodies, RAG document poisoning, instructions in API JSON fields, HTML comment / `<!-- ... -->` with hidden instructions",
+    "definition": "Detect instructions hidden in **untrusted runtime content** (web pages, repository files, build/config scripts, comments, MCP responses, API JSON, RAG documents) that try to control the agent. Locality does not make content authoritative.",
+    "scope_in": "HTML/markdown instructions, fetched email/PR/issue bodies, README/Makefile/package hooks, tool error messages, comments that prescribe follow-up actions, encoded or obfuscated execution payloads, RAG/API document poisoning",
     "scope_out": "payload-level malicious binaries → `detect-malicious-payload-in-tool-output`; user's own input → `detect-direct-prompt-injection`",
     "signal_phrases": "indirect injection, fetched content injection, RAG poisoning, document instruction, hidden instruction in tool output",
     "related": [
@@ -29,7 +29,7 @@
       "detect-malicious-payload-in-tool-output",
       "detect-hidden-instruction-in-tool-description"
     ],
-    "enforcement_mode": "skill"
+    "enforcement_mode": "hybrid"
   },
   {
     "id": "detect-jailbreak-template",
@@ -254,8 +254,8 @@
     "parent_archetype": "check-tool-permission-scope",
     "phase": "planning",
     "attack_surface": "OWASP LLM06.resource-scope",
-    "definition": "Verify the resource (file path, DB schema, repo, account, S3 bucket, project ID) targeted by a tool call is within the namespace authorized for the current task.",
-    "scope_in": "path-namespace check, repo-allowlist check, AWS account/project allowlist, DB schema allowlist",
+    "definition": "Verify every resource and trust boundary targeted by a tool call—file path, DB schema, repo, account, tenant, external recipient, and exported field set—is within the scope authorized for the current task.",
+    "scope_in": "path/repo/account allowlists, tenant-boundary check, approved recipient check, redacted-vs-raw export scope, wildcard trusted-command rejection, DB schema allowlist",
     "scope_out": "filesystem sandbox enforcement (chroot-style) → `enforce-filesystem-sandbox`; tool allowlist → `verify-allowed-tool-list`",
     "signal_phrases": "resource scope, namespace check, path allowlist, repo allowlist, project scope",
     "related": [
@@ -318,8 +318,8 @@
     "parent_archetype": "detect-task-overreach",
     "phase": "planning",
     "attack_surface": "OWASP LLM06",
-    "definition": "Identify individual planned steps whose side effects (writes / sends / spends) are not justified by the user-stated goal.",
-    "scope_in": "per-step justification check, \"why is this step needed\" annotation enforcement, unjustified-write detection",
+    "definition": "Identify individual planned steps whose side effects (reads of protected credentials, writes, deletes, sends, permission changes, persistent jobs, or spends) are not strictly necessary for the user-stated goal.",
+    "scope_in": "per-step necessity check, unnecessary credential read, overly broad export, unrelated cleanup, privilege/authentication weakening, persistence installation, \"why is this step needed\" annotation enforcement",
     "scope_out": "blanket plan/intent comparison → `compare-plan-vs-stated-intent`; budget-based limits → `detect-autonomy-budget-exceeded`",
     "signal_phrases": "unjustified step, unnecessary side effect, scope creep flag, step-level justification",
     "related": [
@@ -349,8 +349,8 @@
     "parent_archetype": "detect-task-overreach",
     "phase": "planning",
     "attack_surface": "自定义.side-effect-graph",
-    "definition": "Enumerate all observable side effects of a planned multi-step task (writes, network calls, money moves, message sends, state mutations) before any action is taken.",
-    "scope_in": "side-effect graph extraction from plan, write-set / read-set analysis, money-flow extraction, dry-run side-effect listing",
+    "definition": "Enumerate all observable side effects of a planned multi-step task before any action is taken, including sensitive reads, writes/deletes, production-data mutations, network recipients and payload fields, permission/authentication changes, persistent execution, and money moves.",
+    "scope_in": "side-effect graph extraction, sensitive read-set and write-set, reversibility/backup check, recipient and payload inventory, persistence and privilege change inventory, dry-run side-effect listing",
     "scope_out": "comparing those side effects against user intent → `compare-plan-vs-stated-intent`; flagging unjustified ones → `flag-unjustified-side-effect`; per-call budget gate → `detect-autonomy-budget-exceeded`",
     "signal_phrases": "side-effect graph, write-set extraction, dry-run plan, plan side-effect inventory",
     "related": [
@@ -413,8 +413,8 @@
     "parent_archetype": "validate-tool-argument-safety",
     "phase": "tool-invocation",
     "attack_surface": "destructive-args",
-    "definition": "Detect destructive flags / parameters in tool calls (`rm -rf`, `--force`, `DROP TABLE`, `git push --force`, `chmod 777`, `kubectl delete --all`) and destructive resource replacement such as overwriting an existing database file.",
-    "scope_in": "command-flag denylist, destructive-arg pattern match, irreversible-flag detection, force-flag check, `mv`/`cp` replacement of a `.db`/`.sqlite` destination",
+    "definition": "Detect irreversible or security-weakening tool arguments: recursive deletion, credential/database-file deletion, Git history rewrite/reset, production database mutation/replacement, system-wide executable installation, wildcard permission changes, authentication weakening, setuid/NOPASSWD, and persistent network callbacks.",
+    "scope_in": "command-flag denylist, protected-resource mutation, force/history-rewrite flags, production DB write detection, bare `make install`/system binary replacement, security-control weakening, persistence-plus-network signatures, `mv`/`cp` replacement of a `.db`/`.sqlite` destination",
     "scope_out": "input keyword detection (before tool layer) → `detect-destructive-action-keyword`; user-intent ambiguity → `classify-request-ambiguity-level`",
     "signal_phrases": "destructive flag, force flag, --force, rm -rf, kubectl delete, drop table, database replacement, destructive-arg detector",
     "related": [
@@ -444,8 +444,8 @@
     "parent_archetype": "validate-tool-argument-safety",
     "phase": "tool-invocation",
     "attack_surface": "OWASP LLM02 (output-side leak via tool args)",
-    "definition": "Detect API keys / tokens / passwords being passed in tool call arguments where they shouldn't be (URL query params, log message fields, bug-report bodies).",
-    "scope_in": "secret in HTTP query string, secret in webhook body, secret in third-party-API arg field, secret in log line",
+    "definition": "Detect credentials being exposed through tool arguments or unsafe local handling, including literal keys, direct display of private credential files, permission broadening on secret files, and sensitive paths combined with network transfer.",
+    "scope_in": "secret in HTTP/webhook/log fields, `cat`/`head` of private keys or cloud credentials, world-readable `.env`, private-key/archive transfer to an external command",
     "scope_out": "secret in user input → `detect-credential-in-input`; secret in code → `detect-hardcoded-secret-in-code`; secret in agent output to user → `redact-output-secret`",
     "signal_phrases": "secret in tool call, credential leakage to tool, secret in URL, secret in argument, leaking key to webhook",
     "related": [
@@ -1431,7 +1431,7 @@
     "phase": "cross-cutting",
     "attack_surface": "HITL",
     "definition": "Pause autonomous execution and emit an explicit confirmation request to the human operator before proceeding with a flagged action.",
-    "scope_in": "confirmation-request emit, pause-and-await flow, irreversibility-triggered confirmation, blast-radius-triggered confirmation",
+    "scope_in": "confirmation-request emit, pause-and-await flow, irreversible production-data or Git-history change, system-wide install, account/access creation, security-control/privilege weakening, persistent job installation, cross-tenant live access, broad/raw external disclosure, blast-radius-triggered confirmation",
     "scope_out": "clarification (intent-ambiguity, not risk-driven) → `elicit-clarification-before-act`; routine notification → `notify-oncall-and-open-ticket`",
     "signal_phrases": "human in the loop, confirmation gate, approval gate, pause for confirmation, kill switch",
     "related": [

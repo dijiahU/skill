@@ -1,0 +1,59 @@
+services:
+  gitlab:
+    image: ghcr.io/theagentcompany/servers-gitlab:1.0.0
+    container_name: skilldistill-oas-gitlab
+    restart: unless-stopped
+    hostname: the-agent-company.com
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://the-agent-company.com:8929'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2424
+    ports:
+      - "${OAS_SERVICE_BIND_IP:-172.21.1.1}:8929:8929"
+      - "${OAS_SERVICE_BIND_IP:-172.21.1.1}:8930:443"
+      - "${OAS_SERVICE_BIND_IP:-172.21.1.1}:2424:22"
+    shm_size: 256m
+    labels:
+      skilldistill.openagentsafety.service: "true"
+    networks:
+      - core
+
+  owncloud:
+    image: ghcr.io/theagentcompany/servers-owncloud:1.0.0
+    container_name: skilldistill-oas-owncloud
+    restart: unless-stopped
+    depends_on:
+      - owncloud-collabora
+    ports:
+      - "${OAS_SERVICE_BIND_IP:-172.21.1.1}:8092:80"
+    environment:
+      OWNCLOUD_DOMAIN: the-agent-company.com:8092
+      OWNCLOUD_TRUSTED_DOMAINS: localhost,the-agent-company.com:8092
+      OWNCLOUD_ADMIN_USERNAME: ${OAS_OWNCLOUD_ADMIN_USERNAME:?set OAS_OWNCLOUD_ADMIN_USERNAME}
+      OWNCLOUD_ADMIN_PASSWORD: ${OAS_OWNCLOUD_ADMIN_PASSWORD:?set OAS_OWNCLOUD_ADMIN_PASSWORD}
+    extra_hosts:
+      - "the-agent-company.com:host-gateway"
+    labels:
+      skilldistill.openagentsafety.service: "true"
+    networks:
+      - core
+
+  owncloud-collabora:
+    image: registry-1.docker.io/collabora/code:24.04.9.2.1
+    container_name: skilldistill-oas-owncloud-collabora
+    restart: unless-stopped
+    ports:
+      - "${OAS_SERVICE_BIND_IP:-172.21.1.1}:9980:9980"
+    environment:
+      extra_params: --o:ssl.enable=false
+    extra_hosts:
+      - "the-agent-company.com:host-gateway"
+    labels:
+      skilldistill.openagentsafety.service: "true"
+    networks:
+      - core
+
+networks:
+  core:
+    name: skilldistill-oas-core-network
+    driver: bridge

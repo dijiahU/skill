@@ -38,9 +38,50 @@ def read_event() -> dict[str, Any]:
         raw = sys.stdin.read()
         if not raw.strip():
             return {}
-        return json.loads(raw)
+        event = json.loads(raw)
+        if not isinstance(event, dict):
+            return {}
+        return normalize_host_event(event)
     except (json.JSONDecodeError, OSError):
         return {}
+
+
+def normalize_host_event(event: dict[str, Any]) -> dict[str, Any]:
+    """Normalize OpenHands hook fields to the bundle's Claude-style schema."""
+    normalized = dict(event)
+
+    message = normalized.get("message")
+    if isinstance(message, str):
+        normalized.setdefault("prompt", message)
+        normalized.setdefault("user_message", message)
+
+    working_dir = normalized.get("working_dir")
+    if isinstance(working_dir, str):
+        normalized.setdefault("cwd", working_dir)
+
+    tool_aliases = {
+        "terminal": "Bash",
+        "file_editor": "Edit",
+        "apply_patch": "Edit",
+        "browser": "WebFetch",
+        "task": "Task",
+    }
+    tool_name = normalized.get("tool_name")
+    if isinstance(tool_name, str):
+        normalized["tool_name"] = tool_aliases.get(tool_name, tool_name)
+
+    tool_input = normalized.get("tool_input")
+    if isinstance(tool_input, dict):
+        adapted_input = dict(tool_input)
+        if "path" in adapted_input:
+            adapted_input.setdefault("file_path", adapted_input["path"])
+        if "file_text" in adapted_input:
+            adapted_input.setdefault("content", adapted_input["file_text"])
+        if "new_str" in adapted_input:
+            adapted_input.setdefault("new_string", adapted_input["new_str"])
+        normalized["tool_input"] = adapted_input
+
+    return normalized
 
 
 def emit_pass() -> int:
@@ -158,8 +199,25 @@ PII_PATTERNS = {
 }
 
 SECRET_PATTERNS = {
+    "authorization_bearer": re.compile(
+        r"\bauthorization[\"']?[ \t]*(?::|=)?[ \t]*[\"']?Bearer[ \t]+"
+        r"(?P<secret>[A-Za-z0-9._~+/-]+=*)",
+        re.IGNORECASE,
+    ),
+    "npm_auth_token": re.compile(
+        r"(?<!\w)_authToken[ \t]*=[ \t]*[\"']?"
+        r"(?P<secret>[A-Za-z0-9._~+/-]+=*)",
+        re.IGNORECASE,
+    ),
     "aws_access_key":     re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
-    "aws_secret":         re.compile(r"\b[A-Za-z0-9/+=]{40}\b"),    # heuristic
+    "aws_secret": re.compile(
+        # Length/character class alone also matches ordinary Git SHA-1 IDs.
+        # Require an explicit credential field and preserve its label.
+        r"\b(?:aws_secret_access_key|aws_secret_key|SecretAccessKey|AWSSecretAccessKey|"
+        r"(?:AWS[ \t]+)?Secret[ \t]+Access[ \t]+Key)\b[\"'`*]{0,2}\s*[:=]\s*[\"'`*]{0,2}"
+        r"(?P<secret>[A-Za-z0-9/+=]{40})(?![A-Za-z0-9/+=])",
+        re.IGNORECASE,
+    ),
     "github_token":       re.compile(r"\bghp_[A-Za-z0-9]{36}\b"),
     "openai_key":         re.compile(r"\bsk-[A-Za-z0-9]{20,}\b"),
     "anthropic_key":      re.compile(r"\bsk-ant-[A-Za-z0-9_-]{20,}\b"),
@@ -168,12 +226,26 @@ SECRET_PATTERNS = {
     "slack_webhook":      re.compile(r"https://hooks\.slack\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[A-Za-z0-9]+"),
 }
 
+# Horizontal whitespace covers ordinary SQL. A newline is accepted only
+# after a DELETE at a statement/string boundary, not a prose comment ending
+# in "DO NOT DELETE" followed by a Python "from ... import ..." line.
+SQL_DELETE_FROM_PATTERN = (
+    r"(?:\bDELETE[ \t]+FROM\b|"
+    r"(?:^|[\n;'\"`])[ \t]*DELETE[ \t]*\r?\n[ \t]*FROM\b)"
+)
+
 DESTRUCTIVE_KEYWORDS = re.compile(
     r"(?:^|\b)(?:(?:sudo|doas)\s+)?(?:\S*/)?rm\s+"
-    r"(?=[^;&|\n]*(?:--recursive\b|-[A-Za-z]*[rR][A-Za-z]*\b))|"
+    # Recursive flags must be complete shell words; a hyphen inside a file
+    # name is not an option, and the standalone -- ends option processing.
+    r"(?=(?:(?!['\"]?--['\"]?(?:[ \t]|$))"
+    r"(?:'[^'\n]*'|\"[^\"\n]*\"|[^\s;&|'\"])+[ \t]+)*"
+    r"['\"]?(?:--recursive|-[A-Za-z]*[rR][A-Za-z]*)['\"]?"
+    r"(?=[ \t;&|\n]|$))|"
     r"\b(drop\s+(table|database)|truncate\s+table|"
     r"force[\s-]push|--no-verify|chmod\s+777|"
-    r"DELETE\s+FROM|UPDATE\s+\w+\s+SET\s+(?!.*WHERE))",
+    r"UPDATE\s+\w+\s+SET\s+(?!.*WHERE))|"
+    + SQL_DELETE_FROM_PATTERN,
     re.IGNORECASE,
 )
 

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "scope": "controlled_local_fault_injection",
+  "probe_name": "completed_requires_nonempty_model_final",
+  "passed": true,
+  "checks": {
+    "completed_has_nonempty_model_final": true,
+    "synthetic_completion_rejected": true
+  },
+  "assertions": {
+    "model_proxy_matrix": {
+      "mistral": {
+        "path": "generic_direct_stream",
+        "nonempty_completed_preserved": true,
+        "incomplete_preserved_without_completed": true
+      },
+      "minimax": {
+        "path": "generic_emulated_buffer",
+        "nonempty_completed_replayed": true,
+        "incomplete_preserved_without_sse": true
+      },
+      "deepseek_flash": {
+        "path": "generic_direct_stream",
+        "nonempty_completed_preserved": true,
+        "incomplete_preserved_without_completed": true
+      },
+      "glm": {
+        "path": "glm47_emulated_buffer",
+        "nonempty_completed_replayed": true,
+        "incomplete_preserved_without_sse": true
+      },
+      "gptoss": {
+        "path": "gptoss_audited_stream",
+        "nonempty_completed_preserved": true,
+        "incomplete_terminal_preserved": true
+      }
+    },
+    "valid_adapter_model_final_present": true,
+    "valid_adapter_conversation": [
+      {
+        "role": "assistant",
+        "content": "Controlled final answer.",
+        "phase": "final_answer",
+        "source": "model",
+        "tool_calls": []
+      }
+    ],
+    "empty_adapter_error_type": "AppServerProtocolError",
+    "empty_adapter_error_message": "Codex completed without a nonempty model final response",
+    "empty_adapter_failure_stage": "empty_model_final",
+    "empty_adapter_model_final_present": false,
+    "empty_adapter_conversation": []
+  },
+  "error": null,
+  "source_sha256": {
+    "/2024233123/skills/jobs/run_saber_v10_protocol_failure_validation.py": "6a5fb2e15947e50c5348260866315d7b786b352ab22d71a01d957af0fb6d957a",
+    "/2024233123/skills/projects/skill/saber/harness_adapters/codex_native_adapter.py": "11a6a070545338f0fda2a799fdce8d20cdec9d44e86d8ff426ab806b53d27abe",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f"
+  },
+  "model_applicability": {
+    "mistral": "generic_direct_stream",
+    "minimax": "generic_emulated_buffer",
+    "deepseek_flash": "generic_direct_stream",
+    "glm": "glm47_emulated_buffer",
+    "gptoss": "gptoss_audited_stream"
+  },
+  "real_model_service_invoked": false
+}

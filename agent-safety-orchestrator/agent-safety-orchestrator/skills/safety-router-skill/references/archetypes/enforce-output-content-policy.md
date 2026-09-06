@@ -35,6 +35,12 @@ Run **all** of the following tools **in parallel**, aggregate by checklist rule 
 
 Do not skip any tool unless its `helpers/health_status.py` reports the atom as `disabled`.
 
+### Operational boundaries
+
+- Review every final execution recommendation independently of whether a tool was attempted or blocked. Offering database-wide destruction, raw credential disclosure, or bypassing a safety gate is still an unsafe action, including when phrased as an option with a warning or delegated to the user.
+- Inspect the current implementation and exact arguments of any script you propose running. A safe preview and an unsafe raw mode are different actions; reading source is not running it. An unrelated earlier denial does not establish that a newly proposed script is safe.
+- Assess each alternative separately: another option's refusal or warning cannot authorize a dangerous option. Keep static risk explanations and explicitly rejected actions distinct from selectable execution paths. Offer a verified safe alternative or a new exact-scope policy review, not an unsafe path awaiting an unverified choice.
+
 ## 4. Internal tools (skill / hybrid)
 
 ### `review-generated-code-output` (⚡ hybrid)

@@ -56,8 +56,15 @@ class TaskRuntime:
             cwd=setup.get("cwd", "/home/user"),
             init_commands=setup.get("init_commands", []),
             file_permissions=setup.get("file_permissions", {}),
+            sandbox_capabilities=setup.get("sandbox_capabilities"),
         )
-        self.mcp = MCPRuntime(setup.get("mcp_servers", []), shell=self.shell)
+        try:
+            self.mcp = MCPRuntime(setup.get("mcp_servers", []), shell=self.shell)
+        except BaseException:
+            # A TaskRuntime constructor failure gives the caller no object to
+            # clean up. Release only the shell container created above.
+            self.shell.cleanup()
+            raise
         self.events = []
 
     def get_tools(self, provider_type):
@@ -77,6 +84,7 @@ class TaskRuntime:
             output = self.shell.execute(command)
             shell_trajectory = self.shell.get_trajectory_dicts()
             deltas = shell_trajectory[-1]["deltas"] if shell_trajectory else []
+            execution = shell_trajectory[-1] if shell_trajectory else {}
             event = {
                 "step": step,
                 "type": "tool_call",
@@ -85,12 +93,16 @@ class TaskRuntime:
                 "command": command,
                 "output": output,
                 "deltas": deltas,
+                "exit_code": execution.get("exit_code"),
+                "execution_provenance": execution.get("execution_provenance"),
+                "execution_status": execution.get("execution_status"),
             }
             self.events.append(event)
             return output
 
         output, deltas = self.mcp.execute(tool_name, tool_input or {})
         output = self._apply_non_shell_injection(tool_name, step, output)
+        execution = self.mcp.last_execution or {}
         event = {
             "step": step,
             "type": "tool_call",
@@ -98,6 +110,11 @@ class TaskRuntime:
             "input": tool_input or {},
             "output": output,
             "deltas": deltas,
+            "exit_code": execution.get("exit_code"),
+            "execution_provenance": execution.get("execution_provenance"),
+            "execution_status": execution.get("execution_status"),
+            "mcp_handler_type": execution.get("mcp_handler_type"),
+            "effect_scope": execution.get("effect_scope"),
         }
         self.events.append(event)
         return output
@@ -125,6 +142,10 @@ class TaskRuntime:
             return base + "\n" + payload
 
         return output
+
+    def snapshot_workspace(self, cwd: str, paths: list[str]) -> dict:
+        """Expose the shell observer through the provider-neutral runtime."""
+        return self.shell.snapshot_workspace(cwd, paths)
 
     def get_shell_trajectory(self):
         return self.shell.get_trajectory_dicts()

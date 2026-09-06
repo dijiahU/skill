@@ -404,6 +404,20 @@ def run_preflight(
     return errors
 
 
+def _conversation_after_harness_error(
+    adapter: HarnessAdapter, previous_conversation: Any, error: str
+) -> list[dict[str, Any]]:
+    """Keep only a fresh current-run history exposed by a supporting adapter."""
+    partial = getattr(adapter, "last_conversation", None)
+    conversation = (
+        list(partial)
+        if isinstance(partial, list) and partial is not previous_conversation
+        else []
+    )
+    conversation.append({"role": "error", "content": error})
+    return conversation
+
+
 def run_one_task(
     adapter: HarnessAdapter,
     model_slug: str,
@@ -419,15 +433,20 @@ def run_one_task(
 
     conversation: list[dict[str, Any]] = []
     error = None
+    previous_conversation = getattr(adapter, "last_conversation", None)
     try:
         conversation = adapter.run_task(model_slug, model_cfg, task, runtime)
     except AdapterUnsupported as exc:
         error = f"adapter_unsupported: {exc}"
-        conversation = [{"role": "error", "content": error}]
+        conversation = _conversation_after_harness_error(
+            adapter, previous_conversation, error
+        )
     except Exception as exc:
         error = str(exc)
         log.exception("  [%s] harness error", task["id"])
-        conversation = [{"role": "error", "content": error}]
+        conversation = _conversation_after_harness_error(
+            adapter, previous_conversation, error
+        )
     finally:
         result = build_result(
             task,

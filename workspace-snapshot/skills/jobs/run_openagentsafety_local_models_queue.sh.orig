@@ -1,0 +1,429 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+skills_root="/2024233123/skills"
+oas_dir="${skills_root}/projects/skill/openagentsafety"
+oas_bin="${oas_dir}/.venv/bin/openagentsafety-infer"
+config_dir="${oas_dir}/.llm_config"
+retry_selection_dir="${skills_root}/jobs/openagentsafety-retry-directfix-20260904"
+results_dir="${skills_root}/results/openagentsafety"
+orchestrator_root="${skills_root}/projects/skill/agent-safety-orchestrator/agent-safety-orchestrator"
+run_stamp="$(TZ=CST-8 date '+%Y%m%d-%H%M%S')"
+log_dir="${skills_root}/logs/openagentsafety-local-models-queue/${run_stamp}"
+status_file="${log_dir}/status.tsv"
+lock_file="${skills_root}/jobs/.openagentsafety-local-models-queue.lock"
+
+server_pid=""
+server_name=""
+oas_pids=()
+
+mkdir -p "${log_dir}"
+
+write_status() {
+  printf '%s\t%s\n' "$(TZ=CST-8 date '+%F %T %Z')" "$1" \
+    | tee -a "${status_file}"
+}
+
+wait_for_gpu_release() {
+  local attempt
+  for attempt in $(seq 1 90); do
+    if [[ -z "$(nvidia-smi --query-compute-apps=pid --format=csv,noheader,nounits 2>/dev/null)" ]]; then
+      return 0
+    fi
+    sleep 2
+  done
+  write_status "failed gpu_processes_still_present"
+  return 1
+}
+
+stop_server() {
+  local pid="${server_pid:-}"
+  local attempt
+
+  if [[ -z "${pid}" ]]; then
+    return 0
+  fi
+
+  if kill -0 "${pid}" 2>/dev/null; then
+    write_status "server_stop model=${server_name} pid=${pid} signal=INT"
+    kill -INT "${pid}" 2>/dev/null || true
+    for attempt in $(seq 1 30); do
+      if ! kill -0 "${pid}" 2>/dev/null; then
+        break
+      fi
+      sleep 2
+    done
+  fi
+
+  if kill -0 "${pid}" 2>/dev/null; then
+    write_status "server_stop model=${server_name} pid=${pid} signal=TERM"
+    kill -TERM "${pid}" 2>/dev/null || true
+    for attempt in $(seq 1 15); do
+      if ! kill -0 "${pid}" 2>/dev/null; then
+        break
+      fi
+      sleep 2
+    done
+  fi
+
+  if kill -0 "${pid}" 2>/dev/null; then
+    write_status "server_stop model=${server_name} pid=${pid} signal=KILL"
+    kill -KILL "${pid}" 2>/dev/null || true
+  fi
+
+  wait "${pid}" 2>/dev/null || true
+  server_pid=""
+  wait_for_gpu_release
+  write_status "server_stopped model=${server_name}"
+}
+
+cleanup() {
+  local pid
+  local exit_status=$?
+
+  for pid in "${oas_pids[@]:-}"; do
+    if [[ -n "${pid}" ]] && kill -0 "${pid}" 2>/dev/null; then
+      kill -TERM "${pid}" 2>/dev/null || true
+    fi
+  done
+  stop_server || true
+  write_status "queue_exit status=${exit_status}"
+}
+
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+exec 9>"${lock_file}"
+if ! flock -n 9; then
+  write_status "failed queue_already_running"
+  exit 2
+fi
+
+source "${skills_root}/aistation_env.sh"
+
+export HF_HUB_OFFLINE=1
+export HF_DATASETS_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export MODELSCOPE_OFFLINE=1
+export OPENHANDS_SUPPRESS_BANNER=1
+export HTTP_PROXY="http://127.0.0.1:17892"
+export HTTPS_PROXY="http://127.0.0.1:17892"
+export http_proxy="${HTTP_PROXY}"
+export https_proxy="${HTTPS_PROXY}"
+export NO_PROXY="127.0.0.1,localhost,${LOCAL_HOST_IP},raw.githubusercontent.com"
+export no_proxy="${NO_PROXY}"
+export OPENAGENTSAFETY_SAFETY_ORCHESTRATOR_ROOT="${orchestrator_root}"
+
+# Let each evaluation process derive its NPC endpoint and model from its own
+# LLM config. NPC_API_KEY is then forwarded by name into the task container.
+unset NPC_API_KEY NPC_BASE_URL NPC_MODEL
+
+for required_path in \
+  "${oas_bin}" \
+  "${retry_selection_dir}" \
+  "${orchestrator_root}"; do
+  if [[ ! -e "${required_path}" ]]; then
+    write_status "failed missing_path=${required_path}"
+    exit 2
+  fi
+done
+
+wait_for_health() {
+  local port="$1"
+  local attempt
+
+  for attempt in $(seq 1 360); do
+    if curl --noproxy '*' --silent --fail --max-time 3 \
+      "http://127.0.0.1:${port}/health" >/dev/null 2>&1; then
+      write_status "server_ready model=${server_name} port=${port} pid=${server_pid}"
+      curl --noproxy '*' --silent --show-error --max-time 10 \
+        "http://127.0.0.1:${port}/v1/models" \
+        >"${log_dir}/${server_name}.models.json"
+      return 0
+    fi
+    if ! kill -0 "${server_pid}" 2>/dev/null; then
+      write_status "failed server_exited model=${server_name} port=${port}"
+      return 1
+    fi
+    sleep 5
+  done
+
+  write_status "failed server_timeout model=${server_name} port=${port}"
+  return 1
+}
+
+start_glm47() {
+  server_name="glm47-flash"
+  (
+    export PYTHONPATH="${skills_root}/envs/glm47-transformers-main"
+    export CUDA_VISIBLE_DEVICES=1
+    export VLLM_WORKER_MULTIPROC_METHOD=spawn
+    export VLLM_USE_EXPERIMENTAL_PARSER_CONTEXT=1
+    exec "${skills_root}/envs/qwen35-vllm/bin/vllm" serve \
+      "${skills_root}/models/modelscope/ZhipuAI/GLM-4.7-Flash" \
+      --served-model-name ZhipuAI/GLM-4.7-Flash \
+      --host 0.0.0.0 \
+      --port 18002 \
+      --tensor-parallel-size 1 \
+      --dtype bfloat16 \
+      --max-model-len 32768 \
+      --max-num-seqs 8 \
+      --gpu-memory-utilization 0.80 \
+      --enable-auto-tool-choice \
+      --tool-call-parser glm47 \
+      --reasoning-parser glm45 \
+      --language-model-only
+  ) >>"${log_dir}/${server_name}.server.log" 2>&1 &
+  server_pid=$!
+}
+
+start_gptoss120b() {
+  server_name="gptoss120b"
+  (
+    export CUDA_VISIBLE_DEVICES=0
+    export VLLM_WORKER_MULTIPROC_METHOD=spawn
+    export VLLM_NO_USAGE_STATS=1
+    exec "${skills_root}/envs/qwen35-vllm/bin/vllm" serve \
+      "${skills_root}/models/modelscope/OpenAI-Mirror/gpt-oss-120b" \
+      --served-model-name OpenAI-Mirror/gpt-oss-120b \
+      --host 0.0.0.0 \
+      --port 18004 \
+      --tensor-parallel-size 1 \
+      --max-model-len 32768 \
+      --max-num-seqs 8 \
+      --gpu-memory-utilization 0.85 \
+      --enable-auto-tool-choice \
+      --tool-call-parser openai \
+      --language-model-only
+  ) >>"${log_dir}/${server_name}.server.log" 2>&1 &
+  server_pid=$!
+}
+
+start_deepseek_v4_flash() {
+  server_name="deepseek-v4-flash-0731"
+  DEEPSEEK_V4_PORT=18020 \
+    "${skills_root}/jobs/run_deepseek_v4_flash_0731_h20_judge_server.sh" \
+    >>"${log_dir}/${server_name}.launcher.log" 2>&1 &
+  server_pid=$!
+}
+
+start_minimax_m25() {
+  server_name="minimax-m25"
+  (
+    export CUDA_VISIBLE_DEVICES=0,1
+    export SAFETENSORS_FAST_GPU=1
+    export VLLM_WORKER_MULTIPROC_METHOD=spawn
+    export VLLM_NO_USAGE_STATS=1
+    exec "${skills_root}/envs/qwen35-vllm/bin/vllm" serve \
+      "${skills_root}/models/modelscope/MiniMax/MiniMax-M2.5" \
+      --served-model-name MiniMax/MiniMax-M2.5 \
+      --trust-remote-code \
+      --host 0.0.0.0 \
+      --port 18006 \
+      --tensor-parallel-size 2 \
+      --max-model-len 32768 \
+      --max-num-seqs 4 \
+      --gpu-memory-utilization 0.90 \
+      --enable-auto-tool-choice \
+      --tool-call-parser minimax_m2 \
+      --reasoning-parser minimax_m2_append_think \
+      --compilation-config '{"cudagraph_mode":"PIECEWISE"}' \
+      --language-model-only
+  ) >>"${log_dir}/${server_name}.server.log" 2>&1 &
+  server_pid=$!
+}
+
+start_mistral_small4() {
+  server_name="mistral-small4-119b"
+  (
+    local vllm_env="${skills_root}/envs/deepseekv4-vllm"
+    local cuda_home="${skills_root}/envs/cuda-toolkit-12-9/usr/local/cuda-12.9"
+    local compat_dir="${skills_root}/envs/cuda-compat-12-9/usr/local/cuda-12.9/compat"
+    local nvjitlink_dir="${vllm_env}/lib/python3.10/site-packages/nvidia/nvjitlink/lib"
+
+    export CUDA_VISIBLE_DEVICES=0,1
+    export CUDA_HOME="${cuda_home}"
+    export CUDACXX="${cuda_home}/bin/nvcc"
+    export PATH="${vllm_env}/bin:${cuda_home}/bin:${PATH}"
+    export CPATH="${cuda_home}/include:${CPATH:-}"
+    export LIBRARY_PATH="${cuda_home}/lib64:${LIBRARY_PATH:-}"
+    export LD_LIBRARY_PATH="${compat_dir}:${nvjitlink_dir}:${cuda_home}/lib64:${LD_LIBRARY_PATH:-}"
+    export VLLM_NO_USAGE_STATS=1
+    export VLLM_WORKER_MULTIPROC_METHOD=spawn
+    export PYTHONPATH="${skills_root}/compat/mistral_developer_role:${PYTHONPATH:-}"
+    export FLASHINFER_WORKSPACE_BASE="${skills_root}/cache/flashinfer-mistral-small4"
+    export VLLM_CACHE_ROOT="${skills_root}/cache/vllm-mistral-small4"
+    export TORCHINDUCTOR_CACHE_DIR="${skills_root}/cache/torchinductor-mistral-small4"
+    export OMP_NUM_THREADS=8
+    export SABER_MISTRAL_DEVELOPER_ROLE_COMPAT=1
+
+    exec "${vllm_env}/bin/vllm" serve \
+      "${skills_root}/models/modelscope/mistralai/Mistral-Small-4-119B-2603" \
+      --served-model-name mistralai/Mistral-Small-4-119B-2603 \
+      --host 0.0.0.0 \
+      --port 18030 \
+      --trust-remote-code \
+      --tokenizer-mode mistral \
+      --config-format mistral \
+      --load-format mistral \
+      --tensor-parallel-size 2 \
+      --dtype bfloat16 \
+      --max-model-len 32768 \
+      --max-num-seqs 8 \
+      --max-num-batched-tokens 8192 \
+      --gpu-memory-utilization 0.90 \
+      --attention-backend FLASH_ATTN_MLA \
+      --enable-auto-tool-choice \
+      --tool-call-parser mistral \
+      --reasoning-parser mistral \
+      --language-model-only
+  ) >>"${log_dir}/${server_name}.server.log" 2>&1 &
+  server_pid=$!
+}
+
+run_oas_pair() {
+  local config="$1"
+  local baseline_note="$2"
+  local skill_note="$3"
+  local baseline_selection="$4"
+  local skill_selection="$5"
+  local baseline_pid
+  local skill_pid
+  local baseline_status
+  local skill_status
+  local common_args=(
+    --dataset mgulavani/openagentsafety_full_updated_v3
+    --split train
+    --workspace docker
+    --max-iterations 50
+    --num-workers 2
+    --output-dir "${results_dir}"
+    --n-critic-runs 1
+    --critic pass
+    --max-retries 0
+    --tool-preset default
+  )
+
+  write_status "oas_start model=${server_name} mode=baseline note=${baseline_note} workers=2"
+  (
+    cd "${oas_dir}"
+    "${oas_bin}" "${config}" \
+      "${common_args[@]}" \
+      --select "${baseline_selection}" \
+      --note "${baseline_note}" \
+      --skill-mode none
+  ) >"${log_dir}/${server_name}.baseline.log" 2>&1 &
+  baseline_pid=$!
+
+  write_status "oas_start model=${server_name} mode=safety-orchestrator note=${skill_note} workers=2"
+  (
+    cd "${oas_dir}"
+    "${oas_bin}" "${config}" \
+      "${common_args[@]}" \
+      --select "${skill_selection}" \
+      --note "${skill_note}" \
+      --skill-mode safety-orchestrator \
+      --safety-orchestrator-root "${orchestrator_root}"
+  ) >"${log_dir}/${server_name}.safety-orchestrator.log" 2>&1 &
+  skill_pid=$!
+
+  oas_pids=("${baseline_pid}" "${skill_pid}")
+  set +e
+  wait "${baseline_pid}"
+  baseline_status=$?
+  wait "${skill_pid}"
+  skill_status=$?
+  set -e
+  oas_pids=()
+
+  write_status "oas_complete model=${server_name} mode=baseline status=${baseline_status}"
+  write_status "oas_complete model=${server_name} mode=safety-orchestrator status=${skill_status}"
+
+  if [[ "${baseline_status}" -ne 0 || "${skill_status}" -ne 0 ]]; then
+    return 1
+  fi
+}
+
+run_model() {
+  local start_function="$1"
+  local port="$2"
+  local config="$3"
+  local baseline_note="$4"
+  local skill_note="$5"
+  local baseline_selection="$6"
+  local skill_selection="$7"
+  local model_status=0
+
+  if curl --noproxy '*' --silent --fail --max-time 2 \
+    "http://127.0.0.1:${port}/health" >/dev/null 2>&1; then
+    write_status "failed port_in_use port=${port}"
+    return 1
+  fi
+
+  wait_for_gpu_release
+  "${start_function}"
+  write_status "server_start model=${server_name} port=${port} pid=${server_pid}"
+
+  if wait_for_health "${port}"; then
+    run_oas_pair \
+      "${config}" \
+      "${baseline_note}" \
+      "${skill_note}" \
+      "${baseline_selection}" \
+      "${skill_selection}" \
+      || model_status=1
+  else
+    model_status=1
+  fi
+
+  stop_server || model_status=1
+  return "${model_status}"
+}
+
+write_status "queue_start models=glm47-flash,gptoss120b,deepseek-v4-flash-0731,minimax-m25,mistral-small4-119b retry_trajectory_tasks=2181 workers_per_mode=2 qwen=skipped tag=directfix-20260904"
+
+overall_status=0
+
+run_model \
+  start_glm47 \
+  18002 \
+  "${config_dir}/glm47-flash-local-oas.json" \
+  glm47-flash-nodeps222-baseline-onepass-w2 \
+  glm47-flash-nodeps222-safety-orchestrator-onepass-w2 \
+  || overall_status=1
+
+run_model \
+  start_gptoss120b \
+  18004 \
+  "${config_dir}/gptoss120b-local-oas.json" \
+  gptoss120b-nodeps222-baseline-onepass-w2 \
+  gptoss120b-nodeps222-safety-orchestrator-onepass-w2 \
+  || overall_status=1
+
+run_model \
+  start_deepseek_v4_flash \
+  18020 \
+  "${config_dir}/deepseek-v4-flash-0731-local-oas.json" \
+  deepseek-v4-flash-0731-nodeps222-baseline-onepass-w2 \
+  deepseek-v4-flash-0731-nodeps222-safety-orchestrator-onepass-w2 \
+  || overall_status=1
+
+run_model \
+  start_minimax_m25 \
+  18006 \
+  "${config_dir}/minimax-m25-local-oas.json" \
+  minimax-m25-nodeps222-baseline-onepass-w2 \
+  minimax-m25-nodeps222-safety-orchestrator-onepass-w2 \
+  || overall_status=1
+
+run_model \
+  start_mistral_small4 \
+  18030 \
+  "${config_dir}/mistral-small4-119b-local-oas.json" \
+  mistral-small4-119b-nodeps222-baseline-onepass-w2 \
+  mistral-small4-119b-nodeps222-safety-orchestrator-onepass-w2 \
+  || overall_status=1
+
+write_status "queue_complete status=${overall_status}"
+exit "${overall_status}"

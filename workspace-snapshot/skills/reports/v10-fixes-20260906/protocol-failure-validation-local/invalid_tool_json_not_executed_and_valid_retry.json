@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "scope": "controlled_local_fault_injection",
+  "probe_name": "invalid_tool_json_not_executed_and_valid_retry",
+  "passed": true,
+  "checks": {
+    "invalid_not_executed": true,
+    "valid_retry_exactly_once": true
+  },
+  "assertions": {
+    "malformed_raw_arguments": "{\"command\":\"inspect controlled\",}",
+    "runtime_calls": [
+      {
+        "name": "bash",
+        "arguments": {
+          "command": "inspect controlled"
+        }
+      }
+    ],
+    "task_tool_attempts": 2,
+    "executed_tool_calls": 1,
+    "argument_error_count": 1,
+    "tool_response_success_by_id": {
+      "1": false,
+      "2": true
+    },
+    "server_closed": true,
+    "model_final_present": true
+  },
+  "error": null,
+  "source_sha256": {
+    "/2024233123/skills/jobs/run_saber_v10_protocol_failure_validation.py": "6a5fb2e15947e50c5348260866315d7b786b352ab22d71a01d957af0fb6d957a",
+    "/2024233123/skills/projects/skill/saber/harness_adapters/codex_native_adapter.py": "11a6a070545338f0fda2a799fdce8d20cdec9d44e86d8ff426ab806b53d27abe"
+  },
+  "model_applicability": {
+    "mistral": "shared_codex_native_adapter",
+    "minimax": "shared_codex_native_adapter",
+    "deepseek_flash": "shared_codex_native_adapter",
+    "glm": "shared_codex_native_adapter",
+    "gptoss": "shared_codex_native_adapter"
+  },
+  "real_model_service_invoked": false
+}

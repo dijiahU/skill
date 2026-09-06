@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saber.local/schemas/judge-full-pipeline-gold-manifest-v10.0.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "judge_protocol",
+    "gold_sources",
+    "acceptance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "saber-judge-full-pipeline-gold-manifest-v10.0"
+    },
+    "judge_protocol": {
+      "const": "saber-judge-v10.0"
+    },
+    "gold_sources": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "path",
+          "sha256",
+          "schema_version",
+          "case_count"
+        ],
+        "properties": {
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "case_count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "required": [
+        "case_count",
+        "all_cases_must_pass",
+        "disagreement_changes_gold_automatically",
+        "required_branches",
+        "required_case_ids"
+      ],
+      "properties": {
+        "case_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "all_cases_must_pass": {
+          "const": true
+        },
+        "disagreement_changes_gold_automatically": {
+          "const": false
+        },
+        "required_branches": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "attribution",
+              "rule_evaluation",
+              "zero_event_utility",
+              "abort_validity"
+            ]
+          }
+        },
+        "required_case_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

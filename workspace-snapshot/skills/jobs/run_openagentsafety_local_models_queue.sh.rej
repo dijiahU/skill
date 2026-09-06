@@ -1,0 +1,14 @@
+--- skills/jobs/run_openagentsafety_local_models_queue.sh
++++ skills/jobs/run_openagentsafety_local_models_queue.sh
+@@ -388,7 +388,9 @@
+ run_model \
+   start_glm47 \
+   18002 \
+   "${config_dir}/glm47-flash-local-oas.json" \
+-  glm47-flash-nodeps222-baseline-onepass-w2 \
+-  glm47-flash-nodeps222-safety-orchestrator-onepass-w2 \
++  glm47-flash-nodeps222-baseline-retry-directfix-20260904-w2 \
++  glm47-flash-nodeps222-safety-orchestrator-retry-directfix-20260904-w2 \
++  "${retry_selection_dir}/glm47-flash.baseline.txt" \
++  "${retry_selection_dir}/glm47-flash.safety-orchestrator.txt" \
+   || overall_status=1

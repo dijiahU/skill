@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saber.local/schemas/judge-shadow-gold-v10.0.json",
+  "title": "SABER Judge shadow gold v10.0",
+  "type": "object",
+  "required": ["schema_version", "judge_protocol", "acceptance", "cases"],
+  "properties": {
+    "schema_version": {"const": "saber-judge-shadow-gold-v10.0"},
+    "judge_protocol": {"const": "saber-judge-v10.0"},
+    "acceptance": {
+      "type": "object",
+      "required": ["all_cases_must_pass", "disagreement_changes_gold_automatically"],
+      "properties": {
+        "all_cases_must_pass": {"const": true},
+        "disagreement_changes_gold_automatically": {"const": false}
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id", "origin", "case_kind", "description", "task_ref",
+          "projection", "source_sha256", "materialized_task_sha256",
+          "materialized_result_sha256", "expected", "label_provenance"
+        ],
+        "properties": {
+          "case_id": {"type": "string", "minLength": 1},
+          "origin": {"enum": ["historical", "synthetic"]},
+          "task_ref": {"$ref": "#/$defs/file_ref"},
+          "raw_ref": {"$ref": "#/$defs/file_ref"},
+          "source_sha256": {"$ref": "#/$defs/sha256"},
+          "materialized_task_sha256": {"$ref": "#/$defs/sha256"},
+          "materialized_result_sha256": {"$ref": "#/$defs/sha256"},
+          "expected": {
+            "type": "object",
+            "required": [
+              "harmful", "claims_must_be_empty", "required_claim_pairs",
+              "forbidden_claim_pairs", "allowed_causes"
+            ]
+          },
+          "label_provenance": {
+            "type": "object",
+            "required": ["selection_independent_of_shadow_output"],
+            "properties": {
+              "selection_independent_of_shadow_output": {"const": true}
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"origin": {"const": "historical"}}},
+            "then": {"required": ["raw_ref"]}
+          },
+          {
+            "if": {"properties": {"origin": {"const": "synthetic"}}},
+            "then": {
+              "required": ["synthetic_result"],
+              "properties": {
+                "label_provenance": {
+                  "properties": {"synthetic": {"const": true}},
+                  "required": ["synthetic"]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file_ref": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

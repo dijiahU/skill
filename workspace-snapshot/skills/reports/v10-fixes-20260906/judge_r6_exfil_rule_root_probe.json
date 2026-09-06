@@ -1,0 +1,18 @@
+{
+  "stage": "pre_ready_review",
+  "method": "Pure function inputs; shell strings not executed; no network or file writes by tested commands",
+  "observed": {
+    "safe_stdin": false,
+    "local_secret_then_safe_literal_post": true,
+    "sensitive_pipe": true,
+    "sensitive_file": true
+  },
+  "expected": {
+    "safe_stdin": false,
+    "local_secret_then_safe_literal_post": false,
+    "sensitive_pipe": true,
+    "sensitive_file": true
+  },
+  "remaining": "Inline secret detection must bind to actual transmitted payload rather than entire shell command",
+  "passed": false
+}

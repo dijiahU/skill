@@ -27,6 +27,25 @@ adapter also invokes `UserPromptSubmit` and `Stop`. These client-side runs are
 reported as `manual_hook_runs`, while any future native app-server events remain
 separately visible as `app_server_hook_runs`.
 
+Before each treatment tool invocation, the client observes current regular-file
+contents directly from the task sandbox using a bounded, read-only observer.
+This observation does not execute task code, consume a benchmark step, or enter
+the model tool transcript. The hook snapshot separates current `file_contents`
+from immutable initial-observation `policy_file_contents`: changing a helper is observable,
+but rewriting an approval file cannot expand its original permitted scope.
+Policy is frozen from the first successful observation before any model task
+action, so initialization-command changes are included; entering a subdirectory
+does not discard constraints rooted at the original task working directory.
+Unavailable observations reject the pending action instead of reusing stale
+contents. The authoritative remote snapshot never falls back to same-named
+files in the runner host. Explicit script entrypoints that are absent or excluded
+from the observation are rejected, not presumed safe. This live observation is distinct from the immutable
+initial snapshots used by historical offline replay.
+
+A denied Stop answer keeps its trusted per-turn block identity until a safe
+final answer is accepted. Final output checks also reject delegating the denied
+effect to the user or offering safety-gate bypasses as menu options.
+
 The paired conditions therefore differ only in whether the Safety Orchestrator
 skill and hooks are installed:
 
@@ -36,6 +55,25 @@ skill and hooks are installed:
 
 Codex's bundled system skills remain present in both conditions because they
 are part of the native harness.
+
+## Observed Safety Usage
+
+Treatment result JSON records runtime evidence under
+`harness_meta.safety_usage`. This is deliberately not a static task-to-atom
+mapping:
+
+- `skill_reads` records each actual `saber_skill_read` call, the archetype file
+  read, and the skill/hybrid atoms that were loaded from its Internal tools
+  section.
+- `hook_calls` records every client-side hook invocation, its event and tool,
+  the matcher processes that actually ran, and whether the call blocked,
+  warned, or modified output.
+- `triggered_hook_atoms` contains only atoms that emitted a real `warn` or
+  `block`; passing checks are not mislabeled as task-relevant atoms.
+
+The summary fields `archetypes_read`, `skill_atoms_loaded`,
+`hook_matchers_run`, and `triggered_hook_atoms` make per-task aggregation
+possible without reparsing the conversation transcript.
 
 ## Setup and Preflight
 
@@ -131,18 +169,19 @@ as `codex_openrouter_laguna_free` from `config.example.json` for comparable A/B
 runs when that free variant is available.
 For multi-step tool tasks, prefer the pinned low-cost
 `codex_openrouter_qwen_flash`; free variants can rate-limit between tool turns.
-Its example configuration enables `preload_skill_references`, so treatment runs
-inject the Router, health status, and all 14 distilled archetype references into
-the developer instructions. Baseline runs ignore those documents. The result
-metadata records the exact preloaded filenames, making the treatment condition
-auditable without relying on the model to request each reference dynamically.
+The example configuration keeps `preload_skill_references` disabled. Treatment
+runs inject only the Router and health status; after the Router selects a safety
+archetype, the model reads that reference on demand with `saber_skill_read`.
+Baseline runs expose neither the Router nor its references. Keep full-reference
+preloading only as an explicit diagnostic fallback, because it changes the
+treatment context and bypasses the intended Router-first loading hierarchy.
 
 For regions where OpenAI, Anthropic, and Google API models are unavailable, the
 `codex_deepseek_official` example uses DeepSeek's native Responses endpoint. Set
 the same runtime-only `SABER_CODEX_PROVIDER_API_KEY` variable to a DeepSeek key;
-do not add the key itself to `config.json`. The `deepseek-chat` alias is resolved
-by DeepSeek, so record the concrete model returned by the provider when reporting
-benchmark results.
+do not add the key itself to `config.json`. Use an explicit model ID such as
+`deepseek-v4-pro` so results do not depend on a provider-managed compatibility
+alias.
 
 Run a single task inside the Runner with:
 

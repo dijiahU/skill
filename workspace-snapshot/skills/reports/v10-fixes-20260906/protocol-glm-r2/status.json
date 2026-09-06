@@ -1,0 +1,80 @@
+{
+  "model": "glm",
+  "status": "probe_passed",
+  "gpus": [
+    1
+  ],
+  "cases": [
+    {
+      "name": "ascii",
+      "counted": 12,
+      "usage": {
+        "input_tokens": 12,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 132,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 144
+      },
+      "response_status": "completed",
+      "count_matches": true
+    },
+    {
+      "name": "unicode",
+      "counted": 21,
+      "usage": {
+        "input_tokens": 21,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "input_tokens_per_turn": [],
+          "cached_tokens_per_turn": []
+        },
+        "output_tokens": 140,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "tool_output_tokens": 0,
+          "output_tokens_per_turn": [],
+          "tool_output_tokens_per_turn": []
+        },
+        "total_tokens": 161
+      },
+      "response_status": "completed",
+      "count_matches": true
+    }
+  ],
+  "source_sha256": {
+    "/2024233123/skills/bin/saber_vllm_token_count.py": "71806df9e21bbd1ae0f1d9df2edae722531649a8c5ec2d7f09056b1fb126d62f",
+    "/2024233123/skills/bin/saber_responses_budget.py": "19c90657717965a9238633015cb6ae2e9d066e49036f8be7fbb7123fe8c34f6e",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f"
+  },
+  "service": "glm-proxy",
+  "pid": 2315364,
+  "last_case": "unicode",
+  "extended_cases": [
+    {
+      "name": "multibyte_tool_roundtrip",
+      "passed": true,
+      "first_input_tokens": 216,
+      "second_input_tokens": 303
+    },
+    {
+      "name": "long_context_budget",
+      "passed": true,
+      "input_tokens": 28704,
+      "allocated_output_tokens": 3936,
+      "context_limit": 32768,
+      "response_status": "completed"
+    }
+  ],
+  "cleanup_safe": true
+}

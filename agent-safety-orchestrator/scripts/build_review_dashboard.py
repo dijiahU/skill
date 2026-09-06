@@ -950,7 +950,7 @@ EXEC_TYPE_BADGE = {
 ATOM_ENFORCEMENT_MODE = {
     # detect-prompt-injection (5)
     "detect-direct-prompt-injection": "skill",
-    "detect-indirect-prompt-injection": "skill",
+    "detect-indirect-prompt-injection": "hybrid",
     "detect-jailbreak-template": "hybrid",
     "detect-system-prompt-extraction": "skill",
     "detect-roleplay-escape": "skill",

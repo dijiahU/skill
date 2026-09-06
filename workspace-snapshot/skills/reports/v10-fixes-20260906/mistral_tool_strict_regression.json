@@ -1,0 +1,66 @@
+{
+  "patch_version": "saber-mistral-tool-strict-v10.0",
+  "baseline_construct_tool_dicts": [
+    {
+      "type": "function",
+      "function": {
+        "name": "saber_bash",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": null,
+        "type": "function",
+        "allowed_callers": null,
+        "defer_loading": null,
+        "description": "run",
+        "output_schema": null
+      }
+    }
+  ],
+  "baseline_error": {
+    "type": "ValidationError",
+    "message": "1 validation error for Function\nstrict\n  Input should be a valid boolean [type=bool_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.13/v/bool_type"
+  },
+  "cases": {
+    "none": {
+      "constructor_nested_strict_present": true,
+      "constructor_nested_strict": null,
+      "cleaned_nested_strict_present": false,
+      "cleaned_nested_strict": null,
+      "converted_strict": false,
+      "conversion_succeeded": true
+    },
+    "false": {
+      "constructor_nested_strict_present": true,
+      "constructor_nested_strict": false,
+      "cleaned_nested_strict_present": true,
+      "cleaned_nested_strict": false,
+      "converted_strict": false,
+      "conversion_succeeded": true
+    },
+    "true": {
+      "constructor_nested_strict_present": true,
+      "constructor_nested_strict": true,
+      "cleaned_nested_strict_present": true,
+      "cleaned_nested_strict": true,
+      "converted_strict": true,
+      "conversion_succeeded": true
+    }
+  },
+  "checks": {
+    "baseline_reproduces_validation_error": true,
+    "patch_installs_idempotently": true,
+    "none_is_omitted": true,
+    "false_is_preserved": true,
+    "true_is_preserved": true
+  },
+  "passed": true
+}

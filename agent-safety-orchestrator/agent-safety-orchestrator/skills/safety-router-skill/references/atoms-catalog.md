@@ -7,7 +7,7 @@
 >
 > **This is an on-demand reference file** — loaded by the agent only when explicitly fetched from Router §7. It is not part of session-start context.
 
-**Coverage**: 95 atoms / 19 archetypes / 5 phases / 60 hook + 21 hybrid + 14 skill. fail_policy and requires_network columns reflect v1.1 deployment metadata.
+**Coverage**: 95 atoms / 19 archetypes / 5 phases / 60 hook + 22 hybrid + 13 skill. fail_policy and requires_network columns reflect v1.1 deployment metadata.
 
 Atoms are sorted by phase → parent archetype → atom_id (matches Router §3.2 routing order).
 
@@ -49,7 +49,7 @@ Atoms are sorted by phase → parent archetype → atom_id (matches Router §3.2
 | `detect-suspicious-mime-type` | `detect-malicious-payload-in-tool-output` | tool-invocation | 🔒 hook | — | — |
 | `match-yara-rule` | `detect-malicious-payload-in-tool-output` | tool-invocation | 🔒 hook | — | — |
 | `strip-active-html-script` | `detect-malicious-payload-in-tool-output` | tool-invocation | 🔒 hook | — | — |
-| `detect-indirect-prompt-injection` | `detect-prompt-injection` | tool-invocation | 🧠 skill | — | — |
+| `detect-indirect-prompt-injection` | `detect-prompt-injection` | tool-invocation | ⚡ hybrid | — | — |
 | `audit-ci-workflow-security` | `detect-supply-chain-risk` | tool-invocation | ⚡ hybrid | — | — |
 | `audit-install-hook` | `detect-supply-chain-risk` | tool-invocation | ⚡ hybrid | — | — |
 | `check-dependency-confusion` | `detect-supply-chain-risk` | tool-invocation | 🔒 hook | `fail-closed` | ✅ |

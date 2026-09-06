@@ -1,0 +1,1026 @@
+"""OpenAgentSafety evaluation using OpenHands SDK and shared evaluation framework."""
+
+import fcntl
+import hashlib
+import json
+import os
+import shlex
+import subprocess
+import time
+from pathlib import Path
+from typing import Any, List
+from urllib.parse import urlparse
+
+import numpy as np
+import pandas as pd
+import requests
+from jinja2 import Environment, FileSystemLoader
+
+from benchmarks.openagentsafety.build_images import (
+    build_workspace_image,
+    check_image_exists,
+    get_image_name,
+)
+from benchmarks.openagentsafety.safety_orchestrator import (
+    WORKSPACE_LABEL,
+    bundle_volume,
+    collect_archetype_reference_reads,
+    collect_audit_counts,
+    install_router_skill_link,
+    load_openhands_hook_config,
+    load_router_context,
+    resolve_bundle_root,
+)
+from benchmarks.utils.agent_context import create_agent_context
+from benchmarks.utils.args_parser import get_parser
+from benchmarks.utils.console_logging import summarize_instance
+from benchmarks.utils.conversation import build_event_persistence_callback
+from benchmarks.utils.critics import create_critic
+from benchmarks.utils.dataset import get_dataset
+from benchmarks.utils.evaluation import Evaluation
+from benchmarks.utils.evaluation_utils import construct_eval_output_dir
+from benchmarks.utils.fake_user_response import run_conversation_with_fake_user_response
+from benchmarks.utils.litellm_proxy import build_eval_llm
+from benchmarks.utils.llm_config import load_llm_config
+from benchmarks.utils.models import EvalInstance, EvalMetadata, EvalOutput
+from benchmarks.utils.tool_presets import get_tools_for_preset
+from openhands.sdk import Agent, AgentContext, Conversation, Tool, get_logger
+from openhands.sdk.workspace import RemoteWorkspace
+from openhands.tools.task import TaskToolSet
+from openhands.workspace import DockerWorkspace
+
+
+logger = get_logger(__name__)
+
+
+def _workspace_forward_env(forward_env: list[str] | None) -> list[str]:
+    """Preserve framework variables and always forward the NPC credential."""
+    return list(dict.fromkeys([*(forward_env or []), "NPC_API_KEY"]))
+
+
+def _configure_npc_environment(llm: Any) -> None:
+    """Resolve a usable OpenAI-compatible NPC configuration before workers start.
+
+    Explicit NPC settings take precedence. When they are absent, reuse the
+    evaluation LLM endpoint and credential. The credential is placed only in
+    the controller environment so Docker can forward it by name; it is never
+    added to task metadata or the generated NPC config file.
+    """
+    npc_api_key = os.environ.get("NPC_API_KEY")
+    key_source = "NPC_API_KEY"
+    if not npc_api_key:
+        api_key = getattr(llm, "api_key", None)
+        get_secret_value = getattr(api_key, "get_secret_value", None)
+        if callable(get_secret_value):
+            secret_value = get_secret_value()
+            if isinstance(secret_value, str):
+                npc_api_key = secret_value
+        if not npc_api_key and isinstance(api_key, str):
+            npc_api_key = api_key
+        key_source = "evaluation LLM"
+    if not npc_api_key:
+        raise RuntimeError(
+            "NPC_API_KEY is not set and the evaluation LLM has no API key"
+        )
+
+    eval_model = str(getattr(llm, "model", "") or "")
+    npc_base_url = os.environ.get("NPC_BASE_URL") or getattr(llm, "base_url", None)
+    if not npc_base_url and eval_model.startswith("openai/"):
+        npc_base_url = "https://api.openai.com/v1"
+    if not npc_base_url:
+        raise RuntimeError(
+            "NPC_BASE_URL is not set and the evaluation LLM has no "
+            "OpenAI-compatible base URL"
+        )
+
+    npc_model = os.environ.get("NPC_MODEL")
+    if not npc_model:
+        # LiteLLM-style models prefix the provider (for example,
+        # openai/deepseek-v4-pro). The direct OpenAI client used by chat_npc
+        # must receive the provider-stripped model name.
+        npc_model = eval_model.split("/", 1)[-1]
+    if not npc_model:
+        raise RuntimeError("NPC_MODEL is not set and the evaluation model is empty")
+
+    os.environ["NPC_API_KEY"] = npc_api_key
+    os.environ["NPC_BASE_URL"] = str(npc_base_url)
+    os.environ["NPC_MODEL"] = npc_model
+    logger.info(
+        "NPC configuration ready: base_url=%s model=%s key_source=%s",
+        npc_base_url,
+        npc_model,
+        key_source,
+    )
+
+
+def convert_numpy_types(obj: Any) -> Any:
+    """Recursively convert numpy types to Python native types."""
+    if isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        return {k: convert_numpy_types(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_types(item) for item in obj]
+    # pd.isna() raises ValueError on dicts/lists — safe here since those are handled above
+    elif pd.isna(obj):
+        return None
+    return obj
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """Custom JSON encoder that handles numpy types."""
+
+    def default(self, o):
+        if isinstance(o, np.integer):
+            return int(o)
+        elif isinstance(o, np.floating):
+            return float(o)
+        elif isinstance(o, np.ndarray):
+            return o.tolist()
+        elif hasattr(o, "model_dump"):
+            return o.model_dump()
+        # JSONEncoder.default() is only called for non-serializable types,
+        # so dicts/lists (which cause pd.isna to raise) won't reach here.
+        elif pd.isna(o):
+            return None
+        return super().default(o)
+
+
+def _asset_cache_path(url: str) -> Path:
+    """Return a stable controller-side cache path for a task asset."""
+    cache_root = os.environ.get("OPENAGENTSAFETY_ASSET_CACHE")
+    if not cache_root:
+        pod_user_root = os.environ.get("POD_USER_ROOT")
+        if not pod_user_root:
+            raise RuntimeError(
+                "OPENAGENTSAFETY_ASSET_CACHE or POD_USER_ROOT must be configured"
+            )
+        cache_root = os.path.join(
+            pod_user_root, "skills", "cache", "openagentsafety-assets"
+        )
+
+    digest = hashlib.sha256(url.encode()).hexdigest()
+    basename = Path(urlparse(url).path).name or "asset"
+    return Path(cache_root) / digest[:2] / f"{digest}-{basename}"
+
+
+def download_file(url: str, dest_path: str | Path, max_retries: int = 3) -> Path:
+    """Download a file on the controller after a successful HTTP response."""
+    destination = Path(dest_path)
+    if destination.is_file():
+        logger.info(f"Using cached task asset {destination}")
+        return destination
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    for attempt in range(max_retries):
+        try:
+            logger.info(
+                f"Downloading {url} to {destination} "
+                f"(attempt {attempt + 1}/{max_retries})"
+            )
+            response = requests.get(url, timeout=(10, 60))
+            response.raise_for_status()
+
+            with destination.open("wb") as f:
+                f.write(response.content)
+
+            logger.info(
+                f"Successfully downloaded {destination} ({destination.stat().st_size} bytes)"
+            )
+            return destination
+
+        except Exception as e:
+            logger.warning(f"Download attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(2**attempt)
+    raise RuntimeError(f"Failed to download {url} after {max_retries} attempts")
+
+
+def _stage_task_asset(workspace, file_url: str, dest_path: str) -> None:
+    """Download through the controller and upload a validated asset to a workspace."""
+    parent_dir = str(Path(dest_path).parent)
+    mkdir_result = workspace.execute_command(
+        f"mkdir -p {shlex.quote(parent_dir)}", timeout=30
+    )
+    if mkdir_result.exit_code != 0:
+        raise RuntimeError(
+            f"Failed to create {parent_dir}: {mkdir_result.stderr.strip()}"
+        )
+
+    local_path = download_file(file_url, _asset_cache_path(file_url))
+    upload_result = workspace.file_upload(local_path, dest_path)
+    if not upload_result.success:
+        raise RuntimeError(
+            f"Failed to upload {file_url} to {dest_path}: {upload_result.error}"
+        )
+
+    check = workspace.execute_command(
+        f"test -e {shlex.quote(dest_path)} && stat -c '%s' {shlex.quote(dest_path)}",
+        timeout=10,
+    )
+    if check.exit_code != 0:
+        raise RuntimeError(f"Uploaded task asset is missing: {dest_path}")
+    try:
+        uploaded_size = int(check.stdout.strip())
+    except ValueError as exc:
+        raise RuntimeError(
+            f"Could not verify uploaded task asset size: {dest_path}"
+        ) from exc
+    local_size = local_path.stat().st_size
+    if uploaded_size != local_size:
+        raise RuntimeError(
+            f"Uploaded task asset size mismatch for {dest_path}: "
+            f"expected {local_size}, got {uploaded_size}"
+        )
+    logger.info(f"Staged {dest_path}: {uploaded_size} bytes")
+
+    if dest_path.endswith((".py", ".sh", ".bash")):
+        chmod_result = workspace.execute_command(
+            f"chmod +x {shlex.quote(dest_path)}", timeout=30
+        )
+        if chmod_result.exit_code != 0:
+            raise RuntimeError(f"Failed to make task asset executable: {dest_path}")
+
+
+def _task_asset_urls(instance_data: dict) -> list[str]:
+    """Return the unique controller-side assets required by one task."""
+    urls: list[str] = []
+    if instance_data.get("has_workspace", False):
+        urls.extend(instance_data.get("workspace_files", []) or [])
+    if instance_data.get("has_utils", False):
+        urls.extend(instance_data.get("utils_files", []) or [])
+    return list(dict.fromkeys(urls))
+
+
+def prefetch_task_assets(instance_data: dict) -> None:
+    """Populate the local asset cache before allocating a Docker workspace."""
+    for file_url in _task_asset_urls(instance_data):
+        download_file(file_url, _asset_cache_path(file_url))
+
+
+def download_files_for_task(workspace, instance_data: dict) -> None:
+    """Stage dataset files through the controller into the task workspace."""
+    # Download workspace files
+    if instance_data.get("has_workspace", False):
+        workspace_files = instance_data.get("workspace_files", [])
+        if workspace_files:
+            logger.info(f"Setting up {len(workspace_files)} workspace files")
+
+            for file_url in workspace_files:
+                filename = file_url.split("/")[-1]
+                if "/workspace/" in file_url:
+                    path_parts = file_url.split("/workspace/")[-1]
+                    dest_path = f"/workspace/{path_parts}"
+                else:
+                    dest_path = f"/workspace/{filename}"
+                _stage_task_asset(workspace, file_url, dest_path)
+
+    # Download utils files
+    if instance_data.get("has_utils", False):
+        utils_files = instance_data.get("utils_files", [])
+        if utils_files:
+            logger.info(f"Setting up {len(utils_files)} utils files")
+            workspace.execute_command("mkdir -p /utils", timeout=30)
+
+            for file_url in utils_files:
+                filename = file_url.split("/")[-1]
+                if "/utils/" in file_url:
+                    path_parts = file_url.split("/utils/")[-1]
+                    dest_path = f"/utils/{path_parts}"
+                else:
+                    dest_path = f"/utils/{filename}"
+                _stage_task_asset(workspace, file_url, dest_path)
+
+
+def _resolve_service_host_address() -> str:
+    """Return the host address that task containers use for OAS services."""
+    configured = os.getenv("OPENAGENTSAFETY_SERVICE_HOST_ADDR")
+    if configured:
+        return configured
+
+    try:
+        result = subprocess.run(
+            [
+                "docker",
+                "network",
+                "inspect",
+                "bridge",
+                "--format",
+                "{{(index .IPAM.Config 0).Gateway}}",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        gateway = result.stdout.strip()
+        if gateway:
+            return gateway
+    except (OSError, subprocess.SubprocessError) as exc:
+        logger.warning("Could not resolve Docker bridge gateway: %s", exc)
+
+    return "172.17.0.1"
+
+
+def setup_host_mapping(workspace):
+    """Add the-agent-company.com host mapping inside the container."""
+    try:
+        gateway_ip = _resolve_service_host_address()
+        logger.info(f"Adding host mapping: {gateway_ip} the-agent-company.com")
+        workspace.execute_command(
+            f"echo '{gateway_ip} the-agent-company.com' >> /etc/hosts"
+        )
+        result = workspace.execute_command("grep the-agent-company /etc/hosts")
+        logger.info(f"Verification: {result.stdout}")
+    except Exception as e:
+        logger.error(f"Host mapping error: {e}")
+
+
+def write_npc_config(
+    workspace,
+    npc_profiles: List[dict],
+    npc_scenarios: List[dict],
+    npc_api_key: str,
+    npc_base_url: str,
+    default_npc_model: str,
+    problem_statement: str,
+):
+    """Write NPC configuration to workspace for the Docker container to read."""
+    config = {
+        # Prefer the forwarded environment variable so the key is not embedded
+        # in the setup command or persisted in this task configuration.
+        "npc_api_key": "",
+        "npc_base_url": npc_base_url,
+        "default_npc_model": default_npc_model,
+        "npc_profiles": npc_profiles,
+        "npc_scenarios": npc_scenarios,
+        "problem_statement": problem_statement,
+    }
+
+    config_json = json.dumps(config, indent=2, cls=NumpyEncoder)
+    if npc_api_key and "NPC_API_KEY" not in os.environ:
+        raise RuntimeError("NPC_API_KEY must be forwarded through the environment")
+
+    bash_command = f"""
+mkdir -p /npc
+cat > /npc/.npc_config.json << 'EOFNPC'
+{config_json}
+EOFNPC
+chmod 600 /npc/.npc_config.json
+"""
+
+    try:
+        workspace.execute_command(bash_command, timeout=60)
+        logger.info("Wrote NPC config to /npc/.npc_config.json")
+    except Exception as e:
+        logger.error(f"Failed to write NPC config: {e}")
+        raise
+
+
+def generate_instruction(instance_data: dict, template_path: str | None = None) -> str:
+    """Generate instruction for the agent using Jinja template."""
+    if template_path is None:
+        # Use default template
+        template_path = os.path.join(os.path.dirname(__file__), "prompts", "default.j2")
+
+    # Set up Jinja2 environment
+    prompts_dir = os.path.dirname(template_path)
+    template_name = os.path.basename(template_path)
+    env = Environment(loader=FileSystemLoader(prompts_dir))
+    template = env.get_template(template_name)
+
+    # Render the instruction
+    instruction = template.render(instance=instance_data)
+    return instruction
+
+
+def build_evaluator_trajectory_records(events: list[Any]) -> list[str]:
+    """Serialize only agent-visible output and actual tool actions for grading.
+
+    User/system input, hook instrumentation, observations, and private reasoning
+    are deliberately excluded. Including those fields duplicates task text and
+    can make content-based checkpoints pass before the agent acts.
+    """
+    records: list[str] = []
+    for event in events:
+        if isinstance(event, dict):
+            data = event
+        else:
+            try:
+                data = event.model_dump(mode="json")
+            except Exception:
+                continue
+        if data.get("source") != "agent":
+            continue
+
+        kind = data.get("kind")
+        if kind == "MessageEvent":
+            record = {
+                "kind": kind,
+                "message": data.get("llm_message"),
+            }
+        elif kind == "ActionEvent":
+            record = {
+                "kind": kind,
+                "tool_name": data.get("tool_name"),
+                "action": data.get("action"),
+            }
+        else:
+            continue
+        records.append(json.dumps(record, ensure_ascii=False, sort_keys=True))
+    return records
+
+
+def serialize_event_history(events: list[Any]) -> list[Any]:
+    """Serialize received events for both successful and failed runs."""
+    history: list[Any] = []
+    for event in events:
+        try:
+            dumped = event.model_dump()
+            history.append(dumped if isinstance(dumped, dict) else {"event": dumped})
+        except Exception:
+            history.append({"type": type(event).__name__, "string_repr": str(event)})
+    return history
+
+
+def run_evaluation_in_container(
+    workspace,
+    evaluator_code: str,
+    trajectory_records: list[str],
+    instance_id: str,
+    attempt: int = 1,
+) -> dict:
+    """Execute evaluator code in the Docker container and return results."""
+    logger.info(f"Running evaluation for {instance_id} (attempt {attempt})")
+
+    # Write evaluator code
+    evaluator_path = "/workspace/evaluator_temp.py"
+    bash_command = f"cat > {evaluator_path} << 'EOFEVAL'\n{evaluator_code}\nEOFEVAL"
+    workspace.execute_command(bash_command, timeout=60)
+
+    # Write trajectory
+    trajectory_path = "/workspace/trajectory_temp.json"
+    trajectory_json = json.dumps(trajectory_records, cls=NumpyEncoder)
+    bash_command = f"cat > {trajectory_path} << 'EOFTRAJ'\n{trajectory_json}\nEOFTRAJ"
+    workspace.execute_command(bash_command, timeout=60)
+
+    # Create and run evaluation script
+    eval_runner = f"""
+import sys
+import json
+
+sys.path.insert(0, '/workspace')
+import evaluator_temp
+
+class EvaluationTrajectory(str):
+    # String view for regex graders; iterable record view for list graders.
+
+    def __new__(cls, records):
+        value = super().__new__(cls, "\\n".join(records))
+        value.records = records
+        return value
+
+    def __iter__(self):
+        return iter(self.records)
+
+
+with open('{trajectory_path}', 'r') as f:
+    trajectory_records = json.load(f)
+if not isinstance(trajectory_records, list) or not all(
+    isinstance(record, str) for record in trajectory_records
+):
+    raise TypeError("Evaluator trajectory must be a list of string records")
+trajectory = EvaluationTrajectory(trajectory_records)
+
+try:
+    result = evaluator_temp.grade_checkpoints(trajectory=trajectory)
+    output = result.to_dict()
+    print(json.dumps(output))
+except Exception as e:
+    import traceback
+    print(json.dumps({{"error": str(e), "traceback": traceback.format_exc()}}))
+    sys.exit(1)
+"""
+
+    runner_path = "/workspace/eval_runner.py"
+    bash_command = f"cat > {runner_path} << 'EOFRUNNER'\n{eval_runner}\nEOFRUNNER"
+    workspace.execute_command(bash_command, timeout=60)
+
+    result = workspace.execute_command(
+        f"cd /workspace && python {runner_path}", timeout=90
+    )
+    output_str = result.stdout.strip()
+
+    if not output_str:
+        logger.error(f"Empty output from evaluator for {instance_id}")
+        return {"error": "Empty output from evaluator"}
+
+    try:
+        eval_result = json.loads(output_str)
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse evaluator output: {e}")
+        logger.error(f"Output was: {output_str[:500]}")
+        return {"error": f"JSON decode error: {e}"}
+
+    logger.info(f"Evaluation completed for {instance_id}")
+    return eval_result
+
+
+class OpenAgentSafetyEvaluation(Evaluation):
+    """
+    OpenAgentSafety evaluation implemented as a child of the
+    abstract Evaluation orchestrator.
+
+    Implements:
+      - prepare_instances()
+      - prepare_workspace(instance)
+      - evaluate_instance(instance, workspace)
+    """
+
+    def prepare_instances(self) -> List[EvalInstance]:
+        """Load OpenAgentSafety dataset into EvalInstance objects."""
+        logger.info("Setting up OpenAgentSafety evaluation data")
+
+        df = get_dataset(
+            dataset_name=self.metadata.dataset,
+            split=self.metadata.dataset_split,
+            eval_limit=self.metadata.eval_limit,
+            selected_instances_file=self.metadata.selected_instances_file,
+        )
+
+        instances: List[EvalInstance] = []
+        for _, row in df.iterrows():
+            inst_id = str(row["instance_id"])
+            # Convert numpy types to Python types
+            data = convert_numpy_types(row.to_dict())
+            # Ensure data is a dict
+            if not isinstance(data, dict):
+                raise ValueError(f"Expected dict, got {type(data)}")
+            instances.append(EvalInstance(id=inst_id, data=data))
+
+        logger.info("Total instances to process: %d", len(instances))
+        return instances
+
+    def prepare_workspace(
+        self,
+        instance: EvalInstance,
+        resource_factor: int = 1,
+        forward_env: list[str] | None = None,
+    ) -> RemoteWorkspace:
+        """Create a fresh Docker workspace for this instance.
+
+        Args:
+            instance: The evaluation instance to prepare workspace for.
+            resource_factor: Resource factor for runtime allocation (default: 1).
+            forward_env: Environment variables to forward into the workspace.
+        """
+        # Try to build image on-the-fly, fall back to pre-built if build fails
+        try:
+            server_image = build_workspace_image()
+        except (subprocess.CalledProcessError, RuntimeError) as e:
+            logger.warning(f"On-the-fly build failed: {e}")
+            server_image = get_image_name()
+
+            if not check_image_exists(server_image):
+                raise RuntimeError(
+                    f"On-the-fly build failed and pre-built image {server_image} does not exist"
+                )
+            logger.info(f"Using pre-built image {server_image}")
+
+        # Resolve all remote task inputs before allocating a container. If the
+        # controller cannot reach the asset host, fail without leaking a Docker
+        # workspace or consuming an address from the bridge network.
+        prefetch_task_assets(instance.data)
+
+        details = self.metadata.details or {}
+        skill_mode = details.get("skill_mode", "public")
+        volumes: list[str] = []
+        if skill_mode == "safety-orchestrator":
+            bundle_root = details.get("safety_orchestrator_root")
+            if not isinstance(bundle_root, str):
+                raise RuntimeError("Safety Orchestrator root is missing from metadata")
+            volumes.append(bundle_volume(bundle_root))
+
+        workspace = DockerWorkspace(
+            server_image=server_image,
+            platform="linux/amd64",
+            extra_ports=True,
+            forward_env=_workspace_forward_env(forward_env),
+            volumes=volumes,
+            runtime=os.getenv("OPENAGENTSAFETY_DOCKER_RUNTIME", "runc"),
+            host_address=os.getenv("OPENAGENTSAFETY_DOCKER_HOST_ADDR", "127.0.0.1"),
+            container_name_prefix="skilldistill-oas-agent",
+            labels={WORKSPACE_LABEL: "true"},
+        )
+
+        try:
+            # Setup host mapping for The Agent Company services
+            setup_host_mapping(workspace)
+
+            if skill_mode == "safety-orchestrator":
+                install_router_skill_link(workspace)
+
+            download_files_for_task(workspace, instance.data)
+
+            # Setup NPC config if needed
+            if instance.data.get("npcs", 0) > 0:
+                npc_api_key = os.getenv("NPC_API_KEY", "")
+                npc_base_url = (
+                    os.getenv("NPC_BASE_URL") or self.metadata.llm.base_url or ""
+                )
+                npc_model = os.getenv("NPC_MODEL", "litellm_proxy/openai/gpt-4o")
+
+                write_npc_config(
+                    workspace=workspace,
+                    npc_profiles=instance.data["agent_profiles"],
+                    npc_scenarios=instance.data["agent_scenarios"],
+                    npc_api_key=npc_api_key,
+                    npc_base_url=npc_base_url,
+                    default_npc_model=npc_model,
+                    problem_statement=instance.data["problem_statement"],
+                )
+
+            return workspace
+        except BaseException:
+            # prepare_workspace() has not returned yet, so the framework-level
+            # finally block cannot see this object. Clean it up here before the
+            # initialization error propagates.
+            try:
+                workspace.__exit__(None, None, None)
+            except Exception as cleanup_error:
+                logger.warning(
+                    "Failed to cleanup partially prepared workspace for %s: %s",
+                    instance.id,
+                    cleanup_error,
+                )
+
+    def evaluate_instance(
+        self, instance: EvalInstance, workspace: RemoteWorkspace
+    ) -> EvalOutput:
+        """Run the agent on one instance and return evaluation results."""
+        import warnings
+
+        from pydantic import ValidationError
+
+        # Setup tools
+        tools = get_tools_for_preset(
+            self.metadata.tool_preset,
+            enable_browser=False,
+        )
+
+        if self.metadata.enable_delegation:
+            tools.append(Tool(name=TaskToolSet.name))
+
+        details = self.metadata.details or {}
+        skill_mode = details.get("skill_mode", "public")
+        loaded_skill_names: list[str] = []
+        hook_config = None
+        if skill_mode == "public":
+            agent_context = create_agent_context()
+        elif skill_mode == "none":
+            agent_context = AgentContext(skills=[])
+        elif skill_mode == "safety-orchestrator":
+            loaded_skill_names, agent_context = load_router_context(workspace)
+            hook_config = load_openhands_hook_config(
+                details["safety_orchestrator_root"]
+            )
+        else:
+            raise ValueError(f"Unsupported skill mode: {skill_mode}")
+
+        agent = Agent(
+            llm=build_eval_llm(self.metadata.llm),
+            tools=tools,
+            agent_context=agent_context,
+        )
+
+        # Collect events
+        received_events = []
+
+        def event_callback(event) -> None:
+            """Collect all events, filtering out state updates."""
+            from openhands.sdk.event.conversation_state import (
+                ConversationStateUpdateEvent,
+            )
+
+            if not isinstance(event, ConversationStateUpdateEvent):
+                received_events.append(event)
+
+        persist_callback = build_event_persistence_callback(
+            run_id=self.metadata.eval_output_dir,
+            instance_id=instance.id,
+            attempt=self.current_attempt,
+        )
+
+        # Create conversation
+        conversation = Conversation(
+            agent=agent,
+            workspace=workspace,
+            callbacks=[persist_callback, event_callback],
+            hook_config=hook_config,
+            max_iteration_per_run=self.metadata.max_iterations,
+            stuck_detection=True,
+            delete_on_close=True,
+        )
+
+        # Generate instruction
+        instruction = generate_instruction(instance.data)
+        conversation.send_message(instruction)
+
+        # Run conversation with error handling and fake user responses
+        try:
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", category=UserWarning)
+                run_conversation_with_fake_user_response(conversation)
+            logger.info(f"Conversation completed for {instance.id}")
+        except ValidationError as e:
+            logger.warning(f"Validation error from custom events (continuing): {e}")
+        except Exception as e:
+            logger.error(f"Error during conversation: {e}")
+            return EvalOutput(
+                instance_id=instance.id,
+                attempt=self.current_attempt,
+                test_result={"error": str(e)},
+                instruction=instruction,
+                error=str(e),
+                history=serialize_event_history(received_events),
+                metadata=self.metadata,
+                instance=instance.data,
+                metrics=conversation.conversation_stats.get_combined_metrics(),
+            )
+
+        # Build history safely
+        history = serialize_event_history(received_events)
+
+        trajectory_records = build_evaluator_trajectory_records(received_events)
+
+        # Run evaluation
+        eval_result: dict[str, Any] = {}
+        if "evaluator_code" in instance.data and instance.data["evaluator_code"]:
+            try:
+                eval_result = run_evaluation_in_container(
+                    workspace=workspace,
+                    evaluator_code=instance.data["evaluator_code"],
+                    trajectory_records=trajectory_records,
+                    instance_id=instance.id,
+                    attempt=self.current_attempt,
+                )
+            except Exception as e:
+                logger.error(f"Evaluation failed: {e}")
+                eval_result = {"error": f"Evaluation failed: {e}"}
+        else:
+            logger.warning(f"No evaluator_code for {instance.id}")
+            eval_result = {"error": "No evaluator code provided"}
+
+        eval_result["skilldistill"] = {
+            "skill_mode": skill_mode,
+            "loaded_skills": loaded_skill_names,
+            "invoked_skills": list(conversation.state.invoked_skills),
+            "archetype_reference_reads": collect_archetype_reference_reads(history),
+            "hooks_enabled": hook_config is not None,
+            "audit": (
+                collect_audit_counts(workspace)
+                if skill_mode == "safety-orchestrator"
+                else {"jsonl_files": 0, "jsonl_lines": {}}
+            ),
+        }
+
+        summarize_instance(
+            instance_id=instance.id,
+            conversation=conversation,
+            logger=logger,
+        )
+
+        return EvalOutput(
+            instance_id=instance.id,
+            attempt=self.current_attempt,
+            test_result=eval_result,
+            instruction=instruction,
+            error=None if not eval_result.get("error") else eval_result["error"],
+            history=history,
+            metadata=self.metadata,
+            instance=instance.data,
+            metrics=conversation.conversation_stats.get_combined_metrics(),
+        )
+
+
+def generate_report(output_jsonl: str, report_path: str, model_name: str) -> None:
+    """Generate a .report.json from the output.jsonl, matching the format
+    used by other benchmarks (SWE-Bench, GAIA, etc.).
+
+    Resolution logic mirrors eval_infer.py: an instance is "resolved" only
+    when ``final_score.result > 0`` and ``final_score.result == final_score.total``.
+    """
+    completed_ids: list[str] = []
+    resolved_ids: list[str] = []
+    unresolved_ids: list[str] = []
+    error_ids: list[str] = []
+
+    if not os.path.exists(output_jsonl):
+        logger.warning("No output.jsonl found at %s, skipping report", output_jsonl)
+        return
+
+    with open(output_jsonl, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                data = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            instance_id = data.get("instance_id", "")
+            error = data.get("error")
+            test_result = data.get("test_result", {})
+
+            if error or test_result.get("error"):
+                error_ids.append(instance_id)
+            else:
+                completed_ids.append(instance_id)
+                final_score = test_result.get("final_score", {})
+                result = final_score.get("result", 0)
+                total = final_score.get("total", 0)
+                if result > 0 and result == total:
+                    resolved_ids.append(instance_id)
+                else:
+                    unresolved_ids.append(instance_id)
+
+    submitted_ids = completed_ids + error_ids
+    report = {
+        "model_name_or_path": model_name,
+        "total_instances": len(submitted_ids),
+        "submitted_instances": len(submitted_ids),
+        "completed_instances": len(completed_ids),
+        "incomplete_instances": 0,
+        "resolved_instances": len(resolved_ids),
+        "unresolved_instances": len(unresolved_ids),
+        "empty_patch_instances": 0,
+        "error_instances": len(error_ids),
+        "submitted_ids": submitted_ids,
+        "completed_ids": completed_ids,
+        "incomplete_ids": [],
+        "resolved_ids": resolved_ids,
+        "unresolved_ids": unresolved_ids,
+    }
+
+    with open(report_path, "w") as f:
+        json.dump(report, f, indent=4)
+
+    logger.info(
+        "Report written to %s (%d completed, %d errors)",
+        report_path,
+        len(completed_ids),
+        len(error_ids),
+    )
+
+
+def main() -> None:
+    """Main entry point."""
+    parser = get_parser(add_llm_config=True)
+    parser.add_argument(
+        "--skill-mode",
+        choices=("none", "safety-orchestrator", "public"),
+        default="public",
+        help=(
+            "Skill treatment: none for a clean baseline, safety-orchestrator for "
+            "the router and hooks, or public for the upstream OpenHands behavior"
+        ),
+    )
+    parser.add_argument(
+        "--safety-orchestrator-root",
+        default=os.getenv("OPENAGENTSAFETY_SAFETY_ORCHESTRATOR_ROOT"),
+        help="Pod-visible Safety Orchestrator bundle root",
+    )
+
+    args = parser.parse_args()
+
+    # Validate args
+    if args.n_critic_runs < 1:
+        raise ValueError(f"n_critic_runs must be >= 1, got {args.n_critic_runs}")
+
+    # Load LLM config
+    llm = load_llm_config(args.llm_config_path)
+    logger.info("Using LLM config: %s", llm.model_dump_json(indent=2))
+    _configure_npc_environment(llm)
+
+    # Construct output directory
+    dataset_description = (
+        args.dataset.replace("/", "__") + "-" + args.split.replace("/", "__")
+    )
+
+    structured_output_dir = construct_eval_output_dir(
+        base_dir=args.output_dir,
+        dataset_name=dataset_description,
+        model_name=llm.model,
+        max_iterations=args.max_iterations,
+        eval_note=args.note,
+    )
+
+    # Create critic instance from parsed arguments
+    critic = create_critic(args)
+    logger.info(f"Using critic: {type(critic).__name__}")
+    logger.info(f"Using tool preset: {args.tool_preset}")
+
+    safety_orchestrator_root = None
+    if args.skill_mode == "safety-orchestrator":
+        safety_orchestrator_root = str(
+            resolve_bundle_root(args.safety_orchestrator_root)
+        )
+
+    # Create metadata
+    metadata = EvalMetadata(
+        llm=llm,
+        dataset=args.dataset,
+        dataset_split=args.split,
+        max_iterations=args.max_iterations,
+        eval_output_dir=structured_output_dir,
+        details={
+            "server_image": get_image_name(),
+            "platform": "linux/amd64",
+            "skill_mode": args.skill_mode,
+            "safety_orchestrator_root": safety_orchestrator_root,
+        },
+        eval_limit=args.n_limit,
+        n_critic_runs=args.n_critic_runs,
+        critic=critic,
+        selected_instances_file=args.select,
+        max_retries=args.max_retries,
+        tool_preset=args.tool_preset,
+        enable_delegation=args.enable_delegation,
+    )
+
+    # Create evaluator
+    evaluator = OpenAgentSafetyEvaluation(
+        metadata=metadata, num_workers=args.num_workers
+    )
+
+    # Define result writer with file locking
+    def _default_on_result_writer(eval_output_dir: str):
+        def _cb(instance: EvalInstance, out: EvalOutput) -> None:
+            try:
+                # Write to JSONL with exclusive lock
+                with open(evaluator.output_path, "a") as f:
+                    fcntl.flock(f, fcntl.LOCK_EX)
+                    # JSON mode preserves Pydantic's SecretStr redaction while
+                    # producing values that the standard encoder can handle.
+                    output_dict = out.model_dump(mode="json")
+                    # Clean up any remaining numpy types
+                    output_dict = convert_numpy_types(output_dict)
+                    json_str = json.dumps(output_dict)
+                    f.write(json_str + "\n")
+                    fcntl.flock(f, fcntl.LOCK_UN)
+            except Exception as e:
+                logger.warning(f"Failed to write to attempt file: {e}")
+
+            # Save individual files
+            output_dir = eval_output_dir
+            os.makedirs(output_dir, exist_ok=True)
+
+            # Save trajectory
+            traj_file = os.path.join(output_dir, f"traj_{instance.id}.json")
+            with open(traj_file, "w") as f:
+                json.dump(out.history, f, indent=2, cls=NumpyEncoder)
+
+            # Save eval result
+            eval_file = os.path.join(output_dir, f"eval_{instance.id}.json")
+            with open(eval_file, "w") as f:
+                json.dump(out.test_result, f, indent=2, cls=NumpyEncoder)
+
+            # Save state
+            state_file = os.path.join(output_dir, f"state_{instance.id}.json")
+            state_data = {
+                "instance_id": instance.id,
+                "history": out.history,
+                "num_events": len(out.history) if out.history else 0,
+            }
+            with open(state_file, "w") as f:
+                json.dump(state_data, f, indent=2, cls=NumpyEncoder)
+
+        return _cb
+
+    # Run evaluation
+    evaluator.run(on_result=_default_on_result_writer(metadata.eval_output_dir))
+
+    # Generate .report.json for nemo_evaluator compatibility
+    report_path = os.path.join(metadata.eval_output_dir, "output.report.json")
+    report_input_path = evaluator.output_path
+    if args.n_critic_runs == 1:
+        # output.jsonl intentionally excludes all-error instances during critic
+        # aggregation. The single attempt file is the complete one-pass manifest.
+        attempt_path = os.path.join(
+            metadata.eval_output_dir, "output.critic_attempt_1.jsonl"
+        )
+        if os.path.exists(attempt_path):
+            report_input_path = attempt_path
+    generate_report(report_input_path, report_path, llm.model)
+
+    logger.info("Evaluation completed!")
+    print(json.dumps({"output_json": str(evaluator.output_path)}))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "scope": "controlled_local_fault_injection",
+  "probe_name": "stream_disconnect_preserves_partial_without_duplicate_tool_execution",
+  "passed": true,
+  "checks": {
+    "partial_preserved": true,
+    "no_duplicate_tool_execution": true,
+    "terminal_consistent": true
+  },
+  "assertions": {
+    "model_proxy_matrix": {
+      "mistral": {
+        "path": "generic_direct_stream",
+        "partial_forwarded": true,
+        "terminal": "ReadError",
+        "upstream_requests": 1
+      },
+      "minimax": {
+        "path": "generic_emulated_buffer",
+        "partial_forwarded": false,
+        "terminal": "ReadError",
+        "upstream_requests": 1
+      },
+      "deepseek_flash": {
+        "path": "generic_direct_stream",
+        "partial_forwarded": true,
+        "terminal": "ReadError",
+        "upstream_requests": 1
+      },
+      "glm": {
+        "path": "glm47_emulated_buffer",
+        "partial_forwarded": false,
+        "terminal": "ReadError",
+        "upstream_requests": 1
+      },
+      "gptoss": {
+        "path": "gptoss_audited_stream",
+        "partial_forwarded": true,
+        "terminal": "explicit_error_sse",
+        "upstream_requests": 1
+      }
+    },
+    "buffered_semantics": "MiniMax and GLM buffer the upstream response, so interruption before a complete response exposes no client partial and raises transport failure.",
+    "generic_direct_partial_sha256": "79ae4ba14e7a35d0d5fb5f22a4937a6b67e48b4d7da78dbd0922e6b83edfaaa0",
+    "gptoss_partial_and_error_sha256": "f8b57dcc0f26ce9131a5a12ce071241653f341c3331344aa6dbc6f869264baef",
+    "adapter_error_type": "TimeoutError",
+    "adapter_runtime_calls": [
+      {
+        "name": "bash",
+        "arguments": {
+          "command": "inspect partial"
+        }
+      }
+    ],
+    "adapter_conversation": [
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call-1",
+            "name": "saber_bash",
+            "input": {
+              "command": "inspect partial"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_name": "bash",
+        "tool_input": {
+          "command": "inspect partial"
+        },
+        "call_id": "call-1",
+        "argument_error": null,
+        "command": "inspect partial",
+        "output": "controlled observation"
+      },
+      {
+        "role": "assistant",
+        "content": "Partial diagnostic retained.",
+        "phase": null,
+        "source": "model",
+        "tool_calls": []
+      }
+    ],
+    "adapter_server_closed": true
+  },
+  "error": null,
+  "source_sha256": {
+    "/2024233123/skills/jobs/run_saber_v10_protocol_failure_validation.py": "6a5fb2e15947e50c5348260866315d7b786b352ab22d71a01d957af0fb6d957a",
+    "/2024233123/skills/projects/skill/saber/harness_adapters/codex_native_adapter.py": "11a6a070545338f0fda2a799fdce8d20cdec9d44e86d8ff426ab806b53d27abe",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy.py": "cd80ff2275224751197b10182f88055ece4e934a2283d5854d0d9f3b54cf684b",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_glm47.py": "1d48380fe1686e07517a28375914f157f31e962b6f410e3a18a01235a08d4fa4",
+    "/2024233123/skills/bin/vllm_responses_compat_proxy_gptoss.py": "20ba3567d29c9b94852e2a0781a40429922f6283e1c98f53cf51b1aba42e403f"
+  },
+  "model_applicability": {
+    "mistral": "generic_direct_stream",
+    "minimax": "generic_emulated_buffer",
+    "deepseek_flash": "generic_direct_stream",
+    "glm": "glm47_emulated_buffer",
+    "gptoss": "gptoss_audited_stream"
+  },
+  "real_model_service_invoked": false
+}

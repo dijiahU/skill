@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "status": "planned_not_executed",
+  "batch": "v10-paired-20260906-r2",
+  "fixture_revision": "saber-v10-fixtures-20260906-r2",
+  "fixture_corpus_sha256": "3dbba088b71153d5af02ef081376d83017f87da8cf1142c81764e19a0ac56167",
+  "pilot_tasks": 52,
+  "models": [
+    "mistral",
+    "minimax",
+    "deepseek_flash",
+    "glm",
+    "gptoss"
+  ],
+  "conditions": [
+    "none",
+    "safety-orchestrator"
+  ],
+  "expected_pilot_records": 520,
+  "expected_full_records": 7160,
+  "judge_shadow_gold": {
+    "path": "/2024233123/skills/reports/v10-fixes-20260906/judge_shadow_gold_v10_r3.json",
+    "sha256": "9d3a39553213c01376f464dff6208df12ef0c09d956416aee390808048156a63",
+    "schema_version": "saber-judge-shadow-gold-v10.0",
+    "case_count": 20,
+    "origin_counts": {
+      "historical": 11,
+      "synthetic": 9
+    },
+    "harmful_counts": {
+      "true": 8,
+      "false": 12
+    },
+    "coverage_counts": {
+      "historical_true": 5,
+      "historical_false": 6,
+      "synthetic_true": 3,
+      "synthetic_false": 6
+    }
+  },
+  "judge_full_pipeline_gold": {
+    "path": "/2024233123/skills/reports/v10-fixes-20260906/judge_full_pipeline_gold_manifest_v10_r2.json",
+    "sha256": "c1ec10c3a22648534027c12abc09e739d2309df23a98621482f158745cd9a8db",
+    "schema_version": "saber-judge-full-pipeline-gold-manifest-v10.0",
+    "case_count": 24,
+    "origin_counts": {
+      "historical": 11,
+      "synthetic": 13
+    },
+    "required_branches": [
+      "abort_validity",
+      "attribution",
+      "rule_evaluation",
+      "zero_event_utility"
+    ],
+    "budget": {
+      "context_window": 65536,
+      "context_margin_tokens": 2048,
+      "max_output_tokens": 6144,
+      "max_output_tokens_ceiling": 12288
+    },
+    "timeout_policy": {
+      "base_read_timeout_seconds": 600.0,
+      "connect_timeout_seconds": 30.0,
+      "read_token_rate_floor_tokens_per_second": 6.0,
+      "read_timeout_prefill_buffer_seconds": 120.0
+    }
+  },
+  "protocol_case_checks": {
+    "exact_render_token_count_equals_usage_for_short_and_multibyte_input": [
+      "multibyte_count_matches_usage",
+      "short_count_matches_usage"
+    ],
+    "long_input_output_reserve_margin_within_context": [
+      "input_not_truncated",
+      "output_reserve_positive",
+      "within_context"
+    ],
+    "invalid_tool_json_not_executed_and_valid_retry": [
+      "invalid_not_executed",
+      "valid_retry_exactly_once"
+    ],
+    "stream_disconnect_preserves_partial_without_duplicate_tool_execution": [
+      "no_duplicate_tool_execution",
+      "partial_preserved",
+      "terminal_consistent"
+    ],
+    "completed_requires_nonempty_model_final": [
+      "completed_has_nonempty_model_final",
+      "synthetic_completion_rejected"
+    ],
+    "mistral_incremental_decode_matches_batch_decode": [
+      "incremental_matches_batch",
+      "replacement_count_zero",
+      "strict_null_removed"
+    ]
+  },
+  "gpu_waves": [
+    [
+      "mistral"
+    ],
+    [
+      "minimax"
+    ],
+    [
+      "deepseek_flash"
+    ],
+    [
+      "glm",
+      "gptoss"
+    ]
+  ],
+  "gates": {
+    "before_pilot": [
+      "fixture_runtime",
+      "protocol",
+      "judge_full_pipeline"
+    ],
+    "before_full": [
+      "fixture_runtime",
+      "protocol",
+      "judge_full_pipeline",
+      "pilot_technical",
+      "pilot_semantics_reviewed"
+    ]
+  },
+  "commands": {
+    "fixture_runtime": "PYTHONPATH=/2024233123/skills/jobs python3 /2024233123/skills/jobs/saber_v10_fixture_preflight.py --runtime --resource-scope v10-fixture-preflight-20260906 --random-repeats 20 --report /2024233123/skills/reports/v10-fixes-20260906/fixture_runtime_preflight_r2.json",
+    "prepare_after_sources_final": "python3 /2024233123/skills/jobs/run_saber_v10.py --batch-id v10-paired-20260906-r2 --prepare",
+    "check_pre_pilot": "python3 /2024233123/skills/jobs/saber-v10-paired-20260906-r2/frozen/jobs/run_saber_v10.py --check-pre-pilot-gates",
+    "run_pilot_after_scoped_approval": "python3 /2024233123/skills/jobs/saber-v10-paired-20260906-r2/frozen/jobs/run_saber_v10.py --run-pilot --cleanup-approved",
+    "advance_reviewed_pilot": "python3 /2024233123/skills/jobs/saber-v10-paired-20260906-r2/frozen/jobs/run_saber_v10.py --advance-reviewed-pilot",
+    "run_full_after_separate_scoped_approval": "python3 /2024233123/skills/jobs/saber-v10-paired-20260906-r2/frozen/jobs/run_saber_v10.py --run-full --cleanup-approved"
+  },
+  "ownership": {
+    "process_tags": {
+      "SABER_BATCH_ID": "v10-paired-20260906-r2",
+      "SABER_BATCH_MODEL": "{pilot|full}-{model}"
+    },
+    "runner_name_prefix": "rick-saber-v10-paired-20260906-r2-{run}-",
+    "runner_labels": {
+      "rick-saber.batch": "v10-paired-20260906-r2",
+      "rick-saber.run": "{run}",
+      "rick-saber.role": "runner"
+    },
+    "sandbox_name_prefixes": [
+      "rick-saber-v10-pilot-mistral-base-",
+      "rick-saber-v10-pilot-mistral-treat-",
+      "rick-saber-v10-pilot-minimax-base-",
+      "rick-saber-v10-pilot-minimax-treat-",
+      "rick-saber-v10-pilot-deepseek_flash-base-",
+      "rick-saber-v10-pilot-deepseek_flash-treat-",
+      "rick-saber-v10-pilot-glm-base-",
+      "rick-saber-v10-pilot-glm-treat-",
+      "rick-saber-v10-pilot-gptoss-base-",
+      "rick-saber-v10-pilot-gptoss-treat-",
+      "rick-saber-v10-full-mistral-base-",
+      "rick-saber-v10-full-mistral-treat-",
+      "rick-saber-v10-full-minimax-base-",
+      "rick-saber-v10-full-minimax-treat-",
+      "rick-saber-v10-full-deepseek_flash-base-",
+      "rick-saber-v10-full-deepseek_flash-treat-",
+      "rick-saber-v10-full-glm-base-",
+      "rick-saber-v10-full-glm-treat-",
+      "rick-saber-v10-full-gptoss-base-",
+      "rick-saber-v10-full-gptoss-treat-"
+    ],
+    "sandbox_labels": [
+      {
+        "skilldistill.saber.batch": "v10-pilot-mistral-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-mistral-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-minimax-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-minimax-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-deepseek_flash-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-deepseek_flash-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-glm-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-glm-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-gptoss-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-pilot-gptoss-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-mistral-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-mistral-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-minimax-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-minimax-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-deepseek_flash-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-deepseek_flash-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-glm-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-glm-treat",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-gptoss-base",
+        "skilldistill.saber.role": "sandbox"
+      },
+      {
+        "skilldistill.saber.batch": "v10-full-gptoss-treat",
+        "skilldistill.saber.role": "sandbox"
+      }
+    ],
+    "cleanup_requires_name_and_all_labels": true
+  },
+  "automatic_full_start": false
+}

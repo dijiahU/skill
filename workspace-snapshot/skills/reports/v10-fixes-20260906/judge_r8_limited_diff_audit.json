@@ -1,0 +1,90 @@
+{
+  "schema_version": "saber-judge-r8-limited-diff-audit-v1",
+  "r7_source_bundle_sha256": "0454b24612700103fb978ac23ef28b67c4d4ff58c466c2f663405d223dd5d17c",
+  "r8_source_bundle_sha256": "44bc0a5e8c7020fd95474f18f7c52f9fec7ce0d36583069d8af2bef2b1f57142",
+  "changed_full_pipeline_dependencies": [
+    "skills/projects/skill/saber/judge_osbench.py",
+    "skills/projects/skill/saber/judge_protocol.py",
+    "skills/bin/run_saber_judge_full_pipeline_gate.py"
+  ],
+  "ast_changed_top_level_items": {
+    "judge_osbench": [
+      "_response_from_openai",
+      "query_judge"
+    ],
+    "judge_protocol": [
+      "JudgeResponse"
+    ],
+    "full_runner": [
+      "build_report",
+      "configure_judge",
+      "main"
+    ]
+  },
+  "prompt_constant_unchanged": true,
+  "request_budget_function_unchanged": true,
+  "validator_unchanged": true,
+  "evidence_corpora_unchanged": true,
+  "schemas": {
+    "skills/projects/skill/saber/judge_protocol_v10.schema.json": {
+      "sha256": "b3f0fd6b3547e561bd87973c52f5af7d46e3511e060e9e8b4296631120b1a81c",
+      "matches_r7": true
+    },
+    "skills/projects/skill/saber/judge_shadow_gold_v10.schema.json": {
+      "sha256": "7672310eb6b8447a562f62cecb48fb4dcff1a4cb67f000a7ac3f3e5789871e98",
+      "matches_r7": true
+    },
+    "skills/projects/skill/saber/judge_full_pipeline_gold_manifest_v10.schema.json": {
+      "sha256": "5960026dc108540a7e4f27026c09eb0545889b6e3427740ddf6b426281f42611",
+      "matches_r7": true
+    },
+    "skills/projects/skill/saber/judge_full_pipeline_shadow_gate_v10.schema.json": {
+      "sha256": "e9bac79bf5431ebe4aab58a173acd304f87cd11e28a68b0dff747e85fd8f6274",
+      "matches_r7": true
+    }
+  },
+  "gold": {
+    "skills/reports/v10-fixes-20260906/judge_shadow_gold_v10_r3.json": "9d3a39553213c01376f464dff6208df12ef0c09d956416aee390808048156a63",
+    "skills/reports/v10-fixes-20260906/judge_utility_source_supplemental_gold_v10_r3.json": "8d5eadc05ef4856cac14d9c1848a590f8a4663317b4e8f0cba959fa4ef7e8bcf",
+    "skills/reports/v10-fixes-20260906/judge_full_pipeline_gold_manifest_v10_r2.json": "c1ec10c3a22648534027c12abc09e739d2309df23a98621482f158745cd9a8db"
+  },
+  "gold_expected": {
+    "skills/reports/v10-fixes-20260906/judge_shadow_gold_v10_r3.json": "9d3a39553213c01376f464dff6208df12ef0c09d956416aee390808048156a63",
+    "skills/reports/v10-fixes-20260906/judge_utility_source_supplemental_gold_v10_r3.json": "8d5eadc05ef4856cac14d9c1848a590f8a4663317b4e8f0cba959fa4ef7e8bcf",
+    "skills/reports/v10-fixes-20260906/judge_full_pipeline_gold_manifest_v10_r2.json": "c1ec10c3a22648534027c12abc09e739d2309df23a98621482f158745cd9a8db"
+  },
+  "gold_unchanged": true,
+  "full_dry_run": {
+    "path": "skills/reports/v10-fixes-20260906/judge_full_pipeline_shadow_dry_run_r8.json",
+    "sha256": "8b92b1e9bf795b4cd3bce182dc39b6d7f7a682dc18eae10aa7eb45b004a5b674",
+    "schema_valid": true,
+    "counts": {
+      "total": 24,
+      "completed": 24,
+      "passed": 0,
+      "disagreements": 0,
+      "errors": 0,
+      "historical_total": 11,
+      "synthetic_total": 13
+    },
+    "enable_thinking": true,
+    "source_sha256": "44bc0a5e8c7020fd95474f18f7c52f9fec7ce0d36583069d8af2bef2b1f57142"
+  },
+  "attribution_dry_run": {
+    "path": "skills/reports/v10-fixes-20260906/judge_shadow_attribution_dry_run_r8.json",
+    "sha256": "e9127a5572ace1521116e8dc583d4057ef413b5e5ac9c0533f44e8783e9d471d",
+    "schema_valid": true,
+    "counts": {
+      "total": 20,
+      "completed": 20,
+      "passed": 0,
+      "disagreements": 0,
+      "errors": 0,
+      "historical_total": 11,
+      "synthetic_total": 9
+    },
+    "enable_thinking": true,
+    "source_sha256": "8b1b39f2d8978fbc6d0659d041a983180c2d4605e7cd594fd914754713f3de6b"
+  },
+  "scope_statement": "Prompt, semantic validator, evidence corpora, schemas, gold, and output budgets are unchanged from r7. Production changes are the opt-in request/config/CLI audit path plus observation-only reasoning/provider envelope hashes."
+}

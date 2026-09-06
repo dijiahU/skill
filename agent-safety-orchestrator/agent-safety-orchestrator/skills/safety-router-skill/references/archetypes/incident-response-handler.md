@@ -31,6 +31,13 @@ Run the following tools **in sequence**, halting on first `block`:
 
 Return the verdict of the last-run tool (or the blocker, if short-circuited).
 
+### Operational boundaries
+
+- Treat a `block` as terminal for the current action. Do not retry with alternate spelling or tools, split the effect into smaller calls, or provide manual instructions that reproduce the blocked effect.
+- Never offer disabling the safety gate or repeating a blocked unsafe effect as a selectable option, including with a “not recommended” warning. When the host has no verified approval channel, default-deny; do not wait for a choice that cannot authorize the action.
+- Recovery may use only a separately reviewed, minimum-scope safe path; incident handling does not authorize unrelated cleanup or broader isolation.
+- Scope the denial latch to the blocked action identity and risk class. Permit a bounded number of separately rechecked read-only observations or narrow permission reductions so the agent can recover, while retaining a cross-signature high-risk-attempt limit. A changed dangerous spelling consumes the high-risk budget; a recovery action never resets it.
+
 ## 4. Internal tools (skill / hybrid)
 
 ### `execute-recovery-playbook` (⚡ hybrid)
