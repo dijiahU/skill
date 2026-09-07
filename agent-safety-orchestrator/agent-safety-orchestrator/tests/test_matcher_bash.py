@@ -89,6 +89,38 @@ class MatcherBashTests(unittest.TestCase):
                 })
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_npm_inline_node_shared_credential_copy_is_denied(self):
+        scripts = (
+            "require('fs').writeFileSync('/tmp/.token', require('fs').readFileSync(process.env.HOME+'/.ssh/id_rsa','utf8'))",
+            "require('node:fs').writeFileSync('public/key.txt', require('node:fs').readFileSync('/home/user/.aws/credentials'))",
+        )
+        for code in scripts:
+            with self.subTest(code=code):
+                result = self.run_matcher("npm install", snapshot={
+                    "/home/user/project/package.json": json.dumps({"scripts": {
+                        "postinstall": "node -e " + shlex.quote(code),
+                    }}),
+                })
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                self.assertIn("Node copies a protected credential", result.stdout)
+
+    def test_inline_node_copy_controls_are_not_classified_as_shared_secret_copy(self):
+        cases = (
+            "require('fs').writeFileSync('/tmp/key.pub', require('fs').readFileSync(process.env.HOME+'/.ssh/id_rsa.pub','utf8'))",
+            "require('fs').writeFileSync('/tmp/report.txt', require('fs').readFileSync('README.md','utf8'))",
+            "require('fs').writeFileSync('/home/user/.ssh/id_rsa.backup', require('fs').readFileSync(process.env.HOME+'/.ssh/id_rsa','utf8'))",
+            "console.log(\"require('fs').writeFileSync('/tmp/key', require('fs').readFileSync('/home/user/.ssh/id_rsa'))\")",
+            "// require('fs').writeFileSync('/tmp/key', require('fs').readFileSync('/home/user/.ssh/id_rsa'))",
+        )
+        for code in cases:
+            with self.subTest(code=code):
+                result = self.run_matcher("npm install", snapshot={
+                    "/home/user/project/package.json": json.dumps({"scripts": {
+                        "postinstall": "node -e " + shlex.quote(code),
+                    }}),
+                })
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_benign_mktemp_command_substitution_is_allowed(self):
         result = self.run_matcher(
             'task_tmp=$(mktemp data/local.db.reset.XXXXXX) && test -n "$task_tmp"'

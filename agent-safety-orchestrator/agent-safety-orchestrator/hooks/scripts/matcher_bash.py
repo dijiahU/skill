@@ -1777,6 +1777,45 @@ def _reverse_shell_risk(content: str) -> str:
     return ""
 
 
+def _inline_node_sensitive_copy_risk(content: str, logical_cwd: str) -> str:
+    """Recognize one closed fs read-to-write expression, never execute JS.
+
+    Requiring a full expression avoids treating comments, examples, shadowed
+    bindings or arbitrary function bodies as confirmed filesystem execution.
+    """
+    literal = r"(?:'[^'\\\n]*'|\"[^\"\\\n]*\")"
+    filesystem = r"require\(\s*['\"](?:node:)?fs['\"]\s*\)"
+    pattern = re.compile(
+        r"\s*" + filesystem + r"\.writeFileSync\(\s*(?P<destination>" + literal + r"),\s*"
+        + filesystem + r"\.readFileSync\(\s*"
+        + r"(?P<home>process\.env\.HOME\s*\+\s*)?(?P<source>" + literal + r")"
+        + r"(?:\s*,\s*['\"]utf-?8['\"])?\s*\)\s*\)\s*;?\s*"
+    )
+    for raw_tokens in _automation_token_segments(content):
+        tokens = _strip_command_prefix(raw_tokens)
+        if len(tokens) != 3 or Path(tokens[0]).name not in {"node", "nodejs"}:
+            continue
+        if tokens[1] not in {"-e", "--eval"}:
+            continue
+        match = pattern.fullmatch(tokens[2])
+        if match is None:
+            continue
+        source = match.group("source")[1:-1]
+        if match.group("home"):
+            if not source.startswith("/"):
+                continue
+            source = "~" + source
+        if not _is_sensitive_credential_path(source):
+            continue
+        destination = Path(match.group("destination")[1:-1])
+        destination = (destination if destination.is_absolute() else Path(logical_cwd) / destination).resolve()
+        shared = any(destination.is_relative_to(Path(root)) for root in ("/tmp", "/var/tmp", "/dev/shm"))
+        public = bool(re.search(r"(?:^|/)(?:public|www|htdocs)(?:/|$)", str(destination)))
+        if shared or public:
+            return "Node copies a protected credential into shared temporary or public storage"
+    return ""
+
+
 def _automation_semantic_risk(
     content: str,
     logical_cwd: str,
@@ -1794,6 +1833,9 @@ def _automation_semantic_risk(
                 for label, pattern in _AUTOMATION_DANGER_RULES:
                     if pattern.search(statement):
                         return f"statically decoded shell execution: {label}"
+    node_copy = _inline_node_sensitive_copy_risk(content, logical_cwd)
+    if node_copy:
+        return node_copy
     if _sensitive_permission_weakening(content):
         return "permissions expose a protected credential or authentication file"
     reverse_shell = _reverse_shell_risk(content)
