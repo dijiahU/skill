@@ -40,6 +40,25 @@ def source_dependency_snapshot(repo_root: Path) -> dict[str, dict[str, Any]]:
     return snapshot
 
 
+_RESUME_CONFIG_FIELDS = (
+    "id", "type", "base_url", "context_window", "context_margin_tokens",
+    "max_output_tokens", "max_output_tokens_ceiling", "max_length_retries",
+    "max_schema_repairs", "enable_thinking", "timeout_seconds",
+    "connect_timeout_seconds", "read_token_rate_floor_tokens_per_second",
+    "read_timeout_prefill_buffer_seconds",
+)
+
+
+def judge_resume_config(config: dict[str, Any]) -> dict[str, Any]:
+    """Bind result reuse to evaluation settings without serializing API keys."""
+    return {key: config.get(key) for key in _RESUME_CONFIG_FIELDS}
+
+
+def judge_resume_config_matches(report: dict[str, Any], config: dict[str, Any]) -> bool:
+    # Older reports lack a full configuration snapshot and cannot prove equality.
+    return report.get("resume_config") == judge_resume_config(config)
+
+
 def source_bundle_sha256(snapshot: dict[str, dict[str, Any]]) -> str:
     return stable_json_sha256(snapshot)
 

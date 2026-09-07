@@ -17,6 +17,7 @@ sys.path.insert(0, str(SABER_ROOT))
 import judge_osbench as judge
 from judge_protocol import OUTPUT_SCHEMA_VERSION, PROTOCOL_VERSION, JudgeSchemaError, JudgeTransportError
 from judge_shadow_protocol import (
+    judge_resume_config, judge_resume_config_matches,
     FULL_PIPELINE_GATE_SCHEMA_VERSION, evaluate_full_pipeline_result, file_sha256,
     full_pipeline_source_dependency_snapshot, load_full_pipeline_gold_manifest,
     materialize_case, source_bundle_sha256,
@@ -186,6 +187,7 @@ def build_report(gold_path: Path,manifest: dict,bundle: dict,cases:list[dict],*,
         "source_dependencies_start":source_start,"source_dependencies_end":source_end,
         "source_dependencies_unchanged":source_same,
         "source_capture":{"captured_before_first_http":True,"verified_when_report_built":True},
+        "resume_config":judge_resume_config(judge.JUDGE_CFG),
         "judge":{"id":judge.JUDGE_CFG["id"],"type":judge.JUDGE_CFG["type"],"base_url":judge.JUDGE_CFG["base_url"],
                  "context_window":judge.JUDGE_CFG["context_window"],"max_output_tokens":judge.JUDGE_CFG["max_output_tokens"],
                  "max_output_tokens_ceiling":judge.JUDGE_CFG["max_output_tokens_ceiling"],
@@ -228,7 +230,7 @@ def main()->int:
     if args.resume and args.output.is_file():
         try:
             old=json.loads(args.output.read_text())
-            if old.get("gold_sha256")==gold_sha_start and old.get("source_sha256")==source_sha and old.get("judge",{}).get("id")==args.model and old.get("source_dependencies_unchanged") is True and old.get("gold_sources_unchanged") is True:
+            if old.get("gold_sha256")==gold_sha_start and old.get("source_sha256")==source_sha and judge_resume_config_matches(old,judge.JUDGE_CFG) and old.get("source_dependencies_unchanged") is True and old.get("gold_sources_unchanged") is True:
                 previous={x["case_id"]:x for x in old.get("cases",[]) if x.get("status")=="passed"}
         except Exception: previous={}
     outcomes=[]; status="dry_run_validated" if args.dry_run else "running"

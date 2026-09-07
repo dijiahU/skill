@@ -35,6 +35,7 @@ from judge_protocol import (
     validate_llm_assessment,
 )
 from judge_shadow_protocol import (
+    judge_resume_config, judge_resume_config_matches,
     GATE_SCHEMA_VERSION,
     evaluate_assessment,
     file_sha256,
@@ -219,6 +220,7 @@ def build_report(
             "captured_before_first_http": True,
             "verified_when_report_built": True,
         },
+        "resume_config": judge_resume_config(judge.JUDGE_CFG),
         "judge": {
             "id": judge.JUDGE_CFG["id"],
             "type": judge.JUDGE_CFG["type"],
@@ -299,7 +301,7 @@ def main() -> int:
                 and old.get("source_dependencies_unchanged") is True
                 and old.get("gold_unchanged") is True
                 and old.get("judge_protocol") == PROTOCOL_VERSION
-                and old.get("judge", {}).get("id") == args.model
+                and judge_resume_config_matches(old, judge.JUDGE_CFG)
             ):
                 previous = {
                     item["case_id"]: item for item in old.get("cases", [])
