@@ -56,6 +56,23 @@ class SchedulerTests(unittest.TestCase):
                 patch.object(Path, 'read_bytes', return_value=b'CUDA_VISIBLE_DEVICES=1\0'):
             self.assertEqual(idle.external_servers({30}, cards), {1})
 
+    def test_runner_mounts_complete_adapter_package_readonly(self):
+        slot = object.__new__(idle.Slot)
+        slot.gpu, slot.token = 0, 'dependency-smoke-g0'
+        slot.directory = Path('/test/idle-session')
+        slot.cycles, slot.processes = [0] * 4, []
+        for preflight in (True, False):
+            with self.subTest(preflight=preflight), patch.object(idle, 'spawn') as spawn, \
+                    patch.object(idle, 'host_path', side_effect=str), \
+                    patch.dict(idle.os.environ, {'DOCKER_HOST': 'unix:///test.sock'}):
+                slot.runner(0, preflight=preflight)
+            argv = spawn.call_args.args[0]
+            mounts = [argv[i + 1] for i, value in enumerate(argv[:-1]) if value == '--mount']
+            package = [value for value in mounts if 'dst=/workspace/saber/harness_adapters,' in value]
+            self.assertEqual(package, [f'type=bind,src={idle.SABER / "harness_adapters"},dst=/workspace/saber/harness_adapters,readonly'])
+            self.assertFalse(any('harness_adapters/codex_native_adapter.py' in value for value in mounts))
+            self.assertTrue((idle.SABER / 'harness_adapters/no_progress.py').is_file())
+
     def test_worker_finishes_restarts_and_keeps_server(self):
         slot = object.__new__(idle.Slot)
         slot.gpu, slot.token, slot.stage = 1, 'test', 'running'

@@ -257,8 +257,8 @@ class Slot:
                 '--env', 'DOCKER_API_VERSION=1.43', '--env', 'SABER_DOCKER_RUNTIME=runc',
                 '--tmpfs', '/workspace/saber/results:rw,nosuid,nodev,size=1g']
         mounts = [(self.directory / 'config.json', '/run/secrets/saber-config.json'),
-                  (SABER / 'harness_adapters/codex_native_adapter.py',
-                   '/workspace/saber/harness_adapters/codex_native_adapter.py'),
+                  # Keep the adapter and its local imports from one source tree.
+                  (SABER / 'harness_adapters', '/workspace/saber/harness_adapters'),
                   (SABER / 'sandbox_shell.py', '/workspace/saber/sandbox_shell.py'),
                   (BUNDLE, '/workspace/agent-safety-orchestrator/agent-safety-orchestrator')]
         if not preflight:
