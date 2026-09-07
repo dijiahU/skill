@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+import traceback
 
 PROTOCOL = 'saber-responses-budget-v1'
 
@@ -75,4 +76,44 @@ class TokenCountMiddleware:
             scope['app'].router.routes.append(Route(
                 '/v1/saber/responses/token-count', token_count_endpoint, methods=['POST']))
             self.registered = True
-        await self.app(scope, receive, send)
+        response_started = False
+        response_closed = False
+        responses_sse = False
+
+        async def observed_send(message):
+            nonlocal response_started, response_closed, responses_sse
+            if message.get('type') == 'http.response.start':
+                response_started = True
+                headers = {bytes(key).lower(): bytes(value).lower()
+                           for key, value in message.get('headers', [])}
+                responses_sse = b'text/event-stream' in headers.get(
+                    b'content-type', b'')
+            elif message.get('type') == 'http.response.body' and not message.get('more_body', False):
+                response_closed = True
+            await send(message)
+
+        try:
+            await self.app(scope, receive, observed_send)
+        except Exception as exc:
+            is_harmony_error = (type(exc).__name__ == 'HarmonyError'
+                                and type(exc).__module__.startswith('openai_harmony'))
+            is_responses = (scope.get('type') == 'http'
+                            and scope.get('path', '').rstrip('/').endswith('/responses'))
+            if not (is_harmony_error and is_responses
+                    and response_started and not response_closed and responses_sse):
+                raise
+            # Catch only the known post-response-start parser failure. Preserve
+            # its full traceback locally, then terminate the SSE stream without
+            # inventing assistant output, success, or a retry.
+            traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
+            payload = {
+                'type': 'error',
+                'code': 'harmony_stream_parse_failed',
+                'message': 'Harmony response parsing failed; partial output was retained.',
+                'param': None,
+            }
+            body = (b'\n\nevent: error\ndata: '
+                    + json.dumps(payload, separators=(',', ':')).encode()
+                    + b'\n\n')
+            await send({'type': 'http.response.body', 'body': body,
+                        'more_body': False})

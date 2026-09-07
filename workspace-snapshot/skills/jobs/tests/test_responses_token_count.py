@@ -1,4 +1,6 @@
 import importlib.util
+import contextlib
+import io
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
@@ -55,6 +57,113 @@ class TokenCountTests(unittest.IsolatedAsyncioTestCase):
             result = await client.post('/v1/saber/responses/token-count', json={})
         self.assertEqual(result.status_code, 401)
         self.assertEqual(sum(r.path == '/v1/saber/responses/token-count' for r in app.routes), 1)
+
+
+    async def test_post_start_harmony_error_becomes_explicit_error_terminal(self):
+        HarmonyError = type('HarmonyError', (Exception,), {'__module__': 'openai_harmony'})
+
+        async def broken(scope, receive, send):
+            await send({'type': 'http.response.start', 'status': 200,
+                        'headers': [(b'content-type', b'text/event-stream')]})
+            await send({'type': 'http.response.body',
+                        'body': (b'event: response.function_call_arguments.delta\n'
+                                 b'data: {"type":"response.function_call_arguments.delta",'
+                                 b'"delta":"{\\"command\\":""}\n\n'),
+                        'more_body': True})
+            raise HarmonyError('synthetic bad token boundary')
+
+        sent = []
+        async def collect(message): sent.append(message)
+        middleware = MODULE.TokenCountMiddleware(broken)
+        scope = {'type': 'http', 'path': '/v1/responses',
+                 'app': SimpleNamespace(router=SimpleNamespace(routes=[]))}
+        with contextlib.redirect_stderr(io.StringIO()) as evidence:
+            await middleware(scope, None, collect)
+        body = b''.join(message.get('body', b'') for message in sent)
+        partial = (b'event: response.function_call_arguments.delta\n'
+                   b'data: {"type":"response.function_call_arguments.delta",'
+                   b'"delta":"{\\"command\\":""}\n\n')
+        self.assertTrue(body.startswith(partial))
+        self.assertEqual(body[:len(partial)], partial)
+        self.assertIn(b'event: error', body)
+        self.assertIn(b'harmony_stream_parse_failed', body)
+        self.assertNotIn(b'response.completed', body)
+        self.assertNotIn(b'response.function_call_arguments.done', body)
+        self.assertNotIn(b'response.output_item.done', body)
+        self.assertFalse(sent[-1]['more_body'])
+        self.assertIn('synthetic bad token boundary', evidence.getvalue())
+
+    async def test_negative_harmony_boundaries_are_not_caught(self):
+        HarmonyError = type('HarmonyError', (Exception,), {'__module__': 'openai_harmony'})
+        OtherError = type('HarmonyError', (Exception,), {'__module__': 'other_parser'})
+
+        cases = [
+            ('non_harmony', '/v1/responses', b'text/event-stream', OtherError('other')),
+            ('wrong_endpoint', '/v1/chat/completions', b'text/event-stream', HarmonyError('path')),
+            ('non_sse', '/v1/responses', b'application/json', HarmonyError('content type')),
+        ]
+        for name, path, content_type, failure in cases:
+            with self.subTest(name=name):
+                async def broken(scope, receive, send):
+                    await send({'type': 'http.response.start', 'status': 200,
+                                'headers': [(b'content-type', content_type)]})
+                    raise failure
+                async def collect(_message): pass
+                middleware = MODULE.TokenCountMiddleware(broken)
+                scope = {'type': 'http', 'path': path,
+                         'app': SimpleNamespace(router=SimpleNamespace(routes=[]))}
+                with self.assertRaises(type(failure)):
+                    await middleware(scope, None, collect)
+
+    async def test_harmony_error_after_closed_body_is_not_caught(self):
+        HarmonyError = type('HarmonyError', (Exception,), {'__module__': 'openai_harmony'})
+        async def broken(scope, receive, send):
+            await send({'type': 'http.response.start', 'status': 200,
+                        'headers': [(b'content-type', b'text/event-stream')]})
+            await send({'type': 'http.response.body', 'body': b'', 'more_body': False})
+            raise HarmonyError('after close')
+        async def collect(_message): pass
+        middleware = MODULE.TokenCountMiddleware(broken)
+        scope = {'type': 'http', 'path': '/v1/responses',
+                 'app': SimpleNamespace(router=SimpleNamespace(routes=[]))}
+        with self.assertRaises(HarmonyError):
+            await middleware(scope, None, collect)
+
+    async def test_starlette_streaming_response_collapses_single_harmony_error(self):
+        import httpx
+        from starlette.applications import Starlette
+        from starlette.responses import StreamingResponse
+        from starlette.routing import Route
+        HarmonyError = type('HarmonyError', (Exception,), {'__module__': 'openai_harmony'})
+        partial = b'event: response.created\ndata: {}\n\n'
+        async def stream():
+            yield partial
+            raise HarmonyError('synthetic streaming generator failure')
+        async def endpoint(_request):
+            return StreamingResponse(stream(), media_type='text/event-stream')
+        app = Starlette(routes=[Route('/v1/responses', endpoint, methods=['POST'])])
+        app.add_middleware(MODULE.TokenCountMiddleware)
+        with contextlib.redirect_stderr(io.StringIO()) as evidence:
+            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app),
+                                          base_url='http://offline') as client:
+                response = await client.post('/v1/responses')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.content.startswith(partial))
+        self.assertIn(b'harmony_stream_parse_failed', response.content)
+        self.assertNotIn(b'response.completed', response.content)
+        self.assertIn('synthetic streaming generator failure', evidence.getvalue())
+
+    async def test_harmony_error_is_not_caught_before_sse_start(self):
+        HarmonyError = type('HarmonyError', (Exception,), {'__module__': 'openai_harmony'})
+
+        async def broken(_scope, _receive, _send):
+            raise HarmonyError('pre-start')
+
+        middleware = MODULE.TokenCountMiddleware(broken)
+        scope = {'type': 'http', 'path': '/v1/responses',
+                 'app': SimpleNamespace(router=SimpleNamespace(routes=[]))}
+        with self.assertRaises(HarmonyError):
+            await middleware(scope, None, AsyncMock())
 
 
 if __name__ == '__main__': unittest.main()
