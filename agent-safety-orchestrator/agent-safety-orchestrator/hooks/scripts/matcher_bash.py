@@ -1228,6 +1228,18 @@ def _sensitive_source_to_sink_risk(
             stdout_sanitized and python_risk.endswith("is printed")
         ):
             return python_risk
+    if not stdout_sanitized:
+        from python_sensitive_output import (
+            python_sensitive_output_risk,
+            python_source_sensitive_output_risk,
+        )
+        python_output_risk = (
+            python_source_sensitive_output_risk(content)
+            if path.suffix == ".py"
+            else python_sensitive_output_risk(content)
+        )
+        if python_output_risk:
+            return python_output_risk
     shell_stdout = _shell_sensitive_stdout_flow(content)
     if shell_stdout:
         return shell_stdout
@@ -1640,20 +1652,23 @@ def _safety_gate_bypass(command: str) -> str:
     ):
         return "explicit automatic-approval or quarantined-content bypass"
 
-    for line in command.splitlines():
-        stripped = line.strip()
-        setting = SAFETY_ENABLE_SETTING.search(line)
-        if not setting or not stripped or stripped.startswith("#"):
+    for raw_tokens in token_segments:
+        if not raw_tokens or not any(SAFETY_ENABLE_SETTING.search(token) for token in raw_tokens):
             continue
-        if re.match(
-            r"(?i)^(?:export\s+|env\s+)?"
-            r"(?:auto_approve|allow_external_fetch|ALLOW_QUARANTINED)\b",
-            stripped,
-        ) or any(
-            token in {">", ">>"} or Path(token).name == "tee"
-            for tokens in token_segments
-            for token in tokens
-        ):
+        setting_assignment = any(
+            re.match(r"(?i)^(?:auto_approve|allow_external_fetch|ALLOW_QUARANTINED)=", token)
+            for token in raw_tokens[:2]
+        ) and ("=" in raw_tokens[0] or raw_tokens[0] in {"export", "env"})
+        tokens = _strip_command_prefix(list(raw_tokens))
+        program = Path(tokens[0]).name if tokens else ""
+        writes_output = program in {"echo", "printf", "cat", "tee"} and (
+            program == "tee" or any(token in {">", ">>"} for token in tokens)
+            or ("|" in tokens and "tee" in tokens)
+        )
+        edits_in_place = program in {"sed", "perl"} and any(
+            token.startswith("-") and "i" in token[1:] for token in tokens[1:]
+        )
+        if setting_assignment or writes_output or edits_in_place:
             return "safety approval/fetch/quarantine gate enabled"
 
     if re.search(
@@ -2245,7 +2260,8 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
                 controllers.append(
                     {"path": (candidate if candidate.is_absolute() else cwd / candidate).resolve(),
                      "kind": "shell", "entries": tokens[script_index + 1:],
-                     "cwd": cwd, "required": True}
+                     "cwd": cwd, "stdout_sanitized": stdout_sanitized,
+                     "required": True}
                 )
             continue
 
@@ -2268,7 +2284,8 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
             candidate = Path(tokens[1])
             controllers.append(
                 {"path": (candidate if candidate.is_absolute() else cwd / candidate).resolve(),
-                 "kind": "file", "entries": [], "required": True}
+                 "kind": "file", "entries": tokens[2:], "required": True,
+                 "cwd": cwd, "stdout_sanitized": stdout_sanitized}
             )
             continue
 
@@ -2278,7 +2295,8 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
             candidate = (cwd / tokens[0]).resolve()
             kind = "shell" if candidate.suffix in {".sh", ".bash"} else "file"
             controllers.append(
-                {"path": candidate, "kind": kind, "entries": tokens[1:], "cwd": cwd, "required": True}
+                {"path": candidate, "kind": kind, "entries": tokens[1:], "cwd": cwd,
+                 "stdout_sanitized": stdout_sanitized, "required": True}
             )
             for suffix in (".c", ".py", ".sh", ".js"):
                 controllers.append(
@@ -2296,6 +2314,20 @@ def _write_controller_trace(trace: dict[str, Any]) -> None:
             handle.write(json.dumps(trace, sort_keys=True) + "\n")
     except OSError:
         pass
+
+
+def _python_has_execution_call(content: str) -> bool:
+    """Separate Python call syntax from metadata strings such as SOURCE=."""
+    try:
+        tree = ast.parse(content)
+    except (SyntaxError, ValueError, RecursionError):
+        return True  # An unparsed controller cannot disprove an existing risk.
+    sinks = {"eval", "exec", "system", "popen", "run", "Popen", "call",
+             "check_call", "check_output"}
+    return any(
+        _ast_name(node.func).rsplit(".", 1)[-1] in sinks
+        for node in ast.walk(tree) if isinstance(node, ast.Call)
+    )
 
 
 def _automation_controller_risk(command: str, logical_cwd: str) -> str:
@@ -2335,6 +2367,8 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
             str(path), str(controller["kind"]),
             tuple(str(value) for value in controller["entries"]),
             str(bool(controller.get("stdout_sanitized"))),
+            tuple(controller.get("javascript_exports", ())),
+            str(runtime_cwd), bool(controller.get("required")),
         )
         if key in reviewed:
             continue
@@ -2384,7 +2418,26 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
         elif controller["kind"] == "shell":
             scan_text = _shell_case_branch_text(content, controller["entries"])
 
+        if path.suffix in {".js", ".cjs"}:
+            from javascript_dependencies import select_javascript_effect_source
+            selected = select_javascript_effect_source(
+                scan_text, controller.get("javascript_exports", ()),
+            )
+            scan_text = selected.scan_text
+            item["javascript_selected_exports"] = [
+                entry.export_name for entry in selected.selected_exports
+            ]
+            item["javascript_effect_unknowns"] = [
+                entry.reason for entry in selected.unknowns
+            ]
+
         risks: list[str] = []
+        if path.suffix == ".py":
+            from python_encoded_execution import find_python_encoded_execution
+            encoded_findings = find_python_encoded_execution(scan_text)
+            if encoded_findings:
+                finding = encoded_findings[0]
+                risks.append(f"line {finding.line}: {finding.effect}")
         for candidate in [scan_text, *_literal_shell_execution_payloads(scan_text)]:
             risk = _network_probe_scope_risk(
                 candidate, runtime_cwd, snapshot, path, controller["entries"]
@@ -2403,12 +2456,54 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
         if source_to_sink_risk:
             risks.append(source_to_sink_risk)
         for label, pattern in _AUTOMATION_DANGER_RULES:
+            if (path.suffix == ".py"
+                    and label == "encoded or serialized payload is executed"
+                    and not _python_has_execution_call(scan_text)):
+                continue
             if pattern.search(scan_text):
                 risks.append(label); break
         if risks:
             risk = f"{path}: {risks[0]}"
             item.update({"decision": "block", "reason": risk})
             return finish(risk)
+
+        if path.suffix in {".js", ".cjs"}:
+            from javascript_dependencies import extract_relative_javascript_dependencies
+            dependencies = extract_relative_javascript_dependencies(
+                scan_text, str(path), known_paths=snapshot,
+            )
+            item["javascript_dependency_unknowns"] = [
+                entry.reason for entry in dependencies.unknowns
+            ]
+            for dependency in dependencies.dependencies:
+                if dependency.selected_path is None:
+                    excluded = metadata.get("excluded_files", {})
+                    if metadata.get("authoritative") and isinstance(excluded, dict) and any(
+                        candidate == name or candidate.startswith(name.rstrip("/") + "/")
+                        for candidate in dependency.candidate_paths
+                        for name in excluded
+                    ):
+                        risk = f"{path}: relative JavaScript dependency content was excluded from safe observation"
+                        item.update({"decision": "block", "reason": risk})
+                        return finish(risk)
+                    item.setdefault("javascript_unresolved_dependencies", []).append(
+                        dependency.specifier
+                    )
+                    continue
+                # Only observed CommonJS source participates in this bounded
+                # source review; JSON/native modules are not JavaScript code.
+                child = Path(dependency.selected_path)
+                if child.suffix not in {".js", ".cjs"}:
+                    continue
+                queue.append({
+                    "path": child, "kind": "file", "entries": [],
+                    "cwd": runtime_cwd, "required": True,
+                    "stdout_sanitized": bool(controller.get("stdout_sanitized")),
+                    "javascript_exports": tuple(sorted({
+                        evidence.export_name
+                        for evidence in dependency.export_call_evidence
+                    })),
+                })
 
         for match in _TRANSITIVE_SCRIPT_CALL.finditer(scan_text):
             referenced = match.group("path")
