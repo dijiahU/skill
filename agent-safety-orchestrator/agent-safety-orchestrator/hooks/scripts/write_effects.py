@@ -262,10 +262,173 @@ def _remote_command_writes_protected(command: str) -> bool:
     return False
 
 
+def _python_static_value(node: ast.AST, values: dict[str, Any]) -> Any:
+    """Resolve only literal Python values, preserving dynamic parts as unknown."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    if isinstance(node, ast.Name):
+        return values.get(node.id, "__SAFETY_DYNAMIC_VALUE__")
+    if isinstance(node, (ast.List, ast.Tuple)):
+        items = [_python_static_value(item, values) for item in node.elts]
+        return items if all(isinstance(item, str) for item in items) else None
+    if isinstance(node, ast.JoinedStr):
+        parts = []
+        for item in node.values:
+            if isinstance(item, ast.Constant) and isinstance(item.value, str):
+                parts.append(item.value)
+            elif isinstance(item, ast.FormattedValue):
+                parts.append("__SAFETY_DYNAMIC_VALUE__")
+            else:
+                return None
+        return "".join(parts)
+    return None
+
+
+def _python_remote_protected_write(content: str) -> bool:
+    try:
+        tree = ast.parse(content)
+    except (SyntaxError, ValueError):
+        return False
+
+    class ProcessCallVisitor(ast.NodeVisitor):
+        def __init__(self, values: dict[str, Any] | None = None, subprocess_bound: bool = False):
+            self.values = dict(values or {})
+            self.subprocess_bound = subprocess_bound
+            self.found = False
+
+        def _invalidate_name(self, name: str) -> None:
+            previous = self.values.get(name)
+            for bound_name, bound_value in list(self.values.items()):
+                if bound_name == name or (previous is not None and bound_value is previous):
+                    self.values.pop(bound_name, None)
+
+        def _bind(self, target: ast.AST, value: Any) -> None:
+            if isinstance(target, ast.Subscript) and isinstance(target.value, ast.Name):
+                self._invalidate_name(target.value.id)
+                return
+            if not isinstance(target, ast.Name):
+                return
+            if value is None:
+                self._invalidate_name(target.id)
+            else:
+                self.values[target.id] = value
+            if target.id == "subprocess":
+                self.subprocess_bound = False
+
+        def visit_Import(self, node: ast.Import) -> None:
+            for alias in node.names:
+                bound_name = alias.asname or alias.name.split(".", 1)[0]
+                if bound_name == "subprocess":
+                    self.subprocess_bound = alias.name == "subprocess"
+                    self.values.pop("subprocess", None)
+
+        def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+            # `from subprocess import ...` has no `subprocess.run` module binding.
+            for alias in node.names:
+                bound_name = alias.asname or alias.name
+                if bound_name == "subprocess":
+                    self.subprocess_bound = False
+                    self.values.pop("subprocess", None)
+
+        def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+            child = ProcessCallVisitor(self.values, self.subprocess_bound)
+            parameters = [*node.args.posonlyargs, *node.args.args, *node.args.kwonlyargs]
+            if node.args.vararg:
+                parameters.append(node.args.vararg)
+            if node.args.kwarg:
+                parameters.append(node.args.kwarg)
+            for parameter in parameters:
+                child.values.pop(parameter.arg, None)
+                if parameter.arg == "subprocess":
+                    child.subprocess_bound = False
+            for statement in node.body:
+                child.visit(statement)
+                if child.found:
+                    self.found = True
+                    return
+
+        visit_AsyncFunctionDef = visit_FunctionDef
+
+        def visit_Assign(self, node: ast.Assign) -> None:
+            self.visit(node.value)
+            value = _python_static_value(node.value, self.values)
+            for target in node.targets:
+                self._bind(target, value)
+
+        def visit_AnnAssign(self, node: ast.AnnAssign) -> None:
+            if node.value:
+                self.visit(node.value)
+            value = _python_static_value(node.value, self.values) if node.value else None
+            self._bind(node.target, value)
+
+        def visit_AugAssign(self, node: ast.AugAssign) -> None:
+            self.visit(node.value)
+            self._bind(node.target, None)
+
+        def visit_Call(self, node: ast.Call) -> None:
+            function = node.func
+            if (
+                isinstance(function, ast.Attribute)
+                and isinstance(function.value, ast.Name)
+                and function.value.id in self.values
+                and function.attr in {"append", "extend", "insert", "clear", "pop", "remove", "reverse", "sort"}
+            ):
+                self._invalidate_name(function.value.id)
+            shell_keywords = [keyword for keyword in node.keywords if keyword.arg == "shell"]
+            default_executor = not any(
+                keyword.arg is None or keyword.arg == "executable"
+                for keyword in node.keywords
+            )
+            default_executor = default_executor and all(
+                isinstance(keyword.value, ast.Constant) and keyword.value.value is False
+                for keyword in shell_keywords
+            )
+            is_subprocess_run = (
+                default_executor and self.subprocess_bound
+                and isinstance(function, ast.Attribute) and function.attr == "run"
+                and isinstance(function.value, ast.Name) and function.value.id == "subprocess"
+            )
+            argv = _python_static_value(node.args[0], self.values) if is_subprocess_run and node.args else None
+            if isinstance(argv, list) and argv and Path(argv[0]).name == "ssh":
+                index = 1
+                while index < len(argv):
+                    word = argv[index]
+                    if word == "--":
+                        index += 1
+                        break
+                    option = word.split("=", 1)[0]
+                    if option in _SSH_OPTIONS_WITH_ARGUMENT:
+                        index += 1 if "=" in word else 2
+                        continue
+                    if word.startswith("-"):
+                        index += 1
+                        continue
+                    index += 1  # destination
+                    break
+                # OpenSSH concatenates the remaining argv into the remote shell
+                # command. Preserve unknown values as markers; inspect only the
+                # statically present operators and paths in that executed tail.
+                remote = " ".join(argv[index:])
+                if remote and _remote_command_writes_protected(remote):
+                    self.found = True
+                    return
+            self.generic_visit(node)
+
+    visitor = ProcessCallVisitor()
+    for statement in tree.body:
+        visitor.visit(statement)
+        if visitor.found:
+            return True
+    return False
+
+
 def remote_protected_script_write(path: str, content: str) -> bool:
     """Detect a bounded set of active SSH writes to protected remote configuration."""
+    suffix = Path(path).suffix.lower()
+    if suffix == ".py" or re.match(r"^#![^\n]*python(?:3(?:\.\d+)?)?\b", content):
+        return _python_remote_protected_write(content)
     if not (
-        Path(path).suffix in {".sh", ".bash", ".zsh"}
+        suffix in {".sh", ".bash", ".zsh"}
         or re.match(r"^#![^\n]*(?:ba|z|k)?sh\b", content)
     ):
         return False

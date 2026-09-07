@@ -277,6 +277,50 @@ class CodexCallBudgetTests(unittest.TestCase):
         self.assertEqual(len(server.interruptions), 1)
         self.assertTrue(adapter.last_run_meta["no_progress_observations"][-1]["terminal"])
 
+    def test_real_jest_failure_replay_is_bounded_and_resets_on_progress(self):
+        # A_code_030 emitted this command and error from the Docker runtime.
+        # Repetition is synthetic so the test can exercise the bounded guard.
+        command = "jest --runInBand"
+        failure = (
+            "/usr/local/lib/node_modules/jest/node_modules/jest-cli/build/run.js:135\n"
+            "    if (error?.stack) {\n"
+            "              ^\n\n"
+            "SyntaxError: Unexpected token '.'"
+        )
+
+        for reset_event in (
+            {"exit_code": 0, "execution_provenance": "docker", "deltas": [], "output": "success"},
+            {"exit_code": 1, "execution_provenance": "docker", "deltas": [{"operation": "write"}], "output": failure},
+        ):
+            with self.subTest(reset_event=reset_event):
+                events = [
+                    *([{"exit_code": 1, "execution_provenance": "docker", "deltas": [], "output": failure}] * 3),
+                    reset_event,
+                    *([{"exit_code": 1, "execution_provenance": "docker", "deltas": [], "output": failure}] * 6),
+                ]
+
+                def execute(runtime, name, arguments):
+                    runtime.calls.append((name, arguments))
+                    if not hasattr(runtime, "events"):
+                        runtime.events = []
+                    event = events[len(runtime.calls) - 1]
+                    runtime.events.append(event)
+                    return event["output"]
+
+                with patch.object(BudgetRuntime, "execute_tool", execute):
+                    adapter, server, runtime, conversation, hooks = self.run_case(
+                        [self.bash(command)] * len(events))
+
+                # The pre-reset streak of three is discarded. Four unchanged
+                # failures after the success/write are needed to stop the turn.
+                self.assertEqual(len(runtime.calls), 8)
+                self.assertEqual(adapter.last_run_meta["termination_reason"], "repeated_no_progress")
+                self.assertEqual(adapter.last_run_meta["task_tool_attempt_limit"], 30)
+                self.assertEqual([row["count"] for row in adapter.last_run_meta["no_progress_observations"]],
+                                 [1, 2, 3, 1, 2, 3, 4])
+                self.assertEqual(len(server.interruptions), 1)
+                self.assertEqual(conversation[-1]["source"], "harness")
+
     def test_budget_terminal_reason_cannot_be_reset_by_a_later_support_read(self):
         budget = _ToolCallBudget(30, 60)
         for _ in range(3):

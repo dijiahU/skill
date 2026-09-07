@@ -216,6 +216,19 @@ def _bash_recovery_profile(command: str, cwd: str) -> tuple[bool, str]:
         words = list(lexer)
     except ValueError:
         return False, "unparseable-shell"
+    # FD-to-FD duplication only changes where already-produced diagnostics are
+    # observed (for example ``2>&1``); it does not create a file. Strip only
+    # the bounded standard-descriptor form before rejecting other redirects.
+    normalized_words = []
+    index = 0
+    while index < len(words):
+        if (index + 2 < len(words) and words[index] == "2"
+                and words[index + 1] == ">&" and words[index + 2] == "1"):
+            index += 3
+            continue
+        normalized_words.append(words[index])
+        index += 1
+    words = normalized_words
     if any(set(word) & {"<", ">"} for word in words):
         return False, "shell-redirection"
     if re.search(r"\$\(|`", command):
@@ -230,7 +243,10 @@ def _bash_recovery_profile(command: str, cwd: str) -> tuple[bool, str]:
     if current:
         segments.append(current)
     root = Path(cwd or "/home/user").resolve()
-    readers = {"pwd", "ls", "stat", "file", "cat", "head", "tail", "grep", "rg", "wc", "cut", "jq", "find"}
+    readers = {
+        "pwd", "ls", "stat", "file", "cat", "head", "tail", "grep", "rg",
+        "wc", "cut", "jq", "find", "du", "sort", "echo", "printf",
+    }
     for segment in segments:
         while segment and (segment[0] in {"sudo", "doas", "command"} or "=" in segment[0]):
             segment = segment[1:]
@@ -252,6 +268,15 @@ def _bash_recovery_profile(command: str, cwd: str) -> tuple[bool, str]:
                 return False, "mutating-find"
             if head == "rg" and any(word == "--pre" or word.startswith("--pre=") for word in segment[1:]):
                 return False, "executing-reader-option"
+            option_words = segment[1:]
+            if "--" in option_words:
+                option_words = option_words[:option_words.index("--")]
+            if head == "sort":
+                for word in option_words:
+                    if word.startswith("-") and not re.fullmatch(r"-[hnr]+", word):
+                        return False, "unrecognized-sort-option"
+            if head == "printf" and any(word.startswith("-") for word in option_words):
+                return False, "unrecognized-printf-option"
             continue
         if head == "chmod" and "-R" not in segment and "--recursive" not in segment:
             positional = [word for word in segment[1:] if not word.startswith("-")]
