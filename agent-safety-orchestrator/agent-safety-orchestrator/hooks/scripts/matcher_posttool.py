@@ -112,6 +112,24 @@ INDIRECT_INJECTION_OUTPUT_PATTERNS = (
     ),
 )
 
+
+REVERSE_SHELL_LINE_PATTERNS = (
+    re.compile(
+        r"(?im)^[ \t]*(?:exec[ \t]+)?(?:/bin/)?(?:ba|z|k)?sh\b"
+        r"[^\n]{0,160}(?:^|[ \t])-i(?:[ \t]|$)[^\n]{0,240}"
+        r"(?:>&|[0-9]+>&)[ \t]*/dev/(?:tcp|udp)/[^/\s]+/[0-9]+"
+    ),
+    re.compile(
+        r"(?im)^[ \t]*(?:exec[ \t]+)?(?:nc|ncat|netcat)\b"
+        r"[^\n]{0,240}(?:^|[ \t])-e[ \t]+(?:/bin/)?(?:ba|z|k)?sh\b"
+    ),
+    re.compile(
+        r"(?im)^[ \t]*(?:exec[ \t]+)?socat\b[^\n]{0,240}"
+        r"\b(?:TCP|TCP4|TCP6):[^,\s]+,[^\n]{0,160}"
+        r"\bEXEC:(?:/bin/)?(?:ba|z|k)?sh\b"
+    ),
+)
+
 _MCP_STATUS_FILE = _state_dir() / "mcp-resource-status.json"
 _MCP_IDENTITY = re.compile(
     r"(?im)^\s*(?:template|artifact|manifest|profile|resource|server|workflow|name)"
@@ -304,7 +322,30 @@ def _record_mcp_resource_status(event: dict, output: str) -> None:
     temporary.replace(_MCP_STATUS_FILE)
 
 
-def _indirect_injection_findings(output: str) -> list[dict]:
+def _looks_like_executable_source(event: dict, output: str) -> bool:
+    """Identify script source without treating prose that quotes a command as code."""
+    if output.startswith("#!"):
+        return True
+    tool_input = event.get("tool_input") or {}
+    if not isinstance(tool_input, dict):
+        return False
+    paths = [
+        value
+        for key, value in _walk_tool_input(tool_input)
+        if isinstance(value, str) and key in {"file_path", "path"}
+    ]
+    command = tool_input.get("command") or tool_input.get("cmd") or ""
+    if isinstance(command, str):
+        try:
+            words = shlex.split(command, comments=True, posix=True)
+        except ValueError:
+            words = []
+        if words and Path(words[0]).name in {"cat", "head", "tail"}:
+            paths.extend(word for word in words[1:] if not word.startswith("-"))
+    return any(Path(path).suffix in {".sh", ".bash", ".zsh", ".ksh"} for path in paths)
+
+
+def _indirect_injection_findings(output: str, event: dict | None = None) -> list[dict]:
     findings = []
     for label, pattern in INDIRECT_INJECTION_OUTPUT_PATTERNS:
         for match in pattern.finditer(output):
@@ -317,6 +358,17 @@ def _indirect_injection_findings(output: str) -> list[dict]:
             })
             if len(findings) >= 32:
                 return findings
+    if _looks_like_executable_source(event or {}, output):
+        for pattern in REVERSE_SHELL_LINE_PATTERNS:
+            for match in pattern.finditer(output):
+                findings.append({
+                    "category": "reverse-shell payload",
+                    "start": match.start(),
+                    "end": match.end(),
+                    "excerpt": match.group(0)[:180],
+                })
+                if len(findings) >= 32:
+                    return findings
     return findings
 
 
@@ -396,7 +448,7 @@ def main() -> int:
     output_view = {}
 
     _record_mcp_resource_status(event, output)
-    indirect_findings = _indirect_injection_findings(output)
+    indirect_findings = _indirect_injection_findings(output, event)
     if indirect_findings:
         can_replace = output_replacement_available()
         if can_replace:
