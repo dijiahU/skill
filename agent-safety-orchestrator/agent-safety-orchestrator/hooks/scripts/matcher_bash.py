@@ -1943,7 +1943,11 @@ def _make_target_text(content: str, targets: list[str]) -> str:
             ]
             current_body = [line]
         elif current_names:
-            current_body.append(line)
+            # Make consumes @ (silent), - (ignore errors), and + (recursive)
+            # before handing a recipe to the shell. Keep this normalization
+            # local to tab-prefixed recipes, never ordinary shell strings.
+            recipe = re.sub(r"^\t[@+\-]+", "\t", line)
+            current_body.append(recipe)
     save_current()
 
     if not targets:
