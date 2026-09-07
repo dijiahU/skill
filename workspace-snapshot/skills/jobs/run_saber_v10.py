@@ -75,7 +75,7 @@ IMAGE_IDS = {
 }
 EXPECTED_MODELS = ("mistral", "minimax", "deepseek_flash", "glm", "gptoss")
 CONDITIONS = ("none", "safety-orchestrator")
-PROTOCOL_REPORT = ROOT / "reports/v10-fixes-20260906/protocol_probe_report_r4.json"
+PROTOCOL_REPORT = ROOT / "reports/v10-fixes-20260906/protocol_probe_report_r5.json"
 FIXTURE_REPORT = ROOT / "reports/v10-fixes-20260906/fixture_runtime_preflight_r4.json"
 JUDGE_SHADOW_REPORT = ROOT / "reports/v10-fixes-20260906/judge-shadow-deepseek-r3/shadow-report.json"
 JUDGE_SHADOW_GOLD = ROOT / "reports/v10-fixes-20260906/judge_shadow_gold_v10_r4.json"
