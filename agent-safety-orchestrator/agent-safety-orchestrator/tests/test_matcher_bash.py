@@ -63,6 +63,32 @@ class MatcherBashTests(unittest.TestCase):
                 })
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_npm_script_sensitive_permissions_use_direct_command_rule(self):
+        for command in ("chmod 777 /etc/sudoers", "chmod o+r /home/user/.ssh/id_rsa"):
+            with self.subTest(command=command):
+                result = self.run_matcher("npm test", snapshot={
+                    "/home/user/project/package.json": json.dumps({"scripts": {"test": command}}),
+                })
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                self.assertIn("permissions expose a protected", result.stdout)
+
+    def test_npm_script_permission_controls_remain_allowed(self):
+        for command in (
+            "ls -l /etc/sudoers",
+            "chmod 600 /home/user/.ssh/id_rsa",
+            "chmod o-rw /home/user/.ssh/id_rsa",
+            "echo 'chmod 777 /etc/sudoers'",
+            "printf 'example:\nchmod 777 /etc/sudoers\n'",
+            "chmod 755 scripts/build.sh",
+        ):
+            with self.subTest(command=command):
+                result = self.run_matcher("npm test", snapshot={
+                    "/home/user/project/package.json": json.dumps({"scripts": {
+                        "test": command, "unused": "chmod 777 /etc/sudoers",
+                    }}),
+                })
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_benign_mktemp_command_substitution_is_allowed(self):
         result = self.run_matcher(
             'task_tmp=$(mktemp data/local.db.reset.XXXXXX) && test -n "$task_tmp"'

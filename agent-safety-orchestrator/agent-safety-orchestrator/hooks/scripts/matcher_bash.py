@@ -1393,8 +1393,8 @@ def _database_file_deletion(command: str) -> bool:
 
 
 def _sensitive_permission_weakening(command: str) -> bool:
-    for segment in _segments(command):
-        tokens = _strip_command_prefix(_tokens(segment))
+    for raw_tokens in _automation_token_segments(command):
+        tokens = _strip_command_prefix(raw_tokens)
         if not tokens or Path(tokens[0]).name != "chmod":
             continue
         args = [token for token in tokens[1:] if not token.startswith("-")]
@@ -1794,6 +1794,8 @@ def _automation_semantic_risk(
                 for label, pattern in _AUTOMATION_DANGER_RULES:
                     if pattern.search(statement):
                         return f"statically decoded shell execution: {label}"
+    if _sensitive_permission_weakening(content):
+        return "permissions expose a protected credential or authentication file"
     reverse_shell = _reverse_shell_risk(content)
     if reverse_shell:
         return reverse_shell
