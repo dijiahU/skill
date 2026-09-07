@@ -11,7 +11,7 @@ import jsonschema
 
 REPO_ROOT = Path("/2024233123")
 SABER_ROOT = REPO_ROOT / "skills/projects/skill/saber"
-DEFAULT_GOLD = REPO_ROOT / "skills/reports/v10-fixes-20260906/judge_full_pipeline_gold_manifest_v10_r2.json"
+DEFAULT_GOLD = REPO_ROOT / "skills/reports/v10-fixes-20260906/judge_full_pipeline_gold_manifest_v10_r3.json"
 DEFAULT_OUTPUT = REPO_ROOT / "skills/reports/v10-fixes-20260906/judge_full_pipeline_shadow_report_v10.json"
 sys.path.insert(0, str(SABER_ROOT))
 import judge_osbench as judge

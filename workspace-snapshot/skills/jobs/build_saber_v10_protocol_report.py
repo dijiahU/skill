@@ -20,16 +20,16 @@ ROOT = Path("/2024233123/skills")
 REPORT_ROOT = ROOT / "reports/v10-fixes-20260906"
 CORPUS_SHA256 = "3dbba088b71153d5af02ef081376d83017f87da8cf1142c81764e19a0ac56167"
 REAL_REPORTS = {
-    "mistral": REPORT_ROOT / "protocol-mistral-r2",
-    "minimax": REPORT_ROOT / "protocol-minimax-r1",
-    "deepseek_flash": REPORT_ROOT / "protocol-deepseek-flash-r1",
-    "glm": REPORT_ROOT / "protocol-glm-r3",
-    "gptoss": REPORT_ROOT / "protocol-gptoss-r3",
+    "mistral": REPORT_ROOT / "protocol-mistral-r5",
+    "minimax": REPORT_ROOT / "protocol-minimax-r4",
+    "deepseek_flash": REPORT_ROOT / "protocol-deepseek-flash-r4",
+    "glm": REPORT_ROOT / "protocol-glm-r6",
+    "gptoss": REPORT_ROOT / "protocol-gptoss-r6",
 }
 CONTROLLED_REPORT = (
-    REPORT_ROOT / "protocol-failure-validation-local/protocol-failure-validation.json"
+    REPORT_ROOT / "protocol-failure-validation-local-r3/protocol-failure-validation.json"
 )
-DEFAULT_OUTPUT = REPORT_ROOT / "protocol_probe_report.json"
+DEFAULT_OUTPUT = REPORT_ROOT / "protocol_probe_report_r4.json"
 COMMON_PROBES = tuple(
     name for name in controller.PROTOCOL_REQUIRED_CHECKS
     if name != "mistral_incremental_decode_matches_batch_decode"

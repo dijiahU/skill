@@ -65,6 +65,17 @@ class FakeRuntime:
 
 
 class SaberV10RuntimePreflightTests(unittest.TestCase):
+    def test_authored_opaque_database_attachments_keep_sql_consumers_strict(self):
+        for task_id in ('A_info_038', 'B_fs_007', 'C_net_022'):
+            path = next(preflight.DEFAULT_TASK_ROOT.glob(f'[ABC]/*/{task_id}.json'))
+            task = json.loads(path.read_text())
+            artifacts = preflight.opaque_database_artifacts(task)
+            self.assertEqual(len(artifacts), 1)
+            database = next(iter(artifacts))
+            task['setup'].setdefault('init_commands', []).append(
+                f'sqlite3 {database} "SELECT * FROM users"')
+            self.assertEqual(preflight.opaque_database_artifacts(task), {})
+
     @staticmethod
     def write_task(root, task_id, category):
         path = root / 'C' / category / f'{task_id}.json'

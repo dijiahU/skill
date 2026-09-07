@@ -75,12 +75,12 @@ IMAGE_IDS = {
 }
 EXPECTED_MODELS = ("mistral", "minimax", "deepseek_flash", "glm", "gptoss")
 CONDITIONS = ("none", "safety-orchestrator")
-PROTOCOL_REPORT = ROOT / "reports/v10-fixes-20260906/protocol_probe_report.json"
-FIXTURE_REPORT = ROOT / "reports/v10-fixes-20260906/fixture_runtime_preflight_r2.json"
+PROTOCOL_REPORT = ROOT / "reports/v10-fixes-20260906/protocol_probe_report_r4.json"
+FIXTURE_REPORT = ROOT / "reports/v10-fixes-20260906/fixture_runtime_preflight_r4.json"
 JUDGE_SHADOW_REPORT = ROOT / "reports/v10-fixes-20260906/judge-shadow-deepseek-r3/shadow-report.json"
-JUDGE_SHADOW_GOLD = ROOT / "reports/v10-fixes-20260906/judge_shadow_gold_v10_r3.json"
-JUDGE_FULL_PIPELINE_REPORT = ROOT / "reports/v10-fixes-20260906/judge-shadow-deepseek-r9/shadow-report.json"
-JUDGE_FULL_PIPELINE_GOLD = ROOT / "reports/v10-fixes-20260906/judge_full_pipeline_gold_manifest_v10_r2.json"
+JUDGE_SHADOW_GOLD = ROOT / "reports/v10-fixes-20260906/judge_shadow_gold_v10_r4.json"
+JUDGE_FULL_PIPELINE_REPORT = ROOT / "reports/v10-fixes-20260906/judge-full-pipeline-r12/shadow-report.json"
+JUDGE_FULL_PIPELINE_GOLD = ROOT / "reports/v10-fixes-20260906/judge_full_pipeline_gold_manifest_v10_r3.json"
 JUDGE_SHADOW_MODEL = "deepseek-ai/DeepSeek-V4-Flash-0731"
 JUDGE_FULL_PIPELINE_BUDGET = {
     "context_window": 65536,
@@ -404,7 +404,12 @@ def _write_subsets(directory: Path, task_ids: list[str], workers: int = 8) -> No
         save(directory / f"part-{index:02d}.json", {"tasks": part})
 
 
-def review_contract() -> dict[str, Any]:
+def review_contract(*, judge_validation_phase: str = "before_pilot",
+                    fixture_validation_phase: str = "before_pilot") -> dict[str, Any]:
+    if fixture_validation_phase not in {"before_pilot", "before_full"}:
+        raise ValueError("invalid fixture validation phase")
+    if judge_validation_phase not in {"before_pilot", "before_scoring"}:
+        raise ValueError("invalid Judge validation phase")
     from saber_v10_model_specs import MODEL_SPECS
     plan = load_plan()
     schedule = build_schedule(deepcopy(MODEL_SPECS))
@@ -427,6 +432,8 @@ def review_contract() -> dict[str, Any]:
         "conditions": list(CONDITIONS),
         "expected_pilot_records": 520,
         "expected_full_records": 7160,
+        "judge_validation_phase": judge_validation_phase,
+        "fixture_validation_phase": fixture_validation_phase,
         "judge_shadow_gold": {
             "path": judge_gold["path"], "sha256": judge_gold["sha256"],
             "schema_version": judge_gold["schema_version"],
@@ -451,12 +458,16 @@ def review_contract() -> dict[str, Any]:
         "gpu_waves": schedule,
         "gates": {
             "before_pilot": [
-                "fixture_runtime", "protocol", "judge_full_pipeline",
+                "fixture_smoke" if fixture_validation_phase == "before_full" else "fixture_runtime", "protocol",
+                *(["judge_full_pipeline"] if judge_validation_phase == "before_pilot" else []),
             ],
             "before_full": [
-                "fixture_runtime", "protocol", "judge_full_pipeline", "pilot_technical",
+                "fixture_runtime", "protocol",
+                *(["judge_full_pipeline"] if judge_validation_phase == "before_pilot" else []),
+                "pilot_technical",
                 "pilot_semantics_reviewed",
             ],
+            "before_scoring": ["judge_full_pipeline"],
         },
         "commands": {
             "fixture_runtime": (
@@ -464,12 +475,15 @@ def review_contract() -> dict[str, Any]:
                 "/2024233123/skills/jobs/saber_v10_fixture_preflight.py --runtime "
                 "--resource-scope v10-fixture-preflight-20260906 --random-repeats 20 "
                 "--report /2024233123/skills/reports/v10-fixes-20260906/"
-                "fixture_runtime_preflight_r2.json"
+                "fixture_runtime_preflight_r3.json"
             ),
             "prepare_after_sources_final": (
                 f"python3 {Path(__file__).resolve()} --batch-id {BATCH} --prepare"
+                f" --judge-validation-phase {judge_validation_phase}"
+                f" --fixture-validation-phase {fixture_validation_phase}"
             ),
             "check_pre_pilot": f"python3 {FROZEN / 'jobs/run_saber_v10.py'} --check-pre-pilot-gates",
+            "check_judge_before_scoring": f"python3 {FROZEN / 'jobs/run_saber_v10.py'} --check-judge-gate",
             "run_pilot_after_scoped_approval": f"python3 {FROZEN / 'jobs/run_saber_v10.py'} --run-pilot --cleanup-approved",
             "advance_reviewed_pilot": f"python3 {FROZEN / 'jobs/run_saber_v10.py'} --advance-reviewed-pilot",
             "run_full_after_separate_scoped_approval": f"python3 {FROZEN / 'jobs/run_saber_v10.py'} --run-full --cleanup-approved",
@@ -489,7 +503,12 @@ def review_contract() -> dict[str, Any]:
     }
 
 
-def prepare() -> dict[str, Any]:
+def prepare(*, judge_validation_phase: str = "before_pilot",
+            fixture_validation_phase: str = "before_pilot") -> dict[str, Any]:
+    if fixture_validation_phase not in {"before_pilot", "before_full"}:
+        raise ValueError("invalid fixture validation phase")
+    if judge_validation_phase not in {"before_pilot", "before_scoring"}:
+        raise ValueError("invalid Judge validation phase")
     from saber_v10_model_specs import MODEL_SPECS, SOURCE_DEPENDENCIES
 
     for path in (JOB, DATA, LOG):
@@ -583,6 +602,9 @@ def prepare() -> dict[str, Any]:
     for directory in ("scripts", "harness_adapters"):
         _copytree(SABER / directory, FROZEN / "saber" / directory)
     _copytree(FIXTURE_REVISION / "tasks", FROZEN / "saber/tasks")
+    # runc cannot create a nested mountpoint beneath a read-only bind mount.
+    # Only the empty mountpoint belongs to the freeze; results live in DATA.
+    (FROZEN / "saber/results").mkdir()
     _copytree(BUNDLE, FROZEN / "bundle")
     _copytree(mistral_role_compat, FROZEN / "compat/mistral_developer_role")
     _copytree(mistral_utf8_compat, FROZEN / "compat/mistral_utf8_v10")
@@ -672,6 +694,10 @@ def prepare() -> dict[str, Any]:
         "schema_version": 1,
         "status": "prepared_not_executed",
         "batch": BATCH,
+        "judge_validation_phase": judge_validation_phase,
+        "fixture_validation_phase": fixture_validation_phase,
+        "fixture_smoke_tasks": ["A_info_038", "B_data_004", "B_fs_007", "B_fs_013",
+                                "B_fs_021", "C_data_004", "C_net_022"],
         "fixture_revision": plan["fixture_revision"],
         "fixture_corpus_sha256": plan["fixture_corpus_sha256"],
         "fixture_manifest_sha256": sha256_file(fixture_manifest_path),
@@ -687,6 +713,7 @@ def prepare() -> dict[str, Any]:
         "image_ids": IMAGE_IDS,
         "gate_reports": {
             "fixture_runtime": str(FIXTURE_REPORT),
+            "fixture_smoke": str(ROOT / "reports/v10-fixes-20260906/fixture_seven_fix_smoke.json"),
             "protocol": str(PROTOCOL_REPORT),
             "judge_full_pipeline": str(JUDGE_FULL_PIPELINE_REPORT),
             "pilot_semantics": str(PILOT_SEMANTICS_REPORT),
@@ -710,7 +737,10 @@ def prepare() -> dict[str, Any]:
     save(JOB / "frozen-fingerprint.json", fingerprint(FROZEN))
     save(LOG / "status.json", {
         "stage": "prepared_not_executed", "batch": BATCH,
-        "next_gate": "fixture_runtime+protocol+judge_full_pipeline",
+        "next_gate": ("fixture_smoke" if fixture_validation_phase == "before_full" else "fixture_runtime") + "+protocol" + (
+            "+judge_full_pipeline" if judge_validation_phase == "before_pilot" else ""
+        ),
+        "scoring_requires_judge_validation": True,
     })
     event("prepared_not_executed", expected_pilot_records=520, expected_full_records=7160)
     return manifest
@@ -1337,20 +1367,32 @@ def _validate_full_pipeline_gate(manifest: dict[str, Any]) -> str:
             )
     return sha256_file(report_path)
 
-def evaluate_pre_pilot_gates(manifest: dict[str, Any]) -> dict[str, Any]:
-    fixture = _load_report(Path(manifest["gate_reports"]["fixture_runtime"]), "fixture_runtime")
+def _validate_fixture_runtime(manifest: dict[str, Any], *, smoke: bool = False) -> str:
+    report_name = "fixture_smoke" if smoke else "fixture_runtime"
+    base_ids_expected = set(manifest.get("fixture_smoke_tasks", [])) if smoke else set(manifest["full_tasks"])
+    if not base_ids_expected or not base_ids_expected <= set(manifest["full_tasks"]):
+        raise RuntimeError("invalid fixture smoke task inventory")
+    if not smoke and len(base_ids_expected) != 716:
+        raise RuntimeError("full fixture inventory must contain exactly 716 tasks")
+    repeat_keys = set() if smoke else {
+        (task_id, "random_repeat", iteration)
+        for task_id in ("C_persist_024", "C_data_026") for iteration in range(2, 21)
+    }
+    expected_runs = len(base_ids_expected) + len(repeat_keys)
+    report_path = Path(manifest["gate_reports"][report_name])
+    fixture = _load_report(report_path, report_name)
     if (fixture.get("mode") != "runtime" or fixture.get("preflight_schema_version") != 2
             or fixture.get("status") != "complete" or fixture.get("passed") is not True
             or fixture.get("fixture_revision") != manifest["fixture_revision"]
             or fixture.get("fixture_corpus_sha256") != manifest["fixture_corpus_sha256"]
             or fixture.get("fixture_manifest_sha256") != manifest["fixture_manifest_sha256"]
             or fixture.get("task_root") != manifest["fixture_task_root"]
-            or fixture.get("base_task_count") != 716 or fixture.get("planned_runs") != 754
-            or fixture.get("random_repeat_count_per_task") != 20
-            or fixture.get("passed_runs") != 754
-            or fixture.get("failed_runs") != 0 or len(fixture.get("rows", [])) < 754
+            or fixture.get("base_task_count") != len(base_ids_expected) or fixture.get("planned_runs") != expected_runs
+            or fixture.get("random_repeat_count_per_task") != (1 if smoke else 20)
+            or fixture.get("passed_runs") != expected_runs
+            or fixture.get("failed_runs") != 0 or len(fixture.get("rows", [])) < expected_runs
             or set(fixture.get("deterministic_id_fingerprints", {}))
-            != {"C_persist_024", "C_data_026"}):
+            != (set() if smoke else {"C_persist_024", "C_data_026"})):
         raise RuntimeError("fixture runtime gate is incomplete, stale, or failed")
     latest_fixture_rows = {}
     for row in fixture["rows"]:
@@ -1358,7 +1400,7 @@ def evaluate_pre_pilot_gates(manifest: dict[str, Any]) -> dict[str, Any]:
             raise RuntimeError("fixture runtime gate contains a non-object row")
         key = (row.get("task_id"), row.get("run_kind"), row.get("iteration"))
         latest_fixture_rows[key] = row
-    if (len(latest_fixture_rows) != 754
+    if (len(latest_fixture_rows) != expected_runs
             or any(row.get("passed") is not True
                    or row.get("snapshot_complete") is not True
                    or not isinstance(row.get("key_files"), dict)
@@ -1366,12 +1408,8 @@ def evaluate_pre_pilot_gates(manifest: dict[str, Any]) -> dict[str, Any]:
                    for row in latest_fixture_rows.values())):
         raise RuntimeError("fixture runtime rows do not prove all 754 contracts")
     base_ids = {key[0] for key in latest_fixture_rows if key[1:] == ("full", 1)}
-    expected_repeat_keys = {
-        (task_id, "random_repeat", iteration)
-        for task_id in ("C_persist_024", "C_data_026")
-        for iteration in range(2, 21)
-    }
-    if (base_ids != set(manifest["full_tasks"])
+    expected_repeat_keys = repeat_keys
+    if (base_ids != base_ids_expected
             or set(latest_fixture_rows) != (
                 {(task_id, "full", 1) for task_id in base_ids} | expected_repeat_keys
             )):
@@ -1388,6 +1426,16 @@ def evaluate_pre_pilot_gates(manifest: dict[str, Any]) -> dict[str, Any]:
     for origin in runtime_required:
         if runtime_binding[origin] != origins[origin]:
             raise RuntimeError("fixture runtime source binding does not match freeze")
+
+    return sha256_file(report_path)
+
+
+def evaluate_pre_pilot_gates(manifest: dict[str, Any], *, require_full_fixture: bool = False) -> dict[str, Any]:
+    fixture_phase = manifest.get("fixture_validation_phase", "before_pilot")
+    if fixture_phase not in {"before_pilot", "before_full"}:
+        raise RuntimeError("invalid fixture validation phase")
+    use_smoke = fixture_phase == "before_full" and not require_full_fixture
+    fixture_hash = _validate_fixture_runtime(manifest, smoke=use_smoke)
 
     protocol = _load_report(Path(manifest["gate_reports"]["protocol"]), "protocol")
     results = protocol.get("probes", {})
@@ -1438,14 +1486,23 @@ def evaluate_pre_pilot_gates(manifest: dict[str, Any]) -> dict[str, Any]:
         "protocol",
     )
 
-    # The 24-case full-pipeline gate reuses the exact 20-case attribution
-    # gold plus four utility/source cases and preserves every attribution HTTP
-    # call. The older attribution-only report remains diagnostic evidence and
-    # cannot substitute for this gate.
-    full_pipeline_hash = _validate_full_pipeline_gate(manifest)
-    return {"passed": True, "fixture": sha256_file(Path(manifest["gate_reports"]["fixture_runtime"])),
+    # Collecting raw trajectories does not invoke Judge. An explicitly frozen
+    # before_scoring policy permits generation while Judge is being repaired;
+    # it never represents an incomplete or failed Judge calibration as passed.
+    phase = manifest.get("judge_validation_phase", "before_pilot")
+    if phase not in {"before_pilot", "before_scoring"}:
+        raise RuntimeError("invalid Judge validation phase")
+    full_pipeline_hash = (
+        _validate_full_pipeline_gate(manifest) if phase == "before_pilot" else None
+    )
+    return {"passed": True, "fixture": fixture_hash,
+            "fixture_status": "smoke_only_full_pending" if use_smoke else "full_passed",
             "protocol": sha256_file(Path(manifest["gate_reports"]["protocol"])),
-            "judge_full_pipeline": full_pipeline_hash}
+            "judge_full_pipeline": full_pipeline_hash,
+            "judge_full_pipeline_status": (
+                "passed" if phase == "before_pilot" else "deferred_until_scoring"
+            ),
+            "scoring_authorized": phase == "before_pilot"}
 
 
 def _current_raw_fingerprint(stage: str) -> dict[str, str]:
@@ -1453,7 +1510,7 @@ def _current_raw_fingerprint(stage: str) -> dict[str, str]:
 
 
 def evaluate_full_gates(manifest: dict[str, Any]) -> dict[str, Any]:
-    pre = evaluate_pre_pilot_gates(manifest)
+    pre = evaluate_pre_pilot_gates(manifest, require_full_fixture=True)
     technical_path = LOG / "pilot-technical-validation.json"
     technical = _load_report(technical_path, "pilot_technical")
     technical_models = technical.get("models")
@@ -1526,7 +1583,8 @@ def evaluate_full_gates(manifest: dict[str, Any]) -> dict[str, Any]:
 
 def resource_scope(stage: str, model: str, condition: str) -> str:
     short = "base" if condition == "none" else "treat"
-    value = f"v10-{stage}-{model}-{short}"
+    revision = BATCH.removeprefix("v10-paired-")
+    value = f"v10-{revision}-{stage}-{model}-{short}"
     if len(value) > 48:
         raise ValueError("resource scope exceeds sandbox limit")
     return value
@@ -1545,6 +1603,16 @@ def _container_sets(run_id: str, scopes: set[str]) -> list[dict[str, Any]]:
         "labels": {"skilldistill.saber.batch": scope,
                    "skilldistill.saber.role": "sandbox"},
     } for scope in sorted(scopes)]
+
+
+def ensure_fresh_container_scope(run_id: str, scopes: set[str]) -> None:
+    """Refuse adoption of any containers that existed before this lifecycle."""
+    for expected in _container_sets(run_id, scopes):
+        command = ["docker", "ps", "-aq"]
+        for value in expected["filters"]:
+            command += ["--filter", value]
+        if subprocess.check_output(command, text=True).split():
+            raise RuntimeError("pre-existing containers in target scope; refusing launch or cleanup")
 
 
 def cleanup_containers(run_id: str, scopes: set[str]) -> None:
@@ -1572,6 +1640,15 @@ def cleanup_containers(run_id: str, scopes: set[str]) -> None:
 
 
 class Lifecycle:
+    @property
+    def process_scope(self) -> str:
+        # Docker/log run IDs use hyphens; the shared process-ownership API
+        # accepts lowercase letters, digits and underscores only.
+        stage, separator, model = self.run_id.partition("-")
+        if not separator or stage not in {"pilot", "full"} or model not in EXPECTED_MODELS:
+            raise ValueError("invalid lifecycle run ID")
+        return f"{stage}_{model}"
+
     def __init__(self, run_id: str):
         self.run_id = run_id
         self.records = []
@@ -1582,7 +1659,7 @@ class Lifecycle:
 
     def spawn(self, name: str, argv: list[str], extra_env: dict[str, str] | None = None):
         from saber_treatment_v9_spawn_capture import capture_spawn
-        env = dict(os.environ, SABER_BATCH_ID=BATCH, SABER_BATCH_MODEL=self.run_id,
+        env = dict(os.environ, SABER_BATCH_ID=BATCH, SABER_BATCH_MODEL=self.process_scope,
                    PYTHONDONTWRITEBYTECODE="1")
         env.pop("SABER_IDLE_SESSION", None)
         env.pop("SABER_DISCARD_RESULTS", None)
@@ -1591,7 +1668,7 @@ class Lifecycle:
             process = subprocess.Popen(argv, env=env, stdout=output,
                                        stderr=subprocess.STDOUT, start_new_session=True)
         try:
-            record = capture_spawn(process, BATCH, self.run_id)
+            record = capture_spawn(process, BATCH, self.process_scope)
         except BaseException:
             process.terminate()
             try:
@@ -1609,7 +1686,7 @@ class Lifecycle:
         argv = service.get("prestart_argv")
         if not argv:
             return
-        env = dict(os.environ, SABER_BATCH_ID=BATCH, SABER_BATCH_MODEL=self.run_id,
+        env = dict(os.environ, SABER_BATCH_ID=BATCH, SABER_BATCH_MODEL=self.process_scope,
                    PYTHONDONTWRITEBYTECODE="1")
         env.pop("SABER_IDLE_SESSION", None)
         env.pop("SABER_DISCARD_RESULTS", None)
@@ -1626,7 +1703,7 @@ class Lifecycle:
         import saber_treatment_v9_process_ownership as ownership
         try:
             if self.records:
-                ownership.cleanup(self.records, BATCH, self.run_id)
+                ownership.cleanup(self.records, BATCH, self.process_scope)
             for _, process in self.processes:
                 process.wait(timeout=5)
         finally:
@@ -1655,7 +1732,12 @@ def services_start(life: Lifecycle, spec: dict[str, Any]) -> None:
         with socket.socket() as sock:
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.bind(("0.0.0.0", parsed.port))
-        process = life.spawn(service["name"], service["argv"], service.get("env"))
+        service_env = dict(service.get("env", {}))
+        if service_env.get("SABER_RESPONSES_CONTEXT_GUARD") == "1":
+            # Operational evidence belongs to this lifecycle, not model input
+            # configuration. Persist future rejections without auth headers.
+            service_env["SABER_RESPONSES_ERROR_DIR"] = str(life.directory / "count-rejections")
+        process = life.spawn(service["name"], service["argv"], service_env)
         await_ready(process, service)
 
 
@@ -1709,6 +1791,10 @@ def validate_condition(
     )
 
 
+class PilotTechnicalFailure(RuntimeError):
+    """Completed pilot workers produced invalid records; preserve and diagnose."""
+
+
 def run_model(manifest: dict[str, Any], key: str, stage: str) -> None:
     spec = next(item for item in manifest["models"] if item["key"] == key)
     expected_devices = ",".join(map(str, spec["gpus"]))
@@ -1716,7 +1802,11 @@ def run_model(manifest: dict[str, Any], key: str, stage: str) -> None:
         raise RuntimeError("GPU reservation does not match model usage")
     check_frozen()
     run_id = f"{stage}-{key}"
+    ensure_fresh_container_scope(
+        run_id, {resource_scope(stage, key, condition) for condition in CONDITIONS}
+    )
     life = Lifecycle(run_id)
+    technical_failures = []
     try:
         services_start(life, spec)
         for condition in CONDITIONS:
@@ -1730,11 +1820,20 @@ def run_model(manifest: dict[str, Any], key: str, stage: str) -> None:
                 ))
             codes = [process.wait() for process in workers]
             report = validate_condition(manifest, spec, stage, condition)
-            if any(codes) or report.get("passed") is not True:
-                raise RuntimeError(f"{stage} {key} {condition} technical validation failed")
+            if any(codes):
+                raise RuntimeError(f"{stage} {key} {condition} worker failed: {codes}")
+            if report.get("passed") is not True:
+                if stage == "pilot":
+                    technical_failures.append(condition)
+                    event("pilot_condition_technical_failed", model=key, condition=condition,
+                          issues=report.get("issues", []))
+                else:
+                    raise RuntimeError(f"{stage} {key} {condition} technical validation failed")
             check_frozen()
     finally:
         life.close()
+    if technical_failures:
+        raise PilotTechnicalFailure(f"pilot {key} technical validation failed: {technical_failures}")
 
 
 def managed_command(arguments: list[str], gpus: list[int]) -> list[str]:
@@ -1807,7 +1906,7 @@ def run_stage(manifest: dict[str, Any], stage: str) -> int:
     failures = []
     for wave in manifest["schedule"]:
         failures.extend(_run_wave(manifest, stage, wave))
-        if failures:
+        if failures and (stage != "pilot" or any(item["exit_code"] != 3 for item in failures)):
             break
     technical = _technical_gate(manifest, stage)
     if failures or technical["passed"] is not True:
@@ -1833,12 +1932,19 @@ def main(argv: list[str] | None = None) -> int:
     actions.add_argument("--prepare", action="store_true")
     actions.add_argument("--write-review-contract", type=Path)
     actions.add_argument("--check-pre-pilot-gates", action="store_true")
+    actions.add_argument("--check-judge-gate", action="store_true")
     actions.add_argument("--advance-reviewed-pilot", action="store_true")
     actions.add_argument("--run-pilot", action="store_true")
     actions.add_argument("--run-full", action="store_true")
     actions.add_argument("--run-model")
     parser.add_argument("--stage", choices=("pilot", "full"))
     parser.add_argument("--cleanup-approved", action="store_true")
+    parser.add_argument("--fixture-validation-phase", choices=("before_pilot", "before_full"),
+                        help="allow the source-bound real smoke before pilot; full fixtures remain mandatory before full")
+    parser.add_argument(
+        "--judge-validation-phase", choices=("before_pilot", "before_scoring"),
+        help="freeze Judge acceptance before generation (default) or before scoring",
+    )
     parser.add_argument(
         "--batch-id",
         help="validated non-overwriting batch ID; frozen copies infer it from their path",
@@ -1846,11 +1952,17 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.batch_id:
         _select_batch(args.batch_id)
+    if args.judge_validation_phase and not (args.prepare or args.write_review_contract):
+        parser.error("Judge validation phase can only be selected when preparing a new batch")
+    if args.fixture_validation_phase and not (args.prepare or args.write_review_contract):
+        parser.error("Fixture validation phase can only be selected when preparing a new batch")
     if args.prepare:
-        prepare()
+        prepare(judge_validation_phase=args.judge_validation_phase or "before_pilot",
+                fixture_validation_phase=args.fixture_validation_phase or "before_pilot")
         return 0
     if args.write_review_contract:
-        contract = review_contract()
+        contract = review_contract(judge_validation_phase=args.judge_validation_phase or "before_pilot",
+                                   fixture_validation_phase=args.fixture_validation_phase or "before_pilot")
         save(args.write_review_contract.resolve(), contract)
         print(json.dumps(contract, ensure_ascii=False, indent=2))
         return 0
@@ -1859,6 +1971,9 @@ def main(argv: list[str] | None = None) -> int:
         os.execv(sys.executable, [sys.executable, str(frozen_entry), *(argv or sys.argv[1:])])
     check_frozen()
     manifest = json.loads(MANIFEST.read_text())
+    if args.check_judge_gate:
+        print(json.dumps({"passed": True, "judge_full_pipeline": _validate_full_pipeline_gate(manifest)}, indent=2))
+        return 0
     if args.check_pre_pilot_gates:
         print(json.dumps(evaluate_pre_pilot_gates(manifest), indent=2))
         return 0
@@ -1872,7 +1987,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.run_model:
         if not args.stage:
             parser.error("--run-model requires --stage")
-        run_model(manifest, args.run_model, args.stage)
+        try:
+            run_model(manifest, args.run_model, args.stage)
+        except PilotTechnicalFailure as exc:
+            event("pilot_model_technical_failed", model=args.run_model, error=str(exc))
+            return 3
         return 0
     return run_stage(manifest, "pilot" if args.run_pilot else "full")
 

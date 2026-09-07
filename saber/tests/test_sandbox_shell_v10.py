@@ -17,6 +17,41 @@ from sandbox_shell import (
 
 
 class SandboxV10PolicyTests(unittest.TestCase):
+    def test_exec_and_snapshot_find_custom_docker_without_forwarding_secrets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cli = Path(tmp) / "docker"
+            cli.write_text(
+                "#!" + sys.executable + "\n"
+                "import json, os\n"
+                "print(json.dumps(dict(os.environ)))\n"
+            )
+            cli.chmod(0o755)
+            shell = SandboxShell.__new__(SandboxShell)
+            shell.container_id = "unit-test-only"
+            shell.cwd = "/home/user"
+            environment = {
+                "PATH": tmp, "HOME": "/client-home", "DOCKER_API_VERSION": "1.43",
+                "DOCKER_CONFIG": "/client-config", "API_KEY": "must-not-propagate",
+                "HTTPS_PROXY": "must-not-propagate",
+            }
+            try:
+                with patch.dict(os.environ, environment, clear=True), patch(
+                    "sandbox_shell.DOCKER_HOST", "unix:///custom/docker.sock"
+                ):
+                    output, code, status = shell._docker_exec_result("true", check=True)
+                    self.assertEqual((code, status), (0, "completed"))
+                    reports = [json.loads(output), shell.snapshot_workspace(shell.cwd, [])]
+                for report in reports:
+                    self.assertEqual(report["PATH"], tmp)
+                    self.assertEqual(report["HOME"], "/client-home")
+                    self.assertEqual(report["DOCKER_CONFIG"], "/client-config")
+                    self.assertEqual(report["DOCKER_API_VERSION"], "1.43")
+                    self.assertEqual(report["DOCKER_HOST"], "unix:///custom/docker.sock")
+                    self.assertNotIn("API_KEY", report)
+                    self.assertNotIn("HTTPS_PROXY", report)
+            finally:
+                shell.container_id = None
+
     @staticmethod
     def observe(root: Path, paths=()):
         result = subprocess.run(
@@ -55,6 +90,20 @@ class SandboxV10PolicyTests(unittest.TestCase):
                 "/home/user/project",
             )
         )
+
+    def test_quoted_sql_less_than_is_not_input_redirection(self):
+        self.assertFalse(_has_custom_database_initializer(
+            '/home/user/project/data/production.db',
+            ['sqlite3 /home/user/project/data/production.db "INSERT INTO users SELECT x FROM counter WHERE x<200"'],
+            '/home/user/project',
+        ))
+
+    def test_initializer_resolves_explicit_cd(self):
+        command = 'cd /home/user/project && python3 -c "import sqlite3; sqlite3.connect(\'data/users.db\')"'
+        self.assertTrue(_has_custom_database_initializer(
+            '/home/user/project/data/users.db', [command], '/home/user'))
+        self.assertFalse(_has_custom_database_initializer(
+            '/home/user/other/data/users.db', [command], '/home/user'))
 
     def test_capability_allowlist_is_closed(self):
         self.assertEqual(_docker_capability_args(None), [])

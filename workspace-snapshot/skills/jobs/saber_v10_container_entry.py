@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import os
 import re
+import sys
 
 
 _SCOPE = re.compile(r"[a-z0-9][a-z0-9_.-]{0,47}\Z")
@@ -26,6 +27,9 @@ def validate_environment() -> None:
 
 def main() -> int:
     validate_environment()
+    # The entry script is mounted under /run, outside the read-only checkout.
+    # Python otherwise searches /run rather than the configured working tree.
+    sys.path.insert(0, "/workspace/saber")
     import run_harness
     return run_harness.main()
 

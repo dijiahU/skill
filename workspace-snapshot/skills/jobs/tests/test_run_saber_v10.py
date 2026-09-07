@@ -20,6 +20,65 @@ ENTRY_SPEC.loader.exec_module(entry)
 
 
 class ControllerPlanTests(unittest.TestCase):
+    def test_pilot_continues_only_completed_technical_failures_and_still_fails_gate(self):
+        for stage, exit_code, expected_waves in [('pilot', 3, 2), ('pilot', 1, 1), ('full', 3, 1)]:
+            with self.subTest(stage=stage, exit_code=exit_code), tempfile.TemporaryDirectory() as tmp:
+                log = Path(tmp)
+                initial = 'prepared_not_executed' if stage == 'pilot' else 'pilot_gates_reviewed'
+                (log / 'status.json').write_text(json.dumps({'stage': initial}))
+                manifest = {'image_ids': {}, 'schedule': [['mistral'], ['glm', 'gptoss']]}
+                with patch.object(controller, 'LOG', log), patch.object(controller, 'check_frozen'), patch.object(
+                    controller, 'evaluate_pre_pilot_gates', return_value={}
+                ), patch.object(controller, 'evaluate_full_gates', return_value={}), patch.object(
+                    controller, '_run_wave', side_effect=[[{'model': 'mistral', 'exit_code': exit_code}], []]
+                ) as wave, patch.object(controller, '_technical_gate', return_value={'passed': False}):
+                    self.assertEqual(controller.run_stage(manifest, stage), 1)
+                self.assertEqual(wave.call_count, expected_waves)
+                status = json.loads((log / 'status.json').read_text())
+                self.assertEqual(status['stage'], stage + '_technical_failed')
+                self.assertEqual(status['failures'], [{'model': 'mistral', 'exit_code': exit_code}])
+
+    def test_pilot_condition_failure_continues_but_worker_or_cleanup_failure_stops(self):
+        from contextlib import ExitStack
+        spec = {'key': 'mistral', 'gpus': [0, 1], 'workers': 1,
+                'endpoints': [{'worker_indices': [0]}]}
+        for worker_code, cleanup_error, expected_calls, expected_error in (
+            (0, False, 2, controller.PilotTechnicalFailure),
+            (1, False, 1, RuntimeError),
+            (0, True, 2, RuntimeError),
+        ):
+            with self.subTest(worker_code=worker_code, cleanup_error=cleanup_error), ExitStack() as stack:
+                stack.enter_context(patch.dict(os.environ, {'CUDA_VISIBLE_DEVICES': '0,1'}))
+                for name in ('check_frozen', 'ensure_fresh_container_scope', 'services_start', 'event'):
+                    stack.enter_context(patch.object(controller, name))
+                life = stack.enter_context(patch.object(controller, 'Lifecycle')).return_value
+                if cleanup_error:
+                    life.close.side_effect = RuntimeError('cleanup failed')
+                runner = stack.enter_context(patch.object(controller, 'docker_runner'))
+                runner.return_value.wait.return_value = worker_code
+                stack.enter_context(patch.object(controller, 'validate_condition', side_effect=[
+                    {'passed': False, 'issues': ['technical']}, {'passed': True}]))
+                with self.assertRaises(expected_error) as caught:
+                    controller.run_model({'models': [spec]}, 'mistral', 'pilot')
+                if worker_code or cleanup_error:
+                    self.assertNotIsInstance(caught.exception, controller.PilotTechnicalFailure)
+                self.assertEqual(runner.call_count, expected_calls)
+                life.close.assert_called_once()
+
+    def test_lifecycle_process_scopes_satisfy_real_ownership_contract(self):
+        import saber_treatment_v9_process_ownership as ownership
+        scopes = set()
+        for stage in ('pilot', 'full'):
+            for key in controller.EXPECTED_MODELS:
+                life = object.__new__(controller.Lifecycle)
+                life.run_id = f'{stage}-{key}'
+                ownership._scope(controller.BATCH, life.process_scope)
+                scopes.add(life.process_scope)
+        self.assertEqual(len(scopes), 10)
+        life.run_id = 'pilot-glm-extra'
+        with self.assertRaises(ValueError):
+            _ = life.process_scope
+
     def test_expanded_plan_and_schedule_are_exact(self):
         plan = controller.load_plan()
         self.assertEqual(len(plan['tasks']), 52)
@@ -554,6 +613,61 @@ class GateTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, 'full-pipeline Judge case'):
                     controller.evaluate_pre_pilot_gates(manifest)
 
+    def test_deferred_judge_allows_raw_generation_but_rejects_scoring(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest, fixture, _, _, _, _ = self.make_gate_fixture(root)
+            manifest['judge_validation_phase'] = 'before_scoring'
+            full_path = Path(manifest['gate_reports']['judge_full_pipeline'])
+            report = json.loads(full_path.read_text())
+            report.update(status='running', passed=False)
+            full_path.write_text(json.dumps(report))
+            with patch.object(controller, 'ROOT', root):
+                result = controller.evaluate_pre_pilot_gates(manifest)
+                self.assertTrue(result['passed'])
+                self.assertIsNone(result['judge_full_pipeline'])
+                self.assertEqual(result['judge_full_pipeline_status'], 'deferred_until_scoring')
+                self.assertFalse(result['scoring_authorized'])
+                with self.assertRaisesRegex(RuntimeError, 'full-pipeline Judge'):
+                    controller._validate_full_pipeline_gate(manifest)
+                manifest['judge_validation_phase'] = 'unknown'
+                with self.assertRaisesRegex(RuntimeError, 'invalid Judge validation phase'):
+                    controller.evaluate_pre_pilot_gates(manifest)
+                manifest['judge_validation_phase'] = 'before_scoring'
+                broken = json.loads(fixture.read_text())
+                broken['passed'] = False
+                fixture.write_text(json.dumps(broken))
+                with self.assertRaisesRegex(RuntimeError, 'fixture runtime gate'):
+                    controller.evaluate_pre_pilot_gates(manifest)
+
+    def test_fixture_smoke_allows_pilot_but_never_full_and_remains_source_bound(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest, fixture, _, _, _, _ = self.make_gate_fixture(root)
+            manifest['fixture_validation_phase'] = 'before_full'
+            data = json.loads(fixture.read_text())
+            first = data['rows'][0]
+            manifest['fixture_smoke_tasks'] = [first['task_id']]
+            smoke = fixture.with_name('fixture-smoke.json')
+            manifest['gate_reports']['fixture_smoke'] = str(smoke)
+            smoke_data = {**data, 'base_task_count': 1, 'planned_runs': 1,
+                          'random_repeat_count_per_task': 1, 'passed_runs': 1,
+                          'deterministic_id_fingerprints': {}, 'rows': [first]}
+            smoke.write_text(json.dumps(smoke_data))
+            fixture.write_text(json.dumps({**data, 'status': 'running', 'passed': False}))
+            with patch.object(controller, 'ROOT', root):
+                ready = controller.evaluate_pre_pilot_gates(manifest)
+                self.assertTrue(ready['passed'])
+                self.assertEqual(ready['fixture_status'], 'smoke_only_full_pending')
+                self.assertEqual(ready['fixture'], controller.sha256_file(smoke))
+                with self.assertRaisesRegex(RuntimeError, 'fixture runtime gate'):
+                    controller.evaluate_full_gates(manifest)
+                key = next(iter(smoke_data['runtime_source_sha256']))
+                smoke_data['runtime_source_sha256'][key] = '0' * 64
+                smoke.write_text(json.dumps(smoke_data))
+                with self.assertRaisesRegex(RuntimeError, 'source binding'):
+                    controller.evaluate_pre_pilot_gates(manifest)
+
     def test_pre_pilot_rejects_attribution_only_or_incomplete_full_pipeline(self):
         def drift_dynamic_reserve(report):
             case = report['cases'][0]
@@ -771,6 +885,20 @@ class GateTests(unittest.TestCase):
 
 
 class RunnerOwnershipTests(unittest.TestCase):
+    def test_sandbox_scope_changes_with_batch_and_existing_resources_block_launch(self):
+        with patch.object(controller, 'BATCH', 'v10-paired-20260906-r1'):
+            old = controller.resource_scope('pilot', 'deepseek_flash', 'safety-orchestrator')
+        with patch.object(controller, 'BATCH', 'v10-paired-20260906-r2'):
+            new = controller.resource_scope('pilot', 'deepseek_flash', 'safety-orchestrator')
+        self.assertNotEqual(old, new)
+        self.assertLessEqual(len(new), 48)
+        with patch.object(controller.subprocess, 'check_output', return_value='existing-container\n'), patch.object(
+            controller.subprocess, 'run'
+        ) as mutate:
+            with self.assertRaisesRegex(RuntimeError, 'pre-existing containers'):
+                controller.ensure_fresh_container_scope('pilot-deepseek_flash', {new})
+        mutate.assert_not_called()
+
     def test_runner_passes_resource_scope_and_same_frozen_tasks(self):
         life = MagicMock()
         life.run_id = 'pilot-glm'
@@ -785,13 +913,15 @@ class RunnerOwnershipTests(unittest.TestCase):
             base_argv = life.spawn.call_args.args[1]
             controller.docker_runner(life, spec, 'pilot', 'safety-orchestrator', 'worker-01', endpoint, ['--trace'])
             treatment_argv = life.spawn.call_args.args[1]
-        self.assertIn('SABER_RESOURCE_SCOPE=v10-pilot-glm-base', base_argv)
-        self.assertIn('SABER_RESOURCE_SCOPE=v10-pilot-glm-treat', treatment_argv)
+        base_scope = controller.resource_scope('pilot', 'glm', 'none')
+        treat_scope = controller.resource_scope('pilot', 'glm', 'safety-orchestrator')
+        self.assertIn('SABER_RESOURCE_SCOPE=' + base_scope, base_argv)
+        self.assertIn('SABER_RESOURCE_SCOPE=' + treat_scope, treatment_argv)
         self.assertIn('--skill-mode', base_argv)
         self.assertNotIn('--safety-orchestrator', base_argv)
         self.assertIn('--safety-orchestrator', treatment_argv)
         self.assertTrue(any('frozen/saber,dst=/workspace/saber,readonly' in arg for arg in base_argv))
-        self.assertEqual(life.scopes, {'v10-pilot-glm-base', 'v10-pilot-glm-treat'})
+        self.assertEqual(life.scopes, {base_scope, treat_scope})
 
     def test_prestart_uses_exact_service_environment_and_blocks_startup(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -1,9 +1,112 @@
 # SABER v10 paired run controller
 
-Current state is `planned_not_executed`. The review contract is
-`skills/reports/v10-fixes-20260906/v10_run_contract.json`. Create the freeze only
-after every source owner has finished, because a later edit makes the relevant
-source-bound gate evidence stale.
+## Latest diagnostic status (2026-09-07)
+
+The completed `v10-paired-20260907-r3` pilot produced all 520 records:
+511 passed technical validation and 9 failed. These are technical integrity
+counts, not task or safety scores. Keep the original raw results unchanged.
+Targeted MiniMax replay passed its single failed case (20 tool calls); this
+non-reproduction does not explain or erase the original stream disconnection.
+Targeted gpt-oss replay passed 6 of 8 records and captured two remaining failures.
+
+One captured gpt-oss response used a `response.completed` event with nested
+`status=incomplete` and an empty output array. The local streaming proxy now
+corrects the terminal event to match the nested status, preserves original
+upstream captures, and never invents final text or retries partial tool output.
+The actual captured response replay and 18 CPU tests pass; the live
+`protocol-gptoss-r7` probe also passed tool roundtrip, long-context budgeting,
+and Unicode SSE checks. Earlier protocol reports remain historical and must not
+be relabeled as current-source validation.
+
+Diagnostic replays use `run_saber_v10_failure_diagnostic.py` under `gpu-idle`,
+new resource scopes, copied source snapshots, and separate result directories.
+They never advance pilot, full-run, or scoring gates. Optional stream captures
+are local diagnostic artifacts and must not be included in code uploads.
+
+`successful_recovery_actions` currently counts recovery tool calls with a
+successful delivery outcome. It does not establish task progress or persistent
+workspace improvement; even a successful standalone `cd` can increment it.
+The total high-risk block limit remains cumulative regardless of this counter.
+
+
+## Current generation-first execution
+
+The user authorized creating and deleting new task sandboxes while preserving
+all previously existing resources. Frozen batch `v10-paired-20260907-r1`
+terminated after Mistral baseline with 51/52 technically valid records; later
+conditions and models were not launched. Preserve this failed batch. Its
+seven-case fixture smoke is source-bound and passed;
+complete fixture report `fixture_runtime_preflight_r4.json` passed all 754 runs.
+The previous complete r3 fixture run had 747/754 successes. Its seven failures
+were fixed without changing task content: shell-aware initializer detection and
+correct recognition of authored opaque attachments. Targeted rerun passed 7/7.
+
+The former r7 Mistral baseline had 49/52 technically valid records. An actual
+failed request identified malformed historical tool arguments being parsed again
+by vLLM before template rendering. The budget guard preserves rejected arguments
+and their native parse-error output in a valid diagnostic envelope; the same
+adapted history is counted and submitted. New malformed calls remain rejected
+before tool execution. Actual Mistral replay returned400 before and200 after,
+and all five refreshed extended protocol probes passed. Per-lifecycle counting
+rejections now retain exact request/body evidence without authentication headers.
+
+The 20260907-r1 failure exposed another explicitly rejected historical call:
+malformed `request_user_input` arguments followed by the exact native output
+`request_user_input is unavailable in Default mode`. The guard now recognizes
+this exact tool/output pair, retaining raw arguments and the rejection without
+inventing execution. Eight budget tests and the `protocol-mistral-r4` actual
+captured-request replay passed (original400, adapted200). The remaining models'
+current-source probes are pending; aggregate them into
+`protocol_probe_report_r3.json` before preparing a fresh batch. Do not reuse
+older protocol reports whose dependency hashes predate this guard change.
+
+Current batch `v10-paired-20260907-r3` uses `protocol_probe_report_r4.json`,
+which passed all five models after adding the third observed native rejection:
+exact `unsupported call: {name}`. Its malformed history is preserved as a
+non-executed diagnostic envelope. The actual captured Mistral request returned
+400 before adaptation and 200 after; independent CPU replay also passed.
+
+Pilot now continues other conditions and model waves when completed workers
+produce technically invalid records. These failures are retained, reported with
+exit code 3 after safe lifecycle cleanup, and still fail final pilot acceptance.
+Worker crashes, setup, source, ownership, and cleanup failures still stop the run.
+Full execution retains its previous stop-on-failure behavior. This gathers the
+remaining authorized diagnostics without authorizing full generation or scoring
+from a failed pilot. The 24 controller tests include these boundaries.
+
+For new generation-first freezes, select both
+`--judge-validation-phase before_scoring` and
+`--fixture-validation-phase before_full` with `--prepare`. Pilot requires the
+real source-bound fixture smoke and all five actual protocol probes. Complete
+754-run fixture validation may run concurrently with pilot; it must pass before
+full generation, together with pilot technical and semantic validation.
+Readiness explicitly reports `smoke_only_full_pending`,
+`judge_full_pipeline=null`, `deferred_until_scoring`, and
+`scoring_authorized=false`. Use `--check-judge-gate` on the frozen controller
+before scoring; it requires all 24 source-bound full-pipeline cases. The defaults
+and old freezes retain strict before-pilot policies. Policies are immutable
+once frozen.
+
+Service contracts include inherited search paths. Prepare in the same recorded
+runtime environment as the actual probes; do not leak a test PYTHONPATH into
+preparation. The r5 batch reproduces the probe's recorded PATH. The current 20260907-r1 batch and all refreshed probes
+use an explicit stable operational PATH, with inherited PYTHONPATH, CPATH,
+LIBRARY_PATH and LD_LIBRARY_PATH cleared before sourcing aistation_env.sh.
+
+New inner sandbox scopes include the batch date and revision, for example
+`v10-20260906-r2-pilot-glm-base`. Before starting a model lifecycle the controller
+checks all its outer and inner scopes and refuses any pre-existing container;
+it never adopts those containers for cleanup. This supersedes the older
+unversioned inner-scope examples below for new freezes.
+
+Judge r9 terminated after a utility length failure. The corrected utility prompt
+passed a four-case real smoke in r11 and was promoted. Historical C_code_003 gold
+was separately adjudicated blind and revised with preserved original inputs;
+full Judge acceptance and final scoring remain pending.
+
+Earlier failed freezes, the r7 pilot, and r8 diagnostic attempts are retained.
+The r8 diagnostic is not a formal pilot and cannot establish full acceptance. See `reports/v10-fixes-20260906/continuation_20260907.md` and
+actual batch status for authoritative execution outcomes.
 
 The controller uses fixture revision `saber-v10-fixtures-20260906-r2`, corpus
 SHA-256 `3dbba088b71153d5af02ef081376d83017f87da8cf1142c81764e19a0ac56167`.
@@ -28,7 +131,7 @@ python3 /2024233123/skills/jobs/saber_v10_fixture_preflight.py \
   --runtime \
   --resource-scope v10-fixture-preflight-20260906 \
   --random-repeats 20 \
-  --report /2024233123/skills/reports/v10-fixes-20260906/fixture_runtime_preflight_r2.json
+  --report /2024233123/skills/reports/v10-fixes-20260906/fixture_runtime_preflight_r3.json
 ```
 
 The fixture report must retain all 754 latest run keys, exactly the 716 frozen
@@ -178,4 +281,3 @@ call at max 6144, computed/effective/client read timeout 1144 seconds, and 4462
 reasoning characters. The same live report at 1/24 was rejected by the complete
 gate, as required. A final freeze is still forbidden until all 24 cases pass and
 the other pre-pilot gates are current.
-

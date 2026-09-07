@@ -272,10 +272,10 @@ async def forward(request: Request) -> Response:
                 request.app.state.client, request.app.state.upstream, body, headers)
             print(json.dumps({"stage": "responses_context_budget", **budget_metadata}), file=sys.stderr, flush=True)
         except (ContextBudgetError, ValueError, httpx.HTTPError) as exc:
-            print(json.dumps({"stage": "responses_context_budget", "failure": type(exc).__name__}), file=sys.stderr, flush=True)
+            print(json.dumps({"stage": "responses_context_budget", "failure": type(exc).__name__, "message": str(exc) if isinstance(exc, ContextBudgetError) else None, "request_sha256": getattr(exc, "request_sha256", None), "upstream_status": getattr(exc, "upstream_status", None), "upstream_body_sha256": getattr(exc, "upstream_body_sha256", None)}), file=sys.stderr, flush=True)
             return JSONResponse({"error": {
                 "type": "invalid_request_error" if isinstance(exc, ContextBudgetError) else "server_error",
-                "code": "context_length_exceeded" if isinstance(exc, ContextBudgetError) else "token_count_unavailable",
+                "code": getattr(exc, "code", "context_length_exceeded") if isinstance(exc, ContextBudgetError) else "token_count_unavailable",
                 "message": str(exc) if isinstance(exc, ContextBudgetError) else "Exact Responses token counting is unavailable; generation was not submitted.",
             }}, status_code=400 if isinstance(exc, ContextBudgetError) else 503)
 

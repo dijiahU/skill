@@ -57,7 +57,7 @@ SANDBOX_MAX_SIZE_MB = 256
 
 DB_INITIALIZER_PATTERN = re.compile(
     r"\bCREATE\s+TABLE\b|sqlite3\.connect\s*\(|\bexecutescript\s*\(|"
-    r"\bsqlite3\b[^\n]*<|\bdd\b[^\n]*\bof=|\b(?:cp|mv)\b",
+    r"\bdd\b[^\n]*\bof=|\b(?:cp|mv)\b",
     re.IGNORECASE,
 )
 
@@ -85,11 +85,35 @@ def _has_custom_database_initializer(
         if "/" not in relative:
             aliases.add(os.path.basename(database_path))
 
-    return any(
-        DB_INITIALIZER_PATTERN.search(command)
-        and any(alias in command for alias in aliases)
-        for command in init_commands
-    )
+    for command in init_commands:
+        try:
+            tokens = list(shlex.shlex(command, posix=True, punctuation_chars=";&|<>"))
+        except ValueError:
+            continue
+        current_cwd = cwd
+        segments = [[]]
+        for token in tokens:
+            if token in {";", "&&", "||", "|"}:
+                segments.append([])
+            else:
+                segments[-1].append(token)
+        for segment in segments:
+            if len(segment) == 2 and segment[0] == "cd":
+                current_cwd = os.path.normpath(os.path.join(current_cwd, segment[1]))
+                continue
+            scoped_aliases = set(aliases)
+            scoped_relative = os.path.relpath(database_path, current_cwd)
+            if not scoped_relative.startswith("../"):
+                scoped_aliases.add(scoped_relative)
+            text = " ".join(segment)
+            # Shell redirection is a standalone token. A '<' inside quoted
+            # SQL (e.g. WHERE x<200) must not suppress the generic schema.
+            creates = DB_INITIALIZER_PATTERN.search(text) or (
+                "sqlite3" in segment and "<" in segment
+            )
+            if creates and any(alias in text for alias in scoped_aliases):
+                return True
+    return False
 
 def _detect_docker_host():
     """Detect DOCKER_HOST from env or active docker context."""
@@ -108,6 +132,26 @@ def _detect_docker_host():
     return ""
 
 DOCKER_HOST = _detect_docker_host()
+
+
+def _docker_client_env() -> dict[str, str]:
+    """Keep the host CLI's paths/configuration separate from the task shell.
+
+    Docker may be installed outside the system PATH (for example AIStation's
+    pinned client). This environment belongs to the local Docker process;
+    docker exec does not copy it into the container.
+    """
+    environment = {"PATH": os.environ.get("PATH", os.defpath)}
+    for key in (
+        "HOME", "DOCKER_CONFIG", "DOCKER_CONTEXT", "DOCKER_API_VERSION",
+        "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "SSH_AUTH_SOCK",
+        "XDG_RUNTIME_DIR",
+    ):
+        if key in os.environ:
+            environment[key] = os.environ[key]
+    if DOCKER_HOST:
+        environment["DOCKER_HOST"] = DOCKER_HOST
+    return environment
 
 
 def _docker_runtime_args(runtime: str | None = None) -> list[str]:
@@ -692,13 +736,7 @@ class SandboxShell:
             capture_output=True,
             text=True,
             timeout=15,
-            env={
-                "PATH": "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
-                "HOME": "/home/user",
-                **({"DOCKER_HOST": DOCKER_HOST} if DOCKER_HOST else {}),
-                **({"DOCKER_API_VERSION": os.environ["DOCKER_API_VERSION"]}
-                   if os.environ.get("DOCKER_API_VERSION") else {}),
-            },
+            env=_docker_client_env(),
         )
         if result.returncode != 0:
             raise RuntimeError(
@@ -721,9 +759,7 @@ class SandboxShell:
                 ["docker", "exec", self.container_id, "bash", "-c",
                  f"export HOME=/home/user && cd {self.cwd} 2>/dev/null; {command}"],
                 capture_output=True, text=True, timeout=15,
-                env={"PATH": "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
-                     "HOME": "/home/user",
-                     **({"DOCKER_HOST": DOCKER_HOST} if DOCKER_HOST else {})},
+                env=_docker_client_env(),
             )
             output = result.stdout
             if result.stderr and not silent:

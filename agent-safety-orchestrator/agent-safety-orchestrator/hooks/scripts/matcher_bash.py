@@ -31,7 +31,11 @@ from lib_common import (
     read_event, aggregate, check, soft_check, _state_dir,
     SHELL_INJECTION_PATTERNS, SECRET_PATTERNS, DESTRUCTIVE_KEYWORDS, PATH_TRAVERSAL_PATTERNS,
 )
-from write_effects import extract_write_effects, review_write_effects
+from write_effects import (
+    extract_write_effects,
+    remote_protected_script_write,
+    review_write_effects,
+)
 from sensitive_data import (
     sensitive_read_authorized, tainted_sink_risk,
 )
@@ -2342,6 +2346,8 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
         semantic_risk = _automation_semantic_risk(scan_text, str(runtime_cwd))
         if semantic_risk:
             risks.append(semantic_risk)
+        if remote_protected_script_write(str(path), scan_text):
+            risks.append("script performs a remote mutation of protected host configuration")
         source_to_sink_risk = _sensitive_source_to_sink_risk(
             scan_text, path, runtime_cwd, snapshot,
             stdout_sanitized=bool(controller.get("stdout_sanitized")),

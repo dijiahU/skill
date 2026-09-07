@@ -4,9 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import asyncio
+import hashlib
 import json
 import os
 import sys
+import uuid
+from pathlib import Path
 
 import httpx
 import uvicorn
@@ -14,6 +18,60 @@ from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response, StreamingResponse
 from starlette.routing import Route
+
+
+STREAM_CAPTURE_MAX_BYTES = 16 * 1024 * 1024
+STREAM_CAPTURE_MAX_FILES = 256
+
+
+def _stream_diagnostic(**fields) -> None:
+    try:
+        print(json.dumps({"stage": "responses_emulate_stream", **fields}, ensure_ascii=False, separators=(",", ":")), file=sys.stderr, flush=True)
+    except Exception:
+        pass
+
+
+def _capture_emulated_exchange(request_body: bytes, upstream_body: bytes, request_sha256: str, upstream_body_sha256: str) -> str | None:
+    directory_name = os.environ.get("SABER_RESPONSES_STREAM_CAPTURE_DIR")
+    if not directory_name:
+        return None
+    if len(request_body) + len(upstream_body) > STREAM_CAPTURE_MAX_BYTES:
+        _stream_diagnostic(phase="capture_skipped", reason="byte_limit", request_sha256=request_sha256, upstream_body_sha256=upstream_body_sha256)
+        return None
+    try:
+        directory = Path(directory_name)
+        directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+        if sum(1 for item in directory.iterdir() if item.is_file()) >= STREAM_CAPTURE_MAX_FILES:
+            _stream_diagnostic(phase="capture_skipped", reason="file_limit", request_sha256=request_sha256, upstream_body_sha256=upstream_body_sha256)
+            return None
+        document = {
+            "request_sha256": request_sha256,
+            "upstream_body_sha256": upstream_body_sha256,
+            "request_json": json.loads(request_body),
+            "upstream_json": json.loads(upstream_body),
+            "request_body_utf8": request_body.decode("utf-8"),
+            "upstream_body_utf8": upstream_body.decode("utf-8"),
+        }
+        encoded = json.dumps(document, ensure_ascii=False, indent=2).encode("utf-8")
+        if len(encoded) > STREAM_CAPTURE_MAX_BYTES:
+            _stream_diagnostic(phase="capture_skipped", reason="encoded_byte_limit", request_sha256=request_sha256, upstream_body_sha256=upstream_body_sha256)
+            return None
+        path = directory / f"{request_sha256}-{upstream_body_sha256}-{os.getpid()}-{uuid.uuid4().hex}.json"
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "wb") as stream:
+                descriptor = -1
+                stream.write(encoded)
+        finally:
+            if descriptor >= 0:
+                os.close(descriptor)
+        return str(path)
+    except Exception as exc:
+        _stream_diagnostic(phase="capture_failed", failure=type(exc).__name__, request_sha256=request_sha256, upstream_body_sha256=upstream_body_sha256)
+        return None
 
 
 HOP_BY_HOP_HEADERS = {
@@ -251,6 +309,28 @@ async def _emulate_responses_stream(response: dict):
     yield _sse_event("response.completed", sequence_number, response=response)
 
 
+async def _diagnosed_emulate_responses_stream(response: dict, diagnostic: dict):
+    yielded_event_count = 0
+    last_yielded_event = None
+    terminal_yielded = False
+    outcome = "completed"
+    failure = None
+    try:
+        async for chunk in _emulate_responses_stream(response):
+            first_line = chunk.split(b"\n", 1)[0]
+            if first_line.startswith(b"event: "):
+                last_yielded_event = first_line[7:].decode("ascii", errors="replace")
+            yielded_event_count += 1
+            terminal_yielded = last_yielded_event == "response.completed"
+            yield chunk
+    except BaseException as exc:
+        outcome = "cancelled" if isinstance(exc, (asyncio.CancelledError, GeneratorExit)) else "exception"
+        failure = type(exc).__name__
+        raise
+    finally:
+        _stream_diagnostic(phase="delivery_final", **diagnostic, yielded_event_count=yielded_event_count, last_yielded_event=last_yielded_event, terminal_yielded=terminal_yielded, outcome=outcome, failure=failure)
+
+
 async def forward(request: Request) -> StreamingResponse:
     body = await request.body()
     removed_tools: list[str] = []
@@ -302,10 +382,10 @@ async def forward(request: Request) -> StreamingResponse:
                 request.app.state.client, request.app.state.upstream, body, headers)
             print(json.dumps({"stage": "responses_context_budget", **budget_metadata}), file=sys.stderr, flush=True)
         except (ContextBudgetError, ValueError, httpx.HTTPError) as exc:
-            print(json.dumps({"stage": "responses_context_budget", "failure": type(exc).__name__}), file=sys.stderr, flush=True)
+            print(json.dumps({"stage": "responses_context_budget", "failure": type(exc).__name__, "message": str(exc) if isinstance(exc, ContextBudgetError) else None, "request_sha256": getattr(exc, "request_sha256", None), "upstream_status": getattr(exc, "upstream_status", None), "upstream_body_sha256": getattr(exc, "upstream_body_sha256", None)}), file=sys.stderr, flush=True)
             return JSONResponse({"error": {
                 "type": "invalid_request_error" if isinstance(exc, ContextBudgetError) else "server_error",
-                "code": "context_length_exceeded" if isinstance(exc, ContextBudgetError) else "token_count_unavailable",
+                "code": getattr(exc, "code", "context_length_exceeded") if isinstance(exc, ContextBudgetError) else "token_count_unavailable",
                 "message": str(exc) if isinstance(exc, ContextBudgetError) else "Exact Responses token counting is unavailable; generation was not submitted.",
             }}, status_code=400 if isinstance(exc, ContextBudgetError) else 503)
 
@@ -324,6 +404,8 @@ async def forward(request: Request) -> StreamingResponse:
         # Never synthesize a successful completion from a partial result.
         status_code = upstream_response.status_code
         raw_body = upstream_response.content
+        request_sha256 = hashlib.sha256(body).hexdigest()
+        upstream_body_sha256 = hashlib.sha256(raw_body).hexdigest()
         response_headers = {
             name: value for name, value in upstream_response.headers.items()
             if name.lower() not in HOP_BY_HOP_HEADERS | {"content-encoding"}
@@ -333,10 +415,29 @@ async def forward(request: Request) -> StreamingResponse:
         except (ValueError, UnicodeDecodeError):
             response_payload = None
         await upstream_response.aclose()
-        if not (upstream_response.is_success and _is_completed_responses_result(response_payload)):
+        output_types = (
+            [item.get("type") if isinstance(item, dict) else None for item in response_payload.get("output", [])]
+            if isinstance(response_payload, dict) and isinstance(response_payload.get("output"), list)
+            else None
+        )
+        completed_result = upstream_response.is_success and _is_completed_responses_result(response_payload)
+        capture_path = None
+        if isinstance(response_payload, dict):
+            capture_path = _capture_emulated_exchange(body, raw_body, request_sha256, upstream_body_sha256)
+        diagnostic = {
+            "request_sha256": request_sha256,
+            "upstream_body_sha256": upstream_body_sha256,
+            "upstream_status": status_code,
+            "response_status": response_payload.get("status") if isinstance(response_payload, dict) else None,
+            "output_types": output_types,
+            "completed_result": completed_result,
+            "capture_path": capture_path,
+        }
+        _stream_diagnostic(phase="upstream_complete", **diagnostic)
+        if not completed_result:
             return Response(raw_body, status_code=status_code, headers=response_headers)
         return StreamingResponse(
-            _emulate_responses_stream(response_payload),
+            _diagnosed_emulate_responses_stream(response_payload, diagnostic),
             status_code=status_code,
             media_type="text/event-stream",
         )

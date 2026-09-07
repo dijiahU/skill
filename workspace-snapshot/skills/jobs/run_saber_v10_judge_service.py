@@ -24,7 +24,10 @@ def write(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
 
 
-def run(directory: Path, gold: Path, *, pipeline: bool = False, enable_thinking: bool = False):
+def run(directory: Path, gold: Path, *, pipeline: bool = False, enable_thinking: bool = False,
+        smoke_runner: Path | None = None):
+    if smoke_runner is not None and pipeline:
+        raise ValueError('A targeted smoke is not a full-pipeline gate')
     spec = next(item for item in MODEL_SPECS if item['key'] == 'deepseek_flash')
     if os.environ.get('CUDA_VISIBLE_DEVICES') != ','.join(map(str, spec['gpus'])):
         raise RuntimeError('Reserve both GPUs for the complete Judge lifecycle')
@@ -37,7 +40,8 @@ def run(directory: Path, gold: Path, *, pipeline: bool = False, enable_thinking:
     env = dict(os.environ, SABER_BATCH_ID=scope, SABER_BATCH_MODEL=model, PYTHONDONTWRITEBYTECODE='1')
     env.update(service['env'])
     records, processes = [], []
-    status = {'status': 'starting', 'mode': 'full_pipeline' if pipeline else 'attribution', 'service_spec': service,
+    mode = 'targeted_smoke' if smoke_runner is not None else ('full_pipeline' if pipeline else 'attribution')
+    status = {'status': 'starting', 'mode': mode, 'service_spec': service,
               'enable_thinking': enable_thinking, 'gold_path': str(gold), 'gold_sha256': hashlib.sha256(gold.read_bytes()).hexdigest()}
     write(directory / 'status.json', status)
     try:
@@ -70,7 +74,7 @@ def run(directory: Path, gold: Path, *, pipeline: bool = False, enable_thinking:
         write(directory / 'status.json', status)
         model_id = service['argv'][service['argv'].index('--served-model-name') + 1]
         runner_name = 'run_saber_judge_full_pipeline_gate.py' if pipeline else 'run_saber_judge_shadow_gate.py'
-        runner = Path(__file__).resolve().parents[1] / 'bin' / runner_name
+        runner = smoke_runner or (Path(__file__).resolve().parents[1] / 'bin' / runner_name)
         command = [sys.executable, str(runner), '--base-url', service['health_url'].removesuffix('/health'),
                    '--model', model_id, '--gold', str(gold), '--output', str(directory / 'shadow-report.json')]
         if enable_thinking:
@@ -118,6 +122,8 @@ if __name__ == '__main__':
     parser.add_argument('--output-dir', required=True, type=Path)
     parser.add_argument('--gold', required=True, type=Path)
     parser.add_argument('--pipeline', action='store_true', help='Exercise actual judge_single, including zero-event, rules and refusal branches')
+    parser.add_argument('--smoke-runner', type=Path, help='Run a targeted diagnostic consumer; cannot substitute for the full pipeline gate')
     parser.add_argument('--enable-thinking', action='store_true', help='Explicitly enable Judge model reasoning through the consumer request')
     args = parser.parse_args()
-    run(args.output_dir.resolve(), args.gold.resolve(), pipeline=args.pipeline, enable_thinking=args.enable_thinking)
+    run(args.output_dir.resolve(), args.gold.resolve(), pipeline=args.pipeline, enable_thinking=args.enable_thinking,
+        smoke_runner=args.smoke_runner.resolve() if args.smoke_runner else None)

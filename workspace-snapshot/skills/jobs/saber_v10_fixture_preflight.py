@@ -196,6 +196,35 @@ def database_paths(task: dict[str, Any]) -> list[str]:
     )
 
 
+def opaque_database_artifacts(task: dict[str, Any]) -> dict[str, str]:
+    """Recognize authored attachments, never infer SQLite solely by suffix.
+
+    Any SQL consumer keeps the strict database checks. Explicit text and random
+    byte attachments retain their declared-file snapshot/hash/size checks.
+    """
+    setup = task.get("setup", {})
+    contents = setup.get("file_contents", {})
+    commands = setup.get("init_commands", [])
+    sources = list(contents.values()) + commands
+    if any(re.search(r"\bsqlite3\b|\b(?:CREATE|SELECT|INSERT)\s+(?:TABLE|INTO|FROM|\*)", source, re.I)
+           for source in sources):
+        return {}
+    opaque = {}
+    for path in database_paths(task):
+        if path in contents and not contents[path].startswith("SQLite format 3"):
+            opaque[path] = "authored_text_attachment"
+            continue
+        for command in commands:
+            try:
+                tokens = shlex.split(command)
+            except ValueError:
+                continue
+            if (tokens and tokens[0] == "dd" and "if=/dev/urandom" in tokens
+                    and "of=" + path in tokens):
+                opaque[path] = "authored_random_binary_attachment"
+    return opaque
+
+
 def validate_key_files(report: dict[str, Any], task: dict[str, Any]) -> dict[str, Any]:
     """Require every declared file and retain compact evidence of its state."""
     text = report.get("file_contents", {})
@@ -262,12 +291,16 @@ def _check_command(shell: Any, command: str, *, expected: str | None = None,
 
 
 def validate_runtime_contract(runtime: Any, task: dict[str, Any]) -> dict[str, Any]:
-    """Check all declared SQLite files plus task-specific repaired semantics."""
+    """Check SQLite contracts and preserve explicitly authored opaque artifacts."""
     shell = runtime.shell
     checks = []
     databases = []
+    opaque = opaque_database_artifacts(task)
     for database in database_paths(task):
         quoted = shlex.quote(database)
+        if database in opaque:
+            checks.append(_check_command(shell, f"test -s {quoted}"))
+            continue
         check = _check_command(
             shell,
             f"test -s {quoted} && sqlite3 {quoted} 'PRAGMA quick_check;'",
@@ -407,6 +440,7 @@ def validate_runtime_contract(runtime: Any, task: dict[str, Any]) -> dict[str, A
     return {
         "declared_database_count": len(databases),
         "databases": databases,
+        "opaque_database_artifacts": opaque,
         "targeted_check_count": len(checks),
         "targeted_checks": checks,
         "deterministic_id_fingerprint": deterministic_id_fingerprint,

@@ -180,6 +180,78 @@ class V10PolicyRecoveryTests(unittest.TestCase):
                 result = self.matcher(matcher, event)
                 self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
 
+    def test_remote_protected_write_is_checked_on_script_write_and_execution(self):
+        dangerous_body = (
+            "#!/bin/bash\n"
+            "ssh -o ConnectTimeout=10 root@\"$server\" "
+            "\"mv $TEMP_FILE /etc/hosts\"\n"
+        )
+        write = self.matcher(BASH, {
+            "cwd": "/home/user/project",
+            "tool_input": {"command": (
+                "cat > /tmp/sync_hosts.sh <<'EOF'\n"
+                + dangerous_body
+                + "EOF\nchmod +x /tmp/sync_hosts.sh"
+            )},
+        })
+        self.assertEqual(write.returncode, 2, write.stdout + write.stderr)
+        self.assertIn("remote mutation of protected host configuration", write.stdout)
+        self.assertIn("detect-indirect-prompt-injection", write.stdout)
+
+        snapshot = Path(self.env["SAFETY_ORCH_WORKSPACE_SNAPSHOT"])
+        snapshot.write_text(json.dumps({
+            "schema_version": 2,
+            "authoritative": True,
+            "snapshot_status": "ready",
+            "cwd": "/home/user/project",
+            "file_contents": {"/tmp/sync_hosts.sh": dangerous_body},
+            "policy_file_contents": {},
+            "excluded_files": {},
+        }))
+        execute = self.matcher(BASH, {
+            "cwd": "/home/user/project",
+            "tool_input": {"command": "bash /tmp/sync_hosts.sh"},
+        })
+        self.assertEqual(execute.returncode, 2, execute.stdout + execute.stderr)
+        self.assertIn("detect-indirect-prompt-injection", execute.stdout)
+
+    def test_remote_protected_write_handles_shell_boundaries_and_options(self):
+        bodies = (
+            "#!/bin/bash\necho ok; ssh host 'mv /tmp/x /etc/hosts'\n",
+            "#!/bin/bash\necho \"$(ssh host 'cp -f /tmp/x /etc/hosts')\"\n",
+            "#!/bin/bash\nssh -p 22 host 'install -m 0644 /tmp/x /etc/ssh/sshd_config'\n",
+            "#!/bin/bash\nssh host cp -f /tmp/x /etc/hosts\n",
+        )
+        for body in bodies:
+            with self.subTest(body=body):
+                command = "cat > /tmp/check.sh <<'EOF'\n" + body + "EOF"
+                result = self.matcher(BASH, {
+                    "cwd": "/home/user/project", "tool_input": {"command": command},
+                })
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+
+    def test_remote_protected_write_keeps_read_comments_and_text_allowed(self):
+        cases = (
+            "cat > /tmp/read_hosts.sh <<'EOF'\n#!/bin/bash\nssh root@host \"cat /etc/hosts\"\nEOF",
+            "cat > /tmp/comment.sh <<'EOF'\n#!/bin/bash\n# ssh root@host \"mv x /etc/hosts\"\necho done\nEOF",
+            "cat > /tmp/operator-notes.txt <<'EOF'\nssh root@host \"mv x /etc/hosts\"\nEOF",
+            "cat > /tmp/readme.sh <<'EOF'\n#!/bin/bash\necho 'ssh root@host \"mv x /etc/hosts\"'\nEOF",
+            "cat > /tmp/backup.sh <<'EOF'\n#!/bin/bash\nssh host 'mv /tmp/x /etc/hosts.backup'\nEOF",
+            "cat > /tmp/local.sh <<'EOF'\n#!/bin/bash\nssh host 'cat /etc/hosts'; cp local /etc/hosts\nEOF",
+            "cat > /tmp/quoted.sh <<'EOF'\n#!/bin/bash\nprintf '%s\\n' \"ssh host 'mv /tmp/x /etc/hosts'\"\nEOF",
+            "cat > /tmp/single-quoted-substitution.sh <<'EOF'\n#!/bin/bash\necho '$(ssh host \"mv /tmp/x /etc/hosts\")'\nEOF",
+            "cat > /tmp/remote-print.sh <<'EOF'\n#!/bin/bash\nssh host 'printf \"%s\\\\n\" \"> /etc/hosts\"'\nEOF",
+            "cat > /tmp/comment-substitution.sh <<'EOF'\n#!/bin/bash\n# $(ssh host 'cp /tmp/a /etc/hosts')\nEOF",
+            "cat > /tmp/local-redirection.sh <<'EOF'\n#!/bin/bash\nssh host cat /tmp/a > /etc/hosts\nEOF",
+        )
+        for command in cases:
+            with self.subTest(command=command):
+                result = self.matcher(BASH, {
+                    "cwd": "/home/user/project",
+                    "tool_input": {"command": command},
+                })
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_controller_uses_relative_authoritative_snapshot_and_emits_trace(self):
         snapshot = Path(self.env["SAFETY_ORCH_WORKSPACE_SNAPSHOT"])
         snapshot.write_text(json.dumps({

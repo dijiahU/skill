@@ -92,6 +92,191 @@ _SECURITY_SENSITIVE_TARGET = re.compile(
 )
 
 
+_SSH_OPTIONS_WITH_ARGUMENT = {
+    "-B", "-b", "-c", "-D", "-E", "-e", "-F", "-I", "-i", "-J",
+    "-L", "-l", "-m", "-O", "-o", "-P", "-p", "-Q", "-R", "-S", "-W", "-w",
+}
+
+
+def _protected_remote_path(value: str) -> bool:
+    value = value.rstrip("/")
+    return bool(re.fullmatch(
+        r"/etc/(?:hosts|sudoers|ssh/sshd_config|crontab|(?:sudoers|cron)\.d/[^/\s]+)",
+        value,
+        re.IGNORECASE,
+    ))
+
+
+def _script_command_segments(command: str) -> list[list[str]]:
+    segments: list[list[str]] = []
+    # Parse each physical line so shell comments end at the actual newline.
+    # This is intentionally bounded and does not claim full shell grammar.
+    for line in command.splitlines():
+        try:
+            lexer = shlex.shlex(line, posix=True, punctuation_chars=";&|<>")
+            lexer.whitespace_split = True
+            lexer.commenters = "#"
+            words = list(lexer)
+        except ValueError:
+            continue
+        current: list[str] = []
+        for word in words:
+            if word in {";", "&&", "||", "|", "&"}:
+                if current:
+                    segments.append(current)
+                    current = []
+            else:
+                current.append(word)
+        if current:
+            segments.append(current)
+    return segments
+
+
+def _script_raw_segments(command: str) -> list[list[str]]:
+    """Tokenize one shell layer while preserving each token's outer quotes."""
+    segments: list[list[str]] = []
+    for line in command.splitlines():
+        try:
+            lexer = shlex.shlex(line, posix=False, punctuation_chars=";&|<>")
+            lexer.whitespace_split = True
+            lexer.commenters = "#"
+            words = list(lexer)
+        except ValueError:
+            continue
+        current: list[str] = []
+        for word in words:
+            if word in {";", "&&", "||", "|", "&"}:
+                if current:
+                    segments.append(current)
+                    current = []
+            else:
+                current.append(word)
+        if current:
+            segments.append(current)
+    return segments
+
+
+def _shell_token_value(raw: str) -> str | None:
+    try:
+        values = shlex.split(raw, comments=False, posix=True)
+    except ValueError:
+        return None
+    return values[0] if len(values) == 1 else None
+
+
+def _command_substitutions(script: str) -> list[str]:
+    """Extract bounded active $(...) bodies; single-quoted examples stay inert."""
+    bodies: list[str] = []
+    stack: list[tuple[int, int]] = []
+    quote = ""
+    escaped = False
+    index = 0
+    while index < len(script):
+        character = script[index]
+        if not quote and character == "#":
+            newline = script.find("\n", index)
+            index = len(script) if newline < 0 else newline + 1
+            continue
+        if escaped:
+            escaped = False
+        elif character == "\\" and quote != "'":
+            escaped = True
+        elif character in {"'", '"'}:
+            if not quote:
+                quote = character
+            elif quote == character:
+                quote = ""
+        elif quote != "'" and script.startswith("$(", index):
+            stack.append((index + 2, 1))
+            index += 1
+        elif quote != "'" and character == ")" and stack:
+            start, depth = stack[-1]
+            if depth == 1:
+                bodies.append(script[start:index])
+                stack.pop()
+            else:
+                stack[-1] = (start, depth - 1)
+        elif quote != "'" and character == "(" and stack:
+            start, depth = stack[-1]
+            stack[-1] = (start, depth + 1)
+        index += 1
+    return bodies[:32]
+
+
+def _ssh_remote_command(raw_words: list[str]) -> str | None:
+    values = [_shell_token_value(word) for word in raw_words]
+    if not raw_words or any(value is None for value in values):
+        return None
+    start = 1 if values[0] in {"if", "elif", "while", "until", "!"} else 0
+    if start >= len(values) or Path(values[start]).name != "ssh":
+        return None
+    index = start + 1
+    while index < len(values):
+        word = values[index]
+        if word == "--":
+            index += 1
+            break
+        option = word.split("=", 1)[0]
+        if option in _SSH_OPTIONS_WITH_ARGUMENT:
+            index += 1 if "=" in word else 2
+            continue
+        if word.startswith("-"):
+            index += 1
+            continue
+        index += 1
+        break
+    if index >= len(values):
+        return None
+    raw_remote = raw_words[index]
+    if len(raw_remote) >= 2 and raw_remote[0] in {"'", '"'} and raw_remote[-1] == raw_remote[0]:
+        return values[index]
+    # Unquoted outer redirections belong to the local shell, not the host.
+    end = next((position for position in range(index, len(raw_words))
+                if raw_words[position] in {">", ">>", "<", "<<"}), len(raw_words))
+    return " ".join(raw_words[index:end]) or None
+
+
+def _remote_command_writes_protected(command: str) -> bool:
+    for segment in _script_command_segments(command):
+        if not segment:
+            continue
+        program = Path(segment[0]).name.lower()
+        if program in {"mv", "cp", "install"}:
+            operands = [word for word in segment[1:] if not word.startswith("-")]
+            if operands and _protected_remote_path(operands[-1]):
+                return True
+        elif program == "tee":
+            if any(_protected_remote_path(word) for word in segment[1:] if not word.startswith("-")):
+                return True
+        elif program == "sed":
+            in_place = any(
+                word == "--in-place" or word.startswith("--in-place=")
+                or (word.startswith("-") and "i" in word[1:])
+                for word in segment[1:]
+            )
+            if in_place and any(_protected_remote_path(word) for word in segment[1:]):
+                return True
+        for index, word in enumerate(segment[:-1]):
+            if word in {">", ">>"} and _protected_remote_path(segment[index + 1]):
+                return True
+    return False
+
+
+def remote_protected_script_write(path: str, content: str) -> bool:
+    """Detect a bounded set of active SSH writes to protected remote configuration."""
+    if not (
+        Path(path).suffix in {".sh", ".bash", ".zsh"}
+        or re.match(r"^#![^\n]*(?:ba|z|k)?sh\b", content)
+    ):
+        return False
+    candidates = [content, *_command_substitutions(content)]
+    for candidate in candidates:
+        for raw_words in _script_raw_segments(candidate):
+            remote = _ssh_remote_command(raw_words)
+            if remote and _remote_command_writes_protected(remote):
+                return True
+    return False
+
 def _snapshot_payload() -> dict[str, Any]:
     raw = os.environ.get("SAFETY_ORCH_WORKSPACE_SNAPSHOT", "").strip()
     if not raw:
@@ -521,6 +706,12 @@ def review_write_effect(effect: WriteEffect) -> list[WriteFinding]:
         findings.append(WriteFinding(
             "detect-malicious-postinstall-script", "block",
             "automatic execution context downloads and executes remote content",
+            path, effect.method,
+        ))
+    if content and remote_protected_script_write(path, content):
+        findings.append(WriteFinding(
+            "detect-indirect-prompt-injection", "block",
+            "written script performs a remote mutation of protected host configuration",
             path, effect.method,
         ))
     previous = effect.previous or ""

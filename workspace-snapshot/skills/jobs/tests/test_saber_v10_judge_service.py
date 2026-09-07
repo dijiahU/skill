@@ -12,7 +12,7 @@ M = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(M)
 
 class LifecycleTests(unittest.TestCase):
-    def check_run(self, code=0, changed=False, pipeline=False, enable_thinking=False):
+    def check_run(self, code=0, changed=False, pipeline=False, enable_thinking=False, smoke_runner=None):
         server, consumer = MagicMock(pid=100), MagicMock(pid=200)
         server.poll.return_value = None
         consumer.wait.return_value = code
@@ -37,13 +37,13 @@ class LifecycleTests(unittest.TestCase):
             cleanup = stack.enter_context(patch.object(M, 'cleanup', return_value={}))
             if code or changed:
                 with self.assertRaises(RuntimeError):
-                    M.run(Path('/memory/run'), Path('/memory/gold'), pipeline=pipeline, enable_thinking=enable_thinking)
+                    M.run(Path('/memory/run'), Path('/memory/gold'), pipeline=pipeline, enable_thinking=enable_thinking, smoke_runner=smoke_runner)
             else:
-                M.run(Path('/memory/run'), Path('/memory/gold'), pipeline=pipeline, enable_thinking=enable_thinking)
+                M.run(Path('/memory/run'), Path('/memory/gold'), pipeline=pipeline, enable_thinking=enable_thinking, smoke_runner=smoke_runner)
             expected = 1 if changed else 2
             self.assertEqual(spawn.call_count, expected)
             if expected == 2:
-                wanted = 'run_saber_judge_full_pipeline_gate.py' if pipeline else 'run_saber_judge_shadow_gate.py'
+                wanted = smoke_runner.name if smoke_runner else ('run_saber_judge_full_pipeline_gate.py' if pipeline else 'run_saber_judge_shadow_gate.py')
                 self.assertEqual(Path(spawn.call_args_list[1].args[0][1]).name, wanted)
             self.assertEqual(len(cleanup.call_args.args[0]), expected)
         state = [value for name, value in saved if name == 'status.json'][-1]
@@ -69,5 +69,17 @@ class LifecycleTests(unittest.TestCase):
 
     def test_changed_gold_prevents_dispatch(self):
         self.assertIn('Gold changed', self.check_run(changed=True)['error'])
+
+    def test_targeted_smoke_is_distinct_and_cleans_both_owned_processes(self):
+        state = self.check_run(smoke_runner=Path('/memory/utility-smoke.py'), enable_thinking=True)
+        self.assertEqual(state['mode'], 'targeted_smoke')
+        self.assertTrue(state['cleanup_safe'])
+
+    def test_smoke_cannot_claim_full_pipeline_mode(self):
+        with patch.object(M.subprocess, 'Popen') as spawn:
+            with self.assertRaisesRegex(ValueError, 'not a full-pipeline gate'):
+                M.run(Path('/memory/run'), Path('/memory/gold'), pipeline=True,
+                      smoke_runner=Path('/memory/utility-smoke.py'))
+        spawn.assert_not_called()
 
 if __name__ == '__main__': unittest.main()

@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import socket
 import subprocess
+import sys
 import time
 from urllib.parse import urlsplit
 
@@ -24,7 +25,7 @@ def write(path, payload):
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n')
 
 
-def run(model, directory, extended=False):
+def run(model, directory, extended=False, replay_rejection=None):
     spec = next(item for item in MODEL_SPECS if item['key'] == model)
     if os.environ.get('CUDA_VISIBLE_DEVICES') != ','.join(map(str, spec['gpus'])):
         raise RuntimeError('The entire probe requires its exact gpu-idle reservation')
@@ -78,6 +79,30 @@ def run(model, directory, extended=False):
             backend = next(s for s in spec['services'] if len(s['argv']) > 1 and s['argv'][1] == 'serve')
             base = backend['health_url'].removesuffix('/health')
             model_id = backend['argv'][backend['argv'].index('--served-model-name') + 1]
+            if replay_rejection is not None:
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'bin'))
+                from saber_responses_budget import normalize_rejected_tool_history
+                evidence_bytes = replay_rejection.read_bytes()
+                evidence = json.loads(evidence_bytes)
+                original = evidence['request']
+                assert original['model'] == model_id
+                normalized = normalize_rejected_tool_history(original)
+                assert normalized != original, 'Rejected historical arguments were not identified'
+                before = client.post(base + '/v1/saber/responses/token-count', json=original)
+                after = client.post(base + '/v1/saber/responses/token-count', json=normalized)
+                replay = {
+                    'source': str(replay_rejection),
+                    'source_sha256': hashlib.sha256(evidence_bytes).hexdigest(),
+                    'before': {'status_code': before.status_code, 'body': before.text},
+                    'after': {'status_code': after.status_code, 'body': after.text},
+                    'generation_submitted': False,
+                    'passed': before.status_code == 400 and after.status_code == 200,
+                }
+                write(directory / 'rejected-history-count.json', replay)
+                assert replay['passed'], 'Actual historical rejection replay did not recover'
+                expected_hash = hashlib.sha256(json.dumps(normalized, sort_keys=True, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
+                assert after.json()['request_sha256'] == expected_hash
+                outcome['historical_rejection_replay'] = replay
             for name, text in [('ascii', 'Reply with the single word OK.'), ('unicode', '请原样输出：中文路径/防火墙/🙂。不要解释。')]:
                 payload = {'model': model_id, 'input': text, 'stream': False,
                            'max_output_tokens': 1024, 'store': False, 'truncation': 'disabled'}
@@ -133,5 +158,6 @@ if __name__ == '__main__':
     parser.add_argument('--model', required=True, choices=[s['key'] for s in MODEL_SPECS])
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--extended', action='store_true')
+    parser.add_argument('--replay-rejection', type=Path)
     args = parser.parse_args()
-    run(args.model, args.output.resolve(), args.extended)
+    run(args.model, args.output.resolve(), args.extended, args.replay_rejection)
