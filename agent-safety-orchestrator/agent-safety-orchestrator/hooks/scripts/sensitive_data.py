@@ -290,6 +290,36 @@ def _load_flow(event: dict[str, Any]) -> dict[str, Any]:
     return payload if isinstance(payload, dict) else {"tainted_paths": []}
 
 
+def record_sensitive_read_flow(event: dict[str, Any]) -> None:
+    """Record path/class lineage after a model-safe sensitive output replacement."""
+    tool_input = event.get("tool_input") or {}
+    command = str(tool_input.get("command") or "") if isinstance(tool_input, dict) else ""
+    paths = sensitive_read_paths(command)
+    if not paths:
+        return
+    cwd = Path(str(event.get("cwd") or "/home/user")).resolve()
+    state = _load_flow(event)
+    existing = {
+        (str(item.get("path")), str(item.get("class")))
+        for item in state.get("sensitive_sources", [])
+        if isinstance(item, dict) and item.get("path") and item.get("class")
+    }
+    for raw, kind in paths:
+        source = Path(raw.strip("'\""))
+        resolved = (source if source.is_absolute() else cwd / source).resolve()
+        existing.add((str(resolved), kind))
+    state["schema_version"] = 1
+    state["sensitive_sources"] = [
+        {"path": path, "class": kind} for path, kind in sorted(existing)[:64]
+    ]
+    path = _flow_path(event)
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(state, sort_keys=True) + "\n", encoding="utf-8")
+    except OSError:
+        pass
+
+
 def record_allowed_bash_flow(event: dict[str, Any]) -> None:
     tool_input = event.get("tool_input") or {}
     command = str(tool_input.get("command") or "") if isinstance(tool_input, dict) else ""
@@ -314,13 +344,157 @@ def record_allowed_bash_flow(event: dict[str, Any]) -> None:
     state = _load_flow(event)
     existing = {str(value) for value in state.get("tainted_paths", [])}
     existing.update(staged)
-    payload = {"schema_version": 1, "tainted_paths": sorted(existing)[:64]}
+    state["schema_version"] = 1
+    state["tainted_paths"] = sorted(existing)[:64]
+    payload = state
     path = _flow_path(event)
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
     except OSError:
         pass
+
+
+def _network_file_inputs(command: str, cwd: Path) -> set[str]:
+    """Return normalized local files explicitly consumed by supported network sinks."""
+    inputs: set[str] = set()
+
+    def add(raw: str) -> None:
+        if not raw or raw == "-" or "://" in raw:
+            return
+        path = Path(raw)
+        inputs.add(str((path if path.is_absolute() else cwd / path).resolve()))
+
+    def curl_data_file(option: str, value: str) -> None:
+        if option in {"-d", "--data", "--data-binary"}:
+            if value.startswith("@"):
+                add(value[1:])
+        elif option == "--data-urlencode":
+            if value.startswith("@"):
+                add(value[1:])
+            elif "@" in value:
+                add(value.split("@", 1)[1])
+        elif option in {"-F", "--form"} and "=" in value:
+            form_value = value.split("=", 1)[1]
+            if form_value.startswith(("@", "<")):
+                add(form_value[1:].split(";", 1)[0])
+
+    for segment in _segments(command):
+        words = list(segment)
+        while words and words[0] in {"sudo", "doas", "command"}:
+            words = words[1:]
+        if not words:
+            continue
+        head = Path(words[0]).name
+        args = words[1:]
+        if head == "curl":
+            index = 0
+            while index < len(args):
+                word = args[index]
+                if word in {"-T", "--upload-file"} and index + 1 < len(args):
+                    add(args[index + 1])
+                    index += 2
+                    continue
+                if word.startswith("--upload-file="):
+                    add(word.split("=", 1)[1])
+                elif word in {"-d", "--data", "--data-binary", "--data-urlencode", "-F", "--form"} and index + 1 < len(args):
+                    curl_data_file(word, args[index + 1])
+                    index += 2
+                    continue
+                elif word.startswith("-T") and len(word) > 2:
+                    add(word[2:])
+                elif word.startswith("-d") and len(word) > 2:
+                    curl_data_file("-d", word[2:])
+                elif word.startswith("-F") and len(word) > 2:
+                    curl_data_file("-F", word[2:])
+                elif any(word.startswith(prefix) for prefix in ("--data=", "--data-binary=", "--data-urlencode=", "--form=")):
+                    option, value = word.split("=", 1)
+                    curl_data_file(option, value)
+                index += 1
+        elif head == "wget":
+            for word in args:
+                if word.startswith(("--post-file=", "--body-file=")):
+                    add(word.split("=", 1)[1])
+        elif head in {"scp", "rsync"}:
+            positional = [word for word in args if not word.startswith("-")]
+            if len(positional) >= 2 and (":" in positional[-1] or "://" in positional[-1]):
+                for source in positional[:-1]:
+                    if ":" not in source and "://" not in source:
+                        add(source)
+    return inputs
+
+
+def _network_stdin_file_inputs(command: str, cwd: Path) -> set[str]:
+    """Track direct file-to-stdin flow within one simple pipeline/redirection."""
+    try:
+        lexer = shlex.shlex(command, posix=True, punctuation_chars=";&|<>")
+        lexer.whitespace_split = True
+        lexer.commenters = ""
+        tokens = list(lexer)
+    except ValueError:
+        return set()
+
+    statements: list[list[str]] = [[]]
+    for token in tokens:
+        if token in {";", "&&", "||"}:
+            statements.append([])
+        else:
+            statements[-1].append(token)
+
+    found: set[str] = set()
+
+    def normalize(raw: str) -> str:
+        path = Path(raw)
+        return str((path if path.is_absolute() else cwd / path).resolve())
+
+    def network_consumes_stdin(words: list[str]) -> bool:
+        stripped = list(words)
+        while stripped and stripped[0] in {"sudo", "doas", "command"}:
+            stripped = stripped[1:]
+        if not stripped:
+            return False
+        head = Path(stripped[0]).name
+        if head in {"nc", "ncat", "socat"}:
+            return True
+        if head != "curl":
+            return False
+        args = stripped[1:]
+        # A bare @- argument is not proof of stdin consumption: --data-raw
+        # sends it literally. Data options use @-, whereas upload-file uses -.
+        stdin_values = {"-d": "@-", "--data": "@-", "--data-binary": "@-",
+                        "-T": "-", "--upload-file": "-"}
+        return any(
+            word in {"-d@-", "--data=@-", "--data-binary=@-", "-T-", "--upload-file=-"}
+            for word in args
+        ) or any(
+            word in stdin_values and index + 1 < len(args)
+            and args[index + 1] == stdin_values[word]
+            for index, word in enumerate(args)
+        )
+
+    for statement in statements:
+        pipeline: list[list[str]] = [[]]
+        for token in statement:
+            if token == "|":
+                pipeline.append([])
+            else:
+                pipeline[-1].append(token)
+        for index, sink in enumerate(pipeline):
+            if not network_consumes_stdin(sink):
+                continue
+            for pos, token in enumerate(sink[:-1]):
+                if token == "<" and _sensitive_class(sink[pos + 1]):
+                    found.add(normalize(sink[pos + 1]))
+            if index == 0:
+                continue
+            source = list(pipeline[index - 1])
+            while source and source[0] in {"sudo", "doas", "command"}:
+                source = source[1:]
+            if source and Path(source[0]).name in _READERS:
+                for raw in source[1:]:
+                    if not raw.startswith("-") and _sensitive_class(raw):
+                        found.add(normalize(raw))
+    return found
 
 
 def tainted_sink_risk(command: str, event: dict[str, Any]) -> str:
@@ -332,9 +506,19 @@ def tainted_sink_risk(command: str, event: dict[str, Any]) -> str:
         has_network |= bool(stripped and Path(stripped[0]).name in _NETWORK)
     if not has_network:
         return ""
-    if any(_sensitive_class(word) for words in _segments(command) for word in words):
+    cwd = Path(str(event.get("cwd") or "/home/user")).resolve()
+    consumed_files = _network_file_inputs(command, cwd)
+    consumed_files.update(_network_stdin_file_inputs(command, cwd))
+    state = _load_flow(event)
+    for source in state.get("sensitive_sources", []):
+        if not isinstance(source, dict):
+            continue
+        path = str(source.get("path") or "")
+        if path and str(Path(path).resolve()) in consumed_files:
+            return "network sink consumes a protected source recorded by prior model-safe output replacement"
+    if any(_sensitive_class(path) for path in consumed_files):
         return "network sink consumes a protected credential source"
-    tainted = {str(value) for value in _load_flow(event).get("tainted_paths", [])}
+    tainted = {str(value) for value in state.get("tainted_paths", [])}
     for path in tainted:
         if path in command or Path(path).name in command:
             return "network sink consumes an artifact derived from a protected credential source"

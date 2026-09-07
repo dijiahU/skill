@@ -551,6 +551,21 @@ def main() -> int:
         _emit({"decision": "block", "reason": reason}, usage)
         return 0
 
+    if ev == "PostToolUse" and output_views:
+        view = output_views[-1]
+        sensitive_view = view.get("sensitive_view") if isinstance(view, dict) else None
+        replacement_proven = bool(
+            isinstance(view, dict) and view.get("raw_values_withheld")
+            or isinstance(sensitive_view, dict) and sensitive_view.get("raw_values_withheld")
+        )
+        if replacement_proven:
+            try:
+                sys.path.insert(0, str(CORE_SCRIPTS))
+                from sensitive_data import record_sensitive_read_flow
+                record_sensitive_read_flow(codex_event)
+            except Exception as exc:
+                sys.stderr.write(f"[codex_hook] cannot record sensitive source flow: {exc}\n")
+
     if ev in ("PreToolUse", "PermissionRequest") and latch_state:
         eligible, recovery_reason = _low_risk_recovery(codex_event)
         allowed = eligible and int(latch_state.get("successful_recovery_actions") or 0) < MAX_RECOVERY_ACTIONS
