@@ -4,6 +4,7 @@ Each task runs in an isolated Docker container with --network=none.
 Commands execute for real. Network commands are intercepted and mocked.
 """
 import os
+import base64
 import re
 import json
 import shlex
@@ -758,12 +759,23 @@ class SandboxShell:
             result = subprocess.run(
                 ["docker", "exec", self.container_id, "bash", "-c",
                  f"export HOME=/home/user && cd {self.cwd} 2>/dev/null; {command}"],
-                capture_output=True, text=True, timeout=15,
+                capture_output=True, text=False, timeout=15,
                 env=_docker_client_env(),
             )
-            output = result.stdout
+            streams = [("stdout", result.stdout or b"")]
             if result.stderr and not silent:
-                output = output + result.stderr if output else result.stderr
+                streams.append(("stderr", result.stderr))
+            rendered_streams = []
+            for label, raw in streams:
+                try:
+                    rendered_streams.append(raw.decode("utf-8"))
+                except UnicodeDecodeError:
+                    escaped = raw.decode("utf-8", errors="backslashreplace")
+                    encoded = base64.b64encode(raw).decode("ascii")
+                    rendered_streams.append(
+                        escaped + f"\n[SABER non-UTF8 {label} bytes_base64={encoded}]"
+                    )
+            output = "".join(rendered_streams)
             if check and result.returncode != 0:
                 detail = (result.stderr or result.stdout or "unknown error").strip()
                 raise RuntimeError(
@@ -888,24 +900,168 @@ class SandboxShell:
 
     # ── Network mocking ─────────────────────────────────────
 
-    def _has_network_cmd(self, command: str) -> bool:
-        """Check if command requires network access."""
-        for seg in command.split("|"):
-            tokens = seg.strip().split()
-            if not tokens:
+    @staticmethod
+    def _heredoc_declarations(line: str, quote: str = "") -> tuple[list[tuple[str, bool]], str]:
+        """Return unquoted heredoc delimiters and the continuing shell quote."""
+        declarations = []
+        index = 0
+        escaped = False
+        while index < len(line):
+            character = line[index]
+            if escaped:
+                escaped = False
+                index += 1
                 continue
-            base = tokens[0]
-            # Direct network commands
+            if character == "\\" and quote != "'":
+                escaped = True
+                index += 1
+                continue
+            if quote:
+                if character == quote:
+                    quote = ""
+                index += 1
+                continue
+            if character in {"'", '"'}:
+                quote = character
+                index += 1
+                continue
+            if character == "#" and (
+                index == 0 or line[index - 1].isspace() or line[index - 1] in ";&|()"
+            ):
+                break
+            if line.startswith("<<<", index):
+                index += 3
+                continue
+            if line.startswith("<<", index):
+                index += 2
+                strip_tabs = index < len(line) and line[index] == "-"
+                if strip_tabs:
+                    index += 1
+                while index < len(line) and line[index] in " \t":
+                    index += 1
+                delimiter = []
+                word_quote = ""
+                while index < len(line):
+                    character = line[index]
+                    if word_quote:
+                        if character == word_quote:
+                            word_quote = ""
+                        else:
+                            delimiter.append(character)
+                        index += 1
+                        continue
+                    if character in {"'", '"'}:
+                        word_quote = character
+                        index += 1
+                        continue
+                    if character.isspace() or character in ";&|<>()":
+                        break
+                    if character == "\\" and index + 1 < len(line):
+                        index += 1
+                        character = line[index]
+                    delimiter.append(character)
+                    index += 1
+                if delimiter and not word_quote:
+                    declarations.append(("".join(delimiter), strip_tabs))
+                continue
+            index += 1
+        return declarations, quote
+
+    @classmethod
+    def _without_heredoc_bodies(cls, command: str) -> str:
+        """Keep shell command lines while removing active heredoc payload data."""
+        kept = []
+        pending = []
+        quote = ""
+        for line in command.splitlines(keepends=True):
+            if pending:
+                candidate = line.rstrip("\r\n")
+                delimiter, strip_tabs = pending[0]
+                if (candidate.lstrip("\t") if strip_tabs else candidate) == delimiter:
+                    pending.pop(0)
+                kept.append("\n" if line.endswith(("\n", "\r")) else "")
+                continue
+            kept.append(line)
+            declarations, quote = cls._heredoc_declarations(line, quote)
+            pending.extend(declarations)
+        return "".join(kept)
+
+    @staticmethod
+    def _shell_command_segments(command: str) -> list[str]:
+        """Split only at unquoted shell list, pipe, group, and newline operators."""
+        segments, current = [], []
+        quote = ""
+        escaped = False
+        comment = False
+        for character in command:
+            if comment:
+                if character == "\n":
+                    segment = "".join(current).strip()
+                    if segment:
+                        segments.append(segment)
+                    current = []
+                    comment = False
+                continue
+            if escaped:
+                current.append(character)
+                escaped = False
+                continue
+            if character == "\\" and quote != "'":
+                current.append(character)
+                escaped = True
+                continue
+            if quote:
+                current.append(character)
+                if character == quote:
+                    quote = ""
+                continue
+            if character in {"'", '"'}:
+                current.append(character)
+                quote = character
+                continue
+            if character == "#" and (
+                not current or current[-1].isspace()
+            ):
+                comment = True
+                continue
+            if character in ";&|()\n":
+                segment = "".join(current).strip()
+                if segment:
+                    segments.append(segment)
+                current = []
+                continue
+            current.append(character)
+        segment = "".join(current).strip()
+        if segment:
+            segments.append(segment)
+        return segments
+
+    @classmethod
+    def _has_network_cmd(cls, command: str) -> bool:
+        """Recognize network commands only in executable shell positions."""
+        command = cls._without_heredoc_bodies(command)
+        for raw_segment in cls._shell_command_segments(command):
+            try:
+                words = shlex.split(raw_segment, comments=True, posix=True)
+            except ValueError:
+                continue
+            while words and ("=" in words[0] and not words[0].startswith(("/", "./"))):
+                words = words[1:]
+            while words and words[0] in {"!", "command", "sudo", "doas", "env", "if", "elif", "while", "until", "then", "do"}:
+                words = words[1:]
+                while words and words[0].startswith("-"):
+                    words = words[1:]
+            if not words:
+                continue
+            base = Path(words[0]).name
             if base in NETWORK_COMMANDS:
                 return True
-            # Subcommands that need network (git push, pip install, etc)
-            if base in NETWORK_SUBCOMMANDS and len(tokens) > 1:
-                if tokens[1] in NETWORK_SUBCOMMANDS[base]:
-                    return True
-        # Also check for network commands anywhere in pipes
-        for token in command.split():
-            if token in NETWORK_COMMANDS:
+            if base in NETWORK_SUBCOMMANDS and len(words) > 1 and words[1] in NETWORK_SUBCOMMANDS[base]:
                 return True
+            if base in {"bash", "sh", "zsh", "dash"} and "-c" in words:
+                index = words.index("-c")
+                if index + 1 < len(words) and cls._has_network_cmd(words[index + 1]):
+                    return True
         return False
 
     def _mock_network(self, command: str) -> str:

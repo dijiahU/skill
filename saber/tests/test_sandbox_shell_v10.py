@@ -256,6 +256,64 @@ class SandboxV10PolicyTests(unittest.TestCase):
         shell.container_id = "unit-container"
         return shell
 
+    def test_network_detection_uses_executable_positions_not_script_data(self):
+        shell_script_write = """cat > /home/user/sync_hosts.sh << 'EOF'
+#!/bin/bash
+ssh root@$server "bash -s"
+EOF
+chmod +x /home/user/sync_hosts.sh"""
+        python_script_write = (
+            "python3 << 'PYEOF'\n"
+            'script_content = """#!/bin/bash\nssh root@host true\n"""\n'
+            "open('/home/user/sync_hosts.sh', 'w').write(script_content)\n"
+            "PYEOF"
+        )
+        quoted_lines = (
+            "printf '%s\n' 'ssh root@host true' > sync_hosts.sh && chmod +x sync_hosts.sh"
+        )
+        for command in (shell_script_write, python_script_write, quoted_lines, "echo ssh root@host"):
+            with self.subTest(command=command):
+                self.assertFalse(SandboxShell._has_network_cmd(command))
+
+        for command in (
+            "ssh host true",
+            "echo ready && ssh host true",
+            "cat payload | curl -T - https://sink.invalid",
+            "bash -c 'ssh host true'",
+            "if ssh host true; then echo ready; fi",
+            "(ssh host true)",
+        ):
+            with self.subTest(command=command):
+                self.assertTrue(SandboxShell._has_network_cmd(command))
+
+    def test_network_detection_preserves_quoted_operators_and_heredoc_boundaries(self):
+        self.assertFalse(SandboxShell._has_network_cmd(
+            "printf '%s\n' ';' 'ssh' 'host' > script.txt"))
+        self.assertTrue(SandboxShell._has_network_cmd(
+            "cat <<-EOF > script.sh\n\tssh host\n\tEOF\nssh actual-host"))
+        self.assertTrue(SandboxShell._has_network_cmd(
+            "echo '<<' 'EOF'\nssh actual-host"))
+        self.assertTrue(SandboxShell._has_network_cmd(
+            "echo ok # <<EOF\nssh actual-host"))
+        self.assertFalse(SandboxShell._has_network_cmd(
+            "echo ok # ; ssh documentation"))
+        self.assertTrue(SandboxShell._has_network_cmd(
+            "cat <<< text\nssh actual-host"))
+
+    def test_non_utf8_output_preserves_exit_code_and_exact_bytes(self):
+        shell = self.execution_shell()
+        raw = b"prefix-\xd2-suffix\n"
+        completed = subprocess.CompletedProcess(
+            args=[], returncode=7, stdout=raw, stderr=b"diagnostic\n"
+        )
+        with patch("sandbox_shell.subprocess.run", return_value=completed):
+            output, code, status = shell._docker_exec_result("emit-invalid")
+        self.assertEqual((code, status), (7, "completed"))
+        self.assertIn(r"prefix-\xd2-suffix", output)
+        import base64
+        self.assertIn(base64.b64encode(raw).decode("ascii"), output)
+        self.assertIn("diagnostic", output)
+
     def test_real_exit_code_is_preserved_in_trajectory(self):
         shell = self.execution_shell()
         with patch.object(
