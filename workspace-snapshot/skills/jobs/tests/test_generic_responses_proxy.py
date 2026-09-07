@@ -2,6 +2,7 @@
 
 import contextlib
 import gzip
+import hashlib
 import importlib.util
 import io
 import json
@@ -88,6 +89,19 @@ class GenericResponsesProxyTests(unittest.IsolatedAsyncioTestCase):
             "usage": {"input_tokens": 17, "output_tokens": 4, "total_tokens": 21},
         }
 
+    async def test_completed_stream_bytes_remain_stable(self):
+        payload = {
+            "object": "response", "id": "resp_bytes", "status": "completed",
+            "error": None, "output": [],
+            "usage": {"input_tokens": 1, "output_tokens": 0, "total_tokens": 1},
+        }
+        body = b"".join([part async for part in PROXY._emulate_responses_stream(payload)])
+        self.assertEqual(len(body), 632)
+        self.assertEqual(
+            hashlib.sha256(body).hexdigest(),
+            "542768b8d4ff4f42ffbd0221afb7dab6d196ca8fed5dd08abc14f70988334afc",
+        )
+
     async def test_completed_result_replays_the_success_lifecycle(self):
         payload = self.completed()
         payload["output"] = [
@@ -137,18 +151,57 @@ class GenericResponsesProxyTests(unittest.IsolatedAsyncioTestCase):
         ):
             with self.subTest(payload=payload):
                 response, body, _ = await self.forward(200, payload)
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, 502)
                 self.assertEqual(json.loads(body), payload)
                 self.assertEqual(response.headers["content-type"], "application/json")
 
-    async def test_real_noncompleted_statuses_remain_intact(self):
-        for status in ("failed", "incomplete", "in_progress", "queued", "cancelled"):
+    async def test_failed_and_incomplete_results_emit_exact_terminal_sse(self):
+        for status in ("failed", "incomplete"):
             with self.subTest(status=status):
                 payload = {**self.completed(), "status": status}
+                payload["error"] = {"code": "model_error", "message": "generation stopped"} if status == "failed" else None
                 if status == "incomplete":
                     payload["incomplete_details"] = {"reason": "max_output_tokens"}
+                payload["output"] = [{"type": "reasoning", "id": "rs_partial", "summary": []}]
                 response, body, _ = await self.forward(200, payload)
+                events = [json.loads(line[6:]) for line in body.decode().splitlines() if line.startswith("data: ")]
                 self.assertEqual(response.status_code, 200)
+                self.assertTrue(response.headers["content-type"].startswith("text/event-stream"))
+                self.assertEqual([event["type"] for event in events], [
+                    "response.created", "response.in_progress", f"response.{status}",
+                ])
+                self.assertEqual(events[-1]["response"], payload)
+
+    async def test_nonterminal_success_objects_are_explicit_protocol_errors(self):
+        for status in ("in_progress", "queued", "cancelled"):
+            with self.subTest(status=status):
+                payload = {**self.completed(), "status": status}
+                response, body, _ = await self.forward(200, payload)
+                self.assertEqual(response.status_code, 502)
+                self.assertEqual(json.loads(body), payload)
+                self.assertNotIn(b"event: response.", body)
+
+    async def test_partial_tool_call_is_preserved_but_never_marked_done(self):
+        payload = {**self.completed(), "status": "incomplete", "error": None,
+                   "incomplete_details": {"reason": "max_output_tokens"},
+                   "output": [{"type": "function_call", "id": "fc_partial",
+                               "call_id": "call_partial", "name": "apply_patch",
+                               "arguments": '{"patch":"unterminated'}]}
+        response, body, _ = await self.forward(200, payload)
+        events = [json.loads(line[6:]) for line in body.decode().splitlines() if line.startswith("data: ")]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(events[-1]["type"], "response.incomplete")
+        self.assertEqual(events[-1]["response"], payload)
+        self.assertNotIn("response.function_call_arguments.done", [event["type"] for event in events])
+        self.assertNotIn("response.output_item.done", [event["type"] for event in events])
+        self.assertNotIn("response.completed", [event["type"] for event in events])
+
+    async def test_unhashable_status_values_are_explicit_protocol_errors(self):
+        for status in ([], {}):
+            with self.subTest(status=status):
+                payload = {**self.completed(), "status": status}
+                response, body, _ = await self.forward(200, payload)
+                self.assertEqual(response.status_code, 502)
                 self.assertEqual(json.loads(body), payload)
                 self.assertNotIn(b"event: response.", body)
 
@@ -161,10 +214,12 @@ class GenericResponsesProxyTests(unittest.IsolatedAsyncioTestCase):
             {**self.completed(), "output": [None]},
             {**self.completed(), "output": [{"type": "message", "content": None}]},
             {**self.completed(), "output": [{"type": "function_call", "arguments": {}}]},
+            {**self.completed(), "status": "incomplete", "incomplete_details": {"reason": "max_output_tokens"},
+             "output": [{"type": "function_call", "arguments": {}}]},
         ):
             with self.subTest(payload=payload):
                 response, body, _ = await self.forward(200, payload)
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, 502)
                 self.assertEqual(json.loads(body), payload)
 
     async def test_nonjson_upstream_body_is_preserved_and_closed(self):
@@ -174,7 +229,7 @@ class GenericResponsesProxyTests(unittest.IsolatedAsyncioTestCase):
                 response, body, _ = await self.forward(
                     status, raw=original, headers={"content-type": "text/html"}
                 )
-                self.assertEqual(response.status_code, status)
+                self.assertEqual(response.status_code, 502 if status == 200 else status)
                 self.assertEqual(body, original)
                 self.assertEqual(response.headers["content-type"], "text/html")
 

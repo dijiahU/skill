@@ -188,6 +188,51 @@ def _is_completed_responses_result(payload: object) -> bool:
     return True
 
 
+def _is_noncompleted_terminal_result(payload: object) -> bool:
+    """Accept only genuine failed/incomplete Responses terminal objects."""
+    if not (
+        isinstance(payload, dict)
+        and payload.get("object") == "response"
+        and isinstance(payload.get("id"), str)
+        and payload["id"]
+        and isinstance(payload.get("status"), str)
+        and payload["status"] in {"incomplete", "failed"}
+        and isinstance(payload.get("output"), list)
+    ):
+        return False
+    if payload["status"] == "failed" and not isinstance(payload.get("error"), dict):
+        return False
+    if payload["status"] == "incomplete" and not (
+        payload.get("error") is None and isinstance(payload.get("incomplete_details"), dict)
+    ):
+        return False
+    for item in payload["output"]:
+        if not isinstance(item, dict):
+            return False
+        if item.get("type") == "function_call":
+            arguments = item.get("arguments")
+            if arguments is not None and not isinstance(arguments, str):
+                return False
+        if item.get("type") == "message":
+            content = item.get("content")
+            if content is not None and not isinstance(content, list):
+                return False
+    return True
+
+
+async def _emulate_noncompleted_terminal_stream(response: dict):
+    """Emit an explicit failed/incomplete SSE terminal without completing output items."""
+    if not _is_noncompleted_terminal_result(response):
+        raise ValueError("Only valid failed/incomplete Responses results can be terminal SSE")
+    initial = dict(response)
+    initial["output"] = []
+    initial["status"] = "in_progress"
+    initial["usage"] = None
+    yield _sse_event("response.created", 0, response=initial)
+    yield _sse_event("response.in_progress", 1, response=initial)
+    yield _sse_event(f"response.{response['status']}", 2, response=response)
+
+
 async def _emulate_responses_stream(response: dict):
     """Replay a complete Responses result as standard SSE lifecycle events."""
     if not _is_completed_responses_result(response):
@@ -331,6 +376,28 @@ async def _diagnosed_emulate_responses_stream(response: dict, diagnostic: dict):
         _stream_diagnostic(phase="delivery_final", **diagnostic, yielded_event_count=yielded_event_count, last_yielded_event=last_yielded_event, terminal_yielded=terminal_yielded, outcome=outcome, failure=failure)
 
 
+async def _diagnosed_emulate_noncompleted_stream(response: dict, diagnostic: dict):
+    yielded_event_count = 0
+    last_yielded_event = None
+    terminal_yielded = False
+    outcome = response.get("status", "noncompleted")
+    failure = None
+    try:
+        async for chunk in _emulate_noncompleted_terminal_stream(response):
+            first_line = chunk.split(b"\n", 1)[0]
+            if first_line.startswith(b"event: "):
+                last_yielded_event = first_line[7:].decode("ascii", errors="replace")
+            yielded_event_count += 1
+            terminal_yielded = last_yielded_event in {"response.incomplete", "response.failed"}
+            yield chunk
+    except BaseException as exc:
+        outcome = "cancelled" if isinstance(exc, (asyncio.CancelledError, GeneratorExit)) else "exception"
+        failure = type(exc).__name__
+        raise
+    finally:
+        _stream_diagnostic(phase="delivery_final", **diagnostic, yielded_event_count=yielded_event_count, last_yielded_event=last_yielded_event, terminal_yielded=terminal_yielded, outcome=outcome, failure=failure)
+
+
 async def forward(request: Request) -> StreamingResponse:
     body = await request.body()
     removed_tools: list[str] = []
@@ -434,13 +501,24 @@ async def forward(request: Request) -> StreamingResponse:
             "capture_path": capture_path,
         }
         _stream_diagnostic(phase="upstream_complete", **diagnostic)
-        if not completed_result:
+        if completed_result:
+            return StreamingResponse(
+                _diagnosed_emulate_responses_stream(response_payload, diagnostic),
+                status_code=status_code,
+                media_type="text/event-stream",
+            )
+        if upstream_response.is_success and _is_noncompleted_terminal_result(response_payload):
+            return StreamingResponse(
+                _diagnosed_emulate_noncompleted_stream(response_payload, diagnostic),
+                status_code=status_code,
+                media_type="text/event-stream",
+            )
+        if not upstream_response.is_success:
             return Response(raw_body, status_code=status_code, headers=response_headers)
-        return StreamingResponse(
-            _diagnosed_emulate_responses_stream(response_payload, diagnostic),
-            status_code=status_code,
-            media_type="text/event-stream",
-        )
+        # A successful HTTP status with a malformed/nonterminal object cannot
+        # satisfy a streaming Responses request. Preserve its body for diagnosis
+        # while making the protocol failure explicit.
+        return Response(raw_body, status_code=502, headers=response_headers)
 
     response_headers = {
         name: value
