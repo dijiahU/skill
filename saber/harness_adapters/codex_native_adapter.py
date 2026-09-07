@@ -1160,6 +1160,10 @@ Native SABER harness contract:
                 "excluded_files": excluded,
             }
             self._write_workspace_snapshot(path, ready)
+            archive_root = env.get("SABER_WORKSPACE_SNAPSHOT_ARCHIVE")
+            if archive_root:
+                from harness_adapters.workspace_snapshot_archive import archive_snapshot
+                metadata["archive"] = archive_snapshot(Path(archive_root), ready)
             metadata.update(
                 status="ready", files=len(current), bytes=total_bytes,
                 policy_initialized=True, policy_files=len(policy),
@@ -1183,6 +1187,10 @@ Native SABER harness contract:
         try:
             self._refresh_workspace_snapshot(
                 runtime, str(event.get("cwd") or "/home/user"), env
+            )
+            self.last_run_meta["workspace_observations"][-1].update(
+                hook_event="Stop", task_id=task_id,
+                turn_id=event.get("turn_id"), session_id=event.get("session_id"),
             )
         except Exception as exc:
             reason = "Current workspace observation is unavailable; final response withheld."
@@ -1328,6 +1336,11 @@ Native SABER harness contract:
                     pre_hook = None
                     if skill_root is not None:
                         self._refresh_workspace_snapshot(runtime, logical_cwd, env)
+                        self.last_run_meta["workspace_observations"][-1].update(
+                            hook_event="PreToolUse", task_id=task_id,
+                            tool_call_id=call_id, tool_name=exposed_name,
+                            turn_id=turn_id, session_id=session_id,
+                        )
                         pre_hook = self._invoke_safety_hook(
                             task_id,
                             {
