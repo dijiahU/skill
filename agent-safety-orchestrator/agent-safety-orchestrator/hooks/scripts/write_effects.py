@@ -422,6 +422,93 @@ def _python_remote_protected_write(content: str) -> bool:
     return False
 
 
+def _shell_heredoc_blocks(script: str) -> tuple[str, list[tuple[str, str]], list[str]]:
+    """Mask active heredoc data and return its command header/body pairs."""
+    lines = script.splitlines(keepends=True)
+    masked: list[str] = []
+    blocks: list[tuple[str, str]] = []
+    expanding_bodies: list[str] = []
+    index = 0
+    while index < len(lines):
+        header = lines[index]
+        masked.append(header)
+        try:
+            lexer = shlex.shlex(header, posix=False, punctuation_chars="<")
+            lexer.whitespace_split = True
+            lexer.commenters = "#"
+            words = list(lexer)
+        except ValueError:
+            index += 1
+            continue
+        markers = [position for position, word in enumerate(words) if word == "<<"]
+        if not markers:
+            index += 1
+            continue
+        if len(markers) != 1:
+            masked.extend("\n" if line.endswith(("\n", "\r")) else "" for line in lines[index + 1:])
+            return "".join(masked), blocks, expanding_bodies
+        marker = markers[0]
+        if marker + 1 >= len(words):
+            index += 1
+            continue
+        raw_delimiter = words[marker + 1]
+        strip_tabs = raw_delimiter == "-" or raw_delimiter.startswith("-")
+        if raw_delimiter == "-":
+            if marker + 2 >= len(words):
+                index += 1
+                continue
+            raw_delimiter = words[marker + 2]
+        elif strip_tabs:
+            raw_delimiter = raw_delimiter[1:]
+        expands = not any(character in raw_delimiter for character in "'\"\\")
+        delimiter = _shell_token_value(raw_delimiter)
+        if not delimiter:
+            index += 1
+            continue
+        end = index + 1
+        while end < len(lines):
+            candidate = lines[end].rstrip("\r\n")
+            if (candidate.lstrip("\t") if strip_tabs else candidate) == delimiter:
+                break
+            end += 1
+        if end >= len(lines):
+            index += 1
+            continue
+        body = "".join(lines[index + 1:end])
+        blocks.append((header, body))
+        if expands:
+            expanding_bodies.append(body)
+        masked.extend("\n" if line.endswith(("\n", "\r")) else "" for line in lines[index + 1:end + 1])
+        index = end + 1
+    return "".join(masked), blocks[:32], expanding_bodies[:32]
+
+
+def _ssh_stdin_heredoc_writes_protected(header: str, body: str) -> bool:
+    for raw_words in _script_raw_segments(header):
+        if "<<" not in raw_words:
+            continue
+        remote = _ssh_remote_command(raw_words)
+        if not remote:
+            continue
+        try:
+            words = shlex.split(remote, comments=True, posix=True)
+        except ValueError:
+            continue
+        while words and words[0] in {"command", "sudo", "doas", "env"}:
+            words = words[1:]
+            while words and words[0].startswith("-"):
+                words = words[1:]
+        if not words or Path(words[0]).name not in {"sh", "bash", "dash", "zsh", "ksh"}:
+            continue
+        if "-c" in words[1:]:
+            continue
+        if len(words) > 1 and "-s" not in words[1:]:
+            continue
+        if _remote_command_writes_protected(body):
+            return True
+    return False
+
+
 def remote_protected_script_write(path: str, content: str) -> bool:
     """Detect a bounded set of active SSH writes to protected remote configuration."""
     suffix = Path(path).suffix.lower()
@@ -432,7 +519,14 @@ def remote_protected_script_write(path: str, content: str) -> bool:
         or re.match(r"^#![^\n]*(?:ba|z|k)?sh\b", content)
     ):
         return False
-    candidates = [content, *_command_substitutions(content)]
+    active_content, heredocs, expanding_bodies = _shell_heredoc_blocks(content)
+    if any(_ssh_stdin_heredoc_writes_protected(header, body) for header, body in heredocs):
+        return True
+    candidates = [
+        active_content,
+        *_command_substitutions(active_content),
+        *(substitution for body in expanding_bodies for substitution in _command_substitutions(body)),
+    ]
     for candidate in candidates:
         for raw_words in _script_raw_segments(candidate):
             remote = _ssh_remote_command(raw_words)

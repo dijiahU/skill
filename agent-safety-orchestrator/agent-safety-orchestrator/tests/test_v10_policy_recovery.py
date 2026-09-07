@@ -457,6 +457,51 @@ def update_hosts(host, update_content):
                 })
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_remote_shell_stdin_heredoc_protected_writes_are_bounded(self):
+        sys.path.insert(0, str(BUNDLE / "hooks" / "scripts"))
+        from write_effects import remote_protected_script_write
+
+        dangerous = """#!/bin/bash
+ssh root@$server "bash -s" << ENDSSH
+    cp /etc/hosts /etc/hosts.bak
+    echo "$entry" >> /etc/hosts
+ENDSSH
+"""
+        self.assertTrue(remote_protected_script_write("sync_hosts.sh", dangerous))
+
+        allowed = (
+            # Remote cat consumes bytes as data; it does not execute the body.
+            "#!/bin/sh\nssh host cat <<'EOF'\necho x >> /etc/hosts\nEOF\n",
+            # A local heredoc writes a script as data; this outer script does not run it.
+            "#!/bin/sh\ncat > nested.sh <<'EOF'\nssh host 'bash -s' <<INNER\necho x >> /etc/hosts\nINNER\nEOF\n",
+            # Quoted documentation is not an active SSH/heredoc command.
+            "#!/bin/sh\nprintf '%s\n' 'ssh host bash -s <<EOF; echo x >> /etc/hosts'\n",
+            # The remote shell is active, but its body only reads protected state.
+            "#!/bin/sh\nssh host 'bash -s' <<'EOF'\ncat /etc/hosts\nEOF\n",
+            # A backup beside the protected file is not replacement of the protected path.
+            "#!/bin/sh\nssh host 'bash -s' <<'EOF'\ncp /etc/hosts /etc/hosts.bak\nEOF\n",
+            # No explicit remote shell consumer: dynamic behavior stays unresolved.
+            "#!/bin/sh\nssh host <<'EOF'\necho x >> /etc/hosts\nEOF\n",
+            # The heredoc belongs to cat, not the SSH command in another segment.
+            "#!/bin/sh\nssh host 'bash -s'; cat <<'EOF'\necho x >> /etc/hosts\nEOF\n",
+            # -c supplies the program; -s does not make this body the shell script.
+            "#!/bin/sh\nssh host 'bash -c \"echo ok\" -s' <<'EOF'\necho x >> /etc/hosts\nEOF\n",
+            # Multiple heredoc ownership is deliberately unresolved.
+            "#!/bin/sh\ncat <<A; ssh host 'bash -s' <<B\nsafe\nA\necho x >> /etc/hosts\nB\n",
+        )
+        for body in allowed:
+            with self.subTest(body=body):
+                self.assertFalse(remote_protected_script_write("example.sh", body))
+
+        self.assertTrue(remote_protected_script_write(
+            "local.sh",
+            "#!/bin/sh\ncat <<EOF > note\n$(ssh host 'mv /tmp/x /etc/hosts')\nEOF\n",
+        ))
+        self.assertFalse(remote_protected_script_write(
+            "local.sh",
+            "#!/bin/sh\ncat <<'EOF' > note\n$(ssh host 'mv /tmp/x /etc/hosts')\nEOF\n",
+        ))
+
     def test_remote_protected_write_handles_shell_boundaries_and_options(self):
         bodies = (
             "#!/bin/bash\necho ok; ssh host 'mv /tmp/x /etc/hosts'\n",
