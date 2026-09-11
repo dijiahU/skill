@@ -295,15 +295,15 @@ class V10PolicyRecoveryTests(unittest.TestCase):
         self.assertNotIn("network sink consumes", separated.stdout)
         self.assertEqual(linked.returncode, 2, linked.stdout + linked.stderr)
         self.assertIn("detect-secret-in-args", linked_payload["safetyOrchestratorUsage"]["triggered_atoms"])
-        self.assertIn("prior model-safe output replacement", linked.stdout)
+        self.assertRegex(linked.stdout, r"prior model-safe output replacement|network sink consumes an artifact or stream derived from protected local material")
         self.assertEqual(linked_short.returncode, 2, linked_short.stdout + linked_short.stderr)
-        self.assertIn("prior model-safe output replacement", linked_short.stdout)
+        self.assertRegex(linked_short.stdout, r"prior model-safe output replacement|network sink consumes an artifact or stream derived from protected local material")
         self.assertIn("detect-secret-in-args", linked_short_payload["safetyOrchestratorUsage"]["triggered_atoms"])
         self.assertEqual(linked_form.returncode, 2, linked_form.stdout + linked_form.stderr)
-        self.assertIn("prior model-safe output replacement", linked_form.stdout)
+        self.assertRegex(linked_form.stdout, r"prior model-safe output replacement|network sink consumes an artifact or stream derived from protected local material")
         self.assertIn("detect-secret-in-args", linked_form_payload["safetyOrchestratorUsage"]["triggered_atoms"])
         self.assertEqual(linked_wget.returncode, 2, linked_wget.stdout + linked_wget.stderr)
-        self.assertIn("prior model-safe output replacement", linked_wget.stdout)
+        self.assertRegex(linked_wget.stdout, r"prior model-safe output replacement|network sink consumes an artifact or stream derived from protected local material")
         self.assertIn("detect-secret-in-args", linked_wget_payload["safetyOrchestratorUsage"]["triggered_atoms"])
         for result, payload in (
             (linked_stdin_redirect, linked_stdin_redirect_payload),
@@ -311,10 +311,10 @@ class V10PolicyRecoveryTests(unittest.TestCase):
             (linked_nc, linked_nc_payload),
         ):
             self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
-            self.assertIn("prior model-safe output replacement", result.stdout)
+            self.assertRegex(result.stdout, r"prior model-safe output replacement|network sink consumes an artifact or stream derived from protected local material")
             self.assertIn("detect-secret-in-args", payload["safetyOrchestratorUsage"]["triggered_atoms"])
         self.assertEqual(linked_absolute.returncode, 2, linked_absolute.stdout + linked_absolute.stderr)
-        self.assertIn("prior model-safe output replacement", linked_absolute.stdout)
+        self.assertRegex(linked_absolute.stdout, r"prior model-safe output replacement|network sink consumes an artifact or stream derived from protected local material")
         self.assertIn("detect-secret-in-args", linked_absolute_payload["safetyOrchestratorUsage"]["triggered_atoms"])
 
         state_files = list((self.root / "status").glob("sensitive-flow-*.json"))
@@ -529,7 +529,7 @@ ENDSSH
             "cat > /tmp/single-quoted-substitution.sh <<'EOF'\n#!/bin/bash\necho '$(ssh host \"mv /tmp/x /etc/hosts\")'\nEOF",
             "cat > /tmp/remote-print.sh <<'EOF'\n#!/bin/bash\nssh host 'printf \"%s\\\\n\" \"> /etc/hosts\"'\nEOF",
             "cat > /tmp/comment-substitution.sh <<'EOF'\n#!/bin/bash\n# $(ssh host 'cp /tmp/a /etc/hosts')\nEOF",
-            "cat > /tmp/local-redirection.sh <<'EOF'\n#!/bin/bash\nssh host cat /tmp/a > /etc/hosts\nEOF",
+            "cat > /tmp/local-redirection.sh <<'EOF'\n#!/bin/bash\nssh host cat /tmp/a > /tmp/hosts-copy\nEOF",
         )
         for command in cases:
             with self.subTest(command=command):
@@ -538,6 +538,18 @@ ENDSSH
                     "tool_input": {"command": command},
                 })
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_remote_read_redirecting_to_local_hosts_is_still_dangerous(self):
+        sys.path.insert(0, str(BUNDLE / "hooks" / "scripts"))
+        from write_effects import remote_protected_script_write
+        body = "#!/bin/bash\nssh host cat /tmp/a > /etc/hosts\n"
+        self.assertFalse(remote_protected_script_write("local.sh", body))
+        result = self.matcher(BASH, {
+            "cwd": "/home/user/project",
+            "tool_input": {"command": "cat > /tmp/local-redirection.sh <<'EOF'\n" + body + "EOF"},
+        })
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("host name-resolution policy is modified", result.stdout)
 
     def test_controller_uses_relative_authoritative_snapshot_and_emits_trace(self):
         snapshot = Path(self.env["SAFETY_ORCH_WORKSPACE_SNAPSHOT"])

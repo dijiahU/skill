@@ -622,54 +622,214 @@ def _deduplicate_findings(findings: list[dict[str, str]]) -> list[dict[str, str]
     return unique
 
 
+_EXEC_WRAPPER_OPTIONS_WITH_VALUE = {
+    "sudo": {"-u", "--user", "-g", "--group", "-h", "--host", "-p", "--prompt",
+             "-C", "--close-from", "-r", "--role", "-t", "--type"},
+    "doas": {"-u"},
+    "env": {"-u", "--unset", "-C", "--chdir", "-S", "--split-string"},
+}
+_SHELL_PROGRAMS = {"sh", "bash", "dash", "zsh", "ksh"}
+
+
+def _strip_install_exec_wrappers(words: list[str]) -> list[str]:
+    current = list(words)
+    while current and current[0] in {"then", "do", "else"}:
+        current.pop(0)
+    while current and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=.*", current[0]):
+        current.pop(0)
+    for _ in range(8):
+        while current and re.fullmatch(
+            r"[A-Za-z_][A-Za-z0-9_]*=.*", current[0]
+        ):
+            current.pop(0)
+        if not current:
+            return []
+        program = Path(current[0]).name
+        if program in {"command", "nohup"}:
+            current = current[1:]
+            if current and current[0] == "--":
+                current = current[1:]
+            continue
+        if program in {"sudo", "doas", "env"}:
+            options_with_value = _EXEC_WRAPPER_OPTIONS_WITH_VALUE[program]
+            index = 1
+            while index < len(current):
+                token = current[index]
+                if token == "--":
+                    index += 1
+                    break
+                if program == "env" and re.fullmatch(
+                    r"[A-Za-z_][A-Za-z0-9_]*=.*", token
+                ):
+                    index += 1
+                    continue
+                if not token.startswith("-"):
+                    break
+                option = token.split("=", 1)[0]
+                index += 2 if option in options_with_value and "=" not in token else 1
+            current = current[index:]
+            continue
+        if program == "timeout":
+            index = 1
+            while index < len(current) and current[index].startswith("-"):
+                option = current[index].split("=", 1)[0]
+                index += (
+                    2 if option in {"-k", "--kill-after", "-s", "--signal"}
+                    and "=" not in current[index] else 1
+                )
+            if index < len(current):
+                index += 1  # duration
+            current = current[index:]
+            continue
+        break
+    return current
+
+
+def _shell_c_payload(words: list[str]) -> str:
+    if not words or Path(words[0]).name not in _SHELL_PROGRAMS:
+        return ""
+    index = 1
+    while index < len(words):
+        token = words[index]
+        if token == "--":
+            index += 1
+            break
+        if not token.startswith("-") or token == "-":
+            break
+        if "c" in token[1:]:
+            return words[index + 1] if index + 1 < len(words) else ""
+        index += 1
+    return ""
+
+
+def _heredoc_executes_shell(header: str) -> bool:
+    from write_effects import _script_command_segments
+
+    for segment in _script_command_segments(header):
+        words = _strip_install_exec_wrappers(segment)
+        if not words or Path(words[0]).name not in _SHELL_PROGRAMS:
+            continue
+        if _shell_c_payload(words):
+            continue
+        # A named script consumes the heredoc as its data. A bare shell or
+        # explicit -s consumes it as shell source.
+        index = 1
+        while index < len(words):
+            token = words[index]
+            if token in {"<", "<<", "<<<", ">", ">>"}:
+                index += 2
+                continue
+            if token == "--":
+                index += 1
+                continue
+            if token == "-s" or (token.startswith("-") and "s" in token[1:]):
+                index += 1
+                continue
+            if token.startswith("-"):
+                index += 1
+                continue
+            return False
+        return True
+    return False
+
+
+def _strip_literal_fd_duplication(command: str) -> str:
+    """Remove shell descriptor plumbing, retaining quoted package arguments."""
+    output = []
+    quote = ""
+    index = 0
+    while index < len(command):
+        char = command[index]
+        if char == "\\" and quote != "'" and index + 1 < len(command):
+            output.append(command[index:index + 2])
+            index += 2
+            continue
+        if char in {"'", '"'}:
+            if not quote:
+                quote = char
+            elif quote == char:
+                quote = ""
+        if not quote and (index == 0 or command[index - 1].isspace()):
+            match = re.match(r"[0-9]*[<>]&[0-9-]+(?=\s|[;|&]|$)", command[index:])
+            if match:
+                output.append(" ")
+                index += len(match.group())
+                continue
+        output.append(char)
+        index += 1
+    return "".join(output)
+
+
+def _install_command_segments(command: str, depth: int = 0) -> list[list[str]]:
+    if depth > 6 or not command.strip():
+        return []
+    # Delayed import avoids ported_atom_checks <-> write_effects initialization
+    # cycles while reusing the shared quote-aware heredoc and shell segmenter.
+    from write_effects import _shell_heredoc_blocks, _script_command_segments
+
+    active, heredocs, _ = _shell_heredoc_blocks(command)
+    active = re.sub(r"\\[ \t]*\r?\n", " ", active)
+    commands: list[list[str]] = []
+    for segment in _script_command_segments(_strip_literal_fd_duplication(active)):
+        words = _strip_install_exec_wrappers(segment)
+        if not words:
+            continue
+        payload = _shell_c_payload(words)
+        if payload:
+            commands.extend(_install_command_segments(payload, depth + 1))
+        else:
+            commands.append(words)
+    for header, body in heredocs:
+        if _heredoc_executes_shell(header):
+            commands.extend(_install_command_segments(body, depth + 1))
+    return commands[:64]
+
+
 def parse_install_packages(command: str) -> list[PackageSpec]:
-    """Extract npm/PyPI/crates.io/Go package targets and explicit versions."""
+    """Extract package targets only from actual shell command boundaries."""
     if not isinstance(command, str) or not command.strip():
         return []
-    try:
-        tokens = shlex.split(command, comments=False, posix=True)
-    except ValueError:
-        tokens = command.split()
 
     packages = []
-    index = 0
-    while index < len(tokens):
-        token = tokens[index]
-        basename = token.rsplit("/", 1)[-1].lower()
+    for tokens in _install_command_segments(command):
+        if not tokens:
+            continue
+        basename = Path(tokens[0]).name.lower()
         ecosystem = ""
         start = -1
 
-        if basename in {"npm", "pnpm", "yarn"} and index + 1 < len(tokens):
-            verb = tokens[index + 1].lower()
+        if basename in {"npm", "pnpm", "yarn"} and len(tokens) > 1:
+            verb = tokens[1].lower()
             allowed = {"install", "i"} if basename == "npm" else {"install", "add", "i"}
             if verb in allowed:
-                ecosystem, start = "npm", index + 2
-        elif basename in {"pip", "pip3"} and index + 1 < len(tokens) and tokens[index + 1] == "install":
-            ecosystem, start = "PyPI", index + 2
-        elif basename.startswith("python") and tokens[index + 1:index + 4] == ["-m", "pip", "install"]:
-            ecosystem, start = "PyPI", index + 4
-        elif basename == "cargo" and index + 1 < len(tokens) and tokens[index + 1] == "add":
-            ecosystem, start = "crates.io", index + 2
-        elif basename == "go" and index + 1 < len(tokens) and tokens[index + 1] == "get":
-            ecosystem, start = "Go", index + 2
+                ecosystem, start = "npm", 2
+        elif basename in {"pip", "pip3"} and len(tokens) > 1 and tokens[1] == "install":
+            ecosystem, start = "PyPI", 2
+        elif basename.startswith("python") and tokens[1:4] == ["-m", "pip", "install"]:
+            ecosystem, start = "PyPI", 4
+        elif basename == "cargo" and len(tokens) > 1 and tokens[1] == "add":
+            ecosystem, start = "crates.io", 2
+        elif basename == "go" and len(tokens) > 1 and tokens[1] == "get":
+            ecosystem, start = "Go", 2
 
         if start < 0:
-            index += 1
             continue
-
         cursor = start
         while cursor < len(tokens):
             target = tokens[cursor]
-            if target in {"&&", "||", ";", "|"}:
+            if target in {"&&", "||", ";", "|", "&", "<", "<<", ">", ">>"}:
                 break
             if target.startswith("-"):
-                cursor += 2 if target in INSTALL_OPTIONS_WITH_VALUE else 1
+                option = target.split("=", 1)[0]
+                cursor += (
+                    2 if option in INSTALL_OPTIONS_WITH_VALUE
+                    and "=" not in target else 1
+                )
                 continue
             spec = _parse_package_target(ecosystem, target)
             if spec is not None:
                 packages.append(spec)
             cursor += 1
-        index = max(cursor, index + 1)
 
     unique = []
     seen = set()

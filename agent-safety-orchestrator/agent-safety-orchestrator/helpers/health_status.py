@@ -25,6 +25,8 @@ from __future__ import annotations
 import json
 import os
 import socket
+import queue
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -136,7 +138,7 @@ def log_fail_open(atom_id: str, ctx: dict[str, Any]) -> None:
 
 # ----- session-start banner -----
 
-def _ping(url: str, timeout: float = 2.0) -> tuple[bool, str]:
+def _ping_request(url: str, timeout: float = 2.0) -> tuple[bool, str]:
     """Lightweight HEAD-like probe. Returns (ok, reason)."""
     try:
         host = urlparse(url).hostname
@@ -156,6 +158,25 @@ def _ping(url: str, timeout: float = 2.0) -> tuple[bool, str]:
     except (urllib.error.URLError, OSError) as e:
         return False, str(e)
 
+
+
+def _ping(url: str, timeout: float = 2.0) -> tuple[bool, str]:
+    """Bound the whole probe, including DNS, without changing global sockets.
+
+    A daemon worker cannot hold session startup or process exit hostage when
+    libc DNS ignores the HTTP socket timeout. It never writes health state.
+    """
+    result = queue.Queue(maxsize=1)
+    def probe():
+        try:
+            result.put(_ping_request(url, timeout))
+        except Exception as exc:
+            result.put((False, f"probe error: {type(exc).__name__}: {exc}"))
+    threading.Thread(target=probe, daemon=True).start()
+    try:
+        return result.get(timeout=timeout)
+    except queue.Empty:
+        return False, f"probe deadline exceeded ({timeout:g}s, including DNS)"
 
 def init_banner(atoms_json_path: str | None = None) -> str:
     """Run health checks and produce a session-start banner.
@@ -185,11 +206,14 @@ def init_banner(atoms_json_path: str | None = None) -> str:
             mark_disabled(atom_id, f"{env_key} missing")
             disabled[atom_id] = f"{env_key} missing"
 
-    # 2. Network pings
+    # 2. Probe each shared endpoint once per session.
+    endpoint_health = {}
     for atom_id, endpoint in NETWORK_ATOMS.items():
         if atom_id in disabled:
             continue
-        ok, reason = _ping(endpoint)
+        if endpoint not in endpoint_health:
+            endpoint_health[endpoint] = _ping(endpoint)
+        ok, reason = endpoint_health[endpoint]
         if ok:
             mark_active(atom_id)
         else:

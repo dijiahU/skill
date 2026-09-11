@@ -27,6 +27,8 @@ from lib_common import (
     PII_PATTERNS, SECRET_PATTERNS, SQL_DELETE_FROM_PATTERN,
 )
 from sensitive_data import minimize_sensitive_output, output_replacement_available
+from archive_permission_observations import observe_sensitive_artifact_permissions
+from trusted_reference_reads import is_trusted_reference_view
 
 MARKDOWN_IMAGE_BEACON = re.compile(
     r"!\[[^\]]*\]\((https?://[^)]+(?:[?&]\w+=[^)&]*)+)\)"
@@ -437,13 +439,24 @@ def _isolate_indirect_output(output: str, findings: list[dict]) -> tuple[str, di
 
 def main() -> int:
     event = read_event()
+    # Only an exact host-pinned policy read is trusted, never the path alone.
+    if is_trusted_reference_view(event):
+        return 0
     output = event.get("tool_response") or event.get("tool_output") or ""
     if isinstance(output, dict):
         output = json.dumps(output, ensure_ascii=False)
-    if not output or not isinstance(output, str):
-        return 0
+    if not isinstance(output, str):
+        output = ""
 
-    verdicts = []
+    verdicts = [
+        soft_check("detect-secret-in-args", True, observation.reason)
+        for observation in observe_sensitive_artifact_permissions(event, output)
+    ]
+    # Empty output is still significant for lineage: a successful quiet local
+    # archive can be observed by a later ls/stat call in the same context.
+    if not output:
+        return aggregate(verdicts) if verdicts else 0
+
     modified_output = output
     output_view = {}
 

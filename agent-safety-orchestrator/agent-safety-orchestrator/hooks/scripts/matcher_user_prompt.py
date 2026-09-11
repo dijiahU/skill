@@ -22,6 +22,10 @@ from lib_common import (
 )
 from ported_atom_checks import jailbreak_template_matches
 from sensitive_data import record_prompt_authorization
+from output_proposals import record_output_proposal_authorization
+from active_identity_writes import record_identity_rotation_authorization
+from task_scope_contracts import record_task_scope_contract
+from ssh_agent_forwarding import record_agent_forwarding_authorization
 
 
 def main() -> int:
@@ -32,6 +36,10 @@ def main() -> int:
 
     # Persist only a narrow authorization class; never persist prompt secrets.
     record_prompt_authorization(event)
+    record_output_proposal_authorization(event)
+    record_identity_rotation_authorization(event)
+    record_task_scope_contract(event)
+    record_agent_forwarding_authorization(event)
 
     verdicts = []
 

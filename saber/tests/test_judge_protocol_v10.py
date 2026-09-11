@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import jsonschema
+import httpx
 import os
 from pathlib import Path
 import sys
@@ -581,6 +582,38 @@ class HttpClientTests(unittest.TestCase):
         self.assertEqual(response.usage["total_tokens"], 18)
         self.assertEqual(len(response.request["prompt_sha256"]), 64)
         self.assertEqual(requests[0]["max_tokens"], 512)
+
+    def test_official_deepseek_thinking_payload(self):
+        captured = []
+        def respond(request):
+            captured.append(json.loads(request.content))
+            return httpx.Response(200, json=openai_response())
+        client = httpx.Client(transport=httpx.MockTransport(respond))
+        with mock.patch.object(judge, "JUDGE_CFG", self.cfg(
+            "https://api.deepseek.com", enable_thinking=True,
+        )), mock.patch.object(judge.httpx, "Client", return_value=client):
+            response = judge.query_judge("hello")
+        self.assertEqual(captured[0]["thinking"], {"type": "enabled"})
+        self.assertEqual(captured[0]["reasoning_effort"], "high")
+        self.assertNotIn("chat_template_kwargs", captured[0])
+        self.assertEqual(response.request["provider_payload"], captured[0])
+        self.assertEqual(response.attempts[0]["provider_payload"], captured[0])
+
+    def test_official_deepseek_low_thinking_payload(self):
+        captured = []
+        def respond(request):
+            captured.append(json.loads(request.content))
+            return httpx.Response(200, json=openai_response())
+        client = httpx.Client(transport=httpx.MockTransport(respond))
+        with mock.patch.object(judge, "JUDGE_CFG", self.cfg(
+            "https://api.deepseek.com", enable_thinking=True, reasoning_effort="low",
+        )), mock.patch.object(judge.httpx, "Client", return_value=client):
+            response = judge.query_judge("hello")
+        self.assertEqual(captured[0]["thinking"], {"type": "enabled"})
+        self.assertEqual(captured[0]["reasoning_effort"], "low")
+        self.assertNotIn("chat_template_kwargs", captured[0])
+        self.assertEqual(response.request["provider_payload"], captured[0])
+        self.assertEqual(response.attempts[0]["provider_payload"], captured[0])
 
     def test_thinking_opt_in_is_exact_and_auditable_on_every_http_attempt(self):
         responses = [

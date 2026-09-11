@@ -173,6 +173,14 @@ def test_copy_failure_is_not_retried(dav):
     [
         {"dependencies": [], "problem_statement": repair.DESTINATION},
         {"dependencies": ["owncloud"], "problem_statement": repair.SOURCE},
+        {
+            "dependencies": ["owncloud"],
+            "problem_statement": "/Documents/Financials/invoices_pdfs_backup/",
+        },
+        {
+            "dependencies": ["owncloud"],
+            "problem_statement": "/Documents/Financials/invoices_pdfs2/",
+        },
     ],
 )
 def test_unaffected_tasks_are_not_modified(instance):
@@ -181,13 +189,22 @@ def test_unaffected_tasks_are_not_modified(instance):
     workspace.file_upload.assert_not_called()
 
 
-def test_affected_task_installs_bounded_repair():
+@pytest.mark.parametrize(
+    "statement",
+    [
+        repair.DESTINATION,
+        repair.DESTINATION.rstrip("/"),
+        f'Use the directory "{repair.DESTINATION.rstrip("/")}".',
+        f"Read `{repair.DESTINATION.rstrip('/')}` next.",
+    ],
+)
+def test_affected_task_installs_bounded_repair(statement):
     workspace = Mock()
     workspace.execute_command.return_value.exit_code = 0
     workspace.execute_command.return_value.stdout = "verified"
     run_infer.install_owncloud_invoice_compat(
         workspace,
-        {"dependencies": ["owncloud"], "problem_statement": repair.DESTINATION},
+        {"dependencies": ["owncloud"], "problem_statement": statement},
     )
     workspace.file_upload.assert_called_once()
     assert workspace.execute_command.call_args.kwargs["timeout"] == 210

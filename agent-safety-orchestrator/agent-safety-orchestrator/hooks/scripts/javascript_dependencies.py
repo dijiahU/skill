@@ -13,6 +13,7 @@ particular effect.  Callers must still inspect the selected dependency with
 their existing semantic/effect checks.
 """
 
+import base64
 from dataclasses import dataclass, field
 import posixpath
 from typing import Iterable
@@ -1155,3 +1156,178 @@ def select_javascript_effect_source(
     return JavascriptEffectSourceReport(
         scan_text, top_level_text, tuple(selected), bounded_unknowns, complete
     )
+
+
+@dataclass(frozen=True)
+class JavascriptLiteralExecution:
+    line: int
+    sink: str
+    payload: str
+    transforms: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class JavascriptLiteralExecutionReport:
+    executions: tuple[JavascriptLiteralExecution, ...]
+    unknowns: tuple[JavascriptDependencyUnknown, ...]
+    complete: bool
+
+
+def _javascript_expression_end(
+    tokens: list[_Token], start: int, pairs: dict[int, int], stop: set[str],
+) -> int:
+    index = start
+    while index < len(tokens):
+        if tokens[index].value in {"(", "[", "{"} and index in pairs:
+            index = pairs[index] + 1
+            continue
+        if tokens[index].value in stop:
+            break
+        index += 1
+    return index
+
+
+def _javascript_static_string(
+    tokens: list[_Token], start: int, end: int, pairs: dict[int, int],
+    values: dict[str, str], depth: int = 0,
+) -> tuple[str | None, tuple[str, ...]]:
+    if depth > 8 or start >= end:
+        return None, ()
+    while start < end and tokens[start].value == "(" and pairs.get(start) == end - 1:
+        start += 1; end -= 1
+    # Concatenation of independently static strings.
+    parts: list[tuple[int, int]] = []
+    cursor = start
+    index = start
+    while index < end:
+        if tokens[index].value in {"(", "[", "{"} and index in pairs:
+            index = pairs[index] + 1; continue
+        if tokens[index].value == "+":
+            parts.append((cursor, index)); cursor = index + 1
+        index += 1
+    if parts:
+        parts.append((cursor, end))
+        rendered: list[str] = []
+        transforms: list[str] = []
+        for left, right in parts:
+            value, applied = _javascript_static_string(tokens, left, right, pairs, values, depth + 1)
+            if value is None: return None, ()
+            rendered.append(value); transforms.extend(applied)
+        combined = "".join(rendered)
+        return (combined, tuple(transforms)) if len(combined) <= _MAX_SOURCE_CHARS else (None, ())
+    if end - start == 1:
+        token = tokens[start]
+        if token.kind == "string": return token.value, ()
+        if token.kind == "template" and "${" not in token.value:
+            body = token.value[1:-1]
+            try:
+                body = bytes(body, "utf-8").decode("unicode_escape")
+            except UnicodeDecodeError:
+                pass
+            return body, ()
+        if token.kind == "identifier": return values.get(token.value), ()
+    # Buffer.from(static, 'base64').toString('utf8')
+    if end - start >= 12 and tokens[start].value == "Buffer" and tokens[start + 1].value == "." and tokens[start + 2].value == "from" and tokens[start + 3].value == "(":
+        opened = start + 3; closed = pairs.get(opened)
+        if closed is not None and closed < end and closed + 3 < end and tokens[closed + 1].value == "." and tokens[closed + 2].value == "toString" and tokens[closed + 3].value == "(":
+            first_end = _javascript_expression_end(tokens, opened + 1, pairs, {",", ")"})
+            raw, transforms = _javascript_static_string(tokens, opened + 1, first_end, pairs, values, depth + 1)
+            encoding = tokens[first_end + 1].value if first_end + 1 < closed and tokens[first_end].value == "," else ""
+            if raw is not None and encoding == "base64" and len(raw) <= _MAX_SOURCE_CHARS:
+                try:
+                    decoded = base64.b64decode(raw, validate=True).decode("utf-8")
+                except (ValueError, UnicodeDecodeError):
+                    return None, ()
+                if len(decoded) <= _MAX_SOURCE_CHARS:
+                    return decoded, transforms + ("base64", "utf8")
+    return None, ()
+
+
+def recover_javascript_literal_executions(source: str) -> JavascriptLiteralExecutionReport:
+    """Recover statically composed strings passed to actual eval/exec calls."""
+    if not isinstance(source, str) or len(source) > _MAX_SOURCE_CHARS:
+        unknown = JavascriptDependencyUnknown(1, "JavaScript source size limit exceeded")
+        return JavascriptLiteralExecutionReport((), (unknown,), False)
+    tokens, lexer_unknowns = _lex(source)
+    pairs, complete = _matching_delimiters(tokens)
+    unknowns = list(lexer_unknowns)
+    values: dict[str, str] = {}
+    child_namespaces: set[str] = set()
+    child_bindings: set[str] = set()
+    declared_eval = False
+    executions: list[JavascriptLiteralExecution] = []
+
+    # Establish child_process bindings without trusting lookalike names.
+    for index in range(len(tokens) - 6):
+        if tokens[index].value not in {"const", "let", "var"}: continue
+        if tokens[index + 1].kind == "identifier" and tokens[index + 2].value == "=" and tokens[index + 3].value == "require" and tokens[index + 4].value == "(" and tokens[index + 5].kind == "string" and tokens[index + 5].value in {"child_process", "node:child_process"}:
+            child_namespaces.add(tokens[index + 1].value)
+        if tokens[index + 1].value == "{" and index + 5 < len(tokens):
+            closed = pairs.get(index + 1)
+            if closed is not None and closed + 4 < len(tokens) and tokens[closed + 1].value == "=" and tokens[closed + 2].value == "require" and tokens[closed + 3].value == "(" and tokens[closed + 4].kind == "string" and tokens[closed + 4].value in {"child_process", "node:child_process"}:
+                for cursor in range(index + 2, closed):
+                    if tokens[cursor].value in {"exec", "execSync", "spawn", "spawnSync"}:
+                        child_bindings.add(tokens[cursor].value)
+    for index, token in enumerate(tokens[:-1]):
+        if token.value in {"const", "let", "var", "function", "class"} and tokens[index + 1].value == "eval":
+            declared_eval = True
+
+    index = 0
+    while index < len(tokens):
+        token = tokens[index]
+        if token.value in {"const", "let", "var"} and index + 3 < len(tokens) and tokens[index + 1].kind == "identifier" and tokens[index + 2].value == "=":
+            name = tokens[index + 1].value
+            end = _javascript_expression_end(tokens, index + 3, pairs, {";"})
+            value, _ = _javascript_static_string(tokens, index + 3, end, pairs, values)
+            if value is None: values.pop(name, None)
+            else: values[name] = value
+        call_open = -1
+        sink = ""
+        if token.value == "eval" and not declared_eval and index + 1 < len(tokens) and tokens[index + 1].value == "(":
+            sink, call_open = "eval", index + 1
+        elif token.value in child_bindings and index + 1 < len(tokens) and tokens[index + 1].value == "(":
+            sink, call_open = token.value, index + 1
+        elif (token.value in child_namespaces and index + 3 < len(tokens) and tokens[index + 1].value == "."
+              and tokens[index + 2].value in {"exec", "execSync", "spawn", "spawnSync"} and tokens[index + 3].value == "("):
+            sink, call_open = tokens[index + 2].value, index + 3
+        if call_open >= 0 and call_open in pairs:
+            end = _javascript_expression_end(tokens, call_open + 1, pairs, {",", ")"})
+            payload, transforms = _javascript_static_string(tokens, call_open + 1, end, pairs, values)
+            if payload is not None:
+                executions.append(JavascriptLiteralExecution(token.line, sink, payload, transforms))
+            else:
+                unknowns.append(JavascriptDependencyUnknown(
+                    token.line, f"JavaScript {sink} argument was not statically resolved"
+                ))
+        index += 1
+    bounded = tuple(executions[:_MAX_DEPENDENCIES])
+    if len(executions) > _MAX_DEPENDENCIES:
+        unknowns.append(JavascriptDependencyUnknown(1, "JavaScript literal execution limit exceeded"))
+    return JavascriptLiteralExecutionReport(bounded, tuple(unknowns[:_MAX_UNKNOWNS]), complete and not unknowns)
+
+
+def javascript_dynamic_effect_risk(source: str) -> str:
+    """Recognize concrete fs source/sink and persistence calls in a JS slice."""
+    if not isinstance(source, str) or len(source) > _MAX_SOURCE_CHARS:
+        return ""
+    tokens, _ = _lex(source)
+    call_names: set[str] = set()
+    for index, token in enumerate(tokens[:-1]):
+        if token.kind == "identifier" and tokens[index + 1].value == "(":
+            call_names.add(token.value)
+    strings = [token.value for token in tokens if token.kind in {"string", "template"}]
+    joined = " ".join(strings).lower()
+    sensitive = any(term in joined for term in (".ssh", ".aws", ".npmrc", ".git-credentials", "credentials", "private_key", "id_rsa", "id_ed25519"))
+    shared = any(term in joined for term in ("/tmp", "public", "outgoing", "handoff", "node_modules/.cache", ".telemetry"))
+    if {"readFileSync", "writeFileSync"} <= call_names and sensitive and shared:
+        return "JavaScript reads protected credential paths and writes the collected values into shared, public, or package-cache storage"
+    has_exec = bool(call_names & {"exec", "execSync", "spawn", "spawnSync", "eval"})
+    if has_exec and "@reboot" in joined and "crontab -" in joined:
+        return "JavaScript installs an unattended reboot crontab entry"
+    if "writeFileSync" in call_names and "autostart" in joined and ".desktop" in joined:
+        return "JavaScript writes a desktop autostart entry"
+    from javascript_remote_execution import javascript_remote_payload_execution_risk
+    remote_execution = javascript_remote_payload_execution_risk(source)
+    if remote_execution:
+        return remote_execution
+    return ""

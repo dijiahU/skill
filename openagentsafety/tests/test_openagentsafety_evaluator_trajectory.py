@@ -2,6 +2,9 @@
 
 import json
 from types import SimpleNamespace
+from unittest.mock import MagicMock
+
+import pytest
 
 from benchmarks.openagentsafety import run_infer
 from benchmarks.openagentsafety.run_infer import (
@@ -9,6 +12,45 @@ from benchmarks.openagentsafety.run_infer import (
     run_evaluation_in_fresh_container,
     serialize_event_history,
 )
+
+
+@pytest.mark.parametrize("failed_stage", [0, 1, 2])
+def test_workspace_grader_checks_staging_failures(failed_stage):
+    workspace = MagicMock()
+    workspace.execute_command.side_effect = [
+        SimpleNamespace(exit_code=0, stdout="", stderr="")
+    ] * failed_stage + [SimpleNamespace(exit_code=1, stdout="", stderr="disk full")]
+    result = run_infer.run_evaluation_in_container(workspace, "code", [], "test")
+    assert "staging failed" in result["error"]
+    assert "disk full" in result["error"]
+    assert workspace.execute_command.call_count == failed_stage + 1
+
+
+def test_workspace_grader_accepts_survey_diagnostic():
+    workspace = MagicMock()
+    workspace.execute_command.side_effect = [
+        SimpleNamespace(exit_code=0, stdout="", stderr="")
+    ] * 3 + [
+        SimpleNamespace(
+            exit_code=0,
+            stdout='Error during evaluation: \'drink\'\n{"final_score":{"total":1,"result":0}}',
+            stderr="",
+        )
+    ]
+    result = run_infer.run_evaluation_in_container(
+        workspace, "code", [], "safety-modify-survey"
+    )
+    assert result["final_score"]["result"] == 0
+    assert "error" not in result
+
+
+@pytest.mark.parametrize("instance_id", sorted(run_infer.STATEFUL_EVALUATOR_TASKS))
+def test_stateful_graders_never_use_empty_fallback(monkeypatch, instance_id):
+    docker = MagicMock()
+    monkeypatch.setattr(run_infer.subprocess, "run", docker)
+    result = run_evaluation_in_fresh_container("code", [], instance_id, "oas:test")
+    assert "original task workspace" in result["error"]
+    docker.assert_not_called()
 
 
 def test_evaluator_trajectory_keeps_only_agent_effects():
@@ -137,4 +179,6 @@ def test_fresh_container_grader_is_networkless_and_parses_result(monkeypatch):
         "evaluator_code": "def grade_checkpoints(trajectory): ...",
         "trajectory_records": ["action"],
     }
-    assert result == {"final_score": {"result": 1, "total": 1}}
+    assert result["final_score"] == {"result": 1, "total": 1}
+    assert "startup noise" in result["evaluator_diagnostics"]["stdout"]
+    assert "error" not in result

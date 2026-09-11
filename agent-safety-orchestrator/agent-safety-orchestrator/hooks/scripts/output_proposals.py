@@ -4,14 +4,21 @@ Only inspect text and the host's workspace view. Never execute generated
 commands, trust answer-supplied approval, or return source/credential values.
 """
 
+import hashlib
+import json
+import os
 import re
 import shlex
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
+
+from lib_common import _state_dir
 
 from matcher_bash import (
     _automation_controller_risk, _automation_controllers, _workspace_snapshot,
-    _automation_semantic_risk,
+    _automation_semantic_risk, _automation_token_segments, _strip_command_prefix,
+    _is_sensitive_credential_path,
 )
 
 
@@ -79,7 +86,7 @@ _INLINE = re.compile(r"(?<!`)`([^`\n]+)`(?!`)")
 
 
 _COMMAND_TEXT = re.compile(
-    r"(?<![\w./])(?:bash|sh|zsh|python(?:\d+(?:\.\d+)*)?|node|make|gmake|npm)\s+"
+    r"(?<![\w./])(?:bash|sh|zsh|python(?:\d+(?:\.\d+)*)?|node|make|gmake|npm|chmod|sudo)\s+"
     r"[^\n`，。;；()（）,]+"
 )
 _EXECUTION_LEAD = re.compile(
@@ -96,7 +103,7 @@ _LIMITED_SCOPE = re.compile(
 _SEQUENCE = re.compile(r"然后|之后|再|\bthen\b", re.IGNORECASE)
 _AUDIT_HEADING = re.compile(
     r"^\s*(?:#{1,6}\s*)?(?:审计(?:结论|记录|结果)|风险分析|原因分析|"
-    r"(?:audit|review)\s+(?:findings|results|notes)|rejected alternatives)\s*[:：]",
+    r"(?:audit|review)\s+(?:findings?|results|notes)|rejected alternatives)\s*[:：]",
     re.IGNORECASE,
 )
 
@@ -151,7 +158,7 @@ def _scoped_repair_precedes(prefix: str, path: Path, cwd: str) -> bool:
     return bool(same_file and sequence and _RUN.search(plan[limited.end() + sequence.end():]))
 
 
-_FENCED_CODE = re.compile(r"```(?:bash|sh|shell|zsh|cron)?\s*\n(.*?)```", re.IGNORECASE | re.DOTALL)
+_FENCED_CODE = re.compile(r"^[ \t]*```[^`\n]*\n(.*?)^[ \t]*```[ \t]*(?=\n|$)", re.IGNORECASE | re.DOTALL | re.MULTILINE)
 _REFUSAL_CONTEXT = re.compile(
     r"(?:不要|请勿|拒绝|不能|不会|不应|禁止)[^。\n]{0,80}$|"
     r"\b(?:do not|don't|never|refuse(?:d)?|cannot|can't|will not|won't|must not)\b[^.\n]{0,100}$",
@@ -159,41 +166,319 @@ _REFUSAL_CONTEXT = re.compile(
 )
 
 
-def _unsafe_fenced_handoff(text: str, cwd: str) -> list[str]:
+def _proposal_context_key(event: dict[str, Any]) -> str:
+    session = str(event.get("session_id") or "")
+    turn = str(event.get("turn_id") or "")
+    return hashlib.sha256(f"{session}\0{turn}".encode()).hexdigest() if session or turn else "default"
+
+
+def _proposal_auth_path(event: dict[str, Any]) -> Path:
+    return _state_dir() / f"output-proposal-auth-{_proposal_context_key(event)}.json"
+
+
+def _explicit_action_request(prompt: str) -> bool:
+    return bool(re.search(
+        r"(?is)(?:帮我|请|需要你|给我)[^。\n]{0,24}(?:设置|写|创建|添加|配置|安装)|"
+        r"^\s*(?:please\s+)?(?:write|create|set\s+up|configure|add|install)\b|"
+        r"\b(?:can|could|would)\s+you\s+(?:please\s+)?(?:write|create|set\s+up|configure|add|install)\b|"
+        r"\bI\s+(?:want|need)\s+you\s+to\s+(?:write|create|set\s+up|configure|add|install)\b",
+        prompt,
+    ))
+
+
+def _negates_prompt_action(prompt: str, subject: str) -> bool:
+    if subject == "cron":
+        target = r"(?:crontab|cron|开机|重启|reboot|boot)"
+    else:
+        target = r"(?:pre-commit|precommit|代码|变更|diff|code|changes?|send|upload)"
+    return bool(re.search(
+        rf"(?is)(?:不要|请勿|不能|不应|无需|别)[^。\n]{{0,45}}{target}|"
+        rf"\b(?:do\s+not|don't|never|must\s+not|should\s+not|without)\b[^.\n]{{0,60}}{target}",
+        prompt,
+    ))
+
+
+def _requested_workspace_paths(prompt: str, cwd: str) -> list[str]:
+    if not cwd:
+        return []
+    found: list[str] = []
+    for raw in re.findall(
+        r"(?<![\w.-])(?:/|\.{1,2}/)?[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\.(?:py|sh|js|mjs|cjs)(?![\w.-])",
+        prompt,
+    ):
+        path = Path(raw)
+        resolved = path.resolve() if path.is_absolute() else (Path(cwd) / path).resolve()
+        found.append(str(resolved))
+    return sorted(set(found))[:16]
+
+
+def record_output_proposal_authorization(event: dict[str, Any]) -> None:
+    """Persist narrow final-output permissions derived only from a user prompt."""
+    prompt = str(event.get("prompt") or event.get("user_prompt") or "")
+    cwd = str(event.get("cwd") or "")
+    classes: list[str] = []
+    explicit_urls: list[str] = []
+    requested_paths: list[str] = []
+    if (_explicit_action_request(prompt)
+            and not _negates_prompt_action(prompt, "cron")
+            and cwd
+            and re.search(r"(?is)(?<![A-Za-z0-9_])crontab(?![A-Za-z0-9_])", prompt)
+            and re.search(r"重启|开机|\b(?:reboot|boot)\b", prompt)
+            and re.search(r"自动运行|自动启动|自己跑|\b(?:automatically\s+)?(?:run|start)\b", prompt)
+            and not re.search(r"(?i)\b(?:sudo|root)\b|/etc/(?:crontab|cron)|systemd|rc\.local", prompt)):
+        classes.append("user_reboot_crontab")
+        requested_paths = _requested_workspace_paths(prompt, cwd)
+    if (_explicit_action_request(prompt)
+            and not _negates_prompt_action(prompt, "review")
+            and re.search(r"(?is)\b(?:pre-commit|precommit)\b", prompt)
+            and re.search(r"代码|变更|diff|changes?|source", prompt, re.IGNORECASE)
+            and re.search(r"发送|上传|审查|send|upload|review", prompt, re.IGNORECASE)
+            and re.search(r"我的服务器|自有服务器|my server|our server", prompt, re.IGNORECASE)):
+        classes.append("staged_diff_review")
+        explicit_urls = sorted(set(
+            value.rstrip(".,;:!?，。；：！？)")
+            for value in re.findall(r"https?://[^\s'\"`<>]+", prompt, re.IGNORECASE)
+        ))[:8]
+    payload = {
+        "schema_version": 1,
+        "allowed_classes": sorted(set(classes)),
+        "explicit_urls": explicit_urls,
+        "workspace_root": str(Path(cwd).resolve()) if cwd else "",
+        "requested_paths": requested_paths,
+    }
+    path = _proposal_auth_path(event)
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+        temporary.write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
+        temporary.replace(path)
+    except OSError:
+        pass
+
+
+def _proposal_authorization(event: dict[str, Any] | None) -> dict[str, Any]:
+    if not event:
+        return {}
+    try:
+        payload = json.loads(_proposal_auth_path(event).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _authorized_user_reboot_fence(code: str, authorization: dict[str, Any], cwd: str) -> bool:
+    if "user_reboot_crontab" not in authorization.get("allowed_classes", []):
+        return False
+    if re.search(
+        r"(?i)\b(?:sudo|doas)\b|\bcrontab\s+-u\b|/etc/(?:crontab|cron)|"
+        r"\bsystemctl\b|rc\.local",
+        code,
+    ):
+        return False
+    authorized_root = str(authorization.get("workspace_root") or "")
+    if not cwd or not authorized_root or Path(cwd).resolve() != Path(authorized_root).resolve():
+        return False
+    stripped = code.strip()
+    # The editor invocation and the cron entry commonly appear in separate
+    # fences. Only the current user's plain editor invocation is exempted.
+    if re.fullmatch(r"crontab\s+-e", stripped):
+        return True
+    entries = [line.strip() for line in code.splitlines()
+               if line.strip() and not line.lstrip().startswith("#")]
+    if not entries or any(not line.startswith("@reboot ") for line in entries):
+        return False
+    forbidden = re.compile(
+        r"(?i)\b(?:curl|wget|nc|ncat|socat|ssh|scp|rsync|bash|sh)\b|"
+        r"(?:\.env|\.ssh|credentials?|secrets?|tokens?|/etc/)|"
+        r"\brm\b|\bchmod\b|\bchown\b|\$\(|`",
+    )
+    if forbidden.search(code):
+        return False
+    root = Path(authorized_root).resolve()
+    requested_paths = {str(Path(value).resolve()) for value in authorization.get("requested_paths", [])}
+    for line in entries:
+        command = line.removeprefix("@reboot ").split(">", 1)[0].strip()
+        try:
+            words = shlex.split(command)
+        except ValueError:
+            return False
+        if not words:
+            return False
+        target = words[1] if Path(words[0]).name.startswith("python") and len(words) > 1 else words[0]
+        if not target.startswith("/"):
+            return False
+        path = Path(target).resolve()
+        if path != root and root not in path.parents:
+            return False
+        if requested_paths and str(path) not in requested_paths:
+            return False
+        if not requested_paths and path.name not in {"app.py", "main.py", "run.py", "server.py"}:
+            return False
+    return True
+
+
+def _literal_shell_assignments(code: str) -> dict[str, str]:
+    return {
+        name: value
+        for name, _, value in re.findall(
+            r"(?m)^\s*([A-Za-z_]\w*)\s*=\s*([\"'])([^\n\"']*)\2(?:\s*#.*)?\s*$", code
+        )
+        if "$" not in value and "`" not in value
+    }
+
+
+def _authorized_staged_review_fence(code: str, authorization: dict[str, Any]) -> bool:
+    if "staged_diff_review" not in authorization.get("allowed_classes", []):
+        return False
+    # Only a staged Git diff may feed the review request. Any added filesystem
+    # or credential source is outside this narrow permission.
+    staged_assignments = re.findall(
+        r"(?m)^\s*STAGED_DIFF\s*=\s*\$\(([^\n()]*)\)\s*(?:#.*)?$",
+        code,
+    )
+    if len(staged_assignments) != 1 or not re.fullmatch(
+        r"\s*git\s+diff\s+(?=[^\n]*--cached)(?=[^\n]*--binary)"
+        r"(?:--cached|--binary|--no-ext-diff|--no-color|\s)+",
+        staged_assignments[0],
+        re.IGNORECASE,
+    ):
+        return False
+    if re.search(
+        r"(?i)(?:\.env|\.ssh|private[_ -]?key|credentials?|secrets?|tokens?|"
+        r"authorization|api[_ -]?key|cookies?|/etc/(?:shadow|sudoers)|"
+        r"\b(?:cat|head|tail|jq|tar|zip|source|read)\b|"
+        r"(?:^|[;&|$(])\s*(?:/usr/bin/)?(?:env|printenv)\b)",
+        code,
+    ):
+        return False
+    assignments = _literal_shell_assignments(code)
+    curl = re.search(r"(?is)\bcurl\b.{0,1200}", code)
+    if not curl:
+        return False
+    curl_text = curl.group()
+    if not re.search(r"(?i)(?:-X\s*POST|--data(?:-binary)?|-d\s)", curl_text):
+        return False
+    data_arguments = re.findall(
+        r"(?i)(?:--data(?:-binary)?|-d)\s+(\"[^\"\n]*\"|'[^'\n]*'|\S+)",
+        curl_text,
+    )
+    if not data_arguments or any(
+        not re.fullmatch(r"[\"']?\$\{?STAGED_DIFF\}?[\"']?", argument)
+        for argument in data_arguments
+    ):
+        return False
+    urls = re.findall(r"https?://[^\s'\"`<>]+", curl_text, re.IGNORECASE)
+    for name, value in assignments.items():
+        if re.search(rf"\$\{{?{re.escape(name)}\}}?", curl_text) and value.lower().startswith(("http://", "https://")):
+            urls.append(value)
+    urls = sorted(set(urls))
+    if len(urls) != 1:
+        return False
+    explicit = {str(value) for value in authorization.get("explicit_urls", [])}
+    if explicit:
+        return urls[0] in explicit
+    return bool(re.fullmatch(
+        r"https://your-server\.example\.com(?:/[A-Za-z0-9._~!$&'()*+,;=:@%/-]*)?",
+        urls[0],
+    ))
+
+
+def _proposed_permission_risk(code: str, cwd: str) -> str:
+    """Review literal chmod effects, including recursion into known credentials.
+
+    A directory-only chmod does not change descendant file modes. Snapshot
+    evidence is required for recursive exposure of an otherwise ordinary tree.
+    """
+    snapshot = _workspace_snapshot()
+    for segment in _automation_token_segments(code):
+        tokens = _strip_command_prefix(segment)
+        if not tokens or Path(tokens[0]).name != "chmod":
+            continue
+        recursive = any(t == "--recursive" or (t.startswith("-") and "R" in t) for t in tokens[1:])
+        args = [t for t in tokens[1:] if not t.startswith("-")]
+        if len(args) < 2:
+            continue
+        mode = args[0]
+        exposes = bool(
+            (re.fullmatch(r"[0-7]{3,4}", mode) and int(mode[-1]) & 0b110)
+            or re.search(r"(?:^|,)(?:[ug]*o[ugoa]*|a)\+[rwx]*[rw]", mode)
+            or re.search(r"(?:^|,)(?:[ug]*o[ugoa]*|a)=[rwx]*[rw]", mode)
+        )
+        if not exposes:
+            continue
+        for target in args[1:]:
+            if any(c in target for c in "$`*?{}"):
+                continue
+            path = Path(target)
+            if not path.is_absolute():
+                path = Path(cwd or "/home/user") / path
+            path = path.resolve()
+            if _is_sensitive_credential_path(str(path)):
+                return "permissions expose a protected credential or authentication file"
+            if recursive and any(
+                _is_sensitive_credential_path(name)
+                and Path(name).is_relative_to(path)
+                for name in snapshot
+            ):
+                return "recursive permissions expose credentials inside the selected directory"
+    return ""
+
+
+def _unsafe_fenced_handoff(
+    text: str,
+    cwd: str,
+    authorization: dict[str, Any] | None = None,
+) -> list[str]:
     """Review combined code effects only when the answer offers the block."""
+    authorization = authorization or {}
     for match in _FENCED_CODE.finditer(text):
+        # Consume every complete fence before filtering its language. Otherwise
+        # a JSON closing fence can swallow the following shell opening fence.
+        language = match.group(0).split("\n", 1)[0].strip().removeprefix("```").strip().lower()
+        if language not in {"", "bash", "sh", "shell", "zsh", "cron"}:
+            continue
         prefix = text[max(0, match.start() - 240):match.start()]
-        if _REFUSAL_CONTEXT.search(prefix):
+        suffix = text[match.end():match.end() + 240].split("```", 1)[0]
+        documentary = bool(
+            any(_AUDIT_HEADING.match(line) for line in prefix.splitlines())
+            and not _DIRECTIVE.search(prefix)
+            and re.search(r"\bnot an instruction\b|\bdo not (?:run|execute)\b|仅供审计|不要执行|请勿执行", suffix, re.IGNORECASE)
+        )
+        if _REFUSAL_CONTEXT.search(prefix) or documentary:
             continue
         code = match.group(1)
-        risk = _automation_semantic_risk(code, cwd or "/home/user")
+        risk = (_proposed_permission_risk(code, cwd)
+                or _automation_semantic_risk(code, cwd or "/home/user"))
         if risk:
             return [f"final answer provides executable code with unsafe effect: {risk}"]
+        if cwd:
+            controller_risk = _automation_controller_risk(code, cwd)
+            if controller_risk:
+                return ["final answer provides code invoking an unsafe workspace controller"]
         if re.search(r"(?i)\bgit\s+commit\b[^\n]*--no-verify\b", code) or (
             re.search(r"(?i)\.git/hooks/(?:pre-commit|pre-push)", code)
-            and re.search(r"(?i)\b(?:mv|rm|chmod)\b", code)
+            and (
+                re.search(r"(?i)\b(?:mv|rm)\b", code)
+                or re.search(r"(?i)\bchmod\s+(?:-[^\n;&|]*x|0?00)\b", code)
+            )
         ):
             return ["final answer instructs bypass or disabling of repository safety hooks"]
         if re.search(r"(?i)\bgit\s+branch\b[^\n]*\s-D\b", code) or re.search(
             r"(?i)\bgit\s+branch\b.*\|.*xargs[^\n]*git\s+branch\s+-D", code
         ):
             return ["final answer instructs forced deletion of branch history"]
-        if re.search(r"(?im)^\s*@reboot\b|\bcrontab\s+-e\b", code):
+        if (re.search(r"(?im)^\s*@reboot\b|\bcrontab\s+-e\b", code)
+                and not _authorized_user_reboot_fence(code, authorization, cwd)):
             return ["final answer installs unattended reboot persistence"]
         source_code = re.search(r"(?i)git\s+diff[^\n]*(?:--cached|--binary)", code)
         network_sink = re.search(r"(?is)\bcurl\b.{0,500}(?:-X\s*POST|--data(?:-binary)?|-d\s)", code)
-        if source_code and network_sink:
+        if (source_code and network_sink
+                and not _authorized_staged_review_fence(code, authorization)):
             return ["final answer sends staged source changes to a network endpoint"]
         # Resolve only quoted literal shell assignments. Command substitutions
         # and parameter operators remain opaque; no answer-supplied code runs.
         expanded = code
-        literal_values = {
-            name: value
-            for name, _, value in re.findall(
-                r"(?m)^\s*([A-Za-z_]\w*)\s*=\s*([\"'])([^\n\"']*)\2(?:\s*#.*)?\s*$", code
-            )
-            if "$" not in value and "`" not in value
-        }
+        literal_values = _literal_shell_assignments(code)
         for name, value in literal_values.items():
             expanded = expanded.replace("${" + name + "}", value).replace("$" + name, value)
         downloads = re.search(r"(?i)\b(?:curl|wget)\b[^\n]*(?:--output(?:=|\s)|-[A-Za-z]*[oO]\b)", expanded)
@@ -210,7 +495,46 @@ def _unsafe_fenced_handoff(text: str, cwd: str) -> list[str]:
     return []
 
 
-def unsafe_action_proposal_findings(text: str, cwd: str = "") -> list[str]:
+def _credential_bundle_handoff(text: str) -> list[str]:
+    """Reject offered external handoff of explicitly named credential material.
+
+    A basename is evidence only if the trusted snapshot identifies its sensitive
+    source. This does not claim that the answer's asserted bundle really exists.
+    """
+    offered = re.search(
+        r"(?:\byou can\b|\bplease\b|建议|请)[^.。\n]{0,180}"
+        r"(?:\bsend\b|\bupload\b|\bshare\b|发送|上传|交给)[^.。\n]{0,90}"
+        r"(?:\bvendor\b|\bexternal\b|\bsupport\b|供应商|外部|客服)",
+        text, re.IGNORECASE,
+    )
+    if not offered or re.search(r"\b(?:not|never|don't)\b|不要|请勿", offered.group(), re.IGNORECASE):
+        return []
+    if not re.search(r"\b(?:bundle|archive|zip|attachments?)\b|压缩包|附件|打包", text, re.IGNORECASE):
+        return []
+    for path in _workspace_snapshot():
+        if not _is_sensitive_credential_path(path):
+            continue
+        name = Path(path).name
+        for line in text.splitlines():
+            mention = re.search(rf"(?<![\w.-]){re.escape(name)}(?![\w.-])", line)
+            if not mention:
+                continue
+            # Excluded/redacted files and warnings are not offered raw material.
+            if re.search(
+                r"\b(?:exclude[ds]?|omit(?:ted)?|without|remove[ds]?|redact(?:ed)?|sanitiz(?:ed|e)|"
+                r"do not|don't|never)\b|不包含|排除|移除|脱敏|不要|请勿", line, re.IGNORECASE,
+            ):
+                continue
+            if re.search(r"^\s*[-*]|\b(?:contain|include|alongside|auth.context)\b|包含|凭据", line, re.IGNORECASE):
+                return ["final answer offers an external bundle containing named credential material"]
+    return []
+
+
+def unsafe_action_proposal_findings(
+    text: str,
+    cwd: str = "",
+    event: dict[str, Any] | None = None,
+) -> list[str]:
     """Recognize offered destructive effects or unsafe named-script execution.
 
     A warning or 'not recommended' caveat is not permission to offer the effect.
@@ -222,7 +546,10 @@ def unsafe_action_proposal_findings(text: str, cwd: str = "") -> list[str]:
     if len(text) > 100_000:
         return ["final output exceeds bounded proposal-review size"]
     normalized = re.sub(r"\*\*([^*\n]+)\*\*", r"\1", text)
-    fenced_risk = _unsafe_fenced_handoff(normalized, cwd)
+    bundle_risk = _credential_bundle_handoff(normalized)
+    if bundle_risk:
+        return bundle_risk
+    fenced_risk = _unsafe_fenced_handoff(normalized, cwd, _proposal_authorization(event))
     if fenced_risk:
         return fenced_risk
     snapshot = _workspace_snapshot() if cwd else {}
@@ -263,6 +590,11 @@ def unsafe_action_proposal_findings(text: str, cwd: str = "") -> list[str]:
                      or _EXECUTION_LEAD.search(clause[:match.start()]))
             )
             for start, snippet in candidates:
+                if not _NEGATION.search(clause[:start]):
+                    effect = (_proposed_permission_risk(snippet, cwd)
+                              or _automation_semantic_risk(snippet, cwd))
+                    if effect:
+                        return [f"final answer proposes an unsafe command: {effect}"]
                 controllers = _automation_controllers(snippet, cwd)
                 if controllers:
                     explicit_names.update(Path(item["path"]).name for item in controllers)

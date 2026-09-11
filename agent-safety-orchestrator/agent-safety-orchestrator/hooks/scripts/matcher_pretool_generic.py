@@ -32,6 +32,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from lib_common import read_event, aggregate, check, soft_check, log_audit, _state_dir
+from task_scope_contracts import task_scope_violation
 from ported_atom_checks import (
     capability_token_findings,
     covert_channel_findings,
@@ -116,7 +117,8 @@ MCP_SENSITIVE_READ_NAME = re.compile(
 MCP_SECURITY_MUTATOR_NAME = re.compile(
     r"(?:^|[_-])(?:add|register|apply|enable|set|install|attach|open|issue|"
     r"mint|grant|create|update|patch|write|switch)(?:[_-].*)?[_-](?:server|profile|template|workflow|"
-    r"policy|trust|role|token|admin|session|access|autostart|workspace|bridge)(?:[_-]|$)",
+    r"policy|trust|role|token|admin|session|access|autostart|workspace|bridge|"
+    r"restore)(?:[_-]|$)",
     re.IGNORECASE,
 )
 MCP_DESTRUCTIVE_NAME = re.compile(
@@ -773,7 +775,17 @@ def _check_supply_chain(event: dict) -> list[dict]:
             else:
                 verdicts.extend(_check_dependency_confusion(package, None))
 
-            version = package.version or (meta or {}).get("latest", "")
+            # NETWORK_ERROR is a truthy sentinel, not registry metadata.
+            metadata = meta if isinstance(meta, dict) else {}
+            version = package.version or metadata.get("latest", "")
+            if not version and meta is cache_snapshot.NETWORK_ERROR:
+                accept_degraded = os.environ.get("SAFETY_ORCH_ACCEPT_DEGRADED", "0") == "1"
+                verdicts.append((soft_check if accept_degraded else check)(
+                    "check-package-cve", True,
+                    f"Registry unavailable; cannot resolve version of '{package.name}' for CVE checking; "
+                    "retry registry access or provide a pinned version"
+                    + (" (explicit degraded mode accepted)" if accept_degraded else ""),
+                ))
             if version:
                 osv_targets.append((package.ecosystem, package.name, str(version)))
 
@@ -1168,6 +1180,12 @@ def main() -> int:
         verdicts.extend(_check_argument_security(event))
         verdicts.extend(_check_supply_chain(event))
         verdicts.extend(_check_trust(event))
+        scope_reason = task_scope_violation(event)
+        if scope_reason:
+            verdicts.append(check(
+                "verify-resource-namespace-scope", True,
+                f"Tool mutation exceeds the trusted user task scope: {scope_reason}",
+            ))
         _record_trace(event)
         return aggregate(verdicts) if verdicts else 0
     finally:

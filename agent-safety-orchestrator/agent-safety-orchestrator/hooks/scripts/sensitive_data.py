@@ -16,8 +16,10 @@ from pathlib import Path
 from typing import Any
 
 from lib_common import _state_dir
+from sensitive_flow_analysis import analyze_command
 
-_READERS = {"cat", "head", "tail", "less", "more", "sed", "awk", "jq", "grep", "rg", "cut"}
+_ENCODING_READERS = {"base64", "base32", "xxd", "od", "hexdump"}
+_READERS = {"cat", "head", "tail", "less", "more", "sed", "awk", "jq", "grep", "rg", "cut"} | _ENCODING_READERS
 _NETWORK = {"curl", "wget", "nc", "ncat", "socat", "scp", "rsync"}
 _SAFE_ENV_SUFFIXES = {"example", "sample", "template", "dist"}
 
@@ -48,15 +50,23 @@ def _sensitive_class(raw: str) -> str:
     leaf = value.rsplit("/", 1)[-1]
     if leaf == ".env" or (leaf.startswith(".env.") and leaf.removeprefix(".env.") not in _SAFE_ENV_SUFFIXES):
         return "dotenv"
+    if re.fullmatch(r"(?:local|prod|production|staging|development)\.env", leaf):
+        return "dotenv"
     if "/.ssh/" in value or value.startswith(("~/.ssh/", ".ssh/")):
         return "private_key" if leaf.startswith("id_") and not leaf.endswith(".pub") else ""
-    if value.endswith(("/.aws/credentials", "/.kube/config", "/.cargo/credentials", "/.cargo/credentials.toml", "/.npmrc", "/.netrc", "/.git-credentials", "/.vault-token", "/.docker/config.json", "/.config/gh/hosts.yml", "/.m2/settings.xml")):
+    if value.endswith(("/.aws/credentials", "/.kube/config", "/.cargo/credentials", "/.cargo/credentials.toml", "/.npmrc", "/.netrc", "/.git-credentials", "/.vault-token", "/.docker/config.json", "/.config/gh/hosts.yml", "/.m2/settings.xml", "/.pypirc", "/.config/pip/pip.conf", "/pip.conf")):
         return "credential_file"
     if value.endswith(("terraform.tfstate", "terraform.tfstate.backup")):
         return "credential_file"
-    if re.fullmatch(r"(?:service[_-]?account|credentials?|secrets?)[^/]*\.json", leaf):
+    if re.fullmatch(r"[^/]*(?:service[_-]?account|credentials?|secrets?)[^/]*\.json", leaf):
         return "credential_file"
-    if re.search(r"(?:^|/)credentials/(?:[^/]+)$", value) or "vault-token" in leaf:
+    if re.fullmatch(r"(?:[a-z0-9]+[-_])?(?:access|auth|api|consul|vault)[-_]?tokens?(?:\.(?:txt|json))?", leaf):
+        return "credential_file"
+    if re.fullmatch(r"(?:cookies?(?:\.sqlite)?|session[_-](?:export|tokens?)(?:\.json|\.txt)?)", leaf):
+        return "credential_file"
+    if leaf in {".confidential", ".sensitive", ".restricted"}:
+        return "protected_data"
+    if re.search(r"(?:^|/)(?:credentials?|secrets?)(?:/|$)", value) or "vault-token" in leaf:
         return "credential_file"
     if value in {"/etc/shadow", "/etc/sudoers"} or value.startswith("/etc/sudoers.d/"):
         return "access_control"
@@ -88,7 +98,17 @@ def sensitive_read_paths(command: str) -> list[tuple[str, str]]:
     for words in _segments(command):
         while words and (words[0] in {"sudo", "doas", "command"} or "=" in words[0]):
             words = words[1:]
-        if not words or Path(words[0]).name not in _READERS:
+        if not words:
+            continue
+        head = Path(words[0]).name
+        find_exec_reader = head == "find" and "-exec" in words and any(
+            Path(word).name in _READERS for word in words[words.index("-exec") + 1:]
+        )
+        substitution_reader = any(
+            re.search(r"\$\((?:[^\s()]+/)?(?:" + "|".join(sorted(_READERS)) + r")$", word)
+            for word in words
+        )
+        if head not in _READERS and not find_exec_reader and not substitution_reader:
             continue
         for word in words[1:]:
             if word.startswith("-") or word in {"p", "d", "s"}:
@@ -248,6 +268,21 @@ def _redact_json(output: str) -> str | None:
     return json.dumps(visit(payload), ensure_ascii=False, indent=2)
 
 
+def _encoded_sensitive_read(command: str) -> bool:
+    for words in _segments(command):
+        while words and (words[0] in {"sudo", "doas", "command"} or "=" in words[0]):
+            words = words[1:]
+        if not words:
+            continue
+        if Path(words[0]).name in _ENCODING_READERS:
+            return True
+        if words[0] == "find" and "-exec" in words:
+            tail = words[words.index("-exec") + 1:]
+            if tail and Path(tail[0]).name in _ENCODING_READERS:
+                return True
+    return False
+
+
 def minimize_sensitive_output(event: dict[str, Any], output: str) -> tuple[str, dict[str, Any]] | None:
     tool_input = event.get("tool_input") or {}
     command = str(tool_input.get("command") or "") if isinstance(tool_input, dict) else ""
@@ -256,7 +291,12 @@ def minimize_sensitive_output(event: dict[str, Any], output: str) -> tuple[str, 
         return None
     kinds = {kind for _, kind in paths}
     digest = hashlib.sha256(output.encode(errors="replace")).hexdigest()
-    if kinds == {"dotenv"}:
+    if _encoded_sensitive_read(command):
+        # Encoded dotenv lines can look like KEY=value due to base64 padding.
+        # Retaining the apparent key would leak the encoded secret itself.
+        body = _metadata_view(output, "encoded-sensitive-file")
+        view_kind = "encoded-sensitive-metadata"
+    elif kinds == {"dotenv"}:
         body = _redact_assignments(output, strict=True)
         view_kind = "dotenv-keys"
     elif "private_key" in kinds or "access_control" in kinds:
@@ -321,39 +361,28 @@ def record_sensitive_read_flow(event: dict[str, Any]) -> None:
 
 
 def record_allowed_bash_flow(event: dict[str, Any]) -> None:
+    """Persist bounded path taint for allowed local copies and archives."""
     tool_input = event.get("tool_input") or {}
     command = str(tool_input.get("command") or "") if isinstance(tool_input, dict) else ""
     if not command:
         return
-    cwd = Path(str(event.get("cwd") or "/home/user")).resolve()
-    staged: list[str] = []
-    for words in _segments(command):
-        if not words:
-            continue
-        head = Path(words[0]).name
-        positional = [word for word in words[1:] if not word.startswith("-")]
-        if head in {"cp", "install"} and len(positional) >= 2 and _sensitive_class(positional[-2]):
-            destination = Path(positional[-1])
-            staged.append(str((destination if destination.is_absolute() else cwd / destination).resolve()))
-        if head in {"tar", "zip"} and any(_sensitive_class(word) for word in positional):
-            for index, word in enumerate(words[:-1]):
-                if word in {"-f", "--file", "-czf", "-cf"}:
-                    staged.append(str((cwd / words[index + 1]).resolve()))
-    if not staged:
-        return
     state = _load_flow(event)
-    existing = {str(value) for value in state.get("tainted_paths", [])}
-    existing.update(staged)
-    state["schema_version"] = 1
-    state["tainted_paths"] = sorted(existing)[:64]
-    payload = state
+    initial = {str(value) for value in state.get("tainted_paths", []) if value}
+    sources = {
+        str(item.get("path")) for item in state.get("sensitive_sources", [])
+        if isinstance(item, dict) and item.get("path")
+    }
+    analysis = analyze_command(command, event, _sensitive_class, initial, sources)
+    if not analysis.tainted_paths or analysis.tainted_paths == initial:
+        return
+    state["schema_version"] = 2
+    state["tainted_paths"] = sorted(analysis.tainted_paths)[:128]
     path = _flow_path(event)
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
+        path.write_text(json.dumps(state, sort_keys=True) + "\n", encoding="utf-8")
     except OSError:
         pass
-
 
 def _network_file_inputs(command: str, cwd: Path) -> set[str]:
     """Return normalized local files explicitly consumed by supported network sinks."""
@@ -497,7 +526,22 @@ def _network_stdin_file_inputs(command: str, cwd: Path) -> set[str]:
     return found
 
 
+
+def sensitive_command_risk(command: str, event: dict[str, Any]) -> str:
+    """Return a bounded protected-source transfer risk for a shell payload."""
+    state = _load_flow(event)
+    initial = {str(value) for value in state.get("tainted_paths", []) if value}
+    sources = {
+        str(item.get("path")) for item in state.get("sensitive_sources", [])
+        if isinstance(item, dict) and item.get("path")
+    }
+    return analyze_command(command, event, _sensitive_class, initial, sources).risk
+
+
 def tainted_sink_risk(command: str, event: dict[str, Any]) -> str:
+    command_risk = sensitive_command_risk(command, event)
+    if command_risk:
+        return command_risk
     has_network = "/dev/tcp/" in command
     for words in _segments(command):
         stripped = list(words)

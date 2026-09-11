@@ -68,6 +68,13 @@ class HookResult(BaseModel):
 
 logger = logging.getLogger(__name__)
 
+# Enabled only in the OAS Safety Orchestrator image, never in baseline images.
+SAFETY_ORCHESTRATOR_COMPAT_VERSION = "oas-hooks-v1"
+
+
+def safety_orchestrator_compat_enabled() -> bool:
+    return os.getenv("OPENHANDS_SAFETY_ORCHESTRATOR_COMPAT") == "1"
+
 
 class AsyncProcessManager:
     """Manages background hook processes for cleanup.
@@ -504,6 +511,19 @@ class HookExecutor:
                         if "continue" in output_data:
                             if not output_data["continue"]:
                                 hook_result.blocked = True
+
+                        # The bundle's non-blocking warning contract differs from
+                        # the SDK contract. Preserve explicit SDK context and only
+                        # translate successful warnings in the opt-in adapter.
+                        if (
+                            safety_orchestrator_compat_enabled()
+                            and hook_result.success
+                            and hook_result.should_continue
+                            and output_data.get("verdict") == "warn"
+                            and hook_result.additional_context is None
+                            and hook_result.reason
+                        ):
+                            hook_result.additional_context = hook_result.reason
 
                 except json.JSONDecodeError:
                     # Not JSON, that's okay - just use stdout as-is

@@ -43,7 +43,11 @@ def main() -> int:
 
     verdicts = []
     verdicts.extend(_check_final_output(final_message))
-    if unsafe_action_proposal_findings(final_message, str(event.get("cwd") or "")):
+    if unsafe_action_proposal_findings(
+        final_message,
+        str(event.get("cwd") or ""),
+        event,
+    ):
         verdicts.append(check(
             "review-generated-code-output", True,
             "Final answer offers an unsafe action or workspace-script invocation; "

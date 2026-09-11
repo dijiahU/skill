@@ -263,6 +263,33 @@ def _bash_recovery_profile(command: str, cwd: str) -> tuple[bool, str]:
             continue
         if head == "git" and len(segment) >= 2 and segment[1] in {"status", "diff", "log", "show"}:
             continue
+        # Fixed diagnostic grammars only; arbitrary interpreter programs,
+        # package installation and service mutation still require normal review.
+        if head == "which" and len(segment) > 1 and all(
+            re.fullmatch(r"[A-Za-z0-9_.+-]+", arg) for arg in segment[1:]
+        ):
+            continue
+        if head == "ps" and segment[1:] in (["aux"], ["-ef"], ["-A"], []):
+            continue
+        if re.fullmatch(r"(?:python(?:[23](?:\.[0-9]+)?)?|R|node|ruby|perl)", head) and segment[1:] in (["--version"], ["-V"]):
+            continue
+        if re.fullmatch(r"pip(?:[23](?:\.[0-9]+)?)?", head):
+            args = segment[1:]
+            if args in (["--version"], ["list"], ["freeze"], ["check"]):
+                continue
+            if len(args) >= 2 and args[0] == "show" and all(
+                re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", arg) for arg in args[1:]
+            ):
+                continue
+        if head == "sed":
+            # Only an explicit numeric line-print program. No -i, e/w/r,
+            # alternate script files, or ambiguous combined option parsing.
+            args = segment[1:]
+            if (len(args) >= 3 and args[0] == "-n"
+                    and re.fullmatch(r"[0-9]+(?:,[0-9]+)?p", args[1])
+                    and all(not arg.startswith("-") for arg in args[2:])):
+                continue
+            return False, "sed-not-bounded-line-reader"
         if head in readers:
             if head == "find" and any(word in {"-delete", "-exec", "-execdir", "-ok", "-okdir", "-fprintf", "-fprint", "-fls"} for word in segment[1:]):
                 return False, "mutating-find"
@@ -395,11 +422,21 @@ def _jobs_for(codex_event: dict):
     if ev == "PostToolUse":
         out = (codex_event.get("tool_response") or codex_event.get("tool_output")
                or codex_event.get("output") or "")
-        metadata = (codex_event.get("response_metadata")
-                    or codex_event.get("tool_response_metadata") or {})
+        # Preserve host execution metadata independently: a failure in either
+        # envelope must not be hidden by a success in the other. Never infer
+        # execution status from application-controlled output or tool input.
+        execution_context = {
+            key: codex_event[key]
+            for key in (
+                "response_metadata", "tool_response_metadata", "exit_code",
+                "exitCode", "returncode", "success", "ok", "executed",
+                "status", "tool_status", "execution_status",
+            )
+            if key in codex_event
+        }
         return [("matcher_posttool.py",
-                 {**_shared_context(codex_event), "tool_name": normalized_tool, "tool_input": ti, "tool_response": out,
-                  "response_metadata": metadata})]
+                 {**_shared_context(codex_event), **execution_context,
+                  "tool_name": normalized_tool, "tool_input": ti, "tool_response": out})]
 
     if ev == "SubagentStart":
         return [("matcher_task.py", {**_shared_context(codex_event), "tool_name": "Task", "tool_input": ti})]
@@ -575,9 +612,14 @@ def main() -> int:
         if not allowed:
             usage["decision_kind"] = "high_risk_block"
             usage["risk_class"] = "recovery-scope"
+            usage["recovery_budget_exhausted"] = eligible
             deny_reason = (
+                "This action passed its matcher and recovery scope check, but the "
+                f"per-turn recovery budget ({MAX_RECOVERY_ACTIONS} actions) is exhausted."
+                if eligible else
                 "A prior high-risk action was denied. This different action passed its matcher "
-                "but is outside the bounded read-only or narrowly scoped recovery channel."
+                "but is outside the bounded read-only or narrowly scoped recovery channel "
+                f"({recovery_reason})."
             )
             return _deny_tool_event(ev, deny_reason, usage)
         latch_state = _record_recovery(codex_event, latch_state)

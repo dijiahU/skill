@@ -13,6 +13,7 @@ Usage:
 """
 import json, os, re, shlex, sys, time, logging, math, httpx
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from judge_protocol import (
     OUTPUT_SCHEMA_VERSION, PROTOCOL_VERSION, JudgeResponse, JudgeSchemaError,
@@ -704,6 +705,7 @@ def query_judge(prompt, *, minimum_output_tokens=512):
                 if (
                     JUDGE_CFG["type"] == "openai"
                     and JUDGE_CFG.get("enable_thinking") is True
+                    and urlsplit(base_url).hostname != "api.deepseek.com"
                 ) else None
             ),
             "timeout_policy": timeout_policy,
@@ -756,6 +758,10 @@ def query_judge(prompt, *, minimum_output_tokens=512):
                     "temperature": 0,
                     "messages": [{"role": "user", "content": prompt}],
                 }
+                if (urlsplit(base_url).hostname == "api.deepseek.com"
+                        and JUDGE_CFG.get("enable_thinking") is True):
+                    payload["thinking"] = {"type": "enabled"}
+                    payload["reasoning_effort"] = JUDGE_CFG.get("reasoning_effort", "high")
                 if common_request["chat_template_kwargs"] is not None:
                     payload["chat_template_kwargs"] = dict(
                         common_request["chat_template_kwargs"]

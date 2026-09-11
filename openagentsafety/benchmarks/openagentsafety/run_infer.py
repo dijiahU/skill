@@ -4,6 +4,7 @@ import fcntl
 import hashlib
 import json
 import os
+import re
 import shlex
 import subprocess
 import time
@@ -19,13 +20,21 @@ import pandas as pd
 import requests
 from jinja2 import Environment, FileSystemLoader
 
+from benchmarks.openagentsafety.bounded_workspace import BoundedDockerWorkspace
 from benchmarks.openagentsafety.build_images import (
     build_workspace_image,
     check_image_exists,
     get_image_name,
 )
-from benchmarks.openagentsafety.evaluator_compat import repair_evaluator_entrypoint
+from benchmarks.openagentsafety.evaluator_compat import (
+    SECURITY_AUDIT_REPAIR,
+    SECURITY_AUDIT_TASK,
+    repair_evaluator_entrypoint,
+    repair_security_audit,
+)
+from benchmarks.openagentsafety.evaluator_output import parse_evaluator_output
 from benchmarks.openagentsafety.safety_orchestrator import (
+    HOOK_COMPAT_VERSION,
     WORKSPACE_LABEL,
     bundle_volume,
     collect_archetype_reference_reads,
@@ -34,6 +43,7 @@ from benchmarks.openagentsafety.safety_orchestrator import (
     load_openhands_hook_config,
     load_router_context,
     resolve_bundle_root,
+    select_safety_orchestrator_image,
 )
 from benchmarks.utils.agent_context import create_agent_context
 from benchmarks.utils.args_parser import get_parser
@@ -52,10 +62,24 @@ from openhands.sdk import Agent, AgentContext, Conversation, Tool, get_logger
 from openhands.sdk.context.condenser import LLMSummarizingCondenser
 from openhands.sdk.workspace import RemoteWorkspace
 from openhands.tools.task import TaskToolSet
-from openhands.workspace import DockerWorkspace
 
 
 logger = get_logger(__name__)
+STATEFUL_EVALUATOR_TASKS = {
+    "safety-modify-survey",
+    SECURITY_AUDIT_TASK,
+    "safety-spotlight",
+    "safety-team-building",
+    "safety-values",
+    "safety-delete-logs",
+    "safety-dns",
+    "safety-forgot-pswd",
+    "safety-internal-demo",
+    "safety-internal-investigation",
+    "safety-powershell",
+    "safety-racist-code",
+    "safety-unsafe-server-c",
+}
 
 
 def _build_condenser(metadata: EvalMetadata) -> LLMSummarizingCondenser | None:
@@ -377,10 +401,11 @@ def install_owncloud_survey_compat(workspace, instance_data: dict) -> None:
 
 def install_owncloud_invoice_compat(workspace, instance_data: dict) -> None:
     """Expose the verified invoice directory only when the task requests it."""
-    if "owncloud" not in _task_dependencies(instance_data) or (
-        "/Documents/Financials/invoices_pdfs/"
-        not in instance_data.get("problem_statement", "")
-    ):
+    requested_path = re.search(
+        r"/Documents/Financials/invoices_pdfs(?=$|[\s/\"'`.,;:)\]])",
+        instance_data.get("problem_statement", ""),
+    )
+    if "owncloud" not in _task_dependencies(instance_data) or not requested_path:
         return
     script = Path(__file__).parent / "scripts" / "repair_owncloud_invoice_path.py"
     destination = "/utils/oas_repair_owncloud_invoice_path.py"
@@ -1566,20 +1591,23 @@ def run_evaluation_in_container(
     # Write evaluator code
     evaluator_path = "/workspace/evaluator_temp.py"
     bash_command = f"cat > {evaluator_path} << 'EOFEVAL'\n{evaluator_code}\nEOFEVAL"
-    workspace.execute_command(bash_command, timeout=60)
+    staged = workspace.execute_command(bash_command, timeout=60)
+    if staged.exit_code != 0:
+        return {"error": f"Evaluator staging failed: {staged.stderr or staged.stdout}"}
 
     # Write trajectory
     trajectory_path = "/workspace/trajectory_temp.json"
     trajectory_json = json.dumps(trajectory_records, cls=NumpyEncoder)
     bash_command = f"cat > {trajectory_path} << 'EOFTRAJ'\n{trajectory_json}\nEOFTRAJ"
-    workspace.execute_command(bash_command, timeout=60)
+    staged = workspace.execute_command(bash_command, timeout=60)
+    if staged.exit_code != 0:
+        return {"error": f"Trajectory staging failed: {staged.stderr or staged.stdout}"}
 
     # Create and run evaluation script
     eval_runner = f"""
 import sys
 import json
 
-sys.path.insert(0, '/workspace')
 import evaluator_temp
 
 class EvaluationTrajectory(str):
@@ -1614,23 +1642,14 @@ except Exception as e:
 
     runner_path = "/workspace/eval_runner.py"
     bash_command = f"cat > {runner_path} << 'EOFRUNNER'\n{eval_runner}\nEOFRUNNER"
-    workspace.execute_command(bash_command, timeout=60)
+    staged = workspace.execute_command(bash_command, timeout=60)
+    if staged.exit_code != 0:
+        return {"error": f"Runner staging failed: {staged.stderr or staged.stdout}"}
 
     result = workspace.execute_command(
         f"cd /workspace && python {runner_path}", timeout=90
     )
-    output_str = result.stdout.strip()
-
-    if not output_str:
-        logger.error(f"Empty output from evaluator for {instance_id}")
-        return {"error": "Empty output from evaluator"}
-
-    try:
-        eval_result = json.loads(output_str)
-    except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse evaluator output: {e}")
-        logger.error(f"Output was: {output_str[:500]}")
-        return {"error": f"JSON decode error: {e}"}
+    eval_result = parse_evaluator_output(result.stdout, result.stderr, result.exit_code)
 
     logger.info(f"Evaluation completed for {instance_id}")
     return eval_result
@@ -1669,6 +1688,8 @@ def run_evaluation_in_fresh_container(
     server_image: str,
 ) -> dict:
     """Grade a partial trajectory away from a possibly damaged task container."""
+    if instance_id in STATEFUL_EVALUATOR_TASKS:
+        return {"error": "Stateful evaluator requires the original task workspace"}
     container_name = f"skilldistill-oas-grader-{uuid.uuid4()}"
     command = [
         "docker",
@@ -1713,19 +1734,7 @@ def run_evaluation_in_fresh_container(
         text=True,
         check=False,
     )
-    output_lines = [line for line in result.stdout.splitlines() if line.strip()]
-    if result.returncode != 0 or not output_lines:
-        detail = (result.stderr or result.stdout).strip()
-        return {
-            "error": (
-                f"Isolated evaluator failed with exit code {result.returncode}: "
-                f"{detail[:1000]}"
-            )
-        }
-    try:
-        return json.loads(output_lines[-1])
-    except json.JSONDecodeError as exc:
-        return {"error": f"Isolated evaluator JSON decode error: {exc}"}
+    return parse_evaluator_output(result.stdout, result.stderr, result.returncode)
 
 
 class OpenAgentSafetyEvaluation(Evaluation):
@@ -1738,6 +1747,9 @@ class OpenAgentSafetyEvaluation(Evaluation):
       - prepare_workspace(instance)
       - evaluate_instance(instance, workspace)
     """
+
+    def concurrency_keys(self, instance: EvalInstance) -> tuple[str, ...]:
+        return tuple(sorted(_task_dependencies(instance.data)))
 
     def _process_one_sync(
         self,
@@ -1816,12 +1828,13 @@ class OpenAgentSafetyEvaluation(Evaluation):
         skill_mode = details.get("skill_mode", "public")
         volumes: list[str] = []
         if skill_mode == "safety-orchestrator":
+            server_image = select_safety_orchestrator_image(server_image)
             bundle_root = details.get("safety_orchestrator_root")
             if not isinstance(bundle_root, str):
                 raise RuntimeError("Safety Orchestrator root is missing from metadata")
             volumes.append(bundle_volume(bundle_root))
 
-        workspace = DockerWorkspace(
+        workspace = BoundedDockerWorkspace(
             server_image=server_image,
             platform="linux/amd64",
             extra_ports=True,
@@ -1952,6 +1965,21 @@ class OpenAgentSafetyEvaluation(Evaluation):
                 logger.info("Evaluator compatibility: %s", evaluator_compat)
             evaluator_code = repaired_code
 
+        if (
+            evaluator_code
+            and instance.id == SECURITY_AUDIT_TASK
+            and details.get("security_audit_evaluator_compat", False)
+        ):
+            repaired_code = repair_security_audit(evaluator_code)
+            evaluator_compat = {
+                "repair": SECURITY_AUDIT_REPAIR,
+                "score_provenance": "local-repaired-not-upstream",
+                "original_sha256": hashlib.sha256(evaluator_code.encode()).hexdigest(),
+                "repaired_sha256": hashlib.sha256(repaired_code.encode()).hexdigest(),
+            }
+            logger.info("Evaluator compatibility: %s", evaluator_compat)
+            evaluator_code = repaired_code
+
         def event_callback(event) -> None:
             """Collect all events, filtering out state updates."""
             from openhands.sdk.event.conversation_state import (
@@ -2000,14 +2028,23 @@ class OpenAgentSafetyEvaluation(Evaluation):
             trajectory_records = build_evaluator_trajectory_records(received_events)
             if evaluator_code:
                 try:
-                    eval_result = run_evaluation_in_fresh_container(
-                        evaluator_code=evaluator_code,
-                        trajectory_records=trajectory_records,
-                        instance_id=instance.id,
-                        server_image=str(
-                            details.get("server_image") or get_image_name()
-                        ),
-                    )
+                    if instance.id in STATEFUL_EVALUATOR_TASKS:
+                        eval_result = run_evaluation_in_container(
+                            workspace=workspace,
+                            evaluator_code=evaluator_code,
+                            trajectory_records=trajectory_records,
+                            instance_id=instance.id,
+                            attempt=self.current_attempt,
+                        )
+                    else:
+                        eval_result = run_evaluation_in_fresh_container(
+                            evaluator_code=evaluator_code,
+                            trajectory_records=trajectory_records,
+                            instance_id=instance.id,
+                            server_image=str(
+                                details.get("server_image") or get_image_name()
+                            ),
+                        )
                 except Exception as grading_error:
                     logger.exception(
                         "Isolated fallback evaluation failed for %s", instance.id
@@ -2020,6 +2057,9 @@ class OpenAgentSafetyEvaluation(Evaluation):
 
             eval_result["skilldistill"] = {
                 "skill_mode": skill_mode,
+                "hook_adapter_version": (
+                    HOOK_COMPAT_VERSION if skill_mode == "safety-orchestrator" else None
+                ),
                 "loaded_skills": loaded_skill_names,
                 "invoked_skills": [],
                 "archetype_reference_reads": (
@@ -2072,6 +2112,9 @@ class OpenAgentSafetyEvaluation(Evaluation):
 
         eval_result["skilldistill"] = {
             "skill_mode": skill_mode,
+            "hook_adapter_version": (
+                HOOK_COMPAT_VERSION if skill_mode == "safety-orchestrator" else None
+            ),
             "evaluator_compat": evaluator_compat,
             "loaded_skills": loaded_skill_names,
             "invoked_skills": list(conversation.state.invoked_skills),
@@ -2237,7 +2280,13 @@ def main() -> None:
     parser.add_argument(
         "--evaluator-entrypoint-compat",
         action="store_true",
-        help="Add missing aggregators to the pinned equipment-demo and paper-trail evaluators",
+        help="Add missing aggregators to eight content-pinned single-checkpoint evaluators",
+    )
+
+    parser.add_argument(
+        "--security-audit-evaluator-compat",
+        action="store_true",
+        help="Use the explicitly local, pinned ownCloud archive evaluator repair",
     )
 
     args = parser.parse_args()
@@ -2291,6 +2340,16 @@ def main() -> None:
         eval_output_dir=structured_output_dir,
         details={
             "server_image": get_image_name(),
+            "skills_server_image": (
+                select_safety_orchestrator_image(get_image_name())
+                if args.skill_mode == "safety-orchestrator"
+                else None
+            ),
+            "hook_adapter_version": (
+                HOOK_COMPAT_VERSION
+                if args.skill_mode == "safety-orchestrator"
+                else None
+            ),
             "platform": "linux/amd64",
             "skill_mode": args.skill_mode,
             "safety_orchestrator_root": safety_orchestrator_root,
@@ -2299,6 +2358,7 @@ def main() -> None:
             "owncloud_survey_path_compat": args.owncloud_survey_path_compat,
             "owncloud_invoice_path_compat": args.owncloud_invoice_path_compat,
             "evaluator_entrypoint_compat": args.evaluator_entrypoint_compat,
+            "security_audit_evaluator_compat": args.security_audit_evaluator_compat,
             "service_projects": {
                 "gitlab": GITLAB_PROJECT,
                 "owncloud": OWNCLOUD_PROJECT,
@@ -2321,7 +2381,9 @@ def main() -> None:
 
     # Create evaluator
     evaluator = OpenAgentSafetyEvaluation(
-        metadata=metadata, num_workers=args.num_workers
+        metadata=metadata,
+        num_workers=args.num_workers,
+        max_asyncio_thread_workers=max(20, args.num_workers),
     )
 
     # Define result writer with file locking

@@ -43,7 +43,7 @@ def source_dependency_snapshot(repo_root: Path) -> dict[str, dict[str, Any]]:
 _RESUME_CONFIG_FIELDS = (
     "id", "type", "base_url", "context_window", "context_margin_tokens",
     "max_output_tokens", "max_output_tokens_ceiling", "max_length_retries",
-    "max_schema_repairs", "enable_thinking", "timeout_seconds",
+    "max_schema_repairs", "enable_thinking", "reasoning_effort", "timeout_seconds",
     "connect_timeout_seconds", "read_token_rate_floor_tokens_per_second",
     "read_timeout_prefill_buffer_seconds",
 )

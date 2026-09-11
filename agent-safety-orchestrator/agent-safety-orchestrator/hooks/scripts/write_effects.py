@@ -12,7 +12,7 @@ import json
 import os
 import re
 import shlex
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +20,13 @@ from ported_atom_checks import (
     ci_workflow_findings,
     install_hook_findings,
     malicious_install_findings,
+)
+from generated_security_effects import generated_security_findings
+from security_config_writes import security_config_write_findings
+from archive_privacy_effects import archive_privacy_effects
+from ssh_agent_forwarding import (
+    _context_key as _ssh_authorization_context,
+    agent_forwarding_write_findings,
 )
 
 _MAX_CONTENT = 1_000_000
@@ -33,6 +40,8 @@ class WriteEffect:
     method: str
     complete: bool = True
     removed_text: str = ""
+    privacy_reason: str = ""
+    authorization_context: str = ""
 
 
 @dataclass(frozen=True)
@@ -65,8 +74,9 @@ _SECURITY_CONTROL_PATTERNS = (
 )
 
 _SAFETY_BYPASS_CONTENT = re.compile(
-    r"(?is)(?:\"?(?:autoApprove|allowAllDomains|auto_approve|"
+    r"(?is)(?:\"?(?:autoApprove|allowAllDomains|auto_approve(?:_shell)?|"
     r"allow_external_fetch|allow_quarantined)\"?\s*[:=]\s*(?:true|1|yes|on))|"
+    r"(?:\bapproval_mode\b\s*[:=]\s*[\"']?auto[\"']?)|"
     r"(?:NODE_OPTIONS\s*\"?\s*[:=]\s*\"?[^\n]*--require\s+"
     r"(?:/tmp|/var/tmp|\.\.?/)[^\s\"']+)|"
     r"(?:core\.hooksPath\s*[:=]?\s*(?:/dev/null|NUL))"
@@ -560,6 +570,10 @@ def _resolve(raw: str, cwd: Path) -> Path:
     value = raw.strip("'\"")
     if value.startswith("~/"):
         return (Path("/home/user") / value[2:]).resolve()
+    if value.startswith("$HOME/"):
+        return (Path("/home/user") / value[6:]).resolve()
+    if value.startswith("${HOME}/"):
+        return (Path("/home/user") / value[8:]).resolve()
     path = Path(value)
     return (path if path.is_absolute() else cwd / path).resolve()
 
@@ -597,6 +611,14 @@ def _literal(node: ast.AST, constants: dict[str, Any]) -> Any:
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
         left, right = _literal(node.left, constants), _literal(node.right, constants)
         return left + right if isinstance(left, str) and isinstance(right, str) else None
+    if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+        receiver = _literal(node.func.value, constants)
+        if node.func.attr == "replace" and isinstance(receiver, str) and len(node.args) in {2, 3}:
+            old = _literal(node.args[0], constants)
+            new = _literal(node.args[1], constants)
+            count = _literal(node.args[2], constants) if len(node.args) == 3 else None
+            if isinstance(old, str) and isinstance(new, str) and (count is None or isinstance(count, int)):
+                return receiver.replace(old, new, count) if isinstance(count, int) else receiver.replace(old, new)
     return None
 
 
@@ -617,17 +639,8 @@ def _python_write_effects(code: str, cwd: Path, files: dict[str, str], method: s
         return []
     constants: dict[str, Any] = {}
     handles: dict[str, tuple[str, bool]] = {}
+    read_handles: dict[str, str] = {}
     effects: list[WriteEffect] = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
-            value = _literal(node.value, constants)
-            if value is not None:
-                constants[node.targets[0].id] = value
-            if isinstance(node.value, ast.Call) and _call_name(node.value.func) in {"open", "io.open"} and node.value.args:
-                raw_path = _literal(node.value.args[0], constants)
-                mode_value = _literal(node.value.args[1], constants) if len(node.value.args) > 1 else "r"
-                if isinstance(raw_path, str) and isinstance(mode_value, str) and any(flag in mode_value for flag in "wax+"):
-                    handles[node.targets[0].id] = (raw_path, "a" in mode_value)
     for node in ast.walk(tree):
         if isinstance(node, (ast.With, ast.AsyncWith)):
             for item in node.items:
@@ -637,8 +650,51 @@ def _python_write_effects(code: str, cwd: Path, files: dict[str, str], method: s
                     continue
                 raw_path = _literal(call.args[0], constants)
                 mode_value = _literal(call.args[1], constants) if len(call.args) > 1 else "r"
-                if isinstance(raw_path, str) and isinstance(mode_value, str) and any(flag in mode_value for flag in "wax+"):
-                    handles[target.id] = (raw_path, "a" in mode_value)
+                if isinstance(raw_path, str) and isinstance(mode_value, str):
+                    if any(flag in mode_value for flag in "wax+"):
+                        handles[target.id] = (raw_path, "a" in mode_value)
+                    else:
+                        read_handles[target.id] = raw_path
+
+    def value_of(node: ast.AST) -> Any:
+        value = _literal(node, constants)
+        if value is not None:
+            return value
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and not node.args:
+            if node.func.attr == "read" and isinstance(node.func.value, ast.Name):
+                raw_path = read_handles.get(node.func.value.id)
+                if raw_path:
+                    return _snapshot_read(_resolve(raw_path, cwd), files)
+            if node.func.attr in {"read_text", "read_bytes"}:
+                receiver = node.func.value
+                if isinstance(receiver, ast.Call) and _call_name(receiver.func) in {"Path", "pathlib.Path"} and receiver.args:
+                    raw_path = _literal(receiver.args[0], constants)
+                    if isinstance(raw_path, str):
+                        return _snapshot_read(_resolve(raw_path, cwd), files)
+        return None
+
+    # A few fixed-point passes resolve bounded read -> replace -> write chains
+    # even when literal replacement strings are assigned after the read.
+    assignments = sorted([
+        node for node in ast.walk(tree)
+        if isinstance(node, ast.Assign) and len(node.targets) == 1
+        and isinstance(node.targets[0], ast.Name)
+    ], key=lambda node: (getattr(node, "lineno", 0), getattr(node, "col_offset", 0)))
+    for _ in range(4):
+        changed = False
+        for node in assignments:
+            name = node.targets[0].id
+            value = value_of(node.value)
+            if value is None:
+                if name in constants:
+                    constants.pop(name, None)
+                    changed = True
+                continue
+            if constants.get(name) != value:
+                constants[name] = value
+                changed = True
+        if not changed:
+            break
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call):
             continue
@@ -694,7 +750,10 @@ def _extract_heredocs(command: str, cwd: Path, files: dict[str, str]) -> tuple[l
             break
         body = "\n".join(lines[index + 1:end]) + "\n"
         prefix = header[:marker.start()]
-        if re.search(r"\bpython(?:\d+(?:\.\d+)*)?\s+-\b", prefix):
+        # ``-`` is a non-word character, so a trailing ``\b`` can never
+        # match the ordinary ``python3 - <<EOF`` spelling when whitespace
+        # follows it. Require shell whitespace/end explicitly instead.
+        if re.search(r"\bpython(?:\d+(?:\.\d+)*)?\s+-(?:\s|$)", prefix):
             python_bodies.append(body)
         target = None
         append = False
@@ -752,9 +811,127 @@ def _shell_segments(command: str) -> list[list[str]]:
     return segments
 
 
+def _copy_effects(command: str, initial_cwd: Path, files: dict[str, str]) -> list[WriteEffect]:
+    """Recover literal one-source cp/install effects from active shell text."""
+    active, _, _ = _shell_heredoc_blocks(command)
+    cwd = initial_cwd
+    effects: list[WriteEffect] = []
+    for words in _shell_segments(active):
+        if not words:
+            continue
+        if Path(words[0]).name == "cd" and len(words) == 2:
+            cwd = _resolve(words[1], cwd)
+            continue
+        while words and words[0] in {"sudo", "doas", "command"}:
+            words = words[1:]
+        if not words or Path(words[0]).name not in {"cp", "install"}:
+            continue
+        positional = [word for word in words[1:] if not word.startswith("-")]
+        if len(positional) != 2 or any(marker in word for word in positional for marker in ("*", "?", "[", "`", "$(")):
+            continue
+        source = _resolve(positional[0], cwd)
+        target = _resolve(positional[1], cwd)
+        content = _snapshot_read(source, files)
+        if content is None:
+            continue
+        previous = _snapshot_read(target, files)
+        effects.append(WriteEffect(
+            str(target), content[:_MAX_CONTENT], previous, "bash-literal-copy", True,
+        ))
+    return effects[:32]
+
+
+def _literal_redirect_effects(command: str, initial_cwd: Path, files: dict[str, str]) -> list[WriteEffect]:
+    """Recover literal echo/printf redirects, including a bounded bash -c layer."""
+    active, _, _ = _shell_heredoc_blocks(command)
+    effects: list[WriteEffect] = []
+
+    def inspect(script: str, cwd: Path, depth: int = 0) -> Path:
+        if depth > 2:
+            return cwd
+        for words in _shell_segments(script):
+            if not words:
+                continue
+            if Path(words[0]).name == "cd" and len(words) == 2:
+                cwd = _resolve(words[1], cwd)
+                continue
+            while words and words[0] in {"sudo", "doas", "command"}:
+                words = words[1:]
+            if len(words) >= 3 and Path(words[0]).name in {"bash", "sh"} and words[1] in {"-c", "-lc"}:
+                inspect(words[2], cwd, depth + 1)
+                continue
+            redirect_index = next((i for i, word in enumerate(words) if word in {">", ">>"}), None)
+            if redirect_index is None or redirect_index + 1 >= len(words):
+                continue
+            target_raw = words[redirect_index + 1]
+            if any(marker in target_raw for marker in ("$", "`", "*", "?", "[")):
+                continue
+            payload_words = words[:redirect_index]
+            if not payload_words:
+                continue
+            program = Path(payload_words[0]).name
+            content: str | None = None
+            if program == "echo":
+                args = payload_words[1:]
+                newline = "-n" not in args
+                expand = "-e" in args
+                args = [word for word in args if word not in {"-n", "-e", "-E"}]
+                if not any("$" in word or "`" in word for word in args):
+                    content = " ".join(args)
+                    if expand:
+                        try:
+                            content = bytes(content, "utf-8").decode("unicode_escape")
+                        except UnicodeDecodeError:
+                            content = None
+                    if content is not None and newline:
+                        content += "\n"
+            elif program == "printf" and len(payload_words) == 2 and not any(marker in payload_words[1] for marker in ("$", "`", "%")):
+                content = payload_words[1]
+            if content is None:
+                continue
+            path = _resolve(target_raw, cwd)
+            previous = _snapshot_read(path, files)
+            final = ((previous or "") + content) if words[redirect_index] == ">>" else content
+            effects.append(WriteEffect(
+                str(path), final[:_MAX_CONTENT], previous, "bash-literal-redirect", True,
+            ))
+        return cwd
+
+    inspect(active, initial_cwd)
+    return effects[:32]
+
+
 def _sed_apply(previous: str, expression: str) -> tuple[str | None, str]:
     # Bounded support for the common mutation forms. Unknown expressions remain
     # incomplete and are reviewed through the matched removed text instead.
+    addressed = re.fullmatch(r"/([^/]+)/(s.+)", expression)
+    if addressed:
+        try:
+            address = re.compile(addressed.group(1))
+        except re.error:
+            return None, ""
+        kept: list[str] = []
+        removed_parts: list[str] = []
+        for line in previous.splitlines(keepends=True):
+            if not address.search(line) and addressed.group(1) not in line:
+                kept.append(line)
+                continue
+            candidate, removed = _sed_apply(line, addressed.group(2))
+            if candidate is None:
+                return None, ""
+            kept.append(candidate)
+            removed_parts.append(removed)
+        return "".join(kept), "".join(removed_parts)
+    single_delete = re.fullmatch(r"/([^/]+)/d", expression)
+    if single_delete:
+        try:
+            pattern = re.compile(single_delete.group(1))
+        except re.error:
+            return None, ""
+        lines = previous.splitlines(keepends=True)
+        removed = [line for line in lines if pattern.search(line)]
+        kept = [line for line in lines if not pattern.search(line)]
+        return "".join(kept), "".join(removed)
     deletion = re.fullmatch(r"/([^/]+)/,\+(\d+)d", expression)
     if deletion:
         try:
@@ -795,17 +972,31 @@ def _sed_apply(previous: str, expression: str) -> tuple[str | None, str]:
     if substitution:
         _, old, new, flags = substitution.groups()
         try:
-            pattern = re.compile(old, re.IGNORECASE if "I" in flags or "i" in flags else 0)
+            pattern_flags = re.MULTILINE
+            if "I" in flags or "i" in flags:
+                pattern_flags |= re.IGNORECASE
+            pattern = re.compile(old, pattern_flags)
         except re.error:
             return None, ""
-        removed = "\n".join(match.group() for match in pattern.finditer(previous))
-        return pattern.sub(new, previous, count=0 if "g" in flags else 1), removed
+        matches = list(pattern.finditer(previous))
+        if matches:
+            removed = "\n".join(match.group() for match in matches)
+            return pattern.sub(new, previous, count=0 if "g" in flags else 1), removed
+        # sed uses basic regex by default, where unescaped parentheses are
+        # literal. Fall back to an exact replacement only when the raw search
+        # text is present verbatim in the source.
+        if old in previous:
+            return previous.replace(old, new, -1 if "g" in flags else 1), old
+        return previous, ""
     return None, ""
 
 
 def _sed_effects(command: str, initial_cwd: Path, files: dict[str, str]) -> list[WriteEffect]:
     cwd = initial_cwd
     effects: list[WriteEffect] = []
+    working: dict[str, str] = {}
+    originals: dict[str, str | None] = {}
+    removed_by_path: dict[str, str] = {}
     for words in _shell_segments(command):
         if not words:
             continue
@@ -833,7 +1024,11 @@ def _sed_effects(command: str, initial_cwd: Path, files: dict[str, str]) -> list
             index += 1
         for raw_path in targets[:16]:
             path = _resolve(raw_path, cwd)
-            previous = _snapshot_read(path, files)
+            path_key = str(path)
+            if path_key not in originals:
+                originals[path_key] = _snapshot_read(path, files)
+            original = originals[path_key]
+            previous = working.get(path_key, original)
             if previous is None:
                 effects.append(WriteEffect(str(path), None, None, "bash-sed-in-place", False))
                 continue
@@ -846,9 +1041,13 @@ def _sed_effects(command: str, initial_cwd: Path, files: dict[str, str]) -> list
                 if candidate is None:
                     complete = False
                     break
+            combined_removed = (removed_by_path.get(path_key, "") + "".join(removed_parts))[:_MAX_CONTENT]
+            removed_by_path[path_key] = combined_removed
+            if candidate is not None:
+                working[path_key] = candidate
             effects.append(WriteEffect(
                 str(path), candidate[:_MAX_CONTENT] if candidate is not None else None,
-                previous, "bash-sed-in-place", complete, "".join(removed_parts)[:_MAX_CONTENT],
+                original, "bash-sed-in-place", complete, combined_removed,
             ))
     return effects
 
@@ -900,6 +1099,13 @@ def _patch_effects(patch: str, cwd: Path, files: dict[str, str]) -> list[WriteEf
     return effects[:32]
 
 
+def _bind_authorization_context(
+    effects: list[WriteEffect], event: dict[str, Any],
+) -> list[WriteEffect]:
+    context = _ssh_authorization_context(event)
+    return [replace(effect, authorization_context=context) for effect in effects]
+
+
 def extract_write_effects(event: dict[str, Any]) -> list[WriteEffect]:
     tool_input = event.get("tool_input") or {}
     if not isinstance(tool_input, dict):
@@ -910,7 +1116,7 @@ def extract_write_effects(event: dict[str, Any]) -> list[WriteEffect]:
     if tool_name in {"Write", "Edit", "MultiEdit", "apply_patch"}:
         patch = tool_input.get("patch") or tool_input.get("input")
         if isinstance(patch, str) and "*** Begin Patch" in patch:
-            return _patch_effects(patch, cwd, files)
+            return _bind_authorization_context(_patch_effects(patch, cwd, files), event)
         raw_path = str(tool_input.get("file_path") or tool_input.get("path") or "")
         if not raw_path:
             return []
@@ -924,13 +1130,25 @@ def extract_write_effects(event: dict[str, Any]) -> list[WriteEffect]:
             content = previous.replace(old, new, 1) if isinstance(previous, str) and isinstance(old, str) and isinstance(new, str) else new
         else:
             content = None
-        return [WriteEffect(str(path), content[:_MAX_CONTENT] if isinstance(content, str) else None, previous, "write-edit", isinstance(content, str))]
+        return _bind_authorization_context([
+            WriteEffect(
+                str(path), content[:_MAX_CONTENT] if isinstance(content, str) else None,
+                previous, "write-edit", isinstance(content, str),
+            )
+        ], event)
 
     command = tool_input.get("command") or event.get("command") or ""
     if tool_name not in {"Bash", "bash"} or not isinstance(command, str):
         return []
     effects, python_bodies = _extract_heredocs(command, cwd, files)
     effects.extend(_sed_effects(command, cwd, files))
+    effects.extend(_copy_effects(command, cwd, files))
+    effects.extend(_literal_redirect_effects(command, cwd, files))
+    for archive in archive_privacy_effects(command, cwd, files):
+        effects.append(WriteEffect(
+            archive.path, None, None, "bash-archive-privacy", False,
+            privacy_reason=archive.reason,
+        ))
     for body in python_bodies:
         effects.extend(_python_write_effects(body, cwd, files, "bash-python-heredoc"))
     for words in _shell_segments(command):
@@ -939,13 +1157,122 @@ def extract_write_effects(event: dict[str, Any]) -> list[WriteEffect]:
     unique: dict[tuple[str, str], WriteEffect] = {}
     for effect in effects:
         unique[(effect.path, effect.method)] = effect
-    return list(unique.values())[:32]
+    return _bind_authorization_context(list(unique.values())[:32], event)
+
+
+_GENERATED_SOURCE_HEADER = re.compile(
+    r"(?im)^\s*[#;/]*\s*source\s+of\s+truth\s*:\s*([^\s#;]+)\s*$"
+)
+
+
+def _normalized_generated_key(value: str) -> str:
+    key = re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
+    return key.removeprefix("default_")
+
+
+def _simple_scalar_assignments(content: str) -> dict[str, str]:
+    values: dict[str, str] = {}
+    for raw in content[:_MAX_CONTENT].splitlines():
+        match = re.match(r"^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_.-]*)\s*=\s*(.*?)\s*$", raw)
+        if not match or match.group(2).startswith(("$", "`")):
+            continue
+        value = match.group(2).split(" #", 1)[0].strip().strip("'\"")
+        values[_normalized_generated_key(match.group(1))] = value
+    return values
+
+
+def _generated_source_truth_risk(effect: WriteEffect) -> str:
+    """Reject direct generated-artifact drift when a declared source disagrees.
+
+    A current authoritative snapshot can show that the source was updated in a
+    preceding tool call. Only simple scalar assignments are compared; unknown
+    formats stay blocked instead of claiming synchronization.
+    """
+    previous = effect.previous or ""
+    header = _GENERATED_SOURCE_HEADER.search(previous)
+    if not header or not re.search(r"(?im)^\s*[#;/]*\s*auto[- ]generated\b", previous):
+        return ""
+    candidate = effect.content
+    if candidate == previous and not effect.removed_text:
+        return ""
+    if candidate is None or not effect.complete:
+        return "direct generated-file mutation cannot be verified against its declared source of truth"
+    source_ref = header.group(1).strip("'\"")
+    if any(mark in source_ref for mark in ("$", "`", "*", "?", "[")):
+        return "direct generated-file mutation has a non-literal source-of-truth reference"
+    artifact = Path(effect.path).resolve()
+    ref = Path(source_ref)
+    files = _snapshot_files()
+    sources: list[str] = []
+    if ref.is_absolute():
+        value = _snapshot_read(ref, files)
+        if value is not None:
+            sources.append(value)
+    else:
+        parent = artifact.parent
+        for _ in range(6):
+            source = _snapshot_read((parent / ref).resolve(), files)
+            if source is not None:
+                sources.append(source)
+                break
+            if parent == parent.parent:
+                break
+            parent = parent.parent
+    if not sources:
+        return "direct generated-file mutation cannot resolve its declared source of truth"
+    before_values = _simple_scalar_assignments(previous)
+    after_values = _simple_scalar_assignments(candidate)
+    changed = {key: value for key, value in after_values.items() if before_values.get(key) != value}
+    if not changed:
+        return "direct generated-file mutation is not attributable to a synchronized scalar source change"
+    for source_content in sources:
+        source_values = _simple_scalar_assignments(source_content)
+        if all(source_values.get(key) == value for key, value in changed.items()):
+            return ""
+    return "direct generated-file mutation disagrees with its declared source of truth"
 
 
 def review_write_effect(effect: WriteEffect) -> list[WriteFinding]:
     findings: list[WriteFinding] = []
     content = effect.content or ""
     path = effect.path
+    if effect.privacy_reason:
+        findings.append(WriteFinding(
+            "detect-secret-in-args", "block", effect.privacy_reason,
+            path, effect.method,
+        ))
+    generated_drift = _generated_source_truth_risk(effect)
+    if generated_drift:
+        findings.append(WriteFinding(
+            "audit-ci-workflow-security", "block", generated_drift,
+            path, effect.method,
+        ))
+    normalized_path = str(Path(path))
+    if (re.fullmatch(r"/(?:home/[^/]+|root)/\.bash_aliases", normalized_path)
+            and (effect.content is None or effect.content != effect.previous or effect.removed_text)):
+        findings.append(WriteFinding(
+            "detect-indirect-prompt-injection", "block",
+            "write changes the user's persistent shell alias configuration",
+            path, effect.method,
+        ))
+    for reason in security_config_write_findings(
+        path, effect.previous, effect.content,
+        complete=effect.complete, removed_text=effect.removed_text,
+    ):
+        findings.append(WriteFinding(
+            "audit-ci-workflow-security", "block", reason, path, effect.method,
+        ))
+    for reason in agent_forwarding_write_findings(
+        path, effect.previous, effect.content,
+        complete=effect.complete, context_key=effect.authorization_context,
+    ):
+        findings.append(WriteFinding(
+            "audit-ci-workflow-security", "block", reason, path, effect.method,
+        ))
+    for reason in generated_security_findings(path, content):
+        findings.append(WriteFinding(
+            "audit-ci-workflow-security", "block", reason, path, effect.method,
+        ))
     for finding in ci_workflow_findings(path, content):
         if finding.get("severity") in {"critical", "high"}:
             findings.append(WriteFinding("audit-ci-workflow-security", "block", str(finding.get("reason")), path, effect.method))

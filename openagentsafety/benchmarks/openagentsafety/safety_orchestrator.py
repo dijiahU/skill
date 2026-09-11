@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
 from openhands.sdk import AgentContext
-from openhands.sdk.hooks import HookConfig
+from openhands.sdk.hooks import HookConfig, conversation_hooks, executor
 from openhands.sdk.workspace import RemoteWorkspace
 
 
@@ -17,6 +19,49 @@ BUNDLE_CONTAINER_ROOT = "/opt/safety-orchestrator"
 ROUTER_SKILL_NAME = "safety-router-skill"
 ROUTER_WORKSPACE_PATH = f"/workspace/.agents/skills/{ROUTER_SKILL_NAME}"
 WORKSPACE_LABEL = "skilldistill.openagentsafety.workspace"
+HOOK_COMPAT_VERSION = "oas-hooks-v1"
+HOOK_COMPAT_LABEL = "skilldistill.openagentsafety.hooks-sha256"
+
+
+def hook_adapter_digest() -> str:
+    """Hash the actual SDK modules used by this consumer."""
+    digest = hashlib.sha256()
+    for module in (executor, conversation_hooks):
+        if module.__file__ is None:
+            raise RuntimeError("Cannot locate Safety Orchestrator SDK modules")
+        digest.update(Path(module.__file__).read_bytes())
+    return digest.hexdigest()
+
+
+def select_safety_orchestrator_image(base_image: str) -> str:
+    """Fail before task execution if the skills image lacks the current adapter.
+
+    Baseline never calls this function. No image is downloaded or built here.
+    """
+    image = os.getenv("OPENAGENTSAFETY_SKILLS_IMAGE") or (
+        f"{base_image}-{HOOK_COMPAT_VERSION}"
+    )
+    result = subprocess.run(
+        ["docker", "image", "inspect", image],
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"Build the local {HOOK_COMPAT_VERSION} skills image: {image}"
+        )
+    config = json.loads(result.stdout)[0]["Config"]
+    labels = config.get("Labels") or {}
+    if labels.get(
+        HOOK_COMPAT_LABEL
+    ) != hook_adapter_digest() or "OPENHANDS_SAFETY_ORCHESTRATOR_COMPAT=1" not in (
+        config.get("Env") or []
+    ):
+        raise RuntimeError(f"Skills image has a missing/stale hook adapter: {image}")
+    return image
+
 
 DEFAULT_BUNDLE_ROOT = (
     Path(__file__).resolve().parents[2].parent

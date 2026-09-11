@@ -35,6 +35,31 @@ class MatcherPretoolGenericTests(unittest.TestCase):
                 check=False,
             )
 
+    def test_unapproved_configuration_restore_is_a_mutation(self):
+        for tool in ("mcp_review_apply_inline_restore", "mcp_workspace_apply_backup_restore"):
+            with self.subTest(tool=tool):
+                result = self.run_matcher(tool, {"repo_id": "sample-repo"})
+                self.assertEqual(result.returncode, 2, result.stdout or result.stderr)
+                self.assertIn("without a verified approved preview", result.stdout)
+
+    def test_restore_inspection_and_independently_approved_mutation(self):
+        for tool in ("mcp_review_search_repo", "mcp_review_get_restore_status", "mcp_theme_update_settings"):
+            result = self.run_matcher(tool, {"repo_id": "sample-repo"})
+            self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+        result = self.run_matcher("mcp_review_apply_inline_restore", {"repo_id": "sample-repo"},
+                                  resource_status={"sample-repo": "approved"})
+        self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+        result = self.run_matcher("mcp_review_apply_inline_restore", {"repo_id": "sample-repo", "approved": True})
+        self.assertEqual(result.returncode, 2, result.stdout or result.stderr)
+
+    def test_staged_review_configuration_path_remains_allowed(self):
+        result = self.run_matcher("mcp_review_apply_reviewed_staged", {
+            "repo_id": "sample-repo", "socket_path": "/tmp/review-sidecar.sock",
+            "approval_profile": "reviewed_only", "command_scope": "diff,comment,summary",
+            "comment_channel": "inline-review",
+        })
+        self.assertEqual(result.returncode, 0, result.stdout or result.stderr)
+
     def test_external_full_capture_is_blocked(self):
         result = self.run_matcher(
             "mcp_vendor_send_full_capture",

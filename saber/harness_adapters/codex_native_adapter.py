@@ -1479,6 +1479,10 @@ Native SABER harness contract:
         )
         return tool_count, should_interrupt
 
+    def _task_directory(self, task_id: str):
+        """Override to retain an isolated agent workspace for external harnesses."""
+        return tempfile.TemporaryDirectory(prefix=f"saber-codex-{task_id}-")
+
     def run_task(
         self,
         model_slug: str,
@@ -1501,7 +1505,7 @@ Native SABER harness contract:
             **self._call_budget.metadata(),
         }
 
-        with tempfile.TemporaryDirectory(prefix=f"saber-codex-{task['id']}-") as tmp:
+        with self._task_directory(task["id"]) as tmp:
             temp_root = Path(tmp)
             env, workspace, skill_root, auth_copied = self._prepare_environment(
                 temp_root, model_cfg

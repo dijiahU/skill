@@ -23,7 +23,7 @@ class JudgeResumeConfigTests(unittest.TestCase):
                   'base_url': 'http://127.0.0.1:18020', 'context_window': 65536,
                   'context_margin_tokens': 2048, 'max_output_tokens': 6144,
                   'max_output_tokens_ceiling': 12288, 'max_length_retries': 1,
-                  'max_schema_repairs': 1, 'enable_thinking': True,
+                  'max_schema_repairs': 1, 'enable_thinking': True, 'reasoning_effort': 'high',
                   'timeout_seconds': 600, 'connect_timeout_seconds': 30,
                   'read_token_rate_floor_tokens_per_second': 6,
                   'read_timeout_prefill_buffer_seconds': 120}

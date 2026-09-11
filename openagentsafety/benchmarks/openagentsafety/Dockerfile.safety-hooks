@@ -1,0 +1,9 @@
+# Small, offline derivative of the already verified OAS agent-server image.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+ARG HOOKS_SHA256
+LABEL skilldistill.openagentsafety.hooks-sha256=${HOOKS_SHA256}
+ENV OPENHANDS_SAFETY_ORCHESTRATOR_COMPAT=1
+COPY vendor/software-agent-sdk/openhands-sdk/openhands/sdk/hooks/executor.py /usr/local/lib/python3.12/site-packages/openhands/sdk/hooks/executor.py
+COPY vendor/software-agent-sdk/openhands-sdk/openhands/sdk/hooks/conversation_hooks.py /usr/local/lib/python3.12/site-packages/openhands/sdk/hooks/conversation_hooks.py
+RUN python -c 'import hashlib, pathlib; root = pathlib.Path("/usr/local/lib/python3.12/site-packages/openhands/sdk/hooks"); digest = hashlib.sha256(); [digest.update((root / name).read_bytes()) for name in ("executor.py", "conversation_hooks.py")]; import os; assert digest.hexdigest() == os.environ["HOOKS_SHA256"]' && python -m compileall -q /usr/local/lib/python3.12/site-packages/openhands/sdk/hooks

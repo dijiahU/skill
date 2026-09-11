@@ -30,6 +30,7 @@ from tqdm import tqdm
 from benchmarks.utils.acp import is_acp_agent
 from benchmarks.utils.constants import OUTPUT_FILENAME
 from benchmarks.utils.critics import get_completed_instances
+from benchmarks.utils.dependency_admission import DependencyAdmission
 from benchmarks.utils.failure_classifier import FailureCategory, classify_failure
 from benchmarks.utils.iterative import aggregate_results, get_failed_instances
 from benchmarks.utils.laminar import LMNR_ENV_VARS, LaminarEvalMetadata, LaminarService
@@ -701,6 +702,10 @@ class Evaluation(ABC, BaseModel):
 
         return all_outputs
 
+    def concurrency_keys(self, instance: EvalInstance) -> tuple[str, ...]:
+        """Dependencies to admit before reserving a worker; opt-in per benchmark."""
+        return ()
+
     async def _run_attempt_async(
         self,
         instances: List[EvalInstance],
@@ -721,6 +726,7 @@ class Evaluation(ABC, BaseModel):
             List of EvalOutput for completed instances
         """
         semaphore = asyncio.Semaphore(self.num_workers)
+        admission = DependencyAdmission()
         pending_instances: dict[asyncio.Task, PendingInstance] = {}
         attempt_outputs: List[EvalOutput] = []
         progress = tqdm(total=len(instances), desc=f"Attempt {attempt}", leave=False)
@@ -730,7 +736,7 @@ class Evaluation(ABC, BaseModel):
             datapoint_id: UUID | None,
         ) -> Tuple[EvalInstance, EvalOutput]:
             """Process one instance with semaphore-based concurrency control."""
-            async with semaphore:
+            async with admission.reserve(self.concurrency_keys(inst)), semaphore:
                 task = asyncio.current_task()
                 pending_info = pending_instances.get(task) if task is not None else None
 

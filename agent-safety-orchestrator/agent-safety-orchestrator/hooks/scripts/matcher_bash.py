@@ -37,8 +37,21 @@ from write_effects import (
     review_write_effects,
 )
 from sensitive_data import (
-    sensitive_read_authorized, tainted_sink_risk,
+    sensitive_command_risk, sensitive_read_authorized, tainted_sink_risk,
 )
+from controller_dependencies import (
+    controller_artifact_risk, decoded_python_sql_risk,
+    extract_relative_python_dependencies,
+    recover_c_xor_shell_execution, recover_python_generated_effects,
+    recover_python_shell_executions,
+    recover_shell_config_executions, select_python_effect_source,
+    strip_shell_heredoc_bodies,
+)
+from sql_file_effects import sql_file_command_risk
+from role_grant_effects import role_grant_risk
+from host_mutation_effects import host_mutation_risk
+from active_identity_writes import active_identity_write_risk
+from proposed_controller import proposed_controller
 
 OVERBROAD_SELECTORS = re.compile(
     r"(rm\s+(?:-[rfvR]*\s+)?(?:/|~/?|\.\.?/?)(?=\s|[;&|]|$)|"
@@ -802,6 +815,24 @@ def _literal_shell_execution_payloads(content: str) -> list[str]:
             payloads.append(value)
             if len(payloads) >= 32:
                 break
+    # Also inspect literal shell -c payloads behind a bounded timeout wrapper.
+    for raw_tokens in _automation_token_segments(content):
+        tokens = _strip_command_prefix(raw_tokens)
+        if tokens and Path(tokens[0]).name == "timeout":
+            index = 1
+            while index < len(tokens) and tokens[index].startswith("-"):
+                index += 1
+                if index < len(tokens) and tokens[index - 1] in {"-k", "--kill-after", "-s", "--signal"}:
+                    index += 1
+            if index < len(tokens) and re.fullmatch(r"\d+(?:\.\d+)?[smhd]?", tokens[index]):
+                index += 1
+            tokens = tokens[index:]
+        if len(tokens) >= 3 and Path(tokens[0]).name in {"bash", "sh", "zsh"} and tokens[1] == "-c":
+            value = _static_shell_value(tokens[2], values)
+            if value is not None and value not in payloads:
+                payloads.append(value)
+                if len(payloads) >= 32:
+                    break
     return payloads
 
 
@@ -1432,6 +1463,24 @@ def _production_database_mutation(command: str) -> bool:
 
 def _git_irreversible_action(command: str) -> str:
     for raw_tokens in _automation_token_segments(command):
+        editor_values = [
+            token.split("=", 1)[1]
+            for token in raw_tokens
+            if token.startswith(("GIT_EDITOR=", "GIT_SEQUENCE_EDITOR="))
+        ]
+        raw_text = " ".join(raw_tokens)
+        full_root_rebase = bool(re.search(
+            r"\bgit\s+rebase\b(?=[^;\n]*\s-i(?:\s|$))(?=[^;\n]*--root(?:\s|$))",
+            raw_text,
+        ))
+        scripted_full_squash = any(
+            re.search(r"\bsed\b", editor)
+            and re.search(r"s/\^pick\s+/squash\s+/", editor)
+            and re.search(r"(?:^|[^0-9])2,", editor)
+            for editor in editor_values
+        )
+        if full_root_rebase and scripted_full_squash:
+            return "scripted interactive rebase squashes the repository full-root history"
         tokens = _strip_command_prefix(raw_tokens)
         git_indexes = [
             index for index, token in enumerate(tokens)
@@ -1581,7 +1630,57 @@ def _has_recursive_rm(command: str) -> bool:
     return False
 
 
+def _protected_host_resolution_write(command: str) -> str:
+    for raw_tokens in _automation_token_segments(command):
+        tokens = _strip_command_prefix(raw_tokens)
+        for index, token in enumerate(tokens):
+            if Path(token).name == "tee" and any(
+                value.strip("'\"") == "/etc/hosts" for value in tokens[index + 1:]
+            ):
+                return "host name-resolution policy is modified"
+            if token in {">", ">>"} and index + 1 < len(tokens) and tokens[index + 1].strip("'\"") == "/etc/hosts":
+                return "host name-resolution policy is modified"
+    return ""
+
+
+def _encoded_controller_artifact_write(command: str) -> str:
+    if not re.search(r"(?m)<<\s*['\"]?[A-Za-z_]\w*['\"]?", command):
+        return ""
+    if not re.search(r">\s*[^\s;&|]+\.(?:sh|bash)\b", command, re.IGNORECASE):
+        return ""
+    has_decode = bool(re.search(r"\b(?:base64\s+-d|openssl\s+enc\s+-d\s+-a|bunzip2)\b", command))
+    has_sink = bool(re.search(r"\b(?:source\s+/dev/stdin|eval\s+|(?:bash|sh)\s+-c\s+)", command))
+    if has_decode and has_sink:
+        return "generated shell controller contains a decoded execution path"
+    return ""
+def _protected_authorization_write(command: str) -> str:
+    """Recognize concrete writes to host authorization policy paths."""
+    for raw_tokens in _automation_token_segments(command):
+        tokens = _strip_command_prefix(raw_tokens)
+        if not tokens:
+            continue
+        for index, token in enumerate(tokens):
+            if token in {">", ">>"} and index + 1 < len(tokens):
+                target = tokens[index + 1].strip("'\"")
+                if target == "/etc/sudoers" or target.startswith("/etc/sudoers.d/"):
+                    return "host sudo authorization policy is overwritten"
+        program_index = next((index for index, token in enumerate(tokens)
+                              if Path(token).name in {"cp", "mv", "install", "tee"}), -1)
+        if program_index < 0:
+            continue
+        arguments = [token.strip("'\"") for token in tokens[program_index + 1:]
+                     if not token.startswith("-")]
+        if any(target == "/etc/sudoers" or target.startswith("/etc/sudoers.d/")
+               for target in arguments):
+            return "host sudo authorization policy is installed or overwritten"
+    return ""
 def _persistent_configuration_write(command: str) -> str:
+    if any(
+        not line.lstrip().startswith("#")
+        and re.search(r"\|\s*crontab\s+-(?:\s|$)", line)
+        for line in command.splitlines()
+    ):
+        return "crontab installation"
     if re.search(r"\bsystemctl\s+enable\b", command, re.IGNORECASE):
         return "systemd service enablement"
     for raw_tokens in _automation_token_segments(command):
@@ -1747,6 +1846,13 @@ def _downloaded_code_execution(command: str) -> str:
                 or Path(value.strip("'\"")).name == filename
                 for value in later[1:]
             )
+            direct_program = bool(
+                later and (
+                    later[0].strip("'\"").lstrip("./") == destination.lstrip("./")
+                    or Path(later[0].strip("'\"")).resolve()
+                    == destination_path.resolve()
+                )
+            )
             imported = bool(
                 stem
                 and re.search(
@@ -1759,7 +1865,7 @@ def _downloaded_code_execution(command: str) -> str:
                 program in {"bash", "sh", "zsh", "source", ".", "node"}
                 or program.startswith("python")
             )
-            if (interpreter and direct_target) or imported or (
+            if direct_program or (interpreter and direct_target) or imported or (
                 autoload and interpreter
             ):
                 return "downloaded code is executed or loaded through an import/autoload path"
@@ -1784,6 +1890,11 @@ def _reverse_shell_risk(content: str) -> str:
             return "netcat launches a command interpreter for a remote peer"
         if re.search(r"(?i)\bsocat\b[^\n]*(?:EXEC|SYSTEM):(?:ba|z|k)?sh", stripped):
             return "socat exposes a command interpreter to a network peer"
+        if re.search(
+            r"(?i)\bssh\b[^\n;&|]*\s-R(?:\s+|=)?(?:[^\s:]+:)?(?:127\.0\.0\.1|localhost):\d+",
+            stripped,
+        ):
+            return "SSH reverse forwarding exposes a local service through a remote relay"
     if re.search(
         r"(?is)socket\.socket\s*\(.*?\.connect\s*\(.*?"
         r"(?:dup2\s*\(|subprocess\.(?:Popen|run)|os\.system)", content
@@ -1848,6 +1959,12 @@ def _automation_semantic_risk(
                 for label, pattern in _AUTOMATION_DANGER_RULES:
                     if pattern.search(statement):
                         return f"statically decoded shell execution: {label}"
+    decoded_sql_risk = decoded_python_sql_risk(content)
+    if decoded_sql_risk:
+        return decoded_sql_risk
+    host_risk = host_mutation_risk(content)
+    if host_risk:
+        return host_risk
     node_copy = _inline_node_sensitive_copy_risk(content, logical_cwd)
     if node_copy:
         return node_copy
@@ -1869,6 +1986,15 @@ def _automation_semantic_risk(
         content, logical_cwd
     ):
         return "recursive deletion exceeds a regenerable directory"
+    encoded_artifact = _encoded_controller_artifact_write(content)
+    if encoded_artifact:
+        return encoded_artifact
+    hosts_write = _protected_host_resolution_write(content)
+    if hosts_write:
+        return hosts_write
+    authorization_write = _protected_authorization_write(content)
+    if authorization_write:
+        return authorization_write
     persistence = _persistent_configuration_write(content)
     if persistence:
         return persistence
@@ -2150,12 +2276,15 @@ def _command_has_trusted_stdout_redactor(command: str) -> bool:
 
 def _automation_token_segments(command: str) -> list[list[str]]:
     """Tokenize shell control segments without splitting quoted inline code."""
+    escaped_semicolon = "__SAFETY_ORCH_ESCAPED_SEMICOLON__"
     normalized: list[str] = []
     quote = ""
     escaped = False
     for character in command:
         if escaped:
-            normalized.append(character)
+            # ``find -exec ... \\;`` terminates find arguments, rather than
+            # the surrounding shell command. Preserve that distinction.
+            normalized.append(escaped_semicolon if character == ";" else character)
             escaped = False
             continue
         if character == "\\" and quote != "'":
@@ -2184,12 +2313,12 @@ def _automation_token_segments(command: str) -> list[list[str]]:
     segments: list[list[str]] = []
     current: list[str] = []
     for token in tokens:
-        if token in {"&&", "||", ";"}:
+        if token in {"&&", "||"} or token and set(token) == {";"}:
             if current:
                 segments.append(current)
                 current = []
             continue
-        current.append(token)
+        current.append(token.replace(escaped_semicolon, ";"))
     if current:
         segments.append(current)
     return segments
@@ -2198,7 +2327,9 @@ def _automation_token_segments(command: str) -> list[list[str]]:
 def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, Any]]:
     cwd = Path(logical_cwd or "/home/user").resolve()
     controllers: list[dict[str, Any]] = []
-    for raw_tokens in _automation_token_segments(command):
+    segments = _automation_token_segments(command)
+    executed_programs = {tokens[0] for raw in segments if (tokens := _strip_command_prefix(raw))}
+    for raw_tokens in segments:
         tokens = _strip_command_prefix(raw_tokens)
         if not tokens:
             continue
@@ -2207,6 +2338,23 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
         if program == "cd" and len(tokens) >= 2:
             target = Path(tokens[1])
             cwd = (target if target.is_absolute() else cwd / target).resolve()
+            continue
+
+        if program in {"gcc", "cc", "clang"} and "-o" in tokens:
+            output_index = tokens.index("-o") + 1
+            if output_index < len(tokens):
+                output = Path(tokens[output_index])
+                output_path = (output if output.is_absolute() else cwd / output).resolve()
+                if any(Path(value).resolve() == output_path for value in executed_programs
+                       if value.startswith(("/", "./"))):
+                    for value in tokens[1:]:
+                        if value.endswith(".c"):
+                            source = Path(value)
+                            controllers.append({
+                                "path": (source if source.is_absolute() else cwd / source).resolve(),
+                                "kind": "c", "entries": [], "cwd": cwd,
+                                "required": True,
+                            })
             continue
 
         if program in {"make", "gmake"}:
@@ -2226,14 +2374,32 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
             continue
 
         if program == "npm" and len(tokens) >= 2:
-            action = tokens[1]
+            action = "install" if tokens[1] in {"i", "install"} else tokens[1]
             if action == "run" and len(tokens) >= 3:
                 action = tokens[2]
-            if action in {"test", "start", "install", "ci", "run"} or tokens[1] == "run":
-                if "--ignore-scripts" not in tokens:
-                    controllers.append(
-                        {"path": cwd / "package.json", "kind": "npm", "entries": [action], "required": True}
-                    )
+            lifecycle_enabled = not any(
+                token in {"--ignore-scripts", "--package-lock-only"}
+                for token in tokens
+            )
+            if (action in {"test", "start", "install", "ci", "run"}
+                    or tokens[1] == "run") and lifecycle_enabled:
+                local_packages: list[Path] = []
+                if action == "install":
+                    for token in tokens[2:]:
+                        value = token[5:] if token.startswith("file:") else token
+                        if (value.startswith(("./", "../", "/"))
+                                and not value.endswith((".tgz", ".tar.gz"))):
+                            candidate = Path(value)
+                            local_packages.append(
+                                (candidate if candidate.is_absolute() else cwd / candidate).resolve()
+                            )
+                package_roots = local_packages or [cwd]
+                for package_root in package_roots:
+                    controllers.append({
+                        "path": package_root / "package.json", "kind": "npm",
+                        "entries": [action], "required": True,
+                        "cwd": package_root,
+                    })
             continue
 
         if program in {"pytest", "py.test"} or (
@@ -2265,19 +2431,47 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
                 )
             continue
 
+        python_pip = program.startswith("python") and tokens[1:3] == ["-m", "pip"]
+        standalone_pip = program in {"pip", "pip3"}
+        if (python_pip or standalone_pip) and len(tokens) >= (4 if python_pip else 2):
+            arguments = tokens[3:] if python_pip else tokens[1:]
+            if arguments and arguments[0] == "install":
+                local_root: Path | None = None
+                index = 1
+                while index < len(arguments):
+                    token = arguments[index]
+                    if token in {"-e", "--editable"} and index + 1 < len(arguments):
+                        token = arguments[index + 1]; index += 1
+                    value = token[5:] if token.startswith("file:") else token
+                    if value in {".", "./"} or value.startswith(("./", "../", "/")):
+                        candidate = Path(value)
+                        local_root = (candidate if candidate.is_absolute() else cwd / candidate).resolve()
+                        break
+                    index += 1
+                if local_root is not None:
+                    controllers.append({
+                        "path": local_root / "setup.py", "kind": "python",
+                        "entries": [], "cwd": local_root, "required": True,
+                        "python_main": True,
+                    })
+            continue
+
         if program.startswith("python") and len(tokens) >= 2:
             if tokens[1] not in {"-c", "-m", "-"} and tokens[1].endswith(".py"):
                 candidate = Path(tokens[1])
                 controllers.append(
                     {"path": (candidate if candidate.is_absolute() else cwd / candidate).resolve(),
-                     "kind": "file", "entries": tokens[2:], "cwd": cwd,
-                     "stdout_sanitized": stdout_sanitized, "required": True}
+                     "kind": "python", "entries": tokens[2:], "cwd": cwd,
+                     "stdout_sanitized": stdout_sanitized, "required": True,
+                     "python_main": True}
                 )
-            if tokens[1:3] in (["-m", "pip"], ["-m", "build"]) and any(
+            if tokens[1:3] == ["-m", "build"] and any(
                 token in {".", "-e"} for token in tokens[3:]
             ):
-                for name in ("pyproject.toml", "setup.py"):
-                    controllers.append({"path": cwd / name, "kind": "file", "entries": []})
+                controllers.append({
+                    "path": cwd / "setup.py", "kind": "python", "entries": [],
+                    "cwd": cwd, "required": True, "python_main": True,
+                })
             continue
 
         if program == "node" and len(tokens) >= 2 and tokens[1].endswith((".js", ".cjs", ".mjs")):
@@ -2289,14 +2483,25 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
             )
             continue
 
+        absolute_candidate = Path(tokens[0]) if tokens[0].startswith("/") else None
         if tokens[0].startswith("./") or (
-            tokens[0].startswith("/") and tokens[0].endswith((".sh", ".py", ".js", ".bash"))
+            absolute_candidate is not None and (
+                tokens[0].endswith((".sh", ".py", ".js", ".bash"))
+                or absolute_candidate.is_relative_to(cwd)
+            )
         ):
             candidate = (cwd / tokens[0]).resolve()
-            kind = "shell" if candidate.suffix in {".sh", ".bash"} else "file"
+            kind = ("shell" if candidate.suffix in {".sh", ".bash"}
+                    else "python" if candidate.suffix == ".py" else "file")
+            script_suffix = candidate.suffix in {".sh", ".bash", ".py", ".js", ".cjs", ".mjs"}
             controllers.append(
                 {"path": candidate, "kind": kind, "entries": tokens[1:], "cwd": cwd,
-                 "stdout_sanitized": stdout_sanitized, "required": True}
+                 "stdout_sanitized": stdout_sanitized,
+                 # Extensionless ./targets are commonly compiler outputs. If
+                 # absent from an initial snapshot, their nearby source can be
+                 # reviewed below without claiming an unknown script.
+                 "required": script_suffix,
+                 "python_main": candidate.suffix == ".py"}
             )
             for suffix in (".c", ".py", ".sh", ".js"):
                 controllers.append(
@@ -2330,7 +2535,9 @@ def _python_has_execution_call(content: str) -> bool:
     )
 
 
-def _automation_controller_risk(command: str, logical_cwd: str) -> str:
+def _automation_controller_risk(
+    command: str, logical_cwd: str, event: dict[str, Any] | None = None,
+) -> str:
     metadata = _workspace_snapshot_payload()
     snapshot = _workspace_snapshot()
     cwd = Path(logical_cwd or "/home/user").resolve()
@@ -2352,11 +2559,88 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
         _write_controller_trace(trace)
         return risk
 
+    def reachable_write_risk(payload: str, payload_cwd: Path) -> str:
+        write_event = dict(event or {})
+        write_event.update({
+            "cwd": str(payload_cwd), "tool_name": "Bash",
+            "tool_input": {"command": payload},
+        })
+        for finding in review_write_effects(extract_write_effects(write_event)):
+            if finding.severity == "block":
+                return f"{finding.reason} (target={finding.path})"
+        return ""
+
+    def recovered_payload_risk(payload: str, payload_cwd: Path) -> str:
+        payload_event = dict(event or {})
+        payload_event["cwd"] = str(payload_cwd)
+        risk = (_automation_semantic_risk(payload, str(payload_cwd))
+                or sensitive_command_risk(payload, payload_event)
+                or active_identity_write_risk(payload, payload_event, snapshot)
+                or reachable_write_risk(payload, payload_cwd))
+        if risk:
+            return risk
+        for label, pattern in _AUTOMATION_DANGER_RULES:
+            if pattern.search(payload):
+                return label
+        return ""
+
+    def inline_javascript_risk(shell_command: str) -> str:
+        from javascript_dependencies import (
+            javascript_dynamic_effect_risk,
+            recover_javascript_literal_executions,
+            select_javascript_effect_source,
+        )
+        for raw_tokens in _automation_token_segments(shell_command):
+            tokens = _strip_command_prefix(raw_tokens)
+            if not tokens or Path(tokens[0]).name != "node":
+                continue
+            option = next((index for index, token in enumerate(tokens)
+                           if token in {"-e", "--eval"}), -1)
+            if option < 0 or option + 1 >= len(tokens):
+                continue
+            selected = select_javascript_effect_source(tokens[option + 1], ())
+            direct = javascript_dynamic_effect_risk(selected.scan_text)
+            if direct:
+                return direct
+            executions = recover_javascript_literal_executions(selected.scan_text)
+            for execution in executions.executions:
+                risk = (javascript_dynamic_effect_risk(execution.payload)
+                        or recovered_payload_risk(execution.payload, cwd))
+                if risk:
+                    return f"decoded inline JavaScript {execution.sink} payload: {risk}"
+            if any("argument was not statically resolved" in unknown.reason
+                   for unknown in executions.unknowns):
+                return "inline JavaScript reaches an actual execution sink with an unresolved encoded payload"
+        return ""
+
+    inline_js_risk = inline_javascript_risk(command)
+    if inline_js_risk:
+        return finish(inline_js_risk)
+
     for candidate in [command, *_literal_shell_execution_payloads(command)]:
         scope_risk = _network_probe_scope_risk(candidate, cwd, snapshot)
         if scope_risk:
             return finish(scope_risk)
-    controllers = _automation_controllers(command, logical_cwd)
+    controller_command = command
+    controller_cwd = logical_cwd
+    proposal = proposed_controller(command, cwd)
+    if (proposal is not None and metadata.get("authoritative")
+            and metadata.get("snapshot_status") == "ready"):
+        path, body, suffix, proposed_cwd = proposal
+        excluded = metadata.get("excluded_files") or {}
+        if str(path) not in excluded:
+            previous = _read_controller(path, snapshot)
+            if previous is not None and previous != body:
+                return finish(f"{path}: split controller replacement and execution into separate calls")
+            # The proposed source remains subject to the complete transitive
+            # review below; original policy snapshots are never rewritten.
+            snapshot = dict(snapshot)
+            snapshot[str(path)] = body
+            controller_command = suffix
+            controller_cwd = str(proposed_cwd)
+            trace["proposed_controller"] = str(path)
+            trace["proposed_source_sha256"] = hashlib.sha256(body.encode()).hexdigest()
+    controllers = _automation_controllers(controller_command, controller_cwd)
     queue = list(controllers)
     reviewed: set[tuple[Any, ...]] = set()
     while queue and len(reviewed) < 32:
@@ -2368,6 +2652,8 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
             tuple(str(value) for value in controller["entries"]),
             str(bool(controller.get("stdout_sanitized"))),
             tuple(controller.get("javascript_exports", ())),
+            tuple(controller.get("python_functions", ())),
+            bool(controller.get("python_main")),
             str(runtime_cwd), bool(controller.get("required")),
         )
         if key in reviewed:
@@ -2417,6 +2703,12 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
             scan_text = _package_script_text(content, controller["entries"][0])
         elif controller["kind"] == "shell":
             scan_text = _shell_case_branch_text(content, controller["entries"])
+        elif path.suffix == ".py" or controller["kind"] == "python":
+            scan_text, python_unknowns, _ = select_python_effect_source(
+                content, controller.get("python_functions", ()),
+                module_is_main=bool(controller.get("python_main")),
+            )
+            item["python_effect_unknowns"] = [entry.reason for entry in python_unknowns]
 
         if path.suffix in {".js", ".cjs"}:
             from javascript_dependencies import select_javascript_effect_source
@@ -2460,8 +2752,134 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
                     and label == "encoded or serialized payload is executed"
                     and not _python_has_execution_call(scan_text)):
                 continue
+            if (path.suffix in {".js", ".cjs"}
+                    and label == "encoded or serialized payload is executed"):
+                from javascript_dependencies import recover_javascript_literal_executions
+                if recover_javascript_literal_executions(scan_text).complete:
+                    # Fully resolved literal executions are judged by their
+                    # decoded effect below; safe payloads are not rejected for
+                    # using an encoding transform alone.
+                    continue
             if pattern.search(scan_text):
                 risks.append(label); break
+
+        controller_event = dict(event or {})
+        controller_event["cwd"] = str(runtime_cwd)
+        sensitive_risk = sensitive_command_risk(scan_text, controller_event)
+        if sensitive_risk:
+            risks.append(sensitive_risk)
+        artifact_risk = controller_artifact_risk(
+            scan_text, str(path), str(runtime_cwd), snapshot,
+        )
+        if artifact_risk:
+            risks.append(artifact_risk)
+        sql_controller_risk = sql_file_command_risk(
+            scan_text, str(runtime_cwd), snapshot,
+        )
+        if sql_controller_risk:
+            risks.append(sql_controller_risk)
+
+        if path.suffix == ".c" or controller["kind"] == "c":
+            c_payload = recover_c_xor_shell_execution(scan_text)
+            if c_payload:
+                c_risk = recovered_payload_risk(c_payload, runtime_cwd)
+                if not c_risk and re.search(
+                    r"(?is)\bcurl\b[^\n]*\s(?:-d|--data(?:-binary)?)\s+@?(?!/tmp/)[^\s]+",
+                    c_payload,
+                ):
+                    c_risk = "decoded C system payload uploads project content to a network endpoint"
+                if c_risk:
+                    risks.append(f"decoded C system payload: {c_risk}")
+
+        if path.suffix == ".py" or controller["kind"] == "python":
+            grant_risk = role_grant_risk(scan_text, str(runtime_cwd), snapshot)
+            if grant_risk:
+                risks.append(grant_risk)
+            python_shells = recover_python_shell_executions(scan_text)
+            item["python_shell_executions"] = [
+                {"line": execution.line, "sink": execution.sink,
+                 "payload_sha256": hashlib.sha256(execution.payload.encode()).hexdigest()}
+                for execution in python_shells
+            ]
+            for execution in python_shells:
+                shell_risk = recovered_payload_risk(
+                    execution.payload, runtime_cwd
+                )
+                if shell_risk:
+                    risks.append(
+                        f"Python {execution.sink} shell payload: {shell_risk}"
+                    )
+                    break
+            generated_effects = recover_python_generated_effects(
+                scan_text, str(runtime_cwd), snapshot,
+            )
+            item["python_generated_effects"] = [
+                {"destination": effect.destination, "line": effect.line,
+                 "content_sha256": hashlib.sha256(effect.content.encode()).hexdigest()}
+                for effect in generated_effects
+            ]
+            for effect in generated_effects:
+                generated_risk = recovered_payload_risk(
+                    effect.content, runtime_cwd
+                )
+                if generated_risk:
+                    risks.append(
+                        f"generated {effect.destination}: {generated_risk}"
+                    )
+                    break
+
+        if controller["kind"] in {"shell", "make", "npm"}:
+            write_risk = reachable_write_risk(scan_text, runtime_cwd)
+            if write_risk:
+                risks.append(write_risk)
+            config_payloads = recover_shell_config_executions(
+                scan_text, str(runtime_cwd), snapshot,
+            )
+            item["config_derived_shell_payloads"] = [
+                {"source_path": payload.source_path,
+                 "source_key": payload.source_key,
+                 "line": payload.line,
+                 "payload_sha256": hashlib.sha256(payload.payload.encode()).hexdigest()}
+                for payload in config_payloads
+            ]
+            for payload in config_payloads:
+                payload_risk = recovered_payload_risk(
+                    payload.payload, runtime_cwd
+                )
+                if payload_risk:
+                    risks.append(
+                        f"config field {payload.source_key!r} is executed: {payload_risk}"
+                    )
+                    break
+
+        if path.suffix in {".js", ".cjs"}:
+            from javascript_dependencies import (
+                javascript_dynamic_effect_risk,
+                recover_javascript_literal_executions,
+            )
+            dynamic_risk = javascript_dynamic_effect_risk(scan_text)
+            if dynamic_risk:
+                risks.append(dynamic_risk)
+            executions = recover_javascript_literal_executions(scan_text)
+            if any("argument was not statically resolved" in unknown.reason
+                   for unknown in executions.unknowns):
+                risks.append(
+                    "JavaScript reaches an actual execution sink with an unresolved encoded payload"
+                )
+            item["javascript_literal_executions"] = [
+                {"line": execution.line, "sink": execution.sink,
+                 "payload_sha256": hashlib.sha256(execution.payload.encode()).hexdigest(),
+                 "transforms": list(execution.transforms)}
+                for execution in executions.executions
+            ]
+            for execution in executions.executions:
+                payload_risk = (javascript_dynamic_effect_risk(execution.payload)
+                    or recovered_payload_risk(execution.payload, runtime_cwd))
+                if payload_risk:
+                    risks.append(
+                        f"decoded JavaScript {execution.sink} payload: {payload_risk}"
+                    )
+                    break
         if risks:
             risk = f"{path}: {risks[0]}"
             item.update({"decision": "block", "reason": risk})
@@ -2505,18 +2923,47 @@ def _automation_controller_risk(command: str, logical_cwd: str) -> str:
                     })),
                 })
 
-        for match in _TRANSITIVE_SCRIPT_CALL.finditer(scan_text):
+        if path.suffix == ".py" or controller["kind"] == "python":
+            python_dependencies = extract_relative_python_dependencies(
+                scan_text, str(path), known_paths=snapshot,
+                module_is_main=bool(controller.get("python_main")),
+            )
+            item["python_dependency_unknowns"] = [
+                entry.reason for entry in python_dependencies.unknowns
+            ]
+            for dependency in python_dependencies.dependencies:
+                queue.append({
+                    "path": Path(dependency.selected_path), "kind": "python",
+                    "entries": [], "cwd": runtime_cwd, "required": True,
+                    "python_main": False,
+                    "python_functions": dependency.called_functions,
+                    "stdout_sanitized": bool(controller.get("stdout_sanitized")),
+                })
+
+        if controller["kind"] in {"shell", "make", "npm"}:
+            nested_shell = strip_shell_heredoc_bodies(scan_text)
+            for nested in _automation_controllers(nested_shell, str(runtime_cwd)):
+                nested.setdefault("stdout_sanitized", bool(controller.get("stdout_sanitized")))
+                queue.append(nested)
+
+        transitive_text = (
+            strip_shell_heredoc_bodies(scan_text)
+            if controller["kind"] in {"shell", "make", "npm"}
+            else scan_text
+        )
+        for match in _TRANSITIVE_SCRIPT_CALL.finditer(transitive_text):
             referenced = match.group("path")
             child = Path(referenced)
             try:
                 arguments = shlex.split(match.group("arguments"))
             except ValueError:
                 arguments = []
-            kind = "shell" if child.suffix in {".sh", ".bash"} else "file"
+            kind = ("shell" if child.suffix in {".sh", ".bash"}
+                    else "python" if child.suffix == ".py" else "file")
             queue.append({
                 "path": (child if child.is_absolute() else runtime_cwd / child).resolve(),
                 "kind": kind, "entries": arguments, "cwd": runtime_cwd,
-                "required": True,
+                "required": True, "python_main": child.suffix == ".py",
             })
     if queue:
         return finish("automation dependency closure exceeds the bounded 32-controller review")
@@ -2553,14 +3000,26 @@ def main() -> int:
 
     # Normalize Bash redirection/heredoc/sed/Python writes into the same
     # before/after representation used by Write/Edit before any effect occurs.
-    for finding in review_write_effects(extract_write_effects({
+    proposed_write_effects = extract_write_effects({
         **event, "tool_name": "Bash",
         "tool_input": {**(event.get("tool_input") or {}), "command": cmd},
-    })):
+    })
+    for finding in review_write_effects(proposed_write_effects):
         verdicts.append((check if finding.severity == "block" else soft_check)(
             finding.atom_id, True,
             f"{finding.reason} (target={finding.path}, method={finding.method})",
         ))
+    from javascript_dependencies import javascript_dynamic_effect_risk
+    for effect in proposed_write_effects:
+        if Path(effect.path).suffix not in {".js", ".cjs", ".mjs"} or not effect.content:
+            continue
+        generated_javascript_risk = javascript_dynamic_effect_risk(effect.content)
+        if generated_javascript_risk:
+            verdicts.append(check(
+                "detect-malicious-postinstall-script", True,
+                f"Generated JavaScript controller has a high-risk effect: {generated_javascript_risk} "
+                f"(target={effect.path}, method={effect.method})",
+            ))
 
     # detect-shell-command-injection. Parse active shell operators so quoted
     # documentation and ordinary semicolon/pipeline usage are not treated as
@@ -2627,6 +3086,16 @@ def main() -> int:
         destructive_reasons.append("unscoped sweep of a shared temporary root")
     if semantic_risk:
         destructive_reasons.append(semantic_risk)
+    sql_file_risk = sql_file_command_risk(
+        cmd, str(event.get("cwd") or "/home/user"), _workspace_snapshot(),
+    )
+    if sql_file_risk:
+        destructive_reasons.append(sql_file_risk)
+    identity_write_risk = active_identity_write_risk(
+        cmd, event, _workspace_snapshot(),
+    )
+    if identity_write_risk:
+        destructive_reasons.append(identity_write_risk)
     if destructive_reasons:
         verdicts.append(check(
             "detect-destructive-flag", True,
@@ -2634,7 +3103,7 @@ def main() -> int:
         ))
 
     automation_risk = _automation_controller_risk(
-        cmd, str(event.get("cwd") or "/home/user")
+        cmd, str(event.get("cwd") or "/home/user"), event
     )
     if automation_risk:
         verdicts.append(check(
