@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /srv/benchmark/skills/aistation_env.sh
+export PATH="/srv/benchmark/skills/envs/terminal-bench/bin:$PATH"
+export PYTHONPATH=/srv/benchmark/skills/jobs/gptoss-oas-terminal-20260913-r1/frozen/adapter:/srv/benchmark/skills/jobs/gptoss-oas-terminal-20260913-r1/frozen
+export TERMINAL_BENCH_SABER_ROOT=/srv/benchmark/skills/jobs/gptoss-oas-terminal-20260913-r1/frozen/saber
+export XDG_CACHE_HOME=/srv/benchmark/skills/cache/terminal-bench
+export UV_CACHE_DIR=/srv/benchmark/skills/cache/uv-terminal-bench
+export HARBOR_CACHE_DIR=/srv/benchmark/skills/cache/terminal-bench
+unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
+export TERMINAL_BENCH_IMAGE_MIRROR=dockerproxy.net.
+export RES_OPTIONS="ndots:1 timeout:2 attempts:2"
+export TERMINAL_BENCH_DIRECT_DOWNLOAD=1
+export TERMINAL_BENCH_DOWNLOAD_PROXY=
+export no_proxy='*' NO_PROXY='*'
+export PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+export PIP_EXTRA_INDEX_URL=
+export PIP_CONFIG_FILE=/dev/null
+export UV_DEFAULT_INDEX=https://pypi.tuna.tsinghua.edu.cn/simple
+export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+export PIP_DEFAULT_TIMEOUT=120 PIP_RETRIES=5
+export TERMINAL_BENCH_KEY_ENV=RESPONSES_API_KEY
+exec /srv/benchmark/skills/envs/terminal-bench/bin/harbor "$@"

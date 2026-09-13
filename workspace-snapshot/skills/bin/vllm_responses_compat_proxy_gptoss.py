@@ -34,7 +34,7 @@ HOP_BY_HOP_HEADERS = {
     "transfer-encoding",
     "upgrade",
 }
-DEBUG_REQUEST = "/2024233123/skills/tmp/last-codex-gptoss-responses-request.json"
+DEBUG_REQUEST = os.environ["GPTOSS_DEBUG_REQUEST"]
 
 
 def _message_text(content: object) -> list[str]:

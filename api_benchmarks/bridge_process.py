@@ -52,7 +52,8 @@ def chat_bridge(env, cfg, python, root, output):
                 raise RuntimeError("Responses bridge did not become ready")
             yield {
                 "OPENAI_API_KEY": token,
-                "OPENAI_BASE_URL": f"http://host.docker.internal:{port}/v1",
+                "OPENAI_BASE_URL": f"http://{env.get('BRIDGE_ADVERTISE_HOST', 'host.docker.internal')}:{port}/v1",
+                "BRIDGE_LOCAL_BASE_URL": f"http://127.0.0.1:{port}/v1",
             }
         finally:
             process.terminate()

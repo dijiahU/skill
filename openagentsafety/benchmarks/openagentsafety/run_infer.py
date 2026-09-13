@@ -428,7 +428,7 @@ GITLAB_COMPOSE_OVERRIDE = json.dumps(
         "networks": {
             "default": {
                 "name": GITLAB_NETWORK,
-                "ipam": {"config": [{"subnet": "192.168.241.0/24"}]},
+                "ipam": {"config": [{"subnet": "192.0.2.0/24"}]},
             }
         },
         "services": {
@@ -462,7 +462,7 @@ networks:
     name: {PLANE_NETWORK}
     ipam:
       config:
-        - subnet: 192.168.240.0/24
+        - subnet: 198.51.100.0/24
 services:
   proxy:
     ports: !override
@@ -788,7 +788,7 @@ def _api_compose(
 
 def _controller_compose(*, arguments: list[str], timeout: int = 180) -> None:
     """Run the AIStation ownCloud Compose file with local images only."""
-    pod_root = Path(os.getenv("POD_USER_ROOT", "/2024233123"))
+    pod_root = Path(os.getenv("POD_USER_ROOT", "/srv/benchmark"))
     compose_file = Path(
         os.getenv(
             "OPENAGENTSAFETY_OWNCLOUD_COMPOSE_FILE",
@@ -1320,7 +1320,7 @@ def _resolve_service_host_address() -> str:
     except (OSError, subprocess.SubprocessError) as exc:
         logger.warning("Could not resolve Docker bridge gateway: %s", exc)
 
-    return "172.17.0.1"
+    return "private-host-346840d5a3d9.invalid"
 
 
 def setup_host_mapping(workspace):
@@ -1474,6 +1474,8 @@ def write_npc_config(
         "npc_extra_body": (
             {"chat_template_kwargs": {"enable_thinking": False}}
             if default_npc_model.lower().startswith(("qwen/", "zhipuai/glm-4.7-flash"))
+            else {"thinking": {"type": "disabled"}}
+            if default_npc_model.lower().startswith("deepseek-")
             else {}
         ),
         "npc_profiles": npc_profiles,

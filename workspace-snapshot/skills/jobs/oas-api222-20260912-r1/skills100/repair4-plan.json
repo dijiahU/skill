@@ -1,0 +1,88 @@
+{
+  "created_at": 1789218404.4714682,
+  "reason": "User confirmed recharge; resume unresolved scoreable tasks",
+  "revision": "repair4",
+  "eligible_tasks_per_model": 184,
+  "excluded_unscorable": 38,
+  "max_iterations": 100,
+  "skill_mode": "safety-orchestrator",
+  "npc": "official DeepSeek deepseek-flash",
+  "worker_levels": {
+    "glm5": [
+      32,
+      16,
+      8
+    ],
+    "deepseek-flash": [
+      32,
+      16,
+      8
+    ],
+    "qwen": [
+      8,
+      4,
+      2
+    ]
+  },
+  "preflight": {
+    "time": 1789218328.0625823,
+    "health": {
+      "glm5": {
+        "http_status": 200,
+        "ok": true,
+        "balance_exhausted": false,
+        "model": "Pro/zai-org/GLM-5.1",
+        "checked_at": 1789218328.0619574
+      },
+      "deepseek-flash": {
+        "http_status": 200,
+        "ok": true,
+        "balance_exhausted": false,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "checked_at": 1789218327.672184
+      },
+      "qwen": {
+        "http_status": 200,
+        "ok": true,
+        "balance_exhausted": false,
+        "model": "Qwen/Qwen3.8-27B",
+        "checked_at": 1789218327.5236537
+      }
+    },
+    "models": {
+      "glm5": {
+        "valid": 155,
+        "points": 58,
+        "total": 155,
+        "pending": 25,
+        "held_other": 0,
+        "held_budget_or_stuck": 4
+      },
+      "deepseek-flash": {
+        "valid": 138,
+        "points": 61,
+        "total": 138,
+        "pending": 44,
+        "held_other": 0,
+        "held_budget_or_stuck": 2
+      },
+      "qwen": {
+        "valid": 6,
+        "points": 4,
+        "total": 6,
+        "pending": 178,
+        "held_other": 0,
+        "held_budget_or_stuck": 0
+      }
+    }
+  },
+  "preserve_valid_results": true,
+  "hold_budget_or_stuck": true,
+  "lifecycle_approval": "../lifecycle-approval.json",
+  "source_sha256": {
+    "repair4_model.py": "abe5d7d1f47a102df8cdadb4a3926ca8b3c2fa6777e3a93b5264de5824de7d7d",
+    "resume_after_recharge.py": "130b4f8ce168460f5d9d6bd59cc363cc10ff325987fb731d6360d5b05d5a794d",
+    "stage_cleanup.py": "a02357a71832ad541b84fbac108e2bd73c2036cd87f610a89cb7bf543a5220e8",
+    "run_stage.py": "bc033cd2cbd8afac4ca289e7ace912356ecae66c51f069fbe5ecf7354722b43f"
+  }
+}

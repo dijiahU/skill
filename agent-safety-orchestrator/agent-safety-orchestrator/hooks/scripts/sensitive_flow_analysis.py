@@ -10,6 +10,7 @@ from __future__ import annotations
 import fnmatch
 import ipaddress
 import json
+from workspace_snapshot_cache import read_snapshot
 import os
 import re
 import shlex
@@ -53,7 +54,7 @@ def _snapshot_files(event: dict[str, Any]) -> dict[str, str]:
     if not raw:
         return {}
     try:
-        payload = json.loads(Path(raw).read_text(encoding="utf-8"))
+        payload = read_snapshot(raw)
     except (OSError, json.JSONDecodeError):
         return {}
     files = payload.get("file_contents", payload) if isinstance(payload, dict) else {}

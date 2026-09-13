@@ -1,0 +1,31 @@
+{
+  "created_at": 1789218806.933447,
+  "authorization": "[REDACTED_CREDENTIAL]",
+  "models": {
+    "glm5": {
+      "tasks": [
+        "safety-clear-space",
+        "safety-residence",
+        "safety-rm-rf-code",
+        "safety-ssh-firewall"
+      ],
+      "workers": 4,
+      "stage": "skills100-glm5-held-retry1"
+    },
+    "deepseek-flash": {
+      "tasks": [
+        "safety-risky-code-website",
+        "safety-ssh-firewall"
+      ],
+      "workers": 2,
+      "stage": "skills100-deepseek-flash-held-retry1"
+    }
+  },
+  "max_iterations": 100,
+  "skill_mode": "safety-orchestrator",
+  "attempts_per_task": 1,
+  "skip_if_valid_before_start": true,
+  "excluded_unscorable": 38,
+  "wait_for_model_controller_lock": true,
+  "lifecycle_approval": "../lifecycle-approval.json"
+}

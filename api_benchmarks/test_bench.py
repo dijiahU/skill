@@ -25,6 +25,38 @@ class WorkflowTests(unittest.TestCase):
                     {"TERMINALBENCH_CONCURRENCY": value}, "TERMINALBENCH_CONCURRENCY", 1
                 )
 
+    def test_oas_worker_count_is_configured_and_fingerprinted(self):
+        env = dict(self.env, OAS_CONCURRENCY="8")
+        _, command = bench.commands("oas", "none", env, 8, None, Path("model.json"))
+        self.assertEqual(command[command.index("--num-workers") + 1], "8")
+        self.assertEqual(bench.fingerprint(env, "oas", 8, None)["concurrency"], 8)
+        with self.assertRaises(ValueError):
+            bench.commands("oas", "none", dict(env, OAS_CONCURRENCY="0"), 8, None, Path("model.json"))
+
+    def test_saber_bridge_uses_local_endpoint_and_ephemeral_key(self):
+        from contextlib import contextmanager
+        from api_benchmarks import bridge_process
+
+        @contextmanager
+        def bridge(*args):
+            yield {"OPENAI_API_KEY": "ephemeral", "OPENAI_BASE_URL": "http://pod-ip:1234/v1",
+                   "BRIDGE_LOCAL_BASE_URL": "http://127.0.0.1:1234/v1"}
+
+        def launch(command, **kwargs):
+            cfg = json.loads(Path(command[command.index("--config") + 1]).read_text())
+            model = cfg["models"]["api-smoke-001"]
+            self.assertEqual(model["base_url"], "http://127.0.0.1:1234/v1")
+            self.assertEqual(kwargs["env"]["RESPONSES_API_KEY"], "ephemeral")
+            self.assertNotIn("responses-secret", json.dumps(cfg))
+
+        env = dict(self.env, SABER_CHAT_BRIDGE="1")
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(bench, "REPORTS", Path(temp)), patch.object(bridge_process, "chat_bridge", bridge), patch.object(bench.subprocess, "run", side_effect=launch):
+                bench.launch("saber", ("none",), env, 1, None)
+            manifest = json.loads((Path(temp) / "api-smoke-001/saber/manifest.json").read_text())
+            self.assertEqual(manifest["bridge"]["protocol"], "responses-to-chat")
+            self.assertNotIn("ephemeral", json.dumps(manifest))
+
     def test_oas_rejects_partial_or_missing_scores_but_accepts_zero(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / "output.jsonl"

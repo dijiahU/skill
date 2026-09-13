@@ -1,0 +1,164 @@
+{
+  "checked_at": 1789234023.6649318,
+  "pricing_version": "baf440789f97b945d9a63e4c6162be02",
+  "source": "https://apinebula.ai/api/pricing",
+  "task_count": 89,
+  "models": 3,
+  "runs_one_condition": 267,
+  "runs_two_conditions": 534,
+  "assumptions": {
+    "input_million_per_model_full_suite": [
+      10,
+      60
+    ],
+    "output_million_per_model_full_suite": [
+      0.5,
+      3
+    ],
+    "cache_discount_applied": false,
+    "retry_contingency": 0.3,
+    "gpt_context": "<=272000 tokens per request",
+    "actual_key_groups": "not yet verified",
+    "usage_is_scenario_not_metered": true
+  },
+  "scenarios": {
+    "gemini-3.8-flash": {
+      "Gemini-反重力": {
+        "input_yuan_per_million": 0.6000000000000001,
+        "output_yuan_per_million": 3.0000000000000004,
+        "89_task_low_yuan": 7.5,
+        "89_task_high_yuan": 45.0
+      },
+      "Gemini-GCP": {
+        "input_yuan_per_million": 1.125,
+        "output_yuan_per_million": 5.625,
+        "89_task_low_yuan": 14.06,
+        "89_task_high_yuan": 84.38
+      }
+    },
+    "gpt-5.6-sol": {
+      "CODEX": {
+        "input_yuan_per_million": 2.0,
+        "output_yuan_per_million": 12.0,
+        "89_task_low_yuan": 26.0,
+        "89_task_high_yuan": 156.0
+      },
+      "CODEX-AZURE": {
+        "input_yuan_per_million": 15.0,
+        "output_yuan_per_million": 90.0,
+        "89_task_low_yuan": 195.0,
+        "89_task_high_yuan": 1170.0
+      }
+    },
+    "claude-opus-5": {
+      "CC-kiro": {
+        "input_yuan_per_million": 2.5,
+        "output_yuan_per_million": 12.5,
+        "89_task_low_yuan": 31.25,
+        "89_task_high_yuan": 187.5
+      },
+      "Claude Code全球高防": {
+        "input_yuan_per_million": 8.5,
+        "output_yuan_per_million": 42.5,
+        "89_task_low_yuan": 106.25,
+        "89_task_high_yuan": 637.5
+      },
+      "不限稳定CC- MAX": {
+        "input_yuan_per_million": 12.0,
+        "output_yuan_per_million": 60.0,
+        "89_task_low_yuan": 150.0,
+        "89_task_high_yuan": 900.0
+      },
+      "满血Claude Code": {
+        "input_yuan_per_million": 8.5,
+        "output_yuan_per_million": 42.5,
+        "89_task_low_yuan": 106.25,
+        "89_task_high_yuan": 637.5
+      }
+    }
+  },
+  "pricing_models": [
+    {
+      "model_name": "gemini-3.8-flash",
+      "vendor_id": 2,
+      "official_price": 0,
+      "is_hot": false,
+      "is_new": false,
+      "quota_type": 0,
+      "model_ratio": 0.375,
+      "model_price": 0,
+      "owner_by": "",
+      "completion_ratio": 5,
+      "cache_ratio": 0.1,
+      "create_cache_ratio": 1.333333333333,
+      "enable_groups": [
+        "Gemini-反重力",
+        "Gemini-GCP"
+      ],
+      "supported_endpoint_types": [
+        "gemini",
+        "openai"
+      ]
+    },
+    {
+      "model_name": "gpt-5.6-sol",
+      "icon": "OpenAI",
+      "vendor_id": 1,
+      "official_price": 0,
+      "is_hot": false,
+      "is_new": false,
+      "pinned_order": 3,
+      "quota_type": 0,
+      "model_ratio": 2.5,
+      "model_price": 0,
+      "owner_by": "",
+      "completion_ratio": 6,
+      "cache_ratio": 0.1,
+      "create_cache_ratio": 1.25,
+      "enable_groups": [
+        "CODEX",
+        "CODEX-AZURE"
+      ],
+      "supported_endpoint_types": [
+        "openai",
+        "openai-response"
+      ],
+      "billing_mode": "tiered_expr",
+      "billing_expr": "len <= 272000 ? tier(\"standard\", p * 5 + c * 30 + cr * 0.5 + cc * 6.25) : tier(\"long_context\", p * 10 + c * 45 + cr * 1 + cc * 12.5)"
+    },
+    {
+      "model_name": "claude-opus-5",
+      "vendor_id": 3,
+      "official_price": 0,
+      "is_hot": false,
+      "is_new": false,
+      "quota_type": 0,
+      "model_ratio": 2.5,
+      "model_price": 0,
+      "owner_by": "",
+      "completion_ratio": 5,
+      "cache_ratio": 0.1,
+      "create_cache_ratio": 1.25,
+      "enable_groups": [
+        "CC-kiro",
+        "Claude Code全球高防",
+        "不限稳定CC- MAX",
+        "满血Claude Code"
+      ],
+      "supported_endpoint_types": [
+        "anthropic",
+        "openai"
+      ]
+    }
+  ],
+  "group_ratios": {
+    "Gemini-GCP": 1.5,
+    "CODEX-AZURE": 3,
+    "Gemini-反重力": 0.8,
+    "CODEX": 0.4,
+    "不限稳定CC- MAX": 2.4,
+    "满血Claude Code": 1.7,
+    "CC-kiro": 0.5,
+    "Claude Code全球高防": 1.7
+  }
+}

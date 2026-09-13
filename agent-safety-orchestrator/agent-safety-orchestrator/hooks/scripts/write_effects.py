@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import ast
 import json
+from workspace_snapshot_cache import read_snapshot
 import os
 import re
 import shlex
@@ -549,7 +550,7 @@ def _snapshot_payload() -> dict[str, Any]:
     if not raw:
         return {}
     try:
-        payload = json.loads(Path(raw).read_text(encoding="utf-8"))
+        payload = read_snapshot(raw)
     except (OSError, json.JSONDecodeError):
         return {}
     return payload if isinstance(payload, dict) else {}

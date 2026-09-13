@@ -1,6 +1,7 @@
 """OAS-specific bounded cleanup; no changes to other SDK consumers."""
 
 import subprocess
+import threading
 
 from openhands.sdk import get_logger
 from openhands.workspace import DockerWorkspace
@@ -30,7 +31,11 @@ class BoundedDockerWorkspace(DockerWorkspace):
         if not container_id:
             return
         self._stop_logs.set()
-        if self._logs_thread and self._logs_thread.is_alive():
+        if (
+            self._logs_thread
+            and self._logs_thread is not threading.current_thread()
+            and self._logs_thread.is_alive()
+        ):
             self._logs_thread.join(timeout=2)
         # No destructor retry after an explicit failed cleanup; leave the exact
         # ID in diagnostics for owned-resource review, never broad cleanup.

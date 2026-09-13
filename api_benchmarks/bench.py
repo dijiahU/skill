@@ -24,7 +24,7 @@ from urllib.parse import urlsplit
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 BUNDLE = ROOT / "agent-safety-orchestrator" / "agent-safety-orchestrator"
-REPORTS = ROOT / "reports" / "api_benchmarks"
+REPORTS = Path(os.environ.get("BENCH_REPORTS_ROOT", ROOT / "reports" / "api_benchmarks"))
 BENCHMARKS = ("saber", "oas", "terminalbench")
 MODES = ("none", "safety-orchestrator")
 
@@ -108,7 +108,7 @@ def python_for(name: str) -> str:
         "oas": ROOT / "openagentsafety/.venv/bin/python",
         "terminalbench": HERE / ".venv-harbor/bin/python",
     }
-    return str(paths[name])
+    return os.environ.get(f"{name.upper()}_PYTHON", str(paths[name]))
 
 
 def run_id(env: dict[str, str]) -> str:
@@ -164,7 +164,7 @@ def commands(
             "--workspace",
             "docker",
             "--num-workers",
-            "1",
+            str(positive_setting(env, "OAS_CONCURRENCY", 1)),
             "--n-limit",
             str(limit),
             "--max-iterations",
@@ -300,6 +300,7 @@ def fingerprint(
         "max_steps": env.get("BENCH_MAX_STEPS", "30"),
     }
     if name == "oas":
+        result["concurrency"] = positive_setting(env, "OAS_CONCURRENCY", 1)
         result["npc"] = role_config(env, "npc", False)
         result["dataset"] = env.get(
             "OAS_DATASET", "mgulavani/openagentsafety_full_updated_v3"
@@ -332,6 +333,14 @@ def fingerprint(
             result["codex_archive_sha256"] = hashlib.sha256(
                 archive.read_bytes()
             ).hexdigest()
+    if name == "saber" and env.get("SABER_CHAT_BRIDGE") == "1":
+        result["bridge"] = {
+            "protocol": "responses-to-chat",
+            "source_sha256": hashlib.sha256(
+                (HERE / "responses_bridge.py").read_bytes()
+            ).hexdigest(),
+            "max_output_tokens": positive_setting(env, "BRIDGE_MAX_OUTPUT_TOKENS", 8192),
+        }
     return result
 
 
@@ -369,24 +378,30 @@ def launch(
     if not manifest.exists():
         private_json(manifest, expected)
     with ExitStack() as stack:
-        if name == "terminalbench" and env.get("TERMINALBENCH_CHAT_BRIDGE") == "1":
-            # bench.py also works as a direct script, with HERE on the import path.
+        if name in ("saber", "terminalbench") and env.get(
+            f"{name.upper()}_CHAT_BRIDGE"
+        ) == "1":
             if __package__:
                 from .bridge_process import chat_bridge
             else:
                 from bridge_process import chat_bridge
-
-            child_env.update(
-                stack.enter_context(
-                    chat_bridge(
-                        env,
-                        role_config(env, "responses", True),
-                        python_for(name),
-                        ROOT,
-                        manifest.parent,
-                    )
+            bridge_env = stack.enter_context(
+                chat_bridge(
+                    env,
+                    role_config(env, "responses", True),
+                    python_for("terminalbench"),
+                    ROOT,
+                    manifest.parent,
                 )
             )
+            if name == "saber":
+                child_env["RESPONSES_API_KEY"] = bridge_env["OPENAI_API_KEY"]
+                data["models"][run_id(env)]["base_url"] = bridge_env["BRIDGE_LOCAL_BASE_URL"]
+            else:
+                child_env.update({
+                    k: v for k, v in bridge_env.items()
+                    if k != "BRIDGE_LOCAL_BASE_URL"
+                })
         temp = stack.enter_context(tempfile.TemporaryDirectory(prefix="api-benchmark-"))
         config = Path(temp) / "model.json"
         private_json(config, data)
@@ -736,7 +751,7 @@ def main() -> int:
                 )
             for mode in modes:
                 slug = f"{run_id(env)}_codex-native-{mode}"
-                if not (ROOT / "saber/results" / slug).exists():
+                if not (Path(env.get("SABER_RESULTS_ROOT", ROOT / "saber/results")) / slug).exists():
                     raise ValueError(f"No SABER inference outputs for {slug}")
                 subprocess.run(
                     [python_for(name), "judge_osbench.py", slug],

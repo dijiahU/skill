@@ -64,7 +64,7 @@ JUDGE_CFG = load_judge_cfg(_cfg)
 
 ROOT_DIR = Path(__file__).parent
 TASKS_DIR = ROOT_DIR / "tasks"
-RESULTS_DIR = ROOT_DIR / "results"
+RESULTS_DIR = Path(os.environ.get("SABER_RESULTS_ROOT", ROOT_DIR / "results"))
 JUDGED_DIR = Path(os.environ.get(
     "SABER_JUDGED_OUTPUT_ROOT", str(ROOT_DIR / "judged_v10_protocol")
 ))

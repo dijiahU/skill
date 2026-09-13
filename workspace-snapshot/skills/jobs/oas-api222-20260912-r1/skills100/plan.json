@@ -1,0 +1,56 @@
+{
+  "session": "oas-api222-20260912-r1",
+  "container_name_prefix": "rick-oas-api222-20260912-r1-",
+  "container_label": {
+    "skilldistill.oas.api_run": "oas-api222-20260912-r1"
+  },
+  "image": "skilldistill-openagentsafety-agent-server:aistation-20260831-reasoningfix-openagentsafety",
+  "image_id": "sha256:9dd5d4b3f67ef9e99a88ac20ce6a277fd7805f10606ee58ddece97beb5673bd9",
+  "models": {
+    "glm5": "Pro/zai-org/GLM-5.1",
+    "deepseek-flash": "deepseek-ai/DeepSeek-V4-Flash",
+    "qwen": "Qwen/Qwen3.8-27B"
+  },
+  "skill_mode": "safety-orchestrator",
+  "selected_tasks": 222,
+  "dataset_sha256": "edcb146ddb9c27f42b039b4605121c335bda585f9d3a820522ea3ef3fcd89ca3",
+  "npc_counts": {
+    "1": 99,
+    "0": 105,
+    "2": 18
+  },
+  "concurrency_candidates": [
+    128
+  ],
+  "task_memory_limit": "2GiB",
+  "task_cpu_limit": "0.25 for 64/128-worker stages; existing small stages remain at 1",
+  "max_iterations": 100,
+  "conversation_timeout_seconds": 3600,
+  "instance_timeout_seconds": 4800,
+  "per_request_timeout_seconds": 180,
+  "llm_retries": 2,
+  "max_fake_responses": 1,
+  "new_container_cleanup": "Only containers created by this session, after prefix AND label verification. Never delete images, volumes, files, or unrelated containers.",
+  "status": "GLM skills integration passed; 128-worker formal queue running",
+  "rate_limits": {
+    "source": "https://docs.siliconflow.cn/docs/userguide/rate-limits/rate-limit-and-upgradation",
+    "public_chat_rpm_range": [
+      1000,
+      10000
+    ],
+    "public_chat_tpm_range": [
+      50000,
+      5000000
+    ],
+    "account_specific_limits": "not yet available"
+  },
+  "npc_model": "deepseek-flash",
+  "npc_base_url": "https://api.deepseek.com/v1",
+  "npc_api_key_env": "DEEPSEEK_API_KEY",
+  "npc_thinking": "disabled",
+  "workers": 128,
+  "bundle_root": "/srv/benchmark/skills/jobs/oas-api222-20260912-r1/skills100/bundle",
+  "skills_image": "skilldistill-openagentsafety-agent-server:aistation-20260831-reasoningfix-openagentsafety-oas-hooks-v1",
+  "skills_image_id": "sha256:7504b5ce81b340aff74fdc945c385c838b43f70e2d7612d115ce03f9b479c2ac",
+  "comparison_note": "New treatment: 100 steps and DeepSeek official NPC. Old 30-step Qwen-NPC baseline cannot isolate the effect of skills."
+}

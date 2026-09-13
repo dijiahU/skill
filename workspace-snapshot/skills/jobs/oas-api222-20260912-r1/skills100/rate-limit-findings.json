@@ -1,0 +1,26 @@
+{
+  "checked_at": 1789216855.1826942,
+  "source": "https://docs.siliconflow.cn/docs/userguide/rate-limits/rate-limit-and-upgradation",
+  "documented_chat_limits": [
+    "RPM: requests per minute",
+    "TPM: tokens per minute"
+  ],
+  "scope": "per account and separately per model; API keys share model limits",
+  "current_observed_error": "TPM limit reached",
+  "hourly_limit": "RPH is defined generally but not listed as a standard Chat-model limit",
+  "unknown": [
+    "account-specific per-model TPM values",
+    "fixed vs rolling window implementation",
+    "exact token accounting including cached tokens and output reservations"
+  ],
+  "probe_file": "rate-limit-header-check.json",
+  "current_workers": {
+    "glm5": 32,
+    "deepseek-flash": 32,
+    "qwen": 8
+  },
+  "qwen_fallback_workers": [
+    4,
+    2
+  ]
+}

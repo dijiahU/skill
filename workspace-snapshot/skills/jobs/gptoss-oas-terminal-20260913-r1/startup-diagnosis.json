@@ -1,0 +1,7 @@
+{
+  "failure": "SIGFPE in torch.nn.functional.linear during logit profile",
+  "root_cause": "torch 2.10+cu128 loaded libcublasLt 12.1.0.26 through inherited LD_LIBRARY_PATH alongside bundled cuBLAS 12.8.4.1",
+  "fix": "Prepend bundled cuBLAS and nvjitlink directories for owned service processes only",
+  "reference": "https://github.com/pytorch/pytorch/issues/133548",
+  "no_scored_tasks_before_fix": true
+}

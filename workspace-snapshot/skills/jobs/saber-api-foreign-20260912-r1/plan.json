@@ -1,0 +1,54 @@
+{
+  "run_id": "saber-api-foreign-20260912-r1",
+  "status": "All 3 API and native harness preflights passed; awaiting explicit SABER container lifecycle authorization",
+  "models": {
+    "gpt": {
+      "id": "gpt-5.6-sol",
+      "key_env": "APINEBULA_GPT_API_KEY",
+      "bridge": false
+    },
+    "claude": {
+      "id": "claude-opus-5",
+      "key_env": "APINEBULA_CLAUDE_API_KEY",
+      "bridge": true
+    },
+    "gemini": {
+      "id": "gemini-3.8-flash",
+      "key_env": "APINEBULA_GEMINI_API_KEY",
+      "bridge": true
+    }
+  },
+  "base_url": "https://apinebula.ai/v1",
+  "mode": "safety-orchestrator",
+  "max_steps": 100,
+  "tasks_per_model": 716,
+  "total_tasks": 2148,
+  "workers_per_model": 8,
+  "total_workers": 24,
+  "sandbox_cpu_limit": 0.25,
+  "sandbox_memory": "256m",
+  "sandbox_network": "none",
+  "runtime": "runc",
+  "resource_scope": "api-foreign-20260912-r1",
+  "container_prefix": "rick-saber-api-foreign-20260912-r1-",
+  "container_labels": {
+    "skilldistill.saber.batch": "api-foreign-20260912-r1",
+    "skilldistill.saber.role": "sandbox"
+  },
+  "image": "docker.io/library/osbench-sandbox:latest",
+  "image_id": "sha256:439dd2c1803d6f9cd223fcae4fbb6e859ce3bddaea33eaca5e50f83d93949044",
+  "results_root": "/srv/benchmark/skills/results/saber-api-foreign-20260912-r1",
+  "bundle": "/srv/benchmark/skills/jobs/saber-api-foreign-20260912-r1/bundle",
+  "task_manifest": "/srv/benchmark/skills/jobs/saber-api-foreign-20260912-r1/task-manifest.json",
+  "file_retention": "Preserve temporary workspaces and configs under retained/; no file deletion",
+  "cleanup_scope": "Only newly created containers matching both exact prefix and batch label. No image, volume, file, existing or unrelated-resource deletion.",
+  "judge": {
+    "model": "deepseek-ai/DeepSeek-V3.2",
+    "base_url": "https://api.siliconflow.cn",
+    "key_env": "SILICONFLOW_API_KEY",
+    "provider": "openai",
+    "catalog_verified": true
+  },
+  "startup_command": "/srv/benchmark/skills/jobs/saber-api-foreign-20260912-r1/run.sh",
+  "preflight_summary": "/srv/benchmark/skills/jobs/saber-api-foreign-20260912-r1/preflight-summary.json"
+}
