@@ -55,6 +55,7 @@ class HookResult(BaseModel):
     additional_context: str | None = None
     error: str | None = None
     async_started: bool = False  # Indicates this was an async hook
+    modified_output: str | None = None  # Opt-in replacement of the entire tool view
 
     @property
     def should_continue(self) -> bool:
@@ -377,6 +378,33 @@ class HookExecutor:
         event: HookEvent,
         env: dict[str, str] | None = None,
     ) -> HookResult:
+        """Execute a hook; OAS tool checks fail closed on infrastructure errors."""
+        critical = safety_orchestrator_compat_enabled() and event.event_type in {
+            "PreToolUse",
+            "PostToolUse",
+        }
+        if critical and hook.async_:
+            return HookResult(
+                success=False,
+                blocked=True,
+                exit_code=-1,
+                error="Safety tool checks must execute synchronously",
+            )
+        result = self._execute(hook, event, env)
+        if critical and not result.success and not result.blocked:
+            result.blocked = True
+            result.error = result.error or (
+                f"Safety hook exited unsuccessfully ({result.exit_code})"
+            )
+            result.reason = "Safety check failed; operation cannot proceed safely"
+        return result
+
+    def _execute(
+        self,
+        hook: HookDefinition,
+        event: HookEvent,
+        env: dict[str, str] | None = None,
+    ) -> HookResult:
         """Execute a single hook."""
         if hook.type == HookType.AGENT:
             return self._execute_agent_hook(hook, event)
@@ -491,7 +519,49 @@ class HookExecutor:
             if result.stdout.strip():
                 try:
                     output_data = json.loads(result.stdout)
+                    if safety_orchestrator_compat_enabled() and not isinstance(
+                        output_data, dict
+                    ):
+                        raise ValueError("Safety hook output must be a JSON object")
                     if isinstance(output_data, dict):
+                        if safety_orchestrator_compat_enabled():
+                            for field in (
+                                "verdict",
+                                "decision",
+                                "reason",
+                                "additionalContext",
+                            ):
+                                if field in output_data and not isinstance(
+                                    output_data[field], str
+                                ):
+                                    raise ValueError(
+                                        f"Safety hook {field} must be a string"
+                                    )
+                            if "modified_output" in output_data:
+                                replacement = output_data["modified_output"]
+                                if not isinstance(replacement, str):
+                                    raise ValueError("modified_output must be a string")
+                                hook_result.modified_output = replacement
+                            verdict = output_data.get("verdict")
+                            if verdict is not None and verdict not in {
+                                "pass",
+                                "warn",
+                                "block",
+                            }:
+                                raise ValueError("Unknown safety hook verdict")
+                            if verdict == "block":
+                                hook_result.blocked = True
+                            if output_data.get("decision", "allow") not in {
+                                "allow",
+                                "deny",
+                            }:
+                                raise ValueError("Unknown safety hook decision")
+                            if "continue" in output_data and not isinstance(
+                                output_data["continue"], bool
+                            ):
+                                raise ValueError(
+                                    "Safety hook continue must be a boolean"
+                                )
                         # Parse decision
                         if "decision" in output_data:
                             decision_str = output_data["decision"].lower()
@@ -526,7 +596,12 @@ class HookExecutor:
                             hook_result.additional_context = hook_result.reason
 
                 except json.JSONDecodeError:
-                    # Not JSON, that's okay - just use stdout as-is
+                    if safety_orchestrator_compat_enabled():
+                        hook_result.success = False
+                        hook_result.error = (
+                            "Safety hook output was not a single JSON object"
+                        )
+                    # Preserve upstream permissive behavior outside OAS.
                     pass
 
             return hook_result

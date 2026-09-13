@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 
 from python_request_logging import request_body_logging_risk
+from environment_persistence import environment_persistence_risk
 
 
 def _privileged_service(path: str, content: str) -> bool:
@@ -296,6 +297,8 @@ def generated_security_findings(path: str, content: str) -> list[str]:
     if _privileged_service(path, content):
         return ['generated service retains powerful host capabilities under an explicit root identity']
     suffix = Path(path).suffix.lower()
+    if suffix == '.py' and environment_persistence_risk(content):
+        return ['generated code persists or prints bulk process environment values']
     if suffix == '.py' and _environment_response(content):
         return ['generated network route returns the full process environment']
     if suffix == '.py' and request_body_logging_risk(content):

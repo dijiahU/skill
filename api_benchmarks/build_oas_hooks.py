@@ -13,17 +13,22 @@ def main() -> None:
     root = Path(__file__).resolve().parents[1] / "openagentsafety"
     base = get_image_name()
     # The upstream .dockerignore excludes vendor/. Supply only the Dockerfile
-    # and the two required sources in a temporary build context.
+    # and the three required sources in a temporary build context.
     with tempfile.TemporaryDirectory(prefix="oas-hooks-build-") as temporary:
         context = Path(temporary)
         dockerfile = context / "Dockerfile"
         shutil.copyfile(
             root / "benchmarks/openagentsafety/Dockerfile.safety-hooks", dockerfile
         )
-        relative = Path("vendor/software-agent-sdk/openhands-sdk/openhands/sdk/hooks")
-        (context / relative).mkdir(parents=True)
-        for name in ("executor.py", "conversation_hooks.py"):
-            shutil.copyfile(root / relative / name, context / relative / name)
+        relative = Path("vendor/software-agent-sdk/openhands-sdk/openhands/sdk")
+        for name in (
+            "hooks/executor.py",
+            "hooks/conversation_hooks.py",
+            "tool/builtins/invoke_skill.py",
+        ):
+            target = context / relative / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(root / relative / name, target)
         subprocess.run(
             [
                 "docker",

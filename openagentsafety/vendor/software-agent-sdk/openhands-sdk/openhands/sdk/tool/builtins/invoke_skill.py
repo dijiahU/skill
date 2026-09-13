@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Self
@@ -24,8 +25,38 @@ if TYPE_CHECKING:
     from openhands.sdk.conversation.state import ConversationState
 
 
+SAFETY_REFERENCE_ROOT = Path("/opt/safety-orchestrator/skills/safety-router-skill")
+SAFETY_REFERENCE_PROVENANCE = "registered-safety-bundle-v1"
+SAFETY_REFERENCE_IDS = frozenset(
+    {
+        "classify-input-intent-ambiguity",
+        "detect-prompt-injection",
+        "scan-input-for-pii-and-secrets",
+        "enforce-policy-as-code",
+        "detect-task-overreach",
+        "validate-tool-argument-safety",
+        "validate-agent-tool-trust",
+        "detect-supply-chain-risk",
+        "enforce-rate-and-quota-limits",
+        "redact-sensitive-output",
+        "detect-data-exfiltration",
+        "enforce-output-content-policy",
+        "incident-response-handler",
+        "escalate-to-human-sentinel",
+    }
+)
+
+
 class InvokeSkillAction(Action):
     name: str = Field(description="Name of the loaded skill to invoke.")
+    reference: str | None = Field(
+        default=None,
+        description=(
+            "For safety-router-skill only, read an archetype reference by ID "
+            "(for example detect-task-overreach), without a path or .md suffix. "
+            "Omit to load the router. This reads trusted static content."
+        ),
+    )
 
     @property
     def visualize(self) -> Text:
@@ -36,6 +67,10 @@ class InvokeSkillAction(Action):
 
 
 class InvokeSkillObservation(Observation):
+    reference_id: str | None = None
+    reference_sha256: str | None = None
+    reference_provenance: str | None = None
+
     skill_name: str = Field(
         description="Name of the skill this observation corresponds to."
     )
@@ -48,12 +83,49 @@ class InvokeSkillObservation(Observation):
         return t
 
 
+def verify_safety_reference_observation(
+    action: InvokeSkillAction, observation: InvokeSkillObservation
+) -> bool:
+    """Verify an executor-produced reference against the fixed host bundle.
+
+    The caller must retain the actual action/observation types; an arbitrary
+    tool-returned dictionary is not evidence of this trusted execution path.
+    """
+    if (
+        action.name.strip() != "safety-router-skill"
+        or action.reference not in SAFETY_REFERENCE_IDS
+        or observation.is_error
+        or observation.skill_name != "safety-router-skill"
+        or observation.reference_id != action.reference
+        or observation.reference_provenance != SAFETY_REFERENCE_PROVENANCE
+    ):
+        return False
+    try:
+        root = SAFETY_REFERENCE_ROOT.resolve(strict=True)
+        path = (root / "references" / "archetypes" / f"{action.reference}.md").resolve(
+            strict=True
+        )
+        if not path.is_relative_to(root) or not path.is_file():
+            return False
+        with path.open("rb") as stream:
+            raw = stream.read(131073)
+        return (
+            len(raw) <= 131072
+            and raw.decode("utf-8") == observation.text
+            and hashlib.sha256(raw).hexdigest() == observation.reference_sha256
+        )
+    except (OSError, RuntimeError, UnicodeError, ValueError):
+        return False
+
+
 TOOL_DESCRIPTION = """Invoke a skill by name.
 
 This is the only supported way to invoke a skill listed in
 `<available_skills>`. Call it with the `<name>` shown in that block; the
 skill's full content is rendered (including any dynamic context) and
-returned as the tool result.
+returned as the tool result. For safety-router-skill, use the optional
+`reference` ID to read its trusted archetype documents; do not resolve their
+relative paths using shell or workspace tools.
 """
 
 
@@ -115,12 +187,54 @@ class InvokeSkillExecutor(ToolExecutor):
                 ),
             )
 
+        if action.reference is not None:
+            return self._read_safety_reference(name, match.source, action.reference)
+
         rendered = render_content_with_commands(match.content, working_dir=working_dir)
         rendered = self._append_skill_location_footer(
             rendered, match.source, working_dir
         )
         self._record_invocation(conversation, name)
         return InvokeSkillObservation.from_text(text=rendered, skill_name=name)
+
+    @classmethod
+    def _read_safety_reference(
+        cls, name: str, source: str | None, reference: str
+    ) -> InvokeSkillObservation:
+        if name != "safety-router-skill" or reference not in SAFETY_REFERENCE_IDS:
+            return cls._error(
+                name, "Unknown safety reference ID; use the router catalog."
+            )
+        try:
+            root = SAFETY_REFERENCE_ROOT.resolve(strict=True)
+            if source is None or Path(source).resolve(strict=True) != root / "SKILL.md":
+                return cls._error(
+                    name, "Safety reference source is not the host bundle."
+                )
+            path = (root / "references" / "archetypes" / f"{reference}.md").resolve(
+                strict=True
+            )
+            if not path.is_relative_to(root) or not path.is_file():
+                return cls._error(
+                    name, "Safety reference escapes the registered bundle."
+                )
+            with path.open("rb") as stream:
+                raw = stream.read(131073)
+            if len(raw) > 131072:
+                return cls._error(name, "Safety reference exceeds the size limit.")
+            text = raw.decode("utf-8")
+        except (OSError, RuntimeError, UnicodeError, ValueError):
+            return cls._error(
+                name,
+                "Trusted safety reference is unavailable; do not assume it passed.",
+            )
+        return InvokeSkillObservation.from_text(
+            text=text,
+            skill_name=name,
+            reference_id=reference,
+            reference_sha256=hashlib.sha256(raw).hexdigest(),
+            reference_provenance=SAFETY_REFERENCE_PROVENANCE,
+        )
 
     @staticmethod
     def _append_skill_location_footer(

@@ -73,12 +73,16 @@ def normalize_host_event(event: dict[str, Any]) -> dict[str, Any]:
     tool_input = normalized.get("tool_input")
     if isinstance(tool_input, dict):
         adapted_input = dict(tool_input)
-        if "path" in adapted_input:
-            adapted_input.setdefault("file_path", adapted_input["path"])
-        if "file_text" in adapted_input:
-            adapted_input.setdefault("content", adapted_input["file_text"])
-        if "new_str" in adapted_input:
-            adapted_input.setdefault("new_string", adapted_input["new_str"])
+        # SDK optional fields arrive as null; retain intentional empty strings.
+        for target, source in (("file_path", "path"), ("content", "file_text"),
+                               ("new_string", "new_str"), ("old_string", "old_str")):
+            if adapted_input.get(target) is None and isinstance(adapted_input.get(source), str):
+                adapted_input[target] = adapted_input[source]
+        if tool_name == "file_editor":
+            normalized["tool_name"] = {
+                "view": "Read", "create": "Write", "str_replace": "Edit",
+                "insert": "Edit",
+            }.get(adapted_input.get("command"), "Edit")
         normalized["tool_input"] = adapted_input
 
     return normalized

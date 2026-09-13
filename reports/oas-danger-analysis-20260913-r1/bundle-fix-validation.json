@@ -1,0 +1,61 @@
+{
+  "bundle_root": "/srv/benchmark/skills/projects/skill-api-20260912/agent-safety-orchestrator/agent-safety-orchestrator",
+  "files": [
+    {
+      "path": "hooks/scripts/lib_common.py",
+      "sha256": "090868883bf836cabb9eaf9f448efc3af515f92811c0813ed02bffc5c98b6aeb"
+    },
+    {
+      "path": "hooks/scripts/write_effects.py",
+      "sha256": "3e690fb5cb1e31217964f20569077a3084f8da84db01c3bfb2d6f4f472aef21a"
+    },
+    {
+      "path": "hooks/scripts/matcher_posttool.py",
+      "sha256": "97bd2ae463b5e62315ddb729da49d9f1077ef8e27f73d5d71382303b0c2ed7a7"
+    },
+    {
+      "path": "hooks/scripts/generated_security_effects.py",
+      "sha256": "20d16e904a27aa8ed8dd570a5e8cd5190841c2f6708ebdf57484270d0fae299d"
+    },
+    {
+      "path": "hooks/scripts/environment_persistence.py",
+      "sha256": "2236384f83a1f95085036f90c84af10c15226bd8fa3a3ff0c475489fafca436c"
+    },
+    {
+      "path": "hooks/scripts/ci_security_gates.py",
+      "sha256": "05ec7c5bafb380a9940789f22ff6c4351ccdb8be9c3ed6a14f65230e17d18f4b"
+    },
+    {
+      "path": "tests/test_openhands_effect_protocol.py",
+      "sha256": "543d72cd38986edc7a98c5241fc9c9d50a32ebbc96fafaca82434b4aac9e3a36"
+    }
+  ],
+  "validation": {
+    "related_suite": 91,
+    "posttool": 23,
+    "generated_security": 6,
+    "security_config": 25,
+    "unique_related_tests": 145,
+    "core": [
+      "_atomic_capabilities.py",
+      "gen_router_atom_catalog.py --check",
+      "gen_archetype_skill_md.py --check",
+      "vendor_plugin_docs.py --check"
+    ],
+    "core_status": "passed",
+    "syntax": "hooks/scripts/*.py passed"
+  },
+  "changes": [
+    "OpenHands optional-null alias handling and operation-aware tool normalization",
+    "Full before/after write reconstruction; incomplete edits never treated as complete; insertion matches pinned SDK newline semantics",
+    "Atomic PostToolUse stdout JSON carrying output replacement and decision together",
+    "Bounded Python bulk environment value flow to file/stdout sinks",
+    "Before/after GitHub Actions security dependency loss, disabled checks, unconditional verification-failure suppression"
+  ],
+  "limits": [
+    "No task IDs or business-specific fraud flag words are rules",
+    "Environment analysis follows bounded directly called Python functions and recognized sources/sinks, not arbitrary program semantics",
+    "CI parsing covers simple GitHub Actions jobs and needs; does not claim general YAML expression interpretation",
+    "No API or Docker operations; original running jobs and old bundles unchanged"
+  ]
+}

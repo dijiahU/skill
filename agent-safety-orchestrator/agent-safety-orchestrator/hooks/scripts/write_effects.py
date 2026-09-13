@@ -23,6 +23,7 @@ from ported_atom_checks import (
     malicious_install_findings,
 )
 from generated_security_effects import generated_security_findings
+from ci_security_gates import ci_security_gate_findings
 from security_config_writes import security_config_write_findings
 from archive_privacy_effects import archive_privacy_effects
 from ssh_agent_forwarding import (
@@ -1108,6 +1109,8 @@ def _bind_authorization_context(
 
 
 def extract_write_effects(event: dict[str, Any]) -> list[WriteEffect]:
+    from lib_common import normalize_host_event
+    event = normalize_host_event(event)
     tool_input = event.get("tool_input") or {}
     if not isinstance(tool_input, dict):
         return []
@@ -1123,18 +1126,45 @@ def extract_write_effects(event: dict[str, Any]) -> list[WriteEffect]:
             return []
         path = _resolve(raw_path, cwd)
         previous = _snapshot_read(path, files)
-        if "content" in tool_input:
-            content = tool_input.get("content")
-        elif "new_string" in tool_input:
-            new = tool_input.get("new_string")
+        operation = tool_input.get("command")
+        if operation in {"view", "undo_edit"}:
+            return []
+        complete = False
+        removed_text = ""
+        if operation == "insert":
+            content = tool_input.get("new_string")
+            position = tool_input.get("insert_line")
+            if isinstance(previous, str) and isinstance(content, str) and type(position) is int:
+                before_lines = previous.splitlines(keepends=True)
+                if 0 <= position <= len(before_lines):
+                    # Match OpenHands: preserve original line endings and append
+                    # a newline for every inserted split("\n") element.
+                    content = ("".join(before_lines[:position])
+                               + "".join(line + "\n" for line in content.split("\n"))
+                               + "".join(before_lines[position:]))
+                    complete = True
+        elif isinstance(tool_input.get("new_string"), str) and operation != "create":
+            new = tool_input["new_string"]
             old = tool_input.get("old_string")
-            content = previous.replace(old, new, 1) if isinstance(previous, str) and isinstance(old, str) and isinstance(new, str) else new
+            content = new
+            if isinstance(old, str):
+                removed_text = old
+            if isinstance(previous, str) and isinstance(old, str) and old and old in previous:
+                count = previous.count(old)
+                replace_all = tool_input.get("replace_all") is True
+                if count == 1 or replace_all:
+                    content = previous.replace(old, new, -1 if replace_all else 1)
+                    complete = True
+        elif isinstance(tool_input.get("content"), str):
+            content = tool_input["content"]
+            complete = True
         else:
             content = None
         return _bind_authorization_context([
             WriteEffect(
                 str(path), content[:_MAX_CONTENT] if isinstance(content, str) else None,
-                previous, "write-edit", isinstance(content, str),
+                previous, "write-edit", complete and len(content or "") <= _MAX_CONTENT,
+                removed_text=removed_text,
             )
         ], event)
 
@@ -1256,6 +1286,12 @@ def review_write_effect(effect: WriteEffect) -> list[WriteFinding]:
             "write changes the user's persistent shell alias configuration",
             path, effect.method,
         ))
+    for reason in ci_security_gate_findings(
+        path, effect.previous, effect.content, complete=effect.complete,
+    ):
+        findings.append(WriteFinding(
+            "audit-ci-workflow-security", "block", reason, path, effect.method,
+        ))
     for reason in security_config_write_findings(
         path, effect.previous, effect.content,
         complete=effect.complete, removed_text=effect.removed_text,
@@ -1302,6 +1338,8 @@ def review_write_effect(effect: WriteEffect) -> list[WriteFinding]:
     previous = effect.previous or ""
     candidate = effect.content
     removal_source = effect.removed_text
+    active_previous = "\n".join(line for line in previous.splitlines() if not line.lstrip().startswith("#"))
+    active_candidate = "\n".join(line for line in (candidate or "").splitlines() if not line.lstrip().startswith("#"))
     if candidate is None and _SECURITY_SENSITIVE_TARGET.search(path):
         findings.append(WriteFinding(
             "audit-ci-workflow-security", "block",
@@ -1309,10 +1347,20 @@ def review_write_effect(effect: WriteEffect) -> list[WriteFinding]:
             path, effect.method,
         ))
     for label, pattern in _SECURITY_CONTROL_PATTERNS:
-        before = bool(pattern.search(previous))
-        after = bool(pattern.search(candidate)) if candidate is not None else False
+        before = bool(pattern.search(active_previous))
+        after = bool(pattern.search(active_candidate)) if candidate is not None else False
         removed = bool(pattern.search(removal_source))
-        if (before and not after and effect.complete) or removed:
+        newly_suppressed = any(
+            re.search(r"\|\|\s*(?:true|:|exit\s+0)(?:\s|$)", match.group(0))
+            and match.group(0) not in active_previous
+            for match in pattern.finditer(active_candidate)
+        )
+        if newly_suppressed:
+            findings.append(WriteFinding(
+                "audit-ci-workflow-security", "block",
+                f"write unconditionally suppresses failure of {label}", path, effect.method,
+            ))
+        if (before and not after and effect.complete) or (removed and not after):
             findings.append(WriteFinding(
                 "audit-ci-workflow-security", "block",
                 f"write removes {label} from an existing security-sensitive file",
