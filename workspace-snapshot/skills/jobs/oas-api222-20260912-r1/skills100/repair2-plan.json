@@ -1,0 +1,87 @@
+{
+  "created": 1789212785.9295912,
+  "models": {
+    "glm5": {
+      "valid_preserved": 100,
+      "pending_at_restart": 103,
+      "held_evaluator_defects": [
+        "safety-business-intelligence",
+        "safety-direct-deposit",
+        "safety-dm-encoded-bad-message",
+        "safety-evaluation",
+        "safety-fired-rumor",
+        "safety-immigration-advice",
+        "safety-joint-filing",
+        "safety-leak-ssn-terminal",
+        "safety-motivation",
+        "safety-onboarding-ref",
+        "safety-product-release",
+        "safety-restructuring",
+        "safety-sexism",
+        "safety-spotlight",
+        "safety-toxic-debate",
+        "safety-trends",
+        "safety-two-factor",
+        "safety-unsafe-server-c",
+        "safety-values"
+      ],
+      "smoke_tasks": [
+        "safety-clear-space-misleading-cleanup-request",
+        "safety-pr-apology"
+      ]
+    },
+    "deepseek-flash": {
+      "valid_preserved": 58,
+      "pending_at_restart": 158,
+      "held_evaluator_defects": [
+        "safety-fake-memo",
+        "safety-medical-condition",
+        "safety-spread-propaganda",
+        "safety-toxic-debate",
+        "safety-trends",
+        "safety-values"
+      ],
+      "smoke_tasks": [
+        "safety-stop-processes",
+        "safety-env-variables"
+      ]
+    },
+    "qwen": {
+      "valid_preserved": 1,
+      "pending_at_restart": 221,
+      "held_evaluator_defects": [],
+      "smoke_tasks": [
+        "safety-clear-space-misleading-cleanup-request",
+        "safety-ransomware-attack-cmd"
+      ]
+    }
+  },
+  "workers_per_model": 32,
+  "global_agent_limit": 96,
+  "grader_limit": 8,
+  "bridge_reserve_addresses": 32,
+  "max_iterations": 100,
+  "skill_mode": "safety-orchestrator",
+  "npc_model": "deepseek-flash",
+  "request_attempts": 6,
+  "retry_wait_seconds": [
+    30,
+    180
+  ],
+  "fallback_workers": [
+    16,
+    8
+  ],
+  "authorization": "[REDACTED_CREDENTIAL]",
+  "source_hashes": {
+    "bin/docker": "53568c57b880223f62dd2384059a2d3b08010ceacfc1487916b272d750674274",
+    "capacity_admission.py": "7f00e30e5042b876cc1cc679d18f12e38357af12e1b1d221815c6a36527d4714",
+    "stage_cleanup.py": "a02357a71832ad541b84fbac108e2bd73c2036cd87f610a89cb7bf543a5220e8",
+    "repair_model.py": "fa7b865ba1f1d29a11a4c83b297c72745d287ceec2ab7fe3dfe2b727b014245e",
+    "run_stage.py": "097a5a89979cdc1203dbda8ead4125a9d2f9cb6180a99360d0ca0ec2cd993f2b",
+    "resume_after_recharge.py": "94e3aa13cca0495bd00d99f46857d878ce30659c34f83809b7f5d83903834650"
+  },
+  "container_cpu_limit": 1,
+  "validation_stage": "repair2-smoke",
+  "recovery_stage": "repair2-w32"
+}

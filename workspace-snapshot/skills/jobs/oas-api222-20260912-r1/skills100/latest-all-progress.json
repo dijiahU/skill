@@ -1,0 +1,241 @@
+{
+  "checked_at": 1789233591.5725927,
+  "groups": [
+    {
+      "group": "skills100",
+      "model": "glm5",
+      "valid": 176,
+      "points": 68,
+      "total": 176,
+      "percent": 38.64,
+      "unresolved": 8,
+      "stages": [],
+      "states": [
+        {
+          "status": "repair4 finished; see held tasks",
+          "stage": null,
+          "workers": null,
+          "tasks_this_stage": 3,
+          "result": {
+            "model": "glm5",
+            "unique_tasks_with_output": 222,
+            "valid_tasks": 174,
+            "points": 67,
+            "total": 174,
+            "invalid_tasks": 48
+          },
+          "updated_at": 1789223404.016068,
+          "error_type": null
+        },
+        {
+          "status": "finished",
+          "stage": "skills100-glm5-held-retry1",
+          "workers": null,
+          "tasks_this_stage": null,
+          "result": {
+            "model": "glm5",
+            "stage": "skills100-glm5-held-retry1",
+            "task_count": 4,
+            "returned": 4,
+            "valid_count": 2,
+            "workers": 4,
+            "peak_containers": 4,
+            "returncode": 0,
+            "elapsed_seconds": 1743.95,
+            "status": "stage finished"
+          },
+          "updated_at": 1789225151.585262,
+          "error_type": null
+        }
+      ],
+      "active_stage": "skills100-glm5-held-retry1",
+      "runner_alive": false
+    },
+    {
+      "group": "skills100",
+      "model": "deepseek-flash",
+      "valid": 179,
+      "points": 84,
+      "total": 179,
+      "percent": 46.93,
+      "unresolved": 5,
+      "stages": [],
+      "states": [
+        {
+          "status": "repair4 finished; see held tasks",
+          "stage": null,
+          "workers": null,
+          "tasks_this_stage": 44,
+          "result": {
+            "model": "deepseek-flash",
+            "unique_tasks_with_output": 220,
+            "valid_tasks": 177,
+            "points": 83,
+            "total": 177,
+            "invalid_tasks": 43
+          },
+          "updated_at": 1789220578.8420432,
+          "error_type": null
+        },
+        {
+          "status": "finished",
+          "stage": "skills100-deepseek-flash-held-retry1",
+          "workers": null,
+          "tasks_this_stage": null,
+          "result": {
+            "model": "deepseek-flash",
+            "stage": "skills100-deepseek-flash-held-retry1",
+            "task_count": 2,
+            "returned": 2,
+            "valid_count": 2,
+            "workers": 2,
+            "peak_containers": 2,
+            "returncode": 0,
+            "elapsed_seconds": 393.17,
+            "status": "stage finished"
+          },
+          "updated_at": 1789220974.8621383,
+          "error_type": null
+        }
+      ],
+      "active_stage": "skills100-deepseek-flash-held-retry1",
+      "runner_alive": false
+    },
+    {
+      "group": "skills100",
+      "model": "qwen",
+      "valid": 37,
+      "points": 17,
+      "total": 37,
+      "percent": 45.95,
+      "unresolved": 147,
+      "stages": [
+        {
+          "stage": "skills100-qwen-repair4-w8",
+          "returned": 52,
+          "valid": 31,
+          "errors": {
+            "TPM limit reached": 7,
+            "other": 13,
+            "Remote conversation got stuck": 1
+          }
+        }
+      ],
+      "states": [
+        {
+          "status": "running repaired scoreable tasks",
+          "stage": null,
+          "workers": null,
+          "tasks_this_stage": 178,
+          "result": null,
+          "updated_at": 1789218453.4261868,
+          "error_type": null
+        }
+      ],
+      "active_stage": "skills100-qwen-repair4-w8",
+      "runner_alive": true
+    },
+    {
+      "group": "baseline100",
+      "model": "deepseek-flash",
+      "valid": 171,
+      "points": 89,
+      "total": 171,
+      "percent": 52.05,
+      "unresolved": 13,
+      "stages": [
+        {
+          "stage": "baseline100-deepseek-flash-r1-smoke",
+          "returned": 2,
+          "valid": 2,
+          "errors": {}
+        },
+        {
+          "stage": "baseline100-deepseek-flash-r1-w32",
+          "returned": 182,
+          "valid": 169,
+          "errors": {
+            "MaxIterationsReached": 7,
+            "other": 6
+          }
+        }
+      ],
+      "states": [
+        {
+          "status": "baseline batches ended; inspect unresolved tasks",
+          "stage": null,
+          "workers": 32,
+          "tasks_this_stage": 182,
+          "result": {
+            "model": "deepseek-flash",
+            "unique_tasks_with_output": 184,
+            "valid_tasks": 171,
+            "points": 89,
+            "total": 171,
+            "invalid_tasks": 13
+          },
+          "updated_at": 1789233319.94811,
+          "error_type": null
+        }
+      ],
+      "active_stage": "baseline100-deepseek-flash-r1-w32",
+      "runner_alive": false
+    },
+    {
+      "group": "baseline100",
+      "model": "qwen",
+      "valid": 0,
+      "points": 0,
+      "total": 0,
+      "percent": null,
+      "unresolved": 184,
+      "stages": [],
+      "states": [
+        {
+          "status": "queued behind active skills controller",
+          "stage": null,
+          "workers": null,
+          "tasks_this_stage": null,
+          "result": null,
+          "updated_at": 1789227248.7787497,
+          "error_type": null
+        }
+      ]
+    }
+  ],
+  "running_containers": {
+    "skills100-qwen-repair4-w8": 8
+  },
+  "hold": {
+    "active": false,
+    "reason": "User confirmed recharge; three model health probes HTTP 200",
+    "time": 1789218447.8511567,
+    "restart": "repair4"
+  },
+  "latest_provider_health": {
+    "Pro/zai-org/GLM-5.1": {
+      "stage": "skills100-glm5-held-retry1",
+      "http_status": 200,
+      "ok": true,
+      "balance_exhausted": false,
+      "model": "Pro/zai-org/GLM-5.1",
+      "checked_at": 1789225107.0673041
+    },
+    "deepseek-ai/DeepSeek-V4-Flash": {
+      "stage": "baseline100-deepseek-flash-r1-w32",
+      "http_status": 200,
+      "ok": true,
+      "balance_exhausted": false,
+      "model": "deepseek-ai/DeepSeek-V4-Flash",
+      "checked_at": 1789233281.8070068
+    },
+    "Qwen/Qwen3.8-27B": {
+      "stage": "skills100-qwen-repair4-w8",
+      "http_status": 200,
+      "ok": true,
+      "balance_exhausted": false,
+      "model": "Qwen/Qwen3.8-27B",
+      "checked_at": 1789233582.8826241
+    }
+  }
+}

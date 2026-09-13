@@ -1,0 +1,39 @@
+{
+  "updated_at": 1789287719.212095,
+  "condition": "skills_only_except_oas_qwen_baseline",
+  "baseline": "User explicitly restored Qwen OAS baseline: 184 eligible tasks, 100 steps, queued after active Qwen skills; other new baseline jobs remain disabled",
+  "terminal_models": [
+    "gpt-5.6-sol",
+    "gemini-3.8-flash",
+    "claude-opus-5"
+  ],
+  "claude": {
+    "authorized": true,
+    "model": "claude-opus-5",
+    "benchmark": "terminal-bench-2.1",
+    "condition": "skills",
+    "tasks": 89,
+    "workers": 2,
+    "job": "/srv/benchmark/skills/jobs/terminal-api-claude-20260913-r1",
+    "smoke_then_full": true
+  },
+  "public_baselines": "Reference only unless model, agent, benchmark and settings match",
+  "oas_qwen_baseline": {
+    "authorized": true,
+    "workers": 8,
+    "max_iterations": 100,
+    "eligible_tasks": 184,
+    "npc_model": "deepseek-flash",
+    "queue_after": "active Qwen skills"
+  },
+  "gptoss": {
+    "source": "local_gpu",
+    "benchmarks": [
+      "oas",
+      "terminal-bench-2.1"
+    ],
+    "condition": "skills",
+    "job": "/srv/benchmark/skills/jobs/gptoss-oas-terminal-20260913-r1",
+    "authorized": true
+  }
+}

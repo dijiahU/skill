@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""Restrict this OAS experiment to its labelled containers and pinned image."""
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+ROOT = Path('/srv/benchmark/skills/jobs/oas-api222-20260912-r1')
+REAL = '/srv/benchmark/skills/bin/docker'
+SESSION = 'oas-api222-20260912-r1'
+PREFIX = 'rick-' + SESSION + '-'
+LABEL = 'skilldistill.oas.api_run'
+IMAGE = 'skilldistill-openagentsafety-agent-server:aistation-20260831-reasoningfix-openagentsafety'
+DIGEST = 'sha256:9dd5d4b3f67ef9e99a88ac20ce6a277fd7805f10606ee58ddece97beb5673bd9'
+
+
+def reject(message):
+    print('OAS run guard: ' + message, file=sys.stderr)
+    raise SystemExit(2)
+
+
+def inspect(target):
+    p = subprocess.run([REAL, 'inspect', target], capture_output=True, text=True)
+    if p.returncode:
+        reject('Cannot inspect target for ownership')
+    return json.loads(p.stdout)[0]
+
+
+def approved():
+    p = ROOT / 'lifecycle-approval.json'
+    if not p.exists() or json.loads(p.read_text()).get('session') != SESSION:
+        reject('This session requires explicit container lifecycle authorization')
+
+
+def main():
+    args = sys.argv[1:]
+    if not args:
+        reject('Missing Docker operation')
+    op = args[0]
+    if op == 'run':
+        approved()
+        if '--name' not in args or IMAGE not in args:
+            reject('Only named OAS containers using the pinned image are permitted')
+        name_index = args.index('--name') + 1
+        name = args[name_index]
+        if not name.startswith(('skilldistill-oas-agent-', 'skilldistill-oas-grader-')):
+            reject('Unexpected container name')
+        info = inspect(IMAGE)
+        if info['Id'] != DIGEST:
+            reject('Pinned image tag changed')
+        args[name_index] = PREFIX + name
+        extra = ['--label', LABEL + '=' + SESSION,
+                 '--label', 'skilldistill.oas.stage=' + os.environ.get('OAS_STAGE', 'unknown')]
+        if '--memory' not in args:
+            cpu = os.environ.get('OAS_CONTAINER_CPUS', '1')
+            if cpu not in ('0.25', '1'):
+                reject('Unexpected CPU limit')
+            extra += ['--memory', '2g', '--cpus', cpu, '--pids-limit', '512']
+        args[1:1] = extra
+    elif op == 'stop':
+        approved()
+        if len(args) != 4 or args[1:3] != ['--time', '10']:
+            reject('Only bounded single-container stop is permitted')
+        obj = inspect(args[-1])
+        if not obj['Name'].lstrip('/').startswith(PREFIX) or obj.get('Config', {}).get('Labels', {}).get(LABEL) != SESSION:
+            reject('Refusing stop of container outside this exact session')
+    elif op in ('exec', 'cp', 'logs', 'inspect', 'images', 'ps', 'stats', 'version', 'info', 'port'):
+        pass
+    else:
+        reject('Operation not permitted: ' + op)
+    os.execv(REAL, [REAL, *args])
+
+
+if __name__ == '__main__':
+    main()

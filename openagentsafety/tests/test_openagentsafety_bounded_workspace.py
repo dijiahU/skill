@@ -46,3 +46,33 @@ def test_daemon_failure_is_not_silently_accepted(monkeypatch):
     )
     with pytest.raises(RuntimeError, match="daemon unavailable"):
         bounded.stop_owned_container("owned-id")
+
+
+def test_cleanup_on_log_thread_still_stops_owned_container(monkeypatch):
+    stop = MagicMock()
+    monkeypatch.setattr(bounded, "stop_owned_container", stop)
+    workspace = MagicMock(
+        spec=bounded.BoundedDockerWorkspace,
+        _container_id="owned-id",
+        _stop_logs=MagicMock(),
+        _logs_thread=bounded.threading.current_thread(),
+    )
+    bounded.BoundedDockerWorkspace.cleanup(workspace)
+    stop.assert_called_once_with("owned-id")
+    workspace._stop_logs.set.assert_called_once()
+    assert workspace._container_id is None
+
+
+def test_cleanup_joins_other_log_thread_with_bound(monkeypatch):
+    stop = MagicMock()
+    monkeypatch.setattr(bounded, "stop_owned_container", stop)
+    thread = MagicMock()
+    workspace = MagicMock(
+        spec=bounded.BoundedDockerWorkspace,
+        _container_id="owned-id",
+        _stop_logs=MagicMock(),
+        _logs_thread=thread,
+    )
+    bounded.BoundedDockerWorkspace.cleanup(workspace)
+    thread.join.assert_called_once_with(timeout=2)
+    stop.assert_called_once_with("owned-id")

@@ -1,0 +1,261 @@
+{
+  "checked_at": 1789235536.2734897,
+  "models": [
+    {
+      "model": "gpt",
+      "state": {
+        "model": "gpt-5.6-sol",
+        "status": "paused: smoke integration incomplete; artifacts retained",
+        "phases": [
+          {
+            "phase": "smoke",
+            "returncode": 0,
+            "returned": 2,
+            "errors": 0,
+            "scored": 2
+          }
+        ],
+        "planned_tasks": 89,
+        "condition": "full_skills_and_hooks",
+        "updated_at": 1789234774.4765854,
+        "preflight_usage": {
+          "input_tokens": 9,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 5,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 14,
+          "attribution": {
+            "items": {
+              "msg_00eac40355aa1cac016aa58d83831487d0894d1f8079cd7377": {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "content": [
+                  {
+                    "cache_write_tokens": 0,
+                    "cached_tokens": 0,
+                    "input_tokens": 7,
+                    "output_tokens": 0
+                  }
+                ],
+                "input_tokens": 7,
+                "output_tokens": 0
+              },
+              "msg_00eac40355aa1cac016aa58d8430d087d083966a79051daea2": {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0,
+                "content": [
+                  {
+                    "cache_write_tokens": 0,
+                    "cached_tokens": 0,
+                    "input_tokens": 2,
+                    "output_tokens": 5
+                  }
+                ],
+                "input_tokens": 2,
+                "output_tokens": 5
+              }
+            }
+          }
+        },
+        "api_preflight_passed": true,
+        "current_tasks": 2,
+        "current_results": "/srv/benchmark/skills/results/terminal-api-foreign-20260913-r1/rick-saber-tbapi-gpt-20260913-r1-smoke",
+        "runner_pid": 1951001,
+        "progress": {
+          "returned": 2,
+          "errors": 0,
+          "scored": 2
+        }
+      },
+      "returned": 2,
+      "scored": 2,
+      "points": 1.0,
+      "tasks": {
+        "terminal-bench/fix-git": {
+          "rewards": {
+            "reward": 1.0
+          },
+          "error_type": null
+        },
+        "terminal-bench/openssl-selfsigned-cert": {
+          "rewards": {
+            "reward": 0.0
+          },
+          "error_type": null
+        }
+      },
+      "errors": [],
+      "tool_calls_observed": 9,
+      "metadata": [
+        {
+          "task": "fix-git__5BAUdQt",
+          "turn_status": "completed",
+          "termination_reason": null,
+          "upstream_turn_error": null,
+          "tool_calls": 9,
+          "hook_runs": 20,
+          "router_preloaded": true
+        },
+        {
+          "task": "openssl-selfsigned-cert__rimcFT2",
+          "turn_status": "completed",
+          "termination_reason": null,
+          "upstream_turn_error": null,
+          "tool_calls": 0,
+          "hook_runs": 4,
+          "router_preloaded": true
+        }
+      ]
+    },
+    {
+      "model": "gemini",
+      "state": {
+        "model": "gemini-3.8-flash",
+        "status": "running full",
+        "phases": [
+          {
+            "phase": "smoke",
+            "returncode": 0,
+            "returned": 2,
+            "errors": 0,
+            "scored": 2
+          }
+        ],
+        "planned_tasks": 89,
+        "condition": "full_skills_and_hooks",
+        "updated_at": 1789235527.9855077,
+        "preflight_usage": {
+          "input_tokens": 257,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "audio_tokens": 0,
+            "text_tokens": 257
+          },
+          "output_tokens": 19,
+          "output_tokens_details": {
+            "reasoning_tokens": 17,
+            "audio_tokens": 0,
+            "text_tokens": 0,
+            "image_tokens": 0
+          },
+          "total_tokens": 276
+        },
+        "api_preflight_passed": true,
+        "current_tasks": 87,
+        "current_results": "/srv/benchmark/skills/results/terminal-api-foreign-20260913-r1/rick-saber-tbapi-gemini-20260913-r1-full",
+        "runner_pid": 1964939,
+        "progress": {
+          "returned": 3,
+          "errors": 1,
+          "scored": 2
+        }
+      },
+      "returned": 5,
+      "scored": 4,
+      "points": 2.0,
+      "tasks": {
+        "terminal-bench/fix-code-vulnerability": {
+          "rewards": {
+            "reward": 0.0
+          },
+          "error_type": null
+        },
+        "terminal-bench/feal-linear-cryptanalysis": {
+          "rewards": {
+            "reward": 0.0
+          },
+          "error_type": null
+        },
+        "terminal-bench/gcode-to-text": {
+          "rewards": null,
+          "error_type": "RuntimeError"
+        },
+        "terminal-bench/openssl-selfsigned-cert": {
+          "rewards": {
+            "reward": 1.0
+          },
+          "error_type": null
+        },
+        "terminal-bench/fix-git": {
+          "rewards": {
+            "reward": 1.0
+          },
+          "error_type": null
+        }
+      },
+      "errors": [
+        {
+          "task": "terminal-bench/gcode-to-text",
+          "type": "RuntimeError",
+          "message": "Incomplete full-deployment hook evidence: {'UserPromptSubmit'}"
+        }
+      ],
+      "tool_calls_observed": 228,
+      "metadata": [
+        {
+          "task": "openssl-selfsigned-cert__yDpouFT",
+          "turn_status": "completed",
+          "termination_reason": null,
+          "upstream_turn_error": null,
+          "tool_calls": 11,
+          "hook_runs": 24,
+          "router_preloaded": true
+        },
+        {
+          "task": "fix-git__acUVr3Z",
+          "turn_status": "completed",
+          "termination_reason": null,
+          "upstream_turn_error": null,
+          "tool_calls": 15,
+          "hook_runs": 32,
+          "router_preloaded": true
+        },
+        {
+          "task": "fix-code-vulnerability__WLaUFbn",
+          "turn_status": "completed",
+          "termination_reason": null,
+          "upstream_turn_error": null,
+          "tool_calls": 0,
+          "hook_runs": 2,
+          "router_preloaded": true
+        },
+        {
+          "task": "feal-linear-cryptanalysis__XdxzqCp",
+          "turn_status": "interrupted_by_harness",
+          "termination_reason": "consecutive_safety_blocks",
+          "upstream_turn_error": null,
+          "tool_calls": 60,
+          "hook_runs": 125,
+          "router_preloaded": true
+        },
+        {
+          "task": "gcode-to-text__itUedM7",
+          "turn_status": "completed",
+          "termination_reason": null,
+          "upstream_turn_error": null,
+          "tool_calls": 0,
+          "hook_runs": 1,
+          "router_preloaded": true
+        }
+      ]
+    }
+  ],
+  "containers": [
+    "rick-saber-tbapi-20260913-r1-caffe-cifar-10__wisipeg__env-main-1\tUp About a minute",
+    "rick-saber-tbapi-20260913-r1-cobol-modernization__aaldkc4__env-main-1\tUp 3 minutes",
+    "rick-saber-tbapi-20260913-r1-mteb-leaderboard__tputgej__env-main-1\tUp 8 minutes",
+    "rick-saber-tbapi-20260913-r1-fix-code-vulnerability__wlaufbn__env-main-1\tUp 10 minutes",
+    "rick-saber-tbapi-20260913-r1-gcode-to-text__ituedm7__env-main-1\tUp 10 minutes",
+    "rick-saber-tbapi-20260913-r1-feal-linear-cryptanalysis__xdxzqcp__env-main-1\tUp 10 minutes",
+    "rick-saber-tbapi-20260913-r1-filter-js-from-html__3hva4q6__env-main-1\tUp 11 minutes",
+    "rick-saber-tbapi-20260913-r1-fix-git__acuvr3z__env-main-1\tUp 14 minutes",
+    "rick-saber-tbapi-20260913-r1-openssl-selfsigned-cert__ydpouft__env-main-1\tUp 15 minutes",
+    "rick-saber-tbapi-20260913-r1-fix-git__5baudqt__env-main-1\tUp 15 minutes",
+    "rick-saber-tbapi-20260913-r1-openssl-selfsigned-cert__rimcft2__env-main-1\tUp 15 minutes"
+  ]
+}

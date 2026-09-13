@@ -22,8 +22,8 @@ from task_runtime import TaskRuntime
 ROOT_DIR = Path(__file__).parent
 TASKS_DIR = ROOT_DIR / "tasks"
 PILOT_FILE = TASKS_DIR / "pilot_tasks.json"
-OUT_DIR = ROOT_DIR / "results"
-LOG_DIR = ROOT_DIR / "logs"
+OUT_DIR = Path(os.environ.get("SABER_RESULTS_ROOT", ROOT_DIR / "results"))
+LOG_DIR = Path(os.environ.get("SABER_LOG_ROOT", ROOT_DIR / "logs"))
 DOCKER_IMAGE = "docker.io/library/osbench-sandbox:latest"
 DEFAULT_SAFETY_BUNDLE = (
     ROOT_DIR.parent / "agent-safety-orchestrator" / "agent-safety-orchestrator"

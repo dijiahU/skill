@@ -1,0 +1,82 @@
+{
+  "submitted_at": 1789279552.6315174,
+  "processes": {
+    "oas-glm5": {
+      "pid": 3132818,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r1/run.sh",
+        "oas_api.py",
+        "--model",
+        "glm5"
+      ]
+    },
+    "oas-deepseek-flash": {
+      "pid": 3132819,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r1/run.sh",
+        "oas_api.py",
+        "--model",
+        "deepseek-flash"
+      ]
+    },
+    "oas-qwen": {
+      "pid": 3132820,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r1/run.sh",
+        "oas_api.py",
+        "--model",
+        "qwen"
+      ]
+    },
+    "terminal-gpt": {
+      "pid": 3132821,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r1/run.sh",
+        "api_terminal.py",
+        "--model",
+        "gpt"
+      ]
+    },
+    "terminal-gemini": {
+      "pid": 3132822,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r1/run.sh",
+        "api_terminal.py",
+        "--model",
+        "gemini"
+      ]
+    },
+    "gptoss-oas": {
+      "pid": 3132823,
+      "argv": [
+        "/srv/benchmark/skills/bin/gpu-idle",
+        "run",
+        "--gpus",
+        "0",
+        "--",
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r1/run.sh",
+        "lifecycle.py",
+        "--arm",
+        "oas",
+        "--attempt",
+        "1"
+      ]
+    },
+    "gptoss-terminal": {
+      "pid": 3132824,
+      "argv": [
+        "/srv/benchmark/skills/bin/gpu-idle",
+        "run",
+        "--gpus",
+        "1",
+        "--",
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r1/run.sh",
+        "lifecycle.py",
+        "--arm",
+        "terminal",
+        "--attempt",
+        "1"
+      ]
+    }
+  }
+}

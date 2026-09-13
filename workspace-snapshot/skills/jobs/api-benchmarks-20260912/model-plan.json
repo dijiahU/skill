@@ -1,0 +1,36 @@
+{
+  "branch": "api-benchmarks-glm-20260912",
+  "commit": "d764079d206e99f8272165648118129da640f2cd",
+  "active": {
+    "glm5": "Pro/zai-org/GLM-5.1",
+    "deepseek-flash": "deepseek-ai/DeepSeek-V4-Flash",
+    "qwen": "Qwen/Qwen3.8-27B",
+    "gemini": "gemini-3.8-flash",
+    "claude": "claude-opus-5",
+    "gptoss": "OpenAI-Mirror/gpt-oss-120b"
+  },
+  "excluded": [
+    "MiniMax"
+  ],
+  "pending": {
+    "mistral": "APINebula key model list does not expose Mistral"
+  },
+  "key_variables": {
+    "siliconflow": "SILICONFLOW_API_KEY",
+    "gpt": "APINEBULA_GPT_API_KEY",
+    "gemini": "APINEBULA_GEMINI_API_KEY",
+    "claude": "APINEBULA_CLAUDE_API_KEY"
+  },
+  "selected_but_blocked": {},
+  "validation": {
+    "glm5": "text and streaming bridge passed",
+    "deepseek-flash": "text passed",
+    "qwen": "text probe ReadTimeout; retry required",
+    "gemini": "text and streaming bridge passed",
+    "claude": "Opus 5 Chat Completions + Anthropic Messages passed; streaming Responses-to-Chat tool call and tool-result round trip passed",
+    "gptoss": "Both local GPU services healthy; streaming Responses/tool roundtrips passed; OAS and Terminal real skills smoke stages running"
+  },
+  "model_sources": {
+    "gptoss": "local GPU; explicitly authorized for OAS and Terminal skills"
+  }
+}

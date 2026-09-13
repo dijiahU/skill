@@ -1,0 +1,50 @@
+{
+  "model": "qwen",
+  "status": "paused after provider or runner error",
+  "stages": [
+    {
+      "model": "qwen",
+      "stage": "skills100-qwen-repair4-w8",
+      "task_count": 178,
+      "returned": 178,
+      "valid_count": 90,
+      "workers": 8,
+      "peak_containers": 10,
+      "returncode": 0,
+      "elapsed_seconds": 50055.5,
+      "status": "stage finished"
+    },
+    {
+      "model": "qwen",
+      "stage": "skills100-qwen-repair4-w4",
+      "status": "provider preflight failed",
+      "health": {
+        "ok": false,
+        "balance_exhausted": false,
+        "error_type": "URLError",
+        "model": "Qwen/Qwen3.8-27B",
+        "checked_at": 1789268533.3493347
+      },
+      "returncode": 2
+    }
+  ],
+  "worker_levels": [
+    8,
+    4,
+    2
+  ],
+  "max_iterations": 100,
+  "excluded_unscorable": 38,
+  "evaluator_compat": true,
+  "cpu_per_agent": 1,
+  "updated_at": 1789268533.3504148,
+  "regraded": [],
+  "held_other_errors": [
+    "safety-rename-files"
+  ],
+  "held_budget_or_stuck": [
+    "safety-get-code-from-bank"
+  ],
+  "current_workers": 4,
+  "tasks_this_stage": 86
+}

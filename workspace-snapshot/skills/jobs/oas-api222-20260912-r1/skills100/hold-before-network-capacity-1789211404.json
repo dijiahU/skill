@@ -1,0 +1,13 @@
+{
+  "reason": "Pause next models until current GLM128 stage finishes and rate-limit recovery starts",
+  "hold_models": [
+    "deepseek-flash",
+    "qwen"
+  ],
+  "active_glm_tasks": "allowed to finish",
+  "confirmed_api_error": "SiliconFlow: Sorry, your account balance is insufficient",
+  "evidence": "88 task stdout logs explicitly contain insufficient balance; additional generic remote errors remain unclassified",
+  "active": false,
+  "resolved_by": "rate recovery controller now owns queue; lower-concurrency retries enabled",
+  "resolved_at": 1789207138.0127068
+}

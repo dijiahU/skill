@@ -1,5 +1,6 @@
 """Tests for the OpenAgentSafety Safety Orchestrator adapter."""
 
+import hashlib
 import os
 from pathlib import Path
 from types import SimpleNamespace
@@ -11,13 +12,17 @@ from benchmarks.openagentsafety.run_infer import (
     _configure_npc_environment,
     _resolve_service_host_address,
     _workspace_forward_env,
+    recover_final_events,
     setup_host_mapping,
+    trajectory_is_complete,
 )
 from benchmarks.openagentsafety.safety_orchestrator import (
     BUNDLE_CONTAINER_ROOT,
     bundle_volume,
+    collect_archetype_reference_attempts,
     collect_archetype_reference_reads,
     load_openhands_hook_config,
+    safety_condition_instruction,
     translate_to_docker_host,
 )
 
@@ -112,10 +117,10 @@ def test_resolve_service_host_address_uses_docker_bridge(monkeypatch):
     monkeypatch.delenv("OPENAGENTSAFETY_SERVICE_HOST_ADDR", raising=False)
     monkeypatch.setattr(
         "benchmarks.openagentsafety.run_infer.subprocess.run",
-        lambda *args, **kwargs: SimpleNamespace(stdout="172.21.1.1\n"),
+        lambda *args, **kwargs: SimpleNamespace(stdout="private-host-098178437f26.invalid\n"),
     )
 
-    assert _resolve_service_host_address() == "172.21.1.1"
+    assert _resolve_service_host_address() == "private-host-098178437f26.invalid"
 
 
 def test_resolve_service_host_address_prefers_explicit_setting(monkeypatch):
@@ -140,7 +145,7 @@ def test_setup_host_mapping_uses_local_forwarder_address(monkeypatch):
 
     monkeypatch.setattr(
         "benchmarks.openagentsafety.run_infer._resolve_service_host_address",
-        lambda: "172.21.1.1",
+        lambda: "private-host-098178437f26.invalid",
     )
 
     setup_host_mapping(Workspace())
@@ -235,7 +240,89 @@ def test_collect_archetype_reference_reads_only_counts_tool_actions():
         },
     ]
 
-    assert collect_archetype_reference_reads(history) == [
+    assert collect_archetype_reference_reads(history) == []
+    assert collect_archetype_reference_attempts(history) == [
         "classify-input-intent-ambiguity.md",
         "enforce-output-content-policy.md",
     ]
+
+
+@pytest.mark.parametrize("mode", ["success", "blocked", "error", "changed", "missing"])
+def test_reference_audit_requires_delivered_hash_verified_observation(mode):
+    body = "# detect-task-overreach\nPolicy body\n"
+    action = {
+        "id": "read-1",
+        "tool_name": "invoke_skill",
+        "action": {"name": "safety-router-skill", "reference": "detect-task-overreach"},
+    }
+    observation = {
+        "action_id": "read-1",
+        "observation": {
+            "is_error": mode == "error",
+            "reference_id": "detect-task-overreach",
+            "reference_sha256": hashlib.sha256(body.encode()).hexdigest(),
+            "reference_provenance": "registered-safety-bundle-v1",
+            "content": [
+                {"type": "text", "text": body if mode != "changed" else "withheld"}
+            ],
+        },
+    }
+    history = [action] if mode == "missing" else [action, observation]
+    if mode == "blocked":
+        history.append({"action_id": "read-1", "blocked": True})
+    assert collect_archetype_reference_attempts(history) == ["detect-task-overreach.md"]
+    assert collect_archetype_reference_reads(history) == (
+        ["detect-task-overreach.md"] if mode == "success" else []
+    )
+
+
+def test_skills_instruction_uses_catalog_reader_and_npc_boundary():
+    task = "Fix the report generation bug."
+    result = safety_condition_instruction(task)
+    assert result.endswith(task)
+    assert 'reference="<archetype-id>"' in result
+    assert "NPC replies" in result and "not authorization" in result
+
+
+def test_recover_final_events_merges_server_actions_missed_by_callbacks():
+    first = SimpleNamespace(id="a", timestamp="1")
+    last = SimpleNamespace(id="b", timestamp="2")
+    conv = SimpleNamespace(state=SimpleNamespace(events=[first, last]))
+    events, recovered = recover_final_events(conv, [first])
+    assert recovered and events == [first, last]
+
+
+@pytest.mark.parametrize(
+    "case", ["complete", "short", "missing_outcome", "input_denial"]
+)
+def test_trajectory_gate_rejects_truncated_success(case):
+    if case == "input_denial":
+        history = [{"hook_event_type": "UserPromptSubmit", "blocked": True}]
+    elif case == "short":
+        history = [{"kind": "SystemPromptEvent"}]
+    else:
+        history = [
+            {"id": "f", "tool_name": "finish", "action": {"message": "Done"}},
+            {"action_id": "f", "observation": {"content": []}},
+        ]
+        if case == "missing_outcome":
+            history.append(
+                {"id": "x", "tool_name": "terminal", "action": {"command": "echo ok"}}
+            )
+    assert trajectory_is_complete(history) == (case in {"complete", "input_denial"})
+
+
+@pytest.mark.parametrize(
+    "blocked_event",
+    [
+        {"hook_event_type": "Stop", "blocked": True},
+        {"hook_event_type": "PreToolUse", "action_id": "finish-1", "blocked": True},
+    ],
+)
+def test_trajectory_gate_rejects_blocked_finish_or_stop(blocked_event):
+    history = [
+        {"id": "finish-1", "tool_name": "finish", "action": {"message": "Done"}},
+        {"action_id": "finish-1", "observation": {"content": []}},
+        blocked_event,
+    ]
+    assert not trajectory_is_complete(history)

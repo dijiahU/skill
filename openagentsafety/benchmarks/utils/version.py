@@ -1,3 +1,4 @@
+import hashlib
 import os
 import subprocess
 from pathlib import Path
@@ -11,10 +12,37 @@ def _get_submodule_sha(submodule_path: Path) -> str:
         ["git", "submodule", "status", str(submodule_path)],
         capture_output=True,
         text=True,
-        check=True,
+        check=False,
     )
-    sha = result.stdout.strip().split()[0].lstrip("+-")
-    return sha
+    fields = result.stdout.strip().split()
+    if result.returncode == 0 and fields:
+        return fields[0].lstrip("+-")
+    # Flattened research snapshots deliberately omit nested Git metadata.
+    # Identify their actual source content instead of using the enclosing
+    # repository's unrelated commit or inventing an upstream SDK revision.
+    sources = sorted(
+        path
+        for path in submodule_path.rglob("*")
+        if path.is_file()
+        and path.suffix in {".py", ".toml", ".j2", ".json", ".sh"}
+        and not any(
+            part.startswith(".")
+            or part in {"__pycache__", "build", "dist", "node_modules"}
+            or part.endswith(".egg-info")
+            for part in path.relative_to(submodule_path).parts
+        )
+    )
+    if not sources or not (submodule_path / "openhands-sdk/pyproject.toml").is_file():
+        raise RuntimeError(
+            f"SDK submodule/source snapshot is missing: {submodule_path}"
+        )
+    digest = hashlib.sha256()
+    for path in sources:
+        digest.update(path.relative_to(submodule_path).as_posix().encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return f"snapshot-{digest.hexdigest()}"
 
 
 def get_sdk_sha() -> str:
@@ -25,7 +53,7 @@ def get_sdk_sha() -> str:
 
 
 SDK_SHA = get_sdk_sha()
-SDK_SHORT_SHA = SDK_SHA[:7]
+SDK_SHORT_SHA = SDK_SHA[:21] if SDK_SHA.startswith("snapshot-") else SDK_SHA[:7]
 
 
 # Centralized image tag prefix used by all benchmark runners.

@@ -1,0 +1,161 @@
+{
+  "scope": "Pinned current bundle and vendored SDK; no command execution",
+  "field_adaptation": [
+    {
+      "command": "create",
+      "normalized_fields": {
+        "content": "value = 1\n",
+        "new_string": null
+      },
+      "effects_raw": [],
+      "effects_normalized": [
+        {
+          "path": "/workspace/synthetic-audit.py",
+          "content": "value = 1\n",
+          "previous": null,
+          "method": "write-edit",
+          "complete": true,
+          "removed_text": "",
+          "privacy_reason": "",
+          "authorization_context": ""
+        }
+      ],
+      "effects_null_and_old_field_repaired": [
+        {
+          "path": "/workspace/synthetic-audit.py",
+          "content": "value = 1\n",
+          "previous": null,
+          "method": "write-edit",
+          "complete": true,
+          "removed_text": "",
+          "privacy_reason": "",
+          "authorization_context": ""
+        }
+      ]
+    },
+    {
+      "command": "str_replace",
+      "normalized_fields": {
+        "content": null,
+        "new_string": "value = 2"
+      },
+      "effects_raw": [],
+      "effects_normalized": [
+        {
+          "path": "/workspace/synthetic-audit.py",
+          "content": null,
+          "previous": null,
+          "method": "write-edit",
+          "complete": false,
+          "removed_text": "",
+          "privacy_reason": "",
+          "authorization_context": ""
+        }
+      ],
+      "effects_null_and_old_field_repaired": [
+        {
+          "path": "/workspace/synthetic-audit.py",
+          "content": "value = 2",
+          "previous": null,
+          "method": "write-edit",
+          "complete": true,
+          "removed_text": "",
+          "privacy_reason": "",
+          "authorization_context": ""
+        }
+      ]
+    }
+  ],
+  "executor_contract": [
+    {
+      "case": "exit2_block",
+      "result": {
+        "success": false,
+        "blocked": true,
+        "exit_code": 2,
+        "stdout": "{\"verdict\": \"block\", \"reason\": \"synthetic block\"}",
+        "stderr": "",
+        "decision": null,
+        "reason": "synthetic block",
+        "additional_context": null,
+        "error": null,
+        "async_started": false
+      },
+      "should_continue": false
+    },
+    {
+      "case": "single_warning",
+      "result": {
+        "success": true,
+        "blocked": false,
+        "exit_code": 0,
+        "stdout": "{\"verdict\": \"warn\", \"reason\": \"synthetic warning\"}",
+        "stderr": "",
+        "decision": null,
+        "reason": "synthetic warning",
+        "additional_context": "synthetic warning",
+        "error": null,
+        "async_started": false
+      },
+      "should_continue": true
+    },
+    {
+      "case": "single_modified_output",
+      "result": {
+        "success": true,
+        "blocked": false,
+        "exit_code": 0,
+        "stdout": "{\"modified_output\": \"safe synthetic text\"}",
+        "stderr": "",
+        "decision": null,
+        "reason": null,
+        "additional_context": null,
+        "error": null,
+        "async_started": false
+      },
+      "should_continue": true
+    },
+    {
+      "case": "bundle_two_json_output",
+      "result": {
+        "success": true,
+        "blocked": false,
+        "exit_code": 0,
+        "stdout": "{\"modified_output\": \"safe synthetic text\", \"verdicts\": []}\n{\"verdict\": \"warn\", \"reason\": \"synthetic warning\"}",
+        "stderr": "",
+        "decision": null,
+        "reason": null,
+        "additional_context": null,
+        "error": null,
+        "async_started": false
+      },
+      "should_continue": true
+    },
+    {
+      "case": "timeout",
+      "result": {
+        "success": false,
+        "blocked": false,
+        "exit_code": -1,
+        "stdout": "",
+        "stderr": "",
+        "decision": null,
+        "reason": null,
+        "additional_context": null,
+        "error": "Hook timed out after 60 seconds",
+        "async_started": false
+      },
+      "should_continue": true
+    }
+  ],
+  "snapshot_audit_counts": {
+    "trajectories_read": 638,
+    "missing_trajectories": 3,
+    "hook_events": 27507,
+    "genuine_execution_errors": 0,
+    "modified_output_events": 756,
+    "modified_output_nonblock": 626,
+    "multi_or_truncated_json": 756,
+    "prepost_additional_context": 51
+  }
+}

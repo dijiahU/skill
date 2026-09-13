@@ -837,6 +837,7 @@ class CodexNativeHarnessAdapter(HarnessAdapter):
         if self.skill_mode == "safety-orchestrator":
             skill_root = self._install_safety_bundle(home, codex_home, env)
             env["SABER_CODEX_SKILL_ROOT"] = str(skill_root)
+            env["SAFETY_ORCH_FAIL_CLOSED"] = "1"
         else:
             env.pop("SABER_CODEX_SKILL_ROOT", None)
 
@@ -1096,7 +1097,7 @@ Native SABER harness contract:
             if not isinstance(report, dict) or report.get("complete") is not True:
                 raise RuntimeError("workspace observation is incomplete")
             current = report.get("file_contents")
-            if not isinstance(current, dict) or len(current) > 512:
+            if not isinstance(current, dict) or len(current) > 32768:
                 raise RuntimeError("workspace observation has an invalid file manifest")
             cwd = Path(logical_cwd)
             total_bytes = 0
@@ -1113,7 +1114,7 @@ Native SABER harness contract:
                     raise RuntimeError("workspace observation exceeds the task filesystem scope")
                 size = len(content.encode("utf-8"))
                 total_bytes += size
-                if size > 1000000 or total_bytes > 8000000:
+                if size > 64000000 or total_bytes > 2000000000:
                     raise RuntimeError("workspace observation exceeds its size limit")
             if report.get("errors"):
                 raise RuntimeError("workspace observation contains unreadable paths")
@@ -1121,9 +1122,9 @@ Native SABER harness contract:
             deleted = report.get("deleted_paths", [])
             if (
                 not isinstance(excluded, dict)
-                or len(excluded) > 2048
+                or len(excluded) > 131072
                 or not isinstance(deleted, list)
-                or len(deleted) > 512
+                or len(deleted) > 32768
             ):
                 raise RuntimeError("workspace observation has invalid omission records")
             for name in [*excluded, *deleted]:

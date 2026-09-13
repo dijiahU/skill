@@ -1,0 +1,87 @@
+{
+  "submitted_at": 1789286843.9970915,
+  "runtime_identity": {
+    "hostname": "ckjg74bmv790d-0",
+    "pod_ip": "private-host-c2e41cada390.invalid",
+    "pid1_start_ticks": "292142879"
+  },
+  "processes": {
+    "oas-glm5": {
+      "pid": 12199,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r2/run.sh",
+        "oas_api.py",
+        "--model",
+        "glm5"
+      ]
+    },
+    "oas-deepseek-flash": {
+      "pid": 12200,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r2/run.sh",
+        "oas_api.py",
+        "--model",
+        "deepseek-flash"
+      ]
+    },
+    "oas-qwen": {
+      "pid": 12201,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r2/run.sh",
+        "oas_api.py",
+        "--model",
+        "qwen"
+      ]
+    },
+    "terminal-gpt": {
+      "pid": 12202,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r2/run.sh",
+        "api_terminal.py",
+        "--model",
+        "gpt"
+      ]
+    },
+    "terminal-gemini": {
+      "pid": 12203,
+      "argv": [
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r2/run.sh",
+        "api_terminal.py",
+        "--model",
+        "gemini"
+      ]
+    },
+    "gptoss-oas": {
+      "pid": 12204,
+      "argv": [
+        "/srv/benchmark/skills/bin/gpu-idle",
+        "run",
+        "--gpus",
+        "0",
+        "--",
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r2/run.sh",
+        "lifecycle.py",
+        "--arm",
+        "oas",
+        "--attempt",
+        "1"
+      ]
+    },
+    "gptoss-terminal": {
+      "pid": 12205,
+      "argv": [
+        "/srv/benchmark/skills/bin/gpu-idle",
+        "run",
+        "--gpus",
+        "1",
+        "--",
+        "/srv/benchmark/skills/jobs/eval-retry-20260913-r2/run.sh",
+        "lifecycle.py",
+        "--arm",
+        "terminal",
+        "--attempt",
+        "1"
+      ]
+    }
+  }
+}

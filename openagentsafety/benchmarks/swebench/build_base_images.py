@@ -68,7 +68,8 @@ def _get_repo_root() -> Path:
 
 def _get_sdk_dockerfile() -> Path:
     """Locate the SDK Dockerfile from the vendor submodule."""
-    benchmarks_root = _get_repo_root()
+    # Source snapshots may live beneath a different enclosing Git repository.
+    benchmarks_root = Path(__file__).resolve().parents[2]
     dockerfile = (
         benchmarks_root
         / "vendor"

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from workspace_snapshot_cache import read_snapshot
 import os
 import re
 import shlex
@@ -259,7 +260,7 @@ def _workspace_files() -> tuple[dict[str, str], bool]:
     if not raw_path:
         return {}, False
     try:
-        payload = json.loads(Path(raw_path).read_text(encoding="utf-8"))
+        payload = read_snapshot(raw_path)
     except (OSError, json.JSONDecodeError):
         return {}, False
     if not isinstance(payload, dict) or payload.get("snapshot_status") not in {None, "ready"}:

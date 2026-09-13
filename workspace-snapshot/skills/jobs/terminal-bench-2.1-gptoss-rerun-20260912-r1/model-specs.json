@@ -1,0 +1,500 @@
+[
+  {
+    "key": "mistral",
+    "label": "Mistral-Small-4-119B-2603",
+    "old_config": "/srv/benchmark/skills/jobs/saber_mistral_small4_119b_treatment_716.json",
+    "old_slug": "codex_mistral_small4_119b_treatment_716",
+    "gpus": [
+      0,
+      1
+    ],
+    "workers": 8,
+    "endpoints": [
+      {
+        "config_key": 0,
+        "base_url": "http://private-host-c6490f8bfd36.invalid:18331/v1",
+        "worker_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "mistral-vllm",
+        "argv": [
+          "/srv/benchmark/skills/envs/deepseekv4-vllm/bin/vllm",
+          "serve",
+          "/srv/benchmark/skills/models/modelscope/mistralai/Mistral-Small-4-119B-2603",
+          "--served-model-name",
+          "mistralai/Mistral-Small-4-119B-2603",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18330",
+          "--trust-remote-code",
+          "--tokenizer-mode",
+          "mistral",
+          "--config-format",
+          "mistral",
+          "--load-format",
+          "mistral",
+          "--tensor-parallel-size",
+          "2",
+          "--dtype",
+          "bfloat16",
+          "--max-model-len",
+          "32768",
+          "--max-num-seqs",
+          "8",
+          "--max-num-batched-tokens",
+          "8192",
+          "--gpu-memory-utilization",
+          "0.90",
+          "--attention-backend",
+          "FLASH_ATTN_MLA",
+          "--enable-auto-tool-choice",
+          "--tool-call-parser",
+          "mistral",
+          "--reasoning-parser",
+          "mistral",
+          "--language-model-only",
+          "--middleware",
+          "saber_vllm_token_count.TokenCountMiddleware"
+        ],
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "CUDA_HOME": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9",
+          "CUDACXX": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/bin/nvcc",
+          "PATH": "/srv/benchmark/skills/envs/deepseekv4-vllm/bin:/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.codex/tmp/arg0/codex-arg0KouTWn:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.nvm/versions/node/v24.20.0/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/root/.vscode-server/cli/servers/Stable-e4c7e7b1d6d060162f4aa7f8225271b67ce1df75/server/bin/remote-cli:/root/.nvm/versions/node/v24.20.0/bin:/root/.nvm/versions/node/v24.20.0/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "CPATH": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/include",
+          "LIBRARY_PATH": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/lib64",
+          "LD_LIBRARY_PATH": "/srv/benchmark/skills/envs/cuda-compat-12-9/usr/local/cuda-12.9/compat:/srv/benchmark/skills/envs/deepseekv4-vllm/lib/python3.10/site-packages/nvidia/nvjitlink/lib:/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/lib64",
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "VLLM_NO_USAGE_STATS": "1",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+          "FLASHINFER_WORKSPACE_BASE": "/srv/benchmark/skills/cache/flashinfer-mistral-small4",
+          "VLLM_CACHE_ROOT": "/srv/benchmark/skills/cache/vllm-mistral-small4",
+          "TORCHINDUCTOR_CACHE_DIR": "/srv/benchmark/skills/cache/torchinductor-mistral-small4",
+          "OMP_NUM_THREADS": "8",
+          "PYTHONPATH": "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/compat/mistral_utf8_v10:/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin:/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/compat/mistral_developer_role",
+          "SABER_MISTRAL_DEVELOPER_ROLE_COMPAT": "1",
+          "SABER_MISTRAL_UTF8_COMPAT_V10": "1",
+          "SABER_MISTRAL_TOOL_STRICT_COMPAT_V10": "1"
+        },
+        "health_url": "http://127.0.0.1:18330/health",
+        "ready_timeout": 3000,
+        "prestart_argv": [
+          "/srv/benchmark/skills/envs/deepseekv4-vllm/bin/python",
+          "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/compat/mistral_utf8_v10/verify_activation.py"
+        ]
+      },
+      {
+        "name": "mistral-budget-proxy",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/python",
+          "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin/vllm_responses_compat_proxy.py",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18331",
+          "--upstream",
+          "http://127.0.0.1:18330"
+        ],
+        "env": {
+          "SABER_RESPONSES_CONTEXT_GUARD": "1"
+        },
+        "health_url": "http://127.0.0.1:18331/v1/models",
+        "ready_timeout": 60
+      }
+    ],
+    "protocol_version": "saber-v10-responses-budget-v1"
+  },
+  {
+    "key": "minimax",
+    "label": "MiniMax-M2.5",
+    "old_config": "/srv/benchmark/skills/jobs/saber_minimax_m25_treatment_716.json",
+    "old_slug": "codex_minimax_m25_treatment_716",
+    "gpus": [
+      0,
+      1
+    ],
+    "workers": 8,
+    "endpoints": [
+      {
+        "config_key": 0,
+        "base_url": "http://private-host-c6490f8bfd36.invalid:18307/v1",
+        "worker_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "minimax-vllm",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/vllm",
+          "serve",
+          "/srv/benchmark/skills/models/modelscope/MiniMax/MiniMax-M2.5",
+          "--served-model-name",
+          "MiniMax/MiniMax-M2.5",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18306",
+          "--trust-remote-code",
+          "--tensor-parallel-size",
+          "2",
+          "--max-model-len",
+          "32768",
+          "--max-num-seqs",
+          "4",
+          "--gpu-memory-utilization",
+          "0.90",
+          "--enable-auto-tool-choice",
+          "--tool-call-parser",
+          "minimax_m2",
+          "--reasoning-parser",
+          "minimax_m2_append_think",
+          "--compilation-config",
+          "{\"cudagraph_mode\":\"PIECEWISE\"}",
+          "--language-model-only",
+          "--middleware",
+          "saber_vllm_token_count.TokenCountMiddleware"
+        ],
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "PATH": "/srv/benchmark/skills/envs/qwen35-vllm/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.codex/tmp/arg0/codex-arg0KouTWn:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.nvm/versions/node/v24.20.0/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/root/.vscode-server/cli/servers/Stable-e4c7e7b1d6d060162f4aa7f8225271b67ce1df75/server/bin/remote-cli:/root/.nvm/versions/node/v24.20.0/bin:/root/.nvm/versions/node/v24.20.0/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "SAFETENSORS_FAST_GPU": "1",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+          "VLLM_NO_USAGE_STATS": "1",
+          "PYTHONPATH": "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin"
+        },
+        "health_url": "http://127.0.0.1:18306/health",
+        "ready_timeout": 1200
+      },
+      {
+        "name": "minimax-proxy",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/python",
+          "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin/vllm_responses_compat_proxy.py",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18307",
+          "--upstream",
+          "http://127.0.0.1:18306",
+          "--emulate-stream",
+          "--temperature",
+          "0"
+        ],
+        "env": {
+          "SABER_RESPONSES_CONTEXT_GUARD": "1"
+        },
+        "health_url": "http://127.0.0.1:18307/v1/models",
+        "ready_timeout": 60
+      }
+    ],
+    "protocol_version": "saber-v10-responses-budget-v1"
+  },
+  {
+    "key": "deepseek_flash",
+    "label": "DeepSeek-V4-Flash-0731",
+    "old_config": "/srv/benchmark/skills/jobs/saber_deepseek_v4_flash_local_treatment_716.json",
+    "old_slug": "codex_deepseek_v4_flash_local_treatment_716",
+    "gpus": [
+      0,
+      1
+    ],
+    "workers": 8,
+    "endpoints": [
+      {
+        "config_key": 0,
+        "base_url": "http://private-host-c6490f8bfd36.invalid:18321/v1",
+        "worker_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "deepseek-flash-vllm",
+        "argv": [
+          "/srv/benchmark/skills/envs/deepseekv4-vllm/bin/vllm",
+          "serve",
+          "/srv/benchmark/skills/models/modelscope/deepseek-ai/DeepSeek-V4-Flash-0731",
+          "--served-model-name",
+          "deepseek-ai/DeepSeek-V4-Flash-0731",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18320",
+          "--api-server-count",
+          "1",
+          "--trust-remote-code",
+          "--tokenizer-mode",
+          "deepseek_v4",
+          "--data-parallel-size",
+          "2",
+          "--enable-expert-parallel",
+          "--moe-backend",
+          "auto",
+          "--kv-cache-dtype",
+          "fp8",
+          "--block-size",
+          "256",
+          "--max-model-len",
+          "65536",
+          "--max-num-seqs",
+          "4",
+          "--max-num-batched-tokens",
+          "8192",
+          "--gpu-memory-utilization",
+          "0.90",
+          "--enforce-eager",
+          "--enable-auto-tool-choice",
+          "--tool-call-parser",
+          "deepseek_v4",
+          "--reasoning-parser",
+          "deepseek_v4",
+          "--middleware",
+          "saber_vllm_token_count.TokenCountMiddleware"
+        ],
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "CUDA_HOME": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9",
+          "CUDACXX": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/bin/nvcc",
+          "PATH": "/srv/benchmark/skills/envs/deepseekv4-vllm/bin:/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.codex/tmp/arg0/codex-arg0KouTWn:/root/.nvm/versions/node/v24.20.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/root/.nvm/versions/node/v24.20.0/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/root/.vscode-server/cli/servers/Stable-e4c7e7b1d6d060162f4aa7f8225271b67ce1df75/server/bin/remote-cli:/root/.nvm/versions/node/v24.20.0/bin:/root/.nvm/versions/node/v24.20.0/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/bin:/srv/benchmark/skills/envs/skills/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+          "CPATH": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/include",
+          "LIBRARY_PATH": "/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/lib64",
+          "LD_LIBRARY_PATH": "/srv/benchmark/skills/envs/cuda-compat-12-9/usr/local/cuda-12.9/compat:/srv/benchmark/skills/envs/deepseekv4-vllm/lib/python3.10/site-packages/nvidia/nvjitlink/lib:/srv/benchmark/skills/envs/cuda-toolkit-12-9/usr/local/cuda-12.9/lib64",
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "VLLM_NO_USAGE_STATS": "1",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+          "FLASHINFER_WORKSPACE_BASE": "/srv/benchmark/skills/cache/flashinfer-deepseekv4",
+          "VLLM_CACHE_ROOT": "/srv/benchmark/skills/cache/vllm-deepseekv4",
+          "TORCHINDUCTOR_CACHE_DIR": "/srv/benchmark/skills/cache/torchinductor-deepseekv4",
+          "OMP_NUM_THREADS": "8",
+          "VLLM_ENGINE_READY_TIMEOUT_S": "1800",
+          "PYTHONPATH": "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin"
+        },
+        "health_url": "http://127.0.0.1:18320/health",
+        "ready_timeout": 1800
+      },
+      {
+        "name": "deepseek_flash-budget-proxy",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/python",
+          "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin/vllm_responses_compat_proxy.py",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18321",
+          "--upstream",
+          "http://127.0.0.1:18320"
+        ],
+        "env": {
+          "SABER_RESPONSES_CONTEXT_GUARD": "1"
+        },
+        "health_url": "http://127.0.0.1:18321/v1/models",
+        "ready_timeout": 60
+      }
+    ],
+    "protocol_version": "saber-v10-responses-budget-v1"
+  },
+  {
+    "key": "glm",
+    "label": "GLM-4.7-Flash",
+    "old_config": "/srv/benchmark/skills/jobs/saber_glm47_treatment_716.json",
+    "old_slug": "codex_glm47_flash_treatment_716",
+    "gpus": [
+      1
+    ],
+    "workers": 8,
+    "endpoints": [
+      {
+        "config_key": 0,
+        "base_url": "http://private-host-c6490f8bfd36.invalid:18003/v1",
+        "worker_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "glm-vllm",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/vllm",
+          "serve",
+          "/srv/benchmark/skills/models/modelscope/ZhipuAI/GLM-4.7-Flash",
+          "--served-model-name",
+          "ZhipuAI/GLM-4.7-Flash",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18302",
+          "--tensor-parallel-size",
+          "1",
+          "--dtype",
+          "bfloat16",
+          "--max-model-len",
+          "32768",
+          "--max-num-seqs",
+          "8",
+          "--gpu-memory-utilization",
+          "0.80",
+          "--enable-auto-tool-choice",
+          "--tool-call-parser",
+          "glm47",
+          "--reasoning-parser",
+          "glm45",
+          "--language-model-only",
+          "--middleware",
+          "saber_vllm_token_count.TokenCountMiddleware"
+        ],
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "PYTHONPATH": "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin:/srv/benchmark/skills/envs/glm47-transformers-main",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+          "VLLM_USE_EXPERIMENTAL_PARSER_CONTEXT": "1"
+        },
+        "health_url": "http://127.0.0.1:18302/health",
+        "ready_timeout": 900
+      },
+      {
+        "name": "glm-proxy",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/python",
+          "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin/vllm_responses_compat_proxy_glm47.py",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18303",
+          "--upstream",
+          "http://127.0.0.1:18302"
+        ],
+        "env": {
+          "SABER_RESPONSES_CONTEXT_GUARD": "1"
+        },
+        "health_url": "http://127.0.0.1:18303/v1/models",
+        "ready_timeout": 60
+      }
+    ],
+    "protocol_version": "saber-v10-responses-budget-v1"
+  },
+  {
+    "key": "gptoss",
+    "label": "gpt-oss-120b",
+    "old_config": "/srv/benchmark/skills/jobs/saber_gptoss120b_treatment_716.json",
+    "old_slug": "codex_gptoss120b_treatment_716",
+    "gpus": [
+      0,
+      1
+    ],
+    "workers": 8,
+    "endpoints": [
+      {
+        "config_key": 0,
+        "base_url": "http://private-host-c6490f8bfd36.invalid:18005/v1",
+        "worker_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "services": [
+      {
+        "name": "gptoss-vllm",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/vllm",
+          "serve",
+          "/srv/benchmark/skills/models/modelscope/OpenAI-Mirror/gpt-oss-120b",
+          "--served-model-name",
+          "OpenAI-Mirror/gpt-oss-120b",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18304",
+          "--tensor-parallel-size",
+          "2",
+          "--max-model-len",
+          "32768",
+          "--max-num-seqs",
+          "8",
+          "--gpu-memory-utilization",
+          "0.75",
+          "--enforce-eager",
+          "--enable-auto-tool-choice",
+          "--tool-call-parser",
+          "openai",
+          "--language-model-only",
+          "--middleware",
+          "saber_vllm_token_count.TokenCountMiddleware"
+        ],
+        "env": {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+          "VLLM_NO_USAGE_STATS": "1",
+          "VLLM_MXFP4_USE_MARLIN": "1",
+          "PYTHONPATH": "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin"
+        },
+        "health_url": "http://127.0.0.1:18304/health",
+        "ready_timeout": 900
+      },
+      {
+        "name": "gptoss-proxy",
+        "argv": [
+          "/srv/benchmark/skills/envs/qwen35-vllm/bin/python",
+          "/srv/benchmark/skills/jobs/terminal-bench-run-20260910-r2/frozen/service-code/bin/vllm_responses_compat_proxy_gptoss.py",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "18305",
+          "--upstream",
+          "http://127.0.0.1:18304"
+        ],
+        "env": {
+          "SABER_RESPONSES_CONTEXT_GUARD": "1"
+        },
+        "health_url": "http://127.0.0.1:18305/v1/models",
+        "ready_timeout": 60
+      }
+    ],
+    "protocol_version": "saber-v10-responses-budget-v1"
+  }
+]

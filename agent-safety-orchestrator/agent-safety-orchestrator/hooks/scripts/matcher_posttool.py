@@ -23,7 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from lib_common import (
-    read_event, aggregate, check, soft_check, log_audit, _state_dir,
+    read_event, check, soft_check, log_audit, log_verdict, _state_dir,
     PII_PATTERNS, SECRET_PATTERNS, SQL_DELETE_FROM_PATTERN,
 )
 from sensitive_data import minimize_sensitive_output, output_replacement_available
@@ -437,11 +437,32 @@ def _isolate_indirect_output(output: str, findings: list[dict]) -> tuple[str, di
         "view_is_not_execution_approval": True,
     }
 
+def _emit_result(verdicts: list[dict], modified_output: str | None = None,
+                 output_view: dict | None = None) -> int:
+    """One JSON document: replacements and verdicts are one atomic protocol."""
+    log_verdict(verdicts)
+    blocks = [v for v in verdicts if v.get("verdict") == "block"]
+    warns = [v for v in verdicts if v.get("verdict") == "warn"]
+    selected = blocks or warns
+    reason = "; ".join(f"[{v['atom_id']}] {v['reason']}" for v in selected)
+    payload = {"verdict": "block" if blocks else "warn" if warns else "pass",
+               "reason": reason, "additionalContext": reason,
+               "decision": "deny" if blocks else "allow", "continue": not bool(blocks),
+               "verdicts": verdicts}
+    if modified_output is not None:
+        payload["modified_output"] = modified_output
+        payload["output_view"] = output_view or {}
+    print(json.dumps(payload, ensure_ascii=False))
+    if blocks:
+        print(reason, file=sys.stderr)
+    return 2 if blocks else 0
+
+
 def main() -> int:
     event = read_event()
     # Only an exact host-pinned policy read is trusted, never the path alone.
     if is_trusted_reference_view(event):
-        return 0
+        return _emit_result([])
     output = event.get("tool_response") or event.get("tool_output") or ""
     if isinstance(output, dict):
         output = json.dumps(output, ensure_ascii=False)
@@ -455,7 +476,7 @@ def main() -> int:
     # Empty output is still significant for lineage: a successful quiet local
     # archive can be observed by a later ls/stat call in the same context.
     if not output:
-        return aggregate(verdicts) if verdicts else 0
+        return _emit_result(verdicts)
 
     modified_output = output
     output_view = {}
@@ -554,15 +575,9 @@ def main() -> int:
         verdicts.append(soft_check("strip-active-html-script", True,
                                    "Inline <script> blocks removed from output"))
 
-    # Emit the (possibly modified) output back via stdout JSON so host can replace.
-    if modified_output != output:
-        print(json.dumps({
-            "modified_output": modified_output,
-            "output_view": output_view,
-            "verdicts": verdicts,
-        }))
-
-    return aggregate(verdicts) if verdicts else 0
+    return _emit_result(
+        verdicts, modified_output if modified_output != output else None, output_view,
+    )
 
 
 def _check_hash_iocs(event: dict, output: str) -> list[dict]:

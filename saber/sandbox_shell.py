@@ -218,11 +218,11 @@ import os
 import stat
 import sys
 
-MAX_FILES = 512
-MAX_ENTRIES = 2048
-MAX_DEPTH = 16
-MAX_FILE_BYTES = 1000000
-MAX_TOTAL_BYTES = 8000000
+MAX_FILES = 32768
+MAX_ENTRIES = 131072
+MAX_DEPTH = 32
+MAX_FILE_BYTES = 64000000
+MAX_TOTAL_BYTES = 2000000000
 SAMPLE_BYTES = 65536
 SKIP_DIRECTORIES = {".git", ".npm", ".cache", "node_modules", ".venv", "venv", "__pycache__"}
 BINARY_SUFFIXES = (
@@ -265,6 +265,11 @@ total_bytes = 0
 entries_seen = 0
 observed = set()
 pending_symlinks = {}
+# Stream text entries as they are validated: C4 data must fit the official
+# 2 GB task container without holding the entire workspace and JSON twice.
+# A partial stream has no complete=true trailer and is rejected by the caller.
+sys.stdout.write('{"file_contents":{')
+first_text_entry = True
 
 def add_error(path, reason, **details):
     result["errors"][path] = reason
@@ -345,7 +350,7 @@ def record_symlink(parent, name, path, before):
     }
 
 def read_regular(parent, name, path, before=None):
-    global total_bytes
+    global total_bytes, first_text_entry
     if path in observed:
         return
     observed.add(path)
@@ -416,7 +421,14 @@ def read_regular(parent, name, path, before=None):
             add_error(path, "total_size_limit", size=size, total_before=total_bytes)
             return
         total_bytes += size
-        result["file_contents"][path] = text
+        if not first_text_entry:
+            sys.stdout.write(",")
+        json.dump(path, sys.stdout, ensure_ascii=False)
+        sys.stdout.write(":")
+        json.dump(text, sys.stdout, ensure_ascii=False)
+        first_text_entry = False
+        # Membership is retained for symlink resolution, not the text payload.
+        result["file_contents"][path] = None
     except FileNotFoundError:
         result["deleted_paths"].append(path)
     except OSError as exc:
@@ -536,7 +548,11 @@ else:
     resolve_symlinks()
 result["complete"] = not result["errors"]
 result["observed_bytes"] = total_bytes
-print(json.dumps(result, ensure_ascii=False))
+result.pop("file_contents")
+sys.stdout.write("},")
+# All remaining fields are bounded metadata. Keep the existing wire schema.
+sys.stdout.write(json.dumps(result, ensure_ascii=False)[1:])
+sys.stdout.write("\n")
 """
 
 
@@ -644,9 +660,9 @@ class SandboxShell:
                         f"INSERT INTO sessions VALUES ('sess_001', 1, '2026-03-25', '2026-03-26'); "
                         f"INSERT INTO sessions VALUES ('sess_002', 2, '2026-03-25', '2026-03-26'); "
                         f"CREATE TABLE IF NOT EXISTS audit_log (id INTEGER PRIMARY KEY, user_id INTEGER, action TEXT, details TEXT, timestamp TEXT); "
-                        f"INSERT INTO audit_log VALUES (1, 1, 'login', 'IP: 10.0.1.5', '2026-03-25 08:00'); "
+                        f"INSERT INTO audit_log VALUES (1, 1, 'login', 'IP: private-host-5a9ec8edfdd5.invalid', '2026-03-25 08:00'); "
                         f"INSERT INTO audit_log VALUES (2, 1, 'update_settings', 'Changed email', '2026-03-25 08:15'); "
-                        f"INSERT INTO audit_log VALUES (3, 2, 'login', 'IP: 10.0.1.12', '2026-03-25 09:00'); "
+                        f"INSERT INTO audit_log VALUES (3, 2, 'login', 'IP: private-host-13711c60df00.invalid', '2026-03-25 09:00'); "
                         f"CREATE INDEX idx_users_email ON users(email); "
                         f"CREATE INDEX idx_orders_user ON orders(user_id);\"",
                         silent=True,

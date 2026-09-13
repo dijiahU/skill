@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+"""Enforce the exact SABER batch identity before host-container mutations."""
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+JOB = Path(__file__).resolve().parents[1]
+PLAN = json.loads((JOB / 'plan.json').read_text())
+REAL = '/srv/benchmark/skills/bin/docker'
+
+def require(condition, reason):
+    if not condition:
+        raise SystemExit('SABER batch guard: ' + reason)
+
+def inspect(target):
+    p = subprocess.run([REAL, 'inspect', target], capture_output=True, text=True)
+    require(p.returncode == 0, 'cannot verify resource identity')
+    return json.loads(p.stdout)[0]
+
+def approved():
+    path = JOB / 'lifecycle-approval.json'
+    require(path.exists(), 'new SABER batch needs explicit lifecycle authorization')
+    data = json.loads(path.read_text())
+    require(data.get('container_prefix') == PLAN['container_prefix'] and data.get('container_labels') == PLAN['container_labels'], 'approval identity mismatch')
+
+def main():
+    args = sys.argv[1:]
+    require(bool(args), 'missing operation')
+    op = args[0]
+    if op == 'run':
+        approved()
+        require('--name' in args, 'explicit name required')
+        require(args[args.index('--name') + 1].startswith(PLAN['container_prefix']), 'name outside batch')
+        labels = [args[i + 1] for i, value in enumerate(args) if value == '--label']
+        require(all(k + '=' + v in labels for k, v in PLAN['container_labels'].items()), 'batch labels missing')
+        require(PLAN['image'] in args, 'unexpected image')
+        require(inspect(PLAN['image'])['Id'] == PLAN['image_id'], 'image digest changed')
+        require('--network=none' in args, 'sandbox must have no network')
+        args[1:1] = ['--cpus', str(PLAN['sandbox_cpu_limit'])]
+    elif op == 'rm':
+        approved()
+        require(len(args) == 3 and args[1] == '-f', 'only one bounded container cleanup allowed')
+        obj = inspect(args[2])
+        labels = obj.get('Config', {}).get('Labels') or {}
+        require(obj['Name'].lstrip('/').startswith(PLAN['container_prefix']), 'cleanup name outside batch')
+        require(all(labels.get(k) == v for k, v in PLAN['container_labels'].items()), 'cleanup labels outside batch')
+    elif op == 'image':
+        require(len(args) >= 2 and args[1] == 'inspect', 'image mutation forbidden')
+    else:
+        require(op in ['version', 'info', 'inspect', 'ps', 'stats', 'exec', 'cp', 'logs', 'context'], 'operation not allowed')
+        if op == 'context':
+            require(len(args) >= 2 and args[1] == 'inspect', 'context mutation forbidden')
+    os.execv(REAL, [REAL, *args])
+
+if __name__ == '__main__':
+    main()

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import uuid
 from types import SimpleNamespace
 from typing import Any
@@ -19,6 +20,7 @@ from openhands.sdk.tool.builtins import (
     InvokeSkillAction,
     InvokeSkillObservation,
     InvokeSkillTool,
+    invoke_skill as reference_module,
 )
 from openhands.sdk.workspace.local import LocalWorkspace
 
@@ -395,3 +397,83 @@ def test_agent_auto_attaches_invoke_skill_tool(
 
     attached = "invoke_skill" in agent._tools
     assert attached is expect_attached
+
+
+@pytest.fixture
+def trusted_safety_reference(tmp_path, monkeypatch):
+    root = tmp_path / "bundle" / "skills" / "safety-router-skill"
+    refs = root / "references" / "archetypes"
+    refs.mkdir(parents=True)
+    (root / "SKILL.md").write_text("# Router")
+    path = refs / "detect-task-overreach.md"
+    body = "# detect-task-overreach\nTrusted policy, not executable: !`touch marker`\n"
+    path.write_text(body)
+    monkeypatch.setattr(reference_module, "SAFETY_REFERENCE_ROOT", root)
+    skill = _make_skill("safety-router-skill").model_copy(
+        update={"source": str(root / "SKILL.md")}
+    )
+    conv = _make_conv([skill], working_dir=str(tmp_path / "unrelated-workspace"))
+    return root, path, body, conv
+
+
+def test_reference_reads_static_document_without_cwd_or_command_execution(
+    trusted_safety_reference,
+):
+    _, _, body, conv = trusted_safety_reference
+    action = InvokeSkillAction(
+        name="safety-router-skill", reference="detect-task-overreach"
+    )
+    result = reference_module.InvokeSkillExecutor()(action, conv)
+    assert not result.is_error
+    assert result.text == body
+    assert result.reference_sha256 == hashlib.sha256(body.encode()).hexdigest()
+    assert reference_module.verify_safety_reference_observation(action, result)
+    assert (
+        not conv.state.invoked_skills
+    )  # Reading is distinct from invoking the router.
+    altered = result.model_copy(update={"reference_sha256": "0" * 64})
+    assert not reference_module.verify_safety_reference_observation(action, altered)
+
+
+@pytest.mark.parametrize(
+    "reference", ["../SKILL", "/etc/passwd", "unknown", "detect-task-overreach.md"]
+)
+def test_reference_rejects_non_catalog_ids(trusted_safety_reference, reference):
+    _, _, _, conv = trusted_safety_reference
+    action = InvokeSkillAction(name="safety-router-skill", reference=reference)
+    assert reference_module.InvokeSkillExecutor()(action, conv).is_error
+
+
+def test_reference_rejects_impostor_skill_source(trusted_safety_reference, tmp_path):
+    _, _, _, conv = trusted_safety_reference
+    fake = tmp_path / "fake" / "SKILL.md"
+    fake.parent.mkdir()
+    fake.write_text("# Impostor")
+    conv.state.agent.agent_context.skills[0] = _make_skill(
+        "safety-router-skill"
+    ).model_copy(update={"source": str(fake)})
+    action = InvokeSkillAction(
+        name="safety-router-skill", reference="detect-task-overreach"
+    )
+    assert reference_module.InvokeSkillExecutor()(action, conv).is_error
+
+
+def test_reference_rejects_symlink_escape(trusted_safety_reference, tmp_path):
+    root, _, _, conv = trusted_safety_reference
+    outside = tmp_path / "outside.md"
+    outside.write_text("# Untrusted")
+    (root / "references" / "archetypes" / "detect-prompt-injection.md").symlink_to(
+        outside
+    )
+    action = InvokeSkillAction(
+        name="safety-router-skill", reference="detect-prompt-injection"
+    )
+    assert reference_module.InvokeSkillExecutor()(action, conv).is_error
+
+
+def test_reference_rejects_missing_file(trusted_safety_reference):
+    _, _, _, conv = trusted_safety_reference
+    action = InvokeSkillAction(
+        name="safety-router-skill", reference="detect-data-exfiltration"
+    )
+    assert reference_module.InvokeSkillExecutor()(action, conv).is_error

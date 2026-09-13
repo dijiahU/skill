@@ -475,7 +475,8 @@ def _run_matcher(fname: str, cc_event: dict):
                            capture_output=True, text=True, env=env, timeout=25)
     except Exception as e:
         sys.stderr.write(f"[codex_hook] matcher {fname} error: {e}\n")
-        return (False, False, [], "", {})
+        reason = f"Safety matcher {fname} unavailable: {type(e).__name__}"
+        return (FAIL_CLOSED, not FAIL_CLOSED, [reason], "", {})
     if p.returncode not in {0, 2}:
         detail = (p.stderr or p.stdout or f"exit {p.returncode}").strip()[:1000]
         reason = f"Safety matcher {fname} failed: {detail}"
