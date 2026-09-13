@@ -248,13 +248,13 @@ output_csv('public-terminal21-scores.csv',public,['source_group','model','agent'
 
 L=[]
 def add(s=''):L.append(s)
-add('# 模型评测结果汇总：OAS、Terminal-Bench 与公开参考成绩')
+add('# 模型评测结果汇总：OAS、SABER、Terminal-Bench 与公开参考成绩')
 add()
 add(f'本地数据采集窗口（运行环境 UTC）：**{START} 至 {END}**。这是一次静态快照，正在运行的任务随后会产生新结果。目录日期使用本次会话日期 2026-09-13；采集时间按运行环境时钟原样记录。')
 add()
 add('## 1. 范围与当前结论')
 add()
-add('本文覆盖本轮 OAS 的 baseline/skills、GPT/Gemini/Claude/gpt-oss 的 Terminal-Bench 2.1 skills、现有 Terminal 历史结果目录，以及本会话刚检索到的 Terminal-Bench 2.1 公开成绩。历史数据按批次与条件分开，未把不同版本、模型或重复尝试混成总分。')
+add('本文覆盖已有 SABER 各版本成绩（第 9 节）、本轮 OAS 的 baseline/skills、GPT/Gemini/Claude/gpt-oss 的 Terminal-Bench 2.1 skills、现有 Terminal 历史结果目录，以及本会话刚检索到的 Terminal-Bench 2.1 公开成绩。历史数据按批次与条件分开，未把不同版本、模型或重复尝试混成总分。')
 add()
 add('- 用户最新决定：保留现有有效成绩，补跑异常与缺失项。Qwen OAS baseline 已恢复；新模型按 skills/hooks 条件运行。旧 GLM 30 步 baseline 作为历史结果保留。')
 add('- Terminal 当前包含 GPT-5.6 Sol、Gemini 3.8 Flash、Claude Opus 5 和本机 GPU gpt-oss-120B，各 89 题、带 skills/hooks。Claude 当前按用户要求暂停，已有结果与容器保留；未经用户指示不恢复推理。')
@@ -381,6 +381,13 @@ for name,label in [('snapshot.json','本次汇总机器可读快照'),('input-sh
     add('- '+link(OUT/name,label))
 add()
 add('本地成绩按原始输出重新计算，原始结果未修改。哈希用于固定此次读取的文件版本；活跃任务文件之后继续追加时，其哈希会发生变化。')
+# Preserve existing SABER versions whenever the combined report is regenerated.
+sys.path.insert(0, str(OUT))
+from build_saber_section import export_section
+saber_section, saber_data = export_section()
+L.extend(['', saber_section])
+snapshot['saber'] = saber_data
+(OUT/'snapshot.json').write_text(json.dumps(snapshot, ensure_ascii=False, indent=2)+'\n')
 (OUT/'评测结果汇总.md').write_text('\n'.join(L)+'\n')
 
 assert all(x['valid']+x['unresolved']==184 for x in oas)
