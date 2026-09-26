@@ -1537,16 +1537,44 @@ def _path_is_regenerable(raw: str, cwd: Path) -> bool:
 
 def _dangerous_log_truncation(command: str, logical_cwd: str) -> bool:
     cwd = Path(logical_cwd or "/home/user").resolve()
+    metadata = _workspace_snapshot_payload()
+    snapshot = _workspace_snapshot()
 
     def protected_log(raw: str) -> bool:
         value = raw.strip("'\",")
-        return bool(
-            LOG_RESOURCE.search(value.replace("\\", "/"))
-            and not _path_is_regenerable(value, cwd)
-        )
+        if not LOG_RESOURCE.search(value.replace("\\", "/")):
+            return False
+        if _path_is_regenerable(value, cwd):
+            return False
+        path = (cwd / value).resolve()
+        # Keep audit/system logs protected, including cwd-relative spellings.
+        if re.search(r"(?i)(?:^|/)(?:var/log|logs?|audit)(?:/|$)|"
+                     r"(?:^|/)(?:audit|auth|security|access|syslog)[^/]*$", str(path)):
+            return True
+        root = Path(str(metadata.get("cwd") or cwd)).resolve()
+        if (not metadata.get("authoritative") or metadata.get("snapshot_status") != "ready"
+                or not path.is_relative_to(root)
+                or any(char in value for char in "$*?[]`~")):
+            return True
+        # An excluded/unreadable path is not evidence of a new output file.
+        for field in ("excluded_files", "errors", "symlinks"):
+            for name in metadata.get(field, {}):
+                unavailable = (root / name).resolve()
+                if path == unavailable or path.is_relative_to(unavailable):
+                    return True
+        return _read_controller(path, snapshot) is not None
 
     for raw_tokens in _automation_token_segments(command):
         tokens = _strip_command_prefix(raw_tokens)
+        if tokens[:1] == ["cd"] and len(tokens) >= 2:
+            cwd = (cwd / tokens[1]).resolve()
+            continue
+        for index, token in enumerate(tokens):
+            if token == ">" and index + 1 < len(tokens) and protected_log(tokens[index + 1]):
+                return True
+            if token.startswith(">") and not token.startswith(">>") and len(token) > 1:
+                if protected_log(token[1:]):
+                    return True
         for index, token in enumerate(tokens):
             program = Path(token).name
             if program == "truncate":
@@ -1570,10 +1598,6 @@ def _dangerous_log_truncation(command: str, logical_cwd: str) -> bool:
                 ):
                     return True
 
-    for raw_tokens in _automation_token_segments(command):
-        for index, token in enumerate(raw_tokens[:-1]):
-            if token == ">" and protected_log(raw_tokens[index + 1]):
-                return True
     return False
 
 
@@ -2325,11 +2349,66 @@ def _automation_token_segments(command: str) -> list[list[str]]:
     return segments
 
 
+def _make_controllers(tokens: list[str], cwd: Path) -> list[dict[str, Any]]:
+    """Resolve make's directory/file options before identifying build targets."""
+    filenames: list[str] = []
+    targets: list[str] = []
+    information_only = False
+    index = 1
+    while index < len(tokens):
+        token = tokens[index]
+        if token in {"|", "|&", "&"}:
+            break
+        if token in {">", ">>", "<", "1>", "2>", "1>>", "2>>"}:
+            index += 2
+            continue
+        if token == "--":
+            targets.extend(value for value in tokens[index + 1:] if "=" not in value)
+            break
+        if token in {"--version", "-v", "--help", "-h"}:
+            information_only = True
+        elif token in {"-C", "--directory", "-f", "--file", "--makefile"}:
+            if index + 1 < len(tokens):
+                index += 1
+                if token in {"-C", "--directory"}:
+                    cwd = (cwd / tokens[index]).resolve()
+                else:
+                    filenames.append(tokens[index])
+        elif token.startswith("--directory=") or token.startswith("-C"):
+            cwd = (cwd / (token.split("=", 1)[1] if token.startswith("--") else token[2:])).resolve()
+        elif token.startswith(("--file=", "--makefile=")) or token.startswith("-f"):
+            filenames.append(token.split("=", 1)[1] if token.startswith("--") else token[2:])
+        elif token in {"-I", "--include-dir", "-o", "--old-file", "--assume-old",
+                       "-W", "--what-if", "--new-file", "--assume-new", "--eval"}:
+            index += 1
+        elif token in {"-j", "--jobs", "-l", "--load-average", "--max-load"}:
+            if index + 1 < len(tokens) and re.fullmatch(r"\d+(?:\.\d+)?", tokens[index + 1]):
+                index += 1
+        elif not token.startswith("-") and "=" not in token:
+            targets.append(token)
+        index += 1
+    if information_only:
+        return []
+    if not filenames:
+        snapshot = _workspace_snapshot()
+        filenames = [next((name for name in ("GNUmakefile", "makefile", "Makefile")
+                           if _read_controller(cwd / name, snapshot) is not None), "Makefile")]
+    return [{"path": (cwd / name).resolve(), "kind": "make", "entries": targets,
+             "required": True, "cwd": cwd} for name in filenames]
+
+
 def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, Any]]:
     cwd = Path(logical_cwd or "/home/user").resolve()
     controllers: list[dict[str, Any]] = []
     segments = _automation_token_segments(command)
-    executed_programs = {tokens[0] for raw in segments if (tokens := _strip_command_prefix(raw))}
+    executed_paths: set[Path] = set()
+    execution_cwd = cwd
+    for raw in segments:
+        tokens = _strip_command_prefix(raw)
+        if tokens[:1] == ["cd"] and len(tokens) >= 2:
+            execution_cwd = (execution_cwd / tokens[1]).resolve()
+        elif tokens and tokens[0].startswith(("/", "./", "../")):
+            executed_paths.add((execution_cwd / tokens[0]).resolve())
     for raw_tokens in segments:
         tokens = _strip_command_prefix(raw_tokens)
         if not tokens:
@@ -2346,8 +2425,7 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
             if output_index < len(tokens):
                 output = Path(tokens[output_index])
                 output_path = (output if output.is_absolute() else cwd / output).resolve()
-                if any(Path(value).resolve() == output_path for value in executed_programs
-                       if value.startswith(("/", "./"))):
+                if output_path in executed_paths:
                     for value in tokens[1:]:
                         if value.endswith(".c"):
                             source = Path(value)
@@ -2359,19 +2437,7 @@ def _automation_controllers(command: str, logical_cwd: str) -> list[dict[str, An
             continue
 
         if program in {"make", "gmake"}:
-            makefile = cwd / "Makefile"
-            targets: list[str] = []
-            index = 1
-            while index < len(tokens):
-                token = tokens[index]
-                if token in {"-f", "--file"} and index + 1 < len(tokens):
-                    makefile = (cwd / tokens[index + 1]).resolve()
-                    index += 2
-                    continue
-                if not token.startswith("-") and "=" not in token:
-                    targets.append(token)
-                index += 1
-            controllers.append({"path": makefile, "kind": "make", "entries": targets, "required": True})
+            controllers.extend(_make_controllers(tokens, cwd))
             continue
 
         if program == "npm" and len(tokens) >= 2:
@@ -2538,6 +2604,7 @@ def _python_has_execution_call(content: str) -> bool:
 
 def _automation_controller_risk(
     command: str, logical_cwd: str, event: dict[str, Any] | None = None,
+    warnings: list[str] | None = None,
 ) -> str:
     metadata = _workspace_snapshot_payload()
     snapshot = _workspace_snapshot()
@@ -2555,7 +2622,9 @@ def _automation_controller_risk(
     }
 
     def finish(risk: str) -> str:
-        trace["decision"] = "block" if risk else "allow"
+        trace["decision"] = "block" if risk else "warn" if any(
+            item.get("decision") == "warn" for item in trace["controllers"]
+        ) else "allow"
         trace["reason"] = risk
         _write_controller_trace(trace)
         return risk
@@ -2675,6 +2744,19 @@ def _automation_controller_risk(
         if content is None:
             excluded = metadata.get("excluded_files", {})
             excluded_names = [str(name) for name in excluded] if isinstance(excluded, dict) else []
+            details = metadata.get("excluded_file_details", {}).get(str(path), {})
+            if (metadata.get("authoritative") and metadata.get("snapshot_status") == "ready"
+                    and controller["kind"] == "file" and not controller.get("required")
+                    and isinstance(excluded, dict)
+                    and excluded.get(str(path)) in {"binary", "oversized_binary"}
+                    and details.get("detection") == "magic:elf"):
+                warning = f"{path}: native ELF executable; source inspection unavailable for binary content"
+                item.update({"decision": "warn", "reason": warning})
+                if warnings is not None:
+                    warnings.append(warning)
+                # Source companions and all other queued controllers still run
+                # through the normal effect checks; ELF is not a safety verdict.
+                continue
             if metadata.get("authoritative") and any(
                 str(path) == name or str(path).startswith(name.rstrip("/") + "/")
                 for name in excluded_names
@@ -2947,11 +3029,23 @@ def _automation_controller_risk(
                 nested.setdefault("stdout_sanitized", bool(controller.get("stdout_sanitized")))
                 queue.append(nested)
 
-        transitive_text = (
-            strip_shell_heredoc_bodies(scan_text)
-            if controller["kind"] in {"shell", "make", "npm"}
-            else scan_text
-        )
+        if path.suffix == ".py" or controller["kind"] == "python":
+            # Ignore docstrings/standalone strings, while retaining conservative
+            # review of command strings (including dynamically built argv).
+            class WithoutDocstrings(ast.NodeTransformer):
+                def visit_Expr(self, node):
+                    if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                        return None
+                    return self.generic_visit(node)
+
+            try:
+                transitive_text = ast.unparse(WithoutDocstrings().visit(ast.parse(scan_text)))
+            except (SyntaxError, ValueError, RecursionError):
+                transitive_text = scan_text
+        else:
+            transitive_text = (strip_shell_heredoc_bodies(scan_text)
+                               if controller["kind"] in {"shell", "make", "npm"}
+                               else scan_text)
         for match in _TRANSITIVE_SCRIPT_CALL.finditer(transitive_text):
             referenced = match.group("path")
             child = Path(referenced)
@@ -3103,8 +3197,9 @@ def main() -> int:
             "High-risk or irreversible action detected: " + "; ".join(destructive_reasons),
         ))
 
+    automation_warnings: list[str] = []
     automation_risk = _automation_controller_risk(
-        cmd, str(event.get("cwd") or "/home/user"), event
+        cmd, str(event.get("cwd") or "/home/user"), event, automation_warnings
     )
     if automation_risk:
         verdicts.append(check(
@@ -3112,6 +3207,8 @@ def main() -> int:
             "Repository-controlled automation contains a high-risk transitive action: "
             + automation_risk,
         ))
+    for warning in automation_warnings:
+        verdicts.append(soft_check("detect-indirect-prompt-injection", True, warning))
 
     # detect-secret-in-args
     secret_hits = [name for name, rx in SECRET_PATTERNS.items() if rx.search(cmd)]

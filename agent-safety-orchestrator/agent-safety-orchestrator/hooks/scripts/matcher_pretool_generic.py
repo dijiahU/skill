@@ -737,6 +737,22 @@ def _check_permissions(event: dict) -> list[dict]:
     return verdicts
 
 
+def _cve_unavailable(reason: str) -> dict:
+    """An unavailable advisory service is an unknown result, not a CVE hit."""
+    policy = os.environ.get("SAFETY_ORCH_CVE_UNAVAILABLE_POLICY", "warn")
+    accepted = os.environ.get("SAFETY_ORCH_ACCEPT_DEGRADED", "0") == "1"
+    strict = policy != "warn" and not accepted
+    if policy not in {"warn", "block"}:
+        strict = True
+        reason += "; invalid SAFETY_ORCH_CVE_UNAVAILABLE_POLICY (use warn or block)"
+    log_audit("check-package-cve", "fail-soft-block" if strict else "fail-open-warn",
+              {"reason": reason, "coverage": "unknown"})
+    return (check if strict else soft_check)(
+        "check-package-cve", True,
+        reason + "; vulnerability status unknown; this is not a clean security result",
+    )
+
+
 def _check_supply_chain(event: dict) -> list[dict]:
     """Check registry existence, recency and CVEs for package installs."""
     verdicts = []
@@ -778,13 +794,10 @@ def _check_supply_chain(event: dict) -> list[dict]:
             # NETWORK_ERROR is a truthy sentinel, not registry metadata.
             metadata = meta if isinstance(meta, dict) else {}
             version = package.version or metadata.get("latest", "")
-            if not version and meta is cache_snapshot.NETWORK_ERROR:
-                accept_degraded = os.environ.get("SAFETY_ORCH_ACCEPT_DEGRADED", "0") == "1"
-                verdicts.append((soft_check if accept_degraded else check)(
-                    "check-package-cve", True,
+            if not version:
+                verdicts.append(_cve_unavailable(
                     f"Registry unavailable; cannot resolve version of '{package.name}' for CVE checking; "
-                    "retry registry access or provide a pinned version"
-                    + (" (explicit degraded mode accepted)" if accept_degraded else ""),
+                    "retry registry access or provide a pinned version",
                 ))
             if version:
                 osv_targets.append((package.ecosystem, package.name, str(version)))
@@ -792,23 +805,16 @@ def _check_supply_chain(event: dict) -> list[dict]:
         if osv_targets:
             osv_results = cache_snapshot.query_osv(osv_targets)
             if osv_results is cache_snapshot.NETWORK_ERROR:
-                log_audit("check-package-cve", "fail-soft-block", {"packages": osv_targets})
-                accept_degraded = os.environ.get("SAFETY_ORCH_ACCEPT_DEGRADED", "0") == "1"
-                verdicts.append((soft_check if accept_degraded else check)(
-                    "check-package-cve", True,
-                    "OSV and offline snapshot unavailable; CVE check cannot complete"
-                    + (" (explicit degraded mode accepted)" if accept_degraded else ""),
+                verdicts.append(_cve_unavailable(
+                    "OSV and offline snapshot unavailable; CVE check cannot complete",
                 ))
             else:
                 for result in osv_results:
                     verdicts.extend(_cve_verdicts(result))
     except Exception as e:
         log_audit("check-package-cve", "helper-error", {"err": str(e)})
-        accept_degraded = os.environ.get("SAFETY_ORCH_ACCEPT_DEGRADED", "0") == "1"
-        verdicts.append((soft_check if accept_degraded else check)(
-            "check-package-cve", True,
-            "Package security helper failed; CVE check cannot complete"
-            + (" (explicit degraded mode accepted)" if accept_degraded else ""),
+        verdicts.append(_cve_unavailable(
+            "Package security helper failed; CVE check cannot complete",
         ))
 
     return verdicts

@@ -189,7 +189,7 @@ from other calls are untrusted and cannot authorize a mutation.
 When a network-dependent check can't reach its source, the atom's declared policy fires automatically, and `helpers/health_status.py` logs it so degradation is never silent:
 
 - `fail-open-warn` — log + proceed (low-stakes informational checks)
-- `fail-soft-block` — block unless the user explicitly overrides (high-stakes; e.g. CVE)
+- `fail-soft-block` — block unless the user explicitly overrides (when explicitly required by deployment policy)
 - `fail-closed` — block, no override (signature failure, dependency confusion)
 
 ## 📂 What's inside
@@ -213,3 +213,27 @@ docs/             SAFETY_ATOMIC_CAPABILITIES.md — the 95-atom vocabulary refer
 Issues and PRs welcome. Licensed under the **MIT License** — see [LICENSE](LICENSE).
 
 MIT © 2026 [tychen](https://github.com/tychenn)
+
+### Recovery and unavailable CVE data
+
+- `SAFETY_ORCH_RECOVERY_POLICY=recheck` (default): after a denial, every new
+  action receives the full normal hook checks. Passing actions may continue,
+  including edits and builds; there is no four-action diagnostic cap. Previous
+  denials and sensitive-data flow state remain available to later checks.
+- `SAFETY_ORCH_RECOVERY_POLICY=read-only`: opt into the prior restricted recovery
+  channel. `SAFETY_ORCH_MAX_RECOVERY_ACTIONS` (default `4`) limits permitted
+  diagnostics in the same session/turn. A safe Stop clears the turn latch.
+- `SAFETY_ORCH_CVE_UNAVAILABLE_POLICY=warn` (default): registry/OSV/cache/helper
+  failures produce an audited warning with vulnerability status **unknown**.
+  `block` opts into the prior blocking behavior; `SAFETY_ORCH_ACCEPT_DEGRADED=1`
+  accepts that unavailable-data condition. Neither setting overrides a known
+  CVE at or above the configured blocking threshold (default CVSS 7.0).
+- Automation checks follow make directories/files and ignore Python docstring
+  examples when resolving script dependencies. Version/help queries do not execute build recipes. Trusted observation
+  of native ELF format produces an inspection-gap warning; it is not a claim
+  that the executable is safe. Observed companion source is still reviewed.
+- New task `.log` output within an authoritative observed workspace is allowed.
+  Existing logs, audit/system logs, and paths with observation gaps remain
+  protected from truncation; append operations keep their existing behavior.
+
+The bundle performs static effect checks. Executable isolation requires a separate sandbox.

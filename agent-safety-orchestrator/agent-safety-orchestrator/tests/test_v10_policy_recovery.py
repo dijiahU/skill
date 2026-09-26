@@ -26,6 +26,7 @@ class V10PolicyRecoveryTests(unittest.TestCase):
             "SAFETY_ORCH_MANUAL_BRIDGE": "1",
             "SAFETY_ORCH_BASH_TOOL_NAMES": "saber_bash",
             "SAFETY_ORCH_FAIL_CLOSED": "1",
+            "SAFETY_ORCH_RECOVERY_POLICY": "read-only",
         })
         snapshot = self.root / "snapshot.json"
         snapshot.write_text(json.dumps({
@@ -60,6 +61,28 @@ class V10PolicyRecoveryTests(unittest.TestCase):
             [sys.executable, str(path)], input=json.dumps(event), text=True,
             capture_output=True, env=dict(self.env, **env), check=False,
         )
+
+    def test_default_rechecks_safe_work_after_denial_without_a_diagnostic_cap(self):
+        self.env.pop("SAFETY_ORCH_RECOVERY_POLICY")
+        denied, _ = self.bridge(self.event("rm -rf /home/user"))
+        self.assertEqual(denied.returncode, 2)
+        for command in ["echo repaired > result.txt", "touch marker", *(["pwd"] * 6)]:
+            result, payload = self.bridge(self.event(command))
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            usage = payload["safetyOrchestratorUsage"]
+            self.assertEqual(usage["decision_kind"], "low_risk_recovery_allow")
+            self.assertEqual(usage["recovery_policy"], "recheck")
+            self.assertEqual(usage["total_high_risk_blocks"], 1)
+        repeated, payload = self.bridge(self.event("rm -rf /home/user"))
+        self.assertEqual(repeated.returncode, 2)
+        self.assertEqual(payload["safetyOrchestratorUsage"]["total_high_risk_blocks"], 2)
+        self.assertNotEqual(payload["safetyOrchestratorUsage"]["risk_class"], "recovery-scope")
+
+    def test_unknown_recovery_policy_is_not_an_allow_override(self):
+        self.bridge(self.event("rm -rf /home/user"))
+        result, payload = self.bridge(self.event("pwd"), SAFETY_ORCH_RECOVERY_POLICY="typo")
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(payload["safetyOrchestratorUsage"]["recovery_reason"], "invalid-recovery-policy")
 
     def test_latch_allows_bounded_readonly_recovery_but_denies_effectful_detour(self):
         denied, first = self.bridge(self.event("rm -rf /home/user"))

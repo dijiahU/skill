@@ -454,7 +454,7 @@
 - **signal_phrases**: CVE check, vulnerability database lookup, NVD scanner, OSV lookup, advisory feed, CVSS gate
 - **related**: `check-package-typosquat`, `check-sbom-completeness`, `run-sast-scan`
 - **requires_network**: true (default endpoints: osv.dev `/v1/querybatch`, GHSA, NVD; supports offline `osv-export` snapshot fallback)
-- **fail_policy**: fail-soft-block
+- **fail_policy**: fail-open-warn
 
 #### `check-dependency-confusion`
 - **parent**: `detect-supply-chain-risk` · **phase**: tool-invocation · **attack_surface**: dep-confusion
@@ -463,7 +463,7 @@
 - **scope_out**: typosquat (similar but distinct name) → `check-package-typosquat`; install-hook abuse → `audit-install-hook`
 - **signal_phrases**: dependency confusion, registry shadowing, scope jacking, namespace shadow, internal-vs-public dep
 - **related**: `check-package-typosquat`, `audit-install-hook`
-- **requires_network**: false (local config: `INTERNAL_REGISTRY_HOSTS` env var lists private registries to cross-check)
+- **requires_network**: true (public registry metadata, cache-backed; internal package inventory from `SAFETY_ORCH_INTERNAL_PACKAGES_JSON`)
 - **fail_policy**: fail-closed
 
 #### `audit-install-hook`
@@ -1113,16 +1113,18 @@ hooks/  ← ~81 个 hook 条目（5 个 pure-hook archetype + 14 mixed-enforce �
 | fail_policy | 失败时行为 | 适用判据 |
 | --- | --- | --- |
 | `fail-open-warn` | 放行 + 写 audit log + Router status 标 degraded | 误漏短窗口可接受的低 stakes atom（recency anomaly、IOC 查询、hallucinated package） |
-| `fail-soft-block` | 阻断 + 需用户显式 `--accept-degraded` 才能继续 | 高 stakes 信息型 atom——漏掉一次就是真实危险（critical CVE 检查） |
+| `fail-soft-block` | 阻断 + 需用户显式 `--accept-degraded` 才能继续 | 高 stakes 信息型 atom——由部署策略明确要求不可在未知结果下继续的检查 |
 | `fail-closed` | 默认阻断，不可绕过 | 安全语义不可降级（签名验证、publisher allowlist、typosquat 检查、dependency confusion） |
 
 **选择原则**：能 `fail-open-warn` 的尽量 `fail-open-warn`（不阻塞 agent 工作流），但凡漏检会让用户**暴露在真实攻击下**的就用 `fail-soft-block` 或 `fail-closed`。**Audit log 必须保留**，事后可统计 degraded 占比。
+
+CVE 查询不可用（含离线缓存不可用）默认警告并记录“结果未知”，不等同于发现漏洞；已知 CVSS 达到阻断阈值的漏洞仍阻断。部署可设置 `SAFETY_ORCH_CVE_UNAVAILABLE_POLICY=block` 恢复查询不可用时阻断的策略。
 
 ### 12.3 8 个 hook-network atom 的部署元数据汇总
 
 | Atom | requires_network | requires_api_key | fail_policy |
 | --- | :---: | --- | --- |
-| `check-package-cve` | ✅ | — | `fail-soft-block` |
+| `check-package-cve` | ✅ | — | `fail-open-warn` |
 | `detect-hallucinated-package` | ✅ | — | `fail-open-warn` |
 | `check-package-recency-anomaly` | ✅ | — | `fail-open-warn` |
 | `check-malware-hash-ioc` | ✅ | `VIRUSTOTAL_API_KEY` | `fail-open-warn` |

@@ -18,13 +18,16 @@ spec.loader.exec_module(hook)
 
 
 class UtilityHookRegressions(unittest.TestCase):
-    def matcher(self, command, files=None, excluded=None):
-        directory = Path(tempfile.mkdtemp(prefix='utility-hook-regression-'))
+    def matcher(self, command, files=None, excluded=None, details=None, errors=None):
+        temporary = tempfile.TemporaryDirectory(prefix='utility-hook-regression-')
+        self.addCleanup(temporary.cleanup)
+        directory = Path(temporary.name)
         snapshot = directory / 'snapshot.json'
         snapshot.write_text(json.dumps({
             'schema_version': 2, 'authoritative': True, 'cwd': '/app',
             'snapshot_status': 'ready', 'file_contents': files or {},
             'policy_file_contents': {}, 'excluded_files': excluded or {},
+            'excluded_file_details': details or {}, 'errors': errors or {},
         }))
         return subprocess.run([sys.executable, str(ROOT / 'hooks/scripts/matcher_bash.py')],
             input=json.dumps({'cwd': '/app', 'tool_name': 'Bash', 'tool_input': {'command': command}}),
@@ -38,6 +41,77 @@ class UtilityHookRegressions(unittest.TestCase):
             with self.subTest(command=command):
                 result = self.matcher(command)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_make_information_queries_do_not_execute_a_makefile(self):
+        for command in ('make --version', 'make -v', 'make --help'):
+            result = self.matcher(command)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        # The apparent flag is a filename argument, not a version query.
+        self.assertEqual(self.matcher('make -f --version').returncode, 2)
+        files = {'/app/Makefile': 'build:\n\trm -rf /home/user\n'}
+        for command in ('make build | grep --version', 'make build > --version'):
+            self.assertEqual(self.matcher(command, files).returncode, 2, command)
+
+    def test_make_directories_and_multiple_files_follow_actual_recipe_paths(self):
+        commands = ('make -C project -f Rules build', 'make -Cproject --file=Rules build',
+                    'make --directory=project --makefile=Rules -j 2 build',
+                    'make -C project -C src -f ../Rules build')
+        for command in commands:
+            safe = {'/app/project/Rules': 'build:\n\techo done\n'}
+            result = self.matcher(command, safe)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            dangerous = {'/app/project/Rules': 'build:\n\tbash attack.sh\n',
+                         '/app/project/attack.sh': 'rm -rf /home/user\n',
+                         '/app/project/src/attack.sh': 'rm -rf /home/user\n'}
+            self.assertEqual(self.matcher(command, dangerous).returncode, 2)
+        files = {'/app/GNUmakefile': 'build:\n\techo done\n',
+                 '/app/extra.mk': 'build:\n\trm -rf /home/user\n'}
+        self.assertEqual(self.matcher('make build', files).returncode, 0)
+        self.assertEqual(self.matcher('make -f GNUmakefile -f extra.mk build', files).returncode, 2)
+
+    def test_python_usage_text_is_not_an_executed_dependency(self):
+        script = '"""Usage: python scripts/worker.py"""\nprint(42)\n'
+        result = self.matcher('python3 task_file/scripts/worker.py',
+                              {'/app/task_file/scripts/worker.py': script})
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        files = {'/app/run.py': "import os\nos.system('python3 scripts/worker.py')\n",
+                 '/app/scripts/worker.py': "import os\nos.system('rm -rf /home/user')\n"}
+        self.assertEqual(self.matcher('python3 run.py', files).returncode, 2)
+        files['/app/run.py'] = "import subprocess\nsubprocess.run('python3 scripts/worker.py'.split())\n"
+        self.assertEqual(self.matcher('python3 run.py', files).returncode, 2)
+
+    def test_native_binary_inspection_gap_warns_but_script_gaps_block(self):
+        excluded = {'/app/sim': 'oversized_binary'}
+        details = {'/app/sim': {'detection': 'magic:elf'}}
+        result = self.matcher('./sim', excluded=excluded, details=details)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('native ELF executable', result.stdout)
+        self.assertEqual(self.matcher('./sim', excluded=excluded).returncode, 2)
+        self.assertEqual(self.matcher('python3 sim.py', excluded={'/app/sim.py': 'binary'},
+                                     details={'/app/sim.py': {'detection': 'magic:elf'}}).returncode, 2)
+        # Native format does not exempt source companions from review.
+        result = self.matcher('./sim', {'/app/sim.c': 'int main(){system("rm -rf /home/user");}'},
+                              excluded=excluded, details=details)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+
+    def test_compile_and_execute_resolves_output_against_task_cwd(self):
+        files = {'/app/src/worker.c': 'int main(){system("rm -rf /home/user");}'}
+        self.assertEqual(self.matcher('gcc src/worker.c -o runner && ./runner', files).returncode, 2)
+
+    def test_new_task_logs_are_allowed_and_observed_or_audit_logs_protected(self):
+        for command in ('echo progress > sampling.log', 'echo progress >sampling.log',
+                        'echo progress | tee sampling.log', 'truncate -s 0 sampling.log'):
+            result = self.matcher(command)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(self.matcher(command, {'/app/sampling.log': 'existing evidence'}).returncode, 2)
+            self.assertEqual(self.matcher(command, errors={'/app': 'directory_entry_limit'}).returncode, 2)
+        for command in ('echo x > audit.log', 'echo x > logs/service.log',
+                        'cd /var/log && echo x > service.log', 'truncate -s 0 /var/log/service.log',
+                        'echo x > ../outside.log'):
+            self.assertEqual(self.matcher(command).returncode, 2, command)
+        self.assertEqual(self.matcher('echo x > sampling.log',
+                                     excluded={'/app/sampling.log': 'internal_symlink'}).returncode, 2)
+        self.assertEqual(self.matcher('echo x >> logs/service.log').returncode, 0)
 
     def test_dangerous_proposed_source_is_blocked(self):
         result = self.matcher("cat > /app/probe.py << 'PY'\nimport os\nos.system('rm -rf /')\nPY\npython3 /app/probe.py")
@@ -78,7 +152,8 @@ class UtilityHookRegressions(unittest.TestCase):
                                        'cwd': '/app', 'file_contents': {}, 'policy_file_contents': {}}))
         env = {**os.environ, 'SAFETY_ORCH_STATUS_DIR': str(directory),
                'SAFETY_ORCH_WORKSPACE_SNAPSHOT': str(snapshot),
-               'SAFETY_ORCH_MANUAL_BRIDGE': '1', 'SAFETY_ORCH_FAIL_CLOSED': '1'}
+               'SAFETY_ORCH_MANUAL_BRIDGE': '1', 'SAFETY_ORCH_FAIL_CLOSED': '1',
+               'SAFETY_ORCH_RECOVERY_POLICY': 'read-only'}
         commands = [
             ("cat > /app/probe.py << 'PY'\nprint(42)\nPY\npython3 /app/probe.py", 0),
             ('rm -rf /', 2),

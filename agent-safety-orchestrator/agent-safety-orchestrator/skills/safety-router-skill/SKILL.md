@@ -58,7 +58,7 @@ or read/execute installed skill support files through task tools. If no trusted
 health interface exists, report that health is unverified instead of inventing
 a command or treating protections as active.
 
-If an atom you would otherwise invoke is degraded or disabled, mention this transparently to the user before relying on that protection. **Do not silently proceed past a degraded high-stakes atom** (e.g., `check-package-cve` in `fail-soft-block` mode).
+If an atom you would otherwise invoke is degraded or disabled, mention this transparently to the user before relying on that protection. Follow the configured failure policy. An unavailable `check-package-cve` lookup defaults to a warning with vulnerability status unknown; it does not require approval to continue. A known high-severity CVE remains a block. Deployments can explicitly require blocking on unavailable CVE data with `SAFETY_ORCH_CVE_UNAVAILABLE_POLICY=block`.
 
 ### 3.2 Phase routing table
 
@@ -204,6 +204,13 @@ smaller calls, or provide manual instructions that reproduce it. If the user
 disagrees, route them through `escalate-to-human-sentinel`. If no reliable
 approval channel exists, default-deny. After a verified approval, continue only
 through the explicitly approved minimum-scope safe path.
+
+A block applies to the denied effect, not to the entire task or turn. Independent
+actions and revised plans that avoid that effect may continue after fresh hook
+checks. If a controller could not be inspected, writing its source and submitting
+it for a fresh review is permitted; do not execute it until that review passes.
+The default Codex recovery policy is `recheck`; deployments may explicitly choose
+`SAFETY_ORCH_RECOVERY_POLICY=read-only` to retain bounded diagnostic recovery.
 
 ## 6. Optimization knobs (latency / cost)
 

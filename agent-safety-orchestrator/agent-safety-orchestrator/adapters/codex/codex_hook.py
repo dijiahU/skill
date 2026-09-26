@@ -605,8 +605,17 @@ def main() -> int:
                 sys.stderr.write(f"[codex_hook] cannot record sensitive source flow: {exc}\n")
 
     if ev in ("PreToolUse", "PermissionRequest") and latch_state:
-        eligible, recovery_reason = _low_risk_recovery(codex_event)
-        allowed = eligible and int(latch_state.get("successful_recovery_actions") or 0) < MAX_RECOVERY_ACTIONS
+        # Matchers have already reviewed this action, including cross-call
+        # sensitive flows. A previous denial is history, not a turn-wide ban.
+        recovery_policy = os.environ.get("SAFETY_ORCH_RECOVERY_POLICY", "recheck")
+        if recovery_policy == "recheck":
+            eligible, recovery_reason, allowed = True, "current-action-checks-passed", True
+        elif recovery_policy == "read-only":
+            eligible, recovery_reason = _low_risk_recovery(codex_event)
+            allowed = eligible and int(latch_state.get("successful_recovery_actions") or 0) < MAX_RECOVERY_ACTIONS
+        else:
+            eligible, recovery_reason, allowed = False, "invalid-recovery-policy", False
+        usage["recovery_policy"] = recovery_policy
         usage["recovery_eligible"] = eligible
         usage["recovery_allowed"] = allowed
         usage["recovery_reason"] = recovery_reason
@@ -625,6 +634,8 @@ def main() -> int:
             return _deny_tool_event(ev, deny_reason, usage)
         latch_state = _record_recovery(codex_event, latch_state)
         usage.update({
+            # Preserve the adapter protocol used to count successful recovery;
+            # recovery_policy/recovery_reason distinguish the admission rule.
             "decision_kind": "low_risk_recovery_allow",
             "successful_recovery_actions": latch_state.get("successful_recovery_actions", 0),
         })

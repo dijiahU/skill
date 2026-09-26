@@ -53,7 +53,7 @@ Atoms are sorted by phase → parent archetype → atom_id (matches Router §3.2
 | `audit-ci-workflow-security` | `detect-supply-chain-risk` | tool-invocation | ⚡ hybrid | — | — |
 | `audit-install-hook` | `detect-supply-chain-risk` | tool-invocation | ⚡ hybrid | — | — |
 | `check-dependency-confusion` | `detect-supply-chain-risk` | tool-invocation | 🔒 hook | `fail-closed` | ✅ |
-| `check-package-cve` | `detect-supply-chain-risk` | tool-invocation | 🔒 hook | `fail-soft-block` | ✅ |
+| `check-package-cve` | `detect-supply-chain-risk` | tool-invocation | 🔒 hook | `fail-open-warn` | ✅ |
 | `check-package-recency-anomaly` | `detect-supply-chain-risk` | tool-invocation | 🔒 hook | `fail-open-warn` | ✅ |
 | `check-package-typosquat` | `detect-supply-chain-risk` | tool-invocation | 🔒 hook | `fail-closed` | ❌ |
 | `detect-hallucinated-package` | `detect-supply-chain-risk` | tool-invocation | 🔒 hook | `fail-open-warn` | ✅ |

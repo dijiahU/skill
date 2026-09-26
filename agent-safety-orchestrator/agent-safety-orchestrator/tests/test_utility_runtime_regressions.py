@@ -9,14 +9,45 @@ import matcher_pretool_generic as generic
 spec=importlib.util.spec_from_file_location('repair_codex_hook', BUNDLE/'adapters/codex/codex_hook.py')
 bridge=importlib.util.module_from_spec(spec);sys.modules[spec.name]=bridge;spec.loader.exec_module(bridge)
 class RepairTests(unittest.TestCase):
+    def test_cve_service_outage_policy_and_known_vulnerability_are_distinct(self):
+        from types import SimpleNamespace
+        event = {'tool_input': {'command': 'pip install toml==0.10.2'}}
+        metadata = {'exists': True, 'latest': '0.10.2'}
+        with patch.object(generic, '_query_package_metadata', return_value=metadata), \
+                patch.object(cache_snapshot, 'query_osv', return_value=cache_snapshot.NETWORK_ERROR):
+            for policy, accepted, expected in [('warn', '0', 'warn'), ('block', '0', 'block'),
+                                               ('block', '1', 'warn'), ('typo', '1', 'block')]:
+                with self.subTest(policy=policy, accepted=accepted), patch.dict(os.environ, {
+                    'SAFETY_ORCH_CVE_UNAVAILABLE_POLICY': policy,
+                    'SAFETY_ORCH_ACCEPT_DEGRADED': accepted,
+                }):
+                    verdicts = generic._check_supply_chain(event)
+                    cve = [v for v in verdicts if v.get('atom_id') == 'check-package-cve']
+                    self.assertEqual([v['verdict'] for v in cve], [expected], verdicts)
+        hit = SimpleNamespace(package='toml', version='0.10.2',
+                              cves=[{'id': 'CVE-TEST-HIGH', 'cvss': 9.8}])
+        with patch.object(generic, '_query_package_metadata', return_value=metadata), \
+                patch.object(cache_snapshot, 'query_osv', return_value=[hit]), \
+                patch.dict(os.environ, {'SAFETY_ORCH_CVE_UNAVAILABLE_POLICY': 'warn',
+                                       'SAFETY_ORCH_ACCEPT_DEGRADED': '1'}):
+            self.assertTrue(any(v['verdict'] == 'block' for v in generic._check_supply_chain(event)))
+
+    def test_cve_helper_failure_is_visible_without_blocking_by_default(self):
+        with patch.object(generic, '_query_package_metadata', side_effect=OSError('offline')), \
+                patch.dict(os.environ, {'SAFETY_ORCH_CVE_UNAVAILABLE_POLICY': 'warn'}):
+            verdicts = generic._check_supply_chain({'tool_input': {'command': 'pip install toml'}})
+        self.assertFalse(any(v['verdict'] == 'block' for v in verdicts), verdicts)
+        self.assertIn('vulnerability status unknown', json.dumps(verdicts))
+
     def test_registry_outage_is_actionable_not_helper_crash(self):
-        with patch.object(generic,'_query_package_metadata',return_value=cache_snapshot.NETWORK_ERROR),patch.object(generic,'log_audit') as audit,patch.dict(os.environ,{'SAFETY_ORCH_ACCEPT_DEGRADED':'0'}):
+        with patch.object(generic,'_query_package_metadata',return_value=cache_snapshot.NETWORK_ERROR),patch.object(generic,'log_audit') as audit,patch.dict(os.environ,{'SAFETY_ORCH_ACCEPT_DEGRADED':'0', 'SAFETY_ORCH_CVE_UNAVAILABLE_POLICY':'warn'}):
             verdicts=generic._check_supply_chain({'tool_input':{'command':'pip install toml'}})
         text=json.dumps(verdicts)
         self.assertNotIn('helper failed',text)
         self.assertIn('cannot resolve version',text)
         self.assertNotIn('helper-error',str(audit.call_args_list))
-        self.assertTrue(any(v.get('verdict')=='block' for v in verdicts),verdicts)
+        self.assertFalse(any(v.get('verdict')=='block' for v in verdicts),verdicts)
+        self.assertIn('vulnerability status unknown', text)
     def test_pinned_version_still_checked_during_registry_outage(self):
         with patch.object(generic,'_query_package_metadata',return_value=cache_snapshot.NETWORK_ERROR),patch.object(cache_snapshot,'query_osv',return_value=cache_snapshot.NETWORK_ERROR) as osv:
             verdicts=generic._check_supply_chain({'tool_input':{'command':'pip install toml==0.10.2'}})
