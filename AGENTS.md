@@ -1,45 +1,43 @@
 # Repository Guidelines
 
-## Project Structure & Module Organization
+This repository contains the Agent Safety Orchestrator framework. Run commands
+from the repository root.
 
-The Git repository lives in `agent-safety-orchestrator/`; run project commands from that directory. Research and generation code is under `scripts/`, project documentation under `docs/`, derived manifests and dashboards under `reports/`, and upstream material under `data/raw/`. Treat `data/raw/` as immutable; write transformed outputs to `reports/`.
+## Structure
 
-The distributable bundle is `agent-safety-orchestrator/agent-safety-orchestrator/`. Its main components are `hooks/scripts/` for deterministic checks, `helpers/` for shared runtime support, `skills/safety-router-skill/` for router documentation, and `adapters/` for Claude Code and Codex integration. Isolated end-to-end scenarios live in `pilot/`.
+- `hooks/scripts/`: shared safety checks and event normalization.
+- `helpers/`: health checks, audit support and vulnerability caches.
+- `adapters/`: Claude Code and Codex host integration.
+- `skills/safety-router-skill/`: Router and 14 archetype references.
+- `docs/SAFETY_ATOMIC_CAPABILITIES.md`: source capability definitions.
+- `scripts/`: manifest and reference generators.
+- `tests/`: framework regressions using Python's standard library.
 
-## Build, Test, and Development Commands
+Keep experiment harnesses, benchmark datasets, paper assets, results and local
+workspace backups outside this repository.
 
-Create an optional environment with Python 3.9 or newer:
+## Validation
+
+Run the full test suite on Linux; snapshot fixtures assume Linux path semantics.
 
 ```bash
-cd agent-safety-orchestrator
-python3 -m venv .venv && source .venv/bin/activate
-python -m pip install numpy requests Markdown
-```
-
-Run the core offline validation before submitting changes:
-
-```bash
-python3 scripts/_atomic_capabilities.py
+python3 scripts/gen_atom_manifest.py --check
 python3 scripts/gen_router_atom_catalog.py --check
 python3 scripts/gen_archetype_skill_md.py --check
-python3 scripts/vendor_plugin_docs.py --check
-python3 -m py_compile agent-safety-orchestrator/hooks/scripts/*.py
+python3 -m py_compile hooks/scripts/*.py helpers/*.py adapters/codex/codex_hook.py
+python3 -m unittest discover -s tests -v
 ```
 
-Use `./pilot/run.sh` and `./pilot/run.sh --vanilla` for comparable bundle/baseline integration runs. Fetch, embedding, and LLM-audit scripts may use networks or paid APIs; inspect `--help` and prefer `--dry-run`, `--dry-run-embedding`, or `--limit` first.
+Preserve 95 atoms, one Router skill, 14 archetype references and eight matchers.
+Update generator sources and regenerate derived files. Keep tests independent
+of external datasets and model APIs. Run installer checks only with isolated
+configuration and skill directories.
 
-## Coding Style & Naming Conventions
+## Style and contributions
 
-Use four-space indentation, type hints, docstrings, and `snake_case` for Python. Keep shell scripts Bash-compatible, quote expansions, and retain `set -euo pipefail`. Matcher files follow `matcher_<event>.py`; atom and archetype IDs use lowercase kebab-case. Do not hand-edit generated catalogs or vendored bundle docs—update their source and rerun the generator.
+Use four-space Python indentation, descriptive snake_case names and existing
+type hints. Keep shell scripts Bash-compatible. Commit messages should explain
+the framework behavior or packaging change; record validation results.
 
-## Testing Guidelines
-
-There is no standalone unit-test suite. Match CI by compiling Python, validating JSON/TOML and shell syntax, and preserving the structural invariants: 95 atoms, one router skill, 14 archetype references, and eight matchers. Add focused stdin JSON fixtures when changing hook verdict behavior, then exercise relevant Pilot scenarios in both modes.
-
-## Commit & Pull Request Guidelines
-
-Recent commits use short, imperative summaries in English or concise Chinese, such as `Add project-wide README` or `补齐缺失代码实现`; Conventional Commit prefixes are not required. Keep commits atomic. Pull requests should explain the safety behavior changed, list validation commands, link related issues, and include before/after logs or dashboard screenshots when behavior or generated reports change.
-
-## Security & Configuration
-
-Copy `.env.example` to `.env` for local keys, and never commit secrets, caches, credentials, or Pilot audit transcripts. Preserve third-party licenses within `data/raw/`.
+Preserve licenses and attribution. Keep credentials, rendered host settings,
+local environments, audit logs and caches out of Git.

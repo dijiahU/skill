@@ -1,1 +1,0 @@
-"""SWE-fficiency benchmark implementation."""

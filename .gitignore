@@ -1,47 +1,28 @@
-# Local credentials and configuration
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Local secrets / config (ship .env.example, never .env)
 .env
-.env.local
-**/.env
-**/.env.local
-**/auth.json
-saber/config.json
 
-# Generated benchmark output
-saber/results/
-saber/judged/
-saber/baselines/results/
-saber/logs/
+# Rendered hook config from manual install.sh (machine-specific absolute paths)
+hooks/settings.json.rendered
+settings.json.rendered
 
-# Local environments and caches
+# Runtime audit / state dirs
+.safety-orch/
+.audit-*/
+
+# OS / editor cruft
+.DS_Store
+*.swp
+
+# Local development and runtime output
 .venv/
 .venv-*/
-venv/
-**/__pycache__/
-*.py[cod]
-node_modules/
-.DS_Store
-
-# Workspace snapshot: local artifacts and credentials
-workspace-snapshot/skills/models/
-workspace-snapshot/skills/datasets/
-workspace-snapshot/skills/packages/
-workspace-snapshot/skills/envs/
-workspace-snapshot/skills/cache/
-workspace-snapshot/skills/hf_cache/
-workspace-snapshot/skills/logs/
-workspace-snapshot/skills/results/
-workspace-snapshot/skills/tmp/
-workspace-snapshot/skills/codex-home/
-workspace-snapshot/skills/docker-config/
-**/judge-shadow-*/
-**/eval_outputs/
-**/*.egg-info/
-openagentsafety/vendor/software-agent-sdk/**/build/
-*.safetensors
+.work/
+.pytest_cache/
+.cache/
+.env.*
+!.env.example
 *.log
-
-# API benchmark runtime state (configuration templates remain tracked)
-api_benchmarks/.cache/
-api_benchmarks/.venv*/
-reports/api_benchmarks/
-openagentsafety/.venv/
