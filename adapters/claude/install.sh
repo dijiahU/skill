@@ -74,7 +74,7 @@ echo
 echo "Done."
 echo
 echo "Next steps:"
-echo "  1. (Optional) Copy .env.example to .env and fill in API keys for Tier-1 atoms."
+echo "  1. (Optional) Export the settings you need from .env.example before starting the host."
 echo "  2. (Optional) Set SAFETY_ORCH_OSV_SNAPSHOT_SOURCE to a validated indexed"
 echo "     snapshot and SAFETY_ORCH_REFRESH_DB=1, then rerun."
 echo "  3. Restart Claude Code to load the new hook config."

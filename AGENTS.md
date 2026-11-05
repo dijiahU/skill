@@ -7,11 +7,11 @@ from the repository root.
 
 - `hooks/scripts/`: shared safety checks and event normalization.
 - `helpers/`: health checks, audit support and vulnerability caches.
-- `adapters/`: Claude Code and Codex host integration.
+- `adapters/`: Claude Code, Codex and DSH host integration.
 - `skills/safety-router-skill/`: Router and 14 archetype references.
 - `docs/SAFETY_ATOMIC_CAPABILITIES.md`: source capability definitions.
 - `scripts/`: manifest and reference generators.
-- `tests/`: framework regressions using Python's standard library.
+- `tests/`: framework regressions using Python's standard library and Node.js.
 
 Keep experiment harnesses, benchmark datasets, paper assets, results and local
 workspace backups outside this repository.
@@ -21,11 +21,9 @@ workspace backups outside this repository.
 Run the full test suite on Linux; snapshot fixtures assume Linux path semantics.
 
 ```bash
-python3 scripts/gen_atom_manifest.py --check
-python3 scripts/gen_router_atom_catalog.py --check
-python3 scripts/gen_archetype_skill_md.py --check
-python3 -m py_compile hooks/scripts/*.py helpers/*.py adapters/codex/codex_hook.py
+python3 scripts/check_repository.py
 python3 -m unittest discover -s tests -v
+node --test tests/test_dsh_adapter.mjs
 ```
 
 Preserve 95 atoms, one Router skill, 14 archetype references and eight matchers.

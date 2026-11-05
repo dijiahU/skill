@@ -354,7 +354,7 @@ After editing a card, regenerate `atoms.json` with `python3 scripts/gen_atom_man
 - **scope_out**: package-registry signature → `check-package-cve` (covers CVE feed integrity); signature on agent output → `enable-tamper-evident-storage`
 - **signal_phrases**: skill signature, signed skill, sigstore, cosign, checksum verification, signed feed
 - **related**: `verify-tool-publisher-identity`, `check-package-cve`
-- **requires_network**: false (bundled pubkey; optional online revocation via `SKILL_REVOCATION_URL`)
+- **requires_network**: false (deployer-provided SHA-256 policy via `SAFETY_ORCH_SKILL_SIGNATURE_POLICY_JSON`)
 - **fail_policy**: fail-closed
 
 #### `verify-tool-publisher-identity`
@@ -364,7 +364,7 @@ After editing a card, regenerate `atoms.json` with `python3 scripts/gen_atom_man
 - **scope_out**: signature verification → `verify-skill-signature`; install-hook content audit → `audit-install-hook`
 - **signal_phrases**: publisher allowlist, maintainer reputation, org provenance, publisher identity, reputation score
 - **related**: `verify-skill-signature`, `check-tool-typosquat-name`
-- **requires_network**: false (local publisher allowlist by default; optional online reputation via user-configured endpoint)
+- **requires_network**: false (deployer-provided allowlist via `SAFETY_ORCH_PUBLISHER_ALLOWLIST_JSON`)
 - **fail_policy**: fail-closed
 
 #### `detect-hidden-instruction-in-tool-description`
@@ -440,7 +440,7 @@ After editing a card, regenerate `atoms.json` with `python3 scripts/gen_atom_man
 - **scope_out**: tool-name typosquat (not a package) → `check-tool-typosquat-name`; transitive dep audit → `check-dependency-confusion`
 - **signal_phrases**: package typosquat, dependency typosquat, npm squatting, pip typosquat, name-similarity scanner
 - **related**: `check-tool-typosquat-name`, `check-package-cve`, `check-dependency-confusion`
-- **requires_network**: false (bundled top-N popular package name DB; refresh via `safety-orch refresh-db`)
+- **requires_network**: false (local known-package name rules)
 - **fail_policy**: fail-closed
 
 #### `check-package-cve`
@@ -853,11 +853,7 @@ After editing a card, regenerate `atoms.json` with `python3 scripts/gen_atom_man
 | tool-invocation | 49 | 51.6% |
 | output-generation | 11 | 11.6% |
 | cross-cutting | 12 | 12.6% |
-| **合计** | **95\*** | 100% |
-
-\* §4 主 phase 总计 95（unique atoms）+ 1 个跨双 phase 显示（`detect-indirect-prompt-injection` primary 是 tool-invocation 但 §4.1.4 借用一次显示）。Atom 集合 unique = 95。
-
-**观察**：v0.7 把 v0.6 涨到 22% 的 planning 阶段精简回 13%——因为 SMT 形式化方法、OWASP API SAST、agent reputation 等"研究 / 离线 / vapor-infra"原子已下架。tool-invocation 仍是最大头（50%），符合"agent 安全核心战场是工具调用边界"的预期。Router 实现时 tool phase 的原子加载策略要重点设计。
+| **合计** | **95** | 100% |
 
 ### 6.2 按 archetype（与 §5 子节对应）
 
@@ -884,281 +880,139 @@ After editing a card, regenerate `atoms.json` with `python3 scripts/gen_atom_man
 | escalate-to-human-sentinel | 4 | cross-cutting |
 | **合计** | **95** | |
 
-最重 archetype 是 `validate-agent-tool-trust`（**14**，v0.7 -2 from v0.6），覆盖 MCP 4 类原生威胁 + skill poisoning + typosquat + signature + publisher + loader + **A2A 信任**（agent identity / delegation chain / MCP server trustworthiness）+ **time-bomb / dormant-payload**。`compute-agent-trust-score` 和 `query-agent-reputation` 已下架（依赖不存在的全局信任 infra）。
+## 10. 包装与维护
 
-**3 个跨 phase 的 archetype**（`detect-prompt-injection`、`validate-agent-tool-trust`、`detect-data-exfiltration`）是 Router 实现"阶段-技能映射表"时的关键复用点。v0.7 中 `scan-code-for-vulnerabilities` 因下架 3 个 OWASP API 类 SAST，重新收敛到 tool-inv only。
+### 10.1 执行模式
 
-**v0.7 删除的 `threat-model-task` archetype**：原 6 atoms 中 STRIDE / attack-tree 是 agent 作为输出**产出**的 deliverable（不是约束 agent 的 guardrail），threat-actor / OWASP 清单 / RoE 是离线分析师工作。仅 `enumerate-task-side-effects` 是真正的 planning 期 runtime 检查 → 已搬到 `detect-task-overreach`。
+每个 atom 的 `enforcement_mode` 为 `hook`、`hybrid` 或 `skill`。
+当前共 60 个 hook、22 个 hybrid 和 13 个 skill。
+执行模式来源为 [`scripts/atom_enforcement.py`](../scripts/atom_enforcement.py)。
 
-## 10. 包装标准（v0.5：enforcement_mode + archetype-as-skill 双维度）
+- `hook`：由宿主触发确定性检查。
+- `hybrid`：提供确定性检查，并由模型处理语义判断。
+- `skill`：由模型根据 Router 和参考文档进行判断。
 
-> The Router is the only top-level skill. Its 14 archetype references live in
-> `skills/safety-router-skill/references/archetypes/` and load when the Router requests them.
->
-> **架构演进**：
-> - **v0.4**（2026-05-09）确定 archetype = SKILL.md 的包装边界（不是 atom）
-> - **v0.5**（2026-05-10）进一步引入 **enforcement_mode** 作为更上一层的"包装方式"分流——hook 和 skill 走完全不同的部署形态，不应该混在 SKILL.md 里
+### 10.2 当前目录
 
-### 10.0 两个独立维度
-
-| 维度 | 取值 | 决定 |
-| --- | --- | --- |
-| **enforcement_mode**（每个 atom）| `hook` / `skill` / `hybrid` | 这个 atom 是 host 硬强制（settings.json hook config）还是 agent 通过 SKILL.md tool 调用 |
-| **execution_type**（每个 archetype 内的 skill/hybrid 部分）| `workflow` / `checklist` / `mixed` | SKILL.md 内部 tools 怎么协调（仅对 skill/hybrid mode 的 atoms 有意义；hook mode 不适用）|
-
-### 10.1 enforcement_mode 详细定义
-
-| Mode | 实现形态 | host 触发点 | 典型 atom |
-| --- | --- | --- | --- |
-| 🔒 **hook** | 注册到 host 的 hook config（如 Claude Code `.claude/settings.json` 的 PreToolUse / PostToolUse / Stop / UserPromptSubmit hooks），调一段确定性 script / regex / engine call | install-time + 各 hook 触发点 | `verify-allowed-tool-list` / `enforce-filesystem-sandbox` / `redact-output-pii` / `record-tool-invocation-trace` |
-| 🧠 **skill** | 在 archetype-level SKILL.md 里作为 tool 描述；agent 顺着 SKILL.md 走时调用（LLM judge / 推理 / 上下文判断）| 由 Router meta-skill 在合适 phase 触发 | `detect-direct-prompt-injection` / `classify-request-ambiguity-level` / `generate-stride-threat-model` |
-| ⚡ **hybrid** | 同时有 hook fast path + skill semantic fallback | hook 跑 + 不确定时升给 LLM | `detect-pii-in-input`（regex hook + LLM 上下文）/ `detect-shell-command-injection`（regex + LLM）/ `evaluate-opa-rego-rule`（OPA + LLM 边界 case）|
-
-**95 个原子的 enforcement_mode 分布**（v0.7）：60 hook (63%) · 21 hybrid (22%) · 14 skill (15%)。完整 per-atom 映射见 [scripts/atom_enforcement.py](../scripts/atom_enforcement.py) `ATOM_ENFORCEMENT_MODE` 字典。
-
-### 10.2 包装单元（按 enforcement_mode 分流）
-
-```
-agent-safety-orchestrator/
-├── hooks/                           ← 所有 enforcement_mode=hook 的 atoms
-│   ├── hooks.json                   ← 自动发现的 plugin hook 条目（命令路径用 ${CLAUDE_PLUGIN_ROOT}）
-│   ├── scripts/                     ← 各 hook 调用的脚本
-│   │   ├── verify-allowed-tool-list.sh
-│   │   ├── enforce-filesystem-sandbox.sh
-│   │   ├── redact-output-pii.py
-│   │   └── ...                       (~80 个 hook script，含 hybrid 的 hook 部分)
-│   └── install.sh                   ← merge 进 host settings
-│
-├── skills/                          ← enforcement_mode=skill / hybrid 的 atoms（按 archetype 分组，自动发现）
-│   ├── detect-prompt-injection/     ← 5 atoms (4 skill + 1 hybrid 的 LLM 部分)
-│   │   ├── SKILL.md
-│   │   └── tools/
-│   ├── classify-input-intent-ambiguity/  ← 2 skill atoms (排除 1 hook atom)
-│   │   ├── SKILL.md
-│   │   └── tools/
-│   ├── detect-task-overreach/       ← 3 skill + 1 hook（含 v0.7 搬入的 enumerate-task-side-effects）
-│   │   ├── SKILL.md
-│   │   └── tools/
-│   ├── ... (共 14 个 SKILL.md)
-│   │
-│   └── safety-router-skill/SKILL.md  ← Router meta-skill
-│
-└── README.md
+```text
+hooks/hooks.json                       宿主 hook 配置
+hooks/scripts/matcher_*.py              8 个事件或工具匹配器
+hooks/scripts/                         匹配器共享的分析模块
+skills/safety-router-skill/SKILL.md     唯一注册的 Router 技能
+skills/safety-router-skill/references/
+  archetypes/*.md                      14 份按需加载的参考文档
+  atoms-catalog.md                      完整能力目录
+helpers/                               健康状态与漏洞缓存
+adapters/                              宿主桥接及安装器
 ```
 
-**最终出货 = 1 hook config bundle + 14 archetype SKILL.md + 1 Router meta-skill = 16 个顶层文件**（v0.7）。
+### 10.3 Archetype 参考文档结构
 
-> **5 个 pure-hook archetype 不出 SKILL.md**（它们的所有 atoms 都是 hook，agent 不需要"决策"调用谁——host 自动强制）：
-> - `check-tool-permission-scope` (4/4 hook)
-> - `constrain-workspace-boundary` (6/6 hook)
-> - `detect-malicious-payload-in-tool-output` (5/5 hook)
-> - `audit-trail-recording` (3/3 hook) — v0.7 精简后回到 pure-hook
-> - `scan-code-for-vulnerabilities` (5/5 hook) — v0.7 精简后回到 pure-hook，**matcher 限定 Write\|Edit\|MultiEdit**
->
-> 这 5 个 archetype 的 23 个 hook atoms 直接进 hooks/。Router meta-skill 不路由它们（hook 自己就在 host 层强制了），Router 路由表只列 **14 个** skill / hybrid archetype（v0.7 下架 `threat-model-task` 整个 archetype；`scan-code-for-vulnerabilities` 因 v0.6 高 FP SAST 下架后回归 pure-hook）。
+每份参考文档包含 frontmatter，以及 Purpose、When to use、How to check、
+Internal tools、Aggregate verdict 和 Hook tools 六节。
+`execution_type` 为 `workflow`、`checklist` 或 `mixed`，描述模型检查的组织方式。
+这些参考文档由 Router 按阶段加载。
 
-### 10.3 SKILL.md 结构（仅对 skill / hybrid 包装；5 段固定 + frontmatter）
+### 10.4 生成文件
 
-````markdown
----
-name: classify-input-intent-ambiguity
-phase: input-understanding
-execution_type: workflow      # workflow | checklist | mixed
-skill_tools_count: 2          # 不含 hook tools，只数 skill / hybrid
-hook_tools_count: 1           # 这些不在本 SKILL.md 调用，由 hook config 强制；仅作信息
----
+本文件 §5 是能力定义的源文件。修改后依次运行：
 
-## 1. Purpose
-本 skill 处理什么类别的安全问题（复用 §5 archetype 描述）
-
-## 2. When to use
-Phase 触发 / scope_in / scope_out
-
-## 3. How to check
-按 §10.4 三种 execution_type 模板之一，**只协调 skill/hybrid mode 的 tools**；
-hook tools 在 host 层已自动强制，本节不需要重复
-
-## 4. Internal tools (skill / hybrid 部分)
-列出本 archetype 中 enforcement_mode ∈ {skill, hybrid} 的 tools；
-hook tools 单独在 §5 跨链一行说明它们由 hook config 强制
-
-## 5. Aggregate verdict
-本 skill 整体产出给 Router meta-skill 的 verdict
-````
-
-### 10.4 execution_type 模板（仅对 SKILL.md 内部 skill/hybrid tools 适用）
-
-**🔄 workflow / ☑ checklist / 🔀 mixed** 三种模板内容跟 v0.4 §10.3 一致，不复述。**对 hook-only 的 atom 这三种类型都不适用**（hook 是 host 层并行触发，不需要 agent 协调）。
-
-### 10.5 archetype 双维度分类（v1 freeze，95 原子 / 19 archetypes / 18 文件）
-
-> **v0.7 包装变动**：① `threat-model-task` 整个 archetype 下架（STRIDE / attack-tree 是 agent-as-output deliverable；threat-actor / OWASP 清单 / RoE 是离线分析；side-effects 搬到 detect-task-overreach）。② `scan-code-for-vulnerabilities` 删 v0.6 加的 3 个高 FP SAST → 重回 pure-hook（**关键约束：matcher 限定 Write\|Edit\|MultiEdit，只在改代码时触发**）。③ `audit-trail-recording` 删 tamper-evident-storage + crypto-intent-binding。④ `enforce-policy-as-code` 删 formal-policy + regulatory-compliance。⑤ `validate-agent-tool-trust` 删 trust-score + reputation-query。⑥ 其他 vapor-infra / multi-call 统计原子下架。最终 **5 pure-hook + 0 pure-skill + 14 mixed-enforce = 14 SKILL.md + 1 hook config + 1 Router meta = 16 个文件**。
-
-| Archetype | atoms | enforcement breakdown | 出货方式 |
-| --- | ---: | --- | --- |
-| `audit-trail-recording` | 3 | 3 hook | 🔒 pure-hook（仅 hook config）|
-| `check-tool-permission-scope` | 4 | 4 hook | 🔒 pure-hook（仅 hook config）|
-| `constrain-workspace-boundary` | 6 | 6 hook | 🔒 pure-hook（仅 hook config）|
-| `detect-malicious-payload-in-tool-output` | 5 | 5 hook | 🔒 pure-hook（仅 hook config）|
-| `scan-code-for-vulnerabilities` | 5 | 5 hook | 🔒 pure-hook（仅 hook config，matcher 限定 Write\|Edit\|MultiEdit）|
-| `classify-input-intent-ambiguity` | 3 | 1 hook + 2 skill | mixed-enforce SKILL.md (execution: workflow) |
-| `detect-prompt-injection` | 5 | 1 hybrid + 4 skill | mixed-enforce SKILL.md (execution: checklist) |
-| `scan-input-for-pii-and-secrets` | 5 | 3 hook + 2 hybrid | mixed-enforce SKILL.md (execution: mixed) |
-| `enforce-policy-as-code` | 2 | 1 hook + 1 hybrid | mixed-enforce SKILL.md (execution: checklist) |
-| `detect-task-overreach` | 4 | 1 hook + 3 skill | mixed-enforce SKILL.md (execution: workflow) |
-| `validate-tool-argument-safety` | 8 | 6 hook + 2 hybrid | mixed-enforce SKILL.md (execution: checklist) |
-| `validate-agent-tool-trust` | 11 | 6 hook + 4 hybrid + 1 skill | mixed-enforce SKILL.md (execution: checklist) |
-| `detect-supply-chain-risk` | 8 | 5 hook + 3 hybrid | mixed-enforce SKILL.md (execution: checklist) |
-| `enforce-rate-and-quota-limits` | 4 | 3 hook + 1 hybrid | mixed-enforce SKILL.md (execution: mixed) |
-| `redact-sensitive-output` | 4 | 2 hook + 2 hybrid | mixed-enforce SKILL.md (execution: mixed) |
-| `detect-data-exfiltration` | 4 | 2 hook + 2 hybrid | mixed-enforce SKILL.md (execution: checklist) |
-| `enforce-output-content-policy` | 5 | 2 hybrid + 3 skill | mixed-enforce SKILL.md (execution: checklist) |
-| `incident-response-handler` | 5 | 4 hook + 1 hybrid | mixed-enforce SKILL.md (execution: workflow) |
-| `escalate-to-human-sentinel` ⭐ | 4 | 3 hook + 1 skill | mixed-enforce SKILL.md (execution: workflow) |
-| **合计** | **95** | **60 hook + 21 hybrid + 14 skill** | **14 SKILL.md + 1 hook config + 1 Router meta + 2 helper = 18 文件**（v1.1，加 cache + health helper）|
-
-### 10.6 执行权限
-
-代码型 hook（hook 类与 hybrid 的 hook 部分）通过 host 的 PreToolUse / PostToolUse / Stop 等 hook 机制 + Bash 执行权限触发。SKILL.md 内的 skill/hybrid tools 通过 agent host 的 Bash / shell 工具调用。**默认假设 host 支持 hook 机制 + Bash 权限**（Claude Code 完整支持；OpenClaw / Codex CLI 部分支持详见 hook config bundle 的 `host-adapter/` 目录）。Host 不支持 hook 时，相关 atoms 降级到 skill 模式（仍可用，但失去硬强制）。
-
-### 10.7 不做自反射 / 自动发现
-
-Router meta-skill 硬编码 14 个 skill / hybrid skill 的列表 + 5 个 phase 的路由表；hook config 硬编码 ~81 个 hook 条目（60 pure-hook + 21 hybrid fast path）。**项目结束时定版，作为 frozen artifact 出**。新增 atom = 重发包。
-
-## 11. Router 架构定位（meta-skill 路径）
-
-> **架构决策**（2026-05-09 与用户对齐）：项目书 §3 的 "Safety Router" **不是独立程序 / middleware**，而是一份 **meta-skill SKILL.md**——agent host 的主 LLM 读这份 meta-skill 就成了 Router 本身。
-
-### 11.1 模型分工
-
-```
-agent host LLM (Claude / Opus / GLM / ...)        ← Router 本体（无新进程）
-    │
-    │ system context loads
-    ▼
-safety-router-skill/SKILL.md (meta-skill)         ← Router 路由表
-    "你在 phase X 时：调以下 skills [...]
-     skill 返回 block → 停 + 调 escalate-to-human-sentinel
-     skill 返回 yellow → 调 present-risk-rationale ..."
-    │
-    │ agent 自主调用（同一 host LLM 顺着 meta-skill 走）
-    ▼
-skills/<archetype-id>/SKILL.md  (14 个 skill / hybrid archetype)
-    每个 skill 内部按 §10.4 execution_type 协调 skill/hybrid tools
-    （hook tools 不在此处协调——已由 hook config 在 host 层硬强制）
-
-并行存在（不被 Router 路由，host 层自动触发）：
-hooks/  ← ~81 个 hook 条目（5 个 pure-hook archetype + 14 mixed-enforce 中的 hook + hybrid fast path）
-    settings.json hook 注入 → host 在 PreToolUse / PostToolUse / Stop 等触发点自动执行
+```bash
+python3 scripts/gen_atom_manifest.py
+python3 scripts/gen_router_atom_catalog.py
+python3 scripts/gen_archetype_skill_md.py
 ```
 
-### 11.2 跟项目书"Router 轻量化"的对齐
+Archetype 的说明文字维护在 `scripts/gen_archetype_skill_md.py`。
+生成器的 `--check` 模式检查源文件与产物是否一致。
 
-| 项目书原文 | meta-skill 模型对应 |
-| --- | --- |
-| "内部维护一张阶段-技能映射表" | meta-skill SKILL.md 的某一节是这张表（自然语言形式）|
-| "通过阅读原子技能描述文件做路由决策（避免重模型调用）" | atom 描述在 system context 里**预加载**，路由决策不额外调外部 LLM；agent 主 LLM 顺着上下文里的描述决定调谁 |
-| "轻量化、低延迟、低算力" | 没有独立中间件 = 部署轻；但 **agent 推理本身的延迟是固有的**（见 §11.3） |
+## 11. Router 架构
 
-实际上 agent 调 atom 时**会有 LLM 推理参与**——SKILL.md 是给 LLM 看的，而非纯文本配置。这是 meta-skill 模型固有的成本。
+### 11.1 模型与 hook 的职责
 
-### 11.3 延迟 / 成本权衡（vs 独立 middleware Router）
+宿主模型读取 Router，根据当前阶段加载 archetype 参考文档。
+宿主同时通过 hook 配置调用确定性匹配器；检查是否执行取决于宿主的接入方式。
 
-| 维度 | meta-skill 模型（本项目）| 独立 middleware 模型 |
-| --- | --- | --- |
-| 部署复杂度 | 极低（放 SKILL.md 进 host 即可）| 高（部署中间件 + 适配每个 host）|
-| Host 兼容 | 任意（Claude Code / OpenClaw / Codex CLI / Cursor / ...）| 每个 host 单独适配 |
-| Phase 边界延迟（粗算）| ~1-2s（含 LLM routing turn）| ~200-500ms（纯并行 fan-out）|
-| Token 成本 | 每 phase 边界 +5-15k tokens（meta + atom desc + verdicts）| 0 |
-| 合规强制力 | best-effort（agent 可能不严格 follow）| 强（中间件代码层硬拦截）|
-| 路由逻辑可读 / 可改 | 自然语言路由表，运营友好 | 代码 + config，工程友好 |
-| Audit 可解释 | LLM 推理链可审 | 中间件结构化日志可审 |
+### 11.2 注册与加载
 
-**4 条降延迟 / 降成本的优化手段**（#2 和 #4 为默认策略，#1 和 #3 可按部署需求选择）：
+唯一注册的技能是 `safety-router-skill`。
+14 份 archetype 文档位于它的 `references/archetypes/` 下。
+5 个仅含 hook 能力的 archetype 由 hook 层处理。
 
-1. **Atom 描述全量预加载**——session 启动时把 95 个 atom 描述全部塞进 system context，避免 per-phase 现读。95 × ~200 tokens ≈ 19k tokens，对 200k+ context 占比可接受
-2. **并行 tool call**——现代 agent host 普遍支持单 turn 多 tool call。Meta-skill 应明确写 "在 phase X **并行 fire** 以下 atoms"，避免 agent 串行调
-3. **Code-atom 批量执行**——把同一 phase 的所有 code-type atom 包成一个 wrapper script（如 `python checks/run_phase.py --phase=input --input="$INPUT"`），1 次 Bash 调用跑完所有 code atoms，省 N-1 次 round-trip
-4. **Phase mapping 写死**——meta-skill 的 phase→atom 映射表写成"在 phase X **必跑** [a, b, c]"硬规则，不让 agent 自由发挥决定调哪些。省一个"thinking" turn
+### 11.3 加载与调用成本
 
-应用 4 条优化后，realistic 延迟可降到 **~600ms-1.5s per phase**，跟 middleware 的 ~200-500ms 差距缩小到 2-3×。这个差距对人机交互场景可接受；对 agent 高频自动 tool call 场景需要重点关注。
+1. 预加载全部 archetype 文档是可选策略，会增加启动上下文。
+2. Router 默认要求并行读取同一阶段需要的参考文档。
+3. Hook 层把能力检查集中在 8 个匹配器中执行。
+4. Router 使用固定的阶段路由表。
+
+实际耗时和 token 用量取决于宿主、模型和任务；本仓库不提供固定性能保证。
 
 ### 11.4 实现位置
 
 Router 入口见 [`skills/safety-router-skill/SKILL.md`](../skills/safety-router-skill/SKILL.md)。
-能力定义见本文件 §5；执行模式见 `scripts/atom_enforcement.py`。
+每个宿主的配置和安装器位于 `adapters/`。
+DSH 原生插件的安装、支持的工具及输出处理边界见
+[`adapters/dsh/README.md`](../adapters/dsh/README.md)。
 
-## 12. 部署配置与降级语义（v1.1 新增）
+## 12. 部署配置与降级语义
 
-> **设计目标**：让非工程背景的用户能"装上即用"——纯本地 hook 零配置，需要外部 IO 的 hook 通过单个 `.env` 渐进开启；网络抖动 / 端点失效不能静默降级，必须在 session 启动 banner 上**显式**列出受影响 atom。
+### 12.1 配置加载
 
-### 12.1 三层配置 tier
+运行代码通过进程环境读取配置；安装器和 hook 不自动加载 `.env`。
+参考根目录 `.env.example`，把需要的变量配置到启动宿主的环境中。
+JSON 配置值需要作为完整字符串传入。
 
-| Tier | 用户操作 | 启用的 atom 范围 |
+本地检查使用本地规则或部署方提供的策略；漏洞、软件包元数据和恶意文件哈希
+查询可能访问外部端点。网络不可用与发现已知风险是不同的结果。
+
+### 12.2 失败策略
+
+| 策略 | 含义 |
+| --- | --- |
+| `fail-open-warn` | 记录警告后继续，检查结果可能未知 |
+| `fail-soft-block` | 阻断；按该检查支持的配置处理显式降级 |
+| `fail-closed` | 无法完成所需验证时阻断 |
+
+CVE 数据不可用默认警告；`SAFETY_ORCH_CVE_UNAVAILABLE_POLICY=block`
+要求阻断。`SAFETY_ORCH_ACCEPT_DEGRADED=1` 可接受不可用数据，不能覆盖已知
+高危漏洞。漏洞阻断阈值由 `SAFETY_ORCH_CVE_BLOCK_CVSS` 设置，默认 7.0。
+
+### 12.3 8 个检查的部署配置
+
+| Atom | 外部依赖或配置 | 失败策略 |
 | --- | --- | --- |
-| **Tier 0**（零配置）| 装包即可 | 所有 pure-local hook（~52）+ 所有 SKILL.md（14 archetypes）+ 公开免费端点的网络 hook：`check-package-cve` (osv.dev) / `detect-hallucinated-package` (npm/PyPI registry) / `check-package-recency-anomaly` (registry metadata) |
-| **Tier 1**（单 `.env`）| 复制 `.env.example` → `.env`，按需填 key | `check-malware-hash-ioc` (VIRUSTOTAL_API_KEY) / `check-dependency-confusion` (INTERNAL_REGISTRY_HOSTS) / `verify-skill-signature` 在线吊销 (SKILL_REVOCATION_URL) |
-| **Tier 2**（air-gap / enterprise）| 自定义 endpoint URL + bundled offline snapshot + 周期性 `safety-orch refresh-db` | 内网部署 / 隔离环境；所有公网 endpoint 替换为内网 mirror，CVE 数据通过离线 osv-export snapshot 提供 |
+| `check-package-cve` | OSV 或已导入的离线快照 | 默认 `fail-open-warn`，可配置阻断 |
+| `detect-hallucinated-package` | 软件包注册表元数据 | `fail-open-warn` |
+| `check-package-recency-anomaly` | 注册表元数据；`SAFETY_ORCH_PACKAGE_MIN_AGE_DAYS` | `fail-open-warn` |
+| `check-malware-hash-ioc` | VirusTotal；`VIRUSTOTAL_API_KEY` | `fail-open-warn` |
+| `check-package-typosquat` | 本地名称规则 | `fail-closed` |
+| `check-dependency-confusion` | 公开注册表及 `SAFETY_ORCH_INTERNAL_PACKAGES_JSON` | `fail-closed` |
+| `verify-skill-signature` | `SAFETY_ORCH_SKILL_SIGNATURE_POLICY_JSON` 中的 SHA-256 策略 | `fail-closed` |
+| `verify-tool-publisher-identity` | `SAFETY_ORCH_PUBLISHER_ALLOWLIST_JSON` | `fail-closed` |
 
-未配置 / 未启用的 atom 进入"待激活"状态，**Router 启动 banner 显式列出**——不会静默忽略。
+后两项信任检查仅在部署方提供相应策略时启用。能力定义列出检查范围，
+不代表所有外部服务或验证机制都已配置。
 
-### 12.2 fail_policy 三态语义
+### 12.4 共享 helper
 
-每个 hook-network atom（以及任何高 stakes 的本地 hook）的卡片新增 `fail_policy` 字段，决定外部依赖 / 本地资源失败时的行为：
+- `helpers/cache_snapshot.py`：查询注册表、OSV 和 VirusTotal；维护 SQLite 缓存。
+  CVE 缓存 TTL 为 24 小时，软件包元数据为 7 天，恶意文件哈希为 1 小时。
+  缓存目录通过 `SAFETY_ORCH_CACHE_DIR` 设置。
+- `helpers/health_status.py`：检查端点与快照状态，记录 active、degraded、disabled。
+  状态目录通过 `SAFETY_ORCH_STATUS_DIR` 设置。
 
-| fail_policy | 失败时行为 | 适用判据 |
-| --- | --- | --- |
-| `fail-open-warn` | 放行 + 写 audit log + Router status 标 degraded | 误漏短窗口可接受的低 stakes atom（recency anomaly、IOC 查询、hallucinated package） |
-| `fail-soft-block` | 阻断 + 需用户显式 `--accept-degraded` 才能继续 | 高 stakes 信息型 atom——由部署策略明确要求不可在未知结果下继续的检查 |
-| `fail-closed` | 默认阻断，不可绕过 | 安全语义不可降级（签名验证、publisher allowlist、typosquat 检查、dependency confusion） |
+导入部署方准备的索引快照：
 
-**选择原则**：能 `fail-open-warn` 的尽量 `fail-open-warn`（不阻塞 agent 工作流），但凡漏检会让用户**暴露在真实攻击下**的就用 `fail-soft-block` 或 `fail-closed`。**Audit log 必须保留**，事后可统计 degraded 占比。
+```bash
+python3 -m helpers.cache_snapshot refresh-db /path/to/indexed-osv.json
+```
 
-CVE 查询不可用（含离线缓存不可用）默认警告并记录“结果未知”，不等同于发现漏洞；已知 CVSS 达到阻断阈值的漏洞仍阻断。部署可设置 `SAFETY_ORCH_CVE_UNAVAILABLE_POLICY=block` 恢复查询不可用时阻断的策略。
+快照需使用 `ecosystem|package` 键和带 `affected_versions` 的 advisory 列表。
+仓库不附带漏洞数据库。健康状态与实际检查结果应一起查看。
 
-### 12.3 8 个 hook-network atom 的部署元数据汇总
+### 12.5 拒绝后的恢复
 
-| Atom | requires_network | requires_api_key | fail_policy |
-| --- | :---: | --- | --- |
-| `check-package-cve` | ✅ | — | `fail-open-warn` |
-| `detect-hallucinated-package` | ✅ | — | `fail-open-warn` |
-| `check-package-recency-anomaly` | ✅ | — | `fail-open-warn` |
-| `check-malware-hash-ioc` | ✅ | `VIRUSTOTAL_API_KEY` | `fail-open-warn` |
-| `check-package-typosquat` | ❌（bundled DB）| — | `fail-closed` |
-| `check-dependency-confusion` | ❌（local config）| `INTERNAL_REGISTRY_HOSTS` | `fail-closed` |
-| `verify-skill-signature` | ❌（bundled pubkey）| `SKILL_REVOCATION_URL`（可选）| `fail-closed` |
-| `verify-tool-publisher-identity` | ❌（local allowlist）| — | `fail-closed` |
-
-**观察**：8 个 atom 里只有 1 个（`check-malware-hash-ioc`）需要付费 / 认证 API key。其它 7 个都是公开免费端点或本地配置，零配置友好度高于初观感。
-
-### 12.4 两块共享 helper（出货文件 16 → 18）
-
-不让 14 个 SKILL.md 各自实现外部 IO + 健康检查——packaging 阶段加 2 个 helper 模块，统一吃所有 hook-network atom 的 IO + 降级逻辑：
-
-1. **`cache-snapshot-helper/`** —— SQLite 本地缓存（`~/.cache/safety-orch/cache.db`）+ bundled osv.dev snapshot + `safety-orch refresh-db` CLI。所有 hook-network atom 经它访问外部端点。
-   - TTL：CVE 24h / package metadata 7d / malware IOC 1h
-   - 支持 osv.dev `/v1/querybatch` 批查（50 包 = 1 HTTP 请求）
-   - npm registry 用 ETag → 304 不消耗 quota
-   - Soft circuit breaker：单 atom hit 429 → 60s 退避 + 该 atom 标 degraded
-
-2. **`health-status-helper/`** —— Router 启动时并行 ping 每个 network endpoint（<1s），维护 `~/.safety-orch/atom-status.json`，session 启动 banner 输出健康状态：
-   ```
-   Safety Orchestrator: 14/16 atoms active
-   ⚠️ Degraded: check-package-cve (osv.dev unreachable, snapshot age 8d)
-   ⚠️ Disabled: check-malware-hash-ioc (VIRUSTOTAL_API_KEY missing)
-   ```
-   每次 fail-open 写入 `record-decision-trace` 结构化日志，事后可查 / 可统计。
-
-**出货文件清单**（v1.1 修订）：
-- 1 Router meta-skill
-- 14 SKILL.md
-- 1 hook config bundle
-- **1 cache/snapshot helper**（新增）
-- **1 health/status helper**（新增）
-- **= 18 个出货文件**
-
-### 12.5 v1 "freeze" 含义的明确
-
-v1 freeze 指 **atom 集合冻结**（95 atoms / 19 archetypes 不再增删）+ **定义性字段冻结**（id / parent / phase / definition / scope_in / scope_out / signal_phrases / related）。**部署元数据**——本节加的 `requires_network` / `requires_api_key` / `fail_policy`，及未来可能加的 `endpoint_strategy` / `hook_ordering_dependency` / `shared_helper_id` 等——**允许在 v1.x 里继续补**。
-
-部署元数据可以在 v1.x 内补充。atom id 改名、atom 增删、parent 重挂或 phase 重分需要显式版本迁移。
+Codex 桥接默认使用 `SAFETY_ORCH_RECOVERY_POLICY=recheck`：每次新动作重新检查。
+`read-only` 模式将恢复动作限制为诊断操作，次数由
+`SAFETY_ORCH_MAX_RECOVERY_ACTIONS` 控制，默认 4。

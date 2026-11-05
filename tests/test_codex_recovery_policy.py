@@ -15,7 +15,7 @@ WRITE = BUNDLE / "hooks" / "scripts" / "matcher_write_edit.py"
 POST = BUNDLE / "hooks" / "scripts" / "matcher_posttool.py"
 
 
-class V10PolicyRecoveryTests(unittest.TestCase):
+class CodexRecoveryPolicyTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)

@@ -4,6 +4,15 @@ All notable changes to the Agent Safety Orchestrator plugin are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+- Add a standalone DSH native adapter, isolated installer, Router reference tool,
+  and offline integration regressions using the shared safety core.
+- Replace obsolete layout and configuration guidance with the current framework structure.
+- Document the implemented trust policies and correct capability counts.
+- Share repository validation between local development and CI.
+- Rename recovery tests and isolate runtime test state per test case.
+
 ## [1.3.0] — 2026-06-08
 
 Router-first **strict hierarchy**: the 14 archetypes are no longer top-level skills.

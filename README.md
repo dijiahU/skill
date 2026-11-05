@@ -2,7 +2,7 @@
 
 A safety framework for coding agents, with a shared hook engine and a Router skill.
 It includes 95 capability definitions, eight hook matchers, 14 Router references,
-and installers for Claude Code and Codex.
+and installers for Claude Code, Codex and DeepSeek Harness (DSH).
 
 ## Install
 
@@ -12,6 +12,8 @@ cd skill
 ./install.sh --host codex
 # Or: ./install.sh --host claude
 # Or: ./install.sh --host both
+# Or: ./install.sh --host dsh
+# Or: ./install.sh --host all
 ```
 
 The hook scripts require Python 3.10 or newer. The installers copy or configure
@@ -27,8 +29,11 @@ Claude Code can also install the repository as a plugin:
 /reload-plugins
 ```
 
-See [Codex adapter details](adapters/codex/README.md) and
-[optional configuration](.env.example).
+See [Codex adapter details](adapters/codex/README.md),
+[DSH adapter details and supported tools](adapters/dsh/README.md), and
+[optional configuration](.env.example). Hooks read environment variables;
+they do not automatically load `.env`. Export the selected settings before
+starting the host.
 
 ## How it works
 
@@ -74,15 +79,14 @@ install.sh       Host installer dispatcher
 
 ## Development
 
-Run from the repository root; validation uses the Python standard library.
+Run from the repository root; validation uses Python's standard library and Node.js 22+.
 Run the full suite on Linux, as its snapshot fixtures use Linux paths.
 macOS path redirection can cause fixture assertions to fail:
 
 ```bash
-python3 scripts/gen_atom_manifest.py --check
-python3 scripts/gen_router_atom_catalog.py --check
-python3 scripts/gen_archetype_skill_md.py --check
+python3 scripts/check_repository.py
 python3 -m unittest discover -s tests -v
+node --test tests/test_dsh_adapter.mjs
 ```
 
 To update capabilities, edit `docs/SAFETY_ATOMIC_CAPABILITIES.md` and, if needed,

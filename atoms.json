@@ -608,7 +608,7 @@
       "verify-tool-publisher-identity",
       "check-package-cve"
     ],
-    "requires_network": "false (bundled pubkey; optional online revocation via `SKILL_REVOCATION_URL`)",
+    "requires_network": "false (deployer-provided SHA-256 policy via `SAFETY_ORCH_SKILL_SIGNATURE_POLICY_JSON`)",
     "fail_policy": "fail-closed",
     "enforcement_mode": "hook"
   },
@@ -625,7 +625,7 @@
       "verify-skill-signature",
       "check-tool-typosquat-name"
     ],
-    "requires_network": "false (local publisher allowlist by default; optional online reputation via user-configured endpoint)",
+    "requires_network": "false (deployer-provided allowlist via `SAFETY_ORCH_PUBLISHER_ALLOWLIST_JSON`)",
     "fail_policy": "fail-closed",
     "enforcement_mode": "hook"
   },
@@ -766,7 +766,7 @@
       "check-package-cve",
       "check-dependency-confusion"
     ],
-    "requires_network": "false (bundled top-N popular package name DB; refresh via `safety-orch refresh-db`)",
+    "requires_network": "false (local known-package name rules)",
     "fail_policy": "fail-closed",
     "enforcement_mode": "hook"
   },

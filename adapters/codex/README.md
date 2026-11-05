@@ -7,17 +7,15 @@ reused verbatim, not copied — and only the host I/O is Codex-specific. The
 Claude Code plugin and this adapter share one core; there is no vendored
 duplicate.
 
-> **Status.** Verified against **codex-cli 0.64.0** + the official hooks /
-> approvals docs. The deterministic bridge is smoke-tested end-to-end and in CI
-> (`Dual-host proof` step). Treat the `apply_patch`, `PostToolUse`, and
-> `SubagentStart` mappings as best-effort until exercised against a live session.
+> Validation covers synthetic hook events and isolated installation.
+> Verify hook delivery in the host version you deploy.
 
 ## Two layers (same as the Claude Code plugin)
 
 | Layer | How it maps to Codex | Determinism |
 |---|---|---|
-| **Hook layer** (60 hook + 21 hybrid atoms) | `hooks.json` → `codex_hook.py`, a bridge that translates each Codex hook event into the event the shared matchers expect, runs them, and returns Codex's `permissionDecision: deny` / `exit 2` | **Deterministic** — Codex blocks before the tool runs |
-| **Skill layer** (14 skill + 21 hybrid atoms) | the single `safety-router-skill` (14 archetype docs nested under `references/archetypes/`) installed into `$HOME/.agents/skills/` — Codex reads the same agentskills.io format; archetypes are Read-on-route reference docs, so the layer is router-first | Model-invoked (advisory) |
+| **Hook layer** (60 hook + 22 hybrid atoms) | `hooks.json` → `codex_hook.py`, a bridge that translates each Codex hook event into the event the shared matchers expect, runs them, and returns Codex's `permissionDecision: deny` / `exit 2` | **Deterministic** — Codex blocks before the tool runs |
+| **Skill layer** (13 skill + 22 hybrid atoms) | the single `safety-router-skill` (14 archetype docs nested under `references/archetypes/`) installed into `$HOME/.agents/skills/` — Codex reads the same agentskills.io format; archetypes are Read-on-route reference docs, so the layer is router-first | Model-invoked (advisory) |
 
 ## How the bridge works
 
@@ -81,13 +79,14 @@ CODEX_HOME=/tmp/codex-test SAFETY_ORCH_CODEX_SKILLS_DIR=/tmp/codex-skills-test .
 …or run this adapter's installer directly (`adapters/codex/install.sh`) — same effect.
 
 The installer is **safe**: it never overwrites an existing `hooks.json` or
-`config.toml` (it writes a `.safety-orchestrator` sidecar for you to merge), and
+`config.toml`. It writes a hook sidecar when `hooks.json` exists and a separate
+`config.backstop.toml` for review, and
 skips skills whose name already exists. It **assembles** the deployment from the
 repo's single source of truth — copying `hooks/scripts/` + `helpers/` +
 `atoms.json` into `$CODEX_HOME/safety-orchestrator/core/`, the bridge alongside
 it, and the skills into `$HOME/.agents/skills/` — then renders the absolute bridge
 path into `hooks.json`. Ensure `[features] hooks = true` in `config.toml`
-(default on), then start `codex`.
+before starting the host.
 
 ## Testing (no model calls, no quota burned)
 
@@ -95,7 +94,7 @@ Feed the bridge a Codex event directly:
 
 ```bash
 echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"rm -rf /home"}}' \
-  | python3 codex_hook.py
+  | python3 adapters/codex/codex_hook.py
 # → {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny",
 #     "permissionDecisionReason":"[detect-destructive-flag] ..."}}   (exit 2)
 ```

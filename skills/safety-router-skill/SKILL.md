@@ -154,7 +154,7 @@ When `helpers/health_status.py` reports an atom as `degraded` or `disabled`:
 | `fail-soft-block` | block unless user accepts | `Read references/archetypes/escalate-to-human-sentinel.md` + apply, reason "high-stakes atom degraded" |
 | `fail-closed` | block, no override | `Read references/archetypes/incident-response-handler.md` + apply, then stop |
 
-Per-atom `fail_policy` is defined in [docs/SAFETY_ATOMIC_CAPABILITIES.md §12.3](../../docs/SAFETY_ATOMIC_CAPABILITIES.md#123-8-个-hook-network-atom-的部署元数据汇总).
+Per-atom `fail_policy` is defined in [docs/SAFETY_ATOMIC_CAPABILITIES.md §12.3](../../docs/SAFETY_ATOMIC_CAPABILITIES.md#123-8-个检查的部署配置).
 
 ## 4. Internal tools
 
@@ -214,11 +214,11 @@ The default Codex recovery policy is `recheck`; deployments may explicitly choos
 
 ## 6. Optimization knobs (latency / cost)
 
-Per [docs/SAFETY_ATOMIC_CAPABILITIES.md §11.3](../../docs/SAFETY_ATOMIC_CAPABILITIES.md#113-延迟--成本权衡vs-独立-middleware-router) four optimizations are available. **#2 and #4 are active by default in this Router**; #1 and #3 are opt-in / out-of-Router.
+Per [docs/SAFETY_ATOMIC_CAPABILITIES.md §11.3](../../docs/SAFETY_ATOMIC_CAPABILITIES.md#113-加载与调用成本) four optimizations are available. **#2 and #4 are active by default in this Router**; #1 and #3 are opt-in / out-of-Router.
 
-1. **(Opt-in) Preload all archetype docs**: at session start, `Read` all 14 `references/archetypes/*.md` upfront instead of lazily per phase. Trades ~17k extra tokens at session start for ~200-500ms saved per phase transition (no per-phase Read latency). Worth it for latency-sensitive agents, overkill for human-paced workflows.
+1. **(Opt-in) Preload all archetype docs**: at session start, `Read` all 14 `references/archetypes/*.md` upfront instead of lazily per phase. This increases initial context and can reduce later reference reads. Measure the tradeoff for the host and workload.
 2. **(Default) Parallel Reads per phase**: each row in §3.2 lists multiple archetype docs; `Read` them in a single agent turn with parallel `Read` calls, not serial.
-3. **(Out-of-Router) Hook-side batch**: deterministic checks (60 hook atoms + 22 hybrid fast-paths = 82 entries) are batched into 8 per-matcher scripts (`hooks/scripts/matcher_*.py`), so a single Bash call triggers one Python process handling ~8 atom checks in fan-in, not 8 processes. This is implemented in the hook bundle, not this Router.
+3. **(Out-of-Router) Hook-side batch**: deterministic checks (60 hook atoms + 22 hybrid fast-paths = 82 capabilities) are batched into 8 per-matcher scripts (`hooks/scripts/matcher_*.py`), each matcher process runs its relevant checks. This is implemented in the hook bundle, not this Router.
 4. **(Default) Hard-coded phase mapping**: §3.2 is non-negotiable. Do not "decide" which archetype checks to apply — `Read` and apply all listed archetype docs for the phase you are entering.
 
 ## 7. Atom coverage (summary)

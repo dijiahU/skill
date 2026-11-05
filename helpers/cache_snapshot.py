@@ -1,32 +1,11 @@
-"""Shared cache + offline-snapshot layer for all hook-network atoms.
+"""Shared HTTP lookups, SQLite cache and imported offline OSV snapshots.
 
-Design goal (per docs/SAFETY_ATOMIC_CAPABILITIES.md §12.4):
-- 14 SKILL.md should NOT each re-implement HTTP + cache + retry logic
-- Single place to set TTL policy, batch-query strategy, circuit breaker
-- Bundled snapshot fallback for air-gap / outage
+Public functions query OSV, npm, PyPI, crates.io and VirusTotal. Network
+failures return NETWORK_ERROR so callers can apply the configured policy.
+TTL_BY_ATOM defines cache lifetimes. Import a validated snapshot with:
+    python3 -m helpers.cache_snapshot refresh-db /path/to/indexed-osv.json
 
-Endpoints exposed:
-    CacheLayer.query_osv(packages: list[(ecosystem,name,version)]) -> list[CveResult]
-    CacheLayer.query_npm_metadata(name: str) -> dict | None
-    CacheLayer.query_pypi_metadata(name: str) -> dict | None
-    CacheLayer.query_crates_metadata(name: str) -> dict | None
-    CacheLayer.query_virustotal_hash(sha256: str) -> dict | None
-    CacheLayer.refresh_snapshot() -> None    # CLI: `safety-orch refresh-db`
-
-Storage:
-    ~/.cache/safety-orch/cache.db        SQLite (atom_id, query_key) → (result_json, ts, etag)
-    ~/.cache/safety-orch/snapshots/      bundled osv-export / npm-top-N name list
-    ~/.safety-orch/atom-status.json      runtime degraded/disabled state (written by health_status.py)
-
-TTL policy (atom-keyed, not endpoint-keyed):
-    check-package-cve              24h
-    check-package-recency-anomaly  7d
-    detect-hallucinated-package    7d
-    check-malware-hash-ioc         1h
-
-Circuit breaker:
-    one 429 / 5xx → 60s backoff for that atom only.
-    Three consecutive failures → mark atom degraded, fall through to snapshot.
+Storage defaults to ~/.cache/safety-orch; SAFETY_ORCH_CACHE_DIR overrides it.
 """
 
 from __future__ import annotations
